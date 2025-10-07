@@ -27,6 +27,7 @@ export function BookingSteps({ currentStep }: BookingStepsProps) {
         const Icon = step.icon;
         const isActive = index === currentIndex;
         const isPast = index < currentIndex;
+        const isCompleted = isPast;
         
         return (
           <div key={step.value} className="flex items-center gap-8">
@@ -35,8 +36,8 @@ export function BookingSteps({ currentStep }: BookingStepsProps) {
                 className={cn(
                   "w-12 h-12 rounded-full flex items-center justify-center border-2 transition-colors",
                   isActive && "bg-primary border-primary text-primary-foreground",
-                  isPast && "bg-muted border-border text-muted-foreground",
-                  !isActive && !isPast && "border-border text-muted-foreground"
+                  isCompleted && "bg-primary border-primary text-primary-foreground",
+                  !isActive && !isCompleted && "border-border text-muted-foreground"
                 )}
               >
                 <Icon className="w-5 h-5" />

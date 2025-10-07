@@ -41,8 +41,7 @@ const NewAppointment = () => {
   };
 
   const handleCreateNewRegistration = () => {
-    // Navigate to registration step
-    console.log("Creating new registration");
+    navigate("/registration");
   };
 
   return (
