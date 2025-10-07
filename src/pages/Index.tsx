@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { CalendarWidget } from "@/components/CalendarWidget";
@@ -8,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -18,7 +21,10 @@ const Index = () => {
         <main className="p-8">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-2xl font-semibold text-foreground">Appointments List</h1>
-            <Button className="gap-2 bg-primary hover:bg-primary/90">
+            <Button 
+              onClick={() => navigate("/new-appointment")}
+              className="gap-2 bg-primary hover:bg-primary/90"
+            >
               <Plus className="w-4 h-4" />
               New Appointment
             </Button>

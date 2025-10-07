@@ -1,0 +1,63 @@
+import { Search, UserPlus, Calendar, CreditCard } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface Step {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+}
+
+const steps: Step[] = [
+  { icon: Search, label: "Search", value: "search" },
+  { icon: UserPlus, label: "Registration", value: "registration" },
+  { icon: Calendar, label: "Appointment", value: "appointment" },
+  { icon: CreditCard, label: "Payment", value: "payment" },
+];
+
+interface BookingStepsProps {
+  currentStep: string;
+}
+
+export function BookingSteps({ currentStep }: BookingStepsProps) {
+  const currentIndex = steps.findIndex(s => s.value === currentStep);
+
+  return (
+    <div className="flex items-center justify-center gap-8 py-8">
+      {steps.map((step, index) => {
+        const Icon = step.icon;
+        const isActive = index === currentIndex;
+        const isPast = index < currentIndex;
+        
+        return (
+          <div key={step.value} className="flex items-center gap-8">
+            <div className="flex flex-col items-center gap-3">
+              <div
+                className={cn(
+                  "w-12 h-12 rounded-full flex items-center justify-center border-2 transition-colors",
+                  isActive && "bg-primary border-primary text-primary-foreground",
+                  isPast && "bg-muted border-border text-muted-foreground",
+                  !isActive && !isPast && "border-border text-muted-foreground"
+                )}
+              >
+                <Icon className="w-5 h-5" />
+              </div>
+              <span
+                className={cn(
+                  "text-sm font-medium",
+                  isActive && "text-foreground",
+                  !isActive && "text-muted-foreground"
+                )}
+              >
+                {step.label}
+              </span>
+            </div>
+            
+            {index < steps.length - 1 && (
+              <div className="w-32 h-px bg-border -mt-6" />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
