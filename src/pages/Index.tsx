@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
-
+import { CalendarWidget } from "@/components/CalendarWidget";
 import { AppointmentTabs } from "@/components/AppointmentTabs";
 import { AppointmentTable } from "@/components/AppointmentTable";
 import { Button } from "@/components/ui/button";
@@ -21,13 +21,16 @@ const Index = () => {
         <main className="p-8">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-2xl font-semibold text-foreground">Appointments List</h1>
-            <Button 
-              onClick={() => navigate("/new-appointment")}
-              className="gap-2 bg-primary hover:bg-primary/90"
-            >
-              <Plus className="w-4 h-4" />
-              New Appointment
-            </Button>
+            <div className="flex items-center gap-4">
+              <CalendarWidget />
+              <Button 
+                onClick={() => navigate("/new-appointment")}
+                className="gap-2 bg-primary hover:bg-primary/90"
+              >
+                <Plus className="w-4 h-4" />
+                New Appointment
+              </Button>
+            </div>
           </div>
 
           <div className="flex items-center justify-end mb-6">
