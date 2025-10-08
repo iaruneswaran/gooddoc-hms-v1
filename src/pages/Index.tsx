@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
-import { CalendarWidget } from "@/components/CalendarWidget";
+
 import { AppointmentTabs } from "@/components/AppointmentTabs";
 import { AppointmentTable } from "@/components/AppointmentTable";
 import { Button } from "@/components/ui/button";
@@ -30,8 +30,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="flex items-center justify-between mb-6">
-            <CalendarWidget />
+          <div className="flex items-center justify-end mb-6">
             <div className="relative w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input

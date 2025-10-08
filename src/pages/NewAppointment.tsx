@@ -6,6 +6,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { BookingSteps } from "@/components/BookingSteps";
 import { PatientSearchForm } from "@/components/PatientSearchForm";
 import { PatientResultsList } from "@/components/PatientResultsList";
+import { CalendarWidget } from "@/components/CalendarWidget";
 import { Button } from "@/components/ui/button";
 
 // Mock data
@@ -80,6 +81,10 @@ const NewAppointment = () => {
                 </Button>
               </div>
             )}
+          </div>
+
+          <div className="fixed bottom-8 left-[220px]">
+            <CalendarWidget />
           </div>
         </main>
       </div>
