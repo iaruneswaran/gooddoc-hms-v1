@@ -35,7 +35,8 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-end mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <AppointmentTabs onTabChange={setSelectedCategory} />
             <div className="relative w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -43,10 +44,6 @@ const Index = () => {
                 className="pl-10"
               />
             </div>
-          </div>
-
-          <div className="mb-6">
-            <AppointmentTabs onTabChange={setSelectedCategory} />
           </div>
 
           <AppointmentTable category={selectedCategory} />
