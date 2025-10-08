@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -10,6 +11,7 @@ import { Plus, Search } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("outpatient-care");
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -44,10 +46,10 @@ const Index = () => {
           </div>
 
           <div className="mb-6">
-            <AppointmentTabs />
+            <AppointmentTabs onTabChange={setSelectedCategory} />
           </div>
 
-          <AppointmentTable />
+          <AppointmentTable category={selectedCategory} />
         </main>
       </div>
     </div>
