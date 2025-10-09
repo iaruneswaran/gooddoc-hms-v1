@@ -31,7 +31,7 @@ export default function BookAppointment() {
             breadcrumbs={["GoodDoc", "Appointments", "Appointment"]}
           />
           
-          <div className="p-4 md:p-6 max-w-full">
+          <div className="p-4 md:p-6 max-w-[1400px] mx-auto">
             <Button
               variant="ghost"
               onClick={() => navigate(-1)}
@@ -45,8 +45,8 @@ export default function BookAppointment() {
               <BookingSteps currentStep="appointment" />
             </div>
 
-            <div className="flex gap-4 items-start">
-              <div className="flex-1 min-w-0">
+            <div className="flex flex-col lg:flex-row gap-4 items-start">
+              <div className="flex-1 min-w-0 w-full lg:w-auto">
                 <h2 className="text-xl font-semibold text-destructive mb-3">Book Appointments</h2>
                 
                 <div className="mb-4">
@@ -100,7 +100,7 @@ export default function BookAppointment() {
                 </div>
               </div>
 
-              <div className="w-72 flex-shrink-0">
+              <div className="w-full lg:w-80 flex-shrink-0">
                 <h3 className="text-sm font-medium mb-3">Appointment Summary</h3>
                 
                 <Card className="mb-4">
