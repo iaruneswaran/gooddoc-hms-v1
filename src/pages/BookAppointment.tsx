@@ -27,32 +27,32 @@ export default function BookAppointment() {
             breadcrumbs={["GoodDoc", "Appointments", "Appointment"]}
           />
           
-          <div className="p-6">
+          <div className="p-6 max-w-[1600px] mx-auto">
             <Button
               variant="ghost"
               onClick={() => navigate(-1)}
-              className="mb-6 -ml-2"
+              className="mb-4 -ml-2"
             >
               <ChevronLeft className="w-4 h-4" />
               Appointments
             </Button>
 
-            <div className="mb-8">
+            <div className="mb-6">
               <BookingSteps currentStep="appointment" />
             </div>
 
-            <div className="flex gap-6">
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-destructive mb-6">Book Appointments</h2>
+            <div className="flex gap-6 items-start">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl font-semibold text-destructive mb-4">Book Appointments</h2>
                 
-                <div className="mb-8">
-                  <h3 className="text-sm font-medium mb-4">Appointment Type</h3>
-                  <div className="flex gap-3">
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium mb-3">Appointment Type</h3>
+                  <div className="flex flex-wrap gap-2">
                     {appointmentTypes.map((type) => (
                       <Button
                         key={type.label}
                         variant="outline"
-                        className="flex items-center gap-2 h-auto py-3 px-4"
+                        className="flex items-center gap-2 h-auto py-2.5 px-4"
                       >
                         <type.icon className={`w-4 h-4 ${type.color}`} />
                         <span className="text-sm">{type.label}</span>
@@ -61,14 +61,14 @@ export default function BookAppointment() {
                   </div>
                 </div>
 
-                <Card className="min-h-[400px] flex items-center justify-center">
-                  <CardContent className="text-center py-20">
+                <Card className="min-h-[300px] flex items-center justify-center">
+                  <CardContent className="text-center py-16">
                     <p className="text-muted-foreground font-medium mb-1">No Appointments</p>
                     <p className="text-sm text-muted-foreground">Booking appointments will appear here</p>
                   </CardContent>
                 </Card>
 
-                <div className="flex justify-between mt-6">
+                <div className="flex justify-between mt-4">
                   <Button
                     variant="outline"
                     onClick={() => navigate(-1)}
@@ -81,8 +81,8 @@ export default function BookAppointment() {
                 </div>
               </div>
 
-              <div className="w-80">
-                <h3 className="text-sm font-medium mb-4">Appointment Summary</h3>
+              <div className="w-80 flex-shrink-0">
+                <h3 className="text-sm font-medium mb-3">Appointment Summary</h3>
                 
                 <Card className="mb-4">
                   <CardContent className="p-4">
