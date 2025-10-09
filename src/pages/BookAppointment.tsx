@@ -31,32 +31,32 @@ export default function BookAppointment() {
             breadcrumbs={["GoodDoc", "Appointments", "Appointment"]}
           />
           
-          <div className="p-6 max-w-[1600px] mx-auto">
+          <div className="p-4 md:p-6 max-w-full">
             <Button
               variant="ghost"
               onClick={() => navigate(-1)}
-              className="mb-4 -ml-2"
+              className="mb-3 -ml-2"
             >
               <ChevronLeft className="w-4 h-4" />
               Appointments
             </Button>
 
-            <div className="mb-6">
+            <div className="mb-4">
               <BookingSteps currentStep="appointment" />
             </div>
 
-            <div className="flex gap-6 items-start">
+            <div className="flex gap-4 items-start">
               <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-semibold text-destructive mb-4">Book Appointments</h2>
+                <h2 className="text-xl font-semibold text-destructive mb-3">Book Appointments</h2>
                 
-                <div className="mb-6">
-                  <h3 className="text-sm font-medium mb-3">Appointment Type</h3>
+                <div className="mb-4">
+                  <h3 className="text-sm font-medium mb-2">Appointment Type</h3>
                   <div className="flex flex-wrap gap-2">
                     {appointmentTypes.map((type) => (
                       <Button
                         key={type.label}
                         variant={type.label === "Consultation" && showConsultationForm ? "default" : "outline"}
-                        className="flex items-center gap-2 h-auto py-2.5 px-4"
+                        className="flex items-center gap-2 h-auto py-2 px-3"
                         onClick={() => {
                           if (type.label === "Consultation") {
                             setShowConsultationForm(true);
@@ -79,8 +79,8 @@ export default function BookAppointment() {
                     onUpdate={(data) => setConsultationData(data)}
                   />
                 ) : (
-                  <Card className="min-h-[300px] flex items-center justify-center">
-                    <CardContent className="text-center py-16">
+                  <Card className="min-h-[200px] flex items-center justify-center">
+                    <CardContent className="text-center py-12">
                       <p className="text-muted-foreground font-medium mb-1">No Appointments</p>
                       <p className="text-sm text-muted-foreground">Booking appointments will appear here</p>
                     </CardContent>
@@ -100,7 +100,7 @@ export default function BookAppointment() {
                 </div>
               </div>
 
-              <div className="w-80 flex-shrink-0">
+              <div className="w-72 flex-shrink-0">
                 <h3 className="text-sm font-medium mb-3">Appointment Summary</h3>
                 
                 <Card className="mb-4">
