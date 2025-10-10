@@ -76,34 +76,34 @@ const BookAppointment = () => {
           <div className="max-w-[1600px] mx-auto">
             <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>
             
+            {/* Appointment Type Buttons */}
+            <div className="space-y-4 mb-8">
+              <h3 className="text-sm font-medium text-foreground">Appointment Type</h3>
+              <div className="flex gap-3">
+                {appointmentTypes.map((type) => {
+                  const Icon = type.icon;
+                  const isSelected = selectedType === type.value;
+                  return (
+                    <Button
+                      key={type.value}
+                      variant={isSelected ? "default" : "outline"}
+                      className={cn(
+                        "h-9 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap",
+                        isSelected && "bg-primary text-primary-foreground"
+                      )}
+                      onClick={() => handleTypeClick(type.value)}
+                    >
+                      <Icon className={cn("w-4 h-4", isSelected ? "text-primary-foreground" : "text-primary")} />
+                      <span className="text-sm">{type.label}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Main Content */}
               <div className="w-full lg:flex-1">
-                {/* Appointment Type Buttons */}
-                <div className="space-y-4 mb-8">
-                  <h3 className="text-sm font-medium text-foreground">Appointment Type</h3>
-                  <div className="flex gap-3">
-                    {appointmentTypes.map((type) => {
-                      const Icon = type.icon;
-                      const isSelected = selectedType === type.value;
-                      return (
-                        <Button
-                          key={type.value}
-                          variant={isSelected ? "default" : "outline"}
-                          className={cn(
-                            "h-9 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap",
-                            isSelected && "bg-primary text-primary-foreground"
-                          )}
-                          onClick={() => handleTypeClick(type.value)}
-                        >
-                          <Icon className={cn("w-4 h-4", isSelected ? "text-primary-foreground" : "text-primary")} />
-                          <span className="text-sm">{type.label}</span>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </div>
-
                 {/* Consultation Form or Empty State */}
                 {selectedType === "consultation" && consultationData ? (
                   <ConsultationBookingForm
