@@ -39,13 +39,13 @@ const BookAppointment = () => {
           <div className="max-w-[1400px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-6 justify-center">
               {/* Main Content */}
-              <div className="w-full lg:max-w-2xl">
+              <div className="w-full lg:max-w-4xl">
                 <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>
                 
                 {/* Appointment Type Buttons */}
                 <div className="space-y-4 mb-8">
                   <h3 className="text-sm font-medium text-foreground">Appointment Type</h3>
-                  <div className="flex gap-3 overflow-x-auto">
+                  <div className="flex gap-3">
                     {appointmentTypes.map((type) => {
                       const Icon = type.icon;
                       return (
