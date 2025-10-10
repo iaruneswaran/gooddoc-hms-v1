@@ -46,7 +46,7 @@ export default function BookAppointment() {
             </div>
 
             <div className="flex flex-col lg:flex-row gap-4 items-start">
-              <div className="flex-1 min-w-0 w-full lg:w-auto">
+              <div className="w-full lg:max-w-2xl">
                 <h2 className="text-xl font-semibold text-destructive mb-3">Book Appointments</h2>
                 
                 <div className="mb-4">
