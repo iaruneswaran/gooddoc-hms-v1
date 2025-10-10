@@ -52,7 +52,7 @@ const BookAppointment = () => {
                         <Button
                           key={type.value}
                           variant="outline"
-                          className="h-auto py-2.5 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap"
+                          className="h-9 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap"
                         >
                           <Icon className="w-4 h-4 text-primary" />
                           <span className="text-sm">{type.label}</span>
