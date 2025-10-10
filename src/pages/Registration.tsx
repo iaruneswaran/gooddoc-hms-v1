@@ -75,7 +75,7 @@ const Registration = () => {
       description: `Patient registered with ${gdid}`,
     });
     // Navigate to appointment booking step
-    navigate("/book-appointment");
+    navigate("/appointment-booking");
   };
 
   return (
