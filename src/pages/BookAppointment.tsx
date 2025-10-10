@@ -36,10 +36,10 @@ const BookAppointment = () => {
 
           <BookingSteps currentStep="appointment" />
 
-          <div className="max-w-[1400px] mx-auto">
+          <div className="max-w-[1600px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-6 justify-center">
               {/* Main Content */}
-              <div className="w-full lg:max-w-4xl">
+              <div className="w-full lg:max-w-5xl">
                 <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>
                 
                 {/* Appointment Type Buttons */}
