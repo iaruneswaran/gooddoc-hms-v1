@@ -45,16 +45,16 @@ const BookAppointment = () => {
                 {/* Appointment Type Buttons */}
                 <div className="space-y-4 mb-8">
                   <h3 className="text-sm font-medium text-foreground">Appointment Type</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="flex gap-3 overflow-x-auto">
                     {appointmentTypes.map((type) => {
                       const Icon = type.icon;
                       return (
                         <Button
                           key={type.value}
                           variant="outline"
-                          className="h-auto py-4 flex flex-col items-center gap-2 hover:bg-accent hover:border-primary transition-colors"
+                          className="h-auto py-2.5 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap"
                         >
-                          <Icon className="w-5 h-5 text-primary" />
+                          <Icon className="w-4 h-4 text-primary" />
                           <span className="text-sm">{type.label}</span>
                         </Button>
                       );
