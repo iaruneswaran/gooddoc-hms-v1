@@ -39,7 +39,7 @@ const BookAppointment = () => {
           <div className="max-w-[1600px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-6 justify-center">
               {/* Main Content */}
-              <div className="w-full lg:max-w-5xl">
+              <div className="w-full lg:flex-1">
                 <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>
                 
                 {/* Appointment Type Buttons */}
@@ -83,7 +83,7 @@ const BookAppointment = () => {
               </div>
 
               {/* Appointment Summary Sidebar */}
-              <Card className="w-full lg:w-80 p-6 h-fit">
+              <Card className="w-full lg:flex-1 p-6 h-fit">
                 <h3 className="text-sm font-semibold text-foreground mb-6">Appointment Summary</h3>
                 
                 <div className="space-y-6">
