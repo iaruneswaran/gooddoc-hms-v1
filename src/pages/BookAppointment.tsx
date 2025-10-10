@@ -45,7 +45,7 @@ export default function BookAppointment() {
               <BookingSteps currentStep="appointment" />
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-4 items-start">
+            <div className="flex flex-col lg:flex-row gap-4 items-start justify-center">
               <div className="w-full lg:max-w-2xl">
                 <h2 className="text-xl font-semibold text-destructive mb-3">Book Appointments</h2>
                 
