@@ -14,7 +14,7 @@ interface AppointmentTabsProps {
 export function AppointmentTabs({ onTabChange }: AppointmentTabsProps) {
   return (
     <Tabs defaultValue="outpatient-care" className="w-full" onValueChange={onTabChange}>
-      <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 w-full justify-start">
+      <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
         {categories.map((category) => (
           <TabsTrigger
             key={category}
