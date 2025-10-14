@@ -11,6 +11,7 @@ import { ConsultationBookingForm, ConsultationData } from "@/components/Consulta
 import { LaboratoryBookingForm, LaboratoryData } from "@/components/LaboratoryBookingForm";
 import { RadiologyBookingForm, RadiologyData } from "@/components/RadiologyBookingForm";
 import { IPDAdmissionBookingForm, IPDAdmissionData } from "@/components/IPDAdmissionBookingForm";
+import { DCProcedureBookingForm, DCProcedureData } from "@/components/DCProcedureBookingForm";
 import { format } from "date-fns";
 
 const appointmentTypes = [
@@ -28,6 +29,7 @@ const BookAppointment = () => {
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
   const [radiologyData, setRadiologyData] = useState<RadiologyData | null>(null);
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
+  const [dcProcedureData, setDcProcedureData] = useState<DCProcedureData | null>(null);
 
   const handleTypeClick = (type: string) => {
     if (type === "consultation") {
@@ -35,6 +37,7 @@ const BookAppointment = () => {
       setLaboratoryData(null);
       setRadiologyData(null);
       setIpdAdmissionData(null);
+      setDcProcedureData(null);
       // Initialize with default data
       setConsultationData({
         mode: "in-person",
@@ -50,6 +53,7 @@ const BookAppointment = () => {
       setConsultationData(null);
       setRadiologyData(null);
       setIpdAdmissionData(null);
+      setDcProcedureData(null);
       // Initialize with default data
       setLaboratoryData({
         mode: "in-clinic",
@@ -66,6 +70,7 @@ const BookAppointment = () => {
       setConsultationData(null);
       setLaboratoryData(null);
       setIpdAdmissionData(null);
+      setDcProcedureData(null);
       // Initialize with default data
       setRadiologyData({
         radiologyType: "X-Ray",
@@ -82,6 +87,7 @@ const BookAppointment = () => {
       setConsultationData(null);
       setLaboratoryData(null);
       setRadiologyData(null);
+      setDcProcedureData(null);
       // Initialize with default data
       setIpdAdmissionData({
         department: "General Medicine",
@@ -89,6 +95,22 @@ const BookAppointment = () => {
         ward: "General Ward - 01A",
         bed: "Bed - 35A",
         reasonForAdmission: "",
+        date: new Date(2025, 7, 5),
+        time: "07:30",
+      });
+    } else if (type === "dc") {
+      setSelectedType(type);
+      setConsultationData(null);
+      setLaboratoryData(null);
+      setRadiologyData(null);
+      setIpdAdmissionData(null);
+      // Initialize with default data
+      setDcProcedureData({
+        department: "General Surgery",
+        procedure: "Endoscopy",
+        attendingDoctor: "Dr. A. Joseph (Ophthalmology)",
+        otRoom: "OT - 05A",
+        reasonForProcedure: "",
         date: new Date(2025, 7, 5),
         time: "07:30",
       });
@@ -115,6 +137,11 @@ const BookAppointment = () => {
     setIpdAdmissionData(null);
   };
 
+  const handleRemoveDCProcedure = () => {
+    setSelectedType(null);
+    setDcProcedureData(null);
+  };
+
   const handleConsultationUpdate = (data: ConsultationData) => {
     setConsultationData(data);
   };
@@ -129,6 +156,10 @@ const BookAppointment = () => {
 
   const handleIPDAdmissionUpdate = (data: IPDAdmissionData) => {
     setIpdAdmissionData(data);
+  };
+
+  const handleDCProcedureUpdate = (data: DCProcedureData) => {
+    setDcProcedureData(data);
   };
 
   const calculateTotal = () => {
@@ -151,6 +182,10 @@ const BookAppointment = () => {
     
     if (ipdAdmissionData) {
       subtotal = 4500;
+    }
+    
+    if (dcProcedureData) {
+      subtotal = 13500;
     }
     
     const cgst = Math.round(subtotal * 0.09);
@@ -227,6 +262,11 @@ const BookAppointment = () => {
                   <IPDAdmissionBookingForm
                     onRemove={handleRemoveIPDAdmission}
                     onUpdate={handleIPDAdmissionUpdate}
+                  />
+                ) : selectedType === "dc" && dcProcedureData ? (
+                  <DCProcedureBookingForm
+                    onRemove={handleRemoveDCProcedure}
+                    onUpdate={handleDCProcedureUpdate}
                   />
                 ) : (
                   <Card className="border-dashed min-h-[400px] flex flex-col items-center justify-center p-8">
@@ -469,6 +509,68 @@ const BookAppointment = () => {
                         <div className="flex justify-between items-center pt-3 border-t border-border">
                           <p className="text-foreground">Admission</p>
                           <p className="text-foreground font-semibold">₹5,000</p>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-border space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">Subtotal</p>
+                          <p className="text-foreground">₹{calculateTotal().subtotal}</p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">CGST (9%)</p>
+                          <p className="text-foreground">₹{calculateTotal().cgst}</p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">SGST (9%)</p>
+                          <p className="text-foreground">₹{calculateTotal().sgst}</p>
+                        </div>
+                        <div className="flex justify-between pt-3 border-t border-border">
+                          <p className="text-foreground font-semibold">Net Payable</p>
+                          <p className="text-foreground font-bold">₹{calculateTotal().total}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : dcProcedureData ? (
+                    <div className="pt-6 border-t border-border space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-foreground mb-1">Day-Care Procedure</p>
+                          <button
+                            onClick={handleRemoveDCProcedure}
+                            className="text-xs text-primary hover:text-primary/80"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3 text-xs">
+                        <div>
+                          <p className="text-muted-foreground">When</p>
+                          <p className="text-foreground font-medium">
+                            {format(dcProcedureData.date, "dd/MM/yyyy")} {dcProcedureData.time} AM
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">Attending Doctor</p>
+                          <p className="text-foreground font-medium">{dcProcedureData.attendingDoctor}</p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">Procedure</p>
+                          <p className="text-foreground font-medium">{dcProcedureData.procedure}</p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">OT/Procedure Room</p>
+                          <p className="text-foreground font-medium">{dcProcedureData.otRoom}</p>
+                        </div>
+
+                        <div className="flex justify-between items-center pt-3 border-t border-border">
+                          <p className="text-foreground">Admission</p>
+                          <p className="text-foreground font-semibold">₹15,000</p>
                         </div>
                       </div>
 
