@@ -103,7 +103,7 @@ const BookAppointment = () => {
 
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Main Content */}
-              <div className="w-full lg:flex-1">
+              <div className="w-full flex-1">
                 {/* Consultation Form or Empty State */}
                 {selectedType === "consultation" && consultationData ? (
                   <ConsultationBookingForm
@@ -132,7 +132,7 @@ const BookAppointment = () => {
               </div>
 
               {/* Appointment Summary Sidebar */}
-              <Card className="w-full lg:flex-1 p-6 h-fit">
+              <Card className="w-full lg:w-[380px] p-6 h-fit shrink-0">
                 <h3 className="text-sm font-semibold text-foreground mb-6">Appointment Summary</h3>
                 
                 <div className="space-y-6">
