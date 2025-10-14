@@ -130,39 +130,40 @@ export const DCProcedureBookingForm = ({ onRemove, onUpdate }: DCProcedureBookin
           </div>
         </div>
 
-        {/* Attending Doctor */}
-        <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">
-            Attending Doctor
-          </label>
-          <Select value={attendingDoctor} onValueChange={handleAttendingDoctorChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select doctor" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Dr. A. Joseph (Ophthalmology)">Dr. A. Joseph (Ophthalmology)</SelectItem>
-              <SelectItem value="Dr. Meera Nair (Cardiology)">Dr. Meera Nair (Cardiology)</SelectItem>
-              <SelectItem value="Dr. Rajesh Kumar (Neurology)">Dr. Rajesh Kumar (Neurology)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Attending Doctor and OT/Procedure Room */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Attending Doctor
+            </label>
+            <Select value={attendingDoctor} onValueChange={handleAttendingDoctorChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select doctor" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Dr. A. Joseph (Ophthalmology)">Dr. A. Joseph (Ophthalmology)</SelectItem>
+                <SelectItem value="Dr. Meera Nair (Cardiology)">Dr. Meera Nair (Cardiology)</SelectItem>
+                <SelectItem value="Dr. Rajesh Kumar (Neurology)">Dr. Rajesh Kumar (Neurology)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        {/* OT/Procedure Room */}
-        <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">
-            OT/Procedure Room
-          </label>
-          <Select value={otRoom} onValueChange={handleOtRoomChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select room" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="OT - 05A">OT - 05A</SelectItem>
-              <SelectItem value="OT - 05B">OT - 05B</SelectItem>
-              <SelectItem value="OT - 06A">OT - 06A</SelectItem>
-              <SelectItem value="OT - 06B">OT - 06B</SelectItem>
-            </SelectContent>
-          </Select>
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              OT/Procedure Room
+            </label>
+            <Select value={otRoom} onValueChange={handleOtRoomChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select room" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="OT - 05A">OT - 05A</SelectItem>
+                <SelectItem value="OT - 05B">OT - 05B</SelectItem>
+                <SelectItem value="OT - 06A">OT - 06A</SelectItem>
+                <SelectItem value="OT - 06B">OT - 06B</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Reason for Procedure */}
