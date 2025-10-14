@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { ConsultationBookingForm, ConsultationData } from "@/components/ConsultationBookingForm";
 import { LaboratoryBookingForm, LaboratoryData } from "@/components/LaboratoryBookingForm";
 import { RadiologyBookingForm, RadiologyData } from "@/components/RadiologyBookingForm";
+import { IPDAdmissionBookingForm, IPDAdmissionData } from "@/components/IPDAdmissionBookingForm";
 import { format } from "date-fns";
 
 const appointmentTypes = [
@@ -26,12 +27,14 @@ const BookAppointment = () => {
   const [consultationData, setConsultationData] = useState<ConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
   const [radiologyData, setRadiologyData] = useState<RadiologyData | null>(null);
+  const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
 
   const handleTypeClick = (type: string) => {
     if (type === "consultation") {
       setSelectedType(type);
       setLaboratoryData(null);
       setRadiologyData(null);
+      setIpdAdmissionData(null);
       // Initialize with default data
       setConsultationData({
         mode: "in-person",
@@ -46,6 +49,7 @@ const BookAppointment = () => {
       setSelectedType(type);
       setConsultationData(null);
       setRadiologyData(null);
+      setIpdAdmissionData(null);
       // Initialize with default data
       setLaboratoryData({
         mode: "in-clinic",
@@ -61,6 +65,7 @@ const BookAppointment = () => {
       setSelectedType(type);
       setConsultationData(null);
       setLaboratoryData(null);
+      setIpdAdmissionData(null);
       // Initialize with default data
       setRadiologyData({
         radiologyType: "X-Ray",
@@ -69,6 +74,21 @@ const BookAppointment = () => {
           { id: "1", name: "Chest (PA View)", category: "Radiology", price: 500 },
           { id: "2", name: "Cervical Spine", category: "Radiology", price: 600 },
         ],
+        date: new Date(2025, 7, 5),
+        time: "07:30",
+      });
+    } else if (type === "ipd") {
+      setSelectedType(type);
+      setConsultationData(null);
+      setLaboratoryData(null);
+      setRadiologyData(null);
+      // Initialize with default data
+      setIpdAdmissionData({
+        department: "General Medicine",
+        attendingDoctor: "Dr. A. Joseph (Ophthalmology)",
+        ward: "General Ward - 01A",
+        bed: "Bed - 35A",
+        reasonForAdmission: "",
         date: new Date(2025, 7, 5),
         time: "07:30",
       });
@@ -90,6 +110,11 @@ const BookAppointment = () => {
     setRadiologyData(null);
   };
 
+  const handleRemoveIPDAdmission = () => {
+    setSelectedType(null);
+    setIpdAdmissionData(null);
+  };
+
   const handleConsultationUpdate = (data: ConsultationData) => {
     setConsultationData(data);
   };
@@ -100,6 +125,10 @@ const BookAppointment = () => {
 
   const handleRadiologyUpdate = (data: RadiologyData) => {
     setRadiologyData(data);
+  };
+
+  const handleIPDAdmissionUpdate = (data: IPDAdmissionData) => {
+    setIpdAdmissionData(data);
   };
 
   const calculateTotal = () => {
@@ -118,6 +147,10 @@ const BookAppointment = () => {
     if (radiologyData) {
       const testsTotal = radiologyData.selectedTests.reduce((sum, test) => sum + test.price, 0);
       subtotal = testsTotal;
+    }
+    
+    if (ipdAdmissionData) {
+      subtotal = 4500;
     }
     
     const cgst = Math.round(subtotal * 0.09);
@@ -189,6 +222,11 @@ const BookAppointment = () => {
                   <RadiologyBookingForm
                     onRemove={handleRemoveRadiology}
                     onUpdate={handleRadiologyUpdate}
+                  />
+                ) : selectedType === "ipd" && ipdAdmissionData ? (
+                  <IPDAdmissionBookingForm
+                    onRemove={handleRemoveIPDAdmission}
+                    onUpdate={handleIPDAdmissionUpdate}
                   />
                 ) : (
                   <Card className="border-dashed min-h-[400px] flex flex-col items-center justify-center p-8">
@@ -370,6 +408,68 @@ const BookAppointment = () => {
                             ))}
                           </div>
                         )}
+                      </div>
+
+                      <div className="pt-4 border-t border-border space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">Subtotal</p>
+                          <p className="text-foreground">₹{calculateTotal().subtotal}</p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">CGST (9%)</p>
+                          <p className="text-foreground">₹{calculateTotal().cgst}</p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">SGST (9%)</p>
+                          <p className="text-foreground">₹{calculateTotal().sgst}</p>
+                        </div>
+                        <div className="flex justify-between pt-3 border-t border-border">
+                          <p className="text-foreground font-semibold">Net Payable</p>
+                          <p className="text-foreground font-bold">₹{calculateTotal().total}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : ipdAdmissionData ? (
+                    <div className="pt-6 border-t border-border space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-foreground mb-1">IPD Admission</p>
+                          <button
+                            onClick={handleRemoveIPDAdmission}
+                            className="text-xs text-primary hover:text-primary/80"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3 text-xs">
+                        <div>
+                          <p className="text-muted-foreground">When</p>
+                          <p className="text-foreground font-medium">
+                            {format(ipdAdmissionData.date, "dd/MM/yyyy")} {ipdAdmissionData.time} AM
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">Attending Doctor</p>
+                          <p className="text-foreground font-medium">{ipdAdmissionData.attendingDoctor}</p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">Ward</p>
+                          <p className="text-foreground font-medium">{ipdAdmissionData.ward}</p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-foreground">Bed</p>
+                          <p className="text-foreground font-medium">{ipdAdmissionData.bed}</p>
+                        </div>
+
+                        <div className="flex justify-between items-center pt-3 border-t border-border">
+                          <p className="text-foreground">Admission</p>
+                          <p className="text-foreground font-semibold">₹5,000</p>
+                        </div>
                       </div>
 
                       <div className="pt-4 border-t border-border space-y-2 text-xs">
