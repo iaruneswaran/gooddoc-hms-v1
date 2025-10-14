@@ -210,13 +210,13 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
       </div>
 
       {/* Date & Time */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
+      <div>
+        <div className="flex items-center justify-between mb-3">
           <label className="text-sm font-medium text-foreground">Date & Time</label>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="h-9 px-3">
-                <CalendarIcon className="w-4 h-4 mr-2" />
+              <Button variant="ghost" size="sm" className="text-foreground">
+                <CalendarIcon className="mr-2 h-4 w-4" />
                 {format(date, "dd/MM/yyyy")}
               </Button>
             </PopoverTrigger>
@@ -232,16 +232,13 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
           </Popover>
         </div>
 
-        {/* Time Slots */}
-        <div className="grid grid-cols-8 gap-2">
+        <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
           {timeSlots.map((time) => (
             <Button
               key={time}
               variant={selectedTime === time ? "default" : "outline"}
-              className={cn(
-                "h-9 text-sm",
-                selectedTime === time && "bg-primary text-primary-foreground"
-              )}
+              size="sm"
+              className="h-9 text-xs"
               onClick={() => handleChange("time", time)}
             >
               {time}

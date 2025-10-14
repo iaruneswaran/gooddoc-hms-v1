@@ -214,14 +214,14 @@ export const DCProcedureBookingForm = ({ onRemove, onUpdate }: DCProcedureBookin
             </Popover>
           </div>
 
-          <div className="grid grid-cols-10 gap-2 p-4 border rounded-md max-h-[200px] overflow-y-auto">
+          <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
             {timeSlots.map((time) => (
               <Button
                 key={time}
                 type="button"
                 variant={selectedTime === time ? "default" : "outline"}
                 size="sm"
-                className="h-8 text-xs"
+                className="h-9 text-xs"
                 onClick={() => handleTimeSelect(time)}
               >
                 {time}

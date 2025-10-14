@@ -242,40 +242,34 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
 
         {/* Date & Time */}
         <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">Date & Time</label>
-          <div className="flex gap-4">
+          <div className="flex items-center justify-between mb-3">
+            <label className="text-sm font-medium text-foreground">Date & Time</label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "justify-start text-left font-normal w-[200px]",
-                    !date && "text-muted-foreground"
-                  )}
-                >
+                <Button variant="ghost" size="sm" className="text-foreground">
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "dd/MM/yyyy") : "Select date"}
+                  {format(date, "dd/MM/yyyy")}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
               </PopoverContent>
             </Popover>
+          </div>
 
-            <div className="flex-1 grid grid-cols-8 gap-2 max-h-[200px] overflow-y-auto p-2 border rounded-md">
-              {timeSlots.map((time) => (
-                <Button
-                  key={time}
-                  type="button"
-                  variant={selectedTime === time ? "default" : "outline"}
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={() => handleTimeSelect(time)}
-                >
-                  {time}
-                </Button>
-              ))}
-            </div>
+          <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
+            {timeSlots.map((time) => (
+              <Button
+                key={time}
+                type="button"
+                variant={selectedTime === time ? "default" : "outline"}
+                size="sm"
+                className="h-9 text-xs"
+                onClick={() => handleTimeSelect(time)}
+              >
+                {time}
+              </Button>
+            ))}
           </div>
         </div>
       </div>
