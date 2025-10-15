@@ -283,7 +283,40 @@ const BookAppointment = () => {
                   >
                     Back
                   </Button>
-                  <Button className="bg-primary hover:bg-primary/90">
+                  <Button 
+                    className="bg-primary hover:bg-primary/90"
+                    onClick={() => {
+                      const { subtotal, cgst, sgst, total } = calculateTotal();
+                      let items: { name: string; price: number }[] = [];
+                      
+                      if (consultationData) {
+                        items.push({ name: "Consultation", price: 1000 });
+                      } else if (laboratoryData) {
+                        items = [
+                          ...laboratoryData.selectedTests.map(test => ({ name: test.name, price: test.price })),
+                          ...laboratoryData.selectedPackages.map(pkg => ({ name: pkg.name, price: pkg.price }))
+                        ];
+                      } else if (radiologyData) {
+                        items = radiologyData.selectedTests.map(test => ({ name: test.name, price: test.price }));
+                      } else if (ipdAdmissionData) {
+                        items.push({ name: "IPD Admission", price: 5000 });
+                      } else if (dcProcedureData) {
+                        items.push({ name: dcProcedureData.procedure, price: 15000 });
+                      }
+                      
+                      navigate("/payment", {
+                        state: {
+                          appointmentType: selectedType,
+                          items,
+                          subtotal,
+                          cgst,
+                          sgst,
+                          total,
+                          date: "05/08/2025"
+                        }
+                      });
+                    }}
+                  >
                     Generate Invoice
                   </Button>
                 </div>
