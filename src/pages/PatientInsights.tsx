@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ChevronLeft, ChevronDown, User, Pencil, Download, Printer, Trash2, FileText, Plus, CheckCircle2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -112,6 +113,10 @@ const PatientInsights = () => {
     }));
   };
 
+  const getAppointmentColor = (type: string) => {
+    return "text-foreground";
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -122,46 +127,50 @@ const PatientInsights = () => {
         <main className="p-8">
           <button
             onClick={() => navigate("/")}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 font-medium"
+            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
           >
-            ← Back to Appointments
+            <ChevronLeft className="w-4 h-4" />
+            <span className="text-lg font-semibold">Appointments</span>
           </button>
 
           {/* Patient Header */}
-          <div className="mb-8 pb-8 border-b border-border">
-            <h1 className="text-3xl font-semibold text-foreground mb-2">{patientData.name}</h1>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <span>{patientData.gdid}</span>
-              <span>{patientData.age} years</span>
-              <span>{patientData.gender}</span>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="w-8 h-8 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground">{patientData.name}</h1>
+              <p className="text-sm text-muted-foreground">
+                {patientData.gdid} • {patientData.age} | {patientData.gender.charAt(0)}
+              </p>
             </div>
           </div>
 
           {/* Financial Summary & Actions */}
-          <div className="grid grid-cols-[2fr_1fr] gap-6 mb-8">
-            <Card className="p-8">
-              <div className="grid grid-cols-2 divide-x divide-border">
-                <div className="pr-8">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Total Outstanding</p>
-                  <p className="text-4xl font-light text-foreground">₹{patientData.totalOutstanding.toLocaleString()}</p>
-                  <p className="text-sm text-muted-foreground mt-1">Due Balance</p>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Card className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Total Outstanding</p>
+                  <p className="text-xs text-muted-foreground">Due Balance</p>
+                  <p className="text-3xl font-bold text-primary mt-2">₹{patientData.totalOutstanding.toLocaleString()}</p>
                 </div>
-                <div className="pl-8">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Advance Balance</p>
-                  <p className="text-4xl font-light text-foreground">₹{patientData.advanceBalance.toLocaleString()}</p>
-                  <p className="text-sm text-muted-foreground mt-1">Prepaid Funds</p>
+                <div className="text-right">
+                  <p className="text-sm text-muted-foreground mb-1">Advance Balance</p>
+                  <p className="text-xs text-muted-foreground">Prepaid Funds</p>
+                  <p className="text-3xl font-bold text-primary mt-2">₹{patientData.advanceBalance.toLocaleString()}</p>
                 </div>
               </div>
             </Card>
 
-            <div className="grid grid-cols-1 gap-3">
-              <Button variant="outline" className="h-full text-sm font-medium">
+            <div className="flex gap-3">
+              <Button variant="outline" className="flex-1 gap-2">
                 Book Appointments
               </Button>
-              <Button variant="outline" className="h-full text-sm font-medium">
+              <Button variant="outline" className="flex-1 gap-2">
                 Discharge
               </Button>
-              <Button variant="outline" className="h-full text-sm font-medium">
+              <Button variant="outline" className="flex-1 gap-2">
                 Payments
               </Button>
             </div>
@@ -172,39 +181,39 @@ const PatientInsights = () => {
             {/* Left Column - Tabs */}
             <div>
               <Tabs defaultValue="appointments" className="w-full">
-                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-8">
+                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
                   <TabsTrigger 
                     value="appointments" 
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-0 text-sm font-medium"
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Appointments
                   </TabsTrigger>
                   <TabsTrigger 
                     value="payment-history"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-0 text-sm font-medium"
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Payment History
                   </TabsTrigger>
                   <TabsTrigger 
                     value="documents"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-0 text-sm font-medium"
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Documents
                   </TabsTrigger>
                   <TabsTrigger 
                     value="insurance"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-0 text-sm font-medium"
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Insurance
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="appointments" className="mt-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-lg font-medium text-foreground">Appointment History</h2>
+                <TabsContent value="appointments" className="mt-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Appointment History</h2>
                     <div className="flex items-center gap-3">
                       <Select defaultValue="all">
-                        <SelectTrigger className="w-[180px] text-sm">
+                        <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="All Appointments" />
                         </SelectTrigger>
                         <SelectContent>
@@ -214,60 +223,63 @@ const PatientInsights = () => {
                           <SelectItem value="radiology">Radiology</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Input placeholder="Search appointments..." className="w-64 text-sm" />
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="space-y-12">
+                  <div className="space-y-8">
                     {appointmentHistory.map((group) => (
                       <div key={group.date}>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-6">{group.date}</p>
-                        <div className="space-y-3">
+                        <p className="text-sm font-medium text-muted-foreground mb-4">{group.date}</p>
+                        <div className="space-y-2">
                           {group.appointments.map((appointment) => (
                             <Collapsible
                               key={appointment.id}
                               open={openAppointments[appointment.id]}
                               onOpenChange={() => toggleAppointment(appointment.id)}
                             >
-                              <Card className="overflow-hidden border-border hover:shadow-sm transition-shadow">
+                              <Card className="overflow-hidden border-border shadow-sm">
                                 <CollapsibleTrigger className="w-full">
-                                  <div className="flex items-center justify-between px-8 py-5 hover:bg-muted/20 transition-colors">
-                                    <div className="text-left">
-                                      <p className="text-base font-medium text-foreground mb-1">
-                                        {appointment.type}
-                                      </p>
-                                      <p className="text-sm text-muted-foreground">{appointment.dateTime}</p>
-                                    </div>
-                                    <span className="text-sm text-muted-foreground">{openAppointments[appointment.id] ? '−' : '+'}</span>
+                                  <div className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors">
+                                    <p className="text-base font-semibold text-foreground">
+                                      {appointment.type}
+                                    </p>
+                                    <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
                                   </div>
                                 </CollapsibleTrigger>
 
                                 <CollapsibleContent>
-                                  <div className="px-8 pb-8 border-t border-border pt-8 bg-muted/10">
-                                    <div className="grid grid-cols-3 gap-x-16 gap-y-8">
+                                  <div className="px-6 pb-6 border-t border-border pt-6">
+                                    <div className="grid grid-cols-3 gap-x-12 gap-y-6">
                                       {/* Left Column */}
-                                      <div className="space-y-6">
+                                      <div className="space-y-4">
+                                        <div>
+                                          <p className="text-sm text-muted-foreground mb-1">Date & Time:</p>
+                                          <p className="text-sm text-foreground">{appointment.dateTime}</p>
+                                        </div>
                                         {appointment.doctor && (
                                           <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Doctor</p>
+                                            <p className="text-sm text-muted-foreground mb-1">Doctor:</p>
                                             <p className="text-sm text-foreground">{appointment.doctor}</p>
                                           </div>
                                         )}
                                         {appointment.clinic && (
                                           <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Clinic</p>
+                                            <p className="text-sm text-muted-foreground mb-1">Clinic:</p>
                                             <p className="text-sm text-foreground">{appointment.clinic}</p>
                                           </div>
                                         )}
                                         {appointment.center && (
                                           <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Center</p>
+                                            <p className="text-sm text-muted-foreground mb-1">Center:</p>
                                             <p className="text-sm text-foreground">{appointment.center}</p>
                                           </div>
                                         )}
                                         {appointment.procedure && (
                                           <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Procedure</p>
+                                            <p className="text-sm text-muted-foreground mb-1">Procedure:</p>
                                             <p className="text-sm text-foreground">{appointment.procedure}</p>
                                           </div>
                                         )}
@@ -275,23 +287,23 @@ const PatientInsights = () => {
 
                                       {/* Middle Column */}
                                       {(appointment.visitId || appointment.provider || appointment.department || appointment.opdClinic) && (
-                                        <div className="space-y-6">
+                                        <div className="space-y-4">
                                           {appointment.visitId && (
                                             <>
                                               <div>
-                                                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Visit ID</p>
+                                                <p className="text-sm text-muted-foreground mb-1">Visit ID:</p>
                                                 <p className="text-sm text-foreground">{appointment.visitId}</p>
                                               </div>
                                               <div>
-                                                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Provider</p>
+                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
                                                 <p className="text-sm text-foreground">{appointment.provider}</p>
                                               </div>
                                               <div>
-                                                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Department</p>
+                                                <p className="text-sm text-muted-foreground mb-1">Department:</p>
                                                 <p className="text-sm text-foreground">{appointment.department}</p>
                                               </div>
                                               <div>
-                                                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">OPD Clinic</p>
+                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
                                                 <p className="text-sm text-foreground">{appointment.opdClinic}</p>
                                               </div>
                                             </>
@@ -301,12 +313,14 @@ const PatientInsights = () => {
 
                                       {/* Right Column - Prescriptions */}
                                       {appointment.prescriptions && (
-                                        <div>
-                                          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Prescriptions</p>
-                                          <div className="space-y-3">
-                                            {appointment.prescriptions.map((prescription, idx) => (
-                                              <p key={idx} className="text-sm text-foreground leading-relaxed">{prescription}</p>
-                                            ))}
+                                        <div className="space-y-4">
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-3">Prescriptions</p>
+                                            <div className="space-y-2">
+                                              {appointment.prescriptions.map((prescription, idx) => (
+                                                <p key={idx} className="text-sm text-foreground">{prescription}</p>
+                                              ))}
+                                            </div>
                                           </div>
                                         </div>
                                       )}
@@ -314,8 +328,8 @@ const PatientInsights = () => {
 
                                     {/* Findings - Full Width */}
                                     {appointment.findings && (
-                                      <div className="mt-8 pt-8 border-t border-border">
-                                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Findings</p>
+                                      <div className="mt-6 pt-6 border-t border-border">
+                                        <p className="text-sm text-muted-foreground mb-2">Findings</p>
                                         <p className="text-sm text-foreground leading-relaxed">{appointment.findings}</p>
                                       </div>
                                     )}
@@ -330,15 +344,16 @@ const PatientInsights = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="payment-history" className="mt-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-lg font-medium text-foreground">Patient Transactions</h2>
+                <TabsContent value="payment-history" className="mt-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
                     <div className="flex items-center gap-3">
-                      <Button variant="outline" className="text-sm font-medium">
+                      <Button variant="outline" className="gap-2">
+                        <Download className="w-4 h-4" />
                         Download statement
                       </Button>
                       <Select defaultValue="all">
-                        <SelectTrigger className="w-[160px] text-sm">
+                        <SelectTrigger className="w-[160px]">
                           <SelectValue placeholder="All Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -348,68 +363,88 @@ const PatientInsights = () => {
                           <SelectItem value="overdue">Overdue</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Input placeholder="Search transactions..." className="w-64 text-sm" />
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
                     </div>
                   </div>
 
-                  <Card className="overflow-hidden border-border">
+                  <Card className="overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-muted/20 border-b border-border">
+                        <thead className="bg-muted/30 border-b border-border">
                           <tr>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Invoice</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Date</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Service</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Method</th>
-                            <th className="text-right px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Amount</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Status</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Actions</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Invoice</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Method</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Amount</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Status</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">INV-2025-001</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Jun 15, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Consultation</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Card • ****1234</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹1,500</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">Paid</Badge>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-001</td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">Card • ****1234</td>
+                            <td className="p-4 text-sm text-foreground">₹1,500</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
                             </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View
-                              </Button>
-                            </td>
-                          </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">INV-2025-002</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">May 20, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Laboratory</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">UPI</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹650</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">Paid</Badge>
-                            </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View
-                              </Button>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
                             </td>
                           </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">INV-2025-003</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Apr 10, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Imaging</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Cash</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹1,200</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">Paid</Badge>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-002</td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">UPI</td>
+                            <td className="p-4 text-sm text-foreground">₹650</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
                             </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View
-                              </Button>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-003</td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">Cash</td>
+                            <td className="p-4 text-sm text-foreground">₹1,200</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -418,95 +453,112 @@ const PatientInsights = () => {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="documents" className="mt-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-lg font-medium text-foreground">Patient Documents</h2>
+                <TabsContent value="documents" className="mt-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Patient Documents</h2>
                     <div className="flex items-center gap-3">
                       <Select defaultValue="all">
-                        <SelectTrigger className="w-[180px] text-sm">
+                        <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="All Documents" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Documents</SelectItem>
-                          <SelectItem value="prescription">Prescription</SelectItem>
-                          <SelectItem value="reports">Reports</SelectItem>
+                          <SelectItem value="prescription">Prescriptions</SelectItem>
+                          <SelectItem value="lab">Lab Results</SelectItem>
                           <SelectItem value="imaging">Imaging</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Input placeholder="Search documents..." className="w-64 text-sm" />
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
                     </div>
                   </div>
 
-                  <Card className="overflow-hidden border-border">
+                  <Card className="overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-muted/20 border-b border-border">
+                        <thead className="bg-muted/30 border-b border-border">
                           <tr>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Name</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Date</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Service</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Source</th>
-                            <th className="text-right px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Size</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Actions</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Name</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Source</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Size</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">Prescription</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Jun 15, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Consultation</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Hospital</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">239.3 KB</td>
-                            <td className="px-8 py-5">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
                               <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Download
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">Prescription</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">Hospital</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Print
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8 text-destructive hover:text-destructive">
-                                  Delete
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
                             </td>
                           </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">Lipid Panel Results</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">May 20, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Laboratory</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Clinic</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">239.3 KB</td>
-                            <td className="px-8 py-5">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
                               <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Download
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">Lipid Panel Results</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">Clinic</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Print
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8 text-destructive hover:text-destructive">
-                                  Delete
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
                             </td>
                           </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">ECG Report</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Apr 10, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Imaging</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">CT Center</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">239.3 KB</td>
-                            <td className="px-8 py-5">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
                               <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Download
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">ECG Report</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">CT Center</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                  Print
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-sm font-medium h-8 text-destructive hover:text-destructive">
-                                  Delete
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
                             </td>
@@ -517,109 +569,123 @@ const PatientInsights = () => {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="insurance" className="mt-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-lg font-medium text-foreground">Insurance Policies</h2>
+                <TabsContent value="insurance" className="mt-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Insurance Policies</h2>
                     <div className="flex items-center gap-3">
-                      <Button variant="outline" className="text-sm font-medium">
+                      <Button className="gap-2 bg-primary hover:bg-primary/90">
+                        <Plus className="w-4 h-4" />
                         Add policy
                       </Button>
-                      <Input placeholder="Search policies..." className="w-64 text-sm" />
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
                     </div>
                   </div>
 
-                  <Card className="p-8 mb-8 border-border">
-                    <div className="flex items-start justify-between mb-6">
+                  {/* Insurance Policy Card */}
+                  <Card className="p-6 mb-6">
+                    <div className="flex items-start justify-between mb-4">
                       <div>
-                        <div className="flex items-center gap-3 mb-3">
-                          <h3 className="text-xl font-medium text-foreground">Star Health Insurance</h3>
-                          <Badge variant="outline" className="text-xs font-normal">Verified</Badge>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold text-foreground">Star Health Insurance</h3>
+                          <Badge className="bg-green-500/10 text-green-700 hover:bg-green-500/20 gap-1">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Verified
+                          </Badge>
                         </div>
-                        <p className="text-base text-foreground mb-1">Family Health Optima Plan</p>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-8 mb-6">
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Member ID</p>
-                        <p className="text-sm text-foreground">SH123456789</p>
-                      </div>
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Group</p>
-                        <p className="text-sm text-foreground">GRP-2025-456</p>
-                      </div>
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Effective Period</p>
-                        <p className="text-sm text-foreground">Jan 01, 2025 – Dec 31, 2025</p>
+                        <p className="text-sm text-muted-foreground mb-3">Family Health Optima Plan</p>
                       </div>
                     </div>
 
-                    <div className="flex gap-3 pt-6 border-t border-border">
-                      <Button variant="outline" size="sm" className="text-sm font-medium">Verify Eligibility</Button>
-                      <Button variant="outline" size="sm" className="text-sm font-medium">Update</Button>
-                      <Button variant="outline" size="sm" className="text-sm font-medium">Replace</Button>
-                      <Button variant="outline" size="sm" className="text-sm font-medium">View coverage</Button>
+                    <div className="space-y-2 mb-4">
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Member ID:</span> SH123456789
+                      </p>
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Group:</span> GRP-2025-456
+                      </p>
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Effective:</span> Jan 01, 2025 – Dec 31, 2025
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button className="bg-primary hover:bg-primary/90">Verify Eligibility</Button>
+                      <Button variant="outline">Update</Button>
+                      <Button variant="outline">Replace</Button>
+                      <Button variant="outline">View coverage</Button>
                     </div>
                   </Card>
 
-                  <Card className="overflow-hidden border-border">
+                  {/* Claims Table */}
+                  <Card className="overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-muted/20 border-b border-border">
+                        <thead className="bg-muted/30 border-b border-border">
                           <tr>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Claim</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Date</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Service</th>
-                            <th className="text-right px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Billed</th>
-                            <th className="text-right px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Insurance paid</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Status</th>
-                            <th className="text-left px-8 py-4 text-xs uppercase tracking-wider text-muted-foreground font-medium">Actions</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Claim</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Billed</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Insurance paid</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Status</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">CLM-2025-789</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Jun 15, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Consultation</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹3,000</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹1,500</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">Paid</Badge>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-789</td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">₹3,000</td>
+                            <td className="p-4 text-sm text-foreground">₹1,500</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
                             </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View EOB
-                              </Button>
-                            </td>
-                          </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">CLM-2025-790</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">May 20, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Laboratory</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹2,000</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹650</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">Paid</Badge>
-                            </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View EOB
-                              </Button>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
                             </td>
                           </tr>
-                          <tr className="hover:bg-muted/10 transition-colors">
-                            <td className="px-8 py-5 text-sm text-foreground font-medium">CLM-2025-791</td>
-                            <td className="px-8 py-5 text-sm text-muted-foreground">Apr 10, 2025</td>
-                            <td className="px-8 py-5 text-sm text-foreground">Imaging</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹2,200</td>
-                            <td className="px-8 py-5 text-sm text-foreground text-right">₹1,200</td>
-                            <td className="px-8 py-5">
-                              <Badge variant="outline" className="text-xs font-normal">In Review</Badge>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-790</td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">₹2,000</td>
+                            <td className="p-4 text-sm text-foreground">₹650</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
                             </td>
-                            <td className="px-8 py-5">
-                              <Button variant="ghost" size="sm" className="text-sm font-medium h-8">
-                                View EOB
-                              </Button>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-791</td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">₹2,200</td>
+                            <td className="p-4 text-sm text-foreground">₹1,200</td>
+                            <td className="p-4">
+                              <Badge className="bg-orange-500/10 text-orange-700 hover:bg-orange-500/20">In Review</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -630,43 +696,74 @@ const PatientInsights = () => {
               </Tabs>
             </div>
 
-            {/* Right Column - Patient Info */}
-            <Card className="p-8 h-fit border-border">
-              <h3 className="text-base font-medium text-foreground mb-6 pb-4 border-b border-border">Patient Information</h3>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Full Name</p>
-                  <p className="text-sm text-foreground">{patientData.name}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-6">
+            {/* Right Column - Patient Information */}
+            <Card className="p-6 h-fit">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-base font-semibold text-primary">Patient Information</h3>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Pencil className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Gender</p>
-                    <p className="text-sm text-foreground">{patientData.gender}</p>
+                    <p className="text-xs text-muted-foreground mb-1">Full Name</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.name}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Date of Birth</p>
-                    <p className="text-sm text-foreground">{patientData.dob}</p>
+                    <p className="text-xs text-muted-foreground mb-1">Gender</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.gender}</p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Mobile Number</p>
-                  <p className="text-sm text-foreground">{patientData.phone}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Email</p>
-                  <p className="text-sm text-foreground">{patientData.email}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">National ID</p>
-                  <p className="text-sm text-foreground">{patientData.nationalId}</p>
-                </div>
-                <div className="pt-4 border-t border-border">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Address</p>
-                  <div className="space-y-3 text-sm text-foreground">
-                    <p>{patientData.street}</p>
-                    <p>{patientData.city}, {patientData.state} {patientData.pincode}</p>
-                    <p>{patientData.country}</p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Date of Birth</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.dob}</p>
                   </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Mobile Number</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.phone}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Email</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">National ID</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.nationalId}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Street, Apartment</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.street}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Pin code</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.pincode}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">State</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.state}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">City</p>
+                    <p className="text-sm font-medium text-foreground">{patientData.city}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Country</p>
+                  <p className="text-sm font-medium text-foreground">{patientData.country}</p>
                 </div>
               </div>
             </Card>
