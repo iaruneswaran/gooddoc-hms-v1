@@ -113,20 +113,7 @@ const PatientInsights = () => {
   };
 
   const getAppointmentColor = (type: string) => {
-    switch (type) {
-      case "Consultation":
-        return "text-primary";
-      case "Laboratory":
-        return "text-blue-600";
-      case "Radiology":
-        return "text-purple-600";
-      case "IPD Admission":
-        return "text-orange-600";
-      case "Day-Care Admission":
-        return "text-green-600";
-      default:
-        return "text-foreground";
-    }
+    return "text-foreground";
   };
 
   return (
@@ -241,24 +228,24 @@ const PatientInsights = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-8">
                     {appointmentHistory.map((group) => (
                       <div key={group.date}>
-                        <p className="text-sm font-medium text-foreground mb-3">{group.date}</p>
-                        <div className="space-y-3">
+                        <p className="text-sm font-medium text-muted-foreground mb-4">{group.date}</p>
+                        <div className="space-y-2">
                           {group.appointments.map((appointment) => (
                             <Collapsible
                               key={appointment.id}
                               open={openAppointments[appointment.id]}
                               onOpenChange={() => toggleAppointment(appointment.id)}
                             >
-                              <Card className="overflow-hidden">
+                              <Card className="overflow-hidden border-border shadow-sm">
                                 <CollapsibleTrigger className="w-full">
-                                  <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
-                                    <p className={`text-base font-semibold ${getAppointmentColor(appointment.type)}`}>
+                                  <div className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors">
+                                    <p className="text-base font-semibold text-foreground">
                                       {appointment.type}
                                     </p>
-                                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
+                                    <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
                                   </div>
                                 </CollapsibleTrigger>
 
