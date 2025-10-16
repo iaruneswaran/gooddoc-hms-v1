@@ -255,86 +255,93 @@ const PatientInsights = () => {
                               <Card className="overflow-hidden">
                                 <CollapsibleTrigger className="w-full">
                                   <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                      <p className={`text-base font-semibold ${getAppointmentColor(appointment.type)}`}>
-                                        {appointment.type}
-                                      </p>
-                                    </div>
+                                    <p className={`text-base font-semibold ${getAppointmentColor(appointment.type)}`}>
+                                      {appointment.type}
+                                    </p>
                                     <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
                                   </div>
                                 </CollapsibleTrigger>
 
                                 <CollapsibleContent>
-                                  <div className="px-4 pb-4 space-y-3 border-t border-border pt-4">
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                      <div>
-                                        <p className="text-muted-foreground mb-1">Date & Time:</p>
-                                        <p className="text-foreground font-medium">{appointment.dateTime}</p>
+                                  <div className="px-6 pb-6 border-t border-border pt-6">
+                                    <div className="grid grid-cols-3 gap-x-12 gap-y-6">
+                                      {/* Left Column */}
+                                      <div className="space-y-4">
+                                        <div>
+                                          <p className="text-sm text-muted-foreground mb-1">Date & Time:</p>
+                                          <p className="text-sm text-foreground">{appointment.dateTime}</p>
+                                        </div>
+                                        {appointment.doctor && (
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Doctor:</p>
+                                            <p className="text-sm text-foreground">{appointment.doctor}</p>
+                                          </div>
+                                        )}
+                                        {appointment.clinic && (
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Clinic:</p>
+                                            <p className="text-sm text-foreground">{appointment.clinic}</p>
+                                          </div>
+                                        )}
+                                        {appointment.center && (
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Center:</p>
+                                            <p className="text-sm text-foreground">{appointment.center}</p>
+                                          </div>
+                                        )}
+                                        {appointment.procedure && (
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Procedure:</p>
+                                            <p className="text-sm text-foreground">{appointment.procedure}</p>
+                                          </div>
+                                        )}
                                       </div>
-                                      {appointment.doctor && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Doctor:</p>
-                                          <p className="text-foreground font-medium">{appointment.doctor}</p>
+
+                                      {/* Middle Column */}
+                                      {(appointment.visitId || appointment.provider || appointment.department || appointment.opdClinic) && (
+                                        <div className="space-y-4">
+                                          {appointment.visitId && (
+                                            <>
+                                              <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Visit ID:</p>
+                                                <p className="text-sm text-foreground">{appointment.visitId}</p>
+                                              </div>
+                                              <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
+                                                <p className="text-sm text-foreground">{appointment.provider}</p>
+                                              </div>
+                                              <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Department:</p>
+                                                <p className="text-sm text-foreground">{appointment.department}</p>
+                                              </div>
+                                              <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
+                                                <p className="text-sm text-foreground">{appointment.opdClinic}</p>
+                                              </div>
+                                            </>
+                                          )}
                                         </div>
                                       )}
-                                      {appointment.clinic && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Clinic:</p>
-                                          <p className="text-foreground font-medium">{appointment.clinic}</p>
-                                        </div>
-                                      )}
-                                      {appointment.center && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Center:</p>
-                                          <p className="text-foreground font-medium">{appointment.center}</p>
-                                        </div>
-                                      )}
-                                      {appointment.procedure && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Procedure:</p>
-                                          <p className="text-foreground font-medium">{appointment.procedure}</p>
-                                        </div>
-                                      )}
-                                      {appointment.visitId && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Visit ID:</p>
-                                          <p className="text-foreground font-medium">{appointment.visitId}</p>
-                                        </div>
-                                      )}
-                                      {appointment.provider && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Provider:</p>
-                                          <p className="text-foreground font-medium">{appointment.provider}</p>
-                                        </div>
-                                      )}
-                                      {appointment.department && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Department:</p>
-                                          <p className="text-foreground font-medium">{appointment.department}</p>
-                                        </div>
-                                      )}
-                                      {appointment.opdClinic && (
-                                        <div>
-                                          <p className="text-muted-foreground mb-1">Provider:</p>
-                                          <p className="text-foreground font-medium">{appointment.opdClinic}</p>
+
+                                      {/* Right Column - Prescriptions */}
+                                      {appointment.prescriptions && (
+                                        <div className="space-y-4">
+                                          <div>
+                                            <p className="text-sm text-muted-foreground mb-3">Prescriptions</p>
+                                            <div className="space-y-2">
+                                              {appointment.prescriptions.map((prescription, idx) => (
+                                                <p key={idx} className="text-sm text-foreground">{prescription}</p>
+                                              ))}
+                                            </div>
+                                          </div>
                                         </div>
                                       )}
                                     </div>
 
-                                    {appointment.prescriptions && (
-                                      <div className="pt-3 border-t border-border">
-                                        <p className="text-sm font-semibold text-foreground mb-2">Prescriptions</p>
-                                        <ul className="space-y-1">
-                                          {appointment.prescriptions.map((prescription, idx) => (
-                                            <li key={idx} className="text-sm text-foreground">{prescription}</li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                    )}
-
+                                    {/* Findings - Full Width */}
                                     {appointment.findings && (
-                                      <div className="pt-3 border-t border-border">
-                                        <p className="text-sm font-semibold text-foreground mb-2">Findings</p>
+                                      <div className="mt-6 pt-6 border-t border-border">
+                                        <p className="text-sm text-muted-foreground mb-2">Findings</p>
                                         <p className="text-sm text-foreground leading-relaxed">{appointment.findings}</p>
                                       </div>
                                     )}
