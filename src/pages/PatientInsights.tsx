@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronDown, User, Pencil } from "lucide-react";
+import { ChevronLeft, ChevronDown, User, Pencil, Download, Printer, Trash2, FileText, Plus, CheckCircle2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 const PatientInsights = () => {
   const navigate = useNavigate();
@@ -344,15 +345,353 @@ const PatientInsights = () => {
                 </TabsContent>
 
                 <TabsContent value="payment-history" className="mt-6">
-                  <p className="text-muted-foreground">Payment history will be displayed here.</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
+                    <div className="flex items-center gap-3">
+                      <Button variant="outline" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Download statement
+                      </Button>
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue placeholder="All Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Status</SelectItem>
+                          <SelectItem value="paid">Paid</SelectItem>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="overdue">Overdue</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Card className="overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-muted/30 border-b border-border">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Invoice</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Method</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Amount</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Status</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-001</td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">Card • ****1234</td>
+                            <td className="p-4 text-sm text-foreground">₹1,500</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-002</td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">UPI</td>
+                            <td className="p-4 text-sm text-foreground">₹650</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">INV-2025-003</td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">Cash</td>
+                            <td className="p-4 text-sm text-foreground">₹1,200</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="documents" className="mt-6">
-                  <p className="text-muted-foreground">Documents will be displayed here.</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Patient Documents</h2>
+                    <div className="flex items-center gap-3">
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="All Documents" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Documents</SelectItem>
+                          <SelectItem value="prescription">Prescriptions</SelectItem>
+                          <SelectItem value="lab">Lab Results</SelectItem>
+                          <SelectItem value="imaging">Imaging</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Card className="overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-muted/30 border-b border-border">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Name</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Source</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Size</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">Prescription</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">Hospital</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">Lipid Panel Results</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">Clinic</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className="text-sm text-foreground">ECG Report</span>
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">CT Center</td>
+                            <td className="p-4 text-sm text-foreground">239.3 KB</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Printer className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="insurance" className="mt-6">
-                  <p className="text-muted-foreground">Insurance information will be displayed here.</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-primary">Insurance Policies</h2>
+                    <div className="flex items-center gap-3">
+                      <Button className="gap-2 bg-primary hover:bg-primary/90">
+                        <Plus className="w-4 h-4" />
+                        Add policy
+                      </Button>
+                      <div className="relative">
+                        <Input placeholder="Search" className="pl-10 w-64" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Insurance Policy Card */}
+                  <Card className="p-6 mb-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold text-foreground">Star Health Insurance</h3>
+                          <Badge className="bg-green-500/10 text-green-700 hover:bg-green-500/20 gap-1">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Verified
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">Family Health Optima Plan</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 mb-4">
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Member ID:</span> SH123456789
+                      </p>
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Group:</span> GRP-2025-456
+                      </p>
+                      <p className="text-sm text-foreground">
+                        <span className="text-muted-foreground">Effective:</span> Jan 01, 2025 – Dec 31, 2025
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button className="bg-primary hover:bg-primary/90">Verify Eligibility</Button>
+                      <Button variant="outline">Update</Button>
+                      <Button variant="outline">Replace</Button>
+                      <Button variant="outline">View coverage</Button>
+                    </div>
+                  </Card>
+
+                  {/* Claims Table */}
+                  <Card className="overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-muted/30 border-b border-border">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Claim</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Billed</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Insurance paid</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Status</th>
+                            <th className="text-left text-sm font-medium text-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-789</td>
+                            <td className="p-4 text-sm text-foreground">Jun 15, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Consultation</td>
+                            <td className="p-4 text-sm text-foreground">₹3,000</td>
+                            <td className="p-4 text-sm text-foreground">₹1,500</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-790</td>
+                            <td className="p-4 text-sm text-foreground">May 20, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Laboratory</td>
+                            <td className="p-4 text-sm text-foreground">₹2,000</td>
+                            <td className="p-4 text-sm text-foreground">₹650</td>
+                            <td className="p-4">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">Paid</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-muted/20">
+                            <td className="p-4 text-sm text-foreground">CLM-2025-791</td>
+                            <td className="p-4 text-sm text-foreground">Apr 10, 2025</td>
+                            <td className="p-4 text-sm text-foreground">Imaging</td>
+                            <td className="p-4 text-sm text-foreground">₹2,200</td>
+                            <td className="p-4 text-sm text-foreground">₹1,200</td>
+                            <td className="p-4">
+                              <Badge className="bg-orange-500/10 text-orange-700 hover:bg-orange-500/20">In Review</Badge>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                                <Button variant="link" className="text-primary h-8 px-2">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </div>
