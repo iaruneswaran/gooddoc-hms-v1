@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronDown, User, Pencil, Download, Printer, Trash2, FileText, Plus, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, ChevronDown, User, Pencil, Download, Printer, Trash2, FileText, Plus, CheckCircle2, Search, Calendar, CreditCard, Shield, TrendingUp, TrendingDown } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const PatientInsights = () => {
   const navigate = useNavigate();
@@ -124,96 +125,141 @@ const PatientInsights = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Patient Insights"]} />
         
-        <main className="p-8">
+        <main className="p-6 lg:p-8">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-all mb-8 group"
           >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="text-lg font-semibold">Appointments</span>
+            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-base font-medium">Back to Appointments</span>
           </button>
 
-          {/* Patient Header */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="w-8 h-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">{patientData.name}</h1>
-              <p className="text-sm text-muted-foreground">
-                {patientData.gdid} • {patientData.age} | {patientData.gender.charAt(0)}
-              </p>
-            </div>
-          </div>
-
-          {/* Financial Summary & Actions */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <Card className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Total Outstanding</p>
-                  <p className="text-xs text-muted-foreground">Due Balance</p>
-                  <p className="text-3xl font-bold text-primary mt-2">₹{patientData.totalOutstanding.toLocaleString()}</p>
+          {/* Patient Header with Enhanced Design */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-2 ring-primary/10">
+                  <User className="w-10 h-10 text-primary" />
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground mb-1">Advance Balance</p>
-                  <p className="text-xs text-muted-foreground">Prepaid Funds</p>
-                  <p className="text-3xl font-bold text-primary mt-2">₹{patientData.advanceBalance.toLocaleString()}</p>
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-background" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground mb-1">{patientData.name}</h1>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="font-medium">{patientData.gdid}</span>
+                  <span>•</span>
+                  <span>{patientData.age} years</span>
+                  <span>•</span>
+                  <span>{patientData.gender}</span>
                 </div>
               </div>
-            </Card>
-
+            </div>
+            
             <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 gap-2">
-                Book Appointments
+              <Button variant="outline" size="lg" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-all">
+                <Calendar className="w-4 h-4" />
+                Book Appointment
               </Button>
-              <Button variant="outline" className="flex-1 gap-2">
-                Discharge
-              </Button>
-              <Button variant="outline" className="flex-1 gap-2">
+              <Button variant="outline" size="lg" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-all">
+                <CreditCard className="w-4 h-4" />
                 Payments
               </Button>
             </div>
           </div>
 
+          {/* Enhanced Financial Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card className="relative overflow-hidden border-2 hover:shadow-lg transition-all duration-300 group">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent" />
+              <div className="relative p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="p-3 rounded-xl bg-red-500/10">
+                    <TrendingUp className="w-6 h-6 text-red-600" />
+                  </div>
+                  <Badge variant="destructive" className="text-xs">Due</Badge>
+                </div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Total Outstanding</p>
+                <p className="text-3xl font-bold text-foreground">₹{patientData.totalOutstanding.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-2">Due Balance</p>
+              </div>
+            </Card>
+
+            <Card className="relative overflow-hidden border-2 hover:shadow-lg transition-all duration-300 group">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent" />
+              <div className="relative p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="p-3 rounded-xl bg-green-500/10">
+                    <TrendingDown className="w-6 h-6 text-green-600" />
+                  </div>
+                  <Badge className="text-xs bg-green-500">Available</Badge>
+                </div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Advance Balance</p>
+                <p className="text-3xl font-bold text-foreground">₹{patientData.advanceBalance.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-2">Prepaid Funds</p>
+              </div>
+            </Card>
+
+            <Card className="relative overflow-hidden border-2 hover:shadow-lg transition-all duration-300 group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+              <div className="relative p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="p-3 rounded-xl bg-primary/10">
+                    <Shield className="w-6 h-6 text-primary" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">Active</Badge>
+                </div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Insurance Coverage</p>
+                <p className="text-3xl font-bold text-foreground">₹10,000</p>
+                <p className="text-xs text-muted-foreground mt-2">Approved Amount</p>
+              </div>
+            </Card>
+          </div>
+
           {/* Main Content */}
-          <div className="grid grid-cols-[1fr_400px] gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-8">
             {/* Left Column - Tabs */}
-            <div>
+            <div className="min-w-0">
               <Tabs defaultValue="appointments" className="w-full">
-                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+                <TabsList className="w-full justify-start bg-muted/40 rounded-lg h-12 p-1">
                   <TabsTrigger 
                     value="appointments" 
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                    className="rounded-md px-6 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                   >
+                    <Calendar className="w-4 h-4 mr-2" />
                     Appointments
                   </TabsTrigger>
                   <TabsTrigger 
                     value="payment-history"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                    className="rounded-md px-6 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                   >
-                    Payment History
+                    <CreditCard className="w-4 h-4 mr-2" />
+                    Payments
                   </TabsTrigger>
                   <TabsTrigger 
                     value="documents"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                    className="rounded-md px-6 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                   >
+                    <FileText className="w-4 h-4 mr-2" />
                     Documents
                   </TabsTrigger>
                   <TabsTrigger 
                     value="insurance"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                    className="rounded-md px-6 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                   >
+                    <Shield className="w-4 h-4 mr-2" />
                     Insurance
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="appointments" className="mt-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold text-primary">Appointment History</h2>
-                    <div className="flex items-center gap-3">
+                <TabsContent value="appointments" className="mt-8">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground">Appointment History</h2>
+                      <p className="text-sm text-muted-foreground mt-1">View and manage all appointments</p>
+                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
                       <Select defaultValue="all">
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger className="w-[180px] border-2">
                           <SelectValue placeholder="All Appointments" />
                         </SelectTrigger>
                         <SelectContent>
@@ -224,63 +270,76 @@ const PatientInsights = () => {
                         </SelectContent>
                       </Select>
                       <div className="relative">
-                        <Input placeholder="Search" className="pl-10 w-64" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input placeholder="Search appointments..." className="pl-10 w-64 border-2" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-8">
-                    {appointmentHistory.map((group) => (
-                      <div key={group.date}>
-                        <p className="text-sm font-medium text-muted-foreground mb-4">{group.date}</p>
-                        <div className="space-y-2">
-                          {group.appointments.map((appointment) => (
-                            <Collapsible
-                              key={appointment.id}
-                              open={openAppointments[appointment.id]}
-                              onOpenChange={() => toggleAppointment(appointment.id)}
-                            >
-                              <Card className="overflow-hidden border-border shadow-sm">
-                                <CollapsibleTrigger className="w-full">
-                                  <div className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors">
-                                    <p className="text-base font-semibold text-foreground">
-                                      {appointment.type}
-                                    </p>
-                                    <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
-                                  </div>
-                                </CollapsibleTrigger>
+                  <ScrollArea className="h-[calc(100vh-400px)]">
+                    <div className="space-y-8 pr-4">
+                      {appointmentHistory.map((group) => (
+                        <div key={group.date} className="animate-fade-in">
+                          <div className="flex items-center gap-3 mb-4">
+                            <Calendar className="w-4 h-4 text-primary" />
+                            <p className="text-sm font-semibold text-foreground">{group.date}</p>
+                          </div>
+                          <div className="space-y-3">
+                            {group.appointments.map((appointment) => (
+                              <Collapsible
+                                key={appointment.id}
+                                open={openAppointments[appointment.id]}
+                                onOpenChange={() => toggleAppointment(appointment.id)}
+                              >
+                                <Card className="overflow-hidden border-2 shadow-sm hover:shadow-md transition-all duration-300">
+                                  <CollapsibleTrigger className="w-full">
+                                    <div className="flex items-center justify-between px-6 py-5 hover:bg-muted/40 transition-colors">
+                                      <div className="flex items-center gap-4">
+                                        <div className="p-2 rounded-lg bg-primary/10">
+                                          <Calendar className="w-5 h-5 text-primary" />
+                                        </div>
+                                        <div className="text-left">
+                                          <p className="text-base font-bold text-foreground">
+                                            {appointment.type}
+                                          </p>
+                                          <p className="text-sm text-muted-foreground mt-0.5">{appointment.dateTime}</p>
+                                        </div>
+                                      </div>
+                                      <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${openAppointments[appointment.id] ? 'rotate-180' : ''}`} />
+                                    </div>
+                                  </CollapsibleTrigger>
 
                                 <CollapsibleContent>
-                                  <div className="px-6 pb-6 border-t border-border pt-6">
-                                    <div className="grid grid-cols-3 gap-x-12 gap-y-6">
+                                  <div className="px-6 pb-6 border-t bg-muted/20 pt-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
                                       {/* Left Column */}
                                       <div className="space-y-4">
                                         <div>
-                                          <p className="text-sm text-muted-foreground mb-1">Date & Time:</p>
-                                          <p className="text-sm text-foreground">{appointment.dateTime}</p>
+                                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Date & Time</p>
+                                          <p className="text-sm font-medium text-foreground">{appointment.dateTime}</p>
                                         </div>
                                         {appointment.doctor && (
                                           <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Doctor:</p>
-                                            <p className="text-sm text-foreground">{appointment.doctor}</p>
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Doctor</p>
+                                            <p className="text-sm font-medium text-foreground">{appointment.doctor}</p>
                                           </div>
                                         )}
                                         {appointment.clinic && (
                                           <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Clinic:</p>
-                                            <p className="text-sm text-foreground">{appointment.clinic}</p>
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Clinic</p>
+                                            <p className="text-sm font-medium text-foreground">{appointment.clinic}</p>
                                           </div>
                                         )}
                                         {appointment.center && (
                                           <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Center:</p>
-                                            <p className="text-sm text-foreground">{appointment.center}</p>
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Center</p>
+                                            <p className="text-sm font-medium text-foreground">{appointment.center}</p>
                                           </div>
                                         )}
                                         {appointment.procedure && (
                                           <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Procedure:</p>
-                                            <p className="text-sm text-foreground">{appointment.procedure}</p>
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Procedure</p>
+                                            <p className="text-sm font-medium text-foreground">{appointment.procedure}</p>
                                           </div>
                                         )}
                                       </div>
@@ -291,20 +350,20 @@ const PatientInsights = () => {
                                           {appointment.visitId && (
                                             <>
                                               <div>
-                                                <p className="text-sm text-muted-foreground mb-1">Visit ID:</p>
-                                                <p className="text-sm text-foreground">{appointment.visitId}</p>
+                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Visit ID</p>
+                                                <p className="text-sm font-medium text-foreground">{appointment.visitId}</p>
                                               </div>
                                               <div>
-                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
-                                                <p className="text-sm text-foreground">{appointment.provider}</p>
+                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Provider</p>
+                                                <p className="text-sm font-medium text-foreground">{appointment.provider}</p>
                                               </div>
                                               <div>
-                                                <p className="text-sm text-muted-foreground mb-1">Department:</p>
-                                                <p className="text-sm text-foreground">{appointment.department}</p>
+                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Department</p>
+                                                <p className="text-sm font-medium text-foreground">{appointment.department}</p>
                                               </div>
                                               <div>
-                                                <p className="text-sm text-muted-foreground mb-1">Provider:</p>
-                                                <p className="text-sm text-foreground">{appointment.opdClinic}</p>
+                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">OPD Clinic</p>
+                                                <p className="text-sm font-medium text-foreground">{appointment.opdClinic}</p>
                                               </div>
                                             </>
                                           )}
@@ -315,10 +374,13 @@ const PatientInsights = () => {
                                       {appointment.prescriptions && (
                                         <div className="space-y-4">
                                           <div>
-                                            <p className="text-sm text-muted-foreground mb-3">Prescriptions</p>
-                                            <div className="space-y-2">
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Prescriptions</p>
+                                            <div className="space-y-3">
                                               {appointment.prescriptions.map((prescription, idx) => (
-                                                <p key={idx} className="text-sm text-foreground">{prescription}</p>
+                                                <div key={idx} className="flex items-start gap-2 p-3 rounded-lg bg-background border">
+                                                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                                                  <p className="text-sm font-medium text-foreground flex-1">{prescription}</p>
+                                                </div>
                                               ))}
                                             </div>
                                           </div>
@@ -328,20 +390,23 @@ const PatientInsights = () => {
 
                                     {/* Findings - Full Width */}
                                     {appointment.findings && (
-                                      <div className="mt-6 pt-6 border-t border-border">
-                                        <p className="text-sm text-muted-foreground mb-2">Findings</p>
-                                        <p className="text-sm text-foreground leading-relaxed">{appointment.findings}</p>
+                                      <div className="mt-6 pt-6 border-t">
+                                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Clinical Findings</p>
+                                        <div className="p-4 rounded-lg bg-background border">
+                                          <p className="text-sm text-foreground leading-relaxed">{appointment.findings}</p>
+                                        </div>
                                       </div>
                                     )}
                                   </div>
                                 </CollapsibleContent>
                               </Card>
                             </Collapsible>
-                          ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
                 </TabsContent>
 
                 <TabsContent value="payment-history" className="mt-6">
@@ -697,75 +762,82 @@ const PatientInsights = () => {
             </div>
 
             {/* Right Column - Patient Information */}
-            <Card className="p-6 h-fit">
+            <Card className="p-6 h-fit border-2 shadow-lg sticky top-8">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-base font-semibold text-primary">Patient Information</h3>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <h3 className="text-xl font-bold text-foreground">Patient Information</h3>
+                <Button variant="ghost" size="icon" className="h-9 w-9 hover:bg-primary/10 hover:text-primary">
                   <Pencil className="w-4 h-4" />
                 </Button>
               </div>
 
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Full Name</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.name}</p>
+              <ScrollArea className="h-[calc(100vh-300px)]">
+                <div className="space-y-5 pr-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Full Name</p>
+                      <p className="text-sm font-bold text-foreground">{patientData.name}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Gender</p>
+                      <p className="text-sm font-bold text-foreground">{patientData.gender}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Gender</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.gender}</p>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Date of Birth</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.dob}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Date of Birth</p>
+                      <p className="text-sm font-bold text-foreground">{patientData.dob}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Mobile</p>
+                      <p className="text-sm font-bold text-foreground">{patientData.phone}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Mobile Number</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.phone}</p>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Email</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.email}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Email</p>
+                      <p className="text-sm font-bold text-foreground break-all">{patientData.email}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/40">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">National ID</p>
+                      <p className="text-sm font-bold text-foreground">{patientData.nationalId}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">National ID</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.nationalId}</p>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Street, Apartment</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.street}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Pin code</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.pincode}</p>
-                  </div>
-                </div>
+                  <div className="pt-6 border-t">
+                    <p className="text-sm font-bold text-foreground mb-4">Address Information</p>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-3 rounded-lg bg-muted/40">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Street</p>
+                          <p className="text-sm font-bold text-foreground">{patientData.street}</p>
+                        </div>
+                        <div className="p-3 rounded-lg bg-muted/40">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Pincode</p>
+                          <p className="text-sm font-bold text-foreground">{patientData.pincode}</p>
+                        </div>
+                      </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">State</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.state}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">City</p>
-                    <p className="text-sm font-medium text-foreground">{patientData.city}</p>
-                  </div>
-                </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-3 rounded-lg bg-muted/40">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">State</p>
+                          <p className="text-sm font-bold text-foreground">{patientData.state}</p>
+                        </div>
+                        <div className="p-3 rounded-lg bg-muted/40">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">City</p>
+                          <p className="text-sm font-bold text-foreground">{patientData.city}</p>
+                        </div>
+                      </div>
 
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Country</p>
-                  <p className="text-sm font-medium text-foreground">{patientData.country}</p>
+                      <div className="p-3 rounded-lg bg-muted/40">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Country</p>
+                        <p className="text-sm font-bold text-foreground">{patientData.country}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </ScrollArea>
             </Card>
           </div>
         </main>
