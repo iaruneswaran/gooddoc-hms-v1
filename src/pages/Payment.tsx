@@ -27,7 +27,9 @@ interface PaymentData {
 const Payment = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const paymentData = location.state as PaymentData;
+  const paymentData = location.state as PaymentData & { fromPatientInsights?: boolean; patientId?: string };
+  const fromPatientInsights = paymentData?.fromPatientInsights;
+  const patientId = paymentData?.patientId;
   
   const [useAdvance, setUseAdvance] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
@@ -48,14 +50,16 @@ const Payment = () => {
         
         <main className="p-8">
           <button
-            onClick={() => navigate("/book-appointment")}
+            onClick={() => navigate("/book-appointment", { 
+              state: { fromPatientInsights, patientId } 
+            })}
             className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="text-lg font-semibold">Appointments</span>
           </button>
 
-          <BookingSteps currentStep="payment" />
+          <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
 
           <div className="max-w-[1600px] mx-auto">
             <h2 className="text-lg font-semibold text-primary mb-6">Payment</h2>

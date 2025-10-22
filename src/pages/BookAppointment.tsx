@@ -315,7 +315,9 @@ const BookAppointment = () => {
                           cgst,
                           sgst,
                           total,
-                          date: "05/08/2025"
+                          date: "05/08/2025",
+                          fromPatientInsights,
+                          patientId
                         }
                       });
                     }}
