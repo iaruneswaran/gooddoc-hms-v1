@@ -2,10 +2,10 @@ import { Bell, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AppHeaderProps {
-  breadcrumbs?: string[];
+  breadcrumbs: string[];
 }
 
-export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
+export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-8">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
