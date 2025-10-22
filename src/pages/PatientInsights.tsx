@@ -277,11 +277,11 @@ const PatientInsights = () => {
 
                 {/* Right side - Financial info */}
                 <div className="flex gap-4">
-                  <div className="text-right">
+                  <div className="border border-border rounded-lg p-4 min-w-[200px]">
                     <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
                     <p className="text-2xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="border border-border rounded-lg p-4 min-w-[200px]">
                     <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
                     <p className="text-2xl font-semibold text-primary">₹{patient.advanceAmount}</p>
                   </div>
