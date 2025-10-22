@@ -393,6 +393,7 @@ const PatientInsights = () => {
                             <th className="text-left text-sm font-medium text-muted-foreground p-4">Type</th>
                             <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
                             <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
                             <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
                             <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                           </tr>
@@ -401,9 +402,10 @@ const PatientInsights = () => {
                           <tr className="border-t">
                             <td className="p-4 text-sm">INV-2025-001</td>
                             <td className="p-4 text-sm">15 Jun 2025</td>
-                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Bill Payment</td>
                             <td className="p-4 text-sm">Consultation</td>
-                            <td className="p-4 text-sm">Card • ****1234</td>
+                            <td className="p-4 text-sm">Card</td>
+                            <td className="p-4 text-sm">Harish Kalyan</td>
                             <td className="p-4 text-sm text-primary font-medium">₹1,500</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
@@ -420,9 +422,10 @@ const PatientInsights = () => {
                           <tr className="border-t">
                             <td className="p-4 text-sm">INV-2025-002</td>
                             <td className="p-4 text-sm">20 May 2025</td>
-                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Bill Payment</td>
                             <td className="p-4 text-sm">Laboratory</td>
                             <td className="p-4 text-sm">UPI</td>
+                            <td className="p-4 text-sm">Harish Kalyan</td>
                             <td className="p-4 text-sm text-primary font-medium">₹650</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
@@ -439,9 +442,10 @@ const PatientInsights = () => {
                           <tr className="border-t">
                             <td className="p-4 text-sm">INV-2025-003</td>
                             <td className="p-4 text-sm">10 Apr 2025</td>
-                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Bill Payment</td>
                             <td className="p-4 text-sm">Imaging</td>
                             <td className="p-4 text-sm">Cash</td>
+                            <td className="p-4 text-sm">Harish Kalyan</td>
                             <td className="p-4 text-sm text-primary font-medium">₹1,200</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
