@@ -1,84 +1,96 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronDown, ChevronUp } from "lucide-react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { ChevronLeft, ChevronDown } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
-export default function PatientInsights() {
+const PatientInsights = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
-  const [expandedAppointments, setExpandedAppointments] = useState<Record<string, boolean>>({});
+  const [expandedAppointment, setExpandedAppointment] = useState<string | null>(null);
 
   // Mock patient data
   const patient = {
     name: "Harish Kalyan",
-    gdid: "GDID - 001",
+    gdid: "001",
     age: 35,
-    gender: "M",
-    patientType: "Outpatient",
-    outstandingTotal: "₹6,600",
-    advanceAmount: "₹3,200",
-    fullName: "Harish Kalyan",
-    dateOfBirth: "10/04/1980",
-    mobileNumber: "+91 98765 43210",
+    gender: "Male",
+    dob: "10/04/1980",
+    mobile: "+91 98765 43210",
     email: "name@example.com",
     nationalId: "9876 5432 1098",
-    street: "Anna Nagar",
+    address: "Anna Nagar",
     pincode: "012 345",
     state: "Tamil Nadu",
     city: "Chennai",
     country: "India",
-    networks: "Male",
+    outstandingTotal: "6,600",
+    advanceAmount: "3,200",
   };
 
   const appointments = [
     {
       id: "1",
       date: "Thu, Aug 05, 2025",
-      visits: [
+      items: [
         {
           type: "Consultation",
-          dateTime: "05 Aug 2025 | 05:30 PM",
+          datetime: "05 Aug 2025 | 05:30 PM",
           doctor: "Dr. Meera Nair – Cardiology",
-          prescriptions: [
-            "Azithromycin 500 mg OD × 3 days",
-            "Paracetamol 500 mg Q6h PRN",
-            "Dextromethorphan syrup 10 mL HS × 5 days",
-          ],
         },
         {
           type: "Laboratory",
-          dateTime: "05 Aug 2025 | 10:30 AM",
+          datetime: "05 Aug 2025 | 10:30 AM",
           visitId: "VST-102345",
           clinic: "Baines Healthcare",
           provider: "Dr. Sarah Khan",
           department: "Internal Medicine",
           opdClinic: "OPD Clinic 3",
+          prescriptions: [
+            "Azithromycin 500 mg OD × 3 days",
+            "Paracetamol 500 mg Q6h PRN",
+            "Dextromethorphan syrup 10 mL HS × 5 days",
+            "Azithromycin 500 mg OD × 3 days",
+          ],
+          findings: "Patient presents with symptoms suggestive of upper respiratory tract infection. Mild throat congestion and cough noted, with low-grade fever. No signs of respiratory distress or chest involvement. Overall condition stable.",
         },
       ],
     },
     {
       id: "2",
       date: "Sun, Sep 28, 2024",
-      visits: [
+      items: [
         {
           type: "Consultation",
-          dateTime: "28 Sep 2024 | 10:30 PM",
+          datetime: "28 Sep 2024 | 10:30 PM",
           doctor: "Dr. Meera Nair – Cardiology",
-          findings: "Patient presents with symptoms suggestive of upper respiratory tract infection. Mild throat congestion and cough noted, with low-grade fever. No signs of respiratory distress or chest involvement. Overall condition stable.",
         },
         {
           type: "Laboratory",
-          dateTime: "28 Sep 2024 | 04:30 PM",
+          datetime: "28 Sep 2024 | 04:30 PM",
           clinic: "Baines Healthcare",
         },
         {
           type: "Radiology",
-          dateTime: "28 Sep 2024 | 10:30 AM",
+          datetime: "28 Sep 2024 | 10:30 AM",
           center: "Baines Healthcare",
         },
       ],
@@ -86,314 +98,341 @@ export default function PatientInsights() {
     {
       id: "3",
       date: "Mon, May 15, 2024",
-      visits: [
+      items: [
         {
           type: "IPD Admission",
-          dateTime: "15 May 2024 | 08:30 PM",
+          datetime: "15 May 2024 | 08:30 PM",
           doctor: "Dr. A. Joseph (Ophthalmology)",
         },
         {
           type: "Day-Care Admission",
-          dateTime: "15 May 2024 | 10:30 AM",
+          datetime: "15 May 2024 | 10:30 AM",
           procedure: "Endoscopy",
         },
       ],
     },
   ];
 
-  const toggleAppointment = (id: string) => {
-    setExpandedAppointments(prev => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full">
+      <div className="flex min-h-screen w-full">
         <AppSidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col">
           <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Patient Insights"]} />
-          
-          <main className="flex-1 overflow-auto bg-background p-8">
-            <div className="max-w-[1400px] mx-auto space-y-6">
-              {/* Back Button */}
-              <Button
-                variant="ghost"
-                onClick={() => navigate("/")}
-                className="gap-2 text-foreground hover:bg-muted -ml-2"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Appointments
-              </Button>
+          <main className="flex-1 bg-background p-6">
+            {/* Back Button */}
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary mb-6 transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Appointments
+            </button>
 
-              {/* Patient Header & Financial Summary */}
-              <div className="space-y-4">
-                {/* Patient Info */}
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-lg font-medium text-primary">
-                      {patient.name.split(" ").map(n => n[0]).join("")}
-                    </span>
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
-                    <p className="text-sm text-muted-foreground">
-                      {patient.gdid} • {patient.age} | {patient.gender}
-                    </p>
-                  </div>
-                </div>
+            {/* Patient Header */}
+            <div className="flex items-start gap-4 mb-6">
+              <Avatar className="h-12 w-12">
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {patient.name.split(" ").map(n => n[0]).join("")}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
+                <p className="text-sm text-muted-foreground">
+                  GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
+                </p>
+              </div>
+            </div>
 
-                {/* Action Buttons & Financial Summary */}
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex gap-3">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      Book Appointments
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      Discharge
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      Payments
-                    </Button>
-                  </div>
-
-                  <div className="flex gap-8">
-                    <div className="text-right">
-                      <div className="text-sm text-muted-foreground mb-1">Outstanding Total</div>
-                      <div className="text-2xl font-semibold text-primary">{patient.outstandingTotal}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-muted-foreground mb-1">Advance Amount</div>
-                      <div className="text-2xl font-semibold text-primary">{patient.advanceAmount}</div>
-                    </div>
-                  </div>
-                </div>
+            {/* Action Buttons and Financial Summary */}
+            <div className="flex flex-col gap-4 mb-6">
+              <div className="flex gap-3">
+                <Button variant="outline" size="sm">
+                  Book Appointments
+                </Button>
+                <Button variant="outline" size="sm">
+                  Discharge
+                </Button>
+                <Button variant="outline" size="sm">
+                  Payments
+                </Button>
               </div>
 
-              {/* Main Content Area */}
               <div className="flex gap-6">
-                {/* Left Content */}
-                <div className="flex-1 space-y-6">
-                  {/* Tabs */}
-                  <Tabs defaultValue="appointments" className="w-full">
-                    <TabsList className="w-full justify-start">
-                      <TabsTrigger value="appointments">Appointments</TabsTrigger>
-                      <TabsTrigger value="payment-history">Payment History</TabsTrigger>
-                      <TabsTrigger value="documents">Documents</TabsTrigger>
-                      <TabsTrigger value="insurance">Insurance</TabsTrigger>
-                    </TabsList>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Outstanding Total</p>
+                  <p className="text-2xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Advance Amount</p>
+                  <p className="text-2xl font-semibold text-primary">₹{patient.advanceAmount}</p>
+                </div>
+              </div>
+            </div>
 
-                    <TabsContent value="appointments" className="space-y-6 mt-6">
-                      {/* Appointment History Section */}
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h2 className="text-lg font-semibold text-primary">Appointment History</h2>
-                          <div className="flex items-center gap-4">
-                            <select className="px-4 py-2 text-sm border border-border rounded-md bg-card">
-                              <option>All Appointments</option>
-                            </select>
-                            <Input placeholder="Search" className="w-64" />
-                          </div>
-                        </div>
+            {/* Main Content */}
+            <div className="flex gap-6">
+              {/* Left Side - Tabs */}
+              <div className="flex-1">
+                <Tabs defaultValue="appointments">
+                  <TabsList>
+                    <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                    <TabsTrigger value="payment-history">Payment History</TabsTrigger>
+                    <TabsTrigger value="documents">Documents</TabsTrigger>
+                    <TabsTrigger value="insurance">Insurance</TabsTrigger>
+                  </TabsList>
 
-                        {/* Appointments List */}
-                        <div className="space-y-3">
-                          {appointments.map((appointment) => (
-                            <div key={appointment.id} className="border border-border rounded-lg bg-card">
-                              <button
-                                onClick={() => toggleAppointment(appointment.id)}
-                                className="w-full p-4 flex items-center justify-between hover:bg-muted/20 transition-colors"
-                              >
-                                <span className="font-medium text-foreground">{appointment.date}</span>
-                                {expandedAppointments[appointment.id] ? (
-                                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                                ) : (
-                                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                                )}
-                              </button>
+                  <TabsContent value="appointments" className="space-y-4">
+                    {/* Controls */}
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-primary">Appointment History</h2>
+                      <div className="flex gap-3">
+                        <Select defaultValue="all">
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="All Appointments" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Appointments</SelectItem>
+                            <SelectItem value="consultation">Consultation</SelectItem>
+                            <SelectItem value="laboratory">Laboratory</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="search"
+                          placeholder="Search"
+                          className="w-[200px]"
+                        />
+                      </div>
+                    </div>
 
-                              {expandedAppointments[appointment.id] && (
-                                <div className="px-4 pb-4 space-y-4">
-                                  {appointment.visits.map((visit, index) => (
-                                    <div key={index} className="p-4 bg-muted/30 rounded-lg space-y-3">
-                                      <h3 className="font-medium text-primary">{visit.type}</h3>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="grid grid-cols-2 gap-2">
-                                          <div>
-                                            <span className="text-muted-foreground">Date & Time:</span>
-                                            <div className="text-foreground">{visit.dateTime}</div>
-                                          </div>
-                                          {visit.doctor && (
-                                            <div>
-                                              <span className="text-muted-foreground">Doctor:</span>
-                                              <div className="text-foreground">{visit.doctor}</div>
-                                            </div>
-                                          )}
-                                          {visit.visitId && (
-                                            <div>
-                                              <span className="text-muted-foreground">Visit ID:</span>
-                                              <div className="text-foreground">{visit.visitId}</div>
-                                            </div>
-                                          )}
-                                          {visit.clinic && (
-                                            <div>
-                                              <span className="text-muted-foreground">Clinic:</span>
-                                              <div className="text-foreground">{visit.clinic}</div>
-                                            </div>
-                                          )}
-                                          {visit.provider && (
-                                            <div>
-                                              <span className="text-muted-foreground">Provider:</span>
-                                              <div className="text-foreground">{visit.provider}</div>
-                                            </div>
-                                          )}
-                                          {visit.department && (
-                                            <div>
-                                              <span className="text-muted-foreground">Department:</span>
-                                              <div className="text-foreground">{visit.department}</div>
-                                            </div>
-                                          )}
-                                          {visit.opdClinic && (
-                                            <div>
-                                              <span className="text-muted-foreground">OPD Clinic:</span>
-                                              <div className="text-foreground">{visit.opdClinic}</div>
-                                            </div>
-                                          )}
-                                          {visit.center && (
-                                            <div>
-                                              <span className="text-muted-foreground">Center:</span>
-                                              <div className="text-foreground">{visit.center}</div>
-                                            </div>
-                                          )}
-                                          {visit.procedure && (
-                                            <div>
-                                              <span className="text-muted-foreground">Procedure:</span>
-                                              <div className="text-foreground">{visit.procedure}</div>
-                                            </div>
-                                          )}
-                                        </div>
-                                        {visit.prescriptions && (
-                                          <div>
-                                            <span className="text-muted-foreground">Prescriptions:</span>
-                                            <ul className="mt-1 space-y-1">
-                                              {visit.prescriptions.map((prescription, i) => (
-                                                <li key={i} className="text-foreground">{prescription}</li>
-                                              ))}
-                                            </ul>
-                                          </div>
-                                        )}
-                                        {visit.findings && (
-                                          <div>
-                                            <span className="text-muted-foreground">Findings:</span>
-                                            <p className="mt-1 text-foreground">{visit.findings}</p>
-                                          </div>
-                                        )}
-                                      </div>
+                    {/* Appointment List */}
+                    <div className="space-y-4">
+                      {appointments.map((appointmentGroup) => (
+                        <div key={appointmentGroup.id} className="space-y-3">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {appointmentGroup.date}
+                          </p>
+                          {appointmentGroup.items.map((item, idx) => (
+                            <Collapsible
+                              key={idx}
+                              open={expandedAppointment === `${appointmentGroup.id}-${idx}`}
+                              onOpenChange={(open) =>
+                                setExpandedAppointment(open ? `${appointmentGroup.id}-${idx}` : null)
+                              }
+                            >
+                              <Card className="overflow-hidden">
+                                <CollapsibleTrigger className="w-full">
+                                  <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+                                    <div className="flex-1 text-left">
+                                      <p className="font-medium text-primary mb-1">{item.type}</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        Date & Time: {item.datetime}
+                                      </p>
+                                      {item.doctor && (
+                                        <p className="text-sm text-muted-foreground">
+                                          Doctor: {item.doctor}
+                                        </p>
+                                      )}
+                                      {item.clinic && !item.doctor && (
+                                        <p className="text-sm text-muted-foreground">
+                                          Clinic: {item.clinic}
+                                        </p>
+                                      )}
+                                      {item.center && (
+                                        <p className="text-sm text-muted-foreground">
+                                          Center: {item.center}
+                                        </p>
+                                      )}
+                                      {item.procedure && (
+                                        <p className="text-sm text-muted-foreground">
+                                          Procedure: {item.procedure}
+                                        </p>
+                                      )}
                                     </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
+                                    <ChevronDown
+                                      className={`h-5 w-5 text-muted-foreground transition-transform ${
+                                        expandedAppointment === `${appointmentGroup.id}-${idx}`
+                                          ? "transform rotate-180"
+                                          : ""
+                                      }`}
+                                    />
+                                  </div>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <div className="border-t p-4 space-y-3 bg-muted/30">
+                                    {item.visitId && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                          Visit ID:
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">{item.visitId}</p>
+                                      </div>
+                                    )}
+                                    {item.clinic && item.doctor && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                          Clinic:
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">{item.clinic}</p>
+                                      </div>
+                                    )}
+                                    {item.provider && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                          Provider:
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">{item.provider}</p>
+                                      </div>
+                                    )}
+                                    {item.department && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                          Department:
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">{item.department}</p>
+                                      </div>
+                                    )}
+                                    {item.opdClinic && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                          Provider:
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">{item.opdClinic}</p>
+                                      </div>
+                                    )}
+                                    {item.prescriptions && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-2">
+                                          Prescriptions
+                                        </p>
+                                        <ul className="space-y-1">
+                                          {item.prescriptions.map((prescription, pIdx) => (
+                                            <li key={pIdx} className="text-sm text-muted-foreground">
+                                              {prescription}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+                                    {item.findings && (
+                                      <div>
+                                        <p className="text-sm font-medium text-foreground mb-2">
+                                          Findings
+                                        </p>
+                                        <p className="text-sm text-muted-foreground leading-relaxed">
+                                          {item.findings}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </CollapsibleContent>
+                              </Card>
+                            </Collapsible>
                           ))}
                         </div>
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="payment-history">
-                      <div className="text-center py-12 text-muted-foreground">
-                        No payment history available
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="documents">
-                      <div className="text-center py-12 text-muted-foreground">
-                        No documents available
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="insurance">
-                      <div className="text-center py-12 text-muted-foreground">
-                        No insurance information available
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </div>
-
-                {/* Right Sidebar - Patient Information */}
-                <div className="w-80 space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-primary">Patient Information</h2>
-                    <button className="text-primary hover:underline text-sm">Edit</button>
-                  </div>
-
-                  <div className="space-y-4 text-sm">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-muted-foreground mb-1">Full Name</div>
-                        <div className="text-foreground">{patient.fullName}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground mb-1">Gender</div>
-                        <div className="text-foreground">{patient.gender === "M" ? "Male" : "Female"}</div>
-                      </div>
+                      ))}
                     </div>
+                  </TabsContent>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-muted-foreground mb-1">Date of Birth</div>
-                        <div className="text-foreground">{patient.dateOfBirth}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground mb-1">Mobile Number</div>
-                        <div className="text-foreground">{patient.mobileNumber}</div>
-                      </div>
-                    </div>
+                  <TabsContent value="payment-history">
+                    <p className="text-muted-foreground">Payment history will be displayed here.</p>
+                  </TabsContent>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-muted-foreground mb-1">Email</div>
-                        <div className="text-foreground">{patient.email}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground mb-1">National ID</div>
-                        <div className="text-foreground">{patient.nationalId}</div>
-                      </div>
-                    </div>
+                  <TabsContent value="documents">
+                    <p className="text-muted-foreground">Documents will be displayed here.</p>
+                  </TabsContent>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-muted-foreground mb-1">Street, Apartment</div>
-                        <div className="text-foreground">{patient.street}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground mb-1">Pin code</div>
-                        <div className="text-foreground">{patient.pincode}</div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-muted-foreground mb-1">State</div>
-                        <div className="text-foreground">{patient.state}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground mb-1">City</div>
-                        <div className="text-foreground">{patient.city}</div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="text-muted-foreground mb-1">Country</div>
-                      <div className="text-foreground">{patient.country}</div>
-                    </div>
-                  </div>
-                </div>
+                  <TabsContent value="insurance">
+                    <p className="text-muted-foreground">Insurance information will be displayed here.</p>
+                  </TabsContent>
+                </Tabs>
               </div>
+
+              {/* Right Side - Patient Information */}
+              <Card className="w-[350px] h-fit p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-foreground">Patient Information</h3>
+                  <button className="text-primary hover:text-primary/80 transition-colors">
+                    <span className="sr-only">Edit</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                      <path d="m15 5 4 4" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Full Name</p>
+                      <p className="text-sm font-medium">{patient.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Gender</p>
+                      <p className="text-sm font-medium">{patient.gender}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Date of Birth</p>
+                      <p className="text-sm font-medium">{patient.dob}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Mobile Number</p>
+                      <p className="text-sm font-medium">{patient.mobile}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Email</p>
+                      <p className="text-sm font-medium">{patient.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">National ID</p>
+                      <p className="text-sm font-medium">{patient.nationalId}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Street, Apartment</p>
+                      <p className="text-sm font-medium">{patient.address}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Pin code</p>
+                      <p className="text-sm font-medium">{patient.pincode}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">State</p>
+                      <p className="text-sm font-medium">{patient.state}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">City</p>
+                      <p className="text-sm font-medium">{patient.city}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Country</p>
+                    <p className="text-sm font-medium">{patient.country}</p>
+                  </div>
+                </div>
+              </Card>
             </div>
           </main>
         </div>
       </div>
     </SidebarProvider>
   );
-}
+};
+
+export default PatientInsights;

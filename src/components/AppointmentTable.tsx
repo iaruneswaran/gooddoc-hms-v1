@@ -116,10 +116,6 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
     });
   };
 
-  const handlePatientClick = (patientId: string) => {
-    navigate(`/patient-insights/${patientId}`);
-  };
-
   const getSpecialtyLabel = () => {
     switch (category) {
       case "inpatient-care":
@@ -154,8 +150,8 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
               </div>
               <div>
                 <button
-                  onClick={() => handlePatientClick(appointment.patient.id)}
-                  className="font-medium text-foreground hover:text-primary hover:underline text-left transition-colors"
+                  onClick={() => navigate(`/patient-insights/${appointment.id}`)}
+                  className="font-medium text-foreground hover:text-primary transition-colors text-left"
                 >
                   {appointment.patient.name}
                 </button>
