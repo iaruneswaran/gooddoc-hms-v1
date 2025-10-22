@@ -356,16 +356,341 @@ const PatientInsights = () => {
                     </div>
                   </TabsContent>
 
-                  <TabsContent value="payment-history">
-                    <p className="text-muted-foreground">Payment history will be displayed here.</p>
+                  <TabsContent value="payment-history" className="space-y-4">
+                    {/* Controls */}
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
+                      <div className="flex gap-3">
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          Download statement
+                        </Button>
+                        <Select defaultValue="all">
+                          <SelectTrigger className="w-[150px]">
+                            <SelectValue placeholder="All Status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Status</SelectItem>
+                            <SelectItem value="paid">Paid</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="search"
+                          placeholder="Search"
+                          className="w-[200px]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Transaction Table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Type</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-background">
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">INV-2025-001</td>
+                            <td className="p-4 text-sm">15 Jun 2025</td>
+                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Consultation</td>
+                            <td className="p-4 text-sm">Card • ****1234</td>
+                            <td className="p-4 text-sm text-primary font-medium">₹1,500</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">INV-2025-002</td>
+                            <td className="p-4 text-sm">20 May 2025</td>
+                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Laboratory</td>
+                            <td className="p-4 text-sm">UPI</td>
+                            <td className="p-4 text-sm text-primary font-medium">₹650</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">INV-2025-003</td>
+                            <td className="p-4 text-sm">10 Apr 2025</td>
+                            <td className="p-4 text-sm">Payment</td>
+                            <td className="p-4 text-sm">Imaging</td>
+                            <td className="p-4 text-sm">Cash</td>
+                            <td className="p-4 text-sm text-primary font-medium">₹1,200</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </TabsContent>
 
-                  <TabsContent value="documents">
-                    <p className="text-muted-foreground">Documents will be displayed here.</p>
+                  <TabsContent value="documents" className="space-y-4">
+                    {/* Controls */}
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-primary">Patient Documents</h2>
+                      <div className="flex gap-3">
+                        <Select defaultValue="all">
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="All Documents" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Documents</SelectItem>
+                            <SelectItem value="prescription">Prescription</SelectItem>
+                            <SelectItem value="results">Lab Results</SelectItem>
+                            <SelectItem value="reports">Reports</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="search"
+                          placeholder="Search"
+                          className="w-[200px]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Documents Table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Name</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Source</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Size</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-background">
+                          <tr className="border-t">
+                            <td className="p-4 text-sm flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                              Prescription
+                            </td>
+                            <td className="p-4 text-sm">Jun 15, 2025</td>
+                            <td className="p-4 text-sm">Consultation</td>
+                            <td className="p-4 text-sm">Hospital</td>
+                            <td className="p-4 text-sm">239.3 KB</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <button className="text-red-500 hover:text-red-600">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                              Lipid Panel Results
+                            </td>
+                            <td className="p-4 text-sm">May 20, 2025</td>
+                            <td className="p-4 text-sm">Laboratory</td>
+                            <td className="p-4 text-sm">Clinic</td>
+                            <td className="p-4 text-sm">239.3 KB</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <button className="text-red-500 hover:text-red-600">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                              ECG Report
+                            </td>
+                            <td className="p-4 text-sm">Apr 10, 2025</td>
+                            <td className="p-4 text-sm">Imaging</td>
+                            <td className="p-4 text-sm">CT Center</td>
+                            <td className="p-4 text-sm">239.3 KB</td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <button className="text-red-500 hover:text-red-600">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </TabsContent>
 
-                  <TabsContent value="insurance">
-                    <p className="text-muted-foreground">Insurance information will be displayed here.</p>
+                  <TabsContent value="insurance" className="space-y-6">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-primary">Insurance Policies</h2>
+                      <div className="flex gap-3">
+                        <Button className="gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                          Add policy
+                        </Button>
+                        <Input
+                          type="search"
+                          placeholder="Search"
+                          className="w-[200px]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Insurance Policy Card */}
+                    <Card className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-lg font-semibold">Star Health Insurance</h3>
+                            <span className="inline-flex items-center gap-1 text-xs text-green-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                              Verified
+                            </span>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-3">Family Health Optima Plan</p>
+                          <div className="space-y-1 text-sm text-muted-foreground">
+                            <p>Member ID: SH123456789</p>
+                            <p>Group: GRP-2025-456</p>
+                            <p>Effective: Jan 01, 2025 – Dec 31, 2025</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button className="bg-primary">Verify Eligibility</Button>
+                        <Button variant="outline">Update</Button>
+                        <Button variant="outline">Replace</Button>
+                        <Button variant="outline">View coverage</Button>
+                      </div>
+                    </Card>
+
+                    {/* Claims Table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Claim No</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Billed Amount</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Insurance paid</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                            <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-background">
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">CLM-2025-789</td>
+                            <td className="p-4 text-sm">15 Jun 2025</td>
+                            <td className="p-4 text-sm">Consultation</td>
+                            <td className="p-4 text-sm">₹3,000</td>
+                            <td className="p-4 text-sm">₹1,500</td>
+                            <td className="p-4 text-sm"><span className="text-green-600 font-medium">Paid</span></td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">CLM-2025-790</td>
+                            <td className="p-4 text-sm">20 May 2025</td>
+                            <td className="p-4 text-sm">Laboratory</td>
+                            <td className="p-4 text-sm">₹2,000</td>
+                            <td className="p-4 text-sm">₹650</td>
+                            <td className="p-4 text-sm"><span className="text-green-600 font-medium">Paid</span></td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t">
+                            <td className="p-4 text-sm">CLM-2025-791</td>
+                            <td className="p-4 text-sm">10 Apr 2025</td>
+                            <td className="p-4 text-sm">Imaging</td>
+                            <td className="p-4 text-sm">₹2,200</td>
+                            <td className="p-4 text-sm">₹1,200</td>
+                            <td className="p-4 text-sm"><span className="text-orange-600 font-medium">In Review</span></td>
+                            <td className="p-4 text-sm">
+                              <div className="flex gap-2">
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button className="text-muted-foreground hover:text-foreground">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </button>
+                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">View EOB</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </TabsContent>
                 </Tabs>
               </div>
