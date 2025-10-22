@@ -91,7 +91,7 @@ const Registration = () => {
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">New Appointment</span>
+            <span className="font-semibold">Search</span>
           </button>
 
           <BookingSteps currentStep="registration" />
