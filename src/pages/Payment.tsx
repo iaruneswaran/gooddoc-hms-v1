@@ -53,10 +53,10 @@ const Payment = () => {
             onClick={() => navigate("/book-appointment", { 
               state: { fromPatientInsights, patientId } 
             })}
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-sm font-semibold">Appointments</span>
+            <span className="font-semibold">Appointments</span>
           </button>
 
           <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />

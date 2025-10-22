@@ -222,10 +222,10 @@ const PatientInsights = () => {
             {/* Back Button */}
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary mb-6 transition-colors"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
             >
               <ChevronLeft className="h-4 w-4" />
-              Appointments
+              <span className="font-semibold">Appointments</span>
             </button>
 
             {/* Patient Header */}

@@ -44,10 +44,10 @@ const Discharge = () => {
         <main className="p-8">
           <button
             onClick={() => navigate("/patient-insights")}
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-sm font-semibold">Patient Insights</span>
+            <span className="font-semibold">Patient Insights</span>
           </button>
 
           <DischargeSteps currentStep={currentStep} />

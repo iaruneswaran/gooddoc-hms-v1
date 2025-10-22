@@ -78,13 +78,13 @@ const Payments = () => {
         
         <main className="p-8">
           {/* Back Button */}
-          <button
-            onClick={() => navigate(`/patient-insights/${patientId}`)}
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary mb-6 transition-colors"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Patient Insights
-          </button>
+            <button
+              onClick={() => navigate(`/patient-insights/${patientId}`)}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="font-semibold">Patient Insights</span>
+            </button>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-3 gap-6 mb-6">

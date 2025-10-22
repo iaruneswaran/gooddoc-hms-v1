@@ -206,10 +206,10 @@ const BookAppointment = () => {
         <main className="p-8">
           <button
             onClick={() => navigate(fromPatientInsights ? `/patient-insights/${patientId}` : "/registration")}
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-sm font-semibold">{fromPatientInsights ? "Patient Insights" : "Appointments"}</span>
+            <span className="font-semibold">{fromPatientInsights ? "Patient Insights" : "Appointments"}</span>
           </button>
 
           <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
