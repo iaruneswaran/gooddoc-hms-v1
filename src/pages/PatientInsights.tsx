@@ -54,12 +54,7 @@ const PatientInsights = () => {
           type: "Consultation",
           datetime: "05 Aug 2025 | 05:30 PM",
           doctor: "Dr. Meera Nair – Cardiology",
-        },
-        {
-          type: "Laboratory",
-          datetime: "05 Aug 2025 | 10:30 AM",
           visitId: "VST-102345",
-          clinic: "Baines Healthcare",
           provider: "Dr. Sarah Khan",
           department: "Internal Medicine",
           opdClinic: "OPD Clinic 3",
@@ -75,38 +70,73 @@ const PatientInsights = () => {
     },
     {
       id: "2",
-      date: "Sun, Sep 28, 2024",
+      date: "Sun, Aug 07, 2025",
       items: [
         {
-          type: "Consultation",
-          datetime: "28 Sep 2024 | 10:30 PM",
-          doctor: "Dr. Meera Nair – Cardiology",
-        },
-        {
           type: "Laboratory",
-          datetime: "28 Sep 2024 | 04:30 PM",
-          clinic: "Baines Healthcare",
-        },
-        {
-          type: "Radiology",
-          datetime: "28 Sep 2024 | 10:30 AM",
-          center: "Baines Healthcare",
+          datetime: "07 Aug 2025 | 10:15 AM",
+          doctor: "Dr. Ravi Menon – Pathology",
+          visitId: "VST-102678",
+          provider: "Central Diagnostic Lab",
+          department: "Laboratory Services",
+          testsOrdered: [
+            "Complete Blood Count (CBC)",
+            "Liver Function Test (LFT)",
+            "Fasting Blood Sugar (FBS)",
+          ],
+          findings: "Blood samples collected successfully. No complications noted during procedure. Preliminary results indicate mild elevation in liver enzymes; remaining parameters within normal limits. Further review scheduled upon report finalization.",
         },
       ],
     },
     {
       id: "3",
-      date: "Mon, May 15, 2024",
+      date: "Sat, Aug 09, 2025",
+      items: [
+        {
+          type: "Radiology",
+          datetime: "09 Aug 2025 | 03:00 PM",
+          doctor: "Dr. Anjali Verma – Radiology",
+          visitId: "VST-102912",
+          provider: "Imaging Suite 2",
+          department: "Radiology",
+          investigations: [
+            "Chest X-ray (PA View)",
+            "Ultrasound Abdomen",
+          ],
+          findings: "Chest X-ray shows clear lung fields with no evidence of consolidation. Ultrasound abdomen reveals mild fatty liver changes. No structural abnormalities detected. Reports shared with referring physician for correlation.",
+        },
+      ],
+    },
+    {
+      id: "4",
+      date: "Tue, Aug 12, 2025",
       items: [
         {
           type: "IPD Admission",
-          datetime: "15 May 2024 | 08:30 PM",
-          doctor: "Dr. A. Joseph (Ophthalmology)",
+          datetime: "12 Aug 2025 | 11:00 AM",
+          doctor: "Dr. Karthik Reddy – General Medicine",
+          admissionId: "IPD-205431",
+          admittingDiagnosis: "Acute Gastroenteritis",
+          roomType: "Private Room – 204",
+          provider: "Inpatient Wing A",
+          department: "General Medicine",
+          findings: "Patient admitted for IV fluid therapy and symptomatic management. Vital signs stable; mild dehydration noted on admission. Responding well to treatment. Daily monitoring of electrolytes and hydration status advised.",
         },
+      ],
+    },
+    {
+      id: "5",
+      date: "Thu, Aug 14, 2025",
+      items: [
         {
           type: "Day-Care Admission",
-          datetime: "15 May 2024 | 10:30 AM",
-          procedure: "Endoscopy",
+          datetime: "14 Aug 2025 | 09:30 AM",
+          doctor: "Dr. Sneha Iyer – Oncology",
+          visitId: "DC-308972",
+          procedure: "Chemotherapy Cycle 3 – Doxorubicin + Cyclophosphamide",
+          provider: "Day-Care Unit B",
+          department: "Oncology",
+          findings: "Patient tolerated chemotherapy well with no immediate adverse reactions. Vital parameters remained stable throughout infusion. Advised oral hydration and antiemetic medication post-session. Next cycle scheduled in 21 days.",
         },
       ],
     },
@@ -291,66 +321,139 @@ const PatientInsights = () => {
                                   </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="border-t p-4 space-y-3 bg-muted/30">
-                                    {item.visitId && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                          Visit ID:
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">{item.visitId}</p>
+                                  <div className="border-t p-4 space-y-4 bg-muted/30">
+                                    <div className="grid grid-cols-2 gap-4">
+                                      {/* Left Column - Provider Information */}
+                                      <div className="space-y-3">
+                                        <h3 className="text-sm font-semibold text-foreground">Provider Information</h3>
+                                        
+                                        {item.visitId && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Visit ID:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.visitId}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.admissionId && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Admission ID:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.admissionId}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.admittingDiagnosis && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Admitting Diagnosis:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.admittingDiagnosis}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.roomType && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Room Type:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.roomType}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.testsOrdered && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Tests Ordered:
+                                            </p>
+                                            <ul className="space-y-1 mt-1">
+                                              {item.testsOrdered.map((test, tIdx) => (
+                                                <li key={tIdx} className="text-sm text-foreground flex items-start">
+                                                  <span className="mr-2">•</span>
+                                                  <span>{test}</span>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        )}
+                                        
+                                        {item.investigations && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Investigations:
+                                            </p>
+                                            <ul className="space-y-1 mt-1">
+                                              {item.investigations.map((investigation, iIdx) => (
+                                                <li key={iIdx} className="text-sm text-foreground flex items-start">
+                                                  <span className="mr-2">•</span>
+                                                  <span>{investigation}</span>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        )}
+                                        
+                                        {item.procedure && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Procedure:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.procedure}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.provider && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Provider:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.provider}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.department && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Department:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.department}</p>
+                                          </div>
+                                        )}
+                                        
+                                        {item.opdClinic && (
+                                          <div>
+                                            <p className="text-xs text-muted-foreground mb-0.5">
+                                              Provider:
+                                            </p>
+                                            <p className="text-sm text-foreground">{item.opdClinic}</p>
+                                          </div>
+                                        )}
                                       </div>
-                                    )}
-                                    {item.clinic && item.doctor && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                          Clinic:
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">{item.clinic}</p>
-                                      </div>
-                                    )}
-                                    {item.provider && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                          Provider:
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">{item.provider}</p>
-                                      </div>
-                                    )}
-                                    {item.department && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                          Department:
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">{item.department}</p>
-                                      </div>
-                                    )}
-                                    {item.opdClinic && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                          Provider:
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">{item.opdClinic}</p>
-                                      </div>
-                                    )}
-                                    {item.prescriptions && (
-                                      <div>
-                                        <p className="text-sm font-medium text-foreground mb-2">
-                                          Prescriptions
-                                        </p>
-                                        <ul className="space-y-1">
-                                          {item.prescriptions.map((prescription, pIdx) => (
-                                            <li key={pIdx} className="text-sm text-muted-foreground">
-                                              {prescription}
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                    )}
+                                      
+                                      {/* Right Column - Prescriptions (for Consultation) */}
+                                      {item.prescriptions && (
+                                        <div className="space-y-3">
+                                          <h3 className="text-sm font-semibold text-foreground">Prescriptions</h3>
+                                          <ul className="space-y-2">
+                                            {item.prescriptions.map((prescription, pIdx) => (
+                                              <li key={pIdx} className="text-sm text-foreground flex items-start">
+                                                <span className="mr-2">•</span>
+                                                <span>{prescription}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                    </div>
+                                    
+                                    {/* Findings Section */}
                                     {item.findings && (
                                       <div>
-                                        <p className="text-sm font-medium text-foreground mb-2">
+                                        <h3 className="text-sm font-semibold text-foreground mb-2">
                                           Findings
-                                        </p>
+                                        </h3>
                                         <p className="text-sm text-muted-foreground leading-relaxed">
                                           {item.findings}
                                         </p>
