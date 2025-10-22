@@ -151,7 +151,11 @@ const PatientInsights = () => {
                   <Button variant="outline" size="sm">
                     Book Appointments
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`)}
+                  >
                     Discharge
                   </Button>
                   <Button 
