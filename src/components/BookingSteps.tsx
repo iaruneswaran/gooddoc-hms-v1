@@ -16,14 +16,16 @@ const steps: Step[] = [
 
 interface BookingStepsProps {
   currentStep: string;
+  hideSteps?: string[];
 }
 
-export function BookingSteps({ currentStep }: BookingStepsProps) {
-  const currentIndex = steps.findIndex(s => s.value === currentStep);
+export function BookingSteps({ currentStep, hideSteps = [] }: BookingStepsProps) {
+  const visibleSteps = steps.filter(step => !hideSteps.includes(step.value));
+  const currentIndex = visibleSteps.findIndex(s => s.value === currentStep);
 
   return (
     <div className="flex items-center justify-center gap-8 py-8">
-      {steps.map((step, index) => {
+      {visibleSteps.map((step, index) => {
         const Icon = step.icon;
         const isActive = index === currentIndex;
         const isPast = index < currentIndex;
@@ -53,7 +55,7 @@ export function BookingSteps({ currentStep }: BookingStepsProps) {
               </span>
             </div>
             
-            {index < steps.length - 1 && (
+            {index < visibleSteps.length - 1 && (
               <div className="w-32 h-px bg-border -mt-6" />
             )}
           </div>

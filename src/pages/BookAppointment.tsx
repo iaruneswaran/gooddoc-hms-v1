@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Calendar, FlaskConical, Scan, Bed, Syringe, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -24,6 +24,9 @@ const appointmentTypes = [
 
 const BookAppointment = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPatientInsights = location.state?.fromPatientInsights;
+  const patientId = location.state?.patientId;
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [consultationData, setConsultationData] = useState<ConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
@@ -202,14 +205,14 @@ const BookAppointment = () => {
         
         <main className="p-8">
           <button
-            onClick={() => navigate("/registration")}
+            onClick={() => navigate(fromPatientInsights ? `/patient-insights/${patientId}` : "/registration")}
             className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-lg font-semibold">Appointments</span>
+            <span className="text-lg font-semibold">{fromPatientInsights ? "Patient Insights" : "Appointments"}</span>
           </button>
 
-          <BookingSteps currentStep="appointment" />
+          <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
 
           <div className="max-w-[1600px] mx-auto">
             <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>

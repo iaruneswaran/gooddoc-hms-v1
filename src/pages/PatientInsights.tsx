@@ -250,7 +250,9 @@ const PatientInsights = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => navigate("/book-appointment")}
+                  onClick={() => navigate("/book-appointment", { 
+                    state: { fromPatientInsights: true, patientId } 
+                  })}
                 >
                   Book Appointments
                 </Button>
