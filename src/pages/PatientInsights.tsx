@@ -130,48 +130,48 @@ const PatientInsights = () => {
             </button>
 
             {/* Patient Header */}
-            <div className="flex items-start gap-4 mb-6">
-              <Avatar className="h-12 w-12">
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {patient.name.split(" ").map(n => n[0]).join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
-                <p className="text-sm text-muted-foreground">
-                  GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
-                </p>
-              </div>
-            </div>
-
-            {/* Action Buttons and Financial Summary */}
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex gap-3">
-                <Button variant="outline" size="sm">
-                  Book Appointments
-                </Button>
-                <Button variant="outline" size="sm">
-                  Discharge
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                >
-                  Payments
-                </Button>
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div className="flex items-start gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {patient.name.split(" ").map(n => n[0]).join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
+                  <p className="text-sm text-muted-foreground">
+                    GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
+                  </p>
+                </div>
               </div>
 
               <div className="flex gap-4">
-                <Card className="p-6 flex-1 min-w-[250px]">
+                <Card className="p-6 min-w-[220px]">
                   <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
                   <p className="text-3xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
                 </Card>
-                <Card className="p-6 flex-1 min-w-[250px]">
+                <Card className="p-6 min-w-[220px]">
                   <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
                   <p className="text-3xl font-semibold text-primary">₹{patient.advanceAmount}</p>
                 </Card>
               </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 mb-6">
+              <Button variant="outline" size="sm">
+                Book Appointments
+              </Button>
+              <Button variant="outline" size="sm">
+                Discharge
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+              >
+                Payments
+              </Button>
             </div>
 
             {/* Main Content */}
