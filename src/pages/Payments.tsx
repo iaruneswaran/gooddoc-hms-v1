@@ -167,7 +167,7 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.id}</td>
                             <td className="p-4 text-sm">{invoice.date}</td>
                             <td className="p-4 text-sm">{invoice.service}</td>
-                            <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
+                            <td className="p-4 text-sm" style={{ color: '#800139' }}>₹{invoice.totalAmount}</td>
                             <td className="p-4 text-sm">{invoice.status}</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
