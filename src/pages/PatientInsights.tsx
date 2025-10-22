@@ -247,11 +247,7 @@ const PatientInsights = () => {
                 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/book-appointment`)}
-                  >
+                  <Button variant="outline" size="sm">
                     Book Appointments
                   </Button>
                   <Button 
