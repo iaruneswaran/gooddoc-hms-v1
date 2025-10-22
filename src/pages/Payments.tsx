@@ -147,8 +147,8 @@ const Payments = () => {
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Invoice No</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
-                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                         </tr>
                       </thead>
@@ -164,8 +164,8 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.id}</td>
                             <td className="p-4 text-sm">{invoice.date}</td>
                             <td className="p-4 text-sm">{invoice.service}</td>
-                            <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
                             <td className="p-4 text-sm">{invoice.payer}</td>
+                            <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
                                 <button className="text-muted-foreground hover:text-foreground">
