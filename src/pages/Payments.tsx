@@ -33,6 +33,7 @@ const Payments = () => {
       service: "Consultation",
       totalAmount: 1500,
       payer: "Harish Kalyan",
+      status: "Pending",
       balance: 1500,
     },
     {
@@ -41,6 +42,7 @@ const Payments = () => {
       service: "Laboratory",
       totalAmount: 650,
       payer: "Harish Kalyan",
+      status: "Pending",
       balance: 650,
     },
     {
@@ -49,6 +51,7 @@ const Payments = () => {
       service: "Imaging",
       totalAmount: 1200,
       payer: "Harish Kalyan",
+      status: "Pending",
       balance: 1200,
     },
   ];
@@ -149,6 +152,7 @@ const Payments = () => {
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                         </tr>
                       </thead>
@@ -166,6 +170,11 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.service}</td>
                             <td className="p-4 text-sm">{invoice.payer}</td>
                             <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
+                            <td className="p-4">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                {invoice.status}
+                              </span>
+                            </td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
                                 <button className="text-muted-foreground hover:text-foreground">
