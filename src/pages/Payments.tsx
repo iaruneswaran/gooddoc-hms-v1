@@ -170,11 +170,7 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.service}</td>
                             <td className="p-4 text-sm">{invoice.payer}</td>
                             <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
-                            <td className="p-4">
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                {invoice.status}
-                              </span>
-                            </td>
+                            <td className="p-4 text-sm">{invoice.status}</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
                                 <button className="text-muted-foreground hover:text-foreground">
