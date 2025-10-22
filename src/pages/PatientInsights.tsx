@@ -228,62 +228,66 @@ const PatientInsights = () => {
               <span className="font-semibold">Appointments</span>
             </button>
 
-            {/* Patient Header */}
-            <div className="flex items-end justify-between gap-4 mb-6">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-start gap-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {patient.name.split(" ").map(n => n[0]).join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
-                    <p className="text-sm text-muted-foreground">
-                      GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
-                    </p>
+            {/* Patient Card */}
+            <Card className="p-6 mb-6">
+              <div className="flex items-start justify-between gap-6">
+                {/* Left side - Patient info and actions */}
+                <div className="flex-1">
+                  <div className="flex items-start gap-4 mb-4">
+                    <Avatar className="h-12 w-12">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {patient.name.split(" ").map(n => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
+                      <p className="text-sm text-muted-foreground">
+                        GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate("/book-appointment", { 
+                        state: { fromPatientInsights: true, patientId } 
+                      })}
+                    >
+                      Book Appointments
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/discharge`)}
+                    >
+                      Discharge
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                    >
+                      Payments
+                    </Button>
                   </div>
                 </div>
-                
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate("/book-appointment", { 
-                    state: { fromPatientInsights: true, patientId } 
-                  })}
-                >
-                  Book Appointments
-                </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`)}
-                  >
-                    Discharge
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                  >
-                    Payments
-                  </Button>
+
+                {/* Right side - Financial info */}
+                <div className="flex gap-4">
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
+                    <p className="text-2xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
+                    <p className="text-2xl font-semibold text-primary">₹{patient.advanceAmount}</p>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex gap-4">
-                <Card className="p-6 min-w-[280px]">
-                  <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
-                  <p className="text-3xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
-                </Card>
-                <Card className="p-6 min-w-[280px]">
-                  <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
-                  <p className="text-3xl font-semibold text-primary">₹{patient.advanceAmount}</p>
-                </Card>
-              </div>
-            </div>
+            </Card>
 
             {/* Main Content */}
             <div className="flex gap-6">
