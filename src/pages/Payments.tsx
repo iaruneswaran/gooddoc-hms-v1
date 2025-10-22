@@ -536,7 +536,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Admission</td>
                         <td className="p-4 text-sm">Cash</td>
                         <td className="p-4 text-sm">Fredrick John</td>
-                        <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                        <td className="p-4 text-sm text-foreground font-medium">+₹1,600</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -557,7 +557,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Admission</td>
                         <td className="p-4 text-sm">Cash</td>
                         <td className="p-4 text-sm">Fredrick John</td>
-                        <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                        <td className="p-4 text-sm text-foreground font-medium">+₹1,600</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -578,7 +578,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Overpayment</td>
                         <td className="p-4 text-sm">Cash</td>
                         <td className="p-4 text-sm">Robb Stark</td>
-                        <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                        <td className="p-4 text-sm text-foreground font-medium">-₹1,600</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -599,7 +599,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Overpayment</td>
                         <td className="p-4 text-sm">Cash</td>
                         <td className="p-4 text-sm">Robb Stark</td>
-                        <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                        <td className="p-4 text-sm text-foreground font-medium">-₹1,600</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -620,7 +620,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Consultation</td>
                         <td className="p-4 text-sm">Card</td>
                         <td className="p-4 text-sm">Robb Stark</td>
-                        <td className="p-4 text-sm font-medium">₹1,500</td>
+                        <td className="p-4 text-sm text-foreground font-medium">₹1,500</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -641,7 +641,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Laboratory</td>
                         <td className="p-4 text-sm">UPI</td>
                         <td className="p-4 text-sm">Harish Kalyan</td>
-                        <td className="p-4 text-sm font-medium">₹650</td>
+                        <td className="p-4 text-sm text-foreground font-medium">₹650</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
@@ -662,7 +662,7 @@ const Payments = () => {
                         <td className="p-4 text-sm">Imaging</td>
                         <td className="p-4 text-sm">Cash</td>
                         <td className="p-4 text-sm">Harish Kalyan</td>
-                        <td className="p-4 text-sm font-medium">₹1,200</td>
+                        <td className="p-4 text-sm text-foreground font-medium">₹1,200</td>
                         <td className="p-4 text-sm">Success</td>
                         <td className="p-4 text-sm">
                           <div className="flex gap-2">
