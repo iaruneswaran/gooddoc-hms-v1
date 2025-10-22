@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, RefreshCw, Plus, Upload, Printer } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const Discharge = () => {
   const navigate = useNavigate();
+  const { patientId } = useParams();
   const [currentStep, setCurrentStep] = useState(1);
 
   const renderStepContent = () => {
@@ -43,7 +44,7 @@ const Discharge = () => {
         
         <main className="p-8">
           <button
-            onClick={() => navigate("/patient-insights")}
+            onClick={() => navigate(`/patient-insights/${patientId}`)}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
