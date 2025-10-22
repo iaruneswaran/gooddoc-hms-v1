@@ -36,9 +36,9 @@ export function AppSidebar() {
               to={item.href}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm mb-1 transition-colors",
-                item.highlight && "bg-primary text-primary-foreground mb-4 hover:bg-primary/90",
-                !item.highlight && isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
-                !item.highlight && !isActive && "hover:bg-sidebar-accent/50"
+                item.highlight && "mb-4",
+                isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
+                !isActive && "hover:bg-sidebar-accent/50"
               )}
             >
               <Icon className="w-4 h-4" />
