@@ -145,7 +145,7 @@ const PatientInsights = () => {
             </div>
 
             {/* Action Buttons and Financial Summary */}
-            <div className="flex flex-col gap-4 mb-6">
+            <div className="flex items-start justify-between mb-6">
               <div className="flex gap-3">
                 <Button variant="outline" size="sm">
                   Book Appointments
@@ -158,12 +158,12 @@ const PatientInsights = () => {
                 </Button>
               </div>
 
-              <div className="flex gap-6">
-                <div>
+              <div className="flex gap-8">
+                <div className="text-right">
                   <p className="text-sm text-muted-foreground mb-1">Outstanding Total</p>
                   <p className="text-2xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
                 </div>
-                <div>
+                <div className="text-right">
                   <p className="text-sm text-muted-foreground mb-1">Advance Amount</p>
                   <p className="text-2xl font-semibold text-primary">₹{patient.advanceAmount}</p>
                 </div>
