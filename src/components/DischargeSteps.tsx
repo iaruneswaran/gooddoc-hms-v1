@@ -21,7 +21,7 @@ interface DischargeStepsProps {
 
 export function DischargeSteps({ currentStep }: DischargeStepsProps) {
   return (
-    <div className="flex items-center justify-center gap-8 py-8">
+    <div className="flex items-center justify-center gap-8 pt-4 pb-6">
       {steps.map((step, index) => {
         const Icon = step.icon;
         const isActive = step.value === currentStep;
