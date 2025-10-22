@@ -1,4 +1,5 @@
 import { User, Phone, Mail } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
@@ -105,6 +106,7 @@ interface AppointmentTableProps {
 }
 
 export function AppointmentTable({ category = "outpatient-care" }: AppointmentTableProps) {
+  const navigate = useNavigate();
   const appointments = allAppointments.filter(apt => apt.category === category);
   
   const handleCheckIn = () => {
@@ -147,7 +149,12 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
                 <User className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <div className="font-medium text-foreground">{appointment.patient.name}</div>
+                <button
+                  onClick={() => navigate(`/patient-insights/${appointment.id}`)}
+                  className="font-medium text-foreground hover:text-primary transition-colors text-left"
+                >
+                  {appointment.patient.name}
+                </button>
                 <div className="text-xs text-muted-foreground">
                   {appointment.patient.id} • {appointment.patient.age} | {appointment.patient.gender}
                 </div>
