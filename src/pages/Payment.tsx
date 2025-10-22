@@ -186,6 +186,16 @@ const Payment = () => {
                     )}
                   </div>
 
+                  {/* Payer Name */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">Payer Name</p>
+                    <input
+                      type="text"
+                      defaultValue="Fredrick John"
+                      className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
+                    />
+                  </div>
+
                   {/* Payment Options */}
                   <div className="space-y-4">
                     <p className="text-sm font-medium text-foreground">Payment Options</p>
@@ -221,12 +231,6 @@ const Payment = () => {
                       Add Payment
                     </Button>
                   </div>
-
-                  {/* Insurance */}
-                  <Button variant="outline" className="w-full justify-between">
-                    <span>Insurance</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-4">
