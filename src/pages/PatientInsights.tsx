@@ -355,7 +355,7 @@ const PatientInsights = () => {
                                 <CollapsibleTrigger className="w-full">
                                   <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
                                     <div className="flex-1 text-left">
-                                      <p className="font-medium text-primary mb-1">{item.type}</p>
+                                      <p className="font-medium text-foreground mb-1">{item.type}</p>
                                       <p className="text-sm text-muted-foreground">
                                         Date & Time: {item.datetime}
                                       </p>
