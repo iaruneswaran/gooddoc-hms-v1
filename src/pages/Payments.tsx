@@ -284,20 +284,339 @@ const Payments = () => {
             </TabsContent>
 
             <TabsContent value="advance" className="mt-6">
-              <Card className="p-6">
-                <p className="text-muted-foreground">Advance payment management coming soon...</p>
-              </Card>
+              <div className="grid grid-cols-[1fr_400px] gap-6">
+                {/* Left Column - Advance Transactions Table */}
+                <Card className="p-6">
+                  <h2 className="text-lg font-semibold text-primary mb-4">Advance Transactions</h2>
+                  
+                  <div className="border rounded-lg overflow-hidden">
+                    <table className="w-full">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-background">
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-001</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Admission</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-002</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Admission</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+
+                {/* Right Column - Advance Collection Form */}
+                <Card className="p-6">
+                  <h3 className="text-sm font-medium mb-3">Payer Name</h3>
+                  <Input defaultValue="Fredrick John" className="mb-4" />
+
+                  <h3 className="text-sm font-medium mb-3">Reason</h3>
+                  <Input defaultValue="Admission" className="mb-4" />
+
+                  <h3 className="text-sm font-medium mb-3">Payment Options</h3>
+                  <div className="flex gap-2 mb-4">
+                    <Input
+                      type="text"
+                      value={`₹${paymentAmount}`}
+                      onChange={(e) => setPaymentAmount(e.target.value.replace('₹', ''))}
+                      className="flex-1"
+                    />
+                    <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Cash">Cash</SelectItem>
+                        <SelectItem value="Card">Card</SelectItem>
+                        <SelectItem value="UPI">UPI</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button variant="link" size="sm" className="text-primary p-0 h-auto mb-4">
+                    Add Payment
+                  </Button>
+
+                  <Button className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white">
+                    Collect Payment
+                  </Button>
+                </Card>
+              </div>
             </TabsContent>
 
             <TabsContent value="refunds" className="mt-6">
-              <Card className="p-6">
-                <p className="text-muted-foreground">Refund management coming soon...</p>
-              </Card>
+              <div className="grid grid-cols-[1fr_400px] gap-6">
+                {/* Left Column - Refund Transactions Table */}
+                <Card className="p-6">
+                  <h2 className="text-lg font-semibold text-primary mb-4">Refund Transactions</h2>
+                  
+                  <div className="border rounded-lg overflow-hidden">
+                    <table className="w-full">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Receiver</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-background">
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-001</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Overpayment</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-001</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Overpayment</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+
+                {/* Right Column - Refund Form */}
+                <Card className="p-6">
+                  <h3 className="text-sm font-medium mb-3">Receiver Name</h3>
+                  <Input defaultValue="Fredrick John" className="mb-4" />
+
+                  <h3 className="text-sm font-medium mb-3">Reason</h3>
+                  <Input defaultValue="Overpayment" className="mb-4" />
+
+                  <h3 className="text-sm font-medium mb-3">Payment Options</h3>
+                  <div className="flex gap-2 mb-4">
+                    <Input
+                      type="text"
+                      value={`₹${paymentAmount}`}
+                      onChange={(e) => setPaymentAmount(e.target.value.replace('₹', ''))}
+                      className="flex-1"
+                    />
+                    <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Cash">Cash</SelectItem>
+                        <SelectItem value="Card">Card</SelectItem>
+                        <SelectItem value="UPI">UPI</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button variant="link" size="sm" className="text-primary p-0 h-auto mb-4">
+                    Add Payment
+                  </Button>
+
+                  <Button className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white">
+                    Confirm Refunds
+                  </Button>
+                </Card>
+              </div>
             </TabsContent>
 
             <TabsContent value="history" className="mt-6">
               <Card className="p-6">
-                <p className="text-muted-foreground">Payment history coming soon...</p>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
+                  <Button variant="outline" size="sm">
+                    Download statement
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-4 mb-4">
+                  <Select defaultValue="all">
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue placeholder="All Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="success">Success</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="failed">Failed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input placeholder="Search" className="max-w-xs" />
+                </div>
+                
+                <div className="border rounded-lg overflow-hidden">
+                  <table className="w-full">
+                    <thead className="bg-muted/50">
+                      <tr>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Type</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Category</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Service/Reason</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer/Receiver</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                        <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-background">
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">REP-2025-001</td>
+                        <td className="p-4 text-sm">06 Oct 2025</td>
+                        <td className="p-4 text-sm">Credited</td>
+                        <td className="p-4 text-sm">Advance</td>
+                        <td className="p-4 text-sm">Admission</td>
+                        <td className="p-4 text-sm">Cash</td>
+                        <td className="p-4 text-sm">Fredrick John</td>
+                        <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">REP-2025-002</td>
+                        <td className="p-4 text-sm">06 Oct 2025</td>
+                        <td className="p-4 text-sm">Credited</td>
+                        <td className="p-4 text-sm">Advance</td>
+                        <td className="p-4 text-sm">Admission</td>
+                        <td className="p-4 text-sm">Cash</td>
+                        <td className="p-4 text-sm">Fredrick John</td>
+                        <td className="p-4 text-sm text-green-600 font-medium">+₹1,600</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">REP-2025-001</td>
+                        <td className="p-4 text-sm">06 Oct 2025</td>
+                        <td className="p-4 text-sm">Debited</td>
+                        <td className="p-4 text-sm">Refund</td>
+                        <td className="p-4 text-sm">Overpayment</td>
+                        <td className="p-4 text-sm">Cash</td>
+                        <td className="p-4 text-sm">Robb Stark</td>
+                        <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">REP-2025-002</td>
+                        <td className="p-4 text-sm">06 Oct 2025</td>
+                        <td className="p-4 text-sm">Debited</td>
+                        <td className="p-4 text-sm">Refund</td>
+                        <td className="p-4 text-sm">Overpayment</td>
+                        <td className="p-4 text-sm">Cash</td>
+                        <td className="p-4 text-sm">Robb Stark</td>
+                        <td className="p-4 text-sm text-red-600 font-medium">-₹1,600</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">INV-2025-001</td>
+                        <td className="p-4 text-sm">15 Jun 2025</td>
+                        <td className="p-4 text-sm">Payment</td>
+                        <td className="p-4 text-sm">Bill Payment</td>
+                        <td className="p-4 text-sm">Consultation</td>
+                        <td className="p-4 text-sm">Card</td>
+                        <td className="p-4 text-sm">Robb Stark</td>
+                        <td className="p-4 text-sm font-medium">₹1,500</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">INV-2025-002</td>
+                        <td className="p-4 text-sm">20 May 2025</td>
+                        <td className="p-4 text-sm">Payment</td>
+                        <td className="p-4 text-sm">Bill Payment</td>
+                        <td className="p-4 text-sm">Laboratory</td>
+                        <td className="p-4 text-sm">UPI</td>
+                        <td className="p-4 text-sm">Harish Kalyan</td>
+                        <td className="p-4 text-sm font-medium">₹650</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="p-4 text-sm">INV-2025-003</td>
+                        <td className="p-4 text-sm">10 Apr 2025</td>
+                        <td className="p-4 text-sm">Payment</td>
+                        <td className="p-4 text-sm">Bill Payment</td>
+                        <td className="p-4 text-sm">Imaging</td>
+                        <td className="p-4 text-sm">Cash</td>
+                        <td className="p-4 text-sm">Harish Kalyan</td>
+                        <td className="p-4 text-sm font-medium">₹1,200</td>
+                        <td className="p-4 text-sm">Success</td>
+                        <td className="p-4 text-sm">
+                          <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </Card>
             </TabsContent>
           </Tabs>
