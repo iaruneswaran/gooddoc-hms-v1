@@ -163,13 +163,13 @@ const PatientInsights = () => {
               </div>
 
               <div className="flex gap-4">
-                <Card className="p-4 flex-1">
+                <Card className="p-6 flex-1 min-w-[250px]">
                   <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
-                  <p className="text-2xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
+                  <p className="text-3xl font-semibold text-primary">₹{patient.outstandingTotal}</p>
                 </Card>
-                <Card className="p-4 flex-1">
+                <Card className="p-6 flex-1 min-w-[250px]">
                   <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
-                  <p className="text-2xl font-semibold text-primary">₹{patient.advanceAmount}</p>
+                  <p className="text-3xl font-semibold text-primary">₹{patient.advanceAmount}</p>
                 </Card>
               </div>
             </div>
