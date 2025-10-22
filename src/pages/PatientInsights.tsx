@@ -175,11 +175,31 @@ const PatientInsights = () => {
               {/* Left Side - Tabs */}
               <div className="flex-1">
                 <Tabs defaultValue="appointments">
-                  <TabsList>
-                    <TabsTrigger value="appointments">Appointments</TabsTrigger>
-                    <TabsTrigger value="payment-history">Payment History</TabsTrigger>
-                    <TabsTrigger value="documents">Documents</TabsTrigger>
-                    <TabsTrigger value="insurance">Insurance</TabsTrigger>
+                  <TabsList className="h-auto bg-transparent border-b border-border p-0 gap-8 rounded-none w-full justify-start">
+                    <TabsTrigger 
+                      value="appointments"
+                      className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                    >
+                      Appointments
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="payment-history"
+                      className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                    >
+                      Payment History
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="documents"
+                      className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                    >
+                      Documents
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="insurance"
+                      className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                    >
+                      Insurance
+                    </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="appointments" className="space-y-4">
