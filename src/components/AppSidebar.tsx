@@ -1,6 +1,7 @@
 import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Pill, Users, Network, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.svg";
 
 const menuItems = [
   { icon: MessageCircle, label: "Ask Good Doc", href: "/ask", highlight: true },
@@ -19,13 +20,8 @@ export function AppSidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-[196px] bg-sidebar text-sidebar-foreground flex flex-col">
       <div className="p-6">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xl font-semibold text-white">g</span>
-            <div className="w-2 h-2 rounded-full bg-primary"></div>
-            <div className="w-2 h-2 rounded-full bg-primary"></div>
-            <span className="text-xl font-semibold text-white">d doc</span>
-          </div>
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="GoodDoc" className="h-7" />
         </Link>
       </div>
 
