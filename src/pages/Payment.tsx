@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Download, Printer, ChevronDown } from "lucide-react";
+import { ChevronLeft, Download, Printer, CheckCircle2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { BookingSteps } from "@/components/BookingSteps";
@@ -34,6 +34,30 @@ const Payment = () => {
   const [useAdvance, setUseAdvance] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [paymentType, setPaymentType] = useState<"now" | "later">("now");
+  const [countdown, setCountdown] = useState(9);
+
+  useEffect(() => {
+    if (showSuccess && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      navigate("/");
+    }
+  }, [showSuccess, countdown, navigate]);
+
+  const handlePayNow = () => {
+    setPaymentType("now");
+    setShowSuccess(true);
+    setCountdown(9);
+  };
+
+  const handlePayLater = () => {
+    setPaymentType("later");
+    setShowSuccess(true);
+    setCountdown(9);
+  };
   
   const advanceAmount = 1000;
   const billAmount = paymentData?.total || 1600;
@@ -238,10 +262,10 @@ const Payment = () => {
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-4">
-                    <Button variant="outline" className="flex-1">
+                    <Button variant="outline" className="flex-1" onClick={handlePayLater}>
                       Pay Later
                     </Button>
-                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handlePayNow}>
                       Confirm Payment
                     </Button>
                   </div>
@@ -251,6 +275,46 @@ const Payment = () => {
           </div>
         </main>
       </div>
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-background rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl animate-scale-in">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center animate-scale-in">
+                <CheckCircle2 className="w-12 h-12 text-primary animate-scale-in" style={{ animationDelay: "0.2s" }} />
+              </div>
+              
+              <div className="space-y-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+                <h2 className="text-2xl font-bold text-foreground">
+                  {paymentType === "now" ? "Payment Successful" : "Payment Scheduled"}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Your booking has been confirmed & Your payment has been {paymentType === "now" ? "processed successfully" : "scheduled for later"}.
+                </p>
+              </div>
+
+              <div className="py-4 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                <p className="text-sm text-muted-foreground mb-2">
+                  You will be redirected to the Home Page in
+                </p>
+                <div className="text-5xl font-bold text-primary animate-pulse">
+                  {countdown}
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">seconds...</p>
+              </div>
+
+              <Button 
+                onClick={() => navigate("/")}
+                className="w-full bg-primary hover:bg-primary/90 animate-fade-in"
+                style={{ animationDelay: "0.5s" }}
+              >
+                Back to Home
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
