@@ -36,8 +36,8 @@ const NewAppointment = () => {
   };
 
   const handleBookAppointment = (patientId: string) => {
-    // Navigate to appointment booking step
-    console.log("Booking appointment for patient:", patientId);
+    const patient = mockPatients.find(p => p.id === patientId);
+    navigate("/book-appointment", { state: { patient } });
   };
 
   const handleCreateNewRegistration = () => {
