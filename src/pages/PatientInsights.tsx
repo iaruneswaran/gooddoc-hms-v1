@@ -131,36 +131,36 @@ const PatientInsights = () => {
 
             {/* Patient Header */}
             <div className="flex items-end justify-between gap-4 mb-6">
-              <div className="flex items-start gap-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    {patient.name.split(" ").map(n => n[0]).join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start gap-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {patient.name.split(" ").map(n => n[0]).join("")}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <h1 className="text-2xl font-semibold text-foreground">{patient.name}</h1>
                     <p className="text-sm text-muted-foreground">
                       GDID - {patient.gdid} • {patient.age} | {patient.gender[0]}
                     </p>
                   </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <Button variant="outline" size="sm">
-                      Book Appointments
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      Discharge
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                    >
-                      Payments
-                    </Button>
-                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <Button variant="outline" size="sm">
+                    Book Appointments
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Discharge
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                  >
+                    Payments
+                  </Button>
                 </div>
               </div>
 
