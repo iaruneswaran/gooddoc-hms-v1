@@ -130,7 +130,7 @@ const PatientInsights = () => {
             </button>
 
             {/* Patient Header */}
-            <div className="flex items-start justify-between gap-4 mb-6">
+            <div className="flex items-start justify-between gap-4 mb-4">
               <div className="flex items-start gap-4">
                 <Avatar className="h-12 w-12">
                   <AvatarFallback className="bg-primary text-primary-foreground">
