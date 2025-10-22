@@ -47,7 +47,7 @@ const Discharge = () => {
             className="flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-lg font-semibold">Patient Insights</span>
+            <span className="text-sm font-semibold">Patient Insights</span>
           </button>
 
           <DischargeSteps currentStep={currentStep} />
