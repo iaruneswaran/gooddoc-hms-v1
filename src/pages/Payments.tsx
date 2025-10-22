@@ -32,7 +32,7 @@ const Payments = () => {
       date: "15 Jun 2025",
       service: "Consultation",
       totalAmount: 1500,
-      paid: 0,
+      payer: "Harish Kalyan",
       balance: 1500,
     },
     {
@@ -40,7 +40,7 @@ const Payments = () => {
       date: "20 May 2025",
       service: "Laboratory",
       totalAmount: 650,
-      paid: 0,
+      payer: "Harish Kalyan",
       balance: 650,
     },
     {
@@ -48,7 +48,7 @@ const Payments = () => {
       date: "10 Apr 2025",
       service: "Imaging",
       totalAmount: 1200,
-      paid: 0,
+      payer: "Harish Kalyan",
       balance: 1200,
     },
   ];
@@ -148,8 +148,7 @@ const Payments = () => {
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
-                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Paid</th>
-                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Balance</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                         </tr>
                       </thead>
@@ -166,8 +165,7 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.date}</td>
                             <td className="p-4 text-sm">{invoice.service}</td>
                             <td className="p-4 text-sm">₹{invoice.totalAmount}</td>
-                            <td className="p-4 text-sm">₹{invoice.paid.toFixed(2)}</td>
-                            <td className="p-4 text-sm text-destructive font-medium">₹{invoice.balance}</td>
+                            <td className="p-4 text-sm">{invoice.payer}</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
                                 <button className="text-muted-foreground hover:text-foreground">
