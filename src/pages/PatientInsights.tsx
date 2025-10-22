@@ -174,7 +174,7 @@ const PatientInsights = () => {
             <div className="flex gap-6">
               {/* Left Side - Tabs */}
               <div className="flex-1">
-                <Tabs defaultValue="appointments">
+                <Tabs defaultValue="appointments" className="w-full">
                   <TabsList className="h-auto bg-transparent border-b border-border p-0 gap-8 rounded-none w-full justify-start">
                     <TabsTrigger 
                       value="appointments"
