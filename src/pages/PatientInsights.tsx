@@ -305,11 +305,6 @@ const PatientInsights = () => {
                                           Center: {item.center}
                                         </p>
                                       )}
-                                      {item.procedure && (
-                                        <p className="text-sm text-muted-foreground">
-                                          Procedure: {item.procedure}
-                                        </p>
-                                      )}
                                     </div>
                                     <ChevronDown
                                       className={`h-5 w-5 text-muted-foreground transition-transform ${
