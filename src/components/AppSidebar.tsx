@@ -2,6 +2,7 @@ import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Pill, Users, Netw
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
+import askGoodDocIcon from "@/assets/ask-gooddoc-icon.svg";
 
 const menuItems = [
   { icon: MessageCircle, label: "Ask Good Doc", href: "/ask", highlight: true },
@@ -41,7 +42,11 @@ export function AppSidebar() {
                 !isActive && "hover:bg-sidebar-accent/50"
               )}
             >
-              <Icon className="w-4 h-4" />
+              {item.highlight ? (
+                <img src={askGoodDocIcon} alt="" className="w-5 h-5" />
+              ) : (
+                <Icon className="w-4 h-4" />
+              )}
               <span>{item.label}</span>
             </Link>
           );
