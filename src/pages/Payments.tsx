@@ -111,25 +111,25 @@ const Payments = () => {
               <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0">
                 <TabsTrigger 
                   value="collection"
-                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
                 >
                   Collection
                 </TabsTrigger>
                 <TabsTrigger 
                   value="advance"
-                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
                 >
                   Advance
                 </TabsTrigger>
                 <TabsTrigger 
                   value="refunds"
-                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
                 >
                   Refunds
                 </TabsTrigger>
                 <TabsTrigger 
                   value="history"
-                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
                 >
                   History
                 </TabsTrigger>
