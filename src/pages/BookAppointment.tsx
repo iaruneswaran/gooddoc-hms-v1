@@ -541,19 +541,20 @@ const BookAppointment = () => {
                   )}
                 </div>
               </Card>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="w-full lg:w-[380px] shrink-0 flex gap-3 mt-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => navigate("/registration")}
-                >
-                  Back
-                </Button>
-                <Button 
-                  className="flex-1 bg-primary hover:bg-primary/90"
-                  onClick={() => {
+            {/* Action Buttons */}
+            <div className="flex gap-3 mt-6 max-w-[1600px] mx-auto">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate("/registration")}
+              >
+                Back
+              </Button>
+              <Button 
+                className="flex-1 bg-primary hover:bg-primary/90"
+                onClick={() => {
                     const { subtotal, cgst, sgst, total } = calculateTotal();
                     let items: { name: string; price: number }[] = [];
                     
@@ -595,8 +596,7 @@ const BookAppointment = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </main>
+          </main>
       </div>
     </div>
   );
