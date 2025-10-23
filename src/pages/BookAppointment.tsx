@@ -543,7 +543,7 @@ const BookAppointment = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-4 mt-6">
+            <div className="flex justify-end gap-4 mt-3">
               <Button
                 variant="outline"
                 onClick={() => navigate("/registration")}
