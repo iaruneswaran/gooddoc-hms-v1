@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,15 +28,14 @@ import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
 const registrationSchema = z.object({
-  fullName: z.string().min(2, "Full name is required").max(100),
+  title: z.string().min(1, "Title is required"),
+  firstName: z.string().min(2, "First name is required").max(100),
+  surname: z.string().min(2, "Surname is required").max(100),
   gender: z.string().min(1, "Gender is required"),
   dateOfBirth: z.date({ required_error: "Date of birth is required" }),
   mobileNumber: z.string().regex(/^\d{10}$/, "Mobile number must be 10 digits"),
   email: z.string().email("Invalid email address").max(255),
   nationalId: z.string().min(12, "National ID must be at least 12 characters").max(20),
-  insuranceProvider: z.string().optional(),
-  policyNumber: z.string().optional(),
-  validityTo: z.date().optional(),
   street: z.string().min(5, "Street address is required").max(200),
   pinCode: z.string().regex(/^\d{6}$/, "Pin code must be 6 digits"),
   city: z.string().min(2, "City is required").max(100),
@@ -49,6 +48,7 @@ type RegistrationFormData = z.infer<typeof registrationSchema>;
 const Registration = () => {
   const navigate = useNavigate();
   const [gdid] = useState("GDID - 009");
+  const [age, setAge] = useState<number | null>(null);
   
   const {
     register,
@@ -64,9 +64,26 @@ const Registration = () => {
   });
 
   const dateOfBirth = watch("dateOfBirth");
-  const validityTo = watch("validityTo");
   const gender = watch("gender");
-  const insuranceProvider = watch("insuranceProvider");
+  const title = watch("title");
+
+  // Calculate age when date of birth changes
+  useEffect(() => {
+    if (dateOfBirth) {
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        calculatedAge--;
+      }
+      
+      setAge(calculatedAge);
+    } else {
+      setAge(null);
+    }
+  }, [dateOfBirth]);
 
   const onSubmit = (data: RegistrationFormData) => {
     console.log("Registration data:", data);
@@ -107,17 +124,48 @@ const Registration = () => {
               <div className="bg-card rounded-lg border border-border p-6 space-y-6">
                 <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
                 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-4 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="title">Title</Label>
+                    <Select value={title} onValueChange={(value) => setValue("title", value)}>
+                      <SelectTrigger className={errors.title ? "border-destructive" : ""}>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Mr">Mr</SelectItem>
+                        <SelectItem value="Mrs">Mrs</SelectItem>
+                        <SelectItem value="Ms">Ms</SelectItem>
+                        <SelectItem value="Dr">Dr</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.title && (
+                      <p className="text-xs text-destructive">{errors.title.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
                     <Input
-                      id="fullName"
-                      placeholder="Full name"
-                      {...register("fullName")}
-                      className={errors.fullName ? "border-destructive" : ""}
+                      id="firstName"
+                      placeholder="First name"
+                      {...register("firstName")}
+                      className={errors.firstName ? "border-destructive" : ""}
                     />
-                    {errors.fullName && (
-                      <p className="text-xs text-destructive">{errors.fullName.message}</p>
+                    {errors.firstName && (
+                      <p className="text-xs text-destructive">{errors.firstName.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="surname">Surname</Label>
+                    <Input
+                      id="surname"
+                      placeholder="Surname"
+                      {...register("surname")}
+                      className={errors.surname ? "border-destructive" : ""}
+                    />
+                    {errors.surname && (
+                      <p className="text-xs text-destructive">{errors.surname.message}</p>
                     )}
                   </div>
 
@@ -137,7 +185,9 @@ const Registration = () => {
                       <p className="text-xs text-destructive">{errors.gender.message}</p>
                     )}
                   </div>
+                </div>
 
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Date of Birth</Label>
                     <Popover>
@@ -170,6 +220,17 @@ const Registration = () => {
                     {errors.dateOfBirth && (
                       <p className="text-xs text-destructive">{errors.dateOfBirth.message}</p>
                     )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      placeholder="Calculated from DOB"
+                      value={age !== null ? age : ""}
+                      readOnly
+                      className="bg-muted"
+                    />
                   </div>
                 </div>
 
@@ -216,63 +277,6 @@ const Registration = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="insuranceProvider">Insurance Provider</Label>
-                    <Select
-                      value={insuranceProvider}
-                      onValueChange={(value) => setValue("insuranceProvider", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Company" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="star-health">Star Health Insurance</SelectItem>
-                        <SelectItem value="icici-lombard">ICICI Lombard</SelectItem>
-                        <SelectItem value="hdfc-ergo">HDFC ERGO</SelectItem>
-                        <SelectItem value="max-bupa">Max Bupa</SelectItem>
-                        <SelectItem value="apollo-munich">Apollo Munich</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="policyNumber">Policy Number</Label>
-                    <Input
-                      id="policyNumber"
-                      placeholder="IND1000012345"
-                      {...register("policyNumber")}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Validity to</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !validityTo && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {validityTo ? format(validityTo, "dd/MM/yyyy") : "dd/mm/yyyy"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={validityTo}
-                          onSelect={(date) => date && setValue("validityTo", date)}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                          className="p-3 pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                </div>
               </div>
 
               {/* Address Details */}
