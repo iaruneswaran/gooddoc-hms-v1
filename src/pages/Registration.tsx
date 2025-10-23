@@ -124,7 +124,7 @@ const Registration = () => {
               <div className="bg-card rounded-lg border border-border p-6 space-y-6">
                 <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
                 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="title">Title</Label>
                     <Select value={title} onValueChange={(value) => setValue("title", value)}>
@@ -168,7 +168,9 @@ const Registration = () => {
                       <p className="text-xs text-destructive">{errors.surname.message}</p>
                     )}
                   </div>
+                </div>
 
+                <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="gender">Gender</Label>
                     <Select value={gender} onValueChange={(value) => setValue("gender", value)}>
@@ -185,9 +187,7 @@ const Registration = () => {
                       <p className="text-xs text-destructive">{errors.gender.message}</p>
                     )}
                   </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Date of Birth</Label>
                     <Popover>
