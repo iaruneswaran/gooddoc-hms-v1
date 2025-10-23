@@ -197,11 +197,10 @@ const BookAppointment = () => {
           <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
 
           <div className="max-w-[1600px] mx-auto">
-            <h2 className="text-lg font-semibold text-primary mb-6">Book Appointments</h2>
+            <h2 className="text-lg font-semibold text-primary mb-4">Book Appointments</h2>
             
             {/* Appointment Type Buttons */}
-            <div className="space-y-4 mb-8">
-              <h3 className="text-sm font-medium text-foreground">Appointment Type</h3>
+            <div className="mb-8">
               <div className="flex gap-3">
                 {appointmentTypes.map((type) => {
                   const Icon = type.icon;
