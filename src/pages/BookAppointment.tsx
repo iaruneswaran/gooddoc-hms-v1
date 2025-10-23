@@ -538,61 +538,61 @@ const BookAppointment = () => {
                       </div>
                     </>
                   )}
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-border">
-                    <Button
-                      variant="outline"
-                      onClick={() => navigate("/registration")}
-                      className="w-full"
-                    >
-                      Back
-                    </Button>
-                    <Button 
-                      className="bg-primary hover:bg-primary/90 w-full"
-                      onClick={() => {
-                        const { subtotal, cgst, sgst, total } = calculateTotal();
-                        let items: { name: string; price: number }[] = [];
-                        
-                        if (consultationData) {
-                          items.push({ name: "Consultation", price: 1000 });
-                        }
-                        if (laboratoryData) {
-                          items.push(
-                            ...laboratoryData.selectedTests.map(test => ({ name: test.name, price: test.price })),
-                            ...laboratoryData.selectedPackages.map(pkg => ({ name: pkg.name, price: pkg.price }))
-                          );
-                        }
-                        if (radiologyData) {
-                          items.push(...radiologyData.selectedTests.map(test => ({ name: test.name, price: test.price })));
-                        }
-                        if (ipdAdmissionData) {
-                          items.push({ name: "IPD Admission", price: 5000 });
-                        }
-                        if (dcProcedureData) {
-                          items.push({ name: dcProcedureData.procedure, price: 15000 });
-                        }
-                        
-                        navigate("/payment", {
-                          state: {
-                            appointmentType: selectedTypes.join(", "),
-                            items,
-                            subtotal,
-                            cgst,
-                            sgst,
-                            total,
-                            date: "05/08/2025",
-                            fromPatientInsights,
-                            patientId
-                          }
-                        });
-                      }}
-                    >
-                      Generate Invoice
-                    </Button>
-                  </div>
                 </div>
               </Card>
+
+              {/* Action Buttons - Outside card, close to bottom */}
+              <div className="w-full lg:w-[380px] flex flex-col gap-3 mt-2 shrink-0">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/registration")}
+                  className="w-full"
+                >
+                  Back
+                </Button>
+                <Button 
+                  className="bg-primary hover:bg-primary/90 w-full"
+                  onClick={() => {
+                    const { subtotal, cgst, sgst, total } = calculateTotal();
+                    let items: { name: string; price: number }[] = [];
+                    
+                    if (consultationData) {
+                      items.push({ name: "Consultation", price: 1000 });
+                    }
+                    if (laboratoryData) {
+                      items.push(
+                        ...laboratoryData.selectedTests.map(test => ({ name: test.name, price: test.price })),
+                        ...laboratoryData.selectedPackages.map(pkg => ({ name: pkg.name, price: pkg.price }))
+                      );
+                    }
+                    if (radiologyData) {
+                      items.push(...radiologyData.selectedTests.map(test => ({ name: test.name, price: test.price })));
+                    }
+                    if (ipdAdmissionData) {
+                      items.push({ name: "IPD Admission", price: 5000 });
+                    }
+                    if (dcProcedureData) {
+                      items.push({ name: dcProcedureData.procedure, price: 15000 });
+                    }
+                    
+                    navigate("/payment", {
+                      state: {
+                        appointmentType: selectedTypes.join(", "),
+                        items,
+                        subtotal,
+                        cgst,
+                        sgst,
+                        total,
+                        date: "05/08/2025",
+                        fromPatientInsights,
+                        patientId
+                      }
+                    });
+                  }}
+                >
+                  Generate Invoice
+                </Button>
+              </div>
             </div>
           </div>
         </main>
