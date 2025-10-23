@@ -6,6 +6,7 @@ import { CalendarWidget } from "@/components/CalendarWidget";
 import { AppointmentTabs } from "@/components/AppointmentTabs";
 import { AppointmentTable } from "@/components/AppointmentTable";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 
@@ -21,19 +22,21 @@ const Index = () => {
         <AppHeader breadcrumbs={["GoodDoc", "Appointments"]} />
         
         <main className="p-8">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-lg font-semibold text-foreground">Appointments List</h1>
-            <div className="flex items-center gap-4">
-              <CalendarWidget />
-              <Button 
-                onClick={() => navigate("/new-appointment")}
-                className="gap-2 bg-primary hover:bg-primary/90"
-              >
-                <Plus className="w-4 h-4" />
-                New Appointment
-              </Button>
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-foreground">Appointments List</h1>
+              <div className="flex items-center gap-4">
+                <CalendarWidget />
+                <Button 
+                  onClick={() => navigate("/new-appointment")}
+                  className="gap-2 bg-primary hover:bg-primary/90"
+                >
+                  <Plus className="w-4 h-4" />
+                  New Appointment
+                </Button>
+              </div>
             </div>
-          </div>
+          </Card>
 
           <div className="flex items-center justify-between mb-6">
             <AppointmentTabs onTabChange={setSelectedCategory} />
