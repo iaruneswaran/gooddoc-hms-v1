@@ -227,7 +227,7 @@ const BookAppointment = () => {
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Main Content */}
               <div className="w-full flex-1 space-y-6">
-                {/* Display all selected forms */}
+                {/* Display all selected forms in reverse order (most recent at top) */}
                 {selectedTypes.length === 0 ? (
                   <Card className="border-dashed min-h-[400px] flex flex-col items-center justify-center p-8">
                     <p className="text-sm font-medium text-muted-foreground mb-1">No Appointments</p>
@@ -235,36 +235,54 @@ const BookAppointment = () => {
                   </Card>
                 ) : (
                   <>
-                    {laboratoryData && selectedTypes.includes("laboratory") && (
-                      <LaboratoryBookingForm
-                        onRemove={handleRemoveLaboratory}
-                        onUpdate={handleLaboratoryUpdate}
-                      />
-                    )}
-                    {consultationData && selectedTypes.includes("consultation") && (
-                      <ConsultationBookingForm
-                        onRemove={handleRemoveConsultation}
-                        onUpdate={handleConsultationUpdate}
-                      />
-                    )}
-                    {radiologyData && selectedTypes.includes("radiology") && (
-                      <RadiologyBookingForm
-                        onRemove={handleRemoveRadiology}
-                        onUpdate={handleRadiologyUpdate}
-                      />
-                    )}
-                    {ipdAdmissionData && selectedTypes.includes("ipd") && (
-                      <IPDAdmissionBookingForm
-                        onRemove={handleRemoveIPDAdmission}
-                        onUpdate={handleIPDAdmissionUpdate}
-                      />
-                    )}
-                    {dcProcedureData && selectedTypes.includes("dc") && (
-                      <DCProcedureBookingForm
-                        onRemove={handleRemoveDCProcedure}
-                        onUpdate={handleDCProcedureUpdate}
-                      />
-                    )}
+                    {[...selectedTypes].reverse().map((type) => {
+                      if (type === "laboratory" && laboratoryData) {
+                        return (
+                          <LaboratoryBookingForm
+                            key="laboratory"
+                            onRemove={handleRemoveLaboratory}
+                            onUpdate={handleLaboratoryUpdate}
+                          />
+                        );
+                      }
+                      if (type === "consultation" && consultationData) {
+                        return (
+                          <ConsultationBookingForm
+                            key="consultation"
+                            onRemove={handleRemoveConsultation}
+                            onUpdate={handleConsultationUpdate}
+                          />
+                        );
+                      }
+                      if (type === "radiology" && radiologyData) {
+                        return (
+                          <RadiologyBookingForm
+                            key="radiology"
+                            onRemove={handleRemoveRadiology}
+                            onUpdate={handleRadiologyUpdate}
+                          />
+                        );
+                      }
+                      if (type === "ipd" && ipdAdmissionData) {
+                        return (
+                          <IPDAdmissionBookingForm
+                            key="ipd"
+                            onRemove={handleRemoveIPDAdmission}
+                            onUpdate={handleIPDAdmissionUpdate}
+                          />
+                        );
+                      }
+                      if (type === "dc" && dcProcedureData) {
+                        return (
+                          <DCProcedureBookingForm
+                            key="dc"
+                            onRemove={handleRemoveDCProcedure}
+                            onUpdate={handleDCProcedureUpdate}
+                          />
+                        );
+                      }
+                      return null;
+                    })}
                   </>
                 )}
 
@@ -339,203 +357,217 @@ const BookAppointment = () => {
                     </div>
                   ) : (
                     <>
-                      {laboratoryData && selectedTypes.includes("laboratory") && (
-                        <div className="pt-6 border-t border-border space-y-4">
-                          <div className="flex items-start justify-between">
-                            <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
-                            <button
-                              onClick={handleRemoveLaboratory}
-                              className="text-xs text-primary hover:text-primary/80"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <div className="space-y-3 text-xs">
-                            <div>
-                              <p className="text-muted-foreground">When</p>
-                              <p className="text-foreground font-medium">
-                                {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | {laboratoryData.mode === "in-clinic" ? "In-Clinic" : "Home Collection"}
-                              </p>
-                            </div>
-
-                            {laboratoryData.selectedTests.length > 0 && (
-                              <div className="space-y-2 pt-2">
-                                {laboratoryData.selectedTests.map((test) => (
-                                  <div key={test.id} className="flex justify-between items-center">
-                                    <p className="text-foreground">{test.name}</p>
-                                    <p className="text-foreground font-semibold">₹{test.price}</p>
-                                  </div>
-                                ))}
+                      {[...selectedTypes].reverse().map((type) => {
+                        if (type === "laboratory" && laboratoryData) {
+                          return (
+                            <div key="laboratory" className="pt-6 border-t border-border space-y-4">
+                              <div className="flex items-start justify-between">
+                                <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
+                                <button
+                                  onClick={handleRemoveLaboratory}
+                                  className="text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
                               </div>
-                            )}
 
-                            {laboratoryData.selectedPackages.length > 0 && (
-                              <div className="space-y-2 pt-2">
-                                {laboratoryData.selectedPackages.map((pkg) => (
-                                  <div key={pkg.id} className="flex justify-between items-center">
-                                    <p className="text-foreground">{pkg.name}</p>
-                                    <p className="text-foreground font-semibold">₹{pkg.price}</p>
+                              <div className="space-y-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-foreground font-medium">
+                                    {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | {laboratoryData.mode === "in-clinic" ? "In-Clinic" : "Home Collection"}
+                                  </p>
+                                </div>
+
+                                {laboratoryData.selectedTests.length > 0 && (
+                                  <div className="space-y-2 pt-2">
+                                    {laboratoryData.selectedTests.map((test) => (
+                                      <div key={test.id} className="flex justify-between items-center">
+                                        <p className="text-foreground">{test.name}</p>
+                                        <p className="text-foreground font-semibold">₹{test.price}</p>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
+                                )}
 
-                      {consultationData && selectedTypes.includes("consultation") && (
-                        <div className="pt-6 border-t border-border space-y-4">
-                          <div className="flex items-start justify-between">
-                            <p className="text-sm font-medium text-foreground mb-1">Consultation</p>
-                            <button
-                              onClick={handleRemoveConsultation}
-                              className="text-xs text-primary hover:text-primary/80"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <div className="space-y-3 text-xs">
-                            <div>
-                              <p className="text-muted-foreground">When</p>
-                              <p className="text-foreground font-medium">
-                                {format(consultationData.date, "dd/MM/yyyy")} {consultationData.time} AM
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-muted-foreground">Provider</p>
-                              <p className="text-foreground font-medium">{consultationData.doctor}</p>
-                            </div>
-
-                            <div className="flex justify-between items-center pt-3 border-t border-border">
-                              <p className="text-foreground">Consultation</p>
-                              <p className="text-foreground font-semibold">₹1,000</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {radiologyData && selectedTypes.includes("radiology") && (
-                        <div className="pt-6 border-t border-border space-y-4">
-                          <div className="flex items-start justify-between">
-                            <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
-                            <button
-                              onClick={handleRemoveRadiology}
-                              className="text-xs text-primary hover:text-primary/80"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <div className="space-y-3 text-xs">
-                            <div>
-                              <p className="text-muted-foreground">When</p>
-                              <p className="text-foreground font-medium">
-                                {format(radiologyData.date, "dd/MM/yyyy")} {radiologyData.time} AM | {radiologyData.radiologyType}
-                              </p>
-                            </div>
-
-                            {radiologyData.selectedTests.length > 0 && (
-                              <div className="space-y-2 pt-2">
-                                {radiologyData.selectedTests.map((test) => (
-                                  <div key={test.id} className="flex justify-between items-center">
-                                    <p className="text-foreground">{test.name}</p>
-                                    <p className="text-foreground font-semibold">₹{test.price}</p>
+                                {laboratoryData.selectedPackages.length > 0 && (
+                                  <div className="space-y-2 pt-2">
+                                    {laboratoryData.selectedPackages.map((pkg) => (
+                                      <div key={pkg.id} className="flex justify-between items-center">
+                                        <p className="text-foreground">{pkg.name}</p>
+                                        <p className="text-foreground font-semibold">₹{pkg.price}</p>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
+                                )}
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {ipdAdmissionData && selectedTypes.includes("ipd") && (
-                        <div className="pt-6 border-t border-border space-y-4">
-                          <div className="flex items-start justify-between">
-                            <p className="text-sm font-medium text-foreground mb-1">IPD Admission</p>
-                            <button
-                              onClick={handleRemoveIPDAdmission}
-                              className="text-xs text-primary hover:text-primary/80"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <div className="space-y-3 text-xs">
-                            <div>
-                              <p className="text-muted-foreground">When</p>
-                              <p className="text-foreground font-medium">
-                                {format(ipdAdmissionData.date, "dd/MM/yyyy")} {ipdAdmissionData.time} AM
-                              </p>
                             </div>
+                          );
+                        }
 
-                            <div>
-                              <p className="text-muted-foreground">Attending Doctor</p>
-                              <p className="text-foreground font-medium">{ipdAdmissionData.attendingDoctor}</p>
+                        if (type === "consultation" && consultationData) {
+                          return (
+                            <div key="consultation" className="pt-6 border-t border-border space-y-4">
+                              <div className="flex items-start justify-between">
+                                <p className="text-sm font-medium text-foreground mb-1">Consultation</p>
+                                <button
+                                  onClick={handleRemoveConsultation}
+                                  className="text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-foreground font-medium">
+                                    {format(consultationData.date, "dd/MM/yyyy")} {consultationData.time} AM
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Provider</p>
+                                  <p className="text-foreground font-medium">{consultationData.doctor}</p>
+                                </div>
+
+                                <div className="flex justify-between items-center pt-3 border-t border-border">
+                                  <p className="text-foreground">Consultation</p>
+                                  <p className="text-foreground font-semibold">₹1,000</p>
+                                </div>
+                              </div>
                             </div>
+                          );
+                        }
 
-                            <div>
-                              <p className="text-muted-foreground">Ward</p>
-                              <p className="text-foreground font-medium">{ipdAdmissionData.ward}</p>
+                        if (type === "radiology" && radiologyData) {
+                          return (
+                            <div key="radiology" className="pt-6 border-t border-border space-y-4">
+                              <div className="flex items-start justify-between">
+                                <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
+                                <button
+                                  onClick={handleRemoveRadiology}
+                                  className="text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-foreground font-medium">
+                                    {format(radiologyData.date, "dd/MM/yyyy")} {radiologyData.time} AM | {radiologyData.radiologyType}
+                                  </p>
+                                </div>
+
+                                {radiologyData.selectedTests.length > 0 && (
+                                  <div className="space-y-2 pt-2">
+                                    {radiologyData.selectedTests.map((test) => (
+                                      <div key={test.id} className="flex justify-between items-center">
+                                        <p className="text-foreground">{test.name}</p>
+                                        <p className="text-foreground font-semibold">₹{test.price}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
                             </div>
+                          );
+                        }
 
-                            <div>
-                              <p className="text-muted-foreground">Bed</p>
-                              <p className="text-foreground font-medium">{ipdAdmissionData.bed}</p>
+                        if (type === "ipd" && ipdAdmissionData) {
+                          return (
+                            <div key="ipd" className="pt-6 border-t border-border space-y-4">
+                              <div className="flex items-start justify-between">
+                                <p className="text-sm font-medium text-foreground mb-1">IPD Admission</p>
+                                <button
+                                  onClick={handleRemoveIPDAdmission}
+                                  className="text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-foreground font-medium">
+                                    {format(ipdAdmissionData.date, "dd/MM/yyyy")} {ipdAdmissionData.time} AM
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Attending Doctor</p>
+                                  <p className="text-foreground font-medium">{ipdAdmissionData.attendingDoctor}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Ward</p>
+                                  <p className="text-foreground font-medium">{ipdAdmissionData.ward}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Bed</p>
+                                  <p className="text-foreground font-medium">{ipdAdmissionData.bed}</p>
+                                </div>
+
+                                <div className="flex justify-between items-center pt-3 border-t border-border">
+                                  <p className="text-foreground">Admission</p>
+                                  <p className="text-foreground font-semibold">₹5,000</p>
+                                </div>
+                              </div>
                             </div>
+                          );
+                        }
 
-                            <div className="flex justify-between items-center pt-3 border-t border-border">
-                              <p className="text-foreground">Admission</p>
-                              <p className="text-foreground font-semibold">₹5,000</p>
+                        if (type === "dc" && dcProcedureData) {
+                          return (
+                            <div key="dc" className="pt-6 border-t border-border space-y-4">
+                              <div className="flex items-start justify-between">
+                                <p className="text-sm font-medium text-foreground mb-1">Day-Care Procedure</p>
+                                <button
+                                  onClick={handleRemoveDCProcedure}
+                                  className="text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-foreground font-medium">
+                                    {format(dcProcedureData.date, "dd/MM/yyyy")} {dcProcedureData.time} AM
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Attending Doctor</p>
+                                  <p className="text-foreground font-medium">{dcProcedureData.attendingDoctor}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">Procedure</p>
+                                  <p className="text-foreground font-medium">{dcProcedureData.procedure}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-muted-foreground">OT/Procedure Room</p>
+                                  <p className="text-foreground font-medium">{dcProcedureData.otRoom}</p>
+                                </div>
+
+                                <div className="flex justify-between items-center pt-3 border-t border-border">
+                                  <p className="text-foreground">Procedure</p>
+                                  <p className="text-foreground font-semibold">₹15,000</p>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      )}
+                          );
+                        }
 
-                      {dcProcedureData && selectedTypes.includes("dc") && (
-                        <div className="pt-6 border-t border-border space-y-4">
-                          <div className="flex items-start justify-between">
-                            <p className="text-sm font-medium text-foreground mb-1">Day-Care Procedure</p>
-                            <button
-                              onClick={handleRemoveDCProcedure}
-                              className="text-xs text-primary hover:text-primary/80"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <div className="space-y-3 text-xs">
-                            <div>
-                              <p className="text-muted-foreground">When</p>
-                              <p className="text-foreground font-medium">
-                                {format(dcProcedureData.date, "dd/MM/yyyy")} {dcProcedureData.time} AM
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-muted-foreground">Attending Doctor</p>
-                              <p className="text-foreground font-medium">{dcProcedureData.attendingDoctor}</p>
-                            </div>
-
-                            <div>
-                              <p className="text-muted-foreground">Procedure</p>
-                              <p className="text-foreground font-medium">{dcProcedureData.procedure}</p>
-                            </div>
-
-                            <div>
-                              <p className="text-muted-foreground">OT/Procedure Room</p>
-                              <p className="text-foreground font-medium">{dcProcedureData.otRoom}</p>
-                            </div>
-
-                            <div className="flex justify-between items-center pt-3 border-t border-border">
-                              <p className="text-foreground">Procedure</p>
-                              <p className="text-foreground font-semibold">₹15,000</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                        return null;
+                      })}
 
                       {/* Total Summary */}
                       <div className="pt-4 border-t border-border space-y-2 text-xs">
