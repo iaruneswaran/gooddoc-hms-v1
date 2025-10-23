@@ -18,8 +18,8 @@ const appointmentTypes = [
   { icon: Calendar, label: "Consultation", value: "consultation" },
   { icon: FlaskConical, label: "Laboratory", value: "laboratory" },
   { icon: Scan, label: "Radiology", value: "radiology" },
-  { icon: Bed, label: "IPD Admission", value: "ipd" },
-  { icon: Syringe, label: "DC Procedure", value: "dc" },
+  { icon: Bed, label: "IP Admission", value: "ipd" },
+  { icon: Syringe, label: "Day-Care Procedure", value: "dc" },
 ];
 
 const BookAppointment = () => {
