@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { User, Phone, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -323,9 +324,11 @@ interface AppointmentTableProps {
 
 export function AppointmentTable({ category = "outpatient-care" }: AppointmentTableProps) {
   const navigate = useNavigate();
+  const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
   const appointments = allAppointments.filter(apt => apt.category === category);
   
-  const handleCheckIn = () => {
+  const handleCheckIn = (appointmentId: string) => {
+    setCheckedInIds(prev => new Set(prev).add(appointmentId));
     toast({
       title: "Success",
       description: "Patient has been successfully checked in.",
@@ -398,12 +401,15 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
 
             <div>
               <Button
-                onClick={handleCheckIn}
-                variant="outline"
+                onClick={() => handleCheckIn(appointment.id)}
+                variant={checkedInIds.has(appointment.id) ? "default" : "outline"}
                 size="sm"
-                className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                disabled={checkedInIds.has(appointment.id)}
+                className={checkedInIds.has(appointment.id) 
+                  ? "w-full bg-primary text-primary-foreground cursor-not-allowed opacity-70" 
+                  : "w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"}
               >
-                Check In
+                {checkedInIds.has(appointment.id) ? "Checked In" : "Check In"}
               </Button>
             </div>
         </div>
