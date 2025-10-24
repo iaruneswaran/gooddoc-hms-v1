@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { format } from "date-fns";
+import { format, parse, isValid } from "date-fns";
 import { CalendarIcon, ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -49,6 +49,7 @@ const Registration = () => {
   const navigate = useNavigate();
   const [gdid] = useState("GDID - 009");
   const [age, setAge] = useState<number | null>(null);
+  const [dateInput, setDateInput] = useState<string>("");
   
   const {
     register,
@@ -190,33 +191,55 @@ const Registration = () => {
 
                   <div className="space-y-2">
                     <Label>Date of Birth</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !dateOfBirth && "text-muted-foreground",
-                            errors.dateOfBirth && "border-destructive"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {dateOfBirth ? format(dateOfBirth, "dd/MM/yyyy") : "dd/mm/yyyy"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={dateOfBirth}
-                          onSelect={(date) => date && setValue("dateOfBirth", date)}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="dd/mm/yyyy"
+                        value={dateInput || (dateOfBirth ? format(dateOfBirth, "dd/MM/yyyy") : "")}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setDateInput(value);
+                          
+                          // Try to parse the date in dd/MM/yyyy format
+                          const parsedDate = parse(value, "dd/MM/yyyy", new Date());
+                          if (isValid(parsedDate) && parsedDate <= new Date() && parsedDate >= new Date("1900-01-01")) {
+                            setValue("dateOfBirth", parsedDate);
                           }
-                          initialFocus
-                          className="p-3 pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
+                        }}
+                        className={cn(
+                          "flex-1",
+                          errors.dateOfBirth && "border-destructive"
+                        )}
+                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className={errors.dateOfBirth ? "border-destructive" : ""}
+                          >
+                            <CalendarIcon className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={dateOfBirth}
+                            onSelect={(date) => {
+                              if (date) {
+                                setValue("dateOfBirth", date);
+                                setDateInput(format(date, "dd/MM/yyyy"));
+                              }
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                     {errors.dateOfBirth && (
                       <p className="text-xs text-destructive">{errors.dateOfBirth.message}</p>
                     )}
