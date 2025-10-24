@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Select,
@@ -793,84 +794,85 @@ const PatientInsights = () => {
               </div>
 
               {/* Right Side - Patient Information */}
-              <Card className="w-[350px] h-fit p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">Patient Information</h3>
-                  <button className="text-primary hover:text-primary/80 transition-colors">
-                    <span className="sr-only">Edit</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                      <path d="m15 5 4 4" />
-                    </svg>
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+              <div className="w-[400px] space-y-6">
+                {/* Patient Information Section */}
+                <Card className="rounded-lg border border-border p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
+                    <button className="text-primary hover:text-primary/80 transition-colors">
+                      <span className="text-sm font-medium">Edit</span>
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-4">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Full Name</p>
-                      <p className="text-sm font-medium">{patient.name}</p>
+                      <Label className="text-xs text-muted-foreground">Full Name</Label>
+                      <p className="text-sm font-medium text-foreground mt-1">{patient.name}</p>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Gender</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.gender}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Date of Birth</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.dob}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.mobile}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Email</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.email}</p>
+                      </div>
+                    </div>
+
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Gender</p>
-                      <p className="text-sm font-medium">{patient.gender}</p>
+                      <Label className="text-xs text-muted-foreground">National ID</Label>
+                      <p className="text-sm font-medium text-foreground mt-1">{patient.nationalId}</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Date of Birth</p>
-                      <p className="text-sm font-medium">{patient.dob}</p>
+                </Card>
+
+                {/* Address Details Section */}
+                <Card className="rounded-lg border border-border p-6">
+                  <h3 className="text-base font-semibold text-foreground mb-6">Address Details</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Street, Apartment</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.address}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Pin code</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.pincode}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Mobile Number</p>
-                      <p className="text-sm font-medium">{patient.mobile}</p>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">State</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.state}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">City</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.city}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
+
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Email</p>
-                      <p className="text-sm font-medium">{patient.email}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">National ID</p>
-                      <p className="text-sm font-medium">{patient.nationalId}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Street, Apartment</p>
-                      <p className="text-sm font-medium">{patient.address}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Pin code</p>
-                      <p className="text-sm font-medium">{patient.pincode}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">State</p>
-                      <p className="text-sm font-medium">{patient.state}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">City</p>
-                      <p className="text-sm font-medium">{patient.city}</p>
+                      <Label className="text-xs text-muted-foreground">Country</Label>
+                      <p className="text-sm font-medium text-foreground mt-1">{patient.country}</p>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Country</p>
-                    <p className="text-sm font-medium">{patient.country}</p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             </div>
         </main>
       </div>
