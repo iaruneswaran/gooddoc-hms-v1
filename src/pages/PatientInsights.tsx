@@ -210,25 +210,25 @@ const PatientInsights = () => {
                     <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
                       <TabsTrigger 
                         value="appointments"
-                        className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                        className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
                       >
                         Appointments
                       </TabsTrigger>
                       <TabsTrigger 
                         value="payment-history"
-                        className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                        className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
                       >
                         Payment History
                       </TabsTrigger>
                       <TabsTrigger 
                         value="documents"
-                        className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                        className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
                       >
                         Documents
                       </TabsTrigger>
                       <TabsTrigger 
                         value="insurance"
-                        className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
+                        className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
                       >
                         Insurance
                       </TabsTrigger>

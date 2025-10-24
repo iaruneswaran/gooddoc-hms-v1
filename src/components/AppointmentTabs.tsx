@@ -19,7 +19,7 @@ export function AppointmentTabs({ onTabChange }: AppointmentTabsProps) {
           <TabsTrigger
             key={category}
             value={category.toLowerCase().replace(/ /g, "-")}
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[hsl(var(--tab-active))] data-[state=active]:bg-transparent px-4 py-3"
+            className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
           >
             {category}
           </TabsTrigger>
