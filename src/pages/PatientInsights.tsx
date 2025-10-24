@@ -31,7 +31,8 @@ const PatientInsights = () => {
   const patient = {
     name: "Harish Kalyan",
     gdid: "001",
-    age: 35,
+    title: "Mr",
+    age: 44,
     gender: "Male",
     dob: "10/04/1980",
     mobile: "+91 98765 43210",
@@ -805,12 +806,18 @@ const PatientInsights = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Full Name</Label>
-                      <p className="text-sm font-medium text-foreground mt-1">{patient.name}</p>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Title</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.title}</p>
+                      </div>
+                      <div className="col-span-2">
+                        <Label className="text-xs text-muted-foreground">Full Name</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.name}</p>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div>
                         <Label className="text-xs text-muted-foreground">Gender</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.gender}</p>
@@ -818,6 +825,10 @@ const PatientInsights = () => {
                       <div>
                         <Label className="text-xs text-muted-foreground">Date of Birth</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.dob}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Age</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.age}</p>
                       </div>
                     </div>
 
