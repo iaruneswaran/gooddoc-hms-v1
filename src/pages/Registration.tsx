@@ -195,8 +195,18 @@ const Registration = () => {
                       <Input
                         placeholder="dd/mm/yyyy"
                         value={dateInput || (dateOfBirth ? format(dateOfBirth, "dd/MM/yyyy") : "")}
+                        maxLength={10}
                         onChange={(e) => {
-                          const value = e.target.value;
+                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                          
+                          // Auto-format with slashes
+                          if (value.length >= 2) {
+                            value = value.slice(0, 2) + '/' + value.slice(2);
+                          }
+                          if (value.length >= 5) {
+                            value = value.slice(0, 5) + '/' + value.slice(5, 9);
+                          }
+                          
                           setDateInput(value);
                           
                           // Try to parse the date in dd/MM/yyyy format
