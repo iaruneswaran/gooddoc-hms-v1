@@ -806,18 +806,18 @@ const PatientInsights = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-xs text-muted-foreground">Title</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.title}</p>
                       </div>
-                      <div className="col-span-2">
+                      <div>
                         <Label className="text-xs text-muted-foreground">Full Name</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.name}</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-xs text-muted-foreground">Gender</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.gender}</p>
@@ -826,26 +826,28 @@ const PatientInsights = () => {
                         <Label className="text-xs text-muted-foreground">Date of Birth</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.dob}</p>
                       </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-xs text-muted-foreground">Age</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.age}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.mobile}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-xs text-muted-foreground">Mobile Number</Label>
-                        <p className="text-sm font-medium text-foreground mt-1">{patient.mobile}</p>
-                      </div>
-                      <div>
                         <Label className="text-xs text-muted-foreground">Email</Label>
                         <p className="text-sm font-medium text-foreground mt-1">{patient.email}</p>
                       </div>
-                    </div>
-
-                    <div>
-                      <Label className="text-xs text-muted-foreground">National ID</Label>
-                      <p className="text-sm font-medium text-foreground mt-1">{patient.nationalId}</p>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">National ID</Label>
+                        <p className="text-sm font-medium text-foreground mt-1">{patient.nationalId}</p>
+                      </div>
                     </div>
                   </div>
                 </Card>
