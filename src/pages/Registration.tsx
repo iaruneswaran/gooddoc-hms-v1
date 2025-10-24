@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format, parse, isValid } from "date-fns";
-import { CalendarIcon, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { BookingSteps } from "@/components/BookingSteps";
@@ -18,12 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
@@ -191,65 +185,33 @@ const Registration = () => {
 
                   <div className="space-y-2">
                     <Label>Date of Birth</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="dd/mm/yyyy"
-                        value={dateInput || (dateOfBirth ? format(dateOfBirth, "dd/MM/yyyy") : "")}
-                        maxLength={10}
-                        onChange={(e) => {
-                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
-                          
-                          // Auto-format with slashes
-                          if (value.length >= 2) {
-                            value = value.slice(0, 2) + '/' + value.slice(2);
-                          }
-                          if (value.length >= 5) {
-                            value = value.slice(0, 5) + '/' + value.slice(5, 9);
-                          }
-                          
-                          setDateInput(value);
-                          
-                          // Try to parse the date in dd/MM/yyyy format
-                          const parsedDate = parse(value, "dd/MM/yyyy", new Date());
-                          if (isValid(parsedDate) && parsedDate <= new Date() && parsedDate >= new Date("1900-01-01")) {
-                            setValue("dateOfBirth", parsedDate);
-                          }
-                        }}
-                        className={cn(
-                          "flex-1",
-                          errors.dateOfBirth && "border-destructive"
-                        )}
-                      />
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="icon"
-                            className={errors.dateOfBirth ? "border-destructive" : ""}
-                          >
-                            <CalendarIcon className="h-4 w-4" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={dateOfBirth}
-                            onSelect={(date) => {
-                              if (date) {
-                                setValue("dateOfBirth", date);
-                                setDateInput(format(date, "dd/MM/yyyy"));
-                              }
-                            }}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                            className="p-3 pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
+                    <Input
+                      placeholder="dd/mm/yyyy"
+                      value={dateInput || (dateOfBirth ? format(dateOfBirth, "dd/MM/yyyy") : "")}
+                      maxLength={10}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                        
+                        // Auto-format with slashes
+                        if (value.length >= 2) {
+                          value = value.slice(0, 2) + '/' + value.slice(2);
+                        }
+                        if (value.length >= 5) {
+                          value = value.slice(0, 5) + '/' + value.slice(5, 9);
+                        }
+                        
+                        setDateInput(value);
+                        
+                        // Try to parse the date in dd/MM/yyyy format
+                        const parsedDate = parse(value, "dd/MM/yyyy", new Date());
+                        if (isValid(parsedDate) && parsedDate <= new Date() && parsedDate >= new Date("1900-01-01")) {
+                          setValue("dateOfBirth", parsedDate);
+                        }
+                      }}
+                      className={cn(
+                        errors.dateOfBirth && "border-destructive"
+                      )}
+                    />
                     {errors.dateOfBirth && (
                       <p className="text-xs text-destructive">{errors.dateOfBirth.message}</p>
                     )}
