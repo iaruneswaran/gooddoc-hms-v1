@@ -555,6 +555,7 @@ const BillingStep = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
+                  <TableHead>Appointment No</TableHead>
                   <TableHead>Service</TableHead>
                   <TableHead>Qty</TableHead>
                   <TableHead>Rate</TableHead>
@@ -564,6 +565,7 @@ const BillingStep = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>05 Oct</TableCell>
+                  <TableCell>SRV-001</TableCell>
                   <TableCell>Oxygen Support</TableCell>
                   <TableCell>2</TableCell>
                   <TableCell>₹500</TableCell>
@@ -571,13 +573,14 @@ const BillingStep = () => {
                 </TableRow>
                 <TableRow>
                   <TableCell>06 Oct</TableCell>
+                  <TableCell>SRV-002</TableCell>
                   <TableCell>Physiotherapy Sessions</TableCell>
                   <TableCell>2</TableCell>
                   <TableCell>₹1,200</TableCell>
                   <TableCell>₹2,400</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
-                  <TableCell colSpan={4} className="text-right font-semibold">Subtotal (Other Services)</TableCell>
+                  <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Other Services)</TableCell>
                   <TableCell className="font-bold">₹3,400</TableCell>
                 </TableRow>
               </TableBody>
