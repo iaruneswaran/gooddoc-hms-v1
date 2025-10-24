@@ -261,7 +261,7 @@ const Payment = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex gap-3 pt-2">
                     <Button variant="outline" className="flex-1" onClick={handlePayLater}>
                       Pay Later
                     </Button>
