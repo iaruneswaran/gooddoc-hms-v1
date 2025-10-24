@@ -798,14 +798,10 @@ const PatientInsights = () => {
               <div className="w-[400px] space-y-6">
                 {/* Edit Button */}
                 <div className="flex justify-end">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
                     <Pencil className="h-4 w-4" />
-                    Edit
-                  </Button>
+                    <span className="text-sm font-medium">Edit</span>
+                  </button>
                 </div>
 
                 {/* Patient Information Section */}
