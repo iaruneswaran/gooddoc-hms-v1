@@ -255,9 +255,9 @@ const Payment = () => {
                       </Select>
                     </div>
 
-                    <Button variant="outline" className="w-full text-primary border-primary hover:bg-primary/5">
+                    <p className="text-sm text-primary font-medium">
                       Add Payment
-                    </Button>
+                    </p>
                   </div>
 
                   {/* Action Buttons */}
