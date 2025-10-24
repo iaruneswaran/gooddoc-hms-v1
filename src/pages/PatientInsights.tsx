@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronDown, Pencil } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -796,14 +796,21 @@ const PatientInsights = () => {
 
               {/* Right Side - Patient Information */}
               <div className="w-[400px] space-y-6">
+                {/* Edit Button */}
+                <div className="flex justify-end">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </Button>
+                </div>
+
                 {/* Patient Information Section */}
                 <Card className="rounded-lg border border-border p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
-                    <button className="text-primary hover:text-primary/80 transition-colors">
-                      <span className="text-sm font-medium">Edit</span>
-                    </button>
-                  </div>
+                  <h3 className="text-base font-semibold text-foreground mb-6">Patient Information</h3>
                   
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
