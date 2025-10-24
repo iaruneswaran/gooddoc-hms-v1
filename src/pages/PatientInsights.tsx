@@ -206,8 +206,8 @@ const PatientInsights = () => {
               {/* Left Side - Tabs */}
               <div className="flex-1">
                 <Tabs defaultValue="appointments" className="w-full">
-                  <div className="w-full border-b border-border">
-                    <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0">
+                  <div className="w-full">
+                    <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
                       <TabsTrigger 
                         value="appointments"
                         className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[hsl(var(--tab-active))] rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium"
