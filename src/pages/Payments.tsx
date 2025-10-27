@@ -210,12 +210,9 @@ const Payments = () => {
                         <span className="text-sm font-medium">Net payable now</span>
                         <span className="text-lg font-semibold text-primary">₹{totalSelected}</span>
                       </div>
-                      <Button variant="link" size="sm" className="text-primary p-0 h-auto">
-                        Split Payment
-                      </Button>
                     </div>
 
-                    <div className="border-t pt-4 mt-4">
+                    <div className="border-t pt-3 mt-3">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm text-muted-foreground">Advance Amount</span>
