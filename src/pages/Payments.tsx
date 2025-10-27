@@ -217,7 +217,7 @@ const Payments = () => {
                         <div className="flex items-center gap-2">
                           <span className="text-sm text-muted-foreground">Advance Amount</span>
                         </div>
-                        <span className="text-sm font-medium">₹{advanceAmount.toLocaleString()}</span>
+                        <span className="text-lg font-medium" style={{ color: '#7e0137' }}>₹{advanceAmount.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center gap-2 mt-3">
                         <Switch
