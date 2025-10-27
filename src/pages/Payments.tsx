@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Select,
   SelectContent,
@@ -296,57 +295,59 @@ const Payments = () => {
                 <Card className="p-6">
                   <h2 className="text-lg font-semibold text-primary mb-4">Advance Transactions</h2>
                   
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Transaction ID</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Reason</TableHead>
-                        <TableHead>Payer</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>REP-2025-001</TableCell>
-                        <TableCell>06 Oct 2025</TableCell>
-                        <TableCell>Admission</TableCell>
-                        <TableCell>Fredrick John</TableCell>
-                        <TableCell className="font-medium text-primary">+₹1,600</TableCell>
-                        <TableCell>Success</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <button className="text-muted-foreground hover:text-foreground">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            </button>
-                            <button className="text-muted-foreground hover:text-foreground">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>REP-2025-002</TableCell>
-                        <TableCell>06 Oct 2025</TableCell>
-                        <TableCell>Admission</TableCell>
-                        <TableCell>Fredrick John</TableCell>
-                        <TableCell className="font-medium text-primary">+₹1,600</TableCell>
-                        <TableCell>Success</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <button className="text-muted-foreground hover:text-foreground">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            </button>
-                            <button className="text-muted-foreground hover:text-foreground">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <div className="border rounded-lg overflow-hidden">
+                    <table className="w-full">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Payer</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-background">
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-001</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Admission</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm font-medium" style={{ color: '#800139' }}>+₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <div className="flex gap-2">
+                              <button className="text-muted-foreground hover:text-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                              </button>
+                              <button className="text-muted-foreground hover:text-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="border-t">
+                          <td className="p-4 text-sm">REP-2025-002</td>
+                          <td className="p-4 text-sm">06 Oct 2025</td>
+                          <td className="p-4 text-sm">Admission</td>
+                          <td className="p-4 text-sm">Fredrick John</td>
+                          <td className="p-4 text-sm font-medium" style={{ color: '#800139' }}>+₹1,600</td>
+                          <td className="p-4 text-sm">Success</td>
+                          <td className="p-4 text-sm">
+                            <div className="flex gap-2">
+                              <button className="text-muted-foreground hover:text-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                              </button>
+                              <button className="text-muted-foreground hover:text-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </Card>
 
                 {/* Right Column - Advance Collection Form */}
