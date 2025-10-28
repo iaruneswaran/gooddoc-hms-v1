@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, RefreshCw, Plus, Upload, Printer } from "lucide-react";
+import { ChevronLeft, RefreshCw, Plus, Upload, Printer, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { DischargeSteps } from "@/components/DischargeSteps";
@@ -100,7 +100,7 @@ const ClearancesStep = () => {
         Ensure all departments have cleared the patient for discharge.
       </p>
 
-      <div className="flex gap-3 mb-6">
+      <div className="flex justify-end gap-3 mb-4">
         <Button variant="outline" className="flex items-center gap-2">
           Request All Clearances (4)
         </Button>
@@ -171,11 +171,6 @@ const ClinicalSummaryStep = () => {
           <label className="text-sm font-medium">Primary Diagnosis (ICD-10) *</label>
           <Input placeholder="Start typing to search ICD-10 codes" />
           <p className="text-xs text-muted-foreground">Start typing to search codes and procedures.</p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Secondary Diagnoses</label>
-          <Button variant="outline" size="sm">Add secondary diagnoses (optional)</Button>
         </div>
 
         <div className="space-y-2">
@@ -256,6 +251,8 @@ const ClinicalSummaryStep = () => {
 };
 
 const MedicationsStep = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
+
   return (
     <Card className="p-6">
       <h2 className="text-lg font-semibold text-primary mb-6">Medications & Follow-up</h2>
@@ -272,7 +269,7 @@ const MedicationsStep = () => {
                 <Printer className="w-4 h-4" />
                 Print e-Rx
               </Button>
-              <Button size="sm" className="flex items-center gap-2">
+              <Button size="sm" className="flex items-center gap-2" onClick={() => setShowAddForm(true)}>
                 <Plus className="w-4 h-4" />
                 Add Medicine
               </Button>
@@ -294,11 +291,68 @@ const MedicationsStep = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-8">
-                  No prescriptions added yet. Click "Add Medicine" to start.
-                </TableCell>
-              </TableRow>
+              {showAddForm ? (
+                <TableRow>
+                  <TableCell>
+                    <Input placeholder="Medicine name" className="w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Input placeholder="mg" className="w-20" />
+                  </TableCell>
+                  <TableCell>
+                    <Input placeholder="1" className="w-16" />
+                  </TableCell>
+                  <TableCell>
+                    <Select defaultValue="oral">
+                      <SelectTrigger className="w-24">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="oral">Oral</SelectItem>
+                        <SelectItem value="iv">IV</SelectItem>
+                        <SelectItem value="im">IM</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <Select defaultValue="bid">
+                      <SelectTrigger className="w-24">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="od">OD</SelectItem>
+                        <SelectItem value="bid">BID</SelectItem>
+                        <SelectItem value="tid">TID</SelectItem>
+                        <SelectItem value="qid">QID</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <Input placeholder="7 days" className="w-24" />
+                  </TableCell>
+                  <TableCell>
+                    <Input type="date" defaultValue="2025-10-28" className="w-36" />
+                  </TableCell>
+                  <TableCell>
+                    <Input placeholder="Notes" className="w-32" />
+                  </TableCell>
+                  <TableCell>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setShowAddForm(false)}
+                    >
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-8">
+                    No prescriptions added yet. Click "Add Medicine" to start.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
