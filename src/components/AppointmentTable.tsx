@@ -2,7 +2,7 @@ import { useState } from "react";
 import { User, Phone, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
+import { TokenGenerationCard } from "./TokenGenerationCard";
 
 interface Appointment {
   id: string;
@@ -325,14 +325,18 @@ interface AppointmentTableProps {
 export function AppointmentTable({ category = "outpatient-care" }: AppointmentTableProps) {
   const navigate = useNavigate();
   const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
+  const [tokenGeneratedIds, setTokenGeneratedIds] = useState<Set<string>>(new Set());
+  const [activeTokenCard, setActiveTokenCard] = useState<string | null>(null);
   const appointments = allAppointments.filter(apt => apt.category === category);
   
   const handleCheckIn = (appointmentId: string) => {
     setCheckedInIds(prev => new Set(prev).add(appointmentId));
-    toast({
-      title: "Success",
-      description: "Patient has been successfully checked in.",
-    });
+    setActiveTokenCard(appointmentId);
+  };
+
+  const handleTokenGenerationComplete = (appointmentId: string) => {
+    setTokenGeneratedIds(prev => new Set(prev).add(appointmentId));
+    setActiveTokenCard(null);
   };
 
   const getSpecialtyLabel = () => {
@@ -396,7 +400,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
             </div>
 
             <div className="text-sm font-medium text-foreground">
-              {appointment.token} | {appointment.time}
+              {tokenGeneratedIds.has(appointment.id) ? appointment.token : "pending"} | {appointment.time}
             </div>
 
             <div>
@@ -414,6 +418,20 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
             </div>
         </div>
       ))}
+
+      {activeTokenCard && (() => {
+        const appointment = appointments.find(apt => apt.id === activeTokenCard);
+        return appointment ? (
+          <TokenGenerationCard
+            token={appointment.token}
+            patientName={appointment.patient.name}
+            specialty={appointment.specialty}
+            doctor={appointment.doctor}
+            time={appointment.time}
+            onComplete={() => handleTokenGenerationComplete(activeTokenCard)}
+          />
+        ) : null;
+      })()}
     </div>
   );
 }
