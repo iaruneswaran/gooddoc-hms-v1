@@ -283,12 +283,7 @@ const PatientInsights = () => {
                                       <p className="text-sm text-muted-foreground">
                                         Date & Time: {item.datetime}
                                       </p>
-                                      {item.doctor && (
-                                        <p className="text-sm text-muted-foreground">
-                                          Doctor: {item.doctor}
-                                        </p>
-                                      )}
-                                      {item.clinic && !item.doctor && (
+                                      {item.clinic && (
                                         <p className="text-sm text-muted-foreground">
                                           Clinic: {item.clinic}
                                         </p>
