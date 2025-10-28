@@ -56,7 +56,7 @@ const Discharge = () => {
           <div className="max-w-[1400px] mx-auto">
             {renderStepContent()}
             
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-end items-center gap-3 mt-4">
               <Button 
                 variant="outline" 
                 onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
@@ -436,30 +436,30 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Service</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>05 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">05 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>Room Charges – General Ward (Per Day)</TableCell>
-                  <TableCell>3</TableCell>
-                  <TableCell>₹2,500</TableCell>
-                  <TableCell>₹7,500</TableCell>
+                  <TableCell className="w-[80px]">3</TableCell>
+                  <TableCell className="w-[100px]">₹2,500</TableCell>
+                  <TableCell className="w-[100px]">₹7,500</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>05 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">05 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>Admission Fee</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹5,000</TableCell>
-                  <TableCell>₹5,000</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹5,000</TableCell>
+                  <TableCell className="w-[100px]">₹5,000</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Room & Admission)</TableCell>
@@ -475,22 +475,22 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Service</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>06 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">06 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>IV Fluids & Medications</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹8,500</TableCell>
-                  <TableCell>₹8,500</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹8,500</TableCell>
+                  <TableCell className="w-[100px]">₹8,500</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Medications & Procedures)</TableCell>
@@ -506,30 +506,30 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Test Name</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>07 Oct</TableCell>
-                  <TableCell>LAB-001</TableCell>
+                  <TableCell className="w-[100px]">07 Oct</TableCell>
+                  <TableCell className="w-[140px]">LAB-001</TableCell>
                   <TableCell>Complete Blood Count</TableCell>
-                  <TableCell>2</TableCell>
-                  <TableCell>₹800</TableCell>
-                  <TableCell>₹1,600</TableCell>
+                  <TableCell className="w-[80px]">2</TableCell>
+                  <TableCell className="w-[100px]">₹800</TableCell>
+                  <TableCell className="w-[100px]">₹1,600</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>07 Oct</TableCell>
-                  <TableCell>LAB-002</TableCell>
+                  <TableCell className="w-[100px]">07 Oct</TableCell>
+                  <TableCell className="w-[140px]">LAB-002</TableCell>
                   <TableCell>Liver Function Test</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹1,500</TableCell>
-                  <TableCell>₹1,500</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹1,500</TableCell>
+                  <TableCell className="w-[100px]">₹1,500</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Laboratory)</TableCell>
@@ -545,30 +545,30 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Test Name</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>06 Oct</TableCell>
-                  <TableCell>RADIO-001</TableCell>
+                  <TableCell className="w-[100px]">06 Oct</TableCell>
+                  <TableCell className="w-[140px]">RADIO-001</TableCell>
                   <TableCell>Chest X-Ray</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹1,200</TableCell>
-                  <TableCell>₹1,200</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹1,200</TableCell>
+                  <TableCell className="w-[100px]">₹1,200</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>06 Oct</TableCell>
-                  <TableCell>RADIO-002</TableCell>
+                  <TableCell className="w-[100px]">06 Oct</TableCell>
+                  <TableCell className="w-[140px]">RADIO-002</TableCell>
                   <TableCell>CT Scan Abdomen</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹4,000</TableCell>
-                  <TableCell>₹4,000</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹4,000</TableCell>
+                  <TableCell className="w-[100px]">₹4,000</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Radiology)</TableCell>
@@ -584,22 +584,22 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Service</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>06 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">06 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>Minor Surgery – Appendix Removal</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>₹15,000</TableCell>
-                  <TableCell>₹15,000</TableCell>
+                  <TableCell className="w-[80px]">1</TableCell>
+                  <TableCell className="w-[100px]">₹15,000</TableCell>
+                  <TableCell className="w-[100px]">₹15,000</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Day Care Procedures)</TableCell>
@@ -615,30 +615,30 @@ const BillingStep = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Appointment No</TableHead>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[140px]">Appointment No</TableHead>
                   <TableHead>Service</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead className="w-[80px]">Qty</TableHead>
+                  <TableHead className="w-[100px]">Rate</TableHead>
+                  <TableHead className="w-[100px]">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>05 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">05 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>Oxygen Support</TableCell>
-                  <TableCell>2</TableCell>
-                  <TableCell>₹500</TableCell>
-                  <TableCell>₹1,000</TableCell>
+                  <TableCell className="w-[80px]">2</TableCell>
+                  <TableCell className="w-[100px]">₹500</TableCell>
+                  <TableCell className="w-[100px]">₹1,000</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>06 Oct</TableCell>
-                  <TableCell>—</TableCell>
+                  <TableCell className="w-[100px]">06 Oct</TableCell>
+                  <TableCell className="w-[140px]">—</TableCell>
                   <TableCell>Physiotherapy Sessions</TableCell>
-                  <TableCell>2</TableCell>
-                  <TableCell>₹1,200</TableCell>
-                  <TableCell>₹2,400</TableCell>
+                  <TableCell className="w-[80px]">2</TableCell>
+                  <TableCell className="w-[100px]">₹1,200</TableCell>
+                  <TableCell className="w-[100px]">₹2,400</TableCell>
                 </TableRow>
                 <TableRow className="bg-muted/50">
                   <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Other Services)</TableCell>
