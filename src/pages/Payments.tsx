@@ -106,8 +106,7 @@ const Payments = () => {
           </div>
 
           {/* Tabs */}
-          <Card className="p-6 mb-6">
-            <Tabs defaultValue="collection" className="w-full">
+            <Tabs defaultValue="collection" className="w-full mb-6">
               <div className="w-full">
                 <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
                   <TabsTrigger 
@@ -679,7 +678,6 @@ const Payments = () => {
               </Card>
             </TabsContent>
           </Tabs>
-        </Card>
         </main>
       </div>
     </div>

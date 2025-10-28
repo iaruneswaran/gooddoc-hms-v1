@@ -207,9 +207,8 @@ const PatientInsights = () => {
             <div className="flex gap-6">
               {/* Left Side - Tabs */}
               <div className="flex-1">
-                <Card className="p-6">
                   <Tabs defaultValue="appointments" className="w-full">
-                    <div className="w-full">
+                    <div className="w-full mb-6">
                       <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
                         <TabsTrigger 
                           value="appointments"
@@ -790,22 +789,19 @@ const PatientInsights = () => {
                     </div>
             </TabsContent>
           </Tabs>
-        </Card>
               </div>
 
               {/* Right Side - Patient Information */}
               <div className="w-[400px] space-y-6">
-                {/* Edit Button */}
-                <div className="flex justify-end">
-                  <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-                    <Pencil className="h-4 w-4" />
-                    <span className="text-sm font-medium">Edit</span>
-                  </button>
-                </div>
-
                 {/* Patient Information Section */}
                 <Card className="rounded-lg border border-border p-6">
-                  <h3 className="text-base font-semibold text-foreground mb-6">Patient Information</h3>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
+                    <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+                      <Pencil className="h-4 w-4" />
+                      <span className="text-sm font-medium">Edit</span>
+                    </button>
+                  </div>
                   
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
