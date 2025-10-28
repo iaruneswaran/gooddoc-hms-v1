@@ -95,19 +95,22 @@ const ClearancesStep = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-lg font-semibold text-primary mb-6">Department Clearances</h2>
-      <p className="text-sm text-muted-foreground mb-6">
-        Ensure all departments have cleared the patient for discharge.
-      </p>
-
-      <div className="flex justify-end gap-3 mb-4">
-        <Button variant="outline" className="flex items-center gap-2">
-          Request All Clearances (4)
-        </Button>
-        <Button variant="outline" className="flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" />
-          Refresh Status
-        </Button>
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h2 className="text-lg font-semibold text-primary mb-2">Department Clearances</h2>
+          <p className="text-sm text-muted-foreground">
+            Ensure all departments have cleared the patient for discharge.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Button variant="outline" className="flex items-center gap-2">
+            Request All Clearances (4)
+          </Button>
+          <Button variant="outline" className="flex items-center gap-2">
+            <RefreshCw className="w-4 h-4" />
+            Refresh Status
+          </Button>
+        </div>
       </div>
 
       <Table>
