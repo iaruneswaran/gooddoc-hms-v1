@@ -276,7 +276,7 @@ const PatientInsights = () => {
                                 setExpandedAppointment(open ? `${appointmentGroup.id}-${idx}` : null)
                               }
                             >
-                              <Card className="overflow-hidden bg-muted/50">
+                              <Card className="overflow-hidden bg-[#F1F2F4]">
                                 <CollapsibleTrigger className="w-full">
                                   <div className="flex items-center justify-between p-4 transition-colors">
                                     <div className="flex-1 text-left">
