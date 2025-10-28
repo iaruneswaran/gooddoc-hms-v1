@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronDown, Pencil } from "lucide-react";
+import { ChevronLeft, ChevronDown, Pencil, Upload, Search } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -560,26 +560,24 @@ const PatientInsights = () => {
                   </TabsContent>
 
                   <TabsContent value="documents" className="space-y-4">
+                    <h2 className="text-lg font-semibold text-primary mb-4">Patient Documents</h2>
+                    
                     {/* Controls */}
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold text-primary">Patient Documents</h2>
-                      <div className="flex gap-3">
-                        <Select defaultValue="all">
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Documents" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Documents</SelectItem>
-                            <SelectItem value="prescription">Prescription</SelectItem>
-                            <SelectItem value="results">Lab Results</SelectItem>
-                            <SelectItem value="reports">Reports</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          type="search"
-                          placeholder="Search"
-                          className="w-[200px]"
-                        />
+                    <div className="flex items-center gap-4">
+                      <h3 className="text-base font-semibold">All Documents</h3>
+                      <Button variant="default">
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Document
+                      </Button>
+                      <div className="flex-1 max-w-sm ml-auto">
+                        <div className="relative">
+                          <Input
+                            type="search"
+                            placeholder="Search"
+                            className="pl-10"
+                          />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        </div>
                       </div>
                     </div>
 
