@@ -56,24 +56,34 @@ const Discharge = () => {
           <div className="max-w-[1400px] mx-auto">
             {renderStepContent()}
             
-            <div className="flex justify-end items-center gap-3 mt-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                disabled={currentStep === 1}
-              >
-                Previous
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Step {currentStep} of 5
+            {currentStep === 5 ? (
+              <div className="flex justify-end items-center gap-3 mt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                >
+                  Previous
+                </Button>
               </div>
-              <Button 
-                onClick={() => setCurrentStep(Math.min(5, currentStep + 1))}
-                disabled={currentStep === 5}
-              >
-                Next
-              </Button>
-            </div>
+            ) : (
+              <div className="flex justify-end items-center gap-3 mt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  disabled={currentStep === 1}
+                >
+                  Previous
+                </Button>
+                <div className="text-sm text-muted-foreground">
+                  Step {currentStep} of 5
+                </div>
+                <Button 
+                  onClick={() => setCurrentStep(Math.min(5, currentStep + 1))}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         </main>
       </div>
@@ -853,7 +863,7 @@ const FinalizeStep = () => {
           <h3 className="text-sm font-semibold">Ready to Finalize</h3>
           <p className="text-sm text-muted-foreground">Please complete all checklist items before finalizing.</p>
           
-          <Button size="lg" className="w-full" disabled>
+          <Button disabled>
             Finalize Discharge
           </Button>
         </div>
