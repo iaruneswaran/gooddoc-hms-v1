@@ -44,18 +44,18 @@ export function TokenGenerationCard({
   }, [onComplete]);
 
   return (
-    <div className="fixed bottom-6 right-6 w-[400px] bg-card border border-border rounded-lg shadow-lg p-6 animate-in slide-in-from-bottom-5 z-50">
-      <div className="space-y-4">
-        <h3 className="text-2xl font-semibold text-foreground">Token Generated</h3>
+    <div className="fixed bottom-6 right-6 w-[320px] bg-card border border-border rounded-lg shadow-lg p-4 animate-in slide-in-from-bottom-5 z-50">
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-foreground">Token Generated</h3>
         
-        <div className="text-center py-4">
-          <div className="text-5xl font-bold" style={{ color: '#7e0137' }}>
+        <div className="text-center py-2">
+          <div className="text-3xl font-bold" style={{ color: '#7e0137' }}>
             {token}
           </div>
-          <div className="text-lg text-muted-foreground mt-2">{patientName}</div>
+          <div className="text-sm text-muted-foreground mt-1">{patientName}</div>
         </div>
 
-        <div className="space-y-2 text-base">
+        <div className="space-y-1.5 text-xs">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Specialty:</span>
             <span className="text-foreground font-medium">{doctor} – {specialty}</span>
@@ -66,9 +66,9 @@ export function TokenGenerationCard({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 pt-2 border-t border-border">
-          <Printer className="w-5 h-5" style={{ color: '#7e0137' }} />
-          <span className="text-muted-foreground">
+        <div className="flex items-center gap-2 pt-2 border-t border-border">
+          <Printer className="w-4 h-4" style={{ color: '#7e0137' }} />
+          <span className="text-xs text-muted-foreground">
             {stage === "generating" && "Sending to printer"}
             {stage === "printing" && "Sending to printer"}
             {stage === "printed" && "Printed successfully"}
