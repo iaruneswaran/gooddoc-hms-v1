@@ -38,18 +38,16 @@ const Index = () => {
             </div>
           </Card>
 
-          <Card className="p-6 mb-6">
-            <div className="flex items-center justify-between">
-              <AppointmentTabs onTabChange={setSelectedCategory} />
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search"
-                  className="pl-10"
-                />
-              </div>
+          <div className="flex items-center justify-between mb-6">
+            <AppointmentTabs onTabChange={setSelectedCategory} />
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search"
+                className="pl-10"
+              />
             </div>
-          </Card>
+          </div>
 
           <AppointmentTable category={selectedCategory} />
         </main>

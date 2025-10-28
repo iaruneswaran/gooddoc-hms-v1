@@ -106,36 +106,35 @@ const Payments = () => {
           </div>
 
           {/* Tabs */}
-          <Card className="p-6 mb-6">
-            <Tabs defaultValue="collection" className="w-full">
-              <div className="w-full">
-                <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
-                  <TabsTrigger 
-                    value="collection"
-                    className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
-                  >
-                    Collection
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="advance"
-                    className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
-                  >
-                    Advance
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="refunds"
-                    className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
-                  >
-                    Refunds
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="history"
-                    className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
-                  >
-                    History
-                  </TabsTrigger>
-                </TabsList>
-              </div>
+          <Tabs defaultValue="collection" className="w-full">
+            <div className="w-full">
+              <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
+                <TabsTrigger 
+                  value="collection"
+                  className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+                >
+                  Collection
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="advance"
+                  className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+                >
+                  Advance
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="refunds"
+                  className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+                >
+                  Refunds
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="history"
+                  className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+                >
+                  History
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="collection" className="mt-6">
               <div className="grid grid-cols-[1fr_400px] gap-6">
@@ -679,7 +678,6 @@ const Payments = () => {
               </Card>
             </TabsContent>
           </Tabs>
-        </Card>
         </main>
       </div>
     </div>

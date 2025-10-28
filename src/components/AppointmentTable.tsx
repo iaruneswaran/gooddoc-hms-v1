@@ -400,7 +400,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
             </div>
 
             <div className="text-sm font-medium text-foreground">
-              {tokenGeneratedIds.has(appointment.id) ? appointment.token : "Pending"} | {appointment.time}
+              {tokenGeneratedIds.has(appointment.id) ? appointment.token : "pending"} | {appointment.time}
             </div>
 
             <div>
