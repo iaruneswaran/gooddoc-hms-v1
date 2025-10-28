@@ -261,7 +261,7 @@ const PatientInsights = () => {
                     </div>
 
                     {/* Appointment List */}
-                    <div className="border rounded-lg overflow-hidden bg-background p-4">
+                    <div className="border rounded-lg overflow-hidden bg-white p-4">
                       <div className="space-y-4">
                         {appointments.map((appointmentGroup) => (
                           <div key={appointmentGroup.id} className="space-y-3">
@@ -276,9 +276,9 @@ const PatientInsights = () => {
                                 setExpandedAppointment(open ? `${appointmentGroup.id}-${idx}` : null)
                               }
                             >
-                              <Card className="overflow-hidden">
+                              <Card className="overflow-hidden bg-muted/50">
                                 <CollapsibleTrigger className="w-full">
-                                  <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+                                  <div className="flex items-center justify-between p-4 transition-colors">
                                     <div className="flex-1 text-left">
                                       <p className="font-medium text-foreground mb-1">{item.type}</p>
                                       <p className="text-sm text-muted-foreground">
