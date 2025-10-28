@@ -278,40 +278,38 @@ const Payment = () => {
 
       {/* Success Modal */}
       {showSuccess && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
-          <div className="bg-background rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl animate-scale-in">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center animate-scale-in">
-                <CheckCircle2 className="w-12 h-12 text-primary animate-scale-in" style={{ animationDelay: "0.2s" }} />
-              </div>
-              
-              <div className="space-y-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                <h2 className="text-2xl font-bold text-foreground">
-                  {paymentType === "now" ? "Payment Successful" : "Payment Scheduled"}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Your booking has been confirmed & Your payment has been {paymentType === "now" ? "processed successfully" : "scheduled for later"}.
-                </p>
-              </div>
-
-              <div className="py-4 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-                <p className="text-sm text-muted-foreground mb-2">
-                  You will be redirected to the Home Page in
-                </p>
-                <div className="text-5xl font-bold text-primary animate-pulse">
-                  {countdown}
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">seconds...</p>
-              </div>
-
-              <Button 
-                onClick={() => navigate("/")}
-                className="w-full bg-primary hover:bg-primary/90 animate-fade-in"
-                style={{ animationDelay: "0.5s" }}
-              >
-                Back to Home
-              </Button>
+        <div className="fixed bottom-6 right-6 w-[320px] bg-background rounded-lg p-6 shadow-2xl animate-in slide-in-from-bottom-5 z-50 border border-border">
+          <div className="flex flex-col items-center text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-primary" />
             </div>
+            
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-foreground">
+                {paymentType === "now" ? "Payment Successful" : "Payment Scheduled"}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Your booking has been confirmed & Your payment has been {paymentType === "now" ? "processed successfully" : "scheduled for later"}.
+              </p>
+            </div>
+
+            <div className="py-2">
+              <p className="text-xs text-muted-foreground mb-1">
+                You will be redirected to the Home Page in
+              </p>
+              <div className="text-3xl font-bold text-primary">
+                {countdown}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">seconds...</p>
+            </div>
+
+            <Button 
+              onClick={() => navigate("/")}
+              size="sm"
+              className="w-full"
+            >
+              Back to Home
+            </Button>
           </div>
         </div>
       )}
