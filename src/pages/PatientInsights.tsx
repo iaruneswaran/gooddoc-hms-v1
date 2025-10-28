@@ -261,13 +261,14 @@ const PatientInsights = () => {
                     </div>
 
                     {/* Appointment List */}
-                    <div className="space-y-4">
-                      {appointments.map((appointmentGroup) => (
-                        <div key={appointmentGroup.id} className="space-y-3">
-                          <p className="text-sm font-medium text-muted-foreground">
-                            {appointmentGroup.date}
-                          </p>
-                          {appointmentGroup.items.map((item, idx) => (
+                    <div className="border rounded-lg overflow-hidden bg-background p-4">
+                      <div className="space-y-4">
+                        {appointments.map((appointmentGroup) => (
+                          <div key={appointmentGroup.id} className="space-y-3">
+                            <p className="text-sm font-medium text-muted-foreground">
+                              {appointmentGroup.date}
+                            </p>
+                            {appointmentGroup.items.map((item, idx) => (
                             <Collapsible
                               key={idx}
                               open={expandedAppointment === `${appointmentGroup.id}-${idx}`}
@@ -449,6 +450,7 @@ const PatientInsights = () => {
                           ))}
                         </div>
                       ))}
+                      </div>
                     </div>
                   </TabsContent>
 
