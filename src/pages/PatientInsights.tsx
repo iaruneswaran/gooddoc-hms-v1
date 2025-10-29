@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
 import { ProfileSlideOver } from "@/components/patient-insights/ProfileSlideOver";
@@ -187,13 +188,21 @@ const PatientInsights = () => {
             <div className="flex items-center justify-between gap-6">
               {/* Left: Patient Chip and Buttons */}
               <div className="flex items-center gap-3">
-                <PatientChip
-                  name={patient.name}
-                  gdid={patient.gdid}
-                  age={patient.age}
-                  gender={patient.gender}
-                  onClick={() => setIsProfileOpen(true)}
-                />
+                <div className="flex items-center gap-3">
+                  <PatientChip
+                    name={patient.name}
+                    gdid={patient.gdid}
+                    age={patient.age}
+                    gender={patient.gender}
+                    onClick={() => setIsProfileOpen(true)}
+                  />
+                  {selectedVisit && (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-muted rounded-md">
+                      <span className="text-xs text-muted-foreground">Active Visit:</span>
+                      <Badge variant="secondary" className="font-mono">{selectedVisit.visitId}</Badge>
+                    </div>
+                  )}
+                </div>
                 
                 <div className="flex gap-2">
                   <Button 
@@ -208,7 +217,9 @@ const PatientInsights = () => {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`)}
+                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
+                      state: { visitId: selectedVisit?.visitId }
+                    })}
                   >
                     Discharge
                   </Button>
