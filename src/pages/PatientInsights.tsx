@@ -197,7 +197,7 @@ const PatientInsights = () => {
                     onClick={() => setIsProfileOpen(true)}
                   />
                   {selectedVisit && (
-                    <div className="flex items-center gap-2 px-3 py-1 bg-muted rounded-md">
+                    <div className="flex items-center gap-2 px-3 h-9 bg-muted rounded-md">
                       <span className="text-xs text-muted-foreground">Active Visit:</span>
                       <Badge variant="secondary" className="font-mono">{selectedVisit.visitId}</Badge>
                     </div>
