@@ -13,7 +13,7 @@ interface AppointmentsTabProps {
 }
 
 export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
-  const [expandedItem, setExpandedItem] = useState<number | null>(null);
+  const [expandedItem, setExpandedItem] = useState<number | null>(0);
 
   if (!selectedVisit) {
     return (
