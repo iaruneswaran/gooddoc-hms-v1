@@ -170,7 +170,7 @@ const Payment = () => {
                   </div>
 
                   {/* Advance Amount Toggle */}
-                  <div className="border-t pt-3 mt-3">
+                  <div>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">Advance Amount</span>
@@ -207,6 +207,8 @@ const Payment = () => {
                       </div>
                     </div>
                   )}
+
+                  <div className="border-t pt-4 mt-4"></div>
 
                   {/* Payer Name */}
                   <div className="space-y-2">
