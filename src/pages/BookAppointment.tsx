@@ -782,11 +782,24 @@ const BookAppointment = () => {
             itemCount={pricing.lineItems.length}
             onGenerateInvoice={() => {
               const { subtotal, cgst, sgst, netPayable } = pricing.totals;
-              const items = pricing.lineItems.map(item => ({
-                name: item.name,
-                basePrice: item.basePrice,
-                finalPrice: item.overridePrice ?? item.basePrice,
-              }));
+              
+              // Build items list matching Payment page expectations
+              const items = pricing.lineItems.map(item => {
+                const effectivePrice = item.overridePrice ?? item.basePrice;
+                let lineNet = effectivePrice;
+                
+                // Apply line discount
+                if (item.lineDiscountAmount !== undefined) {
+                  lineNet = Math.max(0, lineNet - item.lineDiscountAmount);
+                } else if (item.lineDiscountPercent !== undefined) {
+                  lineNet = Math.max(0, lineNet - (lineNet * item.lineDiscountPercent / 100));
+                }
+                
+                return {
+                  name: item.name,
+                  price: lineNet,
+                };
+              });
               
               navigate("/payment", {
                 state: {
