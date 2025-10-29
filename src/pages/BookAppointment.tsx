@@ -35,6 +35,7 @@ const BookAppointment = () => {
   const location = useLocation();
   const fromPatientInsights = location.state?.fromPatientInsights;
   const patientId = location.state?.patientId;
+  const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<ConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
@@ -425,6 +426,13 @@ const BookAppointment = () => {
                     <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
                     <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
                   </div>
+
+                  {visitId && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">Visit ID</p>
+                      <p className="text-sm font-medium text-foreground">{visitId}</p>
+                    </div>
+                  )}
 
                   {selectedTypes.length === 0 ? (
                     <div className="pt-6 border-t border-border">

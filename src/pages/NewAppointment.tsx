@@ -37,7 +37,9 @@ const NewAppointment = () => {
 
   const handleBookAppointment = (patientId: string) => {
     const patient = mockPatients.find(p => p.id === patientId);
-    navigate("/book-appointment", { state: { patient } });
+    // Generate visit ID for new appointments (not from patient insights)
+    const visitId = `VST-${Math.floor(100000 + Math.random() * 900000)}`;
+    navigate("/book-appointment", { state: { patient, visitId } });
   };
 
   const handleCreateNewRegistration = () => {
