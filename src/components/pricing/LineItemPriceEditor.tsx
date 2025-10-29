@@ -70,56 +70,47 @@ export function LineItemPriceEditor({
   // Inline edit pattern
   if (flags.priceEdit_inline && editState.isEditing) {
     return (
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            value={tempValue}
-            onChange={(e) => setTempValue(e.target.value)}
-            className="w-32 h-8 text-sm"
-            placeholder="Enter price"
-            autoFocus
-          />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleSave}>
-                  <Save className="h-4 w-4 text-green-600" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Save</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleCancel}>
-                  <X className="h-4 w-4 text-red-600" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Cancel</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          {isOverridden && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleReset}>
-                    <RotateCcw className="h-4 w-4 text-muted-foreground" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Reset to default</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
+      <div className="flex items-center gap-2">
         <Input
-          type="text"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder="Reason for change (optional)"
-          className="h-8 text-xs"
+          type="number"
+          value={tempValue}
+          onChange={(e) => setTempValue(e.target.value)}
+          className="w-32 h-8 text-sm"
+          placeholder="Enter price"
+          autoFocus
         />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleSave}>
+                <Save className="h-4 w-4 text-green-600" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Save</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleCancel}>
+                <X className="h-4 w-4 text-red-600" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Cancel</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        {isOverridden && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleReset}>
+                  <RotateCcw className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Reset to default</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     );
   }
