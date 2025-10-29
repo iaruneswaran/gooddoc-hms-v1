@@ -59,9 +59,14 @@ export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: Sticky
             </div>
           </div>
 
-          <Button size="lg" onClick={onGenerateInvoice}>
-            Generate Invoice
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button size="lg" variant="outline" onClick={() => window.history.back()}>
+              Back
+            </Button>
+            <Button size="lg" onClick={onGenerateInvoice}>
+              Generate Invoice
+            </Button>
+          </div>
         </div>
       </div>
     </div>

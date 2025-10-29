@@ -738,49 +738,6 @@ const BookAppointment = () => {
                       </div>
                     </>
                   )}
-
-                  {/* Action Buttons */}
-                  <div className="flex justify-end gap-4 mt-6 pt-6 border-t border-border">
-                    <Button
-                      variant="outline"
-                      onClick={() => navigate("/registration")}
-                    >
-                      Back
-                    </Button>
-                    <Button 
-                      className="bg-primary hover:bg-primary/90"
-                      onClick={() => {
-                        const { subtotal, cgst, sgst, netPayable } = pricing.totals;
-                        
-                        // Build items list from line items with final prices
-                        const items = pricing.lineItems.map(item => ({
-                          name: item.name,
-                          basePrice: item.basePrice,
-                          finalPrice: item.overridePrice ?? item.basePrice,
-                        }));
-                        
-                        navigate("/payment", {
-                          state: {
-                            appointmentType: selectedTypes.join(", "),
-                            items,
-                            subtotal,
-                            cgst,
-                            sgst,
-                            total: netPayable,
-                            globalDiscount: pricing.globalDiscountValue > 0 ? {
-                              type: pricing.globalDiscountType,
-                              value: pricing.globalDiscountValue,
-                            } : undefined,
-                            date: "05/08/2025",
-                            fromPatientInsights,
-                            patientId
-                          }
-                        });
-                      }}
-                    >
-                      Generate Invoice
-                    </Button>
-                  </div>
                 </div>
               </Card>
             </div>
