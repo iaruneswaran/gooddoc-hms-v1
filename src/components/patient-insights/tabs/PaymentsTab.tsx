@@ -41,7 +41,7 @@ const allTransactions = [
   {
     id: "INV-2025-004",
     date: "07 Aug 2025",
-    visitId: "IPD-205431",
+    visitId: "VST-205431",
     type: "Bill Payment",
     service: "IPD Admission",
     method: "Card",
@@ -51,7 +51,7 @@ const allTransactions = [
   {
     id: "INV-2025-005",
     date: "07 Aug 2025",
-    visitId: "DC-308972",
+    visitId: "VST-308972",
     type: "Bill Payment",
     service: "Day-Care",
     method: "Insurance",

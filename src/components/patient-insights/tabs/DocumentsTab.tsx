@@ -1,4 +1,5 @@
-import { Download, Printer, Trash2, FileText } from "lucide-react";
+import { Download, Printer, Trash2, FileText, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
 
 interface DocumentsTabProps {
@@ -37,7 +38,7 @@ const allDocuments = [
     id: "4",
     name: "Admission Form",
     date: "07 Aug 2025",
-    visitId: "IPD-205431",
+    visitId: "VST-205431",
     service: "IPD",
     source: "Hospital",
     size: "185.4 KB",
@@ -46,7 +47,7 @@ const allDocuments = [
     id: "5",
     name: "Discharge Summary",
     date: "07 Aug 2025",
-    visitId: "IPD-205431",
+    visitId: "VST-205431",
     service: "IPD",
     source: "Hospital",
     size: "412.7 KB",
@@ -55,7 +56,7 @@ const allDocuments = [
     id: "6",
     name: "Chemotherapy Protocol",
     date: "07 Aug 2025",
-    visitId: "DC-308972",
+    visitId: "VST-308972",
     service: "Day-Care",
     source: "Hospital",
     size: "328.5 KB",
@@ -93,6 +94,10 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-primary">Visit Documents</h2>
+        <Button variant="outline" size="sm" className="gap-2">
+          <Upload className="h-4 w-4" />
+          Upload Document
+        </Button>
       </div>
 
       {/* Table */}
