@@ -110,10 +110,7 @@ export function AdjustPriceModal({ open, onClose, item, onApply, policy }: Adjus
       }
     }
 
-    // Check reason requirement
-    if (requiresReason && !reason.trim()) {
-      newErrors.push('Reason required for this change');
-    }
+    // Reason requirement removed
 
     // Check approver requirement
     if (requiresApproval && !approver.trim()) {
@@ -224,18 +221,6 @@ export function AdjustPriceModal({ open, onClose, item, onApply, policy }: Adjus
           <div className="p-3 bg-muted rounded-md">
             <Label className="text-xs text-muted-foreground">Net line price (preview)</Label>
             <p className="text-lg font-semibold text-primary">₹{formatCurrency(calculateNetPrice())}</p>
-          </div>
-
-          {/* Reason */}
-          <div className="space-y-2">
-            <Label htmlFor="reason">Reason for change</Label>
-            <Textarea
-              id="reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Required if override or discount exceeds policy threshold"
-              rows={2}
-            />
           </div>
 
           {/* Approver (conditional) */}
