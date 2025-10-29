@@ -166,7 +166,7 @@ const Payment = () => {
                   {/* Bill Amount */}
                   <div className="flex justify-between items-center pb-6 border-b border-border">
                     <p className="text-sm font-medium text-foreground">Bill Amount:</p>
-                    <p className="text-2xl font-bold text-foreground">₹{billAmount.toLocaleString()}</p>
+                    <p className="text-[18px] font-semibold text-primary">₹{billAmount.toLocaleString()}</p>
                   </div>
 
                   {/* Advance Amount Toggle */}
