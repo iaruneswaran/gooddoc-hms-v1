@@ -32,27 +32,30 @@ const Payments = () => {
       date: "15 Jun 2025",
       service: "Consultation",
       totalAmount: 1500,
+      partiallyPaid: 0,
+      balance: 1500,
       payer: "Harish Kalyan",
       status: "Pending",
-      balance: 1500,
     },
     {
       id: "INV-2025-002",
       date: "20 May 2025",
       service: "Laboratory",
       totalAmount: 650,
+      partiallyPaid: 0,
+      balance: 650,
       payer: "Harish Kalyan",
       status: "Pending",
-      balance: 650,
     },
     {
       id: "INV-2025-003",
       date: "10 Apr 2025",
       service: "Imaging",
       totalAmount: 1200,
+      partiallyPaid: 0,
+      balance: 1200,
       payer: "Harish Kalyan",
       status: "Pending",
-      balance: 1200,
     },
   ];
 
@@ -151,6 +154,8 @@ const Payments = () => {
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Partially Paid</th>
+                          <th className="text-left text-sm font-medium text-muted-foreground p-4">Balance</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
                           <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                         </tr>
@@ -168,6 +173,8 @@ const Payments = () => {
                             <td className="p-4 text-sm">{invoice.date}</td>
                             <td className="p-4 text-sm">{invoice.service}</td>
                             <td className="p-4 text-sm font-medium" style={{ color: '#800139' }}>₹{invoice.totalAmount}</td>
+                            <td className="p-4 text-sm font-medium text-muted-foreground">₹{invoice.partiallyPaid}</td>
+                            <td className="p-4 text-sm font-medium" style={{ color: '#800139' }}>₹{invoice.balance}</td>
                             <td className="p-4 text-sm">{invoice.status}</td>
                             <td className="p-4 text-sm">
                               <div className="flex gap-2">
