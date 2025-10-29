@@ -91,9 +91,9 @@ const Payment = () => {
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Invoice Summary */}
               <Card className="flex-1 p-6">
-                <h3 className="text-base font-semibold text-foreground mb-4">Invoice Summary</h3>
+                <h3 className="text-base font-semibold text-foreground mb-6">Invoice Summary</h3>
                 
-                <div className="space-y-3">
+                <div className="space-y-6">
                   {/* Patient Details */}
                   <div className="flex justify-between items-start">
                     <div>
@@ -112,9 +112,9 @@ const Payment = () => {
                   </div>
 
                   {/* Episode Ledger */}
-                  <div className="pt-3 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-2">Episode Ledger</p>
-                    <div className="space-y-2">
+                  <div className="pt-6 border-t border-border">
+                    <p className="text-xs text-muted-foreground mb-4">Episode Ledger</p>
+                    <div className="space-y-3">
                       {paymentData?.items?.map((item, index) => (
                         <div key={index} className="flex justify-between items-center">
                           <p className="text-sm text-foreground">{item.name}</p>
@@ -125,7 +125,7 @@ const Payment = () => {
                   </div>
 
                   {/* Totals */}
-                  <div className="pt-3 border-t border-border space-y-2">
+                  <div className="pt-6 border-t border-border space-y-3">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-muted-foreground">Subtotal</p>
                       <p className="text-sm text-foreground">₹{paymentData?.subtotal.toLocaleString()}</p>
@@ -138,14 +138,14 @@ const Payment = () => {
                       <p className="text-sm text-muted-foreground">SGST (9%)</p>
                       <p className="text-sm text-foreground">₹{paymentData?.sgst.toLocaleString()}</p>
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t border-border">
+                    <div className="flex justify-between items-center pt-3 border-t border-border">
                       <p className="text-base font-semibold text-foreground">Bill Amount:</p>
                       <p className="text-base font-bold text-foreground">₹{billAmount.toLocaleString()}</p>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-4 pt-3">
+                  <div className="flex gap-4 pt-4">
                     <Button variant="outline" className="flex items-center gap-2">
                       <Download className="w-4 h-4" />
                       Download
@@ -160,11 +160,11 @@ const Payment = () => {
 
               {/* Collect Payment */}
               <Card className="w-full lg:w-[420px] p-6 h-fit">
-                <h3 className="text-base font-semibold text-foreground mb-4">Collect Payment</h3>
+                <h3 className="text-base font-semibold text-foreground mb-6">Collect Payment</h3>
                 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {/* Bill Amount */}
-                  <div className="flex justify-between items-center pb-4 border-b border-border">
+                  <div className="flex justify-between items-center pb-6 border-b border-border">
                     <p className="text-sm font-medium text-foreground">Bill Amount:</p>
                     <p className="text-2xl font-bold text-foreground">₹{billAmount.toLocaleString()}</p>
                   </div>
