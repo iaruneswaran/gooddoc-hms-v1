@@ -263,7 +263,7 @@ const PatientInsights = () => {
                     {/* Appointment List */}
                     <div className="border rounded-lg overflow-hidden bg-white p-4">
                       <div className="space-y-4">
-                        {appointments.map((appointmentGroup) => (
+                        {[...appointments].reverse().map((appointmentGroup) => (
                           <div key={appointmentGroup.id} className="space-y-3">
                             <p className="text-sm font-medium text-muted-foreground">
                               {appointmentGroup.date}
