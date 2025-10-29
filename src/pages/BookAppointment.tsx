@@ -479,12 +479,23 @@ const BookAppointment = () => {
 
                                 {laboratoryData.selectedPackages.length > 0 && (
                                   <div className="space-y-2 pt-2">
-                                    {laboratoryData.selectedPackages.map((pkg) => (
-                                      <div key={pkg.id} className="flex justify-between items-center">
-                                        <p className="text-foreground">{pkg.name}</p>
-                                        <p className="text-foreground font-semibold">₹{pkg.price}</p>
-                                      </div>
-                                    ))}
+                                    {laboratoryData.selectedPackages.map((pkg) => {
+                                      const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
+                                      return (
+                                        <div key={pkg.id} className="flex justify-between items-center">
+                                          <p className="text-foreground text-xs">{pkg.name}</p>
+                                          {lineItem && (
+                                            <LineItemPriceEditor
+                                              item={lineItem}
+                                              onPriceUpdate={pricing.updateLineItemPrice}
+                                              onDiscountApply={pricing.applyLineDiscount}
+                                              onWaiveOff={pricing.waiveOffItem}
+                                              onOpenModal={() => handleOpenModal(lineItem)}
+                                            />
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>
@@ -623,7 +634,18 @@ const BookAppointment = () => {
 
                                 <div className="flex justify-between items-center pt-3 border-t border-border">
                                   <p className="text-foreground">Admission</p>
-                                  <p className="text-foreground font-semibold">₹5,000</p>
+                                  {(() => {
+                                    const lineItem = pricing.lineItems.find(li => li.id === 'ipd-admission-1');
+                                    return lineItem ? (
+                                      <LineItemPriceEditor
+                                        item={lineItem}
+                                        onPriceUpdate={pricing.updateLineItemPrice}
+                                        onDiscountApply={pricing.applyLineDiscount}
+                                        onWaiveOff={pricing.waiveOffItem}
+                                        onOpenModal={() => handleOpenModal(lineItem)}
+                                      />
+                                    ) : <p className="text-foreground font-semibold">₹5,000</p>;
+                                  })()}
                                 </div>
                               </div>
                             </div>
@@ -668,7 +690,18 @@ const BookAppointment = () => {
 
                                 <div className="flex justify-between items-center pt-3 border-t border-border">
                                   <p className="text-foreground">Procedure</p>
-                                  <p className="text-foreground font-semibold">₹15,000</p>
+                                  {(() => {
+                                    const lineItem = pricing.lineItems.find(li => li.id === 'dc-procedure-1');
+                                    return lineItem ? (
+                                      <LineItemPriceEditor
+                                        item={lineItem}
+                                        onPriceUpdate={pricing.updateLineItemPrice}
+                                        onDiscountApply={pricing.applyLineDiscount}
+                                        onWaiveOff={pricing.waiveOffItem}
+                                        onOpenModal={() => handleOpenModal(lineItem)}
+                                      />
+                                    ) : <p className="text-foreground font-semibold">₹15,000</p>;
+                                  })()}
                                 </div>
                               </div>
                             </div>
