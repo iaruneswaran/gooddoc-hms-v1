@@ -116,7 +116,7 @@ const PatientInsights = () => {
     },
     {
       id: "visit-4",
-      visitId: "IPD-205431",
+      visitId: "VST-205431",
       datetime: new Date(2025, 7, 7, 11, 0), // Aug 07, 2025, 11:00 AM
       type: "IPD Admission",
       status: "Active",
@@ -127,7 +127,7 @@ const PatientInsights = () => {
           type: "IPD Admission",
           datetime: "07 Aug 2025 | 11:00 AM",
           doctor: "Dr. Karthik Reddy – General Medicine",
-          admissionId: "IPD-205431",
+          admissionId: "VST-205431",
           admittingDiagnosis: "Acute Gastroenteritis",
           roomType: "Private Room – 204",
           provider: "Inpatient Wing A",
@@ -138,7 +138,7 @@ const PatientInsights = () => {
     },
     {
       id: "visit-5",
-      visitId: "DC-308972",
+      visitId: "VST-308972",
       datetime: new Date(2025, 7, 7, 9, 30), // Aug 07, 2025, 9:30 AM
       type: "Day-Care Admission",
       status: "Completed",
@@ -149,7 +149,7 @@ const PatientInsights = () => {
           type: "Day-Care Admission",
           datetime: "07 Aug 2025 | 09:30 AM",
           doctor: "Dr. Sneha Iyer – Oncology",
-          visitId: "DC-308972",
+          visitId: "VST-308972",
           procedure: "Chemotherapy Cycle 3 – Doxorubicin + Cyclophosphamide",
           provider: "Day-Care Unit B",
           department: "Oncology",
