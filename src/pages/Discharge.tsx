@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ChevronLeft, RefreshCw, Plus, Upload, Printer, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -15,7 +15,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const Discharge = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { patientId } = useParams();
+  const visitId = location.state?.visitId || "VST-205431";
   const [currentStep, setCurrentStep] = useState(1);
 
   const renderStepContent = () => {
@@ -50,6 +52,14 @@ const Discharge = () => {
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">Patient Insights</span>
           </button>
+
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-foreground mb-2">Patient Discharge</h1>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Visit ID:</span>
+              <Badge variant="secondary" className="font-mono">{visitId}</Badge>
+            </div>
+          </div>
 
           <DischargeSteps currentStep={currentStep} />
 
