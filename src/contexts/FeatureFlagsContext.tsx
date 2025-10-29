@@ -4,7 +4,7 @@ import { FeatureFlags } from '@/types/pricing';
 // Default feature flags (all enabled for demonstration)
 const defaultFlags: FeatureFlags = {
   priceEdit_inline: true,
-  priceEdit_modal: true,
+  priceEdit_modal: false,
   priceEdit_lock: false, // Start unlocked for easier demo
   priceEdit_quickActions: true,
   globalDiscount_summary: true,
