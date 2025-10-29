@@ -44,19 +44,15 @@ export function GlobalDiscountControls({
         <Label className="text-sm font-semibold">Global Discount</Label>
       </div>
 
-      {/* Discount Input with Apply Button */}
-      <div className="flex gap-2">
+      {/* Discount Input */}
+      <div>
         <Input
           type="number"
           value={discountValue || ''}
           onChange={(e) => onDiscountValueChange(parseFloat(e.target.value) || 0)}
           placeholder="0"
-          className="flex-1"
           min="0"
         />
-        <Button size="sm" variant="outline" onClick={onApplyCoupon}>
-          Apply
-        </Button>
       </div>
 
       {/* Apply Pre-tax Toggle */}

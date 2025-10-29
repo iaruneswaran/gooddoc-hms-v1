@@ -711,6 +711,22 @@ const BookAppointment = () => {
                         return null;
                       })}
 
+                      {/* Global Discount Controls */}
+                      <div className="pt-4 border-t border-border">
+                        <GlobalDiscountControls
+                          discountType={pricing.globalDiscountType}
+                          discountValue={pricing.globalDiscountValue}
+                          applyPretax={pricing.applyGlobalDiscountPretax}
+                          couponCode={pricing.couponCode}
+                          onDiscountTypeChange={pricing.setGlobalDiscountType}
+                          onDiscountValueChange={pricing.setGlobalDiscountValue}
+                          onApplyPretaxChange={pricing.setApplyGlobalDiscountPretax}
+                          onCouponCodeChange={pricing.setCouponCode}
+                          onApplyCoupon={handleApplyCoupon}
+                          maxValue={pricing.totals.subtotal}
+                        />
+                      </div>
+
                       {/* Total Summary with Global Discount */}
                       <div className="pt-4 border-t border-border space-y-2 text-xs">
                         <div className="flex justify-between">
@@ -748,22 +764,6 @@ const BookAppointment = () => {
                           <p className="text-foreground font-semibold">Net Payable</p>
                           <p className="text-foreground font-bold">₹{formatCurrency(pricing.totals.netPayable)}</p>
                         </div>
-                      </div>
-                      
-                      {/* Global Discount Controls */}
-                      <div className="pt-4">
-                        <GlobalDiscountControls
-                          discountType={pricing.globalDiscountType}
-                          discountValue={pricing.globalDiscountValue}
-                          applyPretax={pricing.applyGlobalDiscountPretax}
-                          couponCode={pricing.couponCode}
-                          onDiscountTypeChange={pricing.setGlobalDiscountType}
-                          onDiscountValueChange={pricing.setGlobalDiscountValue}
-                          onApplyPretaxChange={pricing.setApplyGlobalDiscountPretax}
-                          onCouponCodeChange={pricing.setCouponCode}
-                          onApplyCoupon={handleApplyCoupon}
-                          maxValue={pricing.totals.subtotal}
-                        />
                       </div>
                     </>
                   )}
