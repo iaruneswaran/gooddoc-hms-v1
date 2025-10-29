@@ -170,53 +170,43 @@ const Payment = () => {
                   </div>
 
                   {/* Advance Amount Toggle */}
-                  <div className="space-y-4">
-                    <Card className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <div className="w-4 h-4 rounded-full border-2 border-primary"></div>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-foreground">Advance Amount</p>
-                            <p className="text-lg font-bold text-primary">₹{advanceAmount.toLocaleString()}</p>
-                          </div>
+                  <div className="border-t pt-3 mt-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">Advance Amount</span>
+                      </div>
+                      <span className="text-lg font-medium text-primary">₹{advanceAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3">
+                      <Switch
+                        id="use-advance"
+                        checked={useAdvance}
+                        onCheckedChange={setUseAdvance}
+                      />
+                      <label htmlFor="use-advance" className="text-sm cursor-pointer">
+                        Use advance amount for this bill
+                      </label>
+                    </div>
+                  </div>
+
+                  {useAdvance && (
+                    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                      <p className="text-sm font-medium text-primary mb-2">Advance Amount Used!</p>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Current bill (₹{billAmount.toLocaleString()}) Used from advance
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Remaining Advance Balance</span>
+                          <span className="font-medium">₹{remainingBalance.toLocaleString()}</span>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <Switch checked={useAdvance} onCheckedChange={setUseAdvance} />
-                          <p className="text-xs text-muted-foreground">Use advance amount for this bill</p>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Payable amount</span>
+                          <span className="font-medium">₹{payableAmount.toLocaleString()}</span>
                         </div>
                       </div>
-                    </Card>
-
-                    {useAdvance && (
-                      <Card className="p-4 border-primary/20 bg-primary/5">
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                              <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
-                            <p className="text-sm font-semibold text-primary">Advance Amount Used!</p>
-                          </div>
-                          <div className="space-y-2 text-xs">
-                            <p className="text-muted-foreground">
-                              Current bill (₹{billAmount.toLocaleString()}) Used from advance
-                            </p>
-                            <div className="flex justify-between pt-1">
-                              <p className="font-medium text-foreground">Remaining Advance Balance</p>
-                              <p className="font-bold text-foreground">₹{remainingBalance.toLocaleString()}</p>
-                            </div>
-                            <div className="flex justify-between">
-                              <p className="font-medium text-foreground">Payable amount</p>
-                              <p className="font-bold text-primary">₹{payableAmount.toLocaleString()}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   {/* Payer Name */}
                   <div className="space-y-2">
