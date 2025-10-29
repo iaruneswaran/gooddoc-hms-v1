@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Calendar, FlaskConical, Scan, Bed, Syringe, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -12,7 +12,15 @@ import { LaboratoryBookingForm, LaboratoryData } from "@/components/LaboratoryBo
 import { RadiologyBookingForm, RadiologyData } from "@/components/RadiologyBookingForm";
 import { IPDAdmissionBookingForm, IPDAdmissionData } from "@/components/IPDAdmissionBookingForm";
 import { DCProcedureBookingForm, DCProcedureData } from "@/components/DCProcedureBookingForm";
+import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
+import { AdjustPriceModal } from "@/components/pricing/AdjustPriceModal";
+import { GlobalDiscountControls } from "@/components/pricing/GlobalDiscountControls";
+import { StickyFooterBar } from "@/components/pricing/StickyFooterBar";
+import { usePricingState } from "@/hooks/usePricingState";
+import { LineItem } from "@/types/pricing";
+import { formatCurrency } from "@/lib/pricingEngine";
 import { format } from "date-fns";
+import { toast } from "@/hooks/use-toast";
 
 const appointmentTypes = [
   { icon: Calendar, label: "Consultation", value: "consultation" },
@@ -33,6 +41,113 @@ const BookAppointment = () => {
   const [radiologyData, setRadiologyData] = useState<RadiologyData | null>(null);
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
   const [dcProcedureData, setDcProcedureData] = useState<DCProcedureData | null>(null);
+  
+  // Pricing state management
+  const pricing = usePricingState();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItemForModal, setSelectedItemForModal] = useState<LineItem | null>(null);
+
+  // Sync line items with selected services
+  useEffect(() => {
+    const items: LineItem[] = [];
+
+    if (consultationData) {
+      items.push({
+        id: 'consultation-1',
+        name: 'Consultation',
+        category: 'Consultation',
+        basePrice: 1000,
+        isDiscountable: true,
+        floorPrice: 500,
+        taxRateComponents: { cgst: 9, sgst: 9 },
+      });
+    }
+
+    if (laboratoryData) {
+      laboratoryData.selectedTests.forEach((test) => {
+        items.push({
+          id: `lab-test-${test.id}`,
+          name: test.name,
+          category: 'Laboratory',
+          basePrice: test.price,
+          isDiscountable: true,
+          floorPrice: test.price * 0.5,
+          taxRateComponents: { cgst: 9, sgst: 9 },
+        });
+      });
+      laboratoryData.selectedPackages.forEach((pkg) => {
+        items.push({
+          id: `lab-pkg-${pkg.id}`,
+          name: pkg.name,
+          category: 'Laboratory Package',
+          basePrice: pkg.price,
+          isDiscountable: true,
+          floorPrice: pkg.price * 0.5,
+          taxRateComponents: { cgst: 9, sgst: 9 },
+        });
+      });
+    }
+
+    if (radiologyData) {
+      radiologyData.selectedTests.forEach((test) => {
+        items.push({
+          id: `rad-test-${test.id}`,
+          name: test.name,
+          category: 'Radiology',
+          basePrice: test.price,
+          isDiscountable: true,
+          floorPrice: test.price * 0.5,
+          taxRateComponents: { cgst: 9, sgst: 9 },
+        });
+      });
+    }
+
+    if (ipdAdmissionData) {
+      items.push({
+        id: 'ipd-admission-1',
+        name: 'IPD Admission',
+        category: 'IPD',
+        basePrice: 5000,
+        isDiscountable: false, // Example: non-discountable
+        floorPrice: 5000,
+        taxRateComponents: { cgst: 9, sgst: 9 },
+      });
+    }
+
+    if (dcProcedureData) {
+      items.push({
+        id: 'dc-procedure-1',
+        name: dcProcedureData.procedure,
+        category: 'Day Care',
+        basePrice: 15000,
+        isDiscountable: true,
+        floorPrice: 10000,
+        taxRateComponents: { cgst: 9, sgst: 9 },
+      });
+    }
+
+    // Update pricing state (but preserve existing overrides/discounts)
+    const existingItems = pricing.lineItems;
+    const updatedItems = items.map((item) => {
+      const existing = existingItems.find((e) => e.id === item.id);
+      return existing ? { ...item, ...existing } : item;
+    });
+
+    // Remove items that are no longer selected
+    const itemIdsToKeep = new Set(items.map((i) => i.id));
+    existingItems.forEach((item) => {
+      if (!itemIdsToKeep.has(item.id)) {
+        pricing.removeLineItem(item.id);
+      }
+    });
+
+    // Add new items
+    updatedItems.forEach((item) => {
+      if (!existingItems.find((e) => e.id === item.id)) {
+        pricing.addLineItem(item);
+      }
+    });
+  }, [consultationData, laboratoryData, radiologyData, ipdAdmissionData, dcProcedureData]);
 
   const handleTypeClick = (type: string) => {
     // Toggle the type - add if not present, keep others
@@ -147,35 +262,48 @@ const BookAppointment = () => {
     setDcProcedureData(data);
   };
 
-  const calculateTotal = () => {
-    let subtotal = 0;
-    
-    if (consultationData) {
-      subtotal += 900;
+  const handleOpenModal = (item: LineItem) => {
+    setSelectedItemForModal(item);
+    setModalOpen(true);
+  };
+
+  const handleApplyModalChanges = (updates: any) => {
+    if (!selectedItemForModal) return;
+
+    const { overridePrice, lineDiscountType, lineDiscountValue, reason, approver } = updates;
+
+    if (overridePrice !== undefined) {
+      pricing.updateLineItemPrice(selectedItemForModal.id, overridePrice, reason);
     }
-    
-    if (laboratoryData) {
-      const testsTotal = laboratoryData.selectedTests.reduce((sum, test) => sum + test.price, 0);
-      const packagesTotal = laboratoryData.selectedPackages.reduce((sum, pkg) => sum + pkg.price, 0);
-      subtotal += testsTotal + packagesTotal;
+
+    if (lineDiscountType && lineDiscountValue !== undefined) {
+      pricing.applyLineDiscount(
+        selectedItemForModal.id,
+        lineDiscountType,
+        lineDiscountValue,
+        reason
+      );
     }
-    
-    if (radiologyData) {
-      const testsTotal = radiologyData.selectedTests.reduce((sum, test) => sum + test.price, 0);
-      subtotal += testsTotal;
+
+    // TODO: Store approver info
+    if (approver) {
+      // Add audit log entry
+      console.log('Approver:', approver);
     }
-    
-    if (ipdAdmissionData) {
-      subtotal += 4500;
-    }
-    
-    if (dcProcedureData) {
-      subtotal += 13500;
-    }
-    
-    const cgst = Math.round(subtotal * 0.09);
-    const sgst = Math.round(subtotal * 0.09);
-    return { subtotal, cgst, sgst, total: subtotal + cgst + sgst };
+
+    toast({
+      title: "Price updated",
+      description: `${selectedItemForModal.name} price has been updated successfully.`,
+    });
+  };
+
+  const handleApplyCoupon = () => {
+    const result = pricing.applyCoupon(pricing.couponCode);
+    toast({
+      title: result.success ? "Coupon applied" : "Invalid coupon",
+      description: result.message,
+      variant: result.success ? "default" : "destructive",
+    });
   };
 
   return (
@@ -329,12 +457,23 @@ const BookAppointment = () => {
 
                                 {laboratoryData.selectedTests.length > 0 && (
                                   <div className="space-y-2 pt-2">
-                                    {laboratoryData.selectedTests.map((test) => (
-                                      <div key={test.id} className="flex justify-between items-center">
-                                        <p className="text-foreground">{test.name}</p>
-                                        <p className="text-foreground font-semibold">₹{test.price}</p>
-                                      </div>
-                                    ))}
+                                    {laboratoryData.selectedTests.map((test) => {
+                                      const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
+                                      return (
+                                        <div key={test.id} className="flex justify-between items-center">
+                                          <p className="text-foreground text-xs">{test.name}</p>
+                                          {lineItem && (
+                                            <LineItemPriceEditor
+                                              item={lineItem}
+                                              onPriceUpdate={pricing.updateLineItemPrice}
+                                              onDiscountApply={pricing.applyLineDiscount}
+                                              onWaiveOff={pricing.waiveOffItem}
+                                              onOpenModal={() => handleOpenModal(lineItem)}
+                                            />
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
 
@@ -381,7 +520,18 @@ const BookAppointment = () => {
 
                                 <div className="flex justify-between items-center pt-3 border-t border-border">
                                   <p className="text-foreground">Consultation</p>
-                                  <p className="text-foreground font-semibold">₹1,000</p>
+                                  {(() => {
+                                    const lineItem = pricing.lineItems.find(li => li.id === 'consultation-1');
+                                    return lineItem ? (
+                                      <LineItemPriceEditor
+                                        item={lineItem}
+                                        onPriceUpdate={pricing.updateLineItemPrice}
+                                        onDiscountApply={pricing.applyLineDiscount}
+                                        onWaiveOff={pricing.waiveOffItem}
+                                        onOpenModal={() => handleOpenModal(lineItem)}
+                                      />
+                                    ) : <p className="text-foreground font-semibold">₹1,000</p>;
+                                  })()}
                                 </div>
                               </div>
                             </div>
@@ -411,12 +561,23 @@ const BookAppointment = () => {
 
                                 {radiologyData.selectedTests.length > 0 && (
                                   <div className="space-y-2 pt-2">
-                                    {radiologyData.selectedTests.map((test) => (
-                                      <div key={test.id} className="flex justify-between items-center">
-                                        <p className="text-foreground">{test.name}</p>
-                                        <p className="text-foreground font-semibold">₹{test.price}</p>
-                                      </div>
-                                    ))}
+                                    {radiologyData.selectedTests.map((test) => {
+                                      const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
+                                      return (
+                                        <div key={test.id} className="flex justify-between items-center">
+                                          <p className="text-foreground text-xs">{test.name}</p>
+                                          {lineItem && (
+                                            <LineItemPriceEditor
+                                              item={lineItem}
+                                              onPriceUpdate={pricing.updateLineItemPrice}
+                                              onDiscountApply={pricing.applyLineDiscount}
+                                              onWaiveOff={pricing.waiveOffItem}
+                                              onOpenModal={() => handleOpenModal(lineItem)}
+                                            />
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>
@@ -517,24 +678,63 @@ const BookAppointment = () => {
                         return null;
                       })}
 
-                      {/* Total Summary */}
+                      {/* Total Summary with Global Discount */}
                       <div className="pt-4 border-t border-border space-y-2 text-xs">
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">Subtotal</p>
-                          <p className="text-foreground">₹{calculateTotal().subtotal}</p>
+                          <p className="text-foreground">₹{formatCurrency(pricing.totals.subtotal)}</p>
+                        </div>
+                        
+                        {/* Global Discount if applied */}
+                        {pricing.globalDiscountValue > 0 && (
+                          <div className="flex justify-between text-green-600">
+                            <p>Global Discount ({pricing.globalDiscountType === 'percent' ? `${pricing.globalDiscountValue}%` : `₹${pricing.globalDiscountValue}`})</p>
+                            <p>-₹{formatCurrency(
+                              pricing.globalDiscountType === 'flat' 
+                                ? pricing.globalDiscountValue 
+                                : (pricing.totals.subtotal * pricing.globalDiscountValue / 100)
+                            )}</p>
+                          </div>
+                        )}
+                        
+                        <div className="flex justify-between">
+                          <p className="text-muted-foreground">Taxable Amount</p>
+                          <p className="text-foreground">₹{formatCurrency(pricing.totals.taxable)}</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">CGST (9%)</p>
-                          <p className="text-foreground">₹{calculateTotal().cgst}</p>
+                          <p className="text-foreground">₹{formatCurrency(pricing.totals.cgst)}</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">SGST (9%)</p>
-                          <p className="text-foreground">₹{calculateTotal().sgst}</p>
+                          <p className="text-foreground">₹{formatCurrency(pricing.totals.sgst)}</p>
                         </div>
+                        {Math.abs(pricing.totals.roundOff) > 0.01 && (
+                          <div className="flex justify-between">
+                            <p className="text-muted-foreground">Round-off</p>
+                            <p className="text-foreground">{pricing.totals.roundOff >= 0 ? '+' : ''}₹{formatCurrency(pricing.totals.roundOff)}</p>
+                          </div>
+                        )}
                         <div className="flex justify-between pt-3 border-t border-border">
                           <p className="text-foreground font-semibold">Net Payable</p>
-                          <p className="text-foreground font-bold">₹{calculateTotal().total}</p>
+                          <p className="text-foreground font-bold">₹{formatCurrency(pricing.totals.netPayable)}</p>
                         </div>
+                      </div>
+                      
+                      {/* Global Discount Controls */}
+                      <div className="pt-4">
+                        <GlobalDiscountControls
+                          discountType={pricing.globalDiscountType}
+                          discountValue={pricing.globalDiscountValue}
+                          applyPretax={pricing.applyGlobalDiscountPretax}
+                          couponCode={pricing.couponCode}
+                          onDiscountTypeChange={pricing.setGlobalDiscountType}
+                          onDiscountValueChange={pricing.setGlobalDiscountValue}
+                          onApplyPretaxChange={pricing.setApplyGlobalDiscountPretax}
+                          onCouponCodeChange={pricing.setCouponCode}
+                          onApplyCoupon={handleApplyCoupon}
+                          maxValue={pricing.totals.subtotal}
+                        />
                       </div>
                     </>
                   )}
@@ -550,27 +750,14 @@ const BookAppointment = () => {
                     <Button 
                       className="bg-primary hover:bg-primary/90"
                       onClick={() => {
-                        const { subtotal, cgst, sgst, total } = calculateTotal();
-                        let items: { name: string; price: number }[] = [];
+                        const { subtotal, cgst, sgst, netPayable } = pricing.totals;
                         
-                        if (consultationData) {
-                          items.push({ name: "Consultation", price: 1000 });
-                        }
-                        if (laboratoryData) {
-                          items.push(
-                            ...laboratoryData.selectedTests.map(test => ({ name: test.name, price: test.price })),
-                            ...laboratoryData.selectedPackages.map(pkg => ({ name: pkg.name, price: pkg.price }))
-                          );
-                        }
-                        if (radiologyData) {
-                          items.push(...radiologyData.selectedTests.map(test => ({ name: test.name, price: test.price })));
-                        }
-                        if (ipdAdmissionData) {
-                          items.push({ name: "IPD Admission", price: 5000 });
-                        }
-                        if (dcProcedureData) {
-                          items.push({ name: dcProcedureData.procedure, price: 15000 });
-                        }
+                        // Build items list from line items with final prices
+                        const items = pricing.lineItems.map(item => ({
+                          name: item.name,
+                          basePrice: item.basePrice,
+                          finalPrice: item.overridePrice ?? item.basePrice,
+                        }));
                         
                         navigate("/payment", {
                           state: {
@@ -579,7 +766,11 @@ const BookAppointment = () => {
                             subtotal,
                             cgst,
                             sgst,
-                            total,
+                            total: netPayable,
+                            globalDiscount: pricing.globalDiscountValue > 0 ? {
+                              type: pricing.globalDiscountType,
+                              value: pricing.globalDiscountValue,
+                            } : undefined,
                             date: "05/08/2025",
                             fromPatientInsights,
                             patientId
@@ -594,6 +785,52 @@ const BookAppointment = () => {
               </Card>
             </div>
           </div>
+          
+          {/* Sticky Footer Bar */}
+          <StickyFooterBar
+            totals={pricing.totals}
+            itemCount={pricing.lineItems.length}
+            onGenerateInvoice={() => {
+              const { subtotal, cgst, sgst, netPayable } = pricing.totals;
+              const items = pricing.lineItems.map(item => ({
+                name: item.name,
+                basePrice: item.basePrice,
+                finalPrice: item.overridePrice ?? item.basePrice,
+              }));
+              
+              navigate("/payment", {
+                state: {
+                  appointmentType: selectedTypes.join(", "),
+                  items,
+                  subtotal,
+                  cgst,
+                  sgst,
+                  total: netPayable,
+                  globalDiscount: pricing.globalDiscountValue > 0 ? {
+                    type: pricing.globalDiscountType,
+                    value: pricing.globalDiscountValue,
+                  } : undefined,
+                  date: "05/08/2025",
+                  fromPatientInsights,
+                  patientId
+                }
+              });
+            }}
+          />
+          
+          {/* Adjust Price Modal */}
+          {selectedItemForModal && (
+            <AdjustPriceModal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              item={selectedItemForModal}
+              onApply={handleApplyModalChanges}
+              policy={{
+                floorPrice: selectedItemForModal.floorPrice,
+                discountThresholdPercent: pricing.policy.discountThresholdPercent,
+              }}
+            />
+          )}
         </main>
       </div>
     </div>
