@@ -782,11 +782,21 @@ const BookAppointment = () => {
             itemCount={pricing.lineItems.length}
             onGenerateInvoice={() => {
               const { subtotal, cgst, sgst, netPayable } = pricing.totals;
-              const items = pricing.lineItems.map(item => ({
-                name: item.name,
-                basePrice: item.basePrice,
-                finalPrice: item.overridePrice ?? item.basePrice,
-              }));
+              const items = pricing.lineItems.map(item => {
+                let price = item.overridePrice ?? item.basePrice;
+                
+                // Apply line discount if present
+                if (item.lineDiscountAmount) {
+                  price = price - item.lineDiscountAmount;
+                } else if (item.lineDiscountPercent) {
+                  price = price - (price * item.lineDiscountPercent / 100);
+                }
+                
+                return {
+                  name: item.name,
+                  price: price,
+                };
+              });
               
               navigate("/payment", {
                 state: {
@@ -796,11 +806,7 @@ const BookAppointment = () => {
                   cgst,
                   sgst,
                   total: netPayable,
-                  globalDiscount: pricing.globalDiscountValue > 0 ? {
-                    type: pricing.globalDiscountType,
-                    value: pricing.globalDiscountValue,
-                  } : undefined,
-                  date: "05/08/2025",
+                  date: format(new Date(), "dd/MM/yyyy"),
                   fromPatientInsights,
                   patientId
                 }
