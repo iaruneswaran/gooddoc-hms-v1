@@ -39,7 +39,7 @@ export function GlobalDiscountControls({
   }
 
   return (
-    <div className="space-y-4 p-4 bg-muted/30 rounded-md border border-border">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
         <Label className="text-sm font-semibold">Global Discount</Label>
       </div>

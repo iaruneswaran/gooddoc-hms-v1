@@ -174,41 +174,6 @@ export function LineItemPriceEditor({
           {item.approval.status === 'pending' ? 'Requires approval' : `Approved by ${item.approval.approver}`}
         </Badge>
       )}
-
-      {flags.priceEdit_quickActions && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost" className="h-6 w-6">
-              <MoreVertical className="h-3 w-3" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onDiscountApply(item.id, 'percent', 10)}>
-              <Tag className="mr-2 h-4 w-4" />
-              Apply discount
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onOpenModal}>
-              <DollarSign className="mr-2 h-4 w-4" />
-              Set custom price
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onWaiveOff(item.id, 'Waived by staff')}>
-              <Ban className="mr-2 h-4 w-4" />
-              Waive off
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-
-      {flags.priceEdit_modal && (
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-6 text-xs text-primary hover:text-primary/80"
-          onClick={onOpenModal}
-        >
-          Edit price
-        </Button>
-      )}
     </div>
   );
 }
