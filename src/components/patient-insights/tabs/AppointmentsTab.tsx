@@ -53,11 +53,6 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
                   <p className="text-sm text-muted-foreground">
                     Date & Time: {item.datetime}
                   </p>
-                  {item.doctor && (
-                    <p className="text-sm text-muted-foreground">
-                      Doctor: {item.doctor}
-                    </p>
-                  )}
                 </div>
                 <ChevronDown
                   className={`h-5 w-5 text-muted-foreground transition-transform ${
@@ -147,6 +142,13 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
                       <div>
                         <p className="text-xs text-muted-foreground mb-0.5">Department:</p>
                         <p className="text-sm text-foreground">{item.department}</p>
+                      </div>
+                    )}
+                    
+                    {item.doctor && (
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-0.5">Doctor:</p>
+                        <p className="text-sm text-foreground">{item.doctor}</p>
                       </div>
                     )}
                   </div>
