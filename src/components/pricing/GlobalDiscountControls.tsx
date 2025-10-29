@@ -44,7 +44,7 @@ export function GlobalDiscountControls({
         <Label className="text-sm font-semibold">Global Discount</Label>
       </div>
 
-      {/* Discount Input */}
+      {/* Discount Input with Apply Button */}
       <div className="flex gap-2">
         <Input
           type="number"
@@ -53,23 +53,9 @@ export function GlobalDiscountControls({
           placeholder="0"
           className="flex-1"
           min="0"
-          max={discountType === 'percent' ? 100 : maxValue}
         />
-        <Button
-          variant={discountType === 'flat' ? 'default' : 'outline'}
-          onClick={() => onDiscountTypeChange('flat')}
-          className="w-16"
-          size="sm"
-        >
-          <DollarSign className="h-4 w-4" />
-        </Button>
-        <Button
-          variant={discountType === 'percent' ? 'default' : 'outline'}
-          onClick={() => onDiscountTypeChange('percent')}
-          className="w-16"
-          size="sm"
-        >
-          <Percent className="h-4 w-4" />
+        <Button size="sm" variant="outline" onClick={onApplyCoupon}>
+          Apply
         </Button>
       </div>
 
@@ -86,25 +72,6 @@ export function GlobalDiscountControls({
           />
         </div>
       )}
-
-      {/* Coupon Code */}
-      <div className="space-y-2">
-        <Label htmlFor="coupon-code" className="text-xs text-muted-foreground">
-          Coupon code (optional)
-        </Label>
-        <div className="flex gap-2">
-          <Input
-            id="coupon-code"
-            value={couponCode}
-            onChange={(e) => onCouponCodeChange(e.target.value)}
-            placeholder="Enter coupon code"
-            className="flex-1"
-          />
-          <Button size="sm" variant="outline" onClick={onApplyCoupon}>
-            Apply
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
