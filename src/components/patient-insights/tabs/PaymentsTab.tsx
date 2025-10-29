@@ -6,10 +6,12 @@ interface PaymentsTabProps {
   selectedVisit: Visit | null;
 }
 
-const mockTransactions = [
+// Mock transactions - filter by visit ID
+const allTransactions = [
   {
     id: "INV-2025-001",
-    date: "15 Jun 2025",
+    date: "05 Aug 2025",
+    visitId: "VST-102345",
     type: "Bill Payment",
     service: "Consultation",
     method: "Card",
@@ -18,7 +20,8 @@ const mockTransactions = [
   },
   {
     id: "INV-2025-002",
-    date: "20 May 2025",
+    date: "05 Aug 2025",
+    visitId: "VST-102346",
     type: "Bill Payment",
     service: "Laboratory",
     method: "UPI",
@@ -27,12 +30,33 @@ const mockTransactions = [
   },
   {
     id: "INV-2025-003",
-    date: "10 Apr 2025",
+    date: "05 Aug 2025",
+    visitId: "VST-102912",
     type: "Bill Payment",
-    service: "Imaging",
+    service: "Radiology",
     method: "Cash",
     payer: "Harish Kalyan",
     amount: "1,200",
+  },
+  {
+    id: "INV-2025-004",
+    date: "07 Aug 2025",
+    visitId: "IPD-205431",
+    type: "Bill Payment",
+    service: "IPD Admission",
+    method: "Card",
+    payer: "Harish Kalyan",
+    amount: "5,800",
+  },
+  {
+    id: "INV-2025-005",
+    date: "07 Aug 2025",
+    visitId: "DC-308972",
+    type: "Bill Payment",
+    service: "Day-Care",
+    method: "Insurance",
+    payer: "Harish Kalyan",
+    amount: "12,500",
   },
 ];
 
@@ -47,11 +71,26 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
     );
   }
 
+  // Filter transactions for selected visit
+  const visitTransactions = allTransactions.filter(
+    (transaction) => transaction.visitId === selectedVisit.visitId
+  );
+
+  if (visitTransactions.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          No payment transactions found for this visit.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
+        <h2 className="text-lg font-semibold text-primary">Visit Transactions</h2>
         <Button variant="outline" size="sm" className="gap-2">
           <Download className="h-4 w-4" />
           Download statement
@@ -74,7 +113,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
             </tr>
           </thead>
           <tbody className="bg-background">
-            {mockTransactions.map((transaction) => (
+            {visitTransactions.map((transaction) => (
               <tr key={transaction.id} className="border-t">
                 <td className="p-4 text-sm">{transaction.id}</td>
                 <td className="p-4 text-sm">{transaction.date}</td>

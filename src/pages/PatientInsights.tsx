@@ -119,7 +119,7 @@ const PatientInsights = () => {
       visitId: "IPD-205431",
       datetime: new Date(2025, 7, 7, 11, 0), // Aug 07, 2025, 11:00 AM
       type: "IPD Admission",
-      status: "Completed",
+      status: "Active",
       location: "Inpatient Wing A",
       doctor: "Dr. Karthik Reddy – General Medicine",
       items: [
@@ -165,14 +165,14 @@ const PatientInsights = () => {
   const selectedVisit = sortedVisits.find((v) => v.id === selectedVisitId) || null;
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px] flex flex-col">
+      <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
         <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Patient Insights"]} />
         
-        {/* Sticky Header with Patient Info and Actions */}
-        <div className="sticky top-16 z-20 bg-background border-b border-border">
+        {/* Fixed Header with Patient Info and Actions */}
+        <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-8 py-4">
             {/* Back Button */}
             <button
@@ -185,21 +185,15 @@ const PatientInsights = () => {
 
             {/* Header Content */}
             <div className="flex items-center justify-between gap-6">
-              {/* Left: Patient Chip */}
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-                onClick={() => setIsProfileOpen(true)}
-              />
-
-              {/* Right: KPIs and Actions */}
-              <div className="flex items-center gap-4">
-                <div className="flex gap-3">
-                  <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
-                  <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
-                </div>
+              {/* Left: Patient Chip and Buttons */}
+              <div className="flex items-center gap-3">
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                  onClick={() => setIsProfileOpen(true)}
+                />
                 
                 <div className="flex gap-2">
                   <Button 
@@ -227,14 +221,20 @@ const PatientInsights = () => {
                   </Button>
                 </div>
               </div>
+
+              {/* Right: KPIs */}
+              <div className="flex gap-3">
+                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
+                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Two-Pane Layout */}
-        <main className="flex-1 flex overflow-hidden">
+        {/* Two-Pane Layout with Independent Scrolling */}
+        <main className="flex-1 flex overflow-hidden min-h-0">
           {/* Left: Visits List (32% width) */}
-          <div className="w-[32%] border-r border-border overflow-hidden">
+          <div className="w-[32%] border-r border-border flex flex-col overflow-hidden">
             <VisitsList
               visits={sortedVisits}
               selectedVisitId={selectedVisitId}
@@ -243,7 +243,7 @@ const PatientInsights = () => {
           </div>
 
           {/* Right: Details Tabs (68% width) */}
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden">
             <VisitDetailsTabs
               selectedVisit={selectedVisit}
               activeTab={activeTab}

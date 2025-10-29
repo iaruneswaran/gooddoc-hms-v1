@@ -5,11 +5,12 @@ interface DocumentsTabProps {
   selectedVisit: Visit | null;
 }
 
-const mockDocuments = [
+const allDocuments = [
   {
     id: "1",
     name: "Prescription",
-    date: "Jun 15, 2025",
+    date: "05 Aug 2025",
+    visitId: "VST-102345",
     service: "Consultation",
     source: "Hospital",
     size: "239.3 KB",
@@ -17,7 +18,8 @@ const mockDocuments = [
   {
     id: "2",
     name: "Lab Report",
-    date: "May 20, 2025",
+    date: "05 Aug 2025",
+    visitId: "VST-102346",
     service: "Laboratory",
     source: "Lab",
     size: "512.8 KB",
@@ -25,10 +27,38 @@ const mockDocuments = [
   {
     id: "3",
     name: "X-Ray Report",
-    date: "Apr 10, 2025",
-    service: "Imaging",
+    date: "05 Aug 2025",
+    visitId: "VST-102912",
+    service: "Radiology",
     source: "Radiology",
     size: "1.2 MB",
+  },
+  {
+    id: "4",
+    name: "Admission Form",
+    date: "07 Aug 2025",
+    visitId: "IPD-205431",
+    service: "IPD",
+    source: "Hospital",
+    size: "185.4 KB",
+  },
+  {
+    id: "5",
+    name: "Discharge Summary",
+    date: "07 Aug 2025",
+    visitId: "IPD-205431",
+    service: "IPD",
+    source: "Hospital",
+    size: "412.7 KB",
+  },
+  {
+    id: "6",
+    name: "Chemotherapy Protocol",
+    date: "07 Aug 2025",
+    visitId: "DC-308972",
+    service: "Day-Care",
+    source: "Hospital",
+    size: "328.5 KB",
   },
 ];
 
@@ -43,11 +73,26 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
     );
   }
 
+  // Filter documents for selected visit
+  const visitDocuments = allDocuments.filter(
+    (doc) => doc.visitId === selectedVisit.visitId
+  );
+
+  if (visitDocuments.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          No documents found for this visit.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-primary">Patient Documents</h2>
+        <h2 className="text-lg font-semibold text-primary">Visit Documents</h2>
       </div>
 
       {/* Table */}
@@ -64,7 +109,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
             </tr>
           </thead>
           <tbody className="bg-background">
-            {mockDocuments.map((doc) => (
+            {visitDocuments.map((doc) => (
               <tr key={doc.id} className="border-t">
                 <td className="p-4 text-sm">
                   <div className="flex items-center gap-2">

@@ -20,9 +20,10 @@ interface VisitListItemProps {
 
 export function VisitListItem({ visit, isSelected, onClick }: VisitListItemProps) {
   const statusColors: Record<string, string> = {
-    Completed: "bg-green-100 text-green-800",
-    Scheduled: "bg-blue-100 text-blue-800",
-    "In Progress": "bg-yellow-100 text-yellow-800",
+    Active: "bg-green-100 text-green-800",
+    Completed: "bg-blue-100 text-blue-800",
+    Scheduled: "bg-yellow-100 text-yellow-800",
+    "In Progress": "bg-orange-100 text-orange-800",
     Cancelled: "bg-red-100 text-red-800",
   };
 
