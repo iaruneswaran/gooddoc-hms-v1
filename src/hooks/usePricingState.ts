@@ -13,7 +13,7 @@ const DEFAULT_POLICY: PricingPolicy = {
 
 export function usePricingState(initialItems: LineItem[] = []) {
   const [lineItems, setLineItems] = useState<LineItem[]>(initialItems);
-  const [globalDiscountType, setGlobalDiscountType] = useState<DiscountType>('percent');
+  const [globalDiscountType, setGlobalDiscountType] = useState<DiscountType>('flat');
   const [globalDiscountValue, setGlobalDiscountValue] = useState<number>(0);
   const [applyGlobalDiscountPretax, setApplyGlobalDiscountPretax] = useState(true);
   const [couponCode, setCouponCode] = useState('');

@@ -721,12 +721,8 @@ const BookAppointment = () => {
                         {/* Global Discount if applied */}
                         {pricing.globalDiscountValue > 0 && (
                           <div className="flex justify-between text-green-600">
-                            <p>Global Discount ({pricing.globalDiscountType === 'percent' ? `${pricing.globalDiscountValue}%` : `₹${pricing.globalDiscountValue}`})</p>
-                            <p>-₹{formatCurrency(
-                              pricing.globalDiscountType === 'flat' 
-                                ? pricing.globalDiscountValue 
-                                : (pricing.totals.subtotal * pricing.globalDiscountValue / 100)
-                            )}</p>
+                            <p>Global Discount (₹{formatCurrency(pricing.globalDiscountValue)})</p>
+                            <p>-₹{formatCurrency(pricing.globalDiscountValue)}</p>
                           </div>
                         )}
                         
