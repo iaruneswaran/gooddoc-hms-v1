@@ -350,7 +350,7 @@ const BookAppointment = () => {
                       )}
                       onClick={() => handleTypeClick(type.value)}
                     >
-                      <Icon className={cn("w-4 h-4", isSelected ? "text-primary-foreground" : "text-primary")} />
+                      <Icon className={cn("w-4 h-4", isSelected ? "text-primary-foreground" : "text-foreground")} />
                       <span className="text-sm">{type.label}</span>
                     </Button>
                   );
