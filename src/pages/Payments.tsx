@@ -548,7 +548,7 @@ const Payments = () => {
                   <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
                   <div className="flex items-center gap-3">
                     <Select defaultValue="all">
-                      <SelectTrigger className="w-[150px]">
+                      <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="All Status" />
                       </SelectTrigger>
                       <SelectContent>
