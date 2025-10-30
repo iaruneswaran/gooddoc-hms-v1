@@ -124,7 +124,7 @@ const Payments = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Payments"]} />
         
-        <main className="p-8">
+        <main className="p-6">
           {/* Back Button */}
             <button
               onClick={() => navigate(`/patient-insights/${patientId}`)}

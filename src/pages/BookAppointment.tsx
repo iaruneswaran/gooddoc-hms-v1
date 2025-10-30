@@ -320,7 +320,7 @@ const BookAppointment = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Appointments", "Appointment"]} />
         
-        <main className="p-8 pb-32">
+        <main className="p-6 pb-32">
           <button
             onClick={() => navigate(fromPatientInsights ? `/patient-insights/${patientId}` : "/registration")}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"

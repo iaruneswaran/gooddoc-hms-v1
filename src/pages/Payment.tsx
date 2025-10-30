@@ -90,7 +90,7 @@ const Payment = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Appointments", "Payment"]} />
         
-        <main className="p-8">
+        <main className="p-6">
           <button
             onClick={() => navigate("/book-appointment", { 
               state: { fromPatientInsights, patientId } 
