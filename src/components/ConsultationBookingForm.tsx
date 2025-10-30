@@ -3,6 +3,7 @@ import { X, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -121,28 +122,12 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
             <label className="text-sm font-medium text-foreground block mb-3">
               Mode of Consultation
             </label>
-            <div className="flex gap-2">
-              <Button
-                variant={mode === "in-person" ? "default" : "outline"}
-                className={cn(
-                  "flex-1",
-                  mode === "in-person" && "bg-primary text-primary-foreground"
-                )}
-                onClick={() => handleChange("mode", "in-person")}
-              >
-                In-Person
-              </Button>
-              <Button
-                variant={mode === "telehealth" ? "default" : "outline"}
-                className={cn(
-                  "flex-1",
-                  mode === "telehealth" && "bg-primary text-primary-foreground"
-                )}
-                onClick={() => handleChange("mode", "telehealth")}
-              >
-                Telehealth
-              </Button>
-            </div>
+            <Tabs value={mode} onValueChange={(v) => handleChange("mode", v as any)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="in-person">In-Person</TabsTrigger>
+                <TabsTrigger value="telehealth">Telehealth</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
           <div>
