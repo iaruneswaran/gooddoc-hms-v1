@@ -455,7 +455,7 @@ const BookAppointment = () => {
                                 <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
                                 <button
                                   onClick={handleRemoveLaboratory}
-                                  className="text-xs text-primary hover:text-primary/80"
+                                  className="text-xs text-primary"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
@@ -524,7 +524,7 @@ const BookAppointment = () => {
                                 <p className="text-sm font-medium text-foreground mb-1">Consultation</p>
                                 <button
                                   onClick={handleRemoveConsultation}
-                                  className="text-xs text-primary hover:text-primary/80"
+                                  className="text-xs text-primary"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
@@ -570,7 +570,7 @@ const BookAppointment = () => {
                                 <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
                                 <button
                                   onClick={handleRemoveRadiology}
-                                  className="text-xs text-primary hover:text-primary/80"
+                                  className="text-xs text-primary"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
@@ -617,7 +617,7 @@ const BookAppointment = () => {
                                 <p className="text-sm font-medium text-foreground mb-1">IPD Admission</p>
                                 <button
                                   onClick={handleRemoveIPDAdmission}
-                                  className="text-xs text-primary hover:text-primary/80"
+                                  className="text-xs text-primary"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
@@ -673,7 +673,7 @@ const BookAppointment = () => {
                                 <p className="text-sm font-medium text-foreground mb-1">Day-Care Procedure</p>
                                 <button
                                   onClick={handleRemoveDCProcedure}
-                                  className="text-xs text-primary hover:text-primary/80"
+                                  className="text-xs text-primary"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
