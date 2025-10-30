@@ -89,8 +89,9 @@ const Payment = () => {
             <h2 className="text-lg font-semibold text-primary mb-6">Payment</h2>
             
             <div className="flex flex-col lg:flex-row gap-6">
-              {/* Invoice Summary */}
-              <Card className="flex-1 p-6">
+              <div className="flex-1 space-y-4">
+                {/* Invoice Summary */}
+                <Card className="p-6">
                 <h3 className="text-base font-semibold text-foreground mb-6">Invoice Summary</h3>
                 
                 <div className="space-y-6">
@@ -144,19 +145,21 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-4 pt-4">
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Download className="w-4 h-4" />
-                      Download
-                    </Button>
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Printer className="w-4 h-4" />
-                      Print Invoice
-                    </Button>
-                  </div>
                 </div>
               </Card>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Download className="w-4 h-4" />
+                  Download
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Printer className="w-4 h-4" />
+                  Print Invoice
+                </Button>
+              </div>
+            </div>
 
               {/* Collect Payment */}
               <Card className="w-full lg:w-[420px] p-6 h-fit self-start">
