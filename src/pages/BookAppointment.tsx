@@ -23,7 +23,7 @@ import { format } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
 const appointmentTypes = [
-  { icon: Calendar, label: "Consultation", value: "consultation" },
+  { icon: Calendar, label: "OP Consultation", value: "consultation" },
   { icon: FlaskConical, label: "Laboratory", value: "laboratory" },
   { icon: Scan, label: "Radiology", value: "radiology" },
   { icon: Bed, label: "IP Admission", value: "ipd" },
