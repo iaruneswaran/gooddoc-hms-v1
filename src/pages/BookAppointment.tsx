@@ -151,9 +151,15 @@ const BookAppointment = () => {
   }, [consultationData, laboratoryData, radiologyData, ipdAdmissionData, dcProcedureData]);
 
   const handleTypeClick = (type: string) => {
-    // Toggle the type - add if not present, keep others
+    // Toggle the type - add if not present, remove if already selected
     if (selectedTypes.includes(type)) {
-      return; // Already selected, do nothing
+      // Deselect: call the appropriate remove handler
+      if (type === "consultation") handleRemoveConsultation();
+      else if (type === "laboratory") handleRemoveLaboratory();
+      else if (type === "radiology") handleRemoveRadiology();
+      else if (type === "ipd") handleRemoveIPDAdmission();
+      else if (type === "dc") handleRemoveDCProcedure();
+      return;
     }
     
     setSelectedTypes(prev => [...prev, type]);
