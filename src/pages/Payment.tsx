@@ -228,14 +228,14 @@ const Payment = () => {
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-primary">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
                             ₹
                           </span>
                           <input
                             type="text"
                             value={payableAmount.toLocaleString()}
                             readOnly
-                            className="w-full h-10 pl-8 pr-4 text-lg font-bold text-primary bg-background border border-input rounded-md"
+                            className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
                           />
                         </div>
                       </div>
