@@ -174,7 +174,7 @@ const PatientInsights = () => {
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-8 py-4">
+          <div className="px-8 py-6">
             {/* Back Button */}
             <button
               onClick={() => navigate("/")}
