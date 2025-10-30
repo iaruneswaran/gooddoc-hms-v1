@@ -51,6 +51,14 @@ export function LineItemPriceEditor({
     setReason('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      handleCancel();
+    }
+  };
+
   const handleCancel = () => {
     setEditState({ ...editState, isEditing: false });
     setTempValue('');
@@ -75,42 +83,12 @@ export function LineItemPriceEditor({
           type="number"
           value={tempValue}
           onChange={(e) => setTempValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleSave}
           className="w-32 h-8 text-sm"
           placeholder="Enter price"
           autoFocus
         />
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleSave}>
-                <Save className="h-4 w-4 text-green-600" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Save</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleCancel}>
-                <X className="h-4 w-4 text-red-600" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Cancel</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        {isOverridden && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleReset}>
-                  <RotateCcw className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Reset to default</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
       </div>
     );
   }
