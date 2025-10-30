@@ -159,7 +159,7 @@ const Payment = () => {
               </Card>
 
               {/* Collect Payment */}
-              <Card className="w-full lg:w-[420px] p-6 h-fit">
+              <Card className="w-full lg:w-[420px] p-6 h-fit self-start">
                 <h3 className="text-base font-semibold text-foreground mb-5">Collect Payment</h3>
                 
                 <div className="space-y-5">
