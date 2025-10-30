@@ -107,12 +107,14 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">Consultation</h3>
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onRemove}
-          className="text-sm text-primary hover:text-primary/80 font-medium"
+          className="text-primary"
         >
           Remove
-        </button>
+        </Button>
       </div>
 
       {/* Mode of Consultation */}
