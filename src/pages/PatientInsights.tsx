@@ -170,7 +170,7 @@ const PatientInsights = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
-        <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Patient Insights"]} />
+        <AppHeader breadcrumbs={["Patient Insights"]} />
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">

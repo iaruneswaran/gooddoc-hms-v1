@@ -88,7 +88,7 @@ const Payment = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Payment"]} />
+        <AppHeader breadcrumbs={["Payment"]} />
         
         <main className="p-8">
           <button
