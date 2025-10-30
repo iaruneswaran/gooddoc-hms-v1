@@ -109,7 +109,7 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
         <h3 className="text-lg font-semibold text-foreground">Consultation</h3>
         <button
           onClick={onRemove}
-          className="text-sm text-primary font-medium"
+          className="text-sm text-primary hover:text-primary/80 font-medium"
         >
           Remove
         </button>
