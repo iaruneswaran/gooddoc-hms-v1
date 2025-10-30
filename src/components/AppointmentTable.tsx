@@ -3,6 +3,16 @@ import { User, Phone, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TokenGenerationCard } from "./TokenGenerationCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Appointment {
   id: string;
@@ -327,11 +337,22 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
   const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
   const [tokenGeneratedIds, setTokenGeneratedIds] = useState<Set<string>>(new Set());
   const [activeTokenCard, setActiveTokenCard] = useState<string | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [pendingAppointmentId, setPendingAppointmentId] = useState<string | null>(null);
   const appointments = allAppointments.filter(apt => apt.category === category);
   
-  const handleCheckIn = (appointmentId: string) => {
-    setCheckedInIds(prev => new Set(prev).add(appointmentId));
-    setActiveTokenCard(appointmentId);
+  const handleCheckInClick = (appointmentId: string) => {
+    setPendingAppointmentId(appointmentId);
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmCheckIn = () => {
+    if (pendingAppointmentId) {
+      setCheckedInIds(prev => new Set(prev).add(pendingAppointmentId));
+      setActiveTokenCard(pendingAppointmentId);
+      setPendingAppointmentId(null);
+    }
+    setConfirmDialogOpen(false);
   };
 
   const handleTokenGenerationComplete = (appointmentId: string) => {
@@ -405,7 +426,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
 
             <div>
               <Button
-                onClick={() => handleCheckIn(appointment.id)}
+                onClick={() => handleCheckInClick(appointment.id)}
                 variant={checkedInIds.has(appointment.id) ? "default" : "outline"}
                 size="sm"
                 disabled={checkedInIds.has(appointment.id)}
@@ -432,6 +453,44 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
           />
         ) : null;
       })()}
+
+      <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl">Confirm to Generate Token</AlertDialogTitle>
+          </AlertDialogHeader>
+          
+          {pendingAppointmentId && (() => {
+            const appointment = appointments.find(apt => apt.id === pendingAppointmentId);
+            return appointment ? (
+              <div className="space-y-4 py-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary mb-2">Pending</div>
+                  <div className="text-xl text-foreground">{appointment.patient.name}</div>
+                </div>
+                
+                <div className="space-y-3 pt-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Specialty:</span>
+                    <span className="text-foreground font-medium">{appointment.doctor} – {appointment.specialty}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Time:</span>
+                    <span className="text-foreground font-medium">{appointment.time}</span>
+                  </div>
+                </div>
+              </div>
+            ) : null;
+          })()}
+          
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmCheckIn} className="bg-primary text-primary-foreground hover:bg-primary/90">
+              Please Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
