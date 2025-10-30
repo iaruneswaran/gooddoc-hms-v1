@@ -145,41 +145,49 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       </div>
 
       <div className="space-y-6">
-        {/* Mode of Sample Collection */}
-        <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">
-            Mode of Sample Collection
-          </label>
-          <div className="flex gap-3">
-            <Button
-              type="button"
-              variant={mode === "in-clinic" ? "default" : "outline"}
-              className="flex-1"
-              onClick={() => handleModeChange("in-clinic")}
-            >
-              In-Clinic
-            </Button>
-            <Button
-              type="button"
-              variant={mode === "home-collection" ? "default" : "outline"}
-              className="flex-1"
-              onClick={() => handleModeChange("home-collection")}
-            >
-              Home Collection
-            </Button>
+        {/* Mode of Sample Collection and Lab Tests */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Mode of Sample Collection
+            </label>
+            <div className="flex flex-col gap-3">
+              <Button
+                type="button"
+                variant={mode === "in-clinic" ? "default" : "outline"}
+                className="w-full"
+                onClick={() => handleModeChange("in-clinic")}
+              >
+                In-Clinic
+              </Button>
+              <Button
+                type="button"
+                variant={mode === "home-collection" ? "default" : "outline"}
+                className="w-full"
+                onClick={() => handleModeChange("home-collection")}
+              >
+                Home Collection
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Lab Tests
+            </label>
+            <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
+                <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
         </div>
 
-        {/* Lab Tests */}
+        {/* Lab Tests Content */}
         <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">Lab Tests</label>
           <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-              <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="health-packages" className="space-y-3">
+            <TabsContent value="health-packages" className="space-y-3 mt-0">
               {healthPackages.map((pkg) => {
                 const isSelected = selectedPackages.some(p => p.id === pkg.id);
                 return (
