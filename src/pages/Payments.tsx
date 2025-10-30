@@ -23,8 +23,9 @@ const Payments = () => {
   const navigate = useNavigate();
   const [selectedInvoices, setSelectedInvoices] = useState<string[]>(["INV-2025-001"]);
   const [useAdvance, setUseAdvance] = useState(false);
-  const [paymentAmount, setPaymentAmount] = useState("0.00");
-  const [paymentMethod, setPaymentMethod] = useState("Cash");
+  const [paymentRows, setPaymentRows] = useState([
+    { id: 1, amount: "0.00", method: "Cash" }
+  ]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
   const [actionType, setActionType] = useState<"payment" | "advance" | "refund">("payment");
@@ -115,6 +116,23 @@ const Payments = () => {
     setActionType("refund");
     setShowSuccess(true);
     setPrintingStatus("printing");
+  };
+
+  const addPaymentRow = () => {
+    const newId = Math.max(...paymentRows.map(row => row.id)) + 1;
+    setPaymentRows([...paymentRows, { id: newId, amount: "0.00", method: "Cash" }]);
+  };
+
+  const removePaymentRow = (id: number) => {
+    if (paymentRows.length > 1) {
+      setPaymentRows(paymentRows.filter(row => row.id !== id));
+    }
+  };
+
+  const updatePaymentRow = (id: number, field: "amount" | "method", value: string) => {
+    setPaymentRows(paymentRows.map(row => 
+      row.id === id ? { ...row, [field]: value } : row
+    ));
   };
 
   return (
@@ -305,25 +323,49 @@ const Payments = () => {
                     <Input defaultValue="Fredrick John" className="mb-4" />
 
                     <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                    <div className="flex gap-2 mb-4">
-                      <Input
-                        type="text"
-                        value={`₹${paymentAmount}`}
-                        onChange={(e) => setPaymentAmount(e.target.value.replace('₹', ''))}
-                        className="flex-1"
-                      />
-                      <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                        <SelectTrigger className="w-[120px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Cash">Cash</SelectItem>
-                          <SelectItem value="Card">Card</SelectItem>
-                          <SelectItem value="UPI">UPI</SelectItem>
-                        </SelectContent>
-                      </Select>
+                    <div className="space-y-2 mb-3">
+                      {paymentRows.map((row) => (
+                        <div key={row.id} className="flex gap-2 items-center">
+                          <div className="relative flex-1">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
+                            <Input
+                              type="text"
+                              value={row.amount}
+                              onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                              className="pl-7"
+                            />
+                          </div>
+                          <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
+                            <SelectTrigger className="w-[120px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Cash">Cash</SelectItem>
+                              <SelectItem value="Card">Card</SelectItem>
+                              <SelectItem value="UPI">UPI</SelectItem>
+                              <SelectItem value="Collection">Collection</SelectItem>
+                              <SelectItem value="Advance">Advance</SelectItem>
+                              <SelectItem value="Refunds">Refunds</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <button
+                            onClick={() => removePaymentRow(row.id)}
+                            className="text-destructive hover:text-destructive/80 p-2"
+                            disabled={paymentRows.length === 1}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                    <Button variant="link" size="sm" className="text-primary p-0 h-auto mb-4">
+                    <Button 
+                      variant="link" 
+                      size="sm" 
+                      className="text-primary p-0 h-auto mb-4"
+                      onClick={addPaymentRow}
+                    >
                       Add Payment
                     </Button>
 
@@ -408,25 +450,49 @@ const Payments = () => {
                   <Input defaultValue="Admission" className="mb-4" />
 
                   <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                  <div className="flex gap-2 mb-4">
-                    <Input
-                      type="text"
-                      value={`₹${paymentAmount}`}
-                      onChange={(e) => setPaymentAmount(e.target.value.replace('₹', ''))}
-                      className="flex-1"
-                    />
-                    <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Cash">Cash</SelectItem>
-                        <SelectItem value="Card">Card</SelectItem>
-                        <SelectItem value="UPI">UPI</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="space-y-2 mb-3">
+                    {paymentRows.map((row) => (
+                      <div key={row.id} className="flex gap-2 items-center">
+                        <div className="relative flex-1">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
+                          <Input
+                            type="text"
+                            value={row.amount}
+                            onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                            className="pl-7"
+                          />
+                        </div>
+                        <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Cash">Cash</SelectItem>
+                            <SelectItem value="Card">Card</SelectItem>
+                            <SelectItem value="UPI">UPI</SelectItem>
+                            <SelectItem value="Collection">Collection</SelectItem>
+                            <SelectItem value="Advance">Advance</SelectItem>
+                            <SelectItem value="Refunds">Refunds</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <button
+                          onClick={() => removePaymentRow(row.id)}
+                          className="text-destructive hover:text-destructive/80 p-2"
+                          disabled={paymentRows.length === 1}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  <Button variant="link" size="sm" className="text-primary p-0 h-auto mb-4">
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    className="text-primary p-0 h-auto mb-4"
+                    onClick={addPaymentRow}
+                  >
                     Add Payment
                   </Button>
 
@@ -510,25 +576,49 @@ const Payments = () => {
                   <Input defaultValue="Overpayment" className="mb-4" />
 
                   <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                  <div className="flex gap-2 mb-4">
-                    <Input
-                      type="text"
-                      value={`₹${paymentAmount}`}
-                      onChange={(e) => setPaymentAmount(e.target.value.replace('₹', ''))}
-                      className="flex-1"
-                    />
-                    <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Cash">Cash</SelectItem>
-                        <SelectItem value="Card">Card</SelectItem>
-                        <SelectItem value="UPI">UPI</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="space-y-2 mb-3">
+                    {paymentRows.map((row) => (
+                      <div key={row.id} className="flex gap-2 items-center">
+                        <div className="relative flex-1">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
+                          <Input
+                            type="text"
+                            value={row.amount}
+                            onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                            className="pl-7"
+                          />
+                        </div>
+                        <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Cash">Cash</SelectItem>
+                            <SelectItem value="Card">Card</SelectItem>
+                            <SelectItem value="UPI">UPI</SelectItem>
+                            <SelectItem value="Collection">Collection</SelectItem>
+                            <SelectItem value="Advance">Advance</SelectItem>
+                            <SelectItem value="Refunds">Refunds</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <button
+                          onClick={() => removePaymentRow(row.id)}
+                          className="text-destructive hover:text-destructive/80 p-2"
+                          disabled={paymentRows.length === 1}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  <Button variant="link" size="sm" className="text-primary p-0 h-auto mb-4">
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    className="text-primary p-0 h-auto mb-4"
+                    onClick={addPaymentRow}
+                  >
                     Add Payment
                   </Button>
 
