@@ -160,24 +160,22 @@ const Payment = () => {
 
               {/* Collect Payment */}
               <Card className="w-full lg:w-[420px] p-6 h-fit">
-                <h3 className="text-base font-semibold text-foreground mb-6">Collect Payment</h3>
+                <h3 className="text-base font-semibold text-foreground mb-5">Collect Payment</h3>
                 
-                <div className="space-y-6">
+                <div className="space-y-5">
                   {/* Bill Amount */}
-                  <div className="flex justify-between items-center pb-6 border-b border-border">
+                  <div className="flex justify-between items-center pb-5 border-b border-border">
                     <p className="text-sm font-medium text-foreground">Bill Amount:</p>
                     <p className="text-[18px] font-semibold text-primary">₹{billAmount.toLocaleString()}</p>
                   </div>
 
                   {/* Advance Amount Toggle */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">Advance Amount</span>
-                      </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Advance Amount</span>
                       <span className="text-lg font-medium text-primary">₹{advanceAmount.toLocaleString()}</span>
                     </div>
-                    <div className="flex items-center gap-2 mt-3">
+                    <div className="flex items-center gap-2">
                       <Switch
                         id="use-advance"
                         checked={useAdvance}
@@ -190,9 +188,9 @@ const Payment = () => {
                   </div>
 
                   {useAdvance && (
-                    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                      <p className="text-sm font-medium text-primary mb-2">Advance Amount Used!</p>
-                      <p className="text-xs text-muted-foreground mb-3">
+                    <div className="p-4 bg-muted/50 rounded-lg space-y-3">
+                      <p className="text-sm font-medium text-primary">Advance Amount Used!</p>
+                      <p className="text-xs text-muted-foreground">
                         Current bill (₹{billAmount.toLocaleString()}) Used from advance
                       </p>
                       <div className="space-y-2">
@@ -208,10 +206,10 @@ const Payment = () => {
                     </div>
                   )}
 
-                  <div className="border-t pt-4 mt-4"></div>
+                  <div className="border-t border-border"></div>
 
                   {/* Payer Name */}
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <p className="text-sm font-medium text-foreground">Payer Name</p>
                     <input
                       type="text"
@@ -221,7 +219,7 @@ const Payment = () => {
                   </div>
 
                   {/* Payment Options */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <p className="text-sm font-medium text-foreground">Payment Options</p>
                     
                     <div className="flex items-center gap-3">
@@ -251,13 +249,13 @@ const Payment = () => {
                       </Select>
                     </div>
 
-                    <p className="text-sm text-primary font-medium">
+                    <p className="text-sm text-primary font-medium cursor-pointer">
                       Add Payment
                     </p>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex gap-3 pt-1">
                     <Button variant="outline" className="flex-1" onClick={handlePayLater}>
                       Pay Later
                     </Button>
