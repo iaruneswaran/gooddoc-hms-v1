@@ -464,7 +464,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
               return appointment ? (
                 <>
                   <div className="text-center py-2">
-                    <div className="text-2xl font-bold" style={{ color: '#7e0137' }}>
+                    <div className="text-2xl font-semibold" style={{ color: '#7e0137' }}>
                       Pending
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">{appointment.patient.name}</div>

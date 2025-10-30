@@ -49,7 +49,7 @@ export function TokenGenerationCard({
         <h3 className="text-lg font-semibold text-foreground">Token Generated</h3>
         
         <div className="text-center py-2">
-          <div className="text-2xl font-bold" style={{ color: '#7e0137' }}>
+          <div className="text-2xl font-semibold" style={{ color: '#7e0137' }}>
             {token}
           </div>
           <div className="text-sm text-muted-foreground mt-1">{patientName}</div>
