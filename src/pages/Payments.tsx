@@ -547,16 +547,6 @@ const Payments = () => {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
                   <div className="flex items-center gap-3">
-                    <Select defaultValue="success">
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="success">Success</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="failed">Failed</SelectItem>
-                      </SelectContent>
-                    </Select>
                     <Input placeholder="Search" className="max-w-xs" />
                     <Button variant="outline" size="sm">
                       Download statement
