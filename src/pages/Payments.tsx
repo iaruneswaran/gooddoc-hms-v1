@@ -546,24 +546,23 @@ const Payments = () => {
               <Card className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-primary">Patient Transactions</h2>
-                  <Button variant="outline" size="sm">
-                    Download statement
-                  </Button>
-                </div>
-
-                <div className="flex items-center gap-4 mb-4">
-                  <Select defaultValue="all">
-                    <SelectTrigger className="w-[150px]">
-                      <SelectValue placeholder="All Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="success">Success</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="failed">Failed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input placeholder="Search" className="max-w-xs" />
+                  <div className="flex items-center gap-3">
+                    <Select defaultValue="all">
+                      <SelectTrigger className="w-[150px]">
+                        <SelectValue placeholder="All Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        <SelectItem value="success">Success</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="failed">Failed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input placeholder="Search" className="max-w-xs" />
+                    <Button variant="outline" size="sm">
+                      Download statement
+                    </Button>
+                  </div>
                 </div>
                 
                 <div className="border rounded-lg overflow-hidden">
