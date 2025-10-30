@@ -345,12 +345,12 @@ const BookAppointment = () => {
                       key={type.value}
                       variant={isSelected ? "default" : "outline"}
                       className={cn(
-                        "h-9 px-4 flex items-center gap-2 hover:bg-accent hover:border-primary transition-colors whitespace-nowrap",
+                        "group h-9 px-4 flex items-center gap-2 hover:bg-primary hover:border-primary hover:text-primary-foreground transition-colors whitespace-nowrap",
                         isSelected && "bg-primary text-primary-foreground"
                       )}
                       onClick={() => handleTypeClick(type.value)}
                     >
-                      <Icon className={cn("w-4 h-4", isSelected ? "text-primary-foreground" : "text-foreground")} />
+                      <Icon className={cn("w-4 h-4 transition-colors", isSelected ? "text-primary-foreground" : "text-foreground group-hover:text-primary-foreground")} />
                       <span className="text-sm">{type.label}</span>
                     </Button>
                   );
