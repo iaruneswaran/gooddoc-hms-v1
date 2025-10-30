@@ -34,7 +34,7 @@ export function VisitsList({ visits, selectedVisitId, onVisitSelect }: VisitsLis
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-border bg-background sticky top-0 z-10">
+      <div className="px-8 py-4 border-b border-border bg-background sticky top-0 z-10">
         <h2 className="text-base font-semibold text-foreground mb-4">Visits</h2>
         
         {/* Search */}
@@ -66,7 +66,7 @@ export function VisitsList({ visits, selectedVisitId, onVisitSelect }: VisitsLis
       </div>
 
       {/* Visits List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      <div className="flex-1 overflow-y-auto px-8 py-4 space-y-2">
         {filteredVisits.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-sm text-muted-foreground">

@@ -17,7 +17,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange }: Visi
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
         <div className="sticky top-0 bg-background z-10 border-b border-border">
-          <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-6">
+          <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-8">
             <TabsTrigger
               value="appointments"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
