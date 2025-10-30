@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, CheckCircle2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,8 @@ const Payments = () => {
   const [useAdvance, setUseAdvance] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("0.00");
   const [paymentMethod, setPaymentMethod] = useState("Cash");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
 
   const invoices = [
     {
@@ -73,6 +75,32 @@ const Payments = () => {
         ? prev.filter(id => id !== invoiceId)
         : [...prev, invoiceId]
     );
+  };
+
+  useEffect(() => {
+    if (showSuccess) {
+      // First show "printing" for 2 seconds
+      const printingTimer = setTimeout(() => {
+        setPrintingStatus("success");
+        // Then show "success" for 2 seconds
+        const successTimer = setTimeout(() => {
+          setPrintingStatus("done");
+          // Close modal after showing success
+          const closeTimer = setTimeout(() => {
+            setShowSuccess(false);
+            setPrintingStatus("printing");
+          }, 1000);
+          return () => clearTimeout(closeTimer);
+        }, 2000);
+        return () => clearTimeout(successTimer);
+      }, 2000);
+      return () => clearTimeout(printingTimer);
+    }
+  }, [showSuccess]);
+
+  const handleConfirmPayment = () => {
+    setShowSuccess(true);
+    setPrintingStatus("printing");
   };
 
   return (
@@ -285,7 +313,10 @@ const Payments = () => {
                       Add Payment
                     </Button>
 
-                    <Button className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white">
+                    <Button 
+                      onClick={handleConfirmPayment}
+                      className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
+                    >
                       Confirm Payment
                     </Button>
                   </Card>
@@ -687,6 +718,43 @@ const Payments = () => {
           </Tabs>
         </main>
       </div>
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed bottom-6 right-6 w-[320px] bg-background rounded-lg p-6 shadow-2xl animate-in slide-in-from-bottom-5 z-50 border border-border">
+          <div className="flex flex-col items-center text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-primary" />
+            </div>
+            
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-foreground">
+                Payment Successful
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Your booking has been confirmed & Your payment has been processed successfully.
+              </p>
+            </div>
+
+            <div className="py-4 w-full">
+              <div className="flex items-center justify-center gap-2">
+                {printingStatus === "printing" && (
+                  <>
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    <p className="text-sm text-muted-foreground">Sending to printer...</p>
+                  </>
+                )}
+                {printingStatus === "success" && (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                    <p className="text-sm text-foreground font-medium">Receipt printed successfully</p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
