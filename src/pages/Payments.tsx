@@ -343,20 +343,18 @@ const Payments = () => {
                               <SelectItem value="Cash">Cash</SelectItem>
                               <SelectItem value="Card">Card</SelectItem>
                               <SelectItem value="UPI">UPI</SelectItem>
-                              <SelectItem value="Collection">Collection</SelectItem>
-                              <SelectItem value="Advance">Advance</SelectItem>
-                              <SelectItem value="Refunds">Refunds</SelectItem>
                             </SelectContent>
                           </Select>
-                          <button
-                            onClick={() => removePaymentRow(row.id)}
-                            className="text-destructive hover:text-destructive/80 p-2"
-                            disabled={paymentRows.length === 1}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                            </svg>
-                          </button>
+                          {paymentRows.length > 1 && (
+                            <button
+                              onClick={() => removePaymentRow(row.id)}
+                              className="text-destructive hover:text-destructive/80 p-2"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                              </svg>
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -470,20 +468,18 @@ const Payments = () => {
                             <SelectItem value="Cash">Cash</SelectItem>
                             <SelectItem value="Card">Card</SelectItem>
                             <SelectItem value="UPI">UPI</SelectItem>
-                            <SelectItem value="Collection">Collection</SelectItem>
-                            <SelectItem value="Advance">Advance</SelectItem>
-                            <SelectItem value="Refunds">Refunds</SelectItem>
                           </SelectContent>
                         </Select>
-                        <button
-                          onClick={() => removePaymentRow(row.id)}
-                          className="text-destructive hover:text-destructive/80 p-2"
-                          disabled={paymentRows.length === 1}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                          </svg>
-                        </button>
+                        {paymentRows.length > 1 && (
+                          <button
+                            onClick={() => removePaymentRow(row.id)}
+                            className="text-destructive hover:text-destructive/80 p-2"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            </svg>
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -596,20 +592,18 @@ const Payments = () => {
                             <SelectItem value="Cash">Cash</SelectItem>
                             <SelectItem value="Card">Card</SelectItem>
                             <SelectItem value="UPI">UPI</SelectItem>
-                            <SelectItem value="Collection">Collection</SelectItem>
-                            <SelectItem value="Advance">Advance</SelectItem>
-                            <SelectItem value="Refunds">Refunds</SelectItem>
                           </SelectContent>
                         </Select>
-                        <button
-                          onClick={() => removePaymentRow(row.id)}
-                          className="text-destructive hover:text-destructive/80 p-2"
-                          disabled={paymentRows.length === 1}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                          </svg>
-                        </button>
+                        {paymentRows.length > 1 && (
+                          <button
+                            onClick={() => removePaymentRow(row.id)}
+                            className="text-destructive hover:text-destructive/80 p-2"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            </svg>
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
