@@ -95,7 +95,7 @@ const Registration = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Registration"]} />
+        <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Registration"]} />
         
         <main className="p-8">
           <button

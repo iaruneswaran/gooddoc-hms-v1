@@ -42,7 +42,7 @@ const Discharge = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Discharge"]} />
+        <AppHeader breadcrumbs={["GoodDoc", "Patient Insights", "Discharge"]} />
         
         <main className="p-8">
           <button

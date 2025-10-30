@@ -318,7 +318,7 @@ const BookAppointment = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Appointment"]} />
+        <AppHeader breadcrumbs={["GoodDoc", "Appointments", "Appointment"]} />
         
         <main className="p-8 pb-32">
           <button
