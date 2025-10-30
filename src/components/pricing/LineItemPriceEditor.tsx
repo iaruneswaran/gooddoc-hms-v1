@@ -122,7 +122,7 @@ export function LineItemPriceEditor({
         <Button
           variant="ghost"
           size="sm"
-          className="h-auto p-0 hover:bg-transparent"
+          className="h-auto p-0 hover:bg-transparent hover:text-foreground"
           onClick={handleStartEdit}
         >
           <span className="text-sm font-semibold">₹{formatCurrency(effectivePrice)}</span>
@@ -135,12 +135,6 @@ export function LineItemPriceEditor({
       {isOverridden && (
         <Badge variant="secondary" className="text-[10px] px-1 py-0">
           Edited
-        </Badge>
-      )}
-
-      {item.approval?.required && (
-        <Badge variant="outline" className="text-[10px] px-1 py-0 border-orange-500 text-orange-700">
-          {item.approval.status === 'pending' ? 'Requires approval' : `Approved by ${item.approval.approver}`}
         </Badge>
       )}
     </div>
