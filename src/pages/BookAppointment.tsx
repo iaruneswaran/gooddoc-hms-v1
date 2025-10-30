@@ -739,38 +739,38 @@ const BookAppointment = () => {
                       <div className="pt-4 border-t border-border space-y-2 text-xs">
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">Subtotal</p>
-                          <p className="text-foreground">₹{formatCurrency(pricing.totals.subtotal)}</p>
+                          <p className="text-foreground">{formatCurrency(pricing.totals.subtotal)}</p>
                         </div>
                         
                         {/* Global Discount if applied */}
                         {pricing.globalDiscountValue > 0 && (
                           <div className="flex justify-between text-green-600">
-                            <p>Global Discount (₹{formatCurrency(pricing.globalDiscountValue)})</p>
-                            <p>-₹{formatCurrency(pricing.globalDiscountValue)}</p>
+                            <p>Global Discount ({formatCurrency(pricing.globalDiscountValue)})</p>
+                            <p>-{formatCurrency(pricing.globalDiscountValue)}</p>
                           </div>
                         )}
                         
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">Taxable Amount</p>
-                          <p className="text-foreground">₹{formatCurrency(pricing.totals.taxable)}</p>
+                          <p className="text-foreground">{formatCurrency(pricing.totals.taxable)}</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">CGST (9%)</p>
-                          <p className="text-foreground">₹{formatCurrency(pricing.totals.cgst)}</p>
+                          <p className="text-foreground">{formatCurrency(pricing.totals.cgst)}</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-muted-foreground">SGST (9%)</p>
-                          <p className="text-foreground">₹{formatCurrency(pricing.totals.sgst)}</p>
+                          <p className="text-foreground">{formatCurrency(pricing.totals.sgst)}</p>
                         </div>
                         {Math.abs(pricing.totals.roundOff) > 0.01 && (
                           <div className="flex justify-between">
                             <p className="text-muted-foreground">Round-off</p>
-                            <p className="text-foreground">{pricing.totals.roundOff >= 0 ? '+' : ''}₹{formatCurrency(pricing.totals.roundOff)}</p>
+                            <p className="text-foreground">{pricing.totals.roundOff >= 0 ? '+' : ''}{formatCurrency(pricing.totals.roundOff)}</p>
                           </div>
                         )}
                         <div className="flex justify-between pt-3 border-t border-border">
                           <p className="text-foreground font-semibold">Net Payable</p>
-                          <p className="text-foreground font-bold">₹{formatCurrency(pricing.totals.netPayable)}</p>
+                          <p className="text-foreground font-bold">{formatCurrency(pricing.totals.netPayable)}</p>
                         </div>
                       </div>
                     </>

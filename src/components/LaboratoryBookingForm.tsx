@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
 export interface LabTest {
@@ -199,7 +199,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
                         <p className="text-xs text-muted-foreground mb-2">
                           Includes: {pkg.includes}
                         </p>
-                        <p className="text-sm font-semibold text-foreground">₹{pkg.price}</p>
+                        <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
                       </div>
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
@@ -235,7 +235,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
                   </Card>
                 );
               })}

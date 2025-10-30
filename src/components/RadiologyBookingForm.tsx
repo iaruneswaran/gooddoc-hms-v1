@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
 export interface RadiologyTest {
@@ -164,7 +164,7 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
                   </Card>
                 );
               })}
@@ -192,7 +192,7 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
                   </Card>
                 );
               })}
