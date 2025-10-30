@@ -37,26 +37,44 @@ const Payment = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [paymentType, setPaymentType] = useState<"now" | "later">("now");
   const [countdown, setCountdown] = useState(9);
+  const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
 
   useEffect(() => {
-    if (showSuccess && countdown > 0) {
+    if (showSuccess) {
+      // First show "printing" for 2 seconds
+      const printingTimer = setTimeout(() => {
+        setPrintingStatus("success");
+        // Then show "success" for 2 seconds
+        const successTimer = setTimeout(() => {
+          setPrintingStatus("done");
+        }, 2000);
+        return () => clearTimeout(successTimer);
+      }, 2000);
+      return () => clearTimeout(printingTimer);
+    }
+  }, [showSuccess]);
+
+  useEffect(() => {
+    if (showSuccess && printingStatus === "done" && countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
       navigate("/");
     }
-  }, [showSuccess, countdown, navigate]);
+  }, [showSuccess, printingStatus, countdown, navigate]);
 
   const handlePayNow = () => {
     setPaymentType("now");
     setShowSuccess(true);
     setCountdown(9);
+    setPrintingStatus("printing");
   };
 
   const handlePayLater = () => {
     setPaymentType("later");
     setShowSuccess(true);
     setCountdown(9);
+    setPrintingStatus("printing");
   };
   
   const advanceAmount = 1000;
@@ -290,23 +308,46 @@ const Payment = () => {
               </p>
             </div>
 
-            <div className="py-2">
-              <p className="text-xs text-muted-foreground mb-1">
-                You will be redirected to the Home Page in
-              </p>
-              <div className="text-3xl font-bold text-primary">
-                {countdown}
+            {printingStatus !== "done" && (
+              <div className="py-4 w-full">
+                <div className="flex items-center justify-center gap-2">
+                  {printingStatus === "printing" && (
+                    <>
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      <p className="text-sm text-muted-foreground">Sending to printer...</p>
+                    </>
+                  )}
+                  {printingStatus === "success" && (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      <p className="text-sm text-foreground font-medium">Receipt printed successfully</p>
+                    </>
+                  )}
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">seconds...</p>
-            </div>
+            )}
 
-            <Button 
-              onClick={() => navigate("/")}
-              size="sm"
-              className="w-full"
-            >
-              Back to Home
-            </Button>
+            {printingStatus === "done" && (
+              <>
+                <div className="py-2">
+                  <p className="text-xs text-muted-foreground mb-1">
+                    You will be redirected to the Home Page in
+                  </p>
+                  <div className="text-3xl font-bold text-primary">
+                    {countdown}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">seconds...</p>
+                </div>
+
+                <Button 
+                  onClick={() => navigate("/")}
+                  size="sm"
+                  className="w-full"
+                >
+                  Back to Home
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
