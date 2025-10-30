@@ -455,40 +455,44 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
       })()}
 
       <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
-        <AlertDialogContent className="max-w-md">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl">Confirm to Generate Token</AlertDialogTitle>
-          </AlertDialogHeader>
-          
-          {pendingAppointmentId && (() => {
-            const appointment = appointments.find(apt => apt.id === pendingAppointmentId);
-            return appointment ? (
-              <div className="space-y-4 py-4">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">Pending</div>
-                  <div className="text-xl text-foreground">{appointment.patient.name}</div>
-                </div>
-                
-                <div className="space-y-3 pt-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Specialty:</span>
-                    <span className="text-foreground font-medium">{appointment.doctor} – {appointment.specialty}</span>
+        <AlertDialogContent className="w-[320px] p-0 gap-0 fixed bottom-6 right-6 top-auto left-auto translate-x-0 translate-y-0">
+          <div className="p-4 space-y-3">
+            <h3 className="text-lg font-semibold text-foreground">Confirm to Generate Token</h3>
+            
+            {pendingAppointmentId && (() => {
+              const appointment = appointments.find(apt => apt.id === pendingAppointmentId);
+              return appointment ? (
+                <>
+                  <div className="text-center py-2">
+                    <div className="text-2xl font-bold" style={{ color: '#7e0137' }}>
+                      Pending
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1">{appointment.patient.name}</div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Time:</span>
-                    <span className="text-foreground font-medium">{appointment.time}</span>
+
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Specialty:</span>
+                      <span className="text-foreground font-medium">{appointment.doctor} – {appointment.specialty}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Time:</span>
+                      <span className="text-foreground font-medium">{appointment.time}</span>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : null;
-          })()}
-          
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmCheckIn} className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Please Confirm
-            </AlertDialogAction>
-          </AlertDialogFooter>
+
+                  <div className="pt-2">
+                    <Button 
+                      onClick={handleConfirmCheckIn} 
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                      Please Confirm
+                    </Button>
+                  </div>
+                </>
+              ) : null;
+            })()}
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>
