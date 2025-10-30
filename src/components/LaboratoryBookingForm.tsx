@@ -151,24 +151,12 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
             <label className="text-sm font-medium text-foreground mb-3 block">
               Mode of Sample Collection
             </label>
-            <div className="flex flex-col gap-3">
-              <Button
-                type="button"
-                variant={mode === "in-clinic" ? "default" : "outline"}
-                className="w-full"
-                onClick={() => handleModeChange("in-clinic")}
-              >
-                In-Clinic
-              </Button>
-              <Button
-                type="button"
-                variant={mode === "home-collection" ? "default" : "outline"}
-                className="w-full"
-                onClick={() => handleModeChange("home-collection")}
-              >
-                Home Collection
-              </Button>
-            </div>
+            <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="in-clinic">In-Clinic</TabsTrigger>
+                <TabsTrigger value="home-collection">Home Collection</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
           <div>
