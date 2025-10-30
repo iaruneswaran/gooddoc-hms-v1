@@ -89,7 +89,7 @@ export const DCProcedureBookingForm = ({ onRemove, onUpdate }: DCProcedureBookin
           variant="ghost"
           size="sm"
           onClick={onRemove}
-          className="text-primary hover:text-primary/80"
+          className="text-primary"
         >
           Remove
         </Button>

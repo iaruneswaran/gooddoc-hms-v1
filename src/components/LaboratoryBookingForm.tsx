@@ -150,7 +150,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
           variant="ghost"
           size="sm"
           onClick={onRemove}
-          className="text-primary hover:text-primary/80"
+          className="text-primary"
         >
           Remove
         </Button>
