@@ -200,19 +200,21 @@ export default function DoctorsList() {
         
         <main className="p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-semibold">Doctors</h1>
-            <div className="flex gap-3">
-              <Button variant="outline">
-                <Download className="w-4 h-4 mr-2" />
-                Export CSV
-              </Button>
-              <Button onClick={() => navigate("/doctors/new")}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Doctor
-              </Button>
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold">Doctors</h1>
+              <div className="flex gap-3">
+                <Button variant="outline">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export CSV
+                </Button>
+                <Button onClick={() => navigate("/doctors/new")}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Doctor
+                </Button>
+              </div>
             </div>
-          </div>
+          </Card>
 
           {/* Search */}
           <div className="relative mb-6">
