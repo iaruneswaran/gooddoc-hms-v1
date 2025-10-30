@@ -19,7 +19,7 @@ const Index = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["GoodDoc", "Appointments"]} />
+        <AppHeader breadcrumbs={["Appointments"]} />
         
         <main className="p-6">
           <Card className="p-6 mb-8">
