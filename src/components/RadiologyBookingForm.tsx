@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Calendar as CalendarIcon, Check, Minus } from "lucide-react";
+import { Calendar as CalendarIcon, Check, Minus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -60,6 +61,7 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
   ]);
   const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
   const [selectedTime, setSelectedTime] = useState("07:30");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleRadiologyTypeChange = (value: string) => {
     setRadiologyType(value);
@@ -91,6 +93,11 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
       onUpdate({ radiologyType, ageGroup, selectedTests, date: newDate, time: selectedTime });
     }
   };
+
+  const filteredTests = radiologyTests.filter(test =>
+    test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    test.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Card className="p-6">
@@ -141,9 +148,19 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
 
         {/* Radiology Tests */}
         <div>
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search radiology tests..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          
           <Tabs value={ageGroup} onValueChange={(v) => handleAgeGroupChange(v as any)}>
             <TabsContent value="adults" className="grid grid-cols-2 gap-3 mt-0">
-              {radiologyTests.map((test) => {
+              {filteredTests.map((test) => {
                 const isSelected = selectedTests.some(t => t.id === test.id);
                 return (
                   <Card
@@ -171,7 +188,7 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
             </TabsContent>
 
             <TabsContent value="kids" className="grid grid-cols-2 gap-3 mt-0">
-              {radiologyTests.map((test) => {
+              {filteredTests.map((test) => {
                 const isSelected = selectedTests.some(t => t.id === test.id);
                 return (
                   <Card

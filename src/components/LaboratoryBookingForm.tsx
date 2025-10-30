@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Trash2, Calendar as CalendarIcon, Check, Minus } from "lucide-react";
+import { Trash2, Calendar as CalendarIcon, Check, Minus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -94,6 +95,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
   const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>([]);
   const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
   const [selectedTime, setSelectedTime] = useState("07:30");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleModeChange = (newMode: "in-clinic" | "home-collection") => {
     setMode(newMode);
@@ -129,6 +131,16 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       onUpdate({ mode, selectedTests, selectedPackages, date: newDate, time: selectedTime });
     }
   };
+
+  const filteredPackages = healthPackages.filter(pkg => 
+    pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    pkg.includes.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredTests = individualTests.filter(test =>
+    test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    test.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Card className="p-6">
@@ -174,9 +186,19 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
 
         {/* Lab Tests Content */}
         <div>
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search lab tests..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          
           <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
             <TabsContent value="health-packages" className="space-y-3 mt-0">
-              {healthPackages.map((pkg) => {
+              {filteredPackages.map((pkg) => {
                 const isSelected = selectedPackages.some(p => p.id === pkg.id);
                 return (
                   <Card
@@ -210,7 +232,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
             </TabsContent>
 
             <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3">
-              {individualTests.map((test) => {
+              {filteredTests.map((test) => {
                 const isSelected = selectedTests.some(t => t.id === test.id);
                 return (
                   <Card
