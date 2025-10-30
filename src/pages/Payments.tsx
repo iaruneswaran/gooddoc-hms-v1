@@ -27,6 +27,7 @@ const Payments = () => {
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [showSuccess, setShowSuccess] = useState(false);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
+  const [actionType, setActionType] = useState<"payment" | "advance" | "refund">("payment");
 
   const invoices = [
     {
@@ -99,6 +100,19 @@ const Payments = () => {
   }, [showSuccess]);
 
   const handleConfirmPayment = () => {
+    setActionType("payment");
+    setShowSuccess(true);
+    setPrintingStatus("printing");
+  };
+
+  const handleCollectAdvance = () => {
+    setActionType("advance");
+    setShowSuccess(true);
+    setPrintingStatus("printing");
+  };
+
+  const handleConfirmRefund = () => {
+    setActionType("refund");
     setShowSuccess(true);
     setPrintingStatus("printing");
   };
@@ -416,7 +430,10 @@ const Payments = () => {
                     Add Payment
                   </Button>
 
-                  <Button className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white">
+                  <Button 
+                    onClick={handleCollectAdvance}
+                    className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
+                  >
                     Collect Payment
                   </Button>
                 </Card>
@@ -515,7 +532,10 @@ const Payments = () => {
                     Add Payment
                   </Button>
 
-                  <Button className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white">
+                  <Button 
+                    onClick={handleConfirmRefund}
+                    className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
+                  >
                     Confirm Refunds
                   </Button>
                 </Card>
@@ -729,10 +749,14 @@ const Payments = () => {
             
             <div className="space-y-1">
               <h2 className="text-lg font-semibold text-foreground">
-                Payment Successful
+                {actionType === "payment" && "Payment Successful"}
+                {actionType === "advance" && "Advance Collected"}
+                {actionType === "refund" && "Refund Processed"}
               </h2>
               <p className="text-xs text-muted-foreground">
-                Your booking has been confirmed & Your payment has been processed successfully.
+                {actionType === "payment" && "Your booking has been confirmed & Your payment has been processed successfully."}
+                {actionType === "advance" && "Advance payment has been collected and recorded successfully."}
+                {actionType === "refund" && "Refund has been processed and will be credited to the account."}
               </p>
             </div>
 
