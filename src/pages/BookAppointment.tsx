@@ -209,6 +209,10 @@ const BookAppointment = () => {
         reasonForAdmission: "",
         date: new Date(2025, 7, 5),
         time: "07:30",
+        emergencyContactName: "",
+        relationship: "",
+        contactNumber: "",
+        address: "",
       });
     } else if (type === "dc") {
       // Initialize with default data

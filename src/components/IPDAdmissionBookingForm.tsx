@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -17,6 +18,10 @@ export interface IPDAdmissionData {
   reasonForAdmission: string;
   date: Date;
   time: string;
+  emergencyContactName: string;
+  relationship: string;
+  contactNumber: string;
+  address: string;
 }
 
 interface IPDAdmissionBookingFormProps {
@@ -43,42 +48,66 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
   const [reasonForAdmission, setReasonForAdmission] = useState("");
   const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
   const [selectedTime, setSelectedTime] = useState("07:30");
+  const [emergencyContactName, setEmergencyContactName] = useState("");
+  const [relationship, setRelationship] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleDepartmentChange = (value: string) => {
     setDepartment(value);
-    onUpdate({ department: value, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime });
+    onUpdate({ department: value, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleAttendingDoctorChange = (value: string) => {
     setAttendingDoctor(value);
-    onUpdate({ department, attendingDoctor: value, ward, bed, reasonForAdmission, date, time: selectedTime });
+    onUpdate({ department, attendingDoctor: value, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleWardChange = (value: string) => {
     setWard(value);
-    onUpdate({ department, attendingDoctor, ward: value, bed, reasonForAdmission, date, time: selectedTime });
+    onUpdate({ department, attendingDoctor, ward: value, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleBedChange = (value: string) => {
     setBed(value);
-    onUpdate({ department, attendingDoctor, ward, bed: value, reasonForAdmission, date, time: selectedTime });
+    onUpdate({ department, attendingDoctor, ward, bed: value, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleReasonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReasonForAdmission(e.target.value);
-    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission: e.target.value, date, time: selectedTime });
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission: e.target.value, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time });
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleDateSelect = (newDate: Date | undefined) => {
     if (newDate) {
       setDate(newDate);
-      onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date: newDate, time: selectedTime });
+      onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date: newDate, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
     }
+  };
+
+  const handleEmergencyContactNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmergencyContactName(e.target.value);
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName: e.target.value, relationship, contactNumber, address });
+  };
+
+  const handleRelationshipChange = (value: string) => {
+    setRelationship(value);
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship: value, contactNumber, address });
+  };
+
+  const handleContactNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContactNumber(e.target.value);
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber: e.target.value, address });
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAddress(e.target.value);
+    onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address: e.target.value });
   };
 
   return (
@@ -213,6 +242,66 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
                 {time}
               </Button>
             ))}
+          </div>
+        </div>
+
+        {/* Emergency Contact Section */}
+        <div className="space-y-4">
+          <h4 className="text-sm font-semibold text-foreground">Emergency Contact</h4>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-3 block">
+                Emergency Contact Name
+              </label>
+              <Input
+                placeholder="John Doe"
+                value={emergencyContactName}
+                onChange={handleEmergencyContactNameChange}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-3 block">
+                Relationship
+              </label>
+              <Select value={relationship} onValueChange={handleRelationshipChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select relationship" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Spouse">Spouse</SelectItem>
+                  <SelectItem value="Parent">Parent</SelectItem>
+                  <SelectItem value="Child">Child</SelectItem>
+                  <SelectItem value="Sibling">Sibling</SelectItem>
+                  <SelectItem value="Friend">Friend</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Contact Number
+            </label>
+            <Input
+              placeholder="+91 98765 43210"
+              value={contactNumber}
+              onChange={handleContactNumberChange}
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Address
+            </label>
+            <Textarea
+              placeholder="House No, Street, City"
+              value={address}
+              onChange={handleAddressChange}
+              className="min-h-[80px]"
+            />
           </div>
         </div>
       </div>
