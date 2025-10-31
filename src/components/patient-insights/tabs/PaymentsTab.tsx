@@ -210,14 +210,12 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                   </SelectContent>
                 </Select>
                 {paymentRows.length > 1 && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
+                  <button
                     onClick={() => removePaymentRow(row.id)}
-                    className="h-10 w-10 text-muted-foreground hover:text-primary"
+                    className="h-10 w-10 flex items-center justify-center text-primary hover:text-primary/80"
                   >
                     <Trash2 className="h-4 w-4" />
-                  </Button>
+                  </button>
                 )}
               </div>
             ))}
