@@ -190,7 +190,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                   variant="ghost"
                   size="icon"
                   onClick={() => removePaymentRow(row.id)}
-                  className="h-10 w-10 text-muted-foreground hover:text-destructive"
+                  className="h-10 w-10 text-muted-foreground hover:text-primary"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
