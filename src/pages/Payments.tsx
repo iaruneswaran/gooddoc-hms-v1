@@ -454,63 +454,90 @@ const Payments = () => {
 
                 {/* Right Column - Advance Collection Form */}
                 <Card className="p-6">
-                  <h3 className="text-sm font-medium mb-3">Payer Name</h3>
-                  <Input defaultValue="Fredrick John" className="mb-4" />
+                  <h3 className="text-base font-semibold text-foreground mb-5">Collect Advance</h3>
+                  
+                  <div className="space-y-5">
+                    <div className="space-y-2.5">
+                      <p className="text-sm font-medium text-foreground">Payer Name</p>
+                      <input
+                        type="text"
+                        defaultValue="Fredrick John"
+                        className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
+                      />
+                    </div>
 
-                  <h3 className="text-sm font-medium mb-3">Reason</h3>
-                  <Input defaultValue="Admission" className="mb-4" />
+                    <div className="space-y-2.5">
+                      <p className="text-sm font-medium text-foreground">Reason</p>
+                      <input
+                        type="text"
+                        defaultValue="Admission"
+                        className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
+                      />
+                    </div>
 
-                  <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                  <div className="space-y-2 mb-3">
-                    {paymentRows.map((row) => (
-                      <div key={row.id} className="flex gap-2 items-center">
-                        <div className="relative flex-1">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
-                          <Input
-                            type="text"
-                            value={row.amount}
-                            onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
-                            className="pl-7"
-                          />
-                        </div>
-                        <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
-                          <SelectTrigger className="w-[120px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Cash">Cash</SelectItem>
-                            <SelectItem value="Card">Card</SelectItem>
-                            <SelectItem value="UPI">UPI</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {paymentRows.length > 1 && (
-                          <button
-                            onClick={() => removePaymentRow(row.id)}
-                            className="text-destructive hover:text-destructive/80 p-2"
+                    <div className="border-t border-border"></div>
+
+                    <div className="space-y-3">
+                      <p className="text-sm font-medium text-foreground">Payment Options</p>
+                      
+                      {paymentRows.map((row) => (
+                        <div key={row.id} className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
+                                ₹
+                              </span>
+                              <input
+                                type="text"
+                                value={row.amount}
+                                onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                                className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
+                              />
+                            </div>
+                          </div>
+                          <Select 
+                            value={row.method} 
+                            onValueChange={(value) => updatePaymentRow(row.id, "method", value)}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    variant="link" 
-                    size="sm" 
-                    className="text-primary p-0 h-auto mb-4"
-                    onClick={addPaymentRow}
-                  >
-                    Add Payment
-                  </Button>
+                            <SelectTrigger className="w-[140px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Cash">Cash</SelectItem>
+                              <SelectItem value="UPI">UPI</SelectItem>
+                              <SelectItem value="Card">Card</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {paymentRows.length > 1 && (
+                            <button
+                              onClick={() => removePaymentRow(row.id)}
+                              className="h-10 w-10 flex items-center justify-center text-primary hover:text-primary/80"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      ))}
 
-                  <Button 
-                    onClick={handleCollectAdvance}
-                    className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
-                  >
-                    Collect Payment
-                  </Button>
+                      <p 
+                        className="text-sm text-primary font-medium cursor-pointer"
+                        onClick={addPaymentRow}
+                      >
+                        Add Payment
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3 pt-1">
+                      <Button 
+                        onClick={handleCollectAdvance}
+                        className="flex-1 bg-primary hover:bg-primary/90"
+                      >
+                        Collect Payment
+                      </Button>
+                    </div>
+                  </div>
                 </Card>
               </div>
             </TabsContent>
@@ -578,63 +605,90 @@ const Payments = () => {
 
                 {/* Right Column - Refund Form */}
                 <Card className="p-6">
-                  <h3 className="text-sm font-medium mb-3">Receiver Name</h3>
-                  <Input defaultValue="Fredrick John" className="mb-4" />
+                  <h3 className="text-base font-semibold text-foreground mb-5">Process Refund</h3>
+                  
+                  <div className="space-y-5">
+                    <div className="space-y-2.5">
+                      <p className="text-sm font-medium text-foreground">Receiver Name</p>
+                      <input
+                        type="text"
+                        defaultValue="Fredrick John"
+                        className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
+                      />
+                    </div>
 
-                  <h3 className="text-sm font-medium mb-3">Reason</h3>
-                  <Input defaultValue="Overpayment" className="mb-4" />
+                    <div className="space-y-2.5">
+                      <p className="text-sm font-medium text-foreground">Reason</p>
+                      <input
+                        type="text"
+                        defaultValue="Overpayment"
+                        className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
+                      />
+                    </div>
 
-                  <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                  <div className="space-y-2 mb-3">
-                    {paymentRows.map((row) => (
-                      <div key={row.id} className="flex gap-2 items-center">
-                        <div className="relative flex-1">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
-                          <Input
-                            type="text"
-                            value={row.amount}
-                            onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
-                            className="pl-7"
-                          />
-                        </div>
-                        <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
-                          <SelectTrigger className="w-[120px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Cash">Cash</SelectItem>
-                            <SelectItem value="Card">Card</SelectItem>
-                            <SelectItem value="UPI">UPI</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {paymentRows.length > 1 && (
-                          <button
-                            onClick={() => removePaymentRow(row.id)}
-                            className="text-destructive hover:text-destructive/80 p-2"
+                    <div className="border-t border-border"></div>
+
+                    <div className="space-y-3">
+                      <p className="text-sm font-medium text-foreground">Payment Options</p>
+                      
+                      {paymentRows.map((row) => (
+                        <div key={row.id} className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
+                                ₹
+                              </span>
+                              <input
+                                type="text"
+                                value={row.amount}
+                                onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                                className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
+                              />
+                            </div>
+                          </div>
+                          <Select 
+                            value={row.method} 
+                            onValueChange={(value) => updatePaymentRow(row.id, "method", value)}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    variant="link" 
-                    size="sm" 
-                    className="text-primary p-0 h-auto mb-4"
-                    onClick={addPaymentRow}
-                  >
-                    Add Payment
-                  </Button>
+                            <SelectTrigger className="w-[140px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Cash">Cash</SelectItem>
+                              <SelectItem value="UPI">UPI</SelectItem>
+                              <SelectItem value="Card">Card</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {paymentRows.length > 1 && (
+                            <button
+                              onClick={() => removePaymentRow(row.id)}
+                              className="h-10 w-10 flex items-center justify-center text-primary hover:text-primary/80"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      ))}
 
-                  <Button 
-                    onClick={handleConfirmRefund}
-                    className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
-                  >
-                    Confirm Refunds
-                  </Button>
+                      <p 
+                        className="text-sm text-primary font-medium cursor-pointer"
+                        onClick={addPaymentRow}
+                      >
+                        Add Payment
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3 pt-1">
+                      <Button 
+                        onClick={handleConfirmRefund}
+                        className="flex-1 bg-primary hover:bg-primary/90"
+                      >
+                        Confirm Refunds
+                      </Button>
+                    </div>
+                  </div>
                 </Card>
               </div>
             </TabsContent>
