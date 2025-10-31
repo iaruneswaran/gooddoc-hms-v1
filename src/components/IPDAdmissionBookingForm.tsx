@@ -199,6 +199,64 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
           </div>
         </div>
 
+        {/* Emergency Contact Fields */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Emergency Contact Name
+            </label>
+            <Input
+              placeholder="John Doe"
+              value={emergencyContactName}
+              onChange={handleEmergencyContactNameChange}
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Relationship
+            </label>
+            <Select value={relationship} onValueChange={handleRelationshipChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select relationship" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Spouse">Spouse</SelectItem>
+                <SelectItem value="Parent">Parent</SelectItem>
+                <SelectItem value="Child">Child</SelectItem>
+                <SelectItem value="Sibling">Sibling</SelectItem>
+                <SelectItem value="Friend">Friend</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Contact Number
+            </label>
+            <Input
+              placeholder="+91 98765 43210"
+              value={contactNumber}
+              onChange={handleContactNumberChange}
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Address
+            </label>
+            <Input
+              placeholder="House No, Street, City"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              onBlur={() => onUpdate({ department, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address })}
+            />
+          </div>
+        </div>
+
         {/* Reason for Admission */}
         <div>
           <label className="text-sm font-medium text-foreground mb-3 block">
@@ -242,66 +300,6 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
                 {time}
               </Button>
             ))}
-          </div>
-        </div>
-
-        {/* Emergency Contact Section */}
-        <div className="space-y-4">
-          <h4 className="text-sm font-semibold text-foreground">Emergency Contact</h4>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">
-                Emergency Contact Name
-              </label>
-              <Input
-                placeholder="John Doe"
-                value={emergencyContactName}
-                onChange={handleEmergencyContactNameChange}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">
-                Relationship
-              </label>
-              <Select value={relationship} onValueChange={handleRelationshipChange}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select relationship" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Spouse">Spouse</SelectItem>
-                  <SelectItem value="Parent">Parent</SelectItem>
-                  <SelectItem value="Child">Child</SelectItem>
-                  <SelectItem value="Sibling">Sibling</SelectItem>
-                  <SelectItem value="Friend">Friend</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-foreground mb-3 block">
-              Contact Number
-            </label>
-            <Input
-              placeholder="+91 98765 43210"
-              value={contactNumber}
-              onChange={handleContactNumberChange}
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-foreground mb-3 block">
-              Address
-            </label>
-            <Textarea
-              placeholder="House No, Street, City"
-              value={address}
-              onChange={handleAddressChange}
-              className="min-h-[80px]"
-            />
           </div>
         </div>
       </div>
