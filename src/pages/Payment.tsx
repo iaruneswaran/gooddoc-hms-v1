@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Download, Printer, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, Download, Printer, CheckCircle2, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { BookingSteps } from "@/components/BookingSteps";
@@ -38,6 +38,7 @@ const Payment = () => {
   const [paymentType, setPaymentType] = useState<"now" | "later">("now");
   const [countdown, setCountdown] = useState(9);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
+  const [paymentRows, setPaymentRows] = useState([{ id: 1, amount: "", method: "Cash" }]);
 
   useEffect(() => {
     if (showSuccess) {
@@ -82,6 +83,21 @@ const Payment = () => {
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
+
+  const addPaymentRow = () => {
+    const newId = Math.max(...paymentRows.map(r => r.id)) + 1;
+    setPaymentRows([...paymentRows, { id: newId, amount: "", method: "Cash" }]);
+  };
+
+  const removePaymentRow = (id: number) => {
+    setPaymentRows(paymentRows.filter(row => row.id !== id));
+  };
+
+  const updatePaymentRow = (id: number, field: 'amount' | 'method', value: string) => {
+    setPaymentRows(paymentRows.map(row => 
+      row.id === id ? { ...row, [field]: value } : row
+    ));
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -243,34 +259,52 @@ const Payment = () => {
                   <div className="space-y-3">
                     <p className="text-sm font-medium text-foreground">Payment Options</p>
                     
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1">
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
-                            ₹
-                          </span>
-                          <input
-                            type="text"
-                            value={payableAmount.toLocaleString()}
-                            readOnly
-                            className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
-                          />
+                    {paymentRows.map((row, index) => (
+                      <div key={row.id} className="flex items-center gap-3">
+                        <div className="flex-1">
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
+                              ₹
+                            </span>
+                            <input
+                              type="text"
+                              value={index === 0 ? payableAmount.toLocaleString() : row.amount}
+                              onChange={(e) => updatePaymentRow(row.id, 'amount', e.target.value)}
+                              readOnly={index === 0}
+                              className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
+                            />
+                          </div>
                         </div>
+                        <Select 
+                          value={row.method} 
+                          onValueChange={(value) => updatePaymentRow(row.id, 'method', value)}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Cash">Cash</SelectItem>
+                            <SelectItem value="UPI">UPI</SelectItem>
+                            <SelectItem value="Card">Card</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {paymentRows.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removePaymentRow(row.id)}
+                            className="h-10 w-10 text-muted-foreground hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
-                      <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Cash">Cash</SelectItem>
-                          <SelectItem value="Card">Card</SelectItem>
-                          <SelectItem value="UPI">UPI</SelectItem>
-                          <SelectItem value="Net Banking">Net Banking</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    ))}
 
-                    <p className="text-sm text-primary font-medium cursor-pointer">
+                    <p 
+                      className="text-sm text-primary font-medium cursor-pointer"
+                      onClick={addPaymentRow}
+                    >
                       Add Payment
                     </p>
                   </div>
