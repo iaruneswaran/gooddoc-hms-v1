@@ -254,125 +254,138 @@ const Payments = () => {
                 </Card>
 
                 {/* Right Column - Selected Invoices & Payment */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-primary mb-4">Selected Invoices</h3>
+                    <h3 className="text-base font-semibold text-foreground mb-5">Selected Invoices</h3>
                     
-                    {selectedInvoices.map((invoiceId) => {
-                      const invoice = invoices.find(inv => inv.id === invoiceId);
-                      if (!invoice) return null;
-                      
-                      return (
-                        <div key={invoiceId} className="mb-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm text-muted-foreground">{invoiceId}</span>
-                            <span className="text-sm font-medium">₹{invoice.balance}</span>
+                    <div className="space-y-5">
+                      {selectedInvoices.map((invoiceId) => {
+                        const invoice = invoices.find(inv => inv.id === invoiceId);
+                        if (!invoice) return null;
+                        
+                        return (
+                          <div key={invoiceId}>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">{invoiceId}</span>
+                              <span className="text-sm font-medium text-foreground">₹{invoice.balance}</span>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
 
-                    <div className="border-t pt-4 mt-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">Net payable now</span>
-                        <span className="text-lg font-semibold text-primary">₹{totalSelected}</span>
+                      <div className="flex justify-between items-center pb-5 border-b border-border">
+                        <p className="text-sm font-medium text-foreground">Net payable now</p>
+                        <p className="text-[18px] font-semibold text-primary">₹{totalSelected}</p>
                       </div>
-                    </div>
 
-                    <div className="border-t pt-3 mt-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
                           <span className="text-sm text-muted-foreground">Advance Amount</span>
+                          <span className="text-lg font-medium text-primary">₹{advanceAmount.toLocaleString()}</span>
                         </div>
-                        <span className="text-lg font-medium" style={{ color: '#7e0137' }}>₹{advanceAmount.toLocaleString()}</span>
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            id="use-advance"
+                            checked={useAdvance}
+                            onCheckedChange={setUseAdvance}
+                          />
+                          <label htmlFor="use-advance" className="text-sm cursor-pointer">
+                            Use advance amount for this bill
+                          </label>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-3">
-                        <Switch
-                          id="use-advance"
-                          checked={useAdvance}
-                          onCheckedChange={setUseAdvance}
+
+                      {useAdvance && (
+                        <div className="p-4 bg-muted/50 rounded-lg space-y-3">
+                          <p className="text-sm font-medium text-primary">Advance Amount Used!</p>
+                          <p className="text-xs text-muted-foreground">
+                            Current bill (₹{totalSelected.toLocaleString()}) Used from advance
+                          </p>
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Remaining Advance Balance</span>
+                              <span className="font-medium">₹{Math.max(0, advanceAmount - totalSelected).toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Payable amount</span>
+                              <span className="font-medium">₹{Math.max(0, totalSelected - advanceAmount).toLocaleString()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="border-t border-border"></div>
+
+                      <div className="space-y-2.5">
+                        <p className="text-sm font-medium text-foreground">Payer Name</p>
+                        <input
+                          type="text"
+                          defaultValue="Fredrick John"
+                          className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
                         />
-                        <Label htmlFor="use-advance" className="text-sm cursor-pointer">
-                          Use advance amount for this bill
-                        </Label>
                       </div>
-                    </div>
 
-                    {useAdvance && (
-                      <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                        <p className="text-sm font-medium text-primary mb-2">Advance Amount Used!</p>
-                        <p className="text-xs text-muted-foreground mb-3">
-                          Current bill (₹{totalSelected}) Used from advance
-                        </p>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Remaining Advance Balance</span>
-                            <span className="font-medium">₹{(advanceAmount - totalSelected).toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Payable amount</span>
-                            <span className="font-medium">₹0.00</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-
-                  <Card className="p-6">
-                    <h3 className="text-sm font-medium mb-3">Payer Name</h3>
-                    <Input defaultValue="Fredrick John" className="mb-4" />
-
-                    <h3 className="text-sm font-medium mb-3">Payment Options</h3>
-                    <div className="space-y-2 mb-3">
-                      {paymentRows.map((row) => (
-                        <div key={row.id} className="flex gap-2 items-center">
-                          <div className="relative flex-1">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">₹</span>
-                            <Input
-                              type="text"
-                              value={row.amount}
-                              onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
-                              className="pl-7"
-                            />
-                          </div>
-                          <Select value={row.method} onValueChange={(value) => updatePaymentRow(row.id, "method", value)}>
-                            <SelectTrigger className="w-[120px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Cash">Cash</SelectItem>
-                              <SelectItem value="Card">Card</SelectItem>
-                              <SelectItem value="UPI">UPI</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {paymentRows.length > 1 && (
-                            <button
-                              onClick={() => removePaymentRow(row.id)}
-                              className="text-destructive hover:text-destructive/80 p-2"
+                      <div className="space-y-3">
+                        <p className="text-sm font-medium text-foreground">Payment Options</p>
+                        
+                        {paymentRows.map((row) => (
+                          <div key={row.id} className="flex items-center gap-3">
+                            <div className="flex-1">
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
+                                  ₹
+                                </span>
+                                <input
+                                  type="text"
+                                  value={row.amount}
+                                  onChange={(e) => updatePaymentRow(row.id, "amount", e.target.value)}
+                                  className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
+                                />
+                              </div>
+                            </div>
+                            <Select 
+                              value={row.method} 
+                              onValueChange={(value) => updatePaymentRow(row.id, "method", value)}
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                              </svg>
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <Button 
-                      variant="link" 
-                      size="sm" 
-                      className="text-primary p-0 h-auto mb-4"
-                      onClick={addPaymentRow}
-                    >
-                      Add Payment
-                    </Button>
+                              <SelectTrigger className="w-[140px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Cash">Cash</SelectItem>
+                                <SelectItem value="UPI">UPI</SelectItem>
+                                <SelectItem value="Card">Card</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {paymentRows.length > 1 && (
+                              <button
+                                onClick={() => removePaymentRow(row.id)}
+                                className="h-10 w-10 flex items-center justify-center text-muted-foreground hover:text-primary"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                </svg>
+                              </button>
+                            )}
+                          </div>
+                        ))}
 
-                    <Button 
-                      onClick={handleConfirmPayment}
-                      className="w-full bg-[#8B1538] hover:bg-[#6B0F2B] text-white"
-                    >
-                      Confirm Payment
-                    </Button>
+                        <p 
+                          className="text-sm text-primary font-medium cursor-pointer"
+                          onClick={addPaymentRow}
+                        >
+                          Add Payment
+                        </p>
+                      </div>
+
+                      <div className="flex gap-3 pt-1">
+                        <Button 
+                          onClick={handleConfirmPayment}
+                          className="flex-1 bg-primary hover:bg-primary/90"
+                        >
+                          Confirm Payment
+                        </Button>
+                      </div>
+                    </div>
                   </Card>
                 </div>
               </div>
