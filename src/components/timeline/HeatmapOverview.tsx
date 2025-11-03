@@ -61,7 +61,7 @@ export function HeatmapOverview({
 }: HeatmapOverviewProps) {
   const [mode, setMode] = useState<HeatmapMode>("density");
   const [palette, setPalette] = useState<HeatmapPalette>("primary");
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
   const [dragStart, setDragStart] = useState<string | null>(null);
 
@@ -250,14 +250,13 @@ export function HeatmapOverview({
   if (isCollapsed) {
     return (
       <div className="sticky top-0 z-10 bg-background border-b border-border">
-        <div className="px-6 py-2">
+        <div className="px-6 py-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Activity Overview</h3>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(false)}
-            className="w-full justify-between"
           >
-            <span className="text-sm font-medium">Activity Overview</span>
             <ChevronDown className="h-4 w-4" />
           </Button>
         </div>
@@ -337,7 +336,6 @@ export function HeatmapOverview({
               variant="ghost"
               size="sm"
               onClick={() => setIsCollapsed(true)}
-              className="lg:hidden"
             >
               <ChevronDown className="h-4 w-4 rotate-180" />
             </Button>
