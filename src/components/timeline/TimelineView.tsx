@@ -133,15 +133,19 @@ export function TimelineView({
                   >
                     {/* Day Header */}
                     <div className="sticky top-0 bg-background border-b border-border px-3 py-3">
-                      <div className="text-xs font-medium text-muted-foreground">
-                        {format(parseISO(date), "EEE")}
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="text-xs font-medium text-muted-foreground">
+                            {format(parseISO(date), "EEE")}
+                          </div>
+                          <div className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-foreground'}`}>
+                            {format(parseISO(date), "MMM d")}
+                          </div>
+                        </div>
+                        {isToday && (
+                          <Badge variant="default" className="text-xs">Today</Badge>
+                        )}
                       </div>
-                      <div className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-foreground'}`}>
-                        {format(parseISO(date), "MMM d")}
-                      </div>
-                      {isToday && (
-                        <Badge variant="default" className="text-xs mt-1">Today</Badge>
-                      )}
                     </div>
 
                     {/* Events */}
