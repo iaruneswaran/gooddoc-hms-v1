@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -78,6 +79,7 @@ const mockAppointments: PendingAppointment[] = [
 export default function Inbox() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("appointment");
 
   const filteredAppointments = mockAppointments.filter((apt) => {
     const matchesSearch =
@@ -117,6 +119,31 @@ export default function Inbox() {
             </div>
           </Card>
 
+          {/* Navigation Tabs */}
+          <Card className="p-0 overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
+                <TabsList className="h-auto bg-transparent border-0 p-0 w-full justify-start rounded-none">
+                  <TabsTrigger 
+                    value="appointment" 
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-4"
+                  >
+                    Appointment
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="scheduled" 
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-4"
+                  >
+                    Scheduled
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </Card>
+
+          {/* Content based on active tab */}
+          {activeTab === "appointment" && (
+            <>
           {/* Appointments List */}
           {filteredAppointments.length === 0 ? (
             <Card className="p-12 text-center">
@@ -217,6 +244,21 @@ export default function Inbox() {
                 </Card>
               ))}
             </div>
+          )}
+            </>
+          )}
+
+          {activeTab === "scheduled" && (
+            <Card className="p-12 text-center">
+              <div className="max-w-md mx-auto space-y-2">
+                <h3 className="text-lg font-semibold text-foreground">
+                  Scheduled Appointments
+                </h3>
+                <p className="text-muted-foreground">
+                  View all scheduled appointments here.
+                </p>
+              </div>
+            </Card>
           )}
         </main>
       </div>
