@@ -343,33 +343,27 @@ export function HeatmapOverview({
         {/* Heatmap Grid */}
         <TooltipProvider delayDuration={100}>
           <div className="flex gap-1">
-            {/* Day labels */}
-            <div className="flex flex-col gap-1 mr-2 text-[10px] text-muted-foreground justify-around" style={{ paddingTop: "20px" }}>
-              <div>Mon</div>
-              <div className="invisible">Tue</div>
-              <div>Wed</div>
-              <div className="invisible">Thu</div>
-              <div>Fri</div>
-              <div className="invisible">Sat</div>
-              <div className="invisible">Sun</div>
-            </div>
-
             {/* Grid */}
             <div className="flex-1 overflow-x-auto">
               {/* Month labels */}
-              <div className="flex gap-1 mb-1 h-4">
-                {monthLabels.map((label, index) => (
-                  <div
-                    key={index}
-                    className="text-[10px] text-muted-foreground font-medium"
-                    style={{ 
-                      position: 'relative',
-                      left: `${label.weekIndex * 16}px`
-                    }}
-                  >
-                    {label.month}
-                  </div>
-                ))}
+              <div className="flex mb-1 h-4">
+                {monthLabels.map((label, index) => {
+                  const nextLabelIndex = monthLabels[index + 1]?.weekIndex || gridStructure.length;
+                  const monthWidth = (nextLabelIndex - label.weekIndex) * 16; // 15px cell + 1px gap
+                  
+                  return (
+                    <div
+                      key={index}
+                      className="text-[10px] text-muted-foreground font-medium"
+                      style={{ 
+                        width: `${monthWidth}px`,
+                        textAlign: 'left'
+                      }}
+                    >
+                      {label.month}
+                    </div>
+                  );
+                })}
               </div>
               
               <div className="flex gap-1">
