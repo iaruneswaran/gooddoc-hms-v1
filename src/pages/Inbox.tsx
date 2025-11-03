@@ -199,17 +199,11 @@ export default function Inbox() {
                   </div>
 
                   <div>
-                    <Badge
-                      variant={
-                        appointment.appointmentType === "consultation"
-                          ? "default"
-                          : "secondary"
-                      }
-                    >
+                    <span className="text-sm text-foreground">
                       {appointment.appointmentType === "consultation"
                         ? "Consultation"
                         : "Lab"}
-                    </Badge>
+                    </span>
                   </div>
 
                   <div className="text-sm text-muted-foreground">
