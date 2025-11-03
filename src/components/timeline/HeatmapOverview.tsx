@@ -111,11 +111,12 @@ export function HeatmapOverview({
     return counts;
   }, [events, startDate, endDate]);
 
-  // Generate grid structure for 365 days (weeks x days)
+  // Generate grid structure for calendar year (Jan 1 - Dec 31)
   const gridStructure = useMemo(() => {
-    // Show last 365 days ending today
-    const end = new Date();
-    const start = subDays(end, 364);
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const start = new Date(currentYear, 0, 1); // Jan 1
+    const end = new Date(currentYear, 11, 31); // Dec 31
     
     const gridStart = startOfWeek(start, { weekStartsOn: 1 }); // Monday
     const gridEnd = endOfWeek(end, { weekStartsOn: 1 });
