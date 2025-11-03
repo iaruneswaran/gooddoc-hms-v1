@@ -101,18 +101,18 @@ export default function Inbox() {
           {/* Header */}
           <Card className="p-6">
             <div className="flex items-center justify-between gap-6">
+              <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
               <div className="flex items-center gap-6">
-                <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
                 <CalendarWidget />
-              </div>
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by patient name, MRN, or appointment type..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
+                <div className="relative w-80">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by patient name, MRN, or appointment type..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
               </div>
             </div>
           </Card>
