@@ -203,7 +203,12 @@ const Payments = () => {
               <div className="grid grid-cols-[1fr_400px] gap-6">
                 {/* Left Column - Invoice Table */}
                 <Card className="p-6">
-                  <h2 className="text-lg font-semibold text-primary mb-4">Payment Collection</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-primary">Payment Collection</h2>
+                    <div className="text-sm text-muted-foreground">
+                      Active Visit: <span className="font-medium text-foreground">VST-205431</span>
+                    </div>
+                  </div>
                   
                   <div className="border rounded-lg overflow-hidden">
                     <table className="w-full">
