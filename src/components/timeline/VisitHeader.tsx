@@ -29,7 +29,7 @@ export function VisitHeader({
   const isActive = status === "active";
 
   return (
-    <div className="sticky top-0 z-10 bg-background border-b border-border">
+    <div className="sticky top-0 z-10 bg-background">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Left: Status and Title */}
