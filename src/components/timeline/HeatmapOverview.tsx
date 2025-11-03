@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { format, parseISO, eachDayOfInterval, startOfWeek, endOfWeek, isSameDay, getDay } from "date-fns";
+import { format, parseISO, eachDayOfInterval, startOfWeek, endOfWeek, isSameDay, getDay, subDays, startOfMonth, getMonth } from "date-fns";
 import { EventType, TimelineEvent } from "@/types/timeline";
 import { cn } from "@/lib/utils";
 
@@ -33,10 +33,10 @@ interface HeatmapOverviewProps {
 }
 
 type HeatmapMode = "density" | "byType" | "status";
-type HeatmapPalette = "greens" | "blues" | "purples" | "greyscale";
+type HeatmapPalette = "primary" | "blues" | "purples" | "greyscale";
 
 const COLOR_PALETTES = {
-  greens: ["#ECFDF5", "#BBF7D0", "#86EFAC", "#34D399", "#059669"],
+  primary: ["hsl(var(--primary) / 0.1)", "hsl(var(--primary) / 0.3)", "hsl(var(--primary) / 0.5)", "hsl(var(--primary) / 0.7)", "hsl(var(--primary))"],
   blues: ["#EFF6FF", "#BFDBFE", "#93C5FD", "#3B82F6", "#1D4ED8"],
   purples: ["#F5F3FF", "#DDD6FE", "#C4B5FD", "#8B5CF6", "#6D28D9"],
   greyscale: ["#F1F5F9", "#CBD5E1", "#94A3B8", "#475569", "#1E293B"],
@@ -60,7 +60,7 @@ export function HeatmapOverview({
   onDateRangeSelect,
 }: HeatmapOverviewProps) {
   const [mode, setMode] = useState<HeatmapMode>("density");
-  const [palette, setPalette] = useState<HeatmapPalette>("greens");
+  const [palette, setPalette] = useState<HeatmapPalette>("primary");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
   const [dragStart, setDragStart] = useState<string | null>(null);
@@ -111,12 +111,16 @@ export function HeatmapOverview({
     return counts;
   }, [events, startDate, endDate]);
 
-  // Generate grid structure (weeks x days)
+  // Generate grid structure for 365 days (weeks x days)
   const gridStructure = useMemo(() => {
-    const start = startOfWeek(parseISO(startDate), { weekStartsOn: 1 }); // Monday
-    const end = endOfWeek(parseISO(endDate), { weekStartsOn: 1 });
+    // Show last 365 days ending today
+    const end = new Date();
+    const start = subDays(end, 364);
     
-    const allDays = eachDayOfInterval({ start, end });
+    const gridStart = startOfWeek(start, { weekStartsOn: 1 }); // Monday
+    const gridEnd = endOfWeek(end, { weekStartsOn: 1 });
+    
+    const allDays = eachDayOfInterval({ start: gridStart, end: gridEnd });
     const weeks: Date[][] = [];
     let currentWeek: Date[] = [];
 
@@ -129,7 +133,28 @@ export function HeatmapOverview({
     });
 
     return weeks;
-  }, [startDate, endDate]);
+  }, []);
+
+  // Generate month labels for the grid
+  const monthLabels = useMemo(() => {
+    const labels: { month: string; weekIndex: number }[] = [];
+    let lastMonth = -1;
+
+    gridStructure.forEach((week, weekIndex) => {
+      const firstDay = week[0];
+      const month = getMonth(firstDay);
+      
+      if (month !== lastMonth) {
+        labels.push({
+          month: format(firstDay, "MMM"),
+          weekIndex,
+        });
+        lastMonth = month;
+      }
+    });
+
+    return labels;
+  }, [gridStructure]);
 
   // Get color for a cell based on mode and palette
   const getCellColor = (dateStr: string): string => {
@@ -273,8 +298,8 @@ export function HeatmapOverview({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setPalette("greens")}>
-                  Greens
+                <DropdownMenuItem onClick={() => setPalette("primary")}>
+                  Primary
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setPalette("blues")}>
                   Blues
@@ -292,17 +317,16 @@ export function HeatmapOverview({
           <div className="flex items-center gap-3">
             {/* Legend */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Less</span>
+              <span>Appointments</span>
               <div className="flex gap-1">
                 {COLOR_PALETTES[palette].map((color, i) => (
                   <div
                     key={i}
-                    className="w-3 h-3 rounded-sm"
+                    className="w-3 h-3 rounded-sm border border-border"
                     style={{ backgroundColor: color }}
                   />
                 ))}
               </div>
-              <span>More</span>
             </div>
 
             <Button
@@ -320,7 +344,7 @@ export function HeatmapOverview({
         <TooltipProvider delayDuration={100}>
           <div className="flex gap-1">
             {/* Day labels */}
-            <div className="flex flex-col gap-1 mr-2 text-[10px] text-muted-foreground justify-around py-1">
+            <div className="flex flex-col gap-1 mr-2 text-[10px] text-muted-foreground justify-around" style={{ paddingTop: "20px" }}>
               <div>Mon</div>
               <div className="invisible">Tue</div>
               <div>Wed</div>
@@ -332,6 +356,22 @@ export function HeatmapOverview({
 
             {/* Grid */}
             <div className="flex-1 overflow-x-auto">
+              {/* Month labels */}
+              <div className="flex gap-1 mb-1 h-4">
+                {monthLabels.map((label, index) => (
+                  <div
+                    key={index}
+                    className="text-[10px] text-muted-foreground font-medium"
+                    style={{ 
+                      position: 'relative',
+                      left: `${label.weekIndex * 16}px`
+                    }}
+                  >
+                    {label.month}
+                  </div>
+                ))}
+              </div>
+              
               <div className="flex gap-1">
                 {gridStructure.map((week, weekIndex) => (
                   <div key={weekIndex} className="flex flex-col gap-1">
