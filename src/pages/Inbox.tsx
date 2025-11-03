@@ -104,40 +104,36 @@ export default function Inbox() {
           <Card className="p-6">
             <div className="flex items-center justify-between gap-6">
               <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
-              <div className="flex items-center gap-6">
-                <CalendarWidget />
-                <div className="relative w-80">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by patient name, MRN, or appointment type..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-              </div>
+              <CalendarWidget />
             </div>
           </Card>
 
-          {/* Navigation Tabs */}
-          <div className="border-b border-border mb-6">
-            <div className="flex items-center justify-between">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
-                <TabsList className="bg-transparent border-0 h-auto p-0 justify-start rounded-none">
-                  <TabsTrigger 
-                    value="appointment" 
-                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
-                  >
-                    Appointment
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="scheduled" 
-                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
-                  >
-                    Scheduled
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+          {/* Navigation Tabs with Search */}
+          <div className="flex items-center justify-between mb-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="bg-transparent border-b border-border h-auto p-0 justify-start rounded-none">
+                <TabsTrigger 
+                  value="appointment" 
+                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
+                >
+                  Appointment
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="scheduled" 
+                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
+                >
+                  Scheduled
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by patient name, MRN, or appointment type..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
             </div>
           </div>
 
