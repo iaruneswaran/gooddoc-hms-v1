@@ -38,6 +38,11 @@ All colors MUST be HSL.
 
     --tab-active: 11 91% 57%;
 
+    --info: 221 83% 53%;
+    --info-light: 189 94% 43%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+
     --radius: 0.5rem;
 
     --sidebar-background: 215 54% 16%;
