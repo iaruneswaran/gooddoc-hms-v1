@@ -36,13 +36,13 @@ export function BookingSteps({ currentStep, hideSteps = [] }: BookingStepsProps)
             <div className="flex flex-col items-center gap-3">
               <div
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors",
+                  "w-12 h-12 rounded-full flex items-center justify-center border-2 transition-colors",
                   isActive && "bg-primary border-primary text-primary-foreground",
                   isCompleted && "bg-primary border-primary text-primary-foreground",
                   !isActive && !isCompleted && "border-border text-muted-foreground"
                 )}
               >
-                <Icon className="w-4 h-4" fill="currentColor" />
+                <Icon className="w-5 h-5" />
               </div>
               <span
                 className={cn(
@@ -56,7 +56,7 @@ export function BookingSteps({ currentStep, hideSteps = [] }: BookingStepsProps)
             </div>
             
             {index < visibleSteps.length - 1 && (
-              <div className="w-32 h-px bg-border -mt-5" />
+              <div className="w-32 h-px bg-border -mt-6" />
             )}
           </div>
         );
