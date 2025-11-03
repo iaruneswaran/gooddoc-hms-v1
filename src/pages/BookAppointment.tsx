@@ -447,14 +447,18 @@ const BookAppointment = () => {
         
         <main className="p-6 pb-32">
           <button
-            onClick={() => navigate(fromPatientInsights ? `/patient-insights/${patientId}` : "/registration")}
+            onClick={() => navigate(isSingleAppointmentMode ? "/inbox" : (fromPatientInsights ? `/patient-insights/${patientId}` : "/registration"))}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">{fromPatientInsights ? "Patient Insights" : "Registration"}</span>
+            <span className="font-semibold">
+              {isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")}
+            </span>
           </button>
 
-          <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
+          {!isSingleAppointmentMode && (
+            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
+          )}
 
           <div className="max-w-[1600px] mx-auto">
             {isSingleAppointmentMode ? (
