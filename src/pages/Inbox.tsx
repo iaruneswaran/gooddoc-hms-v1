@@ -156,9 +156,9 @@ export default function Inbox() {
             <div className="space-y-3">
               {filteredAppointments.map((appointment) => (
                 <Card key={appointment.id} className="p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center gap-4">
                     {/* Patient Avatar */}
-                    <Avatar className="h-12 w-12">
+                    <Avatar className="h-10 w-10">
                       <AvatarImage src={appointment.patientAvatar} />
                       <AvatarFallback>
                         {appointment.patientName
@@ -170,10 +170,10 @@ export default function Inbox() {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-2">
+                      <div className="flex items-start justify-between gap-4 mb-1">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-foreground">
+                            <h3 className="font-semibold text-foreground text-sm">
                               {appointment.patientName}
                             </h3>
                             <span className="text-sm text-muted-foreground">
@@ -207,35 +207,23 @@ export default function Inbox() {
                       </div>
 
                       {appointment.requestedDateTime && (
-                        <p className="text-sm text-muted-foreground mb-2">
+                        <p className="text-sm text-muted-foreground mb-1">
                           Requested: {appointment.requestedDateTime}
                         </p>
                       )}
 
-                      <p className="text-sm text-foreground line-clamp-2 mb-3">
+                      <p className="text-sm text-foreground line-clamp-2">
                         {appointment.reason}
                       </p>
-
-                      <div className="flex items-center gap-2">
-                        <Button
-                          onClick={() => handleSchedule(appointment)}
-                          size="sm"
-                        >
-                          Schedule
-                        </Button>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View details</DropdownMenuItem>
-                            <DropdownMenuItem>Contact patient</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
                     </div>
+
+                    {/* Schedule Button */}
+                    <Button
+                      onClick={() => handleSchedule(appointment)}
+                      size="sm"
+                    >
+                      Schedule
+                    </Button>
                   </div>
                 </Card>
               ))}
