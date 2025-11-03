@@ -1,0 +1,125 @@
+import { useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { AppSidebar } from "@/components/AppSidebar";
+import { AppHeader } from "@/components/AppHeader";
+import { VisitHeader } from "@/components/timeline/VisitHeader";
+import { TimelineView } from "@/components/timeline/TimelineView";
+import { PatientJourney } from "@/types/timeline";
+
+const PatientTimeline = () => {
+  const { patientId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const visitId = location.state?.visitId || "VST-205431";
+
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  // Mock data from requirements
+  const journeyData: PatientJourney = {
+    visitId: visitId,
+    status: "active",
+    admissionDate: "2025-11-01",
+    dischargeDate: null,
+    patient: {
+      name: "John Doe",
+      mrn: "MRN-883920",
+      age: 64,
+      sex: "M",
+    },
+    events: [
+      {
+        id: "e1",
+        date: "2025-11-01",
+        time: "09:32",
+        type: "Admission",
+        title: "Admitted to Ward 3B",
+        dept: "ER → Ward 3B",
+        status: "Completed",
+      },
+      {
+        id: "e2",
+        date: "2025-11-02",
+        time: "08:10",
+        type: "Laboratory",
+        title: "CBC + CMP",
+        dept: "Lab",
+        status: "Resulted",
+      },
+      {
+        id: "e3",
+        date: "2025-11-02",
+        time: "14:15",
+        type: "Medication",
+        title: "Ceftriaxone 1g IV",
+        dept: "Pharmacy",
+        status: "Administered",
+      },
+      {
+        id: "e4",
+        date: "2025-11-03",
+        time: "10:00",
+        type: "Imaging",
+        title: "Chest X‑ray",
+        dept: "Radiology",
+        status: "Scheduled",
+      },
+      {
+        id: "e5",
+        date: "2025-11-04",
+        time: "16:00",
+        type: "Discharge",
+        title: "Discharge planning meeting",
+        dept: "Ward 3B",
+        status: "Planned",
+      },
+    ],
+  };
+
+  const endDate = journeyData.dischargeDate || new Date().toISOString().split('T')[0];
+
+  return (
+    <div className="flex h-screen bg-background overflow-hidden">
+      <AppSidebar />
+      
+      <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
+        <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Timeline"]} />
+        
+        {/* Back Button */}
+        <div className="px-6 py-3 border-b border-border">
+          <button
+            onClick={() => navigate(`/patient-insights/${patientId}`)}
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="font-semibold">Back to Patient Insights</span>
+          </button>
+        </div>
+
+        {/* Visit Header */}
+        <VisitHeader
+          visitId={journeyData.visitId}
+          status={journeyData.status}
+          patient={journeyData.patient}
+          onFilter={() => console.log("Filter clicked")}
+          onAddEvent={() => console.log("Add event clicked")}
+          onMarkDischarged={() => console.log("Mark discharged clicked")}
+          onExport={() => console.log("Export clicked")}
+        />
+
+        {/* Timeline */}
+        <main className="flex-1 overflow-hidden">
+          <TimelineView
+            events={journeyData.events}
+            startDate={journeyData.admissionDate}
+            endDate={endDate}
+            activeFilters={activeFilters}
+            onFilterChange={setActiveFilters}
+          />
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default PatientTimeline;
