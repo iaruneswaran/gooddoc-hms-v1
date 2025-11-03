@@ -10,11 +10,9 @@ import { useFeatureFlags } from '@/contexts/FeatureFlagsContext';
 interface GlobalDiscountControlsProps {
   discountType: DiscountType;
   discountValue: number;
-  applyPretax: boolean;
   couponCode: string;
   onDiscountTypeChange: (type: DiscountType) => void;
   onDiscountValueChange: (value: number) => void;
-  onApplyPretaxChange: (pretax: boolean) => void;
   onCouponCodeChange: (code: string) => void;
   onApplyCoupon: () => void;
   maxValue: number;
@@ -23,11 +21,9 @@ interface GlobalDiscountControlsProps {
 export function GlobalDiscountControls({
   discountType,
   discountValue,
-  applyPretax,
   couponCode,
   onDiscountTypeChange,
   onDiscountValueChange,
-  onApplyPretaxChange,
   onCouponCodeChange,
   onApplyCoupon,
   maxValue,
@@ -54,20 +50,6 @@ export function GlobalDiscountControls({
           min="0"
         />
       </div>
-
-      {/* Apply Pre-tax Toggle */}
-      {flags.allow_post_tax_global_discount && (
-        <div className="flex items-center justify-between">
-          <Label htmlFor="apply-pretax" className="text-xs">
-            Apply pre-tax
-          </Label>
-          <Switch
-            id="apply-pretax"
-            checked={applyPretax}
-            onCheckedChange={onApplyPretaxChange}
-          />
-        </div>
-      )}
     </div>
   );
 }

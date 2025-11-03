@@ -60,7 +60,6 @@ const BookAppointment = () => {
         basePrice: 1000,
         isDiscountable: true,
         floorPrice: 500,
-        taxRateComponents: { cgst: 9, sgst: 9 },
       });
     }
 
@@ -73,7 +72,6 @@ const BookAppointment = () => {
           basePrice: test.price,
           isDiscountable: true,
           floorPrice: test.price * 0.5,
-          taxRateComponents: { cgst: 9, sgst: 9 },
         });
       });
       laboratoryData.selectedPackages.forEach((pkg) => {
@@ -84,7 +82,6 @@ const BookAppointment = () => {
           basePrice: pkg.price,
           isDiscountable: true,
           floorPrice: pkg.price * 0.5,
-          taxRateComponents: { cgst: 9, sgst: 9 },
         });
       });
     }
@@ -98,7 +95,6 @@ const BookAppointment = () => {
           basePrice: test.price,
           isDiscountable: true,
           floorPrice: test.price * 0.5,
-          taxRateComponents: { cgst: 9, sgst: 9 },
         });
       });
     }
@@ -111,7 +107,6 @@ const BookAppointment = () => {
         basePrice: 5000,
         isDiscountable: false, // Example: non-discountable
         floorPrice: 5000,
-        taxRateComponents: { cgst: 9, sgst: 9 },
       });
     }
 
@@ -123,7 +118,6 @@ const BookAppointment = () => {
         basePrice: 15000,
         isDiscountable: true,
         floorPrice: 10000,
-        taxRateComponents: { cgst: 9, sgst: 9 },
       });
     }
 
@@ -734,11 +728,9 @@ const BookAppointment = () => {
                         <GlobalDiscountControls
                           discountType={pricing.globalDiscountType}
                           discountValue={pricing.globalDiscountValue}
-                          applyPretax={pricing.applyGlobalDiscountPretax}
                           couponCode={pricing.couponCode}
                           onDiscountTypeChange={pricing.setGlobalDiscountType}
                           onDiscountValueChange={pricing.setGlobalDiscountValue}
-                          onApplyPretaxChange={pricing.setApplyGlobalDiscountPretax}
                           onCouponCodeChange={pricing.setCouponCode}
                           onApplyCoupon={handleApplyCoupon}
                           maxValue={pricing.totals.subtotal}
@@ -759,19 +751,6 @@ const BookAppointment = () => {
                             <p>-{formatCurrency(pricing.globalDiscountValue)}</p>
                           </div>
                         )}
-                        
-                        <div className="flex justify-between">
-                          <p className="text-muted-foreground">Taxable Amount</p>
-                          <p className="text-foreground">{formatCurrency(pricing.totals.taxable)}</p>
-                        </div>
-                        <div className="flex justify-between">
-                          <p className="text-muted-foreground">CGST (9%)</p>
-                          <p className="text-foreground">{formatCurrency(pricing.totals.cgst)}</p>
-                        </div>
-                        <div className="flex justify-between">
-                          <p className="text-muted-foreground">SGST (9%)</p>
-                          <p className="text-foreground">{formatCurrency(pricing.totals.sgst)}</p>
-                        </div>
                         {Math.abs(pricing.totals.roundOff) > 0.01 && (
                           <div className="flex justify-between">
                             <p className="text-muted-foreground">Round-off</p>
@@ -795,7 +774,7 @@ const BookAppointment = () => {
             totals={pricing.totals}
             itemCount={pricing.lineItems.length}
             onGenerateInvoice={() => {
-              const { subtotal, cgst, sgst, netPayable } = pricing.totals;
+              const { subtotal, netPayable } = pricing.totals;
               const items = pricing.lineItems.map(item => {
                 let price = item.overridePrice ?? item.basePrice;
                 
@@ -817,8 +796,6 @@ const BookAppointment = () => {
                   appointmentType: selectedTypes.join(", "),
                   items,
                   subtotal,
-                  cgst,
-                  sgst,
                   total: netPayable,
                   date: format(new Date(), "dd/MM/yyyy"),
                   fromPatientInsights,

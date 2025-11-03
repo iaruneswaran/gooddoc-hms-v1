@@ -46,12 +46,6 @@ export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: Sticky
               </div>
             )}
             <div>
-              <p className="text-xs text-muted-foreground">Taxes (GST 18%)</p>
-              <p className="text-sm font-semibold">
-                ₹{formatCurrency(totals.cgst + totals.sgst)}
-              </p>
-            </div>
-            <div>
               <p className="text-xs text-muted-foreground">Net Payable</p>
               <p className="text-lg font-bold text-primary">
                 ₹{formatCurrency(totals.netPayable)}

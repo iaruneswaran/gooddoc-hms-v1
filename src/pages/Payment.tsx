@@ -18,8 +18,6 @@ interface PaymentData {
   appointmentType: string;
   items: InvoiceItem[];
   subtotal: number;
-  cgst: number;
-  sgst: number;
   total: number;
   date: string;
 }
@@ -164,14 +162,6 @@ const Payment = () => {
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-muted-foreground">Subtotal</p>
                       <p className="text-sm text-foreground">₹{paymentData?.subtotal.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-muted-foreground">CGST (9%)</p>
-                      <p className="text-sm text-foreground">₹{paymentData?.cgst.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-muted-foreground">SGST (9%)</p>
-                      <p className="text-sm text-foreground">₹{paymentData?.sgst.toLocaleString()}</p>
                     </div>
                     <div className="flex justify-between items-center pt-3 border-t border-border">
                       <p className="text-base font-semibold text-foreground">Bill Amount:</p>

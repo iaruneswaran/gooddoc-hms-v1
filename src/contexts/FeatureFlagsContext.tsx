@@ -11,7 +11,6 @@ const defaultFlags: FeatureFlags = {
   globalDiscount_stickyBar: true,
   globalDiscount_wizard: false, // Advanced feature, disabled by default
   approval_required_below_floor: true,
-  allow_post_tax_global_discount: false, // Rare use case
 };
 
 interface FeatureFlagsContextType {

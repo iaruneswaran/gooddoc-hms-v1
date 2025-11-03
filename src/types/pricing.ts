@@ -15,10 +15,6 @@ export interface LineItem {
   lineDiscountPercent?: number;
   isDiscountable: boolean;
   floorPrice: number;
-  taxRateComponents: {
-    cgst: number; // 9%
-    sgst: number; // 9%
-  };
   editedBy?: string;
   editedAt?: Date;
   editedReason?: string;
@@ -34,10 +30,6 @@ export interface AppointmentTotals {
   subtotal: number;
   globalDiscountType?: DiscountType;
   globalDiscountValue?: number;
-  globalDiscountAppliedPretax: boolean;
-  taxable: number;
-  cgst: number;
-  sgst: number;
   roundOff: number;
   netPayable: number;
 }
@@ -47,7 +39,6 @@ export interface PricingPolicy {
   requireReasonAboveThreshold: boolean;
   floorPriceRules: Record<string, number>;
   approverRoles: AppRole[];
-  allowPostTaxGlobalDiscount: boolean;
 }
 
 export interface Coupon {
@@ -82,7 +73,6 @@ export interface FeatureFlags {
   globalDiscount_stickyBar: boolean;
   globalDiscount_wizard: boolean;
   approval_required_below_floor: boolean;
-  allow_post_tax_global_discount: boolean;
 }
 
 export interface PriceEditState {

@@ -1,5 +1,4 @@
-// Pricing calculation engine for India GST billing
-// CGST 9% + SGST 9% = 18% total
+// Pricing calculation engine
 
 import { LineItem, AppointmentTotals, DiscountType } from "@/types/pricing";
 
@@ -7,7 +6,6 @@ export interface CalculationInput {
   lineItems: LineItem[];
   globalDiscountType?: DiscountType;
   globalDiscountValue?: number;
-  applyGlobalDiscountPretax?: boolean;
 }
 
 export interface CalculationResult extends AppointmentTotals {
@@ -16,10 +14,10 @@ export interface CalculationResult extends AppointmentTotals {
 
 /**
  * Main calculation engine for appointment totals
- * Order: line prices → subtotal → global discount → taxes → round-off → net payable
+ * Order: line prices → subtotal → global discount → round-off → net payable
  */
 export function calculateAppointmentTotals(input: CalculationInput): CalculationResult {
-  const { lineItems, globalDiscountType, globalDiscountValue, applyGlobalDiscountPretax = true } = input;
+  const { lineItems, globalDiscountType, globalDiscountValue } = input;
 
   // Step 1: Calculate line net prices (with overrides and line discounts)
   const lineNets = lineItems.map((item) => {
@@ -58,29 +56,10 @@ export function calculateAppointmentTotals(input: CalculationInput): Calculation
     return { ...item, distributedDiscount };
   });
 
-  // Step 5: Calculate taxable amount
-  let taxable: number;
-  if (applyGlobalDiscountPretax) {
-    taxable = Math.max(0, subtotal - globalDiscountAmount);
-  } else {
-    // Post-tax discount (rare, but supported)
-    taxable = subtotal;
-  }
+  // Step 5: Calculate gross total after discount
+  const grossTotal = Math.max(0, subtotal - globalDiscountAmount);
 
-  // Step 6: Calculate GST (CGST 9% + SGST 9%)
-  const cgst = Math.round(taxable * 0.09);
-  const sgst = Math.round(taxable * 0.09);
-
-  // Step 7: Calculate gross total before rounding
-  let grossTotal: number;
-  if (applyGlobalDiscountPretax) {
-    grossTotal = taxable + cgst + sgst;
-  } else {
-    // Apply global discount after taxes
-    grossTotal = Math.max(0, taxable + cgst + sgst - globalDiscountAmount);
-  }
-
-  // Step 8: Round to nearest rupee
+  // Step 6: Round to nearest rupee
   const netPayable = Math.round(grossTotal);
   const roundOff = netPayable - grossTotal;
 
@@ -88,10 +67,6 @@ export function calculateAppointmentTotals(input: CalculationInput): Calculation
     subtotal,
     globalDiscountType,
     globalDiscountValue,
-    globalDiscountAppliedPretax: applyGlobalDiscountPretax,
-    taxable,
-    cgst,
-    sgst,
     roundOff,
     netPayable,
     lineItemsWithDistributedDiscount,
