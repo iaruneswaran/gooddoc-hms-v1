@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface ConsultationBookingFormProps {
-  onRemove: () => void;
+  onRemove?: () => void;
   onUpdate: (data: ConsultationData) => void;
 }
 
@@ -107,14 +107,16 @@ export function ConsultationBookingForm({ onRemove, onUpdate }: ConsultationBook
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">Consultation</h3>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onRemove}
-          className="text-primary"
-        >
-          Remove
-        </Button>
+        {onRemove && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRemove}
+            className="text-primary"
+          >
+            Remove
+          </Button>
+        )}
       </div>
 
       {/* Mode of Consultation */}

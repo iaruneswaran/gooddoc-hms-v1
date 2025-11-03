@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NewAppointment from "./pages/NewAppointment";
 import Registration from "./pages/Registration";
 import BookAppointment from "./pages/BookAppointment";
+import Inbox from "./pages/Inbox";
 import Payment from "./pages/Payment";
 import PatientInsights from "./pages/PatientInsights";
 import PatientTimeline from "./pages/PatientTimeline";
@@ -26,6 +27,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/inbox" element={<Inbox />} />
           <Route path="/new-appointment" element={<NewAppointment />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/book-appointment" element={<BookAppointment />} />

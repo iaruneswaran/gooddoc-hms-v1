@@ -32,7 +32,7 @@ export interface LaboratoryData {
 }
 
 interface LaboratoryBookingFormProps {
-  onRemove: () => void;
+  onRemove?: () => void;
   onUpdate: (data: LaboratoryData) => void;
 }
 
@@ -146,14 +146,16 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-foreground">Laboratory</h3>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onRemove}
-          className="text-primary"
-        >
-          Remove
-        </Button>
+        {onRemove && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRemove}
+            className="text-primary"
+          >
+            Remove
+          </Button>
+        )}
       </div>
 
       <div className="space-y-6">

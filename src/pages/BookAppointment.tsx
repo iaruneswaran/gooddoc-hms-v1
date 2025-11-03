@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Calendar, FlaskConical, Scan, Bed, Syringe, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -16,6 +16,8 @@ import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
 import { AdjustPriceModal } from "@/components/pricing/AdjustPriceModal";
 import { GlobalDiscountControls } from "@/components/pricing/GlobalDiscountControls";
 import { StickyFooterBar } from "@/components/pricing/StickyFooterBar";
+import { BookingStickyFooter } from "@/components/booking/BookingStickyFooter";
+import { ConfirmationModal } from "@/components/booking/ConfirmationModal";
 import { usePricingState } from "@/hooks/usePricingState";
 import { LineItem } from "@/types/pricing";
 import { formatCurrency } from "@/lib/pricingEngine";
@@ -33,6 +35,13 @@ const appointmentTypes = [
 const BookAppointment = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  
+  // Check if this is single-appointment mode from Inbox
+  const appointmentId = searchParams.get("id");
+  const appointmentType = searchParams.get("type");
+  const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
+  
   const fromPatientInsights = location.state?.fromPatientInsights;
   const patientId = location.state?.patientId;
   const visitId = location.state?.visitId; // Visit ID for new appointments
@@ -43,10 +52,42 @@ const BookAppointment = () => {
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
   const [dcProcedureData, setDcProcedureData] = useState<DCProcedureData | null>(null);
   
+  // Confirmation modal state
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  
   // Pricing state management
   const pricing = usePricingState();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItemForModal, setSelectedItemForModal] = useState<LineItem | null>(null);
+
+  // Initialize with appointment type if in single-appointment mode
+  useEffect(() => {
+    if (isSingleAppointmentMode && appointmentType) {
+      const validType = appointmentType === "consultation" ? "consultation" : "laboratory";
+      setSelectedTypes([validType]);
+      
+      // Initialize the data based on type
+      if (validType === "consultation") {
+        setConsultationData({
+          mode: "in-person",
+          type: "",
+          department: "",
+          doctor: "",
+          clinicalInfo: "",
+          date: new Date(),
+          time: "",
+        });
+      } else if (validType === "laboratory") {
+        setLaboratoryData({
+          mode: "in-clinic",
+          selectedTests: [],
+          selectedPackages: [],
+          date: new Date(),
+          time: "",
+        });
+      }
+    }
+  }, [isSingleAppointmentMode, appointmentType]);
 
   // Sync line items with selected services
   useEffect(() => {
@@ -311,6 +352,92 @@ const BookAppointment = () => {
     });
   };
 
+  // Single-appointment mode handlers
+  const handleAskConfirmation = () => {
+    setConfirmationModalOpen(true);
+  };
+
+  const handleSendConfirmation = () => {
+    setConfirmationModalOpen(false);
+    toast({
+      title: "Confirmation request sent",
+      description: "The patient will receive a confirmation request shortly.",
+    });
+  };
+
+  const handleSchedule = () => {
+    // Validate required fields
+    const isValid = validateAppointmentData();
+    
+    if (!isValid) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields before scheduling.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Appointment scheduled",
+      description: "The appointment has been scheduled successfully.",
+    });
+    
+    // Navigate to appointment details or back to inbox
+    setTimeout(() => {
+      navigate(isSingleAppointmentMode ? "/inbox" : "/");
+    }, 1000);
+  };
+
+  const validateAppointmentData = () => {
+    if (selectedTypes.includes("consultation") && consultationData) {
+      return !!(
+        consultationData.department &&
+        consultationData.doctor &&
+        consultationData.date &&
+        consultationData.time
+      );
+    }
+    
+    if (selectedTypes.includes("laboratory") && laboratoryData) {
+      return !!(
+        (laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0) &&
+        laboratoryData.date &&
+        laboratoryData.time
+      );
+    }
+    
+    return false;
+  };
+
+  const getAppointmentDetails = () => {
+    const details: any = {
+      patientName: "Patient Name", // This should come from the appointment data
+      appointmentType: selectedTypes[0] === "consultation" ? "Consultation" : "Laboratory",
+    };
+
+    if (consultationData) {
+      details.provider = consultationData.doctor;
+      details.mode = consultationData.mode === "in-person" ? "In-person" : "Virtual";
+      details.location = consultationData.mode === "in-person" ? "Main Clinic" : undefined;
+      details.date = consultationData.date ? format(consultationData.date, "PPP") : undefined;
+      details.time = consultationData.time;
+    }
+
+    if (laboratoryData) {
+      details.mode = laboratoryData.mode === "in-clinic" ? "In-lab" : "Home collection";
+      details.tests = [
+        ...laboratoryData.selectedTests.map(t => t.name),
+        ...laboratoryData.selectedPackages.map(p => p.name),
+      ];
+      details.date = laboratoryData.date ? format(laboratoryData.date, "PPP") : undefined;
+      details.time = laboratoryData.time;
+      details.prepNotes = "Fasting may be required for certain tests. Please review instructions.";
+    }
+
+    return details;
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -330,12 +457,16 @@ const BookAppointment = () => {
           <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
 
           <div className="max-w-[1600px] mx-auto">
-            <h2 className="text-lg font-semibold text-primary mb-4">Book Appointments</h2>
+            {isSingleAppointmentMode ? (
+              <h2 className="text-lg font-semibold text-primary mb-4">Schedule Appointment</h2>
+            ) : (
+              <h2 className="text-lg font-semibold text-primary mb-4">Book Appointments</h2>
+            )}
             
-            {/* Appointment Type Buttons */}
-            <div className="mb-8">
-              <div className="flex gap-3">
-                {appointmentTypes.map((type) => {
+            {/* Appointment Type Buttons - Hide in single-appointment mode */}
+            {!isSingleAppointmentMode && (
+              <div className="mb-8">
+                <div className="flex gap-3">{appointmentTypes.map((type) => {
                   const Icon = type.icon;
                   const isSelected = selectedTypes.includes(type.value);
                   return (
@@ -352,9 +483,9 @@ const BookAppointment = () => {
                       <span className="text-sm">{type.label}</span>
                     </Button>
                   );
-                })}
+                })}</div>
               </div>
-            </div>
+            )}
 
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Main Content */}
@@ -368,24 +499,24 @@ const BookAppointment = () => {
                 ) : (
                   <>
                     {[...selectedTypes].reverse().map((type) => {
-                      if (type === "laboratory" && laboratoryData) {
-                        return (
-                          <LaboratoryBookingForm
-                            key="laboratory"
-                            onRemove={handleRemoveLaboratory}
-                            onUpdate={handleLaboratoryUpdate}
-                          />
-                        );
-                      }
-                      if (type === "consultation" && consultationData) {
-                        return (
-                          <ConsultationBookingForm
-                            key="consultation"
-                            onRemove={handleRemoveConsultation}
-                            onUpdate={handleConsultationUpdate}
-                          />
-                        );
-                      }
+                        if (type === "laboratory" && laboratoryData) {
+                          return (
+                            <LaboratoryBookingForm
+                              key="laboratory"
+                              onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
+                              onUpdate={handleLaboratoryUpdate}
+                            />
+                          );
+                        }
+                        if (type === "consultation" && consultationData) {
+                          return (
+                            <ConsultationBookingForm
+                              key="consultation"
+                              onRemove={isSingleAppointmentMode ? undefined : handleRemoveConsultation}
+                              onUpdate={handleConsultationUpdate}
+                            />
+                          );
+                        }
                       if (type === "radiology" && radiologyData) {
                         return (
                           <RadiologyBookingForm
@@ -769,41 +900,49 @@ const BookAppointment = () => {
             </div>
           </div>
           
-          {/* Sticky Footer Bar */}
-          <StickyFooterBar
-            totals={pricing.totals}
-            itemCount={pricing.lineItems.length}
-            onGenerateInvoice={() => {
-              const { subtotal, netPayable } = pricing.totals;
-              const items = pricing.lineItems.map(item => {
-                let price = item.overridePrice ?? item.basePrice;
+          {/* Footer - Different for single vs multi-appointment mode */}
+          {isSingleAppointmentMode ? (
+            <BookingStickyFooter
+              onAskConfirmation={handleAskConfirmation}
+              onSchedule={handleSchedule}
+              isScheduleDisabled={!validateAppointmentData()}
+            />
+          ) : (
+            <StickyFooterBar
+              totals={pricing.totals}
+              itemCount={pricing.lineItems.length}
+              onGenerateInvoice={() => {
+                const { subtotal, netPayable } = pricing.totals;
+                const items = pricing.lineItems.map(item => {
+                  let price = item.overridePrice ?? item.basePrice;
+                  
+                  // Apply line discount if present
+                  if (item.lineDiscountAmount) {
+                    price = price - item.lineDiscountAmount;
+                  } else if (item.lineDiscountPercent) {
+                    price = price - (price * item.lineDiscountPercent / 100);
+                  }
+                  
+                  return {
+                    name: item.name,
+                    price: price,
+                  };
+                });
                 
-                // Apply line discount if present
-                if (item.lineDiscountAmount) {
-                  price = price - item.lineDiscountAmount;
-                } else if (item.lineDiscountPercent) {
-                  price = price - (price * item.lineDiscountPercent / 100);
-                }
-                
-                return {
-                  name: item.name,
-                  price: price,
-                };
-              });
-              
-              navigate("/payment", {
-                state: {
-                  appointmentType: selectedTypes.join(", "),
-                  items,
-                  subtotal,
-                  total: netPayable,
-                  date: format(new Date(), "dd/MM/yyyy"),
-                  fromPatientInsights,
-                  patientId
-                }
-              });
-            }}
-          />
+                navigate("/payment", {
+                  state: {
+                    appointmentType: selectedTypes.join(", "),
+                    items,
+                    subtotal,
+                    total: netPayable,
+                    date: format(new Date(), "dd/MM/yyyy"),
+                    fromPatientInsights,
+                    patientId
+                  }
+                });
+              }}
+            />
+          )}
           
           {/* Adjust Price Modal */}
           {selectedItemForModal && (
@@ -818,6 +957,14 @@ const BookAppointment = () => {
               }}
             />
           )}
+          
+          {/* Confirmation Modal */}
+          <ConfirmationModal
+            open={confirmationModalOpen}
+            onOpenChange={setConfirmationModalOpen}
+            onConfirm={handleSendConfirmation}
+            appointmentDetails={getAppointmentDetails()}
+          />
         </main>
       </div>
     </div>
