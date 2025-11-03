@@ -8,7 +8,7 @@ import { AppointmentTable } from "@/components/AppointmentTable";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Inbox as InboxIcon } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -27,14 +27,6 @@ const Index = () => {
               <h1 className="text-lg font-semibold text-foreground">Appointments List</h1>
               <div className="flex items-center gap-4">
                 <CalendarWidget />
-                <Button 
-                  onClick={() => navigate("/inbox")}
-                  variant="outline"
-                  className="gap-2"
-                >
-                  <InboxIcon className="w-4 h-4" />
-                  Inbox
-                </Button>
                 <Button 
                   onClick={() => navigate("/new-appointment")}
                   className="gap-2 bg-primary hover:bg-primary/90"
