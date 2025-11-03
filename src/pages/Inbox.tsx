@@ -103,8 +103,7 @@ export default function Inbox() {
         <main className="flex-1 p-6 space-y-6">
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-semibold text-foreground">Inbox</h1>
-            <p className="text-muted-foreground mt-1">Appointments to schedule</p>
+            <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
           </div>
 
           {/* Search and Filters */}
