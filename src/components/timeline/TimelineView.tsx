@@ -74,33 +74,6 @@ export function TimelineView({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Filter Bar */}
-      <div className="sticky top-0 z-10 bg-background border-b border-border px-6 py-3">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-muted-foreground mr-2">Filter:</span>
-          {eventTypes.map(type => (
-            <Badge
-              key={type}
-              variant={activeFilters.includes(type) ? "default" : "outline"}
-              className="cursor-pointer"
-              onClick={() => toggleFilter(type)}
-            >
-              {type}
-            </Badge>
-          ))}
-          {activeFilters.length > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => onFilterChange?.([])}
-              className="text-xs"
-            >
-              Clear all
-            </Button>
-          )}
-        </div>
-      </div>
-
       {/* Timeline */}
       <div className="flex-1 overflow-hidden">
         <div className="flex items-stretch h-full">

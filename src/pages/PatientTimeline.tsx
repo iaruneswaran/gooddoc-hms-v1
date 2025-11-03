@@ -110,7 +110,7 @@ const PatientTimeline = () => {
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="font-semibold">Back to Patient Insights</span>
+            <span className="font-semibold">Patient Insights</span>
           </button>
         </div>
 
