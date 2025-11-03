@@ -153,79 +153,79 @@ export default function Inbox() {
               </div>
             </Card>
           ) : (
-            <div className="space-y-3">
+            <div className="bg-card rounded-lg border border-border overflow-hidden">
+              <div className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="text-sm font-medium text-foreground">Patient Info</div>
+                <div className="text-sm font-medium text-foreground">Appointment Details</div>
+                <div className="text-sm font-medium text-foreground">Type</div>
+                <div className="text-sm font-medium text-foreground">Requested Time</div>
+                <div className="text-sm font-medium text-foreground">Action</div>
+              </div>
+
               {filteredAppointments.map((appointment) => (
-                <Card key={appointment.id} className="p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4">
-                    {/* Patient Avatar */}
-                    <Avatar className="h-10 w-10">
+                <div key={appointment.id} className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div className="flex items-start gap-3">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={appointment.patientAvatar} />
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary">
                         {appointment.patientName
                           .split(" ")
                           .map((n) => n[0])
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-1">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-foreground text-sm">
-                              {appointment.patientName}
-                            </h3>
-                            <span className="text-sm text-muted-foreground">
-                              {appointment.patientMRN}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <Badge
-                              variant={
-                                appointment.appointmentType === "consultation"
-                                  ? "default"
-                                  : "secondary"
-                              }
-                            >
-                              {appointment.appointmentType === "consultation"
-                                ? "Consultation"
-                                : "Lab"}
-                            </Badge>
-                            {appointment.mode && (
-                              <span className="text-sm text-muted-foreground">
-                                {appointment.mode}
-                              </span>
-                            )}
-                            {appointment.location && (
-                              <span className="text-sm text-muted-foreground">
-                                • {appointment.location}
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                    <div>
+                      <div className="font-medium text-foreground text-sm">
+                        {appointment.patientName}
                       </div>
-
-                      {appointment.requestedDateTime && (
-                        <p className="text-sm text-muted-foreground mb-1">
-                          Requested: {appointment.requestedDateTime}
-                        </p>
-                      )}
-
-                      <p className="text-sm text-foreground line-clamp-2">
-                        {appointment.reason}
-                      </p>
+                      <div className="text-xs text-muted-foreground">
+                        {appointment.patientMRN}
+                      </div>
                     </div>
+                  </div>
 
-                    {/* Schedule Button */}
+                  <div>
+                    <p className="text-sm text-foreground line-clamp-2 mb-1">
+                      {appointment.reason}
+                    </p>
+                    {appointment.mode && (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{appointment.mode}</span>
+                        {appointment.location && (
+                          <span>• {appointment.location}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <Badge
+                      variant={
+                        appointment.appointmentType === "consultation"
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
+                      {appointment.appointmentType === "consultation"
+                        ? "Consultation"
+                        : "Lab"}
+                    </Badge>
+                  </div>
+
+                  <div className="text-sm text-muted-foreground">
+                    {appointment.requestedDateTime || "Not specified"}
+                  </div>
+
+                  <div>
                     <Button
                       onClick={() => handleSchedule(appointment)}
                       size="sm"
+                      className="w-full"
                     >
                       Schedule
                     </Button>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           )}
