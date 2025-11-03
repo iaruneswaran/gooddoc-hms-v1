@@ -98,20 +98,20 @@ export default function Inbox() {
         <AppHeader breadcrumbs={["Inbox"]} />
         <main className="flex-1 p-6 space-y-6">
           {/* Header */}
-          <div>
-            <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
-          </div>
-
-          {/* Search */}
-          <div className="relative w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by patient name, MRN, or appointment type..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
+              <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by patient name, MRN, or appointment type..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+          </Card>
 
           {/* Appointments List */}
           {filteredAppointments.length === 0 ? (
