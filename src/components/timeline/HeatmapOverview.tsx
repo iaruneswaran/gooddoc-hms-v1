@@ -140,12 +140,15 @@ export function HeatmapOverview({
   const monthLabels = useMemo(() => {
     const labels: { month: string; weekIndex: number }[] = [];
     let lastMonth = -1;
+    const currentYear = new Date().getFullYear();
 
     gridStructure.forEach((week, weekIndex) => {
       const firstDay = week[0];
       const month = getMonth(firstDay);
+      const year = firstDay.getFullYear();
       
-      if (month !== lastMonth) {
+      // Only show months from current year
+      if (year === currentYear && month !== lastMonth) {
         labels.push({
           month: format(firstDay, "MMM"),
           weekIndex,
