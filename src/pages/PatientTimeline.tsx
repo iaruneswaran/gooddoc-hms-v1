@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { VisitHeader } from "@/components/timeline/VisitHeader";
+import { HeatmapOverview } from "@/components/timeline/HeatmapOverview";
 import { TimelineView } from "@/components/timeline/TimelineView";
 import { PatientJourney } from "@/types/timeline";
 
@@ -14,6 +15,7 @@ const PatientTimeline = () => {
   const visitId = location.state?.visitId || "VST-205431";
 
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const timelineRef = useRef<{ scrollToDate: (date: string) => void }>(null);
 
   // Mock data from requirements
   const journeyData: PatientJourney = {
@@ -78,6 +80,22 @@ const PatientTimeline = () => {
 
   const endDate = journeyData.dischargeDate || new Date().toISOString().split('T')[0];
 
+  const handleDateClick = (date: string) => {
+    // Scroll timeline to this date
+    const dayElement = document.querySelector(`[data-date="${date}"]`);
+    if (dayElement) {
+      dayElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  const handleDateRangeSelect = (startDate: string, endDate: string) => {
+    // Set timeline viewport to this range
+    const startElement = document.querySelector(`[data-date="${startDate}"]`);
+    if (startElement) {
+      startElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  };
+
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
@@ -105,6 +123,15 @@ const PatientTimeline = () => {
           onAddEvent={() => console.log("Add event clicked")}
           onMarkDischarged={() => console.log("Mark discharged clicked")}
           onExport={() => console.log("Export clicked")}
+        />
+
+        {/* Heatmap Overview */}
+        <HeatmapOverview
+          events={journeyData.events}
+          startDate={journeyData.admissionDate}
+          endDate={endDate}
+          onDateClick={handleDateClick}
+          onDateRangeSelect={handleDateRangeSelect}
         />
 
         {/* Timeline */}

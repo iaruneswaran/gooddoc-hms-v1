@@ -1,0 +1,380 @@
+import { useState, useMemo } from "react";
+import { ChevronDown, Palette } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { format, parseISO, eachDayOfInterval, startOfWeek, endOfWeek, isSameDay, getDay } from "date-fns";
+import { EventType, TimelineEvent } from "@/types/timeline";
+import { cn } from "@/lib/utils";
+
+interface DailyCount {
+  date: string;
+  total: number;
+  byType: Record<EventType, number>;
+  byStatus: Record<string, number>;
+}
+
+interface HeatmapOverviewProps {
+  events: TimelineEvent[];
+  startDate: string;
+  endDate: string;
+  onDateClick: (date: string) => void;
+  onDateRangeSelect: (startDate: string, endDate: string) => void;
+}
+
+type HeatmapMode = "density" | "byType" | "status";
+type HeatmapPalette = "greens" | "blues" | "purples" | "greyscale";
+
+const COLOR_PALETTES = {
+  greens: ["#ECFDF5", "#BBF7D0", "#86EFAC", "#34D399", "#059669"],
+  blues: ["#EFF6FF", "#BFDBFE", "#93C5FD", "#3B82F6", "#1D4ED8"],
+  purples: ["#F5F3FF", "#DDD6FE", "#C4B5FD", "#8B5CF6", "#6D28D9"],
+  greyscale: ["#F1F5F9", "#CBD5E1", "#94A3B8", "#475569", "#1E293B"],
+};
+
+const TYPE_COLORS: Record<EventType, string> = {
+  Admission: "#3B82F6",
+  Laboratory: "#8B5CF6",
+  Medication: "#10B981",
+  Imaging: "#06B6D4",
+  Procedure: "#F59E0B",
+  Observation: "#64748B",
+  Discharge: "#22C55E",
+};
+
+export function HeatmapOverview({
+  events,
+  startDate,
+  endDate,
+  onDateClick,
+  onDateRangeSelect,
+}: HeatmapOverviewProps) {
+  const [mode, setMode] = useState<HeatmapMode>("density");
+  const [palette, setPalette] = useState<HeatmapPalette>("greens");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [hoveredDate, setHoveredDate] = useState<string | null>(null);
+  const [dragStart, setDragStart] = useState<string | null>(null);
+
+  // Calculate daily counts
+  const dailyCounts = useMemo(() => {
+    const counts: Record<string, DailyCount> = {};
+    
+    // Initialize all days in range
+    const days = eachDayOfInterval({
+      start: parseISO(startDate),
+      end: parseISO(endDate),
+    });
+
+    days.forEach(day => {
+      const dateStr = format(day, "yyyy-MM-dd");
+      counts[dateStr] = {
+        date: dateStr,
+        total: 0,
+        byType: {
+          Admission: 0,
+          Laboratory: 0,
+          Medication: 0,
+          Imaging: 0,
+          Procedure: 0,
+          Observation: 0,
+          Discharge: 0,
+        },
+        byStatus: {
+          Completed: 0,
+          Resulted: 0,
+          Administered: 0,
+          Scheduled: 0,
+          Planned: 0,
+        },
+      };
+    });
+
+    // Count events
+    events.forEach(event => {
+      if (counts[event.date]) {
+        counts[event.date].total++;
+        counts[event.date].byType[event.type]++;
+        counts[event.date].byStatus[event.status]++;
+      }
+    });
+
+    return counts;
+  }, [events, startDate, endDate]);
+
+  // Generate grid structure (weeks x days)
+  const gridStructure = useMemo(() => {
+    const start = startOfWeek(parseISO(startDate), { weekStartsOn: 1 }); // Monday
+    const end = endOfWeek(parseISO(endDate), { weekStartsOn: 1 });
+    
+    const allDays = eachDayOfInterval({ start, end });
+    const weeks: Date[][] = [];
+    let currentWeek: Date[] = [];
+
+    allDays.forEach((day, index) => {
+      currentWeek.push(day);
+      if (currentWeek.length === 7 || index === allDays.length - 1) {
+        weeks.push([...currentWeek]);
+        currentWeek = [];
+      }
+    });
+
+    return weeks;
+  }, [startDate, endDate]);
+
+  // Get color for a cell based on mode and palette
+  const getCellColor = (dateStr: string): string => {
+    const count = dailyCounts[dateStr];
+    if (!count) return "#E5E7EB"; // Out of range
+
+    if (mode === "density") {
+      const colors = COLOR_PALETTES[palette];
+      if (count.total === 0) return colors[0];
+      if (count.total <= 2) return colors[1];
+      if (count.total <= 5) return colors[2];
+      if (count.total <= 10) return colors[3];
+      return colors[4];
+    }
+
+    if (mode === "byType") {
+      // Find dominant type
+      let maxType: EventType = "Admission";
+      let maxCount = 0;
+      Object.entries(count.byType).forEach(([type, cnt]) => {
+        if (cnt > maxCount) {
+          maxCount = cnt;
+          maxType = type as EventType;
+        }
+      });
+      
+      if (maxCount === 0) return "#E5E7EB";
+      return TYPE_COLORS[maxType];
+    }
+
+    // Status mode
+    const completed = count.byStatus.Completed + count.byStatus.Resulted + count.byStatus.Administered;
+    const scheduled = count.byStatus.Scheduled + count.byStatus.Planned;
+    if (completed > scheduled) return "#10B981"; // Green
+    if (scheduled > completed) return "#3B82F6"; // Blue
+    if (count.total > 0) return "#F59E0B"; // Amber for mixed
+    return "#E5E7EB";
+  };
+
+  // Get tooltip content
+  const getTooltipContent = (dateStr: string) => {
+    const count = dailyCounts[dateStr];
+    if (!count || count.total === 0) {
+      return (
+        <div className="text-xs">
+          <div className="font-medium">{format(parseISO(dateStr), "EEE, MMM d")}</div>
+          <div className="text-muted-foreground">No events</div>
+        </div>
+      );
+    }
+
+    // Get top 2 event types
+    const topTypes = Object.entries(count.byType)
+      .filter(([_, cnt]) => cnt > 0)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2);
+
+    return (
+      <div className="text-xs space-y-1">
+        <div className="font-medium">{format(parseISO(dateStr), "EEE, MMM d")}</div>
+        <div className="font-medium">{count.total} events</div>
+        {topTypes.map(([type, cnt]) => (
+          <div key={type} className="text-muted-foreground">
+            {type} {cnt}
+          </div>
+        ))}
+        <div className="text-primary text-[10px] mt-1">Click to view day</div>
+      </div>
+    );
+  };
+
+  const handleCellClick = (dateStr: string) => {
+    onDateClick(dateStr);
+  };
+
+  const handleCellMouseDown = (dateStr: string) => {
+    setDragStart(dateStr);
+  };
+
+  const handleCellMouseUp = (dateStr: string) => {
+    if (dragStart && dragStart !== dateStr) {
+      onDateRangeSelect(dragStart, dateStr);
+    }
+    setDragStart(null);
+  };
+
+  const today = format(new Date(), "yyyy-MM-dd");
+
+  if (isCollapsed) {
+    return (
+      <div className="sticky top-0 z-10 bg-background border-b border-border">
+        <div className="px-6 py-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsCollapsed(false)}
+            className="w-full justify-between"
+          >
+            <span className="text-sm font-medium">Activity Overview</span>
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="sticky top-0 z-10 bg-background border-b border-border">
+      <div className="px-6 py-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <h3 className="text-sm font-semibold text-foreground">Activity Overview</h3>
+            
+            {/* Mode Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="text-xs">
+                  {mode === "density" && "Density"}
+                  {mode === "byType" && "By Type"}
+                  {mode === "status" && "Status Mix"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setMode("density")}>
+                  Density
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setMode("byType")}>
+                  By Type
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setMode("status")}>
+                  Status Mix
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Palette Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="px-2">
+                  <Palette className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setPalette("greens")}>
+                  Greens
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setPalette("blues")}>
+                  Blues
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setPalette("purples")}>
+                  Purples
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setPalette("greyscale")}>
+                  Greyscale
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Legend */}
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Less</span>
+              <div className="flex gap-1">
+                {COLOR_PALETTES[palette].map((color, i) => (
+                  <div
+                    key={i}
+                    className="w-3 h-3 rounded-sm"
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+              <span>More</span>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsCollapsed(true)}
+              className="lg:hidden"
+            >
+              <ChevronDown className="h-4 w-4 rotate-180" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Heatmap Grid */}
+        <TooltipProvider delayDuration={100}>
+          <div className="flex gap-1">
+            {/* Day labels */}
+            <div className="flex flex-col gap-1 mr-2 text-[10px] text-muted-foreground justify-around py-1">
+              <div>Mon</div>
+              <div className="invisible">Tue</div>
+              <div>Wed</div>
+              <div className="invisible">Thu</div>
+              <div>Fri</div>
+              <div className="invisible">Sat</div>
+              <div className="invisible">Sun</div>
+            </div>
+
+            {/* Grid */}
+            <div className="flex-1 overflow-x-auto">
+              <div className="flex gap-1">
+                {gridStructure.map((week, weekIndex) => (
+                  <div key={weekIndex} className="flex flex-col gap-1">
+                    {week.map((day, dayIndex) => {
+                      const dateStr = format(day, "yyyy-MM-dd");
+                      const isInRange = dailyCounts[dateStr] !== undefined;
+                      const isToday = dateStr === today;
+                      const color = getCellColor(dateStr);
+
+                      return (
+                        <Tooltip key={dayIndex}>
+                          <TooltipTrigger asChild>
+                            <button
+                              className={cn(
+                                "w-3 h-3 rounded-sm transition-all",
+                                isToday && "ring-2 ring-primary ring-offset-1",
+                                !isInRange && "opacity-30",
+                                "hover:ring-2 hover:ring-foreground/20"
+                              )}
+                              style={{ backgroundColor: color }}
+                              onClick={() => isInRange && handleCellClick(dateStr)}
+                              onMouseDown={() => isInRange && handleCellMouseDown(dateStr)}
+                              onMouseUp={() => isInRange && handleCellMouseUp(dateStr)}
+                              onMouseEnter={() => setHoveredDate(dateStr)}
+                              onMouseLeave={() => setHoveredDate(null)}
+                              disabled={!isInRange}
+                            />
+                          </TooltipTrigger>
+                          {isInRange && (
+                            <TooltipContent side="top">
+                              {getTooltipContent(dateStr)}
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TooltipProvider>
+      </div>
+    </div>
+  );
+}

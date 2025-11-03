@@ -128,6 +128,7 @@ export function TimelineView({
                 return (
                   <div
                     key={date}
+                    data-date={date}
                     className={`flex-shrink-0 border-r border-border ${isToday ? 'bg-primary/5' : ''}`}
                     style={{ width: `${100 / DAYS_TO_SHOW}%` }}
                   >
