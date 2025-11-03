@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -77,7 +77,6 @@ const mockAppointments: PendingAppointment[] = [
 export default function Inbox() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "consultation" | "lab">("all");
 
   const filteredAppointments = mockAppointments.filter((apt) => {
     const matchesSearch =
@@ -85,10 +84,7 @@ export default function Inbox() {
       apt.patientMRN.toLowerCase().includes(searchQuery.toLowerCase()) ||
       apt.appointmentType.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesFilter =
-      filterType === "all" || apt.appointmentType === filterType;
-
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   const handleSchedule = (appointment: PendingAppointment) => {
@@ -106,40 +102,15 @@ export default function Inbox() {
             <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
           </div>
 
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by patient name, MRN, or appointment type..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant={filterType === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterType("all")}
-              >
-                All
-              </Button>
-              <Button
-                variant={filterType === "consultation" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterType("consultation")}
-              >
-                Consultation
-              </Button>
-              <Button
-                variant={filterType === "lab" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterType("lab")}
-              >
-                Lab
-              </Button>
-            </div>
+          {/* Search */}
+          <div className="relative w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by patient name, MRN, or appointment type..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
           </div>
 
           {/* Appointments List */}
