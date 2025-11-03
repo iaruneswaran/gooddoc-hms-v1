@@ -903,6 +903,8 @@ const BookAppointment = () => {
           {/* Footer - Different for single vs multi-appointment mode */}
           {isSingleAppointmentMode ? (
             <BookingStickyFooter
+              totals={pricing.totals}
+              itemCount={pricing.lineItems.length}
               onAskConfirmation={handleAskConfirmation}
               onSchedule={handleSchedule}
               isScheduleDisabled={!validateAppointmentData()}

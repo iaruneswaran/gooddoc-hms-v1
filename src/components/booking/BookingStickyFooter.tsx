@@ -1,26 +1,51 @@
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/pricingEngine";
+import { AppointmentTotals } from "@/types/pricing";
 
 interface BookingStickyFooterProps {
+  totals: AppointmentTotals;
+  itemCount: number;
   onAskConfirmation: () => void;
   onSchedule: () => void;
   isScheduleDisabled?: boolean;
 }
 
 export function BookingStickyFooter({
+  totals,
+  itemCount,
   onAskConfirmation,
   onSchedule,
   isScheduleDisabled = false,
 }: BookingStickyFooterProps) {
   return (
-    <div className="sticky bottom-0 left-0 right-0 bg-card border-t border-border shadow-lg z-10">
-      <div className="container max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-end gap-3">
-          <Button variant="outline" onClick={onAskConfirmation}>
-            Ask Confirmation
-          </Button>
-          <Button onClick={onSchedule} disabled={isScheduleDisabled}>
-            Schedule
-          </Button>
+    <div className="fixed bottom-0 left-[196px] right-0 bg-background border-t border-border shadow-lg z-40">
+      <div className="max-w-[1600px] mx-auto px-8 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <div>
+              <p className="text-xs text-muted-foreground">Total Items</p>
+              <p className="text-sm font-semibold">{itemCount}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Subtotal</p>
+              <p className="text-sm font-semibold">₹{formatCurrency(totals.subtotal)}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Net Payable</p>
+              <p className="text-lg font-bold text-primary">
+                ₹{formatCurrency(totals.netPayable)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Button size="lg" variant="outline" onClick={onAskConfirmation}>
+              Ask Confirmation
+            </Button>
+            <Button size="lg" onClick={onSchedule} disabled={isScheduleDisabled}>
+              Schedule
+            </Button>
+          </div>
         </div>
       </div>
     </div>
