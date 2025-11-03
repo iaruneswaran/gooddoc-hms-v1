@@ -7,10 +7,6 @@ const dates = [2, 3, 4, 5, 6, 7, 8];
 export function CalendarWidget() {
   return (
     <div className="flex items-center gap-6">
-      <Button variant="outline" className="gap-2">
-        AUG 2025
-        <ChevronDown className="w-4 h-4" />
-      </Button>
       <div className="flex gap-2">
         {daysOfWeek.map((day, index) => (
           <div key={index} className="flex flex-col items-center gap-1">
@@ -27,6 +23,10 @@ export function CalendarWidget() {
           </div>
         ))}
       </div>
+      <Button variant="outline" className="gap-2">
+        AUG 2025
+        <ChevronDown className="w-4 h-4" />
+      </Button>
     </div>
   );
 }
