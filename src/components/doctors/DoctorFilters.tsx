@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -8,9 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
+import { X, Search } from "lucide-react";
 
-export function DoctorFilters() {
+interface DoctorFiltersProps {
+  search: string;
+  onSearchChange: (value: string) => void;
+}
+
+export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
   const [filters, setFilters] = useState<string[]>([]);
 
   const addFilter = (filter: string) => {
@@ -29,8 +35,9 @@ export function DoctorFilters() {
 
   return (
     <div className="space-y-4 mb-6">
-      {/* Filter Controls */}
-      <div className="flex flex-wrap gap-3">
+      {/* Filter Controls and Search */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-3">
         <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Department" />
@@ -97,6 +104,18 @@ export function DoctorFilters() {
             <SelectItem value="recent">Recently added</SelectItem>
           </SelectContent>
         </Select>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search name, department, specialty, location"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="pl-10"
+          />
+        </div>
       </div>
 
       {/* Applied Filters */}

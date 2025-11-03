@@ -216,19 +216,8 @@ export default function DoctorsList() {
             </div>
           </Card>
 
-          {/* Search */}
-          <div className="relative mb-6">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search name, department, specialty, location"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          {/* Filters */}
-          <DoctorFilters />
+          {/* Filters with Search */}
+          <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
           <Card className="rounded-lg border">
