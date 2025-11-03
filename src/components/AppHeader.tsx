@@ -7,7 +7,7 @@ interface AppHeaderProps {
 
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   return (
-    <header className="h-16 border-b border-border bg-card flex items-center justify-between px-8">
+    <header className="h-16 bg-card flex items-center justify-between px-8">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {breadcrumbs.map((crumb, index) => (
           <span key={index} className="flex items-center gap-2">
