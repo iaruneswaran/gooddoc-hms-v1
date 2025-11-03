@@ -120,26 +120,26 @@ export default function Inbox() {
           </Card>
 
           {/* Navigation Tabs */}
-          <Card className="p-0 overflow-hidden">
-            <div className="flex items-center justify-between border-b border-border">
+          <div className="border-b border-border mb-6">
+            <div className="flex items-center justify-between">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
-                <TabsList className="h-auto bg-transparent border-0 p-0 w-full justify-start rounded-none">
+                <TabsList className="bg-transparent border-0 h-auto p-0 justify-start rounded-none">
                   <TabsTrigger 
                     value="appointment" 
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-4"
+                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
                   >
                     Appointment
                   </TabsTrigger>
                   <TabsTrigger 
                     value="scheduled" 
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-4"
+                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
                   >
                     Scheduled
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-          </Card>
+          </div>
 
           {/* Content based on active tab */}
           {activeTab === "appointment" && (
