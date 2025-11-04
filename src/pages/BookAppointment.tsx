@@ -76,8 +76,11 @@ const BookAppointment = () => {
           mode: "laboratory",
           selectedTests: [],
           selectedPackages: [],
-          date: new Date(),
-          time: "",
+          selectedRadiologyTests: [],
+          laboratoryDate: new Date(),
+          laboratoryTime: "",
+          radiologyDate: new Date(),
+          radiologyTime: "",
         });
       }
     }
@@ -200,8 +203,11 @@ const BookAppointment = () => {
           { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
         ],
         selectedPackages: [],
-        date: new Date(2025, 7, 5),
-        time: "07:30",
+        selectedRadiologyTests: [],
+        laboratoryDate: new Date(2025, 7, 5),
+        laboratoryTime: "07:30",
+        radiologyDate: new Date(2025, 7, 5),
+        radiologyTime: "07:30",
       });
     } else if (type === "ipd") {
       // Initialize with default data
@@ -340,11 +346,13 @@ const BookAppointment = () => {
     }
     
     if (selectedTypes.includes("laboratory") && laboratoryData) {
-      return !!(
-        (laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0) &&
-        laboratoryData.date &&
-        laboratoryData.time
-      );
+      const hasLab = laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0;
+      const hasRadiology = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
+      
+      if (hasLab && (!laboratoryData.laboratoryDate || !laboratoryData.laboratoryTime)) return false;
+      if (hasRadiology && (!laboratoryData.radiologyDate || !laboratoryData.radiologyTime)) return false;
+      
+      return hasLab || hasRadiology;
     }
     
     return false;
@@ -365,13 +373,19 @@ const BookAppointment = () => {
     }
 
     if (laboratoryData) {
-      details.mode = laboratoryData.mode === "laboratory" ? "Laboratory" : "Radiology";
+      const hasLab = laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0;
+      const hasRadiology = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
+      
+      details.mode = hasLab ? "Laboratory" : "Radiology";
       details.tests = [
         ...laboratoryData.selectedTests.map(t => t.name),
         ...laboratoryData.selectedPackages.map(p => p.name),
+        ...(laboratoryData.selectedRadiologyTests || []).map(t => t.name),
       ];
-      details.date = laboratoryData.date ? format(laboratoryData.date, "PPP") : undefined;
-      details.time = laboratoryData.time;
+      details.date = hasLab ? 
+        (laboratoryData.laboratoryDate ? format(laboratoryData.laboratoryDate, "PPP") : undefined) :
+        (laboratoryData.radiologyDate ? format(laboratoryData.radiologyDate, "PPP") : undefined);
+      details.time = hasLab ? laboratoryData.laboratoryTime : laboratoryData.radiologyTime;
       details.prepNotes = "Fasting may be required for certain tests. Please review instructions.";
     }
 
@@ -449,6 +463,7 @@ const BookAppointment = () => {
                               key="laboratory"
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
+                              initialData={laboratoryData}
                             />
                           );
                         }
@@ -514,21 +529,19 @@ const BookAppointment = () => {
                                 <div key="laboratory" className="pt-6 border-t border-border space-y-4">
                                   <div className="flex items-start justify-between">
                                     <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
-                                    {!hasRadiologyTests && (
-                                      <button
-                                        onClick={handleRemoveLaboratory}
-                                        className="text-xs text-primary"
-                                      >
-                                        <Trash2 className="w-3 h-3" />
-                                      </button>
-                                    )}
+                                    <button
+                                      onClick={handleRemoveLaboratory}
+                                      className="text-xs text-primary hover:text-primary/80"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
                                   </div>
 
                                   <div className="space-y-3 text-xs">
                                     <div>
                                       <p className="text-muted-foreground">When</p>
                                       <p className="text-foreground font-medium">
-                                        {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | Laboratory
+                                        {format(laboratoryData.laboratoryDate, "dd/MM/yyyy")} {laboratoryData.laboratoryTime} AM | Laboratory
                                       </p>
                                     </div>
 
@@ -584,21 +597,19 @@ const BookAppointment = () => {
                                 <div key="radiology" className="pt-6 border-t border-border space-y-4">
                                   <div className="flex items-start justify-between">
                                     <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
-                                    {!hasLabTests && (
-                                      <button
-                                        onClick={handleRemoveLaboratory}
-                                        className="text-xs text-primary"
-                                      >
-                                        <Trash2 className="w-3 h-3" />
-                                      </button>
-                                    )}
+                                    <button
+                                      onClick={handleRemoveLaboratory}
+                                      className="text-xs text-primary hover:text-primary/80"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
                                   </div>
 
                                   <div className="space-y-3 text-xs">
                                     <div>
                                       <p className="text-muted-foreground">When</p>
                                       <p className="text-foreground font-medium">
-                                        {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | Radiology
+                                        {format(laboratoryData.radiologyDate, "dd/MM/yyyy")} {laboratoryData.radiologyTime} AM | Radiology
                                       </p>
                                     </div>
 

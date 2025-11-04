@@ -35,13 +35,16 @@ export interface LaboratoryData {
   selectedTests: LabTest[];
   selectedPackages: HealthPackage[];
   selectedRadiologyTests?: RadiologyTest[];
-  date: Date;
-  time: string;
+  laboratoryDate: Date;
+  laboratoryTime: string;
+  radiologyDate: Date;
+  radiologyTime: string;
 }
 
 interface LaboratoryBookingFormProps {
   onRemove?: () => void;
   onUpdate: (data: LaboratoryData) => void;
+  initialData?: LaboratoryData;
 }
 
 const healthPackages: HealthPackage[] = [
@@ -104,22 +107,24 @@ const timeSlots = [
   "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
 ];
 
-export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingFormProps) => {
-  const [mode, setMode] = useState<"laboratory" | "radiology">("laboratory");
+export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData }: LaboratoryBookingFormProps) => {
+  const [mode, setMode] = useState<"laboratory" | "radiology">(initialData?.mode || "laboratory");
   const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
-  const [selectedTests, setSelectedTests] = useState<LabTest[]>([
+  const [selectedTests, setSelectedTests] = useState<LabTest[]>(initialData?.selectedTests || [
     { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
     { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
   ]);
-  const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>([]);
-  const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>([]);
-  const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
-  const [selectedTime, setSelectedTime] = useState("07:30");
+  const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>(initialData?.selectedPackages || []);
+  const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>(initialData?.selectedRadiologyTests || []);
+  const [laboratoryDate, setLaboratoryDate] = useState<Date>(initialData?.laboratoryDate || new Date(2025, 7, 5));
+  const [laboratoryTime, setLaboratoryTime] = useState(initialData?.laboratoryTime || "07:30");
+  const [radiologyDate, setRadiologyDate] = useState<Date>(initialData?.radiologyDate || new Date(2025, 7, 5));
+  const [radiologyTime, setRadiologyTime] = useState(initialData?.radiologyTime || "07:30");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleModeChange = (newMode: "laboratory" | "radiology") => {
     setMode(newMode);
-    onUpdate({ mode: newMode, selectedTests, selectedPackages, selectedRadiologyTests, date, time: selectedTime });
+    onUpdate({ mode: newMode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime });
   };
 
   const handleTestToggle = (test: LabTest) => {
@@ -128,7 +133,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       ? selectedTests.filter(t => t.id !== test.id)
       : [...selectedTests, test];
     setSelectedTests(newTests);
-    onUpdate({ mode, selectedTests: newTests, selectedPackages, selectedRadiologyTests, date, time: selectedTime });
+    onUpdate({ mode, selectedTests: newTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime });
   };
 
   const handleRadiologyTestToggle = (test: RadiologyTest) => {
@@ -137,7 +142,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       ? selectedRadiologyTests.filter(t => t.id !== test.id)
       : [...selectedRadiologyTests, test];
     setSelectedRadiologyTests(newTests);
-    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests: newTests, date, time: selectedTime });
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests: newTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime });
   };
 
   const handlePackageToggle = (pkg: HealthPackage) => {
@@ -146,18 +151,30 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       ? selectedPackages.filter(p => p.id !== pkg.id)
       : [...selectedPackages, pkg];
     setSelectedPackages(newPackages);
-    onUpdate({ mode, selectedTests, selectedPackages: newPackages, selectedRadiologyTests, date, time: selectedTime });
+    onUpdate({ mode, selectedTests, selectedPackages: newPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime });
   };
 
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time);
-    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, date, time });
+  const handleLaboratoryTimeSelect = (time: string) => {
+    setLaboratoryTime(time);
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime: time, radiologyDate, radiologyTime });
   };
 
-  const handleDateSelect = (newDate: Date | undefined) => {
+  const handleLaboratoryDateSelect = (newDate: Date | undefined) => {
     if (newDate) {
-      setDate(newDate);
-      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, date: newDate, time: selectedTime });
+      setLaboratoryDate(newDate);
+      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate: newDate, laboratoryTime, radiologyDate, radiologyTime });
+    }
+  };
+
+  const handleRadiologyTimeSelect = (time: string) => {
+    setRadiologyTime(time);
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime: time });
+  };
+
+  const handleRadiologyDateSelect = (newDate: Date | undefined) => {
+    if (newDate) {
+      setRadiologyDate(newDate);
+      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate: newDate, radiologyTime });
     }
   };
 
@@ -344,38 +361,75 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
           </div>
         )}
 
-        {/* Date & Time */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-medium text-foreground">Date & Time</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-foreground">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(date, "dd/MM/yyyy")}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
-              </PopoverContent>
-            </Popover>
-          </div>
+        {/* Date & Time for Laboratory */}
+        {mode === "laboratory" && (selectedTests.length > 0 || selectedPackages.length > 0) && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-medium text-foreground">Laboratory Date & Time</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-foreground">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {format(laboratoryDate, "dd/MM/yyyy")}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar mode="single" selected={laboratoryDate} onSelect={handleLaboratoryDateSelect} initialFocus />
+                </PopoverContent>
+              </Popover>
+            </div>
 
-          <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
-            {timeSlots.map((time) => (
-              <Button
-                key={time}
-                type="button"
-                variant={selectedTime === time ? "default" : "outline"}
-                size="sm"
-                className="h-9 text-xs"
-                onClick={() => handleTimeSelect(time)}
-              >
-                {time}
-              </Button>
-            ))}
+            <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
+              {timeSlots.map((time) => (
+                <Button
+                  key={time}
+                  type="button"
+                  variant={laboratoryTime === time ? "default" : "outline"}
+                  size="sm"
+                  className="h-9 text-xs"
+                  onClick={() => handleLaboratoryTimeSelect(time)}
+                >
+                  {time}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Date & Time for Radiology */}
+        {mode === "radiology" && selectedRadiologyTests.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-medium text-foreground">Radiology Date & Time</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-foreground">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {format(radiologyDate, "dd/MM/yyyy")}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar mode="single" selected={radiologyDate} onSelect={handleRadiologyDateSelect} initialFocus />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
+              {timeSlots.map((time) => (
+                <Button
+                  key={time}
+                  type="button"
+                  variant={radiologyTime === time ? "default" : "outline"}
+                  size="sm"
+                  className="h-9 text-xs"
+                  onClick={() => handleRadiologyTimeSelect(time)}
+                >
+                  {time}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );
