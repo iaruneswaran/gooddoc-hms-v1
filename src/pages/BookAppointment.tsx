@@ -504,71 +504,127 @@ const BookAppointment = () => {
                     <>
                       {[...selectedTypes].reverse().map((type) => {
                         if (type === "laboratory" && laboratoryData) {
+                          const hasLabTests = laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0;
+                          const hasRadiologyTests = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
+                          
                           return (
-                            <div key="laboratory" className="pt-6 border-t border-border space-y-4">
-                              <div className="flex items-start justify-between">
-                                <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
-                                <button
-                                  onClick={handleRemoveLaboratory}
-                                  className="text-xs text-primary"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
+                            <>
+                              {/* Laboratory Section */}
+                              {hasLabTests && (
+                                <div key="laboratory" className="pt-6 border-t border-border space-y-4">
+                                  <div className="flex items-start justify-between">
+                                    <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
+                                    {!hasRadiologyTests && (
+                                      <button
+                                        onClick={handleRemoveLaboratory}
+                                        className="text-xs text-primary"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    )}
+                                  </div>
 
-                              <div className="space-y-3 text-xs">
-                                <div>
-                                  <p className="text-muted-foreground">When</p>
-                                  <p className="text-foreground font-medium">
-                                    {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | {laboratoryData.mode === "laboratory" ? "Laboratory" : "Radiology"}
-                                  </p>
+                                  <div className="space-y-3 text-xs">
+                                    <div>
+                                      <p className="text-muted-foreground">When</p>
+                                      <p className="text-foreground font-medium">
+                                        {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | Laboratory
+                                      </p>
+                                    </div>
+
+                                    {laboratoryData.selectedTests.length > 0 && (
+                                      <div className="space-y-2 pt-2">
+                                        {laboratoryData.selectedTests.map((test) => {
+                                          const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
+                                          return (
+                                            <div key={test.id} className="flex justify-between items-center">
+                                              <p className="text-foreground text-xs">{test.name}</p>
+                                              {lineItem && (
+                                                <LineItemPriceEditor
+                                                  item={lineItem}
+                                                  onPriceUpdate={pricing.updateLineItemPrice}
+                                                  onDiscountApply={pricing.applyLineDiscount}
+                                                  onWaiveOff={pricing.waiveOffItem}
+                                                  onOpenModal={() => handleOpenModal(lineItem)}
+                                                />
+                                              )}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+
+                                    {laboratoryData.selectedPackages.length > 0 && (
+                                      <div className="space-y-2 pt-2">
+                                        {laboratoryData.selectedPackages.map((pkg) => {
+                                          const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
+                                          return (
+                                            <div key={pkg.id} className="flex justify-between items-center">
+                                              <p className="text-foreground text-xs">{pkg.name}</p>
+                                              {lineItem && (
+                                                <LineItemPriceEditor
+                                                  item={lineItem}
+                                                  onPriceUpdate={pricing.updateLineItemPrice}
+                                                  onDiscountApply={pricing.applyLineDiscount}
+                                                  onWaiveOff={pricing.waiveOffItem}
+                                                  onOpenModal={() => handleOpenModal(lineItem)}
+                                                />
+                                              )}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
+                              )}
 
-                                {laboratoryData.selectedTests.length > 0 && (
-                                  <div className="space-y-2 pt-2">
-                                    {laboratoryData.selectedTests.map((test) => {
-                                      const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
-                                      return (
-                                        <div key={test.id} className="flex justify-between items-center">
-                                          <p className="text-foreground text-xs">{test.name}</p>
-                                          {lineItem && (
-                                            <LineItemPriceEditor
-                                              item={lineItem}
-                                              onPriceUpdate={pricing.updateLineItemPrice}
-                                              onDiscountApply={pricing.applyLineDiscount}
-                                              onWaiveOff={pricing.waiveOffItem}
-                                              onOpenModal={() => handleOpenModal(lineItem)}
-                                            />
-                                          )}
-                                        </div>
-                                      );
-                                    })}
+                              {/* Radiology Section */}
+                              {hasRadiologyTests && (
+                                <div key="radiology" className="pt-6 border-t border-border space-y-4">
+                                  <div className="flex items-start justify-between">
+                                    <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
+                                    {!hasLabTests && (
+                                      <button
+                                        onClick={handleRemoveLaboratory}
+                                        className="text-xs text-primary"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    )}
                                   </div>
-                                )}
 
-                                {laboratoryData.selectedPackages.length > 0 && (
-                                  <div className="space-y-2 pt-2">
-                                    {laboratoryData.selectedPackages.map((pkg) => {
-                                      const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
-                                      return (
-                                        <div key={pkg.id} className="flex justify-between items-center">
-                                          <p className="text-foreground text-xs">{pkg.name}</p>
-                                          {lineItem && (
-                                            <LineItemPriceEditor
-                                              item={lineItem}
-                                              onPriceUpdate={pricing.updateLineItemPrice}
-                                              onDiscountApply={pricing.applyLineDiscount}
-                                              onWaiveOff={pricing.waiveOffItem}
-                                              onOpenModal={() => handleOpenModal(lineItem)}
-                                            />
-                                          )}
-                                        </div>
-                                      );
-                                    })}
+                                  <div className="space-y-3 text-xs">
+                                    <div>
+                                      <p className="text-muted-foreground">When</p>
+                                      <p className="text-foreground font-medium">
+                                        {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | Radiology
+                                      </p>
+                                    </div>
+
+                                    <div className="space-y-2 pt-2">
+                                      {laboratoryData.selectedRadiologyTests.map((test) => {
+                                        const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
+                                        return (
+                                          <div key={test.id} className="flex justify-between items-center">
+                                            <p className="text-foreground text-xs">{test.name}</p>
+                                            {lineItem && (
+                                              <LineItemPriceEditor
+                                                item={lineItem}
+                                                onPriceUpdate={pricing.updateLineItemPrice}
+                                                onDiscountApply={pricing.applyLineDiscount}
+                                                onWaiveOff={pricing.waiveOffItem}
+                                                onOpenModal={() => handleOpenModal(lineItem)}
+                                              />
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
                                   </div>
-                                )}
-                              </div>
-                            </div>
+                                </div>
+                              )}
+                            </>
                           );
                         }
 
