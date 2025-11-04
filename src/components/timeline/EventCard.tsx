@@ -40,13 +40,19 @@ const eventTypeConfig: Record<EventType, { icon: any; color: string; bgColor: st
     bgColor: "bg-green-50", 
     borderColor: "border-green-200" 
   },
-  Imaging: { 
+  Radiology: { 
     icon: ScanLine, 
     color: "text-cyan-700", 
     bgColor: "bg-cyan-50", 
     borderColor: "border-cyan-200" 
   },
-  Procedure: { 
+  Consultation: { 
+    icon: Activity, 
+    color: "text-indigo-700", 
+    bgColor: "bg-indigo-50", 
+    borderColor: "border-indigo-200" 
+  },
+  Procedure: {
     icon: Scissors, 
     color: "text-amber-700", 
     bgColor: "bg-amber-50", 

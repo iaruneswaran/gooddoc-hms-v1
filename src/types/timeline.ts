@@ -2,7 +2,8 @@ export type EventType =
   | "Admission" 
   | "Laboratory" 
   | "Medication" 
-  | "Imaging" 
+  | "Radiology" 
+  | "Consultation"
   | "Procedure" 
   | "Observation"
   | "Discharge";
