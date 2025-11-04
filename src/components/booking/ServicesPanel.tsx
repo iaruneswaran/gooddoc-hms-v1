@@ -73,9 +73,9 @@ export function ServicesPanel({
       
       {/* Results */}
       <div className="border rounded-lg">
-        <ScrollArea className="h-[300px]">
+        <ScrollArea className="h-[450px]">
           {results.length === 0 ? (
-            <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
+            <div className="flex items-center justify-center h-[450px] text-sm text-muted-foreground">
               No services found
             </div>
           ) : (

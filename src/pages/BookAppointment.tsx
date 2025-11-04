@@ -585,10 +585,10 @@ const BookAppointment = () => {
                           const hasRadiologyTests = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
                           
                           return (
-                            <>
+                            <div key="laboratory-radiology">
                               {/* Laboratory Section */}
                               {hasLabTests && (
-                                <div key="laboratory" className="pt-6 border-t border-border space-y-4">
+                                <div className="pt-6 border-t border-border space-y-4">
                                   <div className="flex items-start justify-between">
                                     <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
                                     <button
@@ -672,7 +672,7 @@ const BookAppointment = () => {
 
                               {/* Radiology Section */}
                               {hasRadiologyTests && (
-                                <div key="radiology" className="pt-6 border-t border-border space-y-4">
+                                <div className="pt-6 border-t border-border space-y-4">
                                   <div className="flex items-start justify-between">
                                     <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
                                     <button
@@ -721,7 +721,7 @@ const BookAppointment = () => {
                                   </div>
                                 </div>
                               )}
-                            </>
+                            </div>
                           );
                         }
 
