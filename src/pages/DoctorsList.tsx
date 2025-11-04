@@ -7,14 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, X } from "lucide-react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -220,133 +212,128 @@ export default function DoctorsList() {
           <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
-          <Card className="rounded-lg border">
-            {loading ? (
-              <div className="p-6 space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <Skeleton className="h-10 w-10 rounded-full" />
-                    <Skeleton className="h-4 w-[200px]" />
-                    <Skeleton className="h-4 w-[150px]" />
-                    <Skeleton className="h-4 w-[100px]" />
+          {loading ? (
+            <div className="bg-card rounded-lg border border-border p-6 space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <Skeleton className="h-4 w-[200px]" />
+                  <Skeleton className="h-4 w-[150px]" />
+                  <Skeleton className="h-4 w-[100px]" />
+                </div>
+              ))}
+            </div>
+          ) : doctors.length === 0 ? (
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <h3 className="text-lg font-medium mb-2">No doctors yet</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Get started by adding your first doctor
+                </p>
+                <Button onClick={() => navigate("/doctors/new")}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Doctor
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card rounded-lg border border-border overflow-hidden">
+              <div className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="text-sm font-medium text-foreground">Doctor</div>
+                <div className="text-sm font-medium text-foreground">Department / Specialty</div>
+                <div className="text-sm font-medium text-foreground">Availability</div>
+                <div className="text-sm font-medium text-foreground">Locations</div>
+                <div className="text-sm font-medium text-foreground">Duration / Fee</div>
+                <div className="text-sm font-medium text-foreground">Status</div>
+                <div className="text-sm font-medium text-foreground"></div>
+              </div>
+
+              {doctors.map((doctor) => (
+                <div key={doctor.id} className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
+                      <AvatarImage src={doctor.avatar} />
+                      <AvatarFallback>
+                        {doctor.displayName.split(" ").map(n => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-medium text-foreground">{doctor.displayName}</div>
+                      <div className="text-sm text-muted-foreground">{doctor.degrees}</div>
+                    </div>
                   </div>
-                ))}
-              </div>
-            ) : doctors.length === 0 ? (
-              <div className="p-12 text-center">
-                <Card className="max-w-md mx-auto p-8">
-                  <h3 className="text-lg font-medium mb-2">No doctors yet</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Get started by adding your first doctor
-                  </p>
-                  <Button onClick={() => navigate("/doctors/new")}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Doctor
-                  </Button>
-                </Card>
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Doctor</TableHead>
-                    <TableHead>Department / Specialty</TableHead>
-                    <TableHead>Availability</TableHead>
-                    <TableHead>Locations</TableHead>
-                    <TableHead>Duration / Fee</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="w-[50px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {doctors.map((doctor) => (
-                    <TableRow key={doctor.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={doctor.avatar} />
-                            <AvatarFallback>
-                              {doctor.displayName.split(" ").map(n => n[0]).join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">{doctor.displayName}</div>
-                            <div className="text-sm text-muted-foreground">{doctor.degrees}</div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-medium">{doctor.department}</div>
-                        <div className="text-sm text-muted-foreground">{doctor.specialty}</div>
-                      </TableCell>
-                      <TableCell className="text-sm">{doctor.availability}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {doctor.locations.map((loc, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">
-                              {loc}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusVariant(doctor.status)}>
-                          {doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleView(doctor)}>
-                              <Eye className="w-4 h-4 mr-2" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleEdit(doctor.id)}>
-                              <Edit className="w-4 h-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
-                              <Calendar className="w-4 h-4 mr-2" />
-                              Manage Schedule
-                            </DropdownMenuItem>
-                            {doctor.status === "active" ? (
-                              <DropdownMenuItem 
-                                onClick={() => {
-                                  setSelectedDoctor(doctor);
-                                  setDeactivateDialogOpen(true);
-                                }}
-                              >
-                                <Ban className="w-4 h-4 mr-2" />
-                                Deactivate
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem 
-                                onClick={() => {
-                                  setSelectedDoctor(doctor);
-                                  setActivateDialogOpen(true);
-                                }}
-                              >
-                                <CheckCircle className="w-4 h-4 mr-2" />
-                                Activate
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </Card>
+
+                  <div>
+                    <div className="font-medium text-foreground">{doctor.department}</div>
+                    <div className="text-sm text-muted-foreground">{doctor.specialty}</div>
+                  </div>
+
+                  <div className="text-sm text-foreground">{doctor.availability}</div>
+
+                  <div className="flex flex-wrap gap-1">
+                    {doctor.locations.map((loc, i) => (
+                      <Badge key={i} variant="outline" className="text-xs">
+                        {loc}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  <div className="text-sm text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
+
+                  <div>
+                    <Badge variant={getStatusVariant(doctor.status)}>
+                      {doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}
+                    </Badge>
+                  </div>
+
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleView(doctor)}>
+                          <Eye className="w-4 h-4 mr-2" />
+                          View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(doctor.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
+                          <Calendar className="w-4 h-4 mr-2" />
+                          Manage Schedule
+                        </DropdownMenuItem>
+                        {doctor.status === "active" ? (
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              setSelectedDoctor(doctor);
+                              setDeactivateDialogOpen(true);
+                            }}
+                          >
+                            <Ban className="w-4 h-4 mr-2" />
+                            Deactivate
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              setSelectedDoctor(doctor);
+                              setActivateDialogOpen(true);
+                            }}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Activate
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </main>
       </div>
 
