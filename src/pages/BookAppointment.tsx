@@ -913,22 +913,6 @@ const BookAppointment = () => {
                           <p className="text-foreground">{formatCurrency(pricing.totals.subtotal)}</p>
                         </div>
                         
-                        {/* Services Subtotal if present */}
-                        {servicesCart.length > 0 && (
-                          <>
-                            <div className="flex justify-between">
-                              <p className="text-muted-foreground">Services Subtotal</p>
-                              <p className="text-foreground">₹{servicesTotals.subtotal.toLocaleString('en-IN')}</p>
-                            </div>
-                            {servicesTotals.taxTotal > 0 && (
-                              <div className="flex justify-between">
-                                <p className="text-muted-foreground">Services Tax</p>
-                                <p className="text-foreground">₹{servicesTotals.taxTotal.toLocaleString('en-IN')}</p>
-                              </div>
-                            )}
-                          </>
-                        )}
-                        
                         {/* Global Discount if applied */}
                         {pricing.globalDiscountValue > 0 && (
                           <div className="flex justify-between text-green-600">
