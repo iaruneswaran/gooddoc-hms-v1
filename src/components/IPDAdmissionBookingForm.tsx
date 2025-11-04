@@ -141,16 +141,18 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
       </div>
 
       {/* IP Admission & Services Tabs */}
-      <div className="mb-6">
-        <label className="text-sm font-medium text-foreground mb-3 block">
-          IP Admission & Services
-        </label>
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AdmissionTab)}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="Admission">IP Admission</TabsTrigger>
-            <TabsTrigger value="Services">Services</TabsTrigger>
-          </TabsList>
-        </Tabs>
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div>
+          <label className="text-sm font-medium text-foreground mb-3 block">
+            IP Admission & Services
+          </label>
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AdmissionTab)}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="Admission">IP Admission</TabsTrigger>
+              <TabsTrigger value="Services">Services</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </div>
 
       <div className="space-y-6">
