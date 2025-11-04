@@ -1,4 +1,4 @@
-import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Pill, Users, UserCog, Network, Settings, LogOut } from "lucide-react";
+import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Users, UserCog, Network, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -10,7 +10,6 @@ const menuItems = [
   { icon: Calendar, label: "Appointments", href: "/" },
   { icon: Stethoscope, label: "Outpatient", href: "/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
-  { icon: Pill, label: "Pharmacy", href: "/pharmacy" },
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
   { icon: Network, label: "Networks", href: "/networks" },
