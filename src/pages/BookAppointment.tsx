@@ -74,10 +74,14 @@ const BookAppointment = () => {
       } else if (validType === "laboratory") {
         setLaboratoryData({
           mode: "laboratory",
-          selectedTests: [],
+          selectedTests: [
+            { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
+            { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
+          ],
           selectedPackages: [],
-          date: new Date(),
-          time: "",
+          selectedRadiologyTests: [],
+          date: new Date(2025, 7, 5),
+          time: "07:30",
         });
       }
     }
@@ -200,6 +204,7 @@ const BookAppointment = () => {
           { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
         ],
         selectedPackages: [],
+        selectedRadiologyTests: [],
         date: new Date(2025, 7, 5),
         time: "07:30",
       });
@@ -449,6 +454,7 @@ const BookAppointment = () => {
                               key="laboratory"
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
+                              initialData={laboratoryData}
                             />
                           );
                         }
@@ -537,8 +543,19 @@ const BookAppointment = () => {
                                         {laboratoryData.selectedTests.map((test) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
                                           return (
-                                            <div key={test.id} className="flex justify-between items-center">
-                                              <p className="text-foreground text-xs">{test.name}</p>
+                                            <div key={test.id} className="flex justify-between items-center group">
+                                              <div className="flex items-center gap-2 flex-1">
+                                                <button
+                                                  onClick={() => {
+                                                    const updatedTests = laboratoryData.selectedTests.filter(t => t.id !== test.id);
+                                                    setLaboratoryData({ ...laboratoryData, selectedTests: updatedTests });
+                                                  }}
+                                                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                  <Trash2 className="w-3 h-3 text-destructive" />
+                                                </button>
+                                                <p className="text-foreground text-xs">{test.name}</p>
+                                              </div>
                                               {lineItem && (
                                                 <LineItemPriceEditor
                                                   item={lineItem}
@@ -559,8 +576,19 @@ const BookAppointment = () => {
                                         {laboratoryData.selectedPackages.map((pkg) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
                                           return (
-                                            <div key={pkg.id} className="flex justify-between items-center">
-                                              <p className="text-foreground text-xs">{pkg.name}</p>
+                                            <div key={pkg.id} className="flex justify-between items-center group">
+                                              <div className="flex items-center gap-2 flex-1">
+                                                <button
+                                                  onClick={() => {
+                                                    const updatedPackages = laboratoryData.selectedPackages.filter(p => p.id !== pkg.id);
+                                                    setLaboratoryData({ ...laboratoryData, selectedPackages: updatedPackages });
+                                                  }}
+                                                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                  <Trash2 className="w-3 h-3 text-destructive" />
+                                                </button>
+                                                <p className="text-foreground text-xs">{pkg.name}</p>
+                                              </div>
                                               {lineItem && (
                                                 <LineItemPriceEditor
                                                   item={lineItem}
@@ -606,8 +634,19 @@ const BookAppointment = () => {
                                       {laboratoryData.selectedRadiologyTests.map((test) => {
                                         const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
                                         return (
-                                          <div key={test.id} className="flex justify-between items-center">
-                                            <p className="text-foreground text-xs">{test.name}</p>
+                                          <div key={test.id} className="flex justify-between items-center group">
+                                            <div className="flex items-center gap-2 flex-1">
+                                              <button
+                                                onClick={() => {
+                                                  const updatedTests = laboratoryData.selectedRadiologyTests!.filter(t => t.id !== test.id);
+                                                  setLaboratoryData({ ...laboratoryData, selectedRadiologyTests: updatedTests });
+                                                }}
+                                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                              >
+                                                <Trash2 className="w-3 h-3 text-destructive" />
+                                              </button>
+                                              <p className="text-foreground text-xs">{test.name}</p>
+                                            </div>
                                             {lineItem && (
                                               <LineItemPriceEditor
                                                 item={lineItem}
