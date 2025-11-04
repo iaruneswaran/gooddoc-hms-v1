@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ServicesPanel } from "@/components/booking/ServicesPanel";
@@ -140,30 +140,17 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
         </Button>
       </div>
 
-      {/* Segmented Control */}
+      {/* IP Admission & Services Tabs */}
       <div className="mb-6">
         <label className="text-sm font-medium text-foreground mb-3 block">
           IP Admission & Services
         </label>
-        <ToggleGroup
-          type="single"
-          value={activeTab}
-          onValueChange={(value) => value && setActiveTab(value as AdmissionTab)}
-          className="inline-flex h-9 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground w-full"
-        >
-          <ToggleGroupItem
-            value="Admission"
-            className="flex-1 rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
-          >
-            IP Admission
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="Services"
-            className="flex-1 rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
-          >
-            Services
-          </ToggleGroupItem>
-        </ToggleGroup>
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AdmissionTab)}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="Admission">IP Admission</TabsTrigger>
+            <TabsTrigger value="Services">Services</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <div className="space-y-6">
