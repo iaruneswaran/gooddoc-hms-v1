@@ -42,7 +42,6 @@ export interface LaboratoryData {
 interface LaboratoryBookingFormProps {
   onRemove?: () => void;
   onUpdate: (data: LaboratoryData) => void;
-  hideModeSelector?: boolean;
 }
 
 const healthPackages: HealthPackage[] = [
@@ -105,7 +104,7 @@ const timeSlots = [
   "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
 ];
 
-export const LaboratoryBookingForm = ({ onRemove, onUpdate, hideModeSelector = false }: LaboratoryBookingFormProps) => {
+export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingFormProps) => {
   const [mode, setMode] = useState<"laboratory" | "radiology">("laboratory");
   const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
   const [selectedTests, setSelectedTests] = useState<LabTest[]>([
@@ -195,19 +194,18 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, hideModeSelector = f
 
       <div className="space-y-6">
         {/* Diagnostics Type and Lab Tests */}
-        {!hideModeSelector && (
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">
-                Diagnostics Type
-              </label>
-              <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
-                  <TabsTrigger value="radiology">Radiology</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-3 block">
+              Diagnostics Type
+            </label>
+            <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
+                <TabsTrigger value="radiology">Radiology</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
           {mode === "laboratory" && (
             <div>
@@ -223,10 +221,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, hideModeSelector = f
             </div>
           )}
         </div>
-        )}
 
-        {/* Lab Tests Content - show regardless of hideModeSelector */}
-        {(!hideModeSelector || mode === "laboratory") && mode === "laboratory" && (
+        {/* Lab Tests Content */}
+        {mode === "laboratory" && (
           <div>
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

@@ -445,11 +445,10 @@ const BookAppointment = () => {
                     {[...selectedTypes].reverse().map((type) => {
                         if (type === "laboratory" && laboratoryData) {
                           return (
-                             <LaboratoryBookingForm
+                            <LaboratoryBookingForm
                               key="laboratory"
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
-                              hideModeSelector={isSingleAppointmentMode}
                             />
                           );
                         }
