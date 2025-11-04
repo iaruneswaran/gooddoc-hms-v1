@@ -556,25 +556,25 @@ const BookAppointment = () => {
 
               {/* Appointment Summary Sidebar */}
               <Card className="w-full lg:w-[380px] p-6 h-fit shrink-0">
-                <h3 className="text-sm font-semibold text-foreground mb-6">Appointment Summary</h3>
+                <h3 className="text-sm font-semibold text-foreground mb-4">Appointment Summary</h3>
                 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-muted-foreground mb-2">Patient</p>
+                    <p className="text-xs text-muted-foreground mb-1.5">Patient</p>
                     <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
-                    <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">GDID - 009 • 35 | M</p>
                   </div>
 
                   {visitId && (
                     <div>
-                      <p className="text-xs text-muted-foreground mb-2">Visit ID</p>
+                      <p className="text-xs text-muted-foreground mb-1.5">Visit ID</p>
                       <p className="text-sm font-medium text-foreground">{visitId}</p>
                     </div>
                   )}
 
                   {selectedTypes.length === 0 ? (
-                    <div className="pt-6 border-t border-border">
-                      <p className="text-sm font-medium text-muted-foreground mb-2">No Summary</p>
+                    <div className="pt-4 border-t border-border">
+                      <p className="text-sm font-medium text-muted-foreground mb-1">No Summary</p>
                       <p className="text-xs text-muted-foreground">Booking summary will appear here</p>
                     </div>
                   ) : (
@@ -585,12 +585,12 @@ const BookAppointment = () => {
                           const hasRadiologyTests = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
                           
                           return (
-                            <div key="laboratory-radiology">
+                            <div key="laboratory-radiology" className="space-y-4">
                               {/* Laboratory Section */}
                               {hasLabTests && (
-                                <div className="pt-6 border-t border-border space-y-4">
-                                  <div className="flex items-start justify-between">
-                                    <p className="text-sm font-medium text-foreground mb-1">Laboratory</p>
+                                <div className="pt-4 border-t border-border">
+                                  <div className="flex items-start justify-between mb-3">
+                                    <p className="text-sm font-medium text-foreground">Laboratory</p>
                                     <button
                                       onClick={handleRemoveLaboratory}
                                       className="text-xs text-primary hover:text-primary/80"
@@ -599,37 +599,42 @@ const BookAppointment = () => {
                                     </button>
                                   </div>
 
-                                  <div className="space-y-3 text-xs">
+                                  <div className="space-y-2.5 text-xs">
                                     <div>
-                                      <p className="text-muted-foreground">When</p>
+                                      <p className="text-muted-foreground mb-1">When</p>
                                       <p className="text-foreground font-medium">
                                         {format(laboratoryData.laboratoryDate, "dd/MM/yyyy")} {laboratoryData.laboratoryTime} AM | Laboratory
                                       </p>
                                     </div>
 
                                     {laboratoryData.selectedTests.length > 0 && (
-                                      <div className="space-y-2 pt-2">
+                                      <div className="space-y-2 pt-1.5">
                                         {laboratoryData.selectedTests.map((test) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
                                           return (
-                                            <div key={test.id} className="flex justify-between items-center group">
-                                              <div className="flex items-center gap-2 flex-1">
-                                                <p className="text-foreground text-xs">{test.name}</p>
+                                            <div key={test.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
+                                              <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                                <p className="text-foreground text-xs truncate">{test.name}</p>
                                                 <button
-                                                  onClick={() => handleRemoveLabTest(test.id)}
-                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleRemoveLabTest(test.id);
+                                                  }}
+                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
                                                 >
                                                   <Trash2 className="w-3 h-3" />
                                                 </button>
                                               </div>
                                               {lineItem && (
-                                                <LineItemPriceEditor
-                                                  item={lineItem}
-                                                  onPriceUpdate={pricing.updateLineItemPrice}
-                                                  onDiscountApply={pricing.applyLineDiscount}
-                                                  onWaiveOff={pricing.waiveOffItem}
-                                                  onOpenModal={() => handleOpenModal(lineItem)}
-                                                />
+                                                <div className="shrink-0">
+                                                  <LineItemPriceEditor
+                                                    item={lineItem}
+                                                    onPriceUpdate={pricing.updateLineItemPrice}
+                                                    onDiscountApply={pricing.applyLineDiscount}
+                                                    onWaiveOff={pricing.waiveOffItem}
+                                                    onOpenModal={() => handleOpenModal(lineItem)}
+                                                  />
+                                                </div>
                                               )}
                                             </div>
                                           );
@@ -638,28 +643,33 @@ const BookAppointment = () => {
                                     )}
 
                                     {laboratoryData.selectedPackages.length > 0 && (
-                                      <div className="space-y-2 pt-2">
+                                      <div className="space-y-2 pt-1.5">
                                         {laboratoryData.selectedPackages.map((pkg) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
                                           return (
-                                            <div key={pkg.id} className="flex justify-between items-center group">
-                                              <div className="flex items-center gap-2 flex-1">
-                                                <p className="text-foreground text-xs">{pkg.name}</p>
+                                            <div key={pkg.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
+                                              <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                                <p className="text-foreground text-xs truncate">{pkg.name}</p>
                                                 <button
-                                                  onClick={() => handleRemoveLabPackage(pkg.id)}
-                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleRemoveLabPackage(pkg.id);
+                                                  }}
+                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
                                                 >
                                                   <Trash2 className="w-3 h-3" />
                                                 </button>
                                               </div>
                                               {lineItem && (
-                                                <LineItemPriceEditor
-                                                  item={lineItem}
-                                                  onPriceUpdate={pricing.updateLineItemPrice}
-                                                  onDiscountApply={pricing.applyLineDiscount}
-                                                  onWaiveOff={pricing.waiveOffItem}
-                                                  onOpenModal={() => handleOpenModal(lineItem)}
-                                                />
+                                                <div className="shrink-0">
+                                                  <LineItemPriceEditor
+                                                    item={lineItem}
+                                                    onPriceUpdate={pricing.updateLineItemPrice}
+                                                    onDiscountApply={pricing.applyLineDiscount}
+                                                    onWaiveOff={pricing.waiveOffItem}
+                                                    onOpenModal={() => handleOpenModal(lineItem)}
+                                                  />
+                                                </div>
                                               )}
                                             </div>
                                           );
@@ -672,9 +682,9 @@ const BookAppointment = () => {
 
                               {/* Radiology Section */}
                               {hasRadiologyTests && (
-                                <div className="pt-6 border-t border-border space-y-4">
-                                  <div className="flex items-start justify-between">
-                                    <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
+                                <div className="pt-4 border-t border-border">
+                                  <div className="flex items-start justify-between mb-3">
+                                    <p className="text-sm font-medium text-foreground">Radiology</p>
                                     <button
                                       onClick={handleRemoveLaboratory}
                                       className="text-xs text-primary hover:text-primary/80"
@@ -683,36 +693,41 @@ const BookAppointment = () => {
                                     </button>
                                   </div>
 
-                                  <div className="space-y-3 text-xs">
+                                  <div className="space-y-2.5 text-xs">
                                     <div>
-                                      <p className="text-muted-foreground">When</p>
+                                      <p className="text-muted-foreground mb-1">When</p>
                                       <p className="text-foreground font-medium">
                                         {format(laboratoryData.radiologyDate, "dd/MM/yyyy")} {laboratoryData.radiologyTime} AM | Radiology
                                       </p>
                                     </div>
 
-                                    <div className="space-y-2 pt-2">
+                                    <div className="space-y-2 pt-1.5">
                                       {laboratoryData.selectedRadiologyTests.map((test) => {
                                         const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
                                         return (
-                                          <div key={test.id} className="flex justify-between items-center group">
-                                            <div className="flex items-center gap-2 flex-1">
-                                              <p className="text-foreground text-xs">{test.name}</p>
+                                          <div key={test.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
+                                            <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                              <p className="text-foreground text-xs truncate">{test.name}</p>
                                               <button
-                                                onClick={() => handleRemoveRadiologyTest(test.id)}
-                                                className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleRemoveRadiologyTest(test.id);
+                                                }}
+                                                className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
                                               >
                                                 <Trash2 className="w-3 h-3" />
                                               </button>
                                             </div>
                                             {lineItem && (
-                                              <LineItemPriceEditor
-                                                item={lineItem}
-                                                onPriceUpdate={pricing.updateLineItemPrice}
-                                                onDiscountApply={pricing.applyLineDiscount}
-                                                onWaiveOff={pricing.waiveOffItem}
-                                                onOpenModal={() => handleOpenModal(lineItem)}
-                                              />
+                                              <div className="shrink-0">
+                                                <LineItemPriceEditor
+                                                  item={lineItem}
+                                                  onPriceUpdate={pricing.updateLineItemPrice}
+                                                  onDiscountApply={pricing.applyLineDiscount}
+                                                  onWaiveOff={pricing.waiveOffItem}
+                                                  onOpenModal={() => handleOpenModal(lineItem)}
+                                                />
+                                              </div>
                                             )}
                                           </div>
                                         );
@@ -727,9 +742,9 @@ const BookAppointment = () => {
 
                         if (type === "consultation" && consultationData) {
                           return (
-                            <div key="consultation" className="pt-6 border-t border-border space-y-4">
-                              <div className="flex items-start justify-between">
-                                <p className="text-sm font-medium text-foreground mb-1">Consultation</p>
+                            <div key="consultation" className="pt-4 border-t border-border">
+                              <div className="flex items-start justify-between mb-3">
+                                <p className="text-sm font-medium text-foreground">Consultation</p>
                                 <button
                                   onClick={handleRemoveConsultation}
                                   className="text-xs text-primary"
@@ -738,20 +753,20 @@ const BookAppointment = () => {
                                 </button>
                               </div>
 
-                              <div className="space-y-3 text-xs">
+                              <div className="space-y-2.5 text-xs">
                                 <div>
-                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-muted-foreground mb-1">When</p>
                                   <p className="text-foreground font-medium">
                                     {format(consultationData.date, "dd/MM/yyyy")} {consultationData.time} AM
                                   </p>
                                 </div>
 
                                 <div>
-                                  <p className="text-muted-foreground">Provider</p>
+                                  <p className="text-muted-foreground mb-1">Provider</p>
                                   <p className="text-foreground font-medium">{consultationData.doctor}</p>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-3 border-t border-border">
+                                <div className="flex justify-between items-center pt-2 border-t border-border">
                                   <p className="text-foreground">Consultation</p>
                                   {(() => {
                                     const lineItem = pricing.lineItems.find(li => li.id === 'consultation-1');
@@ -773,9 +788,9 @@ const BookAppointment = () => {
 
                         if (type === "ipd" && ipdAdmissionData) {
                           return (
-                            <div key="ipd" className="pt-6 border-t border-border space-y-4">
-                              <div className="flex items-start justify-between">
-                                <p className="text-sm font-medium text-foreground mb-1">IPD Admission</p>
+                            <div key="ipd" className="pt-4 border-t border-border">
+                              <div className="flex items-start justify-between mb-3">
+                                <p className="text-sm font-medium text-foreground">IPD Admission</p>
                                 <button
                                   onClick={handleRemoveIPDAdmission}
                                   className="text-xs text-primary"
@@ -784,30 +799,30 @@ const BookAppointment = () => {
                                 </button>
                               </div>
 
-                              <div className="space-y-3 text-xs">
+                              <div className="space-y-2.5 text-xs">
                                 <div>
-                                  <p className="text-muted-foreground">When</p>
+                                  <p className="text-muted-foreground mb-1">When</p>
                                   <p className="text-foreground font-medium">
                                     {format(ipdAdmissionData.date, "dd/MM/yyyy")} {ipdAdmissionData.time} AM
                                   </p>
                                 </div>
 
                                 <div>
-                                  <p className="text-muted-foreground">Attending Doctor</p>
+                                  <p className="text-muted-foreground mb-1">Attending Doctor</p>
                                   <p className="text-foreground font-medium">{ipdAdmissionData.attendingDoctor}</p>
                                 </div>
 
                                 <div>
-                                  <p className="text-muted-foreground">Ward</p>
+                                  <p className="text-muted-foreground mb-1">Ward</p>
                                   <p className="text-foreground font-medium">{ipdAdmissionData.ward}</p>
                                 </div>
 
                                 <div>
-                                  <p className="text-muted-foreground">Bed</p>
+                                  <p className="text-muted-foreground mb-1">Bed</p>
                                   <p className="text-foreground font-medium">{ipdAdmissionData.bed}</p>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-3 border-t border-border">
+                                <div className="flex justify-between items-center pt-2 border-t border-border">
                                   <p className="text-foreground">Admission</p>
                                   {(() => {
                                     const lineItem = pricing.lineItems.find(li => li.id === 'ipd-admission-1');
@@ -826,8 +841,8 @@ const BookAppointment = () => {
                               
                               {/* Services & Procedures Section */}
                               {servicesCart.length > 0 && (
-                                <div className="pt-4 border-t border-border">
-                                  <div className="flex items-start justify-between mb-3">
+                                <div className="pt-3 mt-3 border-t border-border">
+                                  <div className="flex items-start justify-between mb-2.5">
                                     <p className="text-sm font-medium text-foreground">Services & Procedures</p>
                                     <button
                                       onClick={handleClearServices}
@@ -840,24 +855,29 @@ const BookAppointment = () => {
                                     {servicesCart.map((item) => {
                                       const lineItem = pricing.lineItems.find(li => li.id === `service-${item.itemId}`);
                                       return (
-                                        <div key={item.itemId} className="flex justify-between items-center group">
-                                          <div className="flex items-center gap-2 flex-1">
-                                            <p className="text-foreground text-xs">{item.name}</p>
+                                        <div key={item.itemId} className="flex justify-between items-center gap-2 group min-h-[24px]">
+                                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                            <p className="text-foreground text-xs truncate">{item.name}</p>
                                             <button
-                                              onClick={() => handleRemoveService(item.itemId)}
-                                              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveService(item.itemId);
+                                              }}
+                                              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
                                             >
                                               <Trash2 className="w-3 h-3" />
                                             </button>
                                           </div>
                                           {lineItem && (
-                                            <LineItemPriceEditor
-                                              item={lineItem}
-                                              onPriceUpdate={pricing.updateLineItemPrice}
-                                              onDiscountApply={pricing.applyLineDiscount}
-                                              onWaiveOff={pricing.waiveOffItem}
-                                              onOpenModal={() => handleOpenModal(lineItem)}
-                                            />
+                                            <div className="shrink-0">
+                                              <LineItemPriceEditor
+                                                item={lineItem}
+                                                onPriceUpdate={pricing.updateLineItemPrice}
+                                                onDiscountApply={pricing.applyLineDiscount}
+                                                onWaiveOff={pricing.waiveOffItem}
+                                                onOpenModal={() => handleOpenModal(lineItem)}
+                                              />
+                                            </div>
                                           )}
                                         </div>
                                       );
