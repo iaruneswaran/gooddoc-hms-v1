@@ -104,7 +104,7 @@ const PatientTimeline = () => {
         <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Timeline"]} />
         
         {/* Back Button */}
-        <div className="px-6 py-3 border-b border-border">
+        <div className="px-6 py-3">
           <button
             onClick={() => navigate(`/patient-insights/${patientId}`)}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
