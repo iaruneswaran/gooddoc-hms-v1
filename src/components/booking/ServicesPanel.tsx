@@ -91,26 +91,6 @@ export function ServicesPanel({
           )}
         </ScrollArea>
       </div>
-      
-      {/* Selected Services */}
-      {cart.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-foreground">Selected Services ({cart.length})</h4>
-          </div>
-          <div className="space-y-2 max-h-[250px] overflow-y-auto">
-            {cart.map((item) => (
-              <CartItemInline
-                key={item.itemId}
-                item={item}
-                onUpdateQty={onUpdateQty}
-                onUpdateDiscount={onUpdateDiscount}
-                onRemove={onRemoveFromCart}
-              />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -159,6 +159,18 @@ const BookAppointment = () => {
       });
     }
 
+    // Add services from cart
+    servicesCart.forEach((service) => {
+      items.push({
+        id: `service-${service.itemId}`,
+        name: service.name,
+        category: service.category,
+        basePrice: service.unitPrice * service.qty,
+        isDiscountable: true,
+        floorPrice: service.unitPrice * service.qty * 0.5,
+      });
+    });
+
     // Update pricing state (but preserve existing overrides/discounts)
     const existingItems = pricing.lineItems;
     const updatedItems = items.map((item) => {
@@ -180,7 +192,7 @@ const BookAppointment = () => {
         pricing.addLineItem(item);
       }
     });
-  }, [consultationData, laboratoryData, ipdAdmissionData]);
+  }, [consultationData, laboratoryData, ipdAdmissionData, servicesCart]);
 
   const handleTypeClick = (type: string) => {
     // Toggle the type - add if not present, remove if already selected
@@ -760,21 +772,23 @@ const BookAppointment = () => {
                                 <div className="pt-4 border-t border-border">
                                   <p className="text-sm font-medium text-foreground mb-3">Services & Procedures</p>
                                   <div className="space-y-2">
-                                    {servicesCart.map((item) => (
-                                      <div key={item.itemId} className="flex justify-between items-start text-xs">
-                                        <div className="flex-1">
-                                          <p className="text-foreground font-medium">{item.name}</p>
-                                          <p className="text-muted-foreground">
-                                            {item.qty} × ₹{item.unitPrice.toLocaleString('en-IN')}
-                                            {item.discountPct && item.discountPct > 0 ? ` (-${item.discountPct}%)` : ''}
-                                            {item.taxPct > 0 ? ` +${item.taxPct}% tax` : ''}
-                                          </p>
+                                    {servicesCart.map((item) => {
+                                      const lineItem = pricing.lineItems.find(li => li.id === `service-${item.itemId}`);
+                                      return (
+                                        <div key={item.itemId} className="flex justify-between items-center">
+                                          <p className="text-foreground text-xs">{item.name}</p>
+                                          {lineItem && (
+                                            <LineItemPriceEditor
+                                              item={lineItem}
+                                              onPriceUpdate={pricing.updateLineItemPrice}
+                                              onDiscountApply={pricing.applyLineDiscount}
+                                              onWaiveOff={pricing.waiveOffItem}
+                                              onOpenModal={() => handleOpenModal(lineItem)}
+                                            />
+                                          )}
                                         </div>
-                                        <p className="text-foreground font-semibold">
-                                          ₹{calcLineTotal(item).toLocaleString('en-IN')}
-                                        </p>
-                                      </div>
-                                    ))}
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
