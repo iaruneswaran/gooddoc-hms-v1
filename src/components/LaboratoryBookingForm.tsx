@@ -42,7 +42,6 @@ export interface LaboratoryData {
 interface LaboratoryBookingFormProps {
   onRemove?: () => void;
   onUpdate: (data: LaboratoryData) => void;
-  initialData?: LaboratoryData;
 }
 
 const healthPackages: HealthPackage[] = [
@@ -105,19 +104,17 @@ const timeSlots = [
   "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
 ];
 
-export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData }: LaboratoryBookingFormProps) => {
-  const [mode, setMode] = useState<"laboratory" | "radiology">(initialData?.mode || "laboratory");
+export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingFormProps) => {
+  const [mode, setMode] = useState<"laboratory" | "radiology">("laboratory");
   const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
-  const [selectedTests, setSelectedTests] = useState<LabTest[]>(
-    initialData?.selectedTests || [
-      { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
-      { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
-    ]
-  );
-  const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>(initialData?.selectedPackages || []);
-  const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>(initialData?.selectedRadiologyTests || []);
-  const [date, setDate] = useState<Date>(initialData?.date || new Date(2025, 7, 5));
-  const [selectedTime, setSelectedTime] = useState(initialData?.time || "07:30");
+  const [selectedTests, setSelectedTests] = useState<LabTest[]>([
+    { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
+    { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
+  ]);
+  const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>([]);
+  const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>([]);
+  const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
+  const [selectedTime, setSelectedTime] = useState("07:30");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleModeChange = (newMode: "laboratory" | "radiology") => {
