@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,8 +7,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ServicesPanel } from "@/components/booking/ServicesPanel";
+import { useServicesCart } from "@/hooks/useServicesCart";
+import { AdmissionTab } from "@/types/booking/ipAdmission";
 
 export interface IPDAdmissionData {
   department: string;
@@ -27,6 +31,7 @@ export interface IPDAdmissionData {
 interface IPDAdmissionBookingFormProps {
   onRemove: () => void;
   onUpdate: (data: IPDAdmissionData) => void;
+  onServicesChange?: (cart: any[], totals: any) => void;
 }
 
 const timeSlots = [
@@ -40,7 +45,8 @@ const timeSlots = [
   "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
 ];
 
-export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBookingFormProps) => {
+export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }: IPDAdmissionBookingFormProps) => {
+  const [activeTab, setActiveTab] = useState<AdmissionTab>("Admission");
   const [department, setDepartment] = useState("General Medicine");
   const [attendingDoctor, setAttendingDoctor] = useState("Dr. A. Joseph (Ophthalmology)");
   const [ward, setWard] = useState("General Ward - 01A");
@@ -52,6 +58,16 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
   const [relationship, setRelationship] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [address, setAddress] = useState("");
+  
+  // Services cart
+  const servicesCart = useServicesCart(5000); // baseCharge of 5000 for admission
+  
+  // Notify parent of services changes
+  useEffect(() => {
+    if (onServicesChange) {
+      onServicesChange(servicesCart.cart, servicesCart.totals);
+    }
+  }, [servicesCart.cart, servicesCart.totals, onServicesChange]);
 
   const handleDepartmentChange = (value: string) => {
     setDepartment(value);
@@ -124,7 +140,35 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
         </Button>
       </div>
 
+      {/* Segmented Control */}
+      <div className="mb-6">
+        <label className="text-sm font-medium text-foreground mb-3 block">
+          IP Admission & Services
+        </label>
+        <ToggleGroup
+          type="single"
+          value={activeTab}
+          onValueChange={(value) => value && setActiveTab(value as AdmissionTab)}
+          className="inline-flex h-9 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground w-full"
+        >
+          <ToggleGroupItem
+            value="Admission"
+            className="flex-1 rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
+          >
+            IP Admission
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="Services"
+            className="flex-1 rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
+          >
+            Services
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
       <div className="space-y-6">
+        {activeTab === "Admission" ? (
+          <>
         {/* Department and Attending Doctor */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -302,6 +346,17 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate }: IPDAdmissionBook
             ))}
           </div>
         </div>
+        </>
+        ) : (
+          // Services Tab
+          <ServicesPanel
+            cart={servicesCart.cart}
+            onAddToCart={servicesCart.addToCart}
+            onUpdateQty={servicesCart.updateQty}
+            onUpdateDiscount={servicesCart.updateDiscount}
+            onRemoveFromCart={servicesCart.removeFromCart}
+          />
+        )}
       </div>
     </Card>
   );

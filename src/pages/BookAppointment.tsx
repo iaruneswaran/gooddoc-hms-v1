@@ -21,6 +21,8 @@ import { LineItem } from "@/types/pricing";
 import { formatCurrency } from "@/lib/pricingEngine";
 import { format } from "date-fns";
 import { toast } from "@/hooks/use-toast";
+import { CartItem, Totals } from "@/types/booking/ipAdmission";
+import { calcLineTotal } from "@/utils/billing/totals";
 
 const appointmentTypes = [
   { icon: Calendar, label: "OP Consultation", value: "consultation" },
@@ -53,6 +55,15 @@ const BookAppointment = () => {
   const pricing = usePricingState();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItemForModal, setSelectedItemForModal] = useState<LineItem | null>(null);
+  
+  // Services cart state (for IPD)
+  const [servicesCart, setServicesCart] = useState<CartItem[]>([]);
+  const [servicesTotals, setServicesTotals] = useState<Totals>({
+    subtotal: 0,
+    discountTotal: 0,
+    taxTotal: 0,
+    netPayable: 0,
+  });
 
   // Initialize with appointment type if in single-appointment mode
   useEffect(() => {
@@ -252,6 +263,11 @@ const BookAppointment = () => {
 
   const handleIPDAdmissionUpdate = (data: IPDAdmissionData) => {
     setIpdAdmissionData(data);
+  };
+  
+  const handleServicesChange = (cart: CartItem[], totals: Totals) => {
+    setServicesCart(cart);
+    setServicesTotals(totals);
   };
 
   const handleOpenModal = (item: LineItem) => {
@@ -482,6 +498,7 @@ const BookAppointment = () => {
                             key="ipd"
                             onRemove={handleRemoveIPDAdmission}
                             onUpdate={handleIPDAdmissionUpdate}
+                            onServicesChange={handleServicesChange}
                           />
                         );
                       }
@@ -737,6 +754,30 @@ const BookAppointment = () => {
                                   })()}
                                 </div>
                               </div>
+                              
+                              {/* Services & Procedures Section */}
+                              {servicesCart.length > 0 && (
+                                <div className="pt-4 border-t border-border">
+                                  <p className="text-sm font-medium text-foreground mb-3">Services & Procedures</p>
+                                  <div className="space-y-2">
+                                    {servicesCart.map((item) => (
+                                      <div key={item.itemId} className="flex justify-between items-start text-xs">
+                                        <div className="flex-1">
+                                          <p className="text-foreground font-medium">{item.name}</p>
+                                          <p className="text-muted-foreground">
+                                            {item.qty} × ₹{item.unitPrice.toLocaleString('en-IN')}
+                                            {item.discountPct && item.discountPct > 0 ? ` (-${item.discountPct}%)` : ''}
+                                            {item.taxPct > 0 ? ` +${item.taxPct}% tax` : ''}
+                                          </p>
+                                        </div>
+                                        <p className="text-foreground font-semibold">
+                                          ₹{calcLineTotal(item).toLocaleString('en-IN')}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           );
                         }
@@ -765,6 +806,22 @@ const BookAppointment = () => {
                           <p className="text-foreground">{formatCurrency(pricing.totals.subtotal)}</p>
                         </div>
                         
+                        {/* Services Subtotal if present */}
+                        {servicesCart.length > 0 && (
+                          <>
+                            <div className="flex justify-between">
+                              <p className="text-muted-foreground">Services Subtotal</p>
+                              <p className="text-foreground">₹{servicesTotals.subtotal.toLocaleString('en-IN')}</p>
+                            </div>
+                            {servicesTotals.taxTotal > 0 && (
+                              <div className="flex justify-between">
+                                <p className="text-muted-foreground">Services Tax</p>
+                                <p className="text-foreground">₹{servicesTotals.taxTotal.toLocaleString('en-IN')}</p>
+                              </div>
+                            )}
+                          </>
+                        )}
+                        
                         {/* Global Discount if applied */}
                         {pricing.globalDiscountValue > 0 && (
                           <div className="flex justify-between text-green-600">
@@ -780,7 +837,7 @@ const BookAppointment = () => {
                         )}
                         <div className="flex justify-between pt-3 border-t border-border">
                           <p className="text-foreground font-semibold">Net Payable</p>
-                          <p className="text-foreground font-bold">{formatCurrency(pricing.totals.netPayable)}</p>
+                          <p className="text-foreground font-bold">{formatCurrency(pricing.totals.netPayable + servicesTotals.netPayable)}</p>
                         </div>
                       </div>
                     </>
@@ -793,16 +850,22 @@ const BookAppointment = () => {
           {/* Footer - Different for single vs multi-appointment mode */}
           {isSingleAppointmentMode ? (
             <BookingStickyFooter
-              totals={pricing.totals}
-              itemCount={pricing.lineItems.length}
+              totals={{
+                ...pricing.totals,
+                netPayable: pricing.totals.netPayable + servicesTotals.netPayable,
+              }}
+              itemCount={pricing.lineItems.length + servicesCart.length}
               onAskConfirmation={handleAskConfirmation}
               onSchedule={handleSchedule}
               isScheduleDisabled={!validateAppointmentData()}
             />
           ) : (
             <StickyFooterBar
-              totals={pricing.totals}
-              itemCount={pricing.lineItems.length}
+              totals={{
+                ...pricing.totals,
+                netPayable: pricing.totals.netPayable + servicesTotals.netPayable,
+              }}
+              itemCount={pricing.lineItems.length + servicesCart.length}
               onGenerateInvoice={() => {
                 const { subtotal, netPayable } = pricing.totals;
                 const items = pricing.lineItems.map(item => {
@@ -821,12 +884,18 @@ const BookAppointment = () => {
                   };
                 });
                 
+                // Add services to items
+                const servicesItems = servicesCart.map(item => ({
+                  name: item.name,
+                  price: calcLineTotal(item),
+                }));
+                
                 navigate("/payment", {
                   state: {
                     appointmentType: selectedTypes.join(", "),
-                    items,
-                    subtotal,
-                    total: netPayable,
+                    items: [...items, ...servicesItems],
+                    subtotal: subtotal + servicesTotals.subtotal,
+                    total: netPayable + servicesTotals.netPayable,
                     date: format(new Date(), "dd/MM/yyyy"),
                     fromPatientInsights,
                     patientId
