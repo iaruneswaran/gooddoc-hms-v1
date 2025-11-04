@@ -137,27 +137,6 @@ const PatientInsights = () => {
         },
       ],
     },
-    {
-      id: "visit-5",
-      visitId: "VST-308972",
-      datetime: new Date(2025, 7, 7, 9, 30), // Aug 07, 2025, 9:30 AM
-      type: "Day-Care Admission",
-      status: "Completed",
-      location: "Day-Care Unit B",
-      doctor: "Dr. Sneha Iyer – Oncology",
-      items: [
-        {
-          type: "Day-Care Admission",
-          datetime: "07 Aug 2025 | 09:30 AM",
-          doctor: "Dr. Sneha Iyer – Oncology",
-          visitId: "VST-308972",
-          procedure: "Chemotherapy Cycle 3 – Doxorubicin + Cyclophosphamide",
-          provider: "Day-Care Unit B",
-          department: "Oncology",
-          findings: "Patient tolerated chemotherapy well with no immediate adverse reactions. Vital parameters remained stable throughout infusion. Advised oral hydration and antiemetic medication post-session. Next cycle scheduled in 21 days.",
-        },
-      ],
-    },
   ];
 
   // Sort visits by date (latest first) and select the latest by default
