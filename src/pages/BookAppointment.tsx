@@ -24,8 +24,8 @@ import { toast } from "@/hooks/use-toast";
 
 const appointmentTypes = [
   { icon: Calendar, label: "OP Consultation", value: "consultation" },
-  { icon: FlaskConical, label: "Diagnostics", value: "laboratory" },
   { icon: Bed, label: "IP Admission", value: "ipd" },
+  { icon: FlaskConical, label: "Diagnostics", value: "laboratory" },
 ];
 
 const BookAppointment = () => {
