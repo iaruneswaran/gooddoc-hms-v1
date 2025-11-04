@@ -16,6 +16,13 @@ export interface LabTest {
   price: number;
 }
 
+export interface RadiologyTest {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+}
+
 export interface HealthPackage {
   id: string;
   name: string;
@@ -24,9 +31,10 @@ export interface HealthPackage {
 }
 
 export interface LaboratoryData {
-  mode: "in-clinic" | "home-collection";
+  mode: "laboratory" | "radiology";
   selectedTests: LabTest[];
   selectedPackages: HealthPackage[];
+  selectedRadiologyTests?: RadiologyTest[];
   date: Date;
   time: string;
 }
@@ -74,6 +82,17 @@ const individualTests: LabTest[] = [
   { id: "8", name: "Lipid Profile", category: "Biochemistry", price: 300 },
 ];
 
+const radiologyTests: RadiologyTest[] = [
+  { id: "r1", name: "Chest (PA View)", category: "Radiology", price: 500 },
+  { id: "r2", name: "Cervical Spine", category: "Radiology", price: 600 },
+  { id: "r3", name: "Lumbar Spine", category: "Radiology", price: 700 },
+  { id: "r4", name: "Abdomen (KUB)", category: "Radiology", price: 300 },
+  { id: "r5", name: "Hand / Wrist", category: "Radiology", price: 400 },
+  { id: "r6", name: "Knee Joint (Both)", category: "Radiology", price: 500 },
+  { id: "r7", name: "Chest (Lateral View)", category: "Radiology", price: 500 },
+  { id: "r8", name: "Pelvis", category: "Radiology", price: 600 },
+];
+
 const timeSlots = [
   "00:00", "00:30", "01:00", "01:30", "02:00", "02:30",
   "03:00", "03:30", "04:00", "04:30", "05:00", "05:30",
@@ -86,20 +105,21 @@ const timeSlots = [
 ];
 
 export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingFormProps) => {
-  const [mode, setMode] = useState<"in-clinic" | "home-collection">("in-clinic");
+  const [mode, setMode] = useState<"laboratory" | "radiology">("laboratory");
   const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
   const [selectedTests, setSelectedTests] = useState<LabTest[]>([
     { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
     { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
   ]);
   const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>([]);
+  const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>([]);
   const [date, setDate] = useState<Date>(new Date(2025, 7, 5));
   const [selectedTime, setSelectedTime] = useState("07:30");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleModeChange = (newMode: "in-clinic" | "home-collection") => {
+  const handleModeChange = (newMode: "laboratory" | "radiology") => {
     setMode(newMode);
-    onUpdate({ mode: newMode, selectedTests, selectedPackages, date, time: selectedTime });
+    onUpdate({ mode: newMode, selectedTests, selectedPackages, selectedRadiologyTests, date, time: selectedTime });
   };
 
   const handleTestToggle = (test: LabTest) => {
@@ -108,7 +128,16 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       ? selectedTests.filter(t => t.id !== test.id)
       : [...selectedTests, test];
     setSelectedTests(newTests);
-    onUpdate({ mode, selectedTests: newTests, selectedPackages, date, time: selectedTime });
+    onUpdate({ mode, selectedTests: newTests, selectedPackages, selectedRadiologyTests, date, time: selectedTime });
+  };
+
+  const handleRadiologyTestToggle = (test: RadiologyTest) => {
+    const isSelected = selectedRadiologyTests.some(t => t.id === test.id);
+    const newTests = isSelected
+      ? selectedRadiologyTests.filter(t => t.id !== test.id)
+      : [...selectedRadiologyTests, test];
+    setSelectedRadiologyTests(newTests);
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests: newTests, date, time: selectedTime });
   };
 
   const handlePackageToggle = (pkg: HealthPackage) => {
@@ -117,18 +146,18 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       ? selectedPackages.filter(p => p.id !== pkg.id)
       : [...selectedPackages, pkg];
     setSelectedPackages(newPackages);
-    onUpdate({ mode, selectedTests, selectedPackages: newPackages, date, time: selectedTime });
+    onUpdate({ mode, selectedTests, selectedPackages: newPackages, selectedRadiologyTests, date, time: selectedTime });
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    onUpdate({ mode, selectedTests, selectedPackages, date, time });
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, date, time });
   };
 
   const handleDateSelect = (newDate: Date | undefined) => {
     if (newDate) {
       setDate(newDate);
-      onUpdate({ mode, selectedTests, selectedPackages, date: newDate, time: selectedTime });
+      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, date: newDate, time: selectedTime });
     }
   };
 
@@ -142,10 +171,15 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
     test.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredRadiologyTests = radiologyTests.filter(test =>
+    test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    test.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">Laboratory</h3>
+        <h3 className="text-lg font-semibold text-foreground">Diagnostics</h3>
         {onRemove && (
           <Button
             variant="ghost"
@@ -159,47 +193,50 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
       </div>
 
       <div className="space-y-6">
-        {/* Mode of Sample Collection and Lab Tests */}
+        {/* Diagnostics Type and Lab Tests */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium text-foreground mb-3 block">
-              Mode of Sample Collection
+              Diagnostics Type
             </label>
             <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="in-clinic">In-Clinic</TabsTrigger>
-                <TabsTrigger value="home-collection">Home Collection</TabsTrigger>
+                <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
+                <TabsTrigger value="radiology">Radiology</TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-foreground mb-3 block">
-              Lab Tests
-            </label>
-            <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+          {mode === "laboratory" && (
+            <div>
+              <label className="text-sm font-medium text-foreground mb-3 block">
+                Lab Tests
+              </label>
+              <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
+                  <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          )}
         </div>
 
         {/* Lab Tests Content */}
-        <div>
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search lab tests..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          
-          <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-            <TabsContent value="health-packages" className="space-y-3 mt-0">
+        {mode === "laboratory" && (
+          <div>
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search lab tests..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            
+            <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+              <TabsContent value="health-packages" className="space-y-3 mt-0">
               {filteredPackages.map((pkg) => {
                 const isSelected = selectedPackages.some(p => p.id === pkg.id);
                 return (
@@ -261,7 +298,51 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate }: LaboratoryBookingF
               })}
             </TabsContent>
           </Tabs>
-        </div>
+          </div>
+        )}
+
+        {/* Radiology Tests Content */}
+        {mode === "radiology" && (
+          <div>
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search radiology tests..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {filteredRadiologyTests.map((test) => {
+                const isSelected = selectedRadiologyTests.some(t => t.id === test.id);
+                return (
+                  <Card
+                    key={test.id}
+                    className={cn(
+                      "p-4 cursor-pointer transition-all hover:border-primary",
+                      isSelected && "border-primary bg-primary/5"
+                    )}
+                    onClick={() => handleRadiologyTestToggle(test)}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-sm font-semibold text-foreground flex-1 pr-2">{test.name}</h4>
+                      <div className={cn(
+                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                      )}>
+                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
+                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Date & Time */}
         <div>

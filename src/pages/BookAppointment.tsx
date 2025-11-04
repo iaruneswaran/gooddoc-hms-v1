@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Calendar, FlaskConical, Scan, Bed, Syringe, Trash2 } from "lucide-react";
+import { ChevronLeft, Calendar, FlaskConical, Bed, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { BookingSteps } from "@/components/BookingSteps";
@@ -9,9 +9,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ConsultationBookingForm, ConsultationData } from "@/components/ConsultationBookingForm";
 import { LaboratoryBookingForm, LaboratoryData } from "@/components/LaboratoryBookingForm";
-import { RadiologyBookingForm, RadiologyData } from "@/components/RadiologyBookingForm";
 import { IPDAdmissionBookingForm, IPDAdmissionData } from "@/components/IPDAdmissionBookingForm";
-import { DCProcedureBookingForm, DCProcedureData } from "@/components/DCProcedureBookingForm";
 import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
 import { AdjustPriceModal } from "@/components/pricing/AdjustPriceModal";
 import { GlobalDiscountControls } from "@/components/pricing/GlobalDiscountControls";
@@ -26,10 +24,8 @@ import { toast } from "@/hooks/use-toast";
 
 const appointmentTypes = [
   { icon: Calendar, label: "OP Consultation", value: "consultation" },
-  { icon: FlaskConical, label: "Laboratory", value: "laboratory" },
-  { icon: Scan, label: "Radiology", value: "radiology" },
+  { icon: FlaskConical, label: "Diagnostics", value: "laboratory" },
   { icon: Bed, label: "IP Admission", value: "ipd" },
-  { icon: Syringe, label: "Day-Care Procedure", value: "dc" },
 ];
 
 const BookAppointment = () => {
@@ -48,9 +44,7 @@ const BookAppointment = () => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<ConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
-  const [radiologyData, setRadiologyData] = useState<RadiologyData | null>(null);
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
-  const [dcProcedureData, setDcProcedureData] = useState<DCProcedureData | null>(null);
   
   // Confirmation modal state
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
@@ -79,7 +73,7 @@ const BookAppointment = () => {
         });
       } else if (validType === "laboratory") {
         setLaboratoryData({
-          mode: "in-clinic",
+          mode: "laboratory",
           selectedTests: [],
           selectedPackages: [],
           date: new Date(),
@@ -105,39 +99,39 @@ const BookAppointment = () => {
     }
 
     if (laboratoryData) {
-      laboratoryData.selectedTests.forEach((test) => {
-        items.push({
-          id: `lab-test-${test.id}`,
-          name: test.name,
-          category: 'Laboratory',
-          basePrice: test.price,
-          isDiscountable: true,
-          floorPrice: test.price * 0.5,
+      if (laboratoryData.mode === "laboratory") {
+        laboratoryData.selectedTests.forEach((test) => {
+          items.push({
+            id: `lab-test-${test.id}`,
+            name: test.name,
+            category: 'Laboratory',
+            basePrice: test.price,
+            isDiscountable: true,
+            floorPrice: test.price * 0.5,
+          });
         });
-      });
-      laboratoryData.selectedPackages.forEach((pkg) => {
-        items.push({
-          id: `lab-pkg-${pkg.id}`,
-          name: pkg.name,
-          category: 'Laboratory Package',
-          basePrice: pkg.price,
-          isDiscountable: true,
-          floorPrice: pkg.price * 0.5,
+        laboratoryData.selectedPackages.forEach((pkg) => {
+          items.push({
+            id: `lab-pkg-${pkg.id}`,
+            name: pkg.name,
+            category: 'Laboratory Package',
+            basePrice: pkg.price,
+            isDiscountable: true,
+            floorPrice: pkg.price * 0.5,
+          });
         });
-      });
-    }
-
-    if (radiologyData) {
-      radiologyData.selectedTests.forEach((test) => {
-        items.push({
-          id: `rad-test-${test.id}`,
-          name: test.name,
-          category: 'Radiology',
-          basePrice: test.price,
-          isDiscountable: true,
-          floorPrice: test.price * 0.5,
+      } else if (laboratoryData.mode === "radiology" && laboratoryData.selectedRadiologyTests) {
+        laboratoryData.selectedRadiologyTests.forEach((test) => {
+          items.push({
+            id: `rad-test-${test.id}`,
+            name: test.name,
+            category: 'Radiology',
+            basePrice: test.price,
+            isDiscountable: true,
+            floorPrice: test.price * 0.5,
+          });
         });
-      });
+      }
     }
 
     if (ipdAdmissionData) {
@@ -148,17 +142,6 @@ const BookAppointment = () => {
         basePrice: 5000,
         isDiscountable: false, // Example: non-discountable
         floorPrice: 5000,
-      });
-    }
-
-    if (dcProcedureData) {
-      items.push({
-        id: 'dc-procedure-1',
-        name: dcProcedureData.procedure,
-        category: 'Day Care',
-        basePrice: 15000,
-        isDiscountable: true,
-        floorPrice: 10000,
       });
     }
 
@@ -183,7 +166,7 @@ const BookAppointment = () => {
         pricing.addLineItem(item);
       }
     });
-  }, [consultationData, laboratoryData, radiologyData, ipdAdmissionData, dcProcedureData]);
+  }, [consultationData, laboratoryData, ipdAdmissionData]);
 
   const handleTypeClick = (type: string) => {
     // Toggle the type - add if not present, remove if already selected
@@ -191,9 +174,7 @@ const BookAppointment = () => {
       // Deselect: call the appropriate remove handler
       if (type === "consultation") handleRemoveConsultation();
       else if (type === "laboratory") handleRemoveLaboratory();
-      else if (type === "radiology") handleRemoveRadiology();
       else if (type === "ipd") handleRemoveIPDAdmission();
-      else if (type === "dc") handleRemoveDCProcedure();
       return;
     }
     
@@ -213,24 +194,12 @@ const BookAppointment = () => {
     } else if (type === "laboratory") {
       // Initialize with default data
       setLaboratoryData({
-        mode: "in-clinic",
+        mode: "laboratory",
         selectedTests: [
           { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
           { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
         ],
         selectedPackages: [],
-        date: new Date(2025, 7, 5),
-        time: "07:30",
-      });
-    } else if (type === "radiology") {
-      // Initialize with default data
-      setRadiologyData({
-        radiologyType: "X-Ray",
-        ageGroup: "adults",
-        selectedTests: [
-          { id: "1", name: "Chest (PA View)", category: "Radiology", price: 500 },
-          { id: "2", name: "Cervical Spine", category: "Radiology", price: 600 },
-        ],
         date: new Date(2025, 7, 5),
         time: "07:30",
       });
@@ -249,17 +218,6 @@ const BookAppointment = () => {
         contactNumber: "",
         address: "",
       });
-    } else if (type === "dc") {
-      // Initialize with default data
-      setDcProcedureData({
-        department: "General Surgery",
-        procedure: "Endoscopy",
-        attendingDoctor: "Dr. A. Joseph (Ophthalmology)",
-        otRoom: "OT - 05A",
-        reasonForProcedure: "",
-        date: new Date(2025, 7, 5),
-        time: "07:30",
-      });
     }
   };
 
@@ -273,19 +231,9 @@ const BookAppointment = () => {
     setLaboratoryData(null);
   };
 
-  const handleRemoveRadiology = () => {
-    setSelectedTypes(prev => prev.filter(t => t !== "radiology"));
-    setRadiologyData(null);
-  };
-
   const handleRemoveIPDAdmission = () => {
     setSelectedTypes(prev => prev.filter(t => t !== "ipd"));
     setIpdAdmissionData(null);
-  };
-
-  const handleRemoveDCProcedure = () => {
-    setSelectedTypes(prev => prev.filter(t => t !== "dc"));
-    setDcProcedureData(null);
   };
 
   const handleConsultationUpdate = (data: ConsultationData) => {
@@ -296,16 +244,8 @@ const BookAppointment = () => {
     setLaboratoryData(data);
   };
 
-  const handleRadiologyUpdate = (data: RadiologyData) => {
-    setRadiologyData(data);
-  };
-
   const handleIPDAdmissionUpdate = (data: IPDAdmissionData) => {
     setIpdAdmissionData(data);
-  };
-
-  const handleDCProcedureUpdate = (data: DCProcedureData) => {
-    setDcProcedureData(data);
   };
 
   const handleOpenModal = (item: LineItem) => {
@@ -425,7 +365,7 @@ const BookAppointment = () => {
     }
 
     if (laboratoryData) {
-      details.mode = laboratoryData.mode === "in-clinic" ? "In-lab" : "Home collection";
+      details.mode = laboratoryData.mode === "laboratory" ? "Laboratory" : "Radiology";
       details.tests = [
         ...laboratoryData.selectedTests.map(t => t.name),
         ...laboratoryData.selectedPackages.map(p => p.name),
@@ -521,30 +461,12 @@ const BookAppointment = () => {
                             />
                           );
                         }
-                      if (type === "radiology" && radiologyData) {
-                        return (
-                          <RadiologyBookingForm
-                            key="radiology"
-                            onRemove={handleRemoveRadiology}
-                            onUpdate={handleRadiologyUpdate}
-                          />
-                        );
-                      }
                       if (type === "ipd" && ipdAdmissionData) {
                         return (
                           <IPDAdmissionBookingForm
                             key="ipd"
                             onRemove={handleRemoveIPDAdmission}
                             onUpdate={handleIPDAdmissionUpdate}
-                          />
-                        );
-                      }
-                      if (type === "dc" && dcProcedureData) {
-                        return (
-                          <DCProcedureBookingForm
-                            key="dc"
-                            onRemove={handleRemoveDCProcedure}
-                            onUpdate={handleDCProcedureUpdate}
                           />
                         );
                       }
@@ -598,7 +520,7 @@ const BookAppointment = () => {
                                 <div>
                                   <p className="text-muted-foreground">When</p>
                                   <p className="text-foreground font-medium">
-                                    {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | {laboratoryData.mode === "in-clinic" ? "In-Clinic" : "Home Collection"}
+                                    {format(laboratoryData.date, "dd/MM/yyyy")} {laboratoryData.time} AM | {laboratoryData.mode === "laboratory" ? "Laboratory" : "Radiology"}
                                   </p>
                                 </div>
 
@@ -696,53 +618,6 @@ const BookAppointment = () => {
                           );
                         }
 
-                        if (type === "radiology" && radiologyData) {
-                          return (
-                            <div key="radiology" className="pt-6 border-t border-border space-y-4">
-                              <div className="flex items-start justify-between">
-                                <p className="text-sm font-medium text-foreground mb-1">Radiology</p>
-                                <button
-                                  onClick={handleRemoveRadiology}
-                                  className="text-xs text-primary"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
-
-                              <div className="space-y-3 text-xs">
-                                <div>
-                                  <p className="text-muted-foreground">When</p>
-                                  <p className="text-foreground font-medium">
-                                    {format(radiologyData.date, "dd/MM/yyyy")} {radiologyData.time} AM | {radiologyData.radiologyType}
-                                  </p>
-                                </div>
-
-                                {radiologyData.selectedTests.length > 0 && (
-                                  <div className="space-y-2 pt-2">
-                                    {radiologyData.selectedTests.map((test) => {
-                                      const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
-                                      return (
-                                        <div key={test.id} className="flex justify-between items-center">
-                                          <p className="text-foreground text-xs">{test.name}</p>
-                                          {lineItem && (
-                                            <LineItemPriceEditor
-                                              item={lineItem}
-                                              onPriceUpdate={pricing.updateLineItemPrice}
-                                              onDiscountApply={pricing.applyLineDiscount}
-                                              onWaiveOff={pricing.waiveOffItem}
-                                              onOpenModal={() => handleOpenModal(lineItem)}
-                                            />
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        }
-
                         if (type === "ipd" && ipdAdmissionData) {
                           return (
                             <div key="ipd" className="pt-6 border-t border-border space-y-4">
@@ -792,62 +667,6 @@ const BookAppointment = () => {
                                         onOpenModal={() => handleOpenModal(lineItem)}
                                       />
                                     ) : <p className="text-foreground font-semibold">₹5,000</p>;
-                                  })()}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        }
-
-                        if (type === "dc" && dcProcedureData) {
-                          return (
-                            <div key="dc" className="pt-6 border-t border-border space-y-4">
-                              <div className="flex items-start justify-between">
-                                <p className="text-sm font-medium text-foreground mb-1">Day-Care Procedure</p>
-                                <button
-                                  onClick={handleRemoveDCProcedure}
-                                  className="text-xs text-primary"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
-
-                              <div className="space-y-3 text-xs">
-                                <div>
-                                  <p className="text-muted-foreground">When</p>
-                                  <p className="text-foreground font-medium">
-                                    {format(dcProcedureData.date, "dd/MM/yyyy")} {dcProcedureData.time} AM
-                                  </p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground">Attending Doctor</p>
-                                  <p className="text-foreground font-medium">{dcProcedureData.attendingDoctor}</p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground">Procedure</p>
-                                  <p className="text-foreground font-medium">{dcProcedureData.procedure}</p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground">OT/Procedure Room</p>
-                                  <p className="text-foreground font-medium">{dcProcedureData.otRoom}</p>
-                                </div>
-
-                                <div className="flex justify-between items-center pt-3 border-t border-border">
-                                  <p className="text-foreground">Procedure</p>
-                                  {(() => {
-                                    const lineItem = pricing.lineItems.find(li => li.id === 'dc-procedure-1');
-                                    return lineItem ? (
-                                      <LineItemPriceEditor
-                                        item={lineItem}
-                                        onPriceUpdate={pricing.updateLineItemPrice}
-                                        onDiscountApply={pricing.applyLineDiscount}
-                                        onWaiveOff={pricing.waiveOffItem}
-                                        onOpenModal={() => handleOpenModal(lineItem)}
-                                      />
-                                    ) : <p className="text-foreground font-semibold">₹15,000</p>;
                                   })()}
                                 </div>
                               </div>
