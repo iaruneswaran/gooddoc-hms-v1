@@ -37,7 +37,7 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1">
-            <p className="text-sm font-medium text-foreground">{item.name}</p>
+            <p className="text-[13px] text-foreground">{item.name}</p>
             <p className="text-xs text-muted-foreground">{item.code}</p>
           </div>
           <Button
@@ -50,7 +50,7 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
           </Button>
         </div>
         
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-3 text-[13px]">
           <div className="flex items-center gap-1">
             <Button
               variant="outline"
@@ -61,7 +61,7 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
             >
               <Minus className="w-3 h-3" />
             </Button>
-            <span className="w-8 text-center font-medium">{item.qty}</span>
+            <span className="w-8 text-center">{item.qty}</span>
             <Button
               variant="outline"
               size="sm"
@@ -74,7 +74,7 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
           
           <div className="flex items-center gap-1">
             <span className="text-muted-foreground">×</span>
-            <span className="font-medium">{formatCurrency(item.unitPrice)}</span>
+            <span>{formatCurrency(item.unitPrice)}</span>
           </div>
           
           <div className="flex items-center gap-1">
@@ -91,7 +91,7 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
             <span className="text-muted-foreground">%</span>
           </div>
           
-          <div className="ml-auto font-semibold text-foreground">
+          <div className="ml-auto font-medium text-foreground">
             {formatCurrency(lineTotal)}
           </div>
         </div>
