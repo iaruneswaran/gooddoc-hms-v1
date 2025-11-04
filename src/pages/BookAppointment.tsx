@@ -281,6 +281,39 @@ const BookAppointment = () => {
     setServicesCart(cart);
     setServicesTotals(totals);
   };
+  
+  const handleRemoveLabTest = (testId: string) => {
+    if (!laboratoryData) return;
+    setLaboratoryData({
+      ...laboratoryData,
+      selectedTests: laboratoryData.selectedTests.filter(t => t.id !== testId),
+    });
+  };
+  
+  const handleRemoveLabPackage = (pkgId: string) => {
+    if (!laboratoryData) return;
+    setLaboratoryData({
+      ...laboratoryData,
+      selectedPackages: laboratoryData.selectedPackages.filter(p => p.id !== pkgId),
+    });
+  };
+  
+  const handleRemoveRadiologyTest = (testId: string) => {
+    if (!laboratoryData) return;
+    setLaboratoryData({
+      ...laboratoryData,
+      selectedRadiologyTests: laboratoryData.selectedRadiologyTests?.filter(t => t.id !== testId) || [],
+    });
+  };
+  
+  const handleRemoveService = (itemId: string) => {
+    setServicesCart(prev => prev.filter(item => item.itemId !== itemId));
+  };
+  
+  const handleClearServices = () => {
+    setServicesCart([]);
+    setServicesTotals({ subtotal: 0, discountTotal: 0, taxTotal: 0, netPayable: 0 });
+  };
 
   const handleOpenModal = (item: LineItem) => {
     setSelectedItemForModal(item);
@@ -579,8 +612,16 @@ const BookAppointment = () => {
                                         {laboratoryData.selectedTests.map((test) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
                                           return (
-                                            <div key={test.id} className="flex justify-between items-center">
-                                              <p className="text-foreground text-xs">{test.name}</p>
+                                            <div key={test.id} className="flex justify-between items-center group">
+                                              <div className="flex items-center gap-2 flex-1">
+                                                <p className="text-foreground text-xs">{test.name}</p>
+                                                <button
+                                                  onClick={() => handleRemoveLabTest(test.id)}
+                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                                >
+                                                  <Trash2 className="w-3 h-3" />
+                                                </button>
+                                              </div>
                                               {lineItem && (
                                                 <LineItemPriceEditor
                                                   item={lineItem}
@@ -601,8 +642,16 @@ const BookAppointment = () => {
                                         {laboratoryData.selectedPackages.map((pkg) => {
                                           const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
                                           return (
-                                            <div key={pkg.id} className="flex justify-between items-center">
-                                              <p className="text-foreground text-xs">{pkg.name}</p>
+                                            <div key={pkg.id} className="flex justify-between items-center group">
+                                              <div className="flex items-center gap-2 flex-1">
+                                                <p className="text-foreground text-xs">{pkg.name}</p>
+                                                <button
+                                                  onClick={() => handleRemoveLabPackage(pkg.id)}
+                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                                >
+                                                  <Trash2 className="w-3 h-3" />
+                                                </button>
+                                              </div>
                                               {lineItem && (
                                                 <LineItemPriceEditor
                                                   item={lineItem}
@@ -646,8 +695,16 @@ const BookAppointment = () => {
                                       {laboratoryData.selectedRadiologyTests.map((test) => {
                                         const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
                                         return (
-                                          <div key={test.id} className="flex justify-between items-center">
-                                            <p className="text-foreground text-xs">{test.name}</p>
+                                          <div key={test.id} className="flex justify-between items-center group">
+                                            <div className="flex items-center gap-2 flex-1">
+                                              <p className="text-foreground text-xs">{test.name}</p>
+                                              <button
+                                                onClick={() => handleRemoveRadiologyTest(test.id)}
+                                                className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                              >
+                                                <Trash2 className="w-3 h-3" />
+                                              </button>
+                                            </div>
                                             {lineItem && (
                                               <LineItemPriceEditor
                                                 item={lineItem}
@@ -770,13 +827,29 @@ const BookAppointment = () => {
                               {/* Services & Procedures Section */}
                               {servicesCart.length > 0 && (
                                 <div className="pt-4 border-t border-border">
-                                  <p className="text-sm font-medium text-foreground mb-3">Services & Procedures</p>
+                                  <div className="flex items-start justify-between mb-3">
+                                    <p className="text-sm font-medium text-foreground">Services & Procedures</p>
+                                    <button
+                                      onClick={handleClearServices}
+                                      className="text-xs text-primary hover:text-primary/80"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
                                   <div className="space-y-2">
                                     {servicesCart.map((item) => {
                                       const lineItem = pricing.lineItems.find(li => li.id === `service-${item.itemId}`);
                                       return (
-                                        <div key={item.itemId} className="flex justify-between items-center">
-                                          <p className="text-foreground text-xs">{item.name}</p>
+                                        <div key={item.itemId} className="flex justify-between items-center group">
+                                          <div className="flex items-center gap-2 flex-1">
+                                            <p className="text-foreground text-xs">{item.name}</p>
+                                            <button
+                                              onClick={() => handleRemoveService(item.itemId)}
+                                              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                                            >
+                                              <Trash2 className="w-3 h-3" />
+                                            </button>
+                                          </div>
                                           {lineItem && (
                                             <LineItemPriceEditor
                                               item={lineItem}
