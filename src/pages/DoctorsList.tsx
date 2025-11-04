@@ -194,7 +194,7 @@ export default function DoctorsList() {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold">Doctors</h1>
+              <h1 className="text-lg font-semibold text-foreground">Doctors</h1>
               <div className="flex gap-3">
                 <Button variant="outline">
                   <Download className="w-4 h-4 mr-2" />
@@ -258,14 +258,14 @@ export default function DoctorsList() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div className="font-medium text-foreground">{doctor.displayName}</div>
-                      <div className="text-sm text-muted-foreground">{doctor.degrees}</div>
+                      <div className="text-sm font-medium text-foreground">{doctor.displayName}</div>
+                      <div className="text-xs text-muted-foreground">{doctor.degrees}</div>
                     </div>
                   </div>
 
                   <div>
-                    <div className="font-medium text-foreground">{doctor.department}</div>
-                    <div className="text-sm text-muted-foreground">{doctor.specialty}</div>
+                    <div className="text-sm font-medium text-foreground">{doctor.department}</div>
+                    <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
                   </div>
 
                   <div className="text-sm text-foreground">{doctor.availability}</div>
