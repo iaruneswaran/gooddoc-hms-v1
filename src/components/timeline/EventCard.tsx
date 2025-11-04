@@ -86,14 +86,9 @@ export function EventCard({ type, title, time, dept, status, onClick }: EventCar
           <Icon className="h-4 w-4" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h4 className="text-sm font-medium text-foreground line-clamp-1">
-              {title}
-            </h4>
-            <Badge variant="outline" className="text-xs flex-shrink-0">
-              {status}
-            </Badge>
-          </div>
+          <h4 className="text-sm font-medium text-foreground line-clamp-1 mb-1">
+            {title}
+          </h4>
           <div className="text-xs text-muted-foreground space-y-0.5">
             <div>{time}</div>
             <div className="line-clamp-1">{dept}</div>
