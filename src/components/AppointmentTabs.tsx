@@ -4,7 +4,6 @@ const categories = [
   "Outpatient Care",
   "Inpatient Care",
   "Diagnostics",
-  "Emergency",
 ];
 
 interface AppointmentTabsProps {
