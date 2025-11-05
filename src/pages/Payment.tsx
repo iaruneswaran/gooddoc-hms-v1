@@ -129,11 +129,6 @@ const Payment = () => {
                   <h3 className="text-base font-semibold text-foreground">Invoice Summary</h3>
                   <div className="flex gap-4">
                     <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1">Patient</p>
-                      <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
-                      <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
-                    </div>
-                    <div className="text-right">
                       <p className="text-xs text-muted-foreground mb-1">Invoice No</p>
                       <p className="text-sm font-medium text-foreground">IN-2025-009</p>
                     </div>
@@ -141,15 +136,17 @@ const Payment = () => {
                       <p className="text-xs text-muted-foreground mb-1">Date</p>
                       <p className="text-sm font-medium text-foreground">{paymentData?.date || "05/11/2025"}</p>
                     </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground mb-1">Patient</p>
+                      <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
+                      <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
+                    </div>
                   </div>
                 </div>
                 
                 <div className="space-y-6">
-                  <div className="mb-4 flex gap-6 text-sm">
-                    <span><span className="font-medium">Admission Date:</span> 05 Oct</span>
-                    <span><span className="font-medium">Discharge Date:</span> 07 Oct</span>
-                  </div>
-
+                  {paymentData?.items && paymentData.items.length > 0 && (
+                  <>
                   {/* Room & Admission */}
                   <div className="mb-6">
                     <h4 className="text-sm font-semibold mb-3 text-primary">Room & Admission</h4>
@@ -375,6 +372,12 @@ const Payment = () => {
                       </TableBody>
                     </Table>
                   </div>
+                  </>
+                  )}
+                  
+                  {(!paymentData?.items || paymentData.items.length === 0) && (
+                    <p className="text-center text-muted-foreground py-8">No invoice data available. Generate from booking appointment.</p>
+                  )}
                 </div>
               </Card>
 
