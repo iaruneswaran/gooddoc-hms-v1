@@ -78,7 +78,7 @@ const Payment = () => {
   };
   
   const advanceAmount = 1000;
-  const billAmount = 49900; // Grand total from invoice
+  const billAmount = 51500; // Grand total from invoice
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
@@ -225,6 +225,37 @@ const Payment = () => {
                     </Table>
                   </div>
 
+                  {/* Consultation */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Consultation</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">05 Oct</TableCell>
+                          <TableCell className="w-[140px]">CONS-001</TableCell>
+                          <TableCell>Cardiology Consultation</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹1,500</TableCell>
+                          <TableCell className="w-[100px]">₹1,500</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Consultation)</TableCell>
+                          <TableCell className="font-bold">₹1,500</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
                   {/* Laboratory */}
                   <div className="mb-6">
                     <h4 className="text-sm font-semibold mb-3 text-primary">Laboratory</h4>
@@ -323,9 +354,21 @@ const Payment = () => {
                           <TableCell>Services & Procedures</TableCell>
                           <TableCell className="text-right">₹29,200</TableCell>
                         </TableRow>
+                        <TableRow>
+                          <TableCell>Consultation</TableCell>
+                          <TableCell className="text-right">₹1,500</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Laboratory</TableCell>
+                          <TableCell className="text-right">₹3,100</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Radiology</TableCell>
+                          <TableCell className="text-right">₹5,200</TableCell>
+                        </TableRow>
                         <TableRow className="bg-primary/10">
                           <TableCell className="font-bold text-lg">Total</TableCell>
-                          <TableCell className="text-right font-bold text-lg">₹49,900</TableCell>
+                          <TableCell className="text-right font-bold text-lg">₹51,500</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
