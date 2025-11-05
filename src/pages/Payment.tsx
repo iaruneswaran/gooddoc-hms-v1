@@ -147,9 +147,9 @@ const Payment = () => {
                 <div className="space-y-6">
                   {paymentData?.items && paymentData.items.length > 0 && (
                   <>
-                  {/* Room & Admission */}
+                  {/* Admission */}
                   <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Room & Admission</h4>
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Admission</h4>
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -171,7 +171,7 @@ const Payment = () => {
                           <TableCell className="w-[100px]">₹5,000</TableCell>
                         </TableRow>
                         <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Room & Admission)</TableCell>
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Admission)</TableCell>
                           <TableCell className="font-bold">₹5,000</TableCell>
                         </TableRow>
                       </TableBody>
@@ -339,7 +339,7 @@ const Payment = () => {
                       </TableHeader>
                       <TableBody>
                         <TableRow>
-                          <TableCell>Room & Admission</TableCell>
+                          <TableCell>Admission</TableCell>
                           <TableCell className="text-right">₹5,000</TableCell>
                         </TableRow>
                         <TableRow>
