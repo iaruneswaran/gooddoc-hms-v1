@@ -135,6 +135,31 @@ const PatientInsights = () => {
           department: "General Medicine",
           findings: "Patient admitted for IV fluid therapy and symptomatic management. Vital signs stable; mild dehydration noted on admission. Responding well to treatment. Daily monitoring of electrolytes and hydration status advised.",
         },
+        {
+          type: "Laboratory",
+          datetime: "07 Aug 2025 | 01:00 PM",
+          doctor: "Dr. Ravi Menon – Pathology",
+          visitId: "VST-205431",
+          provider: "Central Diagnostic Lab",
+          department: "Laboratory Services",
+          testsOrdered: [
+            "Electrolyte Panel",
+            "Kidney Function Test",
+          ],
+          findings: "Electrolyte levels monitored for IV therapy adjustment. Sodium and potassium levels within normal range.",
+        },
+        {
+          type: "Radiology",
+          datetime: "07 Aug 2025 | 02:30 PM",
+          doctor: "Dr. Anjali Verma – Radiology",
+          visitId: "VST-205431",
+          provider: "Imaging Suite 2",
+          department: "Radiology",
+          investigations: [
+            "Abdominal Ultrasound",
+          ],
+          findings: "Ultrasound shows no signs of acute pathology. Bowel loops appear normal with no obstruction.",
+        },
       ],
     },
   ];

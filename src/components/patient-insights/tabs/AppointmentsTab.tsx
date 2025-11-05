@@ -45,7 +45,7 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
           open={expandedItem === idx}
           onOpenChange={(open) => setExpandedItem(open ? idx : null)}
         >
-          <Card className="overflow-hidden bg-[#F1F2F4]">
+          <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
               <div className="flex items-center justify-between p-4 transition-colors">
                 <div className="flex-1 text-left">
