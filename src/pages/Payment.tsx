@@ -78,7 +78,7 @@ const Payment = () => {
   };
   
   const advanceAmount = 1000;
-  const billAmount = 32700; // Grand total from invoice
+  const billAmount = 49900; // Grand total from invoice
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
@@ -186,9 +186,9 @@ const Payment = () => {
                     </Table>
                   </div>
 
-                  {/* Medications & Procedures */}
+                  {/* Services & Procedures */}
                   <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Medications & Procedures</h4>
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Services & Procedures</h4>
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -204,14 +204,22 @@ const Payment = () => {
                         <TableRow>
                           <TableCell className="w-[100px]">06 Oct</TableCell>
                           <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>IV Fluids & Medications</TableCell>
+                          <TableCell>Cardiac Catheterization</TableCell>
                           <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹8,500</TableCell>
-                          <TableCell className="w-[100px]">₹8,500</TableCell>
+                          <TableCell className="w-[100px]">₹28,000</TableCell>
+                          <TableCell className="w-[100px]">₹28,000</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="w-[100px]">05 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>Nursing Care (per day)</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹1,200</TableCell>
+                          <TableCell className="w-[100px]">₹1,200</TableCell>
                         </TableRow>
                         <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Medications & Procedures)</TableCell>
-                          <TableCell className="font-bold">₹8,500</TableCell>
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Services & Procedures)</TableCell>
+                          <TableCell className="font-bold">₹29,200</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -295,44 +303,6 @@ const Payment = () => {
                     </Table>
                   </div>
 
-                  {/* Other Services */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Other Services</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Service</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">05 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Oxygen Support</TableCell>
-                          <TableCell className="w-[80px]">2</TableCell>
-                          <TableCell className="w-[100px]">₹500</TableCell>
-                          <TableCell className="w-[100px]">₹1,000</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-[100px]">06 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Physiotherapy Sessions</TableCell>
-                          <TableCell className="w-[80px]">2</TableCell>
-                          <TableCell className="w-[100px]">₹1,200</TableCell>
-                          <TableCell className="w-[100px]">₹2,400</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Other Services)</TableCell>
-                          <TableCell className="font-bold">₹3,400</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
 
                   {/* Grand Total */}
                   <div className="mt-8">
@@ -350,24 +320,12 @@ const Payment = () => {
                           <TableCell className="text-right">₹12,500</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell>Medications & Procedures</TableCell>
-                          <TableCell className="text-right">₹8,500</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Laboratory</TableCell>
-                          <TableCell className="text-right">₹3,100</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Radiology</TableCell>
-                          <TableCell className="text-right">₹5,200</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Other Services</TableCell>
-                          <TableCell className="text-right">₹3,400</TableCell>
+                          <TableCell>Services & Procedures</TableCell>
+                          <TableCell className="text-right">₹29,200</TableCell>
                         </TableRow>
                         <TableRow className="bg-primary/10">
                           <TableCell className="font-bold text-lg">Total</TableCell>
-                          <TableCell className="text-right font-bold text-lg">₹32,700</TableCell>
+                          <TableCell className="text-right font-bold text-lg">₹49,900</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
