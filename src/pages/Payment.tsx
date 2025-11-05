@@ -78,7 +78,7 @@ const Payment = () => {
   };
   
   const advanceAmount = 1000;
-  const billAmount = 51500; // Grand total from invoice
+  const billAmount = 44000; // Grand total from invoice
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
@@ -165,14 +165,6 @@ const Payment = () => {
                         <TableRow>
                           <TableCell className="w-[100px]">05 Oct</TableCell>
                           <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Room Charges – General Ward (Per Day)</TableCell>
-                          <TableCell className="w-[80px]">3</TableCell>
-                          <TableCell className="w-[100px]">₹2,500</TableCell>
-                          <TableCell className="w-[100px]">₹7,500</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-[100px]">05 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
                           <TableCell>Admission Fee</TableCell>
                           <TableCell className="w-[80px]">1</TableCell>
                           <TableCell className="w-[100px]">₹5,000</TableCell>
@@ -180,7 +172,7 @@ const Payment = () => {
                         </TableRow>
                         <TableRow className="bg-muted/50">
                           <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Room & Admission)</TableCell>
-                          <TableCell className="font-bold">₹12,500</TableCell>
+                          <TableCell className="font-bold">₹5,000</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -348,7 +340,7 @@ const Payment = () => {
                       <TableBody>
                         <TableRow>
                           <TableCell>Room & Admission</TableCell>
-                          <TableCell className="text-right">₹12,500</TableCell>
+                          <TableCell className="text-right">₹5,000</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell>Services & Procedures</TableCell>
@@ -368,7 +360,7 @@ const Payment = () => {
                         </TableRow>
                         <TableRow className="bg-primary/10">
                           <TableCell className="font-bold text-lg">Total</TableCell>
-                          <TableCell className="text-right font-bold text-lg">₹51,500</TableCell>
+                          <TableCell className="text-right font-bold text-lg">₹44,000</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
