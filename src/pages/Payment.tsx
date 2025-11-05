@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface InvoiceItem {
   name: string;
@@ -77,7 +78,7 @@ const Payment = () => {
   };
   
   const advanceAmount = 1000;
-  const billAmount = paymentData?.total || 1600;
+  const billAmount = 32700; // Grand total from invoice
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
@@ -124,12 +125,10 @@ const Payment = () => {
               <div className="flex-1 space-y-4">
                 {/* Invoice Summary */}
                 <Card className="p-6">
-                <h3 className="text-base font-semibold text-foreground mb-6">Invoice Summary</h3>
-                
-                <div className="space-y-6">
-                  {/* Patient Details */}
-                  <div className="flex justify-between items-start">
-                    <div>
+                <div className="flex justify-between items-start mb-6">
+                  <h3 className="text-base font-semibold text-foreground">Invoice Summary</h3>
+                  <div className="flex gap-4">
+                    <div className="text-right">
                       <p className="text-xs text-muted-foreground mb-1">Patient</p>
                       <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
                       <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
@@ -140,35 +139,242 @@ const Payment = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground mb-1">Date</p>
-                      <p className="text-sm font-medium text-foreground">{paymentData?.date || "05/08/2025"}</p>
+                      <p className="text-sm font-medium text-foreground">{paymentData?.date || "05/11/2025"}</p>
                     </div>
                   </div>
-
-                  {/* Episode Ledger */}
-                  <div className="pt-6 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-4">Episode Ledger</p>
-                    <div className="space-y-3">
-                      {paymentData?.items?.map((item, index) => (
-                        <div key={index} className="flex justify-between items-center">
-                          <p className="text-sm text-foreground">{item.name}</p>
-                          <p className="text-sm font-medium text-foreground">₹{item.price.toLocaleString()}</p>
-                        </div>
-                      ))}
-                    </div>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="mb-4 flex gap-6 text-sm">
+                    <span><span className="font-medium">Admission Date:</span> 05 Oct</span>
+                    <span><span className="font-medium">Discharge Date:</span> 07 Oct</span>
                   </div>
 
-                  {/* Totals */}
-                  <div className="pt-6 border-t border-border space-y-3">
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-muted-foreground">Subtotal</p>
-                      <p className="text-sm text-foreground">₹{paymentData?.subtotal.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center pt-3 border-t border-border">
-                      <p className="text-base font-semibold text-foreground">Bill Amount:</p>
-                      <p className="text-base font-bold text-foreground">₹{billAmount.toLocaleString()}</p>
-                    </div>
+                  {/* Room & Admission */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Room & Admission</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">05 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>Room Charges – General Ward (Per Day)</TableCell>
+                          <TableCell className="w-[80px]">3</TableCell>
+                          <TableCell className="w-[100px]">₹2,500</TableCell>
+                          <TableCell className="w-[100px]">₹7,500</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="w-[100px]">05 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>Admission Fee</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹5,000</TableCell>
+                          <TableCell className="w-[100px]">₹5,000</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Room & Admission)</TableCell>
+                          <TableCell className="font-bold">₹12,500</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
                   </div>
 
+                  {/* Medications & Procedures */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Medications & Procedures</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">06 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>IV Fluids & Medications</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹8,500</TableCell>
+                          <TableCell className="w-[100px]">₹8,500</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Medications & Procedures)</TableCell>
+                          <TableCell className="font-bold">₹8,500</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Laboratory */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Laboratory</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Test Name</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">07 Oct</TableCell>
+                          <TableCell className="w-[140px]">LAB-001</TableCell>
+                          <TableCell>Complete Blood Count</TableCell>
+                          <TableCell className="w-[80px]">2</TableCell>
+                          <TableCell className="w-[100px]">₹800</TableCell>
+                          <TableCell className="w-[100px]">₹1,600</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="w-[100px]">07 Oct</TableCell>
+                          <TableCell className="w-[140px]">LAB-002</TableCell>
+                          <TableCell>Liver Function Test</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹1,500</TableCell>
+                          <TableCell className="w-[100px]">₹1,500</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Laboratory)</TableCell>
+                          <TableCell className="font-bold">₹3,100</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Radiology */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Radiology</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Test Name</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">06 Oct</TableCell>
+                          <TableCell className="w-[140px]">RADIO-001</TableCell>
+                          <TableCell>Chest X-Ray</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹1,200</TableCell>
+                          <TableCell className="w-[100px]">₹1,200</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="w-[100px]">06 Oct</TableCell>
+                          <TableCell className="w-[140px]">RADIO-002</TableCell>
+                          <TableCell>CT Scan Abdomen</TableCell>
+                          <TableCell className="w-[80px]">1</TableCell>
+                          <TableCell className="w-[100px]">₹4,000</TableCell>
+                          <TableCell className="w-[100px]">₹4,000</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Radiology)</TableCell>
+                          <TableCell className="font-bold">₹5,200</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Other Services */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Other Services</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">Date</TableHead>
+                          <TableHead className="w-[140px]">Appointment No</TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead className="w-[80px]">Qty</TableHead>
+                          <TableHead className="w-[100px]">Rate</TableHead>
+                          <TableHead className="w-[100px]">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="w-[100px]">05 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>Oxygen Support</TableCell>
+                          <TableCell className="w-[80px]">2</TableCell>
+                          <TableCell className="w-[100px]">₹500</TableCell>
+                          <TableCell className="w-[100px]">₹1,000</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="w-[100px]">06 Oct</TableCell>
+                          <TableCell className="w-[140px]">—</TableCell>
+                          <TableCell>Physiotherapy Sessions</TableCell>
+                          <TableCell className="w-[80px]">2</TableCell>
+                          <TableCell className="w-[100px]">₹1,200</TableCell>
+                          <TableCell className="w-[100px]">₹2,400</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Other Services)</TableCell>
+                          <TableCell className="font-bold">₹3,400</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Grand Total */}
+                  <div className="mt-8">
+                    <h4 className="text-sm font-semibold mb-3 text-primary">Grand Total</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Description</TableHead>
+                          <TableHead className="text-right">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>Room & Admission</TableCell>
+                          <TableCell className="text-right">₹12,500</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Medications & Procedures</TableCell>
+                          <TableCell className="text-right">₹8,500</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Laboratory</TableCell>
+                          <TableCell className="text-right">₹3,100</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Radiology</TableCell>
+                          <TableCell className="text-right">₹5,200</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Other Services</TableCell>
+                          <TableCell className="text-right">₹3,400</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-primary/10">
+                          <TableCell className="font-bold text-lg">Total</TableCell>
+                          <TableCell className="text-right font-bold text-lg">₹32,700</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </Card>
 
