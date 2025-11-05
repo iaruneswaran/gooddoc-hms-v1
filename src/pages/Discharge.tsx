@@ -601,36 +601,6 @@ const BillingStep = () => {
             </Table>
           </div>
 
-          {/* Day Care Procedures */}
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold mb-3 text-primary">Day Care Procedures</h4>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Date</TableHead>
-                  <TableHead className="w-[140px]">Appointment No</TableHead>
-                  <TableHead>Service</TableHead>
-                  <TableHead className="w-[80px]">Qty</TableHead>
-                  <TableHead className="w-[100px]">Rate</TableHead>
-                  <TableHead className="w-[100px]">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="w-[100px]">06 Oct</TableCell>
-                  <TableCell className="w-[140px]">—</TableCell>
-                  <TableCell>Minor Surgery – Appendix Removal</TableCell>
-                  <TableCell className="w-[80px]">1</TableCell>
-                  <TableCell className="w-[100px]">₹15,000</TableCell>
-                  <TableCell className="w-[100px]">₹15,000</TableCell>
-                </TableRow>
-                <TableRow className="bg-muted/50">
-                  <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Day Care Procedures)</TableCell>
-                  <TableCell className="font-bold">₹15,000</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
 
           {/* Other Services */}
           <div className="mb-6">
@@ -699,16 +669,12 @@ const BillingStep = () => {
                   <TableCell className="text-right">₹5,200</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Day Care Procedures</TableCell>
-                  <TableCell className="text-right">₹15,000</TableCell>
-                </TableRow>
-                <TableRow>
                   <TableCell>Other Services</TableCell>
                   <TableCell className="text-right">₹3,400</TableCell>
                 </TableRow>
                 <TableRow className="bg-primary/10">
                   <TableCell className="font-bold text-lg">Total</TableCell>
-                  <TableCell className="text-right font-bold text-lg">₹47,700</TableCell>
+                  <TableCell className="text-right font-bold text-lg">₹32,700</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
