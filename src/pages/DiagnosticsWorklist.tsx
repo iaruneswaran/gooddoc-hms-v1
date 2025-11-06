@@ -365,7 +365,7 @@ export default function DiagnosticsWorklist() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/diagnostics/${order.type}/${order.id}`}>
+                        <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
                           <Button size="sm">
                             Enter Results
                           </Button>
