@@ -29,7 +29,8 @@ export function AppSidebar() {
       <nav className="flex-1 px-3">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.href;
+          const isActive = location.pathname === item.href || 
+                          (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics"));
           
           return (
             <Link

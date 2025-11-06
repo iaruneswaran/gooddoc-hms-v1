@@ -1,0 +1,397 @@
+import { useState } from "react";
+import { AppSidebar } from "@/components/AppSidebar";
+import { AppHeader } from "@/components/AppHeader";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Calendar, Search, Filter, Phone, Mail, MoreVertical, Clock, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+interface DiagnosticOrder {
+  id: string;
+  type: "laboratory" | "radiology";
+  patient: {
+    name: string;
+    mrn: string;
+    age: number;
+    sex: string;
+    phone: string;
+    avatar: string;
+  };
+  orderSummary: {
+    indication: string;
+    tests: string[];
+    referringDoctor: string;
+  };
+  service: {
+    department?: string;
+    modality?: string;
+  };
+  token: string;
+  scheduledTime: string;
+  status: string;
+  priority: "routine" | "stat";
+  tatMinutes?: number;
+  isOverdue?: boolean;
+}
+
+const mockOrders: DiagnosticOrder[] = [
+  {
+    id: "OR-LL-10342",
+    type: "laboratory",
+    patient: {
+      name: "Anaya Shah",
+      mrn: "MRN-204983",
+      age: 34,
+      sex: "F",
+      phone: "+91 98xxxx210",
+      avatar: "AS"
+    },
+    orderSummary: {
+      indication: "Chest pain evaluation",
+      tests: ["Troponin I", "CMP", "CBC with Diff"],
+      referringDoctor: "Dr. Mehta"
+    },
+    service: {
+      department: "Central Diagnostic Lab"
+    },
+    token: "T-045",
+    scheduledTime: "10:30 AM",
+    status: "Sample Collected",
+    priority: "stat",
+    tatMinutes: 45,
+    isOverdue: false
+  },
+  {
+    id: "OR-LL-10367",
+    type: "laboratory",
+    patient: {
+      name: "Rohan Mehta",
+      mrn: "MRN-198733",
+      age: 62,
+      sex: "M",
+      phone: "+91 98xxxx345",
+      avatar: "RM"
+    },
+    orderSummary: {
+      indication: "DM2 follow-up",
+      tests: ["HbA1c", "Lipid Panel"],
+      referringDoctor: "Dr. Sharma"
+    },
+    service: {
+      department: "Central Diagnostic Lab"
+    },
+    token: "T-052",
+    scheduledTime: "11:15 AM",
+    status: "Pending",
+    priority: "routine",
+    tatMinutes: 120
+  },
+  {
+    id: "OR-RD-55421",
+    type: "radiology",
+    patient: {
+      name: "Kavya Iyer",
+      mrn: "MRN-217564",
+      age: 28,
+      sex: "F",
+      phone: "+91 98xxxx567",
+      avatar: "KI"
+    },
+    orderSummary: {
+      indication: "r/o PE",
+      tests: ["CT Chest with contrast"],
+      referringDoctor: "Dr. Patel"
+    },
+    service: {
+      modality: "CT"
+    },
+    token: "R-023",
+    scheduledTime: "09:45 AM",
+    status: "In Progress",
+    priority: "stat",
+    tatMinutes: 60
+  },
+  {
+    id: "OR-RD-55438",
+    type: "radiology",
+    patient: {
+      name: "Arnav Rao",
+      mrn: "MRN-176540",
+      age: 45,
+      sex: "M",
+      phone: "+91 98xxxx789",
+      avatar: "AR"
+    },
+    orderSummary: {
+      indication: "Persistent headache",
+      tests: ["MRI Brain w/o contrast"],
+      referringDoctor: "Dr. Kumar"
+    },
+    service: {
+      modality: "MRI"
+    },
+    token: "R-031",
+    scheduledTime: "02:30 PM",
+    status: "Scheduled",
+    priority: "routine",
+    tatMinutes: 180
+  },
+  {
+    id: "OR-LL-10389",
+    type: "laboratory",
+    patient: {
+      name: "Priya Desai",
+      mrn: "MRN-209845",
+      age: 52,
+      sex: "F",
+      phone: "+91 98xxxx432",
+      avatar: "PD"
+    },
+    orderSummary: {
+      indication: "UTI symptoms",
+      tests: ["Urinalysis", "Urine Culture"],
+      referringDoctor: "Dr. Singh"
+    },
+    service: {
+      department: "Microbiology Lab"
+    },
+    token: "T-058",
+    scheduledTime: "01:00 PM",
+    status: "Checked-in",
+    priority: "routine",
+    tatMinutes: 240
+  }
+];
+
+export default function DiagnosticsWorklist() {
+  const [selectedTab, setSelectedTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending": return "bg-muted text-muted-foreground";
+      case "checked-in": return "bg-blue-100 text-blue-700";
+      case "sample collected": return "bg-purple-100 text-purple-700";
+      case "in progress": return "bg-yellow-100 text-yellow-700";
+      case "entered": return "bg-cyan-100 text-cyan-700";
+      case "under review": return "bg-orange-100 text-orange-700";
+      case "released": return "bg-green-100 text-green-700";
+      case "critical": return "bg-destructive text-destructive-foreground";
+      default: return "bg-muted text-muted-foreground";
+    }
+  };
+
+  const filteredOrders = mockOrders.filter(order => {
+    const matchesTab = selectedTab === "all" || 
+                       (selectedTab === "laboratory" && order.type === "laboratory") ||
+                       (selectedTab === "radiology" && order.type === "radiology");
+    const matchesSearch = searchQuery === "" || 
+                         order.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         order.patient.mrn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         order.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || order.status === statusFilter;
+    
+    return matchesTab && matchesSearch && matchesStatus;
+  });
+
+  const stats = {
+    total: mockOrders.length,
+    medianTAT: 120,
+    critical: mockOrders.filter(o => o.priority === "stat").length
+  };
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      
+      <div className="flex-1 ml-[196px]">
+        <AppHeader breadcrumbs={["Diagnostics", "Worklist"]} />
+        
+        <main className="p-8">
+          {/* Header with Stats */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <h1 className="text-3xl font-semibold text-foreground">Diagnostics</h1>
+              <div className="flex gap-2">
+                <Badge variant="secondary" className="px-3 py-1">
+                  Today: {stats.total} orders
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1">
+                  Median TAT: {stats.medianTAT}min
+                </Badge>
+                <Badge variant="destructive" className="px-3 py-1">
+                  {stats.critical} Critical
+                </Badge>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon">
+                <Calendar className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
+            <TabsList>
+              <TabsTrigger value="all">
+                All ({mockOrders.length})
+              </TabsTrigger>
+              <TabsTrigger value="laboratory">
+                Laboratory ({mockOrders.filter(o => o.type === "laboratory").length})
+              </TabsTrigger>
+              <TabsTrigger value="radiology">
+                Radiology ({mockOrders.filter(o => o.type === "radiology").length})
+              </TabsTrigger>
+              <TabsTrigger value="critical">
+                Critical ({stats.critical})
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* Filters and Search */}
+          <Card className="p-4 mb-6">
+            <div className="flex gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by patient name, MRN, or order ID..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="Pending">Pending</SelectItem>
+                  <SelectItem value="Checked-in">Checked-in</SelectItem>
+                  <SelectItem value="Sample Collected">Sample Collected</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Released">Released</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline">
+                <Filter className="h-4 w-4 mr-2" />
+                More Filters
+              </Button>
+            </div>
+          </Card>
+
+          {/* Orders Table */}
+          <Card>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Order Summary</TableHead>
+                  <TableHead>Service</TableHead>
+                  <TableHead>Token & Time</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredOrders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback>{order.patient.avatar}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-medium text-foreground">{order.patient.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {order.patient.mrn} • {order.patient.age}y | {order.patient.sex}
+                          </div>
+                          <div className="flex gap-2 mt-1">
+                            <button className="text-muted-foreground hover:text-primary">
+                              <Phone className="h-3 w-3" />
+                            </button>
+                            <button className="text-muted-foreground hover:text-primary">
+                              <Mail className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="text-sm font-medium text-foreground">{order.id}</div>
+                        <div className="text-sm text-muted-foreground">{order.orderSummary.indication}</div>
+                        <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
+                        <div className="text-xs text-muted-foreground">Dr: {order.orderSummary.referringDoctor}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        {order.service.department || order.service.modality}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{order.token}</Badge>
+                          {order.priority === "stat" && (
+                            <Badge variant="destructive" className="text-xs">STAT</Badge>
+                          )}
+                        </div>
+                        <div className="text-sm text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {order.scheduledTime}
+                        </div>
+                        {order.tatMinutes && (
+                          <div className="text-xs text-muted-foreground">
+                            TAT: {order.tatMinutes}min
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getStatusColor(order.status)}>
+                        {order.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link to={`/diagnostics/${order.type}/${order.id}`}>
+                          <Button size="sm">
+                            Enter Results
+                          </Button>
+                        </Link>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Order</DropdownMenuItem>
+                            <DropdownMenuItem>Reassign</DropdownMenuItem>
+                            <DropdownMenuItem>Print Barcodes</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Cancel</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        </main>
+      </div>
+    </div>
+  );
+}
