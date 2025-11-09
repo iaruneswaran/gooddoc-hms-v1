@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Calendar, Search, Filter, Phone, Mail, MoreVertical, Clock, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -215,29 +215,31 @@ export default function DiagnosticsWorklist() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Diagnostics", "Worklist"]} />
         
-        <main className="p-8">
+        <main className="p-6">
           {/* Header with Stats */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <h1 className="text-3xl font-semibold text-foreground">Diagnostics</h1>
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <h1 className="text-lg font-semibold text-foreground">Diagnostics</h1>
+                <div className="flex gap-2">
+                  <Badge variant="secondary" className="px-3 py-1">
+                    Today: {stats.total} orders
+                  </Badge>
+                  <Badge variant="secondary" className="px-3 py-1">
+                    Median TAT: {stats.medianTAT}min
+                  </Badge>
+                  <Badge variant="destructive" className="px-3 py-1">
+                    {stats.critical} Critical
+                  </Badge>
+                </div>
+              </div>
               <div className="flex gap-2">
-                <Badge variant="secondary" className="px-3 py-1">
-                  Today: {stats.total} orders
-                </Badge>
-                <Badge variant="secondary" className="px-3 py-1">
-                  Median TAT: {stats.medianTAT}min
-                </Badge>
-                <Badge variant="destructive" className="px-3 py-1">
-                  {stats.critical} Critical
-                </Badge>
+                <Button variant="outline" size="icon">
+                  <Calendar className="h-4 w-4" />
+                </Button>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <Calendar className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+          </Card>
 
           {/* Tabs */}
           <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
@@ -290,106 +292,98 @@ export default function DiagnosticsWorklist() {
           </Card>
 
           {/* Orders Table */}
-          <Card>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Order Summary</TableHead>
-                  <TableHead>Service</TableHead>
-                  <TableHead>Token & Time</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar>
-                          <AvatarFallback>{order.patient.avatar}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium text-foreground">{order.patient.name}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {order.patient.mrn} • {order.patient.age}y | {order.patient.sex}
-                          </div>
-                          <div className="flex gap-2 mt-1">
-                            <button className="text-muted-foreground hover:text-primary">
-                              <Phone className="h-3 w-3" />
-                            </button>
-                            <button className="text-muted-foreground hover:text-primary">
-                              <Mail className="h-3 w-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="text-sm font-medium text-foreground">{order.id}</div>
-                        <div className="text-sm text-muted-foreground">{order.orderSummary.indication}</div>
-                        <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
-                        <div className="text-xs text-muted-foreground">Dr: {order.orderSummary.referringDoctor}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        {order.service.department || order.service.modality}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">{order.token}</Badge>
-                          {order.priority === "stat" && (
-                            <Badge variant="destructive" className="text-xs">STAT</Badge>
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {order.scheduledTime}
-                        </div>
-                        {order.tatMinutes && (
-                          <div className="text-xs text-muted-foreground">
-                            TAT: {order.tatMinutes}min
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(order.status)}>
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
-                          <Button size="sm">
-                            Enter Results
-                          </Button>
-                        </Link>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Order</DropdownMenuItem>
-                            <DropdownMenuItem>Reassign</DropdownMenuItem>
-                            <DropdownMenuItem>Print Barcodes</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">Cancel</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+          <div className="bg-card rounded-lg border border-border overflow-hidden">
+            <div className="grid grid-cols-[200px_1fr_180px_180px_140px_180px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="text-sm font-medium text-foreground">Patient</div>
+              <div className="text-sm font-medium text-foreground">Order Summary</div>
+              <div className="text-sm font-medium text-foreground">Service</div>
+              <div className="text-sm font-medium text-foreground">Token & Time</div>
+              <div className="text-sm font-medium text-foreground">Status</div>
+              <div className="text-sm font-medium text-foreground">Actions</div>
+            </div>
+
+            {filteredOrders.map((order) => (
+              <div key={order.id} className="grid grid-cols-[200px_1fr_180px_180px_140px_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                <div className="flex items-start gap-3">
+                  <Avatar className="w-10 h-10 flex-shrink-0">
+                    <AvatarFallback className="bg-primary/10 text-primary">{order.patient.avatar}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <button className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left">
+                      {order.patient.name}
+                    </button>
+                    <div className="text-xs text-muted-foreground">
+                      {order.patient.mrn} • {order.patient.age}y | {order.patient.sex}
+                    </div>
+                    <div className="flex gap-2 mt-1">
+                      <button className="text-muted-foreground hover:text-primary">
+                        <Phone className="w-3.5 h-3.5" />
+                      </button>
+                      <button className="text-muted-foreground hover:text-primary">
+                        <Mail className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-sm font-medium text-foreground">{order.id}</div>
+                  <div className="text-sm text-muted-foreground">{order.orderSummary.indication}</div>
+                  <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
+                  <div className="text-xs text-muted-foreground">Dr: {order.orderSummary.referringDoctor}</div>
+                </div>
+
+                <div className="text-sm text-foreground">
+                  {order.service.department || order.service.modality}
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="text-xs">{order.token}</Badge>
+                    {order.priority === "stat" && (
+                      <Badge variant="destructive" className="text-xs">STAT</Badge>
+                    )}
+                  </div>
+                  <div className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5" />
+                    {order.scheduledTime}
+                  </div>
+                  {order.tatMinutes && (
+                    <div className="text-xs text-muted-foreground">
+                      TAT: {order.tatMinutes}min
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <Badge className={getStatusColor(order.status)}>
+                    {order.status}
+                  </Badge>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
+                    <Button size="sm" className="bg-primary hover:bg-primary/90">
+                      Enter Results
+                    </Button>
+                  </Link>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>View Order</DropdownMenuItem>
+                      <DropdownMenuItem>Reassign</DropdownMenuItem>
+                      <DropdownMenuItem>Print Barcodes</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">Cancel</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            ))}
+          </div>
         </main>
       </div>
     </div>
