@@ -228,9 +228,6 @@ export default function DiagnosticsWorklist() {
                   <Badge variant="secondary" className="px-3 py-1">
                     Median TAT: {stats.medianTAT}min
                   </Badge>
-                  <Badge variant="destructive" className="px-3 py-1">
-                    {stats.critical} Critical
-                  </Badge>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -252,9 +249,6 @@ export default function DiagnosticsWorklist() {
               </TabsTrigger>
               <TabsTrigger value="radiology" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Radiology ({mockOrders.filter(o => o.type === "radiology").length})
-              </TabsTrigger>
-              <TabsTrigger value="critical" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                Critical ({stats.critical})
               </TabsTrigger>
             </TabsList>
           </Tabs>
