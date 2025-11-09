@@ -241,17 +241,17 @@ export default function DiagnosticsWorklist() {
 
           {/* Tabs */}
           <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
-            <TabsList>
-              <TabsTrigger value="all">
+            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
+              <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 All ({mockOrders.length})
               </TabsTrigger>
-              <TabsTrigger value="laboratory">
+              <TabsTrigger value="laboratory" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Laboratory ({mockOrders.filter(o => o.type === "laboratory").length})
               </TabsTrigger>
-              <TabsTrigger value="radiology">
+              <TabsTrigger value="radiology" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Radiology ({mockOrders.filter(o => o.type === "radiology").length})
               </TabsTrigger>
-              <TabsTrigger value="critical">
+              <TabsTrigger value="critical" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Critical ({stats.critical})
               </TabsTrigger>
             </TabsList>
