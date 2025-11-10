@@ -92,13 +92,10 @@ export default function OutpatientAppointments() {
             </Button>
           )}
           <Button
-            variant="outline"
+            variant="default"
             onClick={() => handlePatient360Click(appointment)}
           >
             Patient 360
-          </Button>
-          <Button variant="default">
-            {activeTab === "scheduled" ? "Start" : "Resume"}
           </Button>
         </div>
       </div>
