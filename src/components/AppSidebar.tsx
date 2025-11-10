@@ -8,7 +8,7 @@ const menuItems = [
   { icon: MessageCircle, label: "Ask Good Doc", href: "/ask", highlight: true },
   { icon: Mail, label: "Inbox", href: "/inbox" },
   { icon: Calendar, label: "Appointments", href: "/" },
-  { icon: Stethoscope, label: "Outpatient", href: "/outpatient" },
+  { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
