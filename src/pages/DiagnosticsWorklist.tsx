@@ -330,12 +330,7 @@ export default function DiagnosticsWorklist() {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs">{order.token}</Badge>
-                    {order.priority === "stat" && (
-                      <span className="text-xs text-destructive font-medium">STAT</span>
-                    )}
-                  </div>
+                  <div className="text-sm font-medium text-foreground">{order.token}</div>
                   <div className="text-sm text-muted-foreground flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     {order.scheduledTime}
