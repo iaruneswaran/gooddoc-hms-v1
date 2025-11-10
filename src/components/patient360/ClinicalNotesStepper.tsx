@@ -21,45 +21,6 @@ export function ClinicalNotesStepper({ patient, vitals }: ClinicalNotesStepperPr
 
   return (
     <div>
-      <div className="flex items-center justify-center mb-8">
-        {steps.map((step, index) => (
-          <div key={step.number} className="flex items-center">
-            <div className="flex flex-col items-center">
-              <div
-                className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-colors",
-                  currentStep === step.number
-                    ? "bg-primary text-primary-foreground"
-                    : currentStep > step.number
-                    ? "bg-primary/20 text-primary"
-                    : "bg-muted text-muted-foreground"
-                )}
-              >
-                {step.number}
-              </div>
-              <span
-                className={cn(
-                  "text-xs mt-2 font-medium",
-                  currentStep === step.number
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                )}
-              >
-                {step.label}
-              </span>
-            </div>
-            {index < steps.length - 1 && (
-              <div
-                className={cn(
-                  "h-[2px] w-32 mx-4 transition-colors",
-                  currentStep > step.number ? "bg-primary" : "bg-muted"
-                )}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
       <div>
         {currentStep === 1 && (
           <WriteNotesStep
