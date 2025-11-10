@@ -70,10 +70,9 @@ export default function OutpatientAppointments() {
         {/* Vitals */}
         <div>
           {appointment.vitalsPreview && (
-            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-              <span>BP: {appointment.vitalsPreview.bp}</span>
-              <span>HR: {appointment.vitalsPreview.hr} bpm</span>
-              <span>Temp: {appointment.vitalsPreview.temp}°C</span>
+            <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
+              <span>Temp {appointment.vitalsPreview.temp}°C | HR {appointment.vitalsPreview.hr} | RR {appointment.vitalsPreview.rr} | SpO₂ {appointment.vitalsPreview.spo2}%</span>
+              <span>BP {appointment.vitalsPreview.bp} mmHg | BG {appointment.vitalsPreview.bg} mg/dL</span>
             </div>
           )}
         </div>

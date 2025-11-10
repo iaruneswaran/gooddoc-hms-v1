@@ -72,7 +72,7 @@ export const mockAppointments: Appointment[] = [
     chiefComplaint: "Chest pain evaluation",
     mode: "In-Clinic",
     type: "Follow-up",
-    vitalsPreview: { bp: "120/80", hr: 72, temp: 37 },
+    vitalsPreview: { bp: "120/80", hr: 78, rr: 18, spo2: 98, temp: 37.2, bg: 95 },
     status: "Scheduled"
   },
   {
@@ -87,7 +87,7 @@ export const mockAppointments: Appointment[] = [
     chiefComplaint: "Routine checkup",
     mode: "In-Clinic",
     type: "New",
-    vitalsPreview: { bp: "118/78", hr: 68, temp: 36.8 },
+    vitalsPreview: { bp: "118/78", hr: 70, rr: 16, spo2: 99, temp: 36.8, bg: 92 },
     status: "Scheduled"
   }
 ];
