@@ -5,6 +5,8 @@ import { AppHeader } from "@/components/AppHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { CalendarWidget } from "@/components/CalendarWidget";
 import { User, Phone, MessageCircle, Video } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
@@ -117,24 +119,27 @@ export default function OutpatientAppointments() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Appointments", "Outpatient"]} />
         <main className="p-6">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-foreground mb-2">
-              Today's Appointments
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {new Date().toLocaleDateString("en-IN", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}
-            </p>
-          </div>
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-foreground">Today's Appointments</h1>
+              <CalendarWidget />
+            </div>
+          </Card>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6">
-              <TabsTrigger value="scheduled">Scheduled</TabsTrigger>
-              <TabsTrigger value="visited">Visited</TabsTrigger>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start mb-6">
+              <TabsTrigger
+                value="scheduled"
+                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+              >
+                Scheduled
+              </TabsTrigger>
+              <TabsTrigger
+                value="visited"
+                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+              >
+                Visited
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="scheduled">
