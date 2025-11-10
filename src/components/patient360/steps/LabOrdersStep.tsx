@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 interface LabOrdersStepProps {
   patient: Patient;
-  onBack?: () => void;
+  onBack: () => void;
 }
 
 export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
@@ -193,10 +193,15 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2 mt-6">
-            <Button variant="outline">Print Requisition</Button>
-            <Button variant="outline">Share to patient</Button>
-            <Button onClick={handleOrderNow}>Order Now</Button>
+          <div className="flex items-center justify-between mt-6">
+            <Button variant="ghost" onClick={onBack}>
+              Back
+            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline">Print Requisition</Button>
+              <Button variant="outline">Share to patient</Button>
+              <Button onClick={handleOrderNow}>Order Now</Button>
+            </div>
           </div>
         </Card>
       </div>
