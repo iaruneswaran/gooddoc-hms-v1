@@ -11,7 +11,6 @@ const defaultFlags: FeatureFlags = {
   globalDiscount_stickyBar: true,
   globalDiscount_wizard: false, // Advanced feature, disabled by default
   approval_required_below_floor: true,
-  patient360_v2_layout: true, // New Patient 360 layout with care board
 };
 
 interface FeatureFlagsContextType {
