@@ -238,35 +238,34 @@ export default function DiagnosticsWorklist() {
             </div>
           </Card>
 
-          {/* Tabs */}
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
-            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
-              <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                All ({mockOrders.length})
-              </TabsTrigger>
-              <TabsTrigger value="laboratory" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                Laboratory ({mockOrders.filter(o => o.type === "laboratory").length})
-              </TabsTrigger>
-              <TabsTrigger value="radiology" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                Radiology ({mockOrders.filter(o => o.type === "radiology").length})
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+          {/* Tabs and Filters */}
+          <div className="flex items-center justify-between mb-6 border-b border-border">
+            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+              <TabsList className="bg-transparent border-b-0 rounded-none h-auto p-0 justify-start">
+                <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  All ({mockOrders.length})
+                </TabsTrigger>
+                <TabsTrigger value="laboratory" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  Laboratory ({mockOrders.filter(o => o.type === "laboratory").length})
+                </TabsTrigger>
+                <TabsTrigger value="radiology" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  Radiology ({mockOrders.filter(o => o.type === "radiology").length})
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-          {/* Filters and Search */}
-          <Card className="p-4 mb-6">
-            <div className="flex gap-4">
-              <div className="flex-1 relative">
+            <div className="flex gap-3 pb-2">
+              <div className="relative w-[320px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search by patient name, MRN, or order ID..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 h-9"
                 />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[160px] h-9">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -278,12 +277,12 @@ export default function DiagnosticsWorklist() {
                   <SelectItem value="Released">Released</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline">
+              <Button variant="outline" size="sm" className="h-9">
                 <Filter className="h-4 w-4 mr-2" />
                 More Filters
               </Button>
             </div>
-          </Card>
+          </div>
 
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
