@@ -10,8 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 
 interface PrescriptionsStepProps {
   patient: Patient;
-  onBack: () => void;
-  onNext: () => void;
+  onBack?: () => void;
+  onNext?: () => void;
 }
 
 export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStepProps) {
@@ -45,7 +45,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
         variant: "destructive"
       });
     }
-    onNext();
+    onNext?.();
   };
 
   return (
@@ -160,15 +160,21 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
         Add More Medicines
       </Button>
 
-      <div className="flex items-center justify-between mt-6">
-        <Button variant="ghost" onClick={onBack}>
-          Back
-        </Button>
-        <div className="flex gap-3">
-          <Button variant="ghost">Skip, Fill later</Button>
-          <Button onClick={handleSave}>Save & Continue</Button>
+      {(onBack || onNext) && (
+        <div className="flex items-center justify-between mt-6">
+          {onBack && (
+            <Button variant="ghost" onClick={onBack}>
+              Back
+            </Button>
+          )}
+          {onNext && (
+            <div className="flex gap-3">
+              <Button variant="ghost">Skip, Fill later</Button>
+              <Button onClick={handleSave}>Save & Continue</Button>
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </Card>
   );
 }

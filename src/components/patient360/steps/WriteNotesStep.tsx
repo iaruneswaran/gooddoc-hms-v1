@@ -10,7 +10,7 @@ import { VitalsCard } from "../VitalsCard";
 interface WriteNotesStepProps {
   patient: Patient;
   vitals?: Vitals;
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps) {
@@ -118,10 +118,12 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 mt-6">
-            <Button variant="ghost">Skip, Fill later</Button>
-            <Button onClick={onNext}>Save & Continue</Button>
-          </div>
+          {onNext && (
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <Button variant="ghost">Skip, Fill later</Button>
+              <Button onClick={onNext}>Save & Continue</Button>
+            </div>
+          )}
         </Card>
       </div>
 
