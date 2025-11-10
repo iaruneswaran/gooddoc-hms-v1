@@ -308,14 +308,6 @@ export default function DiagnosticsWorklist() {
                     <div className="text-xs text-muted-foreground">
                       {order.patient.mrn} • {order.patient.age}y | {order.patient.sex}
                     </div>
-                    <div className="flex gap-2 mt-1">
-                      <button className="text-muted-foreground hover:text-primary">
-                        <Phone className="w-3.5 h-3.5" />
-                      </button>
-                      <button className="text-muted-foreground hover:text-primary">
-                        <Mail className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
                   </div>
                 </div>
 
@@ -335,11 +327,6 @@ export default function DiagnosticsWorklist() {
                     <Clock className="w-3.5 h-3.5" />
                     {order.scheduledTime}
                   </div>
-                  {order.tatMinutes && (
-                    <div className="text-xs text-muted-foreground">
-                      TAT: {order.tatMinutes}min
-                    </div>
-                  )}
                 </div>
 
                 <div>
