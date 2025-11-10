@@ -5,8 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Phone, MessageCircle, Video } from "lucide-react";
+import { User, Phone, MessageCircle, Video } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 
@@ -38,23 +37,31 @@ export default function OutpatientAppointments() {
     return (
       <div
         key={appointment.id}
-        className="flex items-center gap-4 p-4 bg-card border border-border rounded-lg hover:shadow-sm transition-shadow"
+        className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
-        <div className="text-sm font-medium text-muted-foreground min-w-[60px]">
+        <div className="text-sm font-medium text-muted-foreground">
           {appointment.time}
         </div>
 
-        <Avatar className="h-12 w-12">
-          <AvatarFallback className="bg-primary text-primary-foreground">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-foreground">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <User className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <button
+              onClick={() => handlePatient360Click(appointment)}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
+            >
               {appointment.patientName}
-            </h3>
+            </button>
+            <div className="text-xs text-muted-foreground">
+              GDID-{appointment.gdid} • {appointment.age}y | {appointment.sex}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 mb-1">
             <Badge variant="outline" className="text-xs">
               {appointment.type}
             </Badge>
@@ -62,16 +69,13 @@ export default function OutpatientAppointments() {
               {appointment.mode === "In-Clinic" ? "In-Clinic" : "Virtual"}
             </Badge>
           </div>
-          <div className="text-sm text-muted-foreground">
-            GDID-{appointment.gdid} • {appointment.age}y | {appointment.sex}
-          </div>
           {appointment.chiefComplaint && (
-            <div className="text-sm text-foreground mt-1">
+            <div className="text-sm text-foreground">
               {appointment.chiefComplaint}
             </div>
           )}
           {appointment.vitalsPreview && (
-            <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
+            <div className="flex gap-3 text-xs text-muted-foreground">
               <span>BP: {appointment.vitalsPreview.bp}</span>
               <span>HR: {appointment.vitalsPreview.hr} bpm</span>
               <span>Temp: {appointment.vitalsPreview.temp}°C</span>
@@ -91,9 +95,14 @@ export default function OutpatientAppointments() {
               <Video className="w-4 h-4" />
             </Button>
           )}
+        </div>
+
+        <div>
           <Button
             variant="default"
+            size="sm"
             onClick={() => handlePatient360Click(appointment)}
+            className="w-full"
           >
             Patient 360
           </Button>
@@ -128,24 +137,42 @@ export default function OutpatientAppointments() {
               <TabsTrigger value="visited">Visited</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="scheduled" className="space-y-3">
-              {scheduledAppointments.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  No scheduled appointments for today
+            <TabsContent value="scheduled">
+              <div className="bg-card rounded-lg border border-border overflow-hidden">
+                <div className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                  <div className="text-sm font-medium text-foreground">Time</div>
+                  <div className="text-sm font-medium text-foreground">Patient Info</div>
+                  <div className="text-sm font-medium text-foreground">Appointment Details</div>
+                  <div className="text-sm font-medium text-foreground">Quick Actions</div>
+                  <div className="text-sm font-medium text-foreground">Action</div>
                 </div>
-              ) : (
-                scheduledAppointments.map(renderAppointmentCard)
-              )}
+                {scheduledAppointments.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground text-sm">
+                    No scheduled appointments for today
+                  </div>
+                ) : (
+                  scheduledAppointments.map(renderAppointmentCard)
+                )}
+              </div>
             </TabsContent>
 
-            <TabsContent value="visited" className="space-y-3">
-              {visitedAppointments.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  No visited appointments yet
+            <TabsContent value="visited">
+              <div className="bg-card rounded-lg border border-border overflow-hidden">
+                <div className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                  <div className="text-sm font-medium text-foreground">Time</div>
+                  <div className="text-sm font-medium text-foreground">Patient Info</div>
+                  <div className="text-sm font-medium text-foreground">Appointment Details</div>
+                  <div className="text-sm font-medium text-foreground">Quick Actions</div>
+                  <div className="text-sm font-medium text-foreground">Action</div>
                 </div>
-              ) : (
-                visitedAppointments.map(renderAppointmentCard)
-              )}
+                {visitedAppointments.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground text-sm">
+                    No visited appointments yet
+                  </div>
+                ) : (
+                  visitedAppointments.map(renderAppointmentCard)
+                )}
+              </div>
             </TabsContent>
           </Tabs>
         </main>
