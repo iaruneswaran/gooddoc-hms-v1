@@ -65,6 +65,7 @@ export interface AuditEvent {
 }
 
 export interface FeatureFlags {
+  patient360_v2_layout?: boolean;
   priceEdit_inline: boolean;
   priceEdit_modal: boolean;
   priceEdit_lock: boolean;
