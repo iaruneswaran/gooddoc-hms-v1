@@ -323,7 +323,6 @@ export default function DiagnosticsWorklist() {
                   <div className="text-sm font-medium text-foreground">{order.id}</div>
                   <div className="text-sm text-muted-foreground">{order.orderSummary.indication}</div>
                   <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
-                  <div className="text-xs text-muted-foreground">Dr: {order.orderSummary.referringDoctor}</div>
                 </div>
 
                 <div className="text-sm text-foreground">
@@ -334,7 +333,7 @@ export default function DiagnosticsWorklist() {
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-xs">{order.token}</Badge>
                     {order.priority === "stat" && (
-                      <Badge variant="destructive" className="text-xs">STAT</Badge>
+                      <span className="text-xs text-destructive font-medium">STAT</span>
                     )}
                   </div>
                   <div className="text-sm text-muted-foreground flex items-center gap-1">
