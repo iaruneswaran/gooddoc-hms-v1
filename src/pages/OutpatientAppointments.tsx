@@ -31,53 +31,46 @@ export default function OutpatientAppointments() {
   };
 
   const renderAppointmentCard = (appointment: Appointment) => {
-    const initials = appointment.patientName
-      .split(" ")
-      .map((n) => n[0])
-      .join("");
-
     return (
       <div
         key={appointment.id}
-        className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
+        className="grid grid-cols-[200px_1fr_120px_180px_80px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
-        <div className="text-sm font-medium text-muted-foreground">
-          {appointment.time}
-        </div>
-
-        <div className="flex items-start gap-3">
+        {/* Patient Info */}
+        <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
             <User className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <button
-              onClick={() => handlePatient360Click(appointment)}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-            >
+            <div className="text-sm font-medium text-foreground">
               {appointment.patientName}
-            </button>
+            </div>
             <div className="text-xs text-muted-foreground">
               GDID-{appointment.gdid} • {appointment.age}y | {appointment.sex}
             </div>
           </div>
         </div>
 
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-1">
-            <Badge variant="outline" className="text-xs">
-              {appointment.type}
-            </Badge>
-            <Badge variant="secondary" className="text-xs">
-              {appointment.mode === "In-Clinic" ? "In-Clinic" : "Virtual"}
-            </Badge>
-          </div>
+        {/* Appointment Details */}
+        <div>
           {appointment.chiefComplaint && (
             <div className="text-sm text-foreground">
               {appointment.chiefComplaint}
             </div>
           )}
+        </div>
+
+        {/* Consultation Type */}
+        <div>
+          <Badge variant="outline" className="text-xs">
+            {appointment.type}
+          </Badge>
+        </div>
+
+        {/* Vitals */}
+        <div>
           {appointment.vitalsPreview && (
-            <div className="flex gap-3 text-xs text-muted-foreground">
+            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
               <span>BP: {appointment.vitalsPreview.bp}</span>
               <span>HR: {appointment.vitalsPreview.hr} bpm</span>
               <span>Temp: {appointment.vitalsPreview.temp}°C</span>
@@ -85,20 +78,12 @@ export default function OutpatientAppointments() {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" title="Call">
-            <Phone className="w-4 h-4" />
-          </Button>
-          <Button variant="ghost" size="icon" title="WhatsApp">
-            <MessageCircle className="w-4 h-4" />
-          </Button>
-          {appointment.mode === "Virtual" && (
-            <Button variant="ghost" size="icon" title="Video Call">
-              <Video className="w-4 h-4" />
-            </Button>
-          )}
+        {/* Time */}
+        <div className="text-sm font-medium text-foreground">
+          {appointment.time}
         </div>
 
+        {/* Action - Patient 360 */}
         <div>
           <Button
             variant="default"
@@ -144,11 +129,12 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-sm font-medium text-foreground">Time</div>
+                <div className="grid grid-cols-[200px_1fr_120px_180px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
-                  <div className="text-sm font-medium text-foreground">Quick Actions</div>
+                  <div className="text-sm font-medium text-foreground">Consultation Type</div>
+                  <div className="text-sm font-medium text-foreground">Vitals</div>
+                  <div className="text-sm font-medium text-foreground">Time</div>
                   <div className="text-sm font-medium text-foreground">Action</div>
                 </div>
                 {scheduledAppointments.length === 0 ? (
@@ -163,11 +149,12 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[60px_200px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-sm font-medium text-foreground">Time</div>
+                <div className="grid grid-cols-[200px_1fr_120px_180px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
-                  <div className="text-sm font-medium text-foreground">Quick Actions</div>
+                  <div className="text-sm font-medium text-foreground">Consultation Type</div>
+                  <div className="text-sm font-medium text-foreground">Vitals</div>
+                  <div className="text-sm font-medium text-foreground">Time</div>
                   <div className="text-sm font-medium text-foreground">Action</div>
                 </div>
                 {visitedAppointments.length === 0 ? (
