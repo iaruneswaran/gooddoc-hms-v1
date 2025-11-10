@@ -117,7 +117,7 @@ export default function OutpatientAppointments() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Appointments", "Outpatient"]} />
+        <AppHeader breadcrumbs={["Outpatient"]} />
         <main className="p-6">
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
