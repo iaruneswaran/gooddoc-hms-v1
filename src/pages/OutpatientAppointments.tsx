@@ -34,7 +34,7 @@ export default function OutpatientAppointments() {
     return (
       <div
         key={appointment.id}
-        className="grid grid-cols-[200px_120px_1fr_180px_80px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
+        className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
         {/* Patient Info */}
         <div className="flex items-center gap-3">
@@ -128,7 +128,7 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_120px_1fr_180px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
@@ -148,7 +148,7 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_120px_1fr_180px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
