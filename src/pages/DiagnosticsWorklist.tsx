@@ -239,9 +239,9 @@ export default function DiagnosticsWorklist() {
           </Card>
 
           {/* Tabs and Filters */}
-          <div className="flex items-center justify-between mb-6 border-b border-border">
+          <div className="flex items-center justify-between mb-6">
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-              <TabsList className="bg-transparent border-b-0 rounded-none h-auto p-0 justify-start">
+              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
                 <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                   All ({mockOrders.length})
                 </TabsTrigger>
