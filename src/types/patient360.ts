@@ -9,7 +9,10 @@ export interface Appointment {
   gdid: string;
   age: number;
   sex: 'M' | 'F' | 'O';
+  phone?: string;
+  email?: string;
   chiefComplaint?: string;
+  secondaryInfo?: string;
   mode: 'In-Clinic' | 'Virtual';
   type: 'New' | 'Follow-up';
   vitalsPreview?: { bp?: string; hr?: number; temp?: number; rr?: number; spo2?: number; bg?: number };
