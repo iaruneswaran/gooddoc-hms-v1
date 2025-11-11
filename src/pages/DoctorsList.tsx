@@ -29,7 +29,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { DoctorFilters } from "@/components/doctors/DoctorFilters";
@@ -53,7 +52,6 @@ export default function DoctorsList() {
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [viewDrawerOpen, setViewDrawerOpen] = useState(false);
@@ -63,47 +61,44 @@ export default function DoctorsList() {
 
   // Mock data
   useEffect(() => {
-    setTimeout(() => {
-      setDoctors([
-        {
-          id: "1",
-          displayName: "Dr. Meera Nair",
-          degrees: "MBBS, MD",
-          department: "Cardiology",
-          specialty: "Interventional Cardiology",
-          availability: "Today at 2:30 PM",
-          locations: ["Main Campus", "Telemedicine"],
-          duration: 20,
-          fee: 1500,
-          status: "active",
-        },
-        {
-          id: "2",
-          displayName: "Dr. Rajesh Kumar",
-          degrees: "MBBS, DM",
-          department: "Endocrinology",
-          specialty: "Diabetes & Metabolism",
-          availability: "Tomorrow at 10:00 AM",
-          locations: ["Main Campus"],
-          duration: 30,
-          fee: 1200,
-          status: "active",
-        },
-        {
-          id: "3",
-          displayName: "Dr. Priya Sharma",
-          degrees: "MBBS, MS",
-          department: "Orthopedics",
-          specialty: "Joint Replacement",
-          availability: "On leave",
-          locations: ["Main Campus", "Branch A"],
-          duration: 20,
-          fee: 1800,
-          status: "inactive",
-        },
-      ]);
-      setLoading(false);
-    }, 500);
+    setDoctors([
+      {
+        id: "1",
+        displayName: "Dr. Meera Nair",
+        degrees: "MBBS, MD",
+        department: "Cardiology",
+        specialty: "Interventional Cardiology",
+        availability: "Today at 2:30 PM",
+        locations: ["Main Campus", "Telemedicine"],
+        duration: 20,
+        fee: 1500,
+        status: "active",
+      },
+      {
+        id: "2",
+        displayName: "Dr. Rajesh Kumar",
+        degrees: "MBBS, DM",
+        department: "Endocrinology",
+        specialty: "Diabetes & Metabolism",
+        availability: "Tomorrow at 10:00 AM",
+        locations: ["Main Campus"],
+        duration: 30,
+        fee: 1200,
+        status: "active",
+      },
+      {
+        id: "3",
+        displayName: "Dr. Priya Sharma",
+        degrees: "MBBS, MS",
+        department: "Orthopedics",
+        specialty: "Joint Replacement",
+        availability: "On leave",
+        locations: ["Main Campus", "Branch A"],
+        duration: 20,
+        fee: 1800,
+        status: "inactive",
+      },
+    ]);
   }, []);
 
   // Handle deep link with view parameter
@@ -212,18 +207,7 @@ export default function DoctorsList() {
           <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
-          {loading ? (
-            <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                  <Skeleton className="h-4 w-[200px]" />
-                  <Skeleton className="h-4 w-[150px]" />
-                  <Skeleton className="h-4 w-[100px]" />
-                </div>
-              ))}
-            </div>
-          ) : doctors.length === 0 ? (
+          {doctors.length === 0 ? (
             <div className="bg-card rounded-lg border border-border p-12 text-center">
               <div className="max-w-md mx-auto">
                 <h3 className="text-lg font-medium mb-2">No doctors yet</h3>
