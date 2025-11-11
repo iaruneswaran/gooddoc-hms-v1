@@ -101,7 +101,7 @@ export default function Inbox() {
         <AppHeader breadcrumbs={["Inbox"]} />
         <main className="flex-1 p-6 space-y-6">
           {/* Header */}
-          <Card className="p-6">
+          <Card className="p-6 mb-8">
             <div className="flex items-center justify-between gap-6">
               <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
               <CalendarWidget />
@@ -109,7 +109,7 @@ export default function Inbox() {
           </Card>
 
           {/* Navigation Tabs with Search */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="bg-transparent border-b border-border h-auto p-0 justify-start rounded-none">
                 <TabsTrigger 

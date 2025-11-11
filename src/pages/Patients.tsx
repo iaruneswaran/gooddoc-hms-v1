@@ -174,22 +174,22 @@ export default function Patients() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border bg-muted/30">
-                    <th className="text-left p-4 text-xs font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Patient Info
                     </th>
-                    <th className="text-left p-4 text-xs font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Contact
                     </th>
-                    <th className="text-left p-4 text-xs font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Admission & Visit
                     </th>
-                    <th className="text-left p-4 text-xs font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="text-left p-4 text-xs font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Status
                     </th>
-                    <th className="text-right p-4 text-xs font-medium text-foreground">
+                    <th className="text-right p-4 text-sm font-medium text-foreground">
                       Action
                     </th>
                   </tr>

@@ -178,12 +178,12 @@ export default function DiagnosticsWorklist() {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "pending": return "bg-muted text-muted-foreground";
-      case "checked-in": return "bg-blue-100 text-blue-700";
-      case "sample collected": return "bg-purple-100 text-purple-700";
-      case "in progress": return "bg-yellow-100 text-yellow-700";
-      case "entered": return "bg-cyan-100 text-cyan-700";
-      case "under review": return "bg-orange-100 text-orange-700";
-      case "released": return "bg-green-100 text-green-700";
+      case "checked-in": return "bg-primary/10 text-primary";
+      case "sample collected": return "bg-secondary text-secondary-foreground";
+      case "in progress": return "bg-accent/20 text-accent-foreground";
+      case "entered": return "bg-primary/10 text-primary";
+      case "under review": return "bg-secondary text-secondary-foreground";
+      case "released": return "bg-primary/20 text-primary";
       case "critical": return "bg-destructive text-destructive-foreground";
       default: return "bg-muted text-muted-foreground";
     }

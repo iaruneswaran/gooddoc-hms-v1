@@ -253,7 +253,7 @@ export default function DoctorsList() {
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={doctor.avatar} />
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary">
                         {doctor.displayName.split(" ").map(n => n[0]).join("")}
                       </AvatarFallback>
                     </Avatar>
@@ -348,7 +348,7 @@ export default function DoctorsList() {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={selectedDoctor.avatar} />
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-primary/10 text-primary">
                     {selectedDoctor.displayName.split(" ").map(n => n[0]).join("")}
                   </AvatarFallback>
                 </Avatar>
