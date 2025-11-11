@@ -10,6 +10,7 @@ export interface Appointment {
   age: number;
   sex: 'M' | 'F' | 'O';
   chiefComplaint?: string;
+  secondaryInfo?: string;
   mode: 'In-Clinic' | 'Virtual';
   type: 'New' | 'Follow-up';
   vitalsPreview?: { bp?: string; hr?: number; temp?: number; rr?: number; spo2?: number; bg?: number };
