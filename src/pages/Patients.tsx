@@ -278,12 +278,6 @@ export default function Patients() {
                       </td>
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => navigate(`/patient-insights/${patient.id}`)}
-                          >
-                            Patient Insight
-                          </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon" className="h-8 w-8">

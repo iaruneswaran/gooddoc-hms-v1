@@ -391,12 +391,9 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
                 <User className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <button
-                  onClick={() => navigate(`/patient-insights/${appointment.id}`)}
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-                >
+                <div className="text-sm font-medium text-foreground">
                   {appointment.patient.name}
-                </button>
+                </div>
                 <div className="text-xs text-muted-foreground">
                   {appointment.patient.id} • {appointment.patient.age} | {appointment.patient.gender}
                 </div>
