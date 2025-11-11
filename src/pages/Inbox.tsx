@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, Phone, Mail } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { CalendarWidget } from "@/components/CalendarWidget";
@@ -164,8 +164,9 @@ export default function Inbox() {
             </Card>
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <div className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="grid grid-cols-[200px_180px_1fr_180px_140px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                 <div className="text-sm font-medium text-foreground">Patient Info</div>
+                <div className="text-sm font-medium text-foreground">Contact Details</div>
                 <div className="text-sm font-medium text-foreground">Appointment Details</div>
                 <div className="text-sm font-medium text-foreground">Type</div>
                 <div className="text-sm font-medium text-foreground">Requested Time</div>
@@ -173,7 +174,7 @@ export default function Inbox() {
               </div>
 
               {filteredAppointments.map((appointment) => (
-                <div key={appointment.id} className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                <div key={appointment.id} className="grid grid-cols-[200px_180px_1fr_180px_140px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                   <div className="flex items-start gap-3">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={appointment.patientAvatar} />
@@ -192,6 +193,23 @@ export default function Inbox() {
                         GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
                       </div>
                     </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <a
+                      href="tel:+919876543210"
+                      className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
+                    >
+                      <Phone className="w-3 h-3" />
+                      +91 98765 43210
+                    </a>
+                    <a
+                      href="mailto:9876543210@gooddoc.app"
+                      className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
+                    >
+                      <Mail className="w-3 h-3" />
+                      9876543210@gooddoc.app
+                    </a>
                   </div>
 
                   <div>

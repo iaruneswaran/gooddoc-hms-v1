@@ -286,8 +286,9 @@ export default function DiagnosticsWorklist() {
 
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[200px_1fr_180px_180px_140px_180px] gap-4 p-4 border-b border-border bg-muted/30">
+            <div className="grid grid-cols-[200px_180px_1fr_180px_180px_140px_180px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-sm font-medium text-foreground">Patient</div>
+              <div className="text-sm font-medium text-foreground">Contact Details</div>
               <div className="text-sm font-medium text-foreground">Order Summary</div>
               <div className="text-sm font-medium text-foreground">Service</div>
               <div className="text-sm font-medium text-foreground">Token & Time</div>
@@ -296,7 +297,7 @@ export default function DiagnosticsWorklist() {
             </div>
 
             {filteredOrders.map((order) => (
-              <div key={order.id} className="grid grid-cols-[200px_1fr_180px_180px_140px_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+              <div key={order.id} className="grid grid-cols-[200px_180px_1fr_180px_180px_140px_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                 <div className="flex items-start gap-3">
                   <Avatar className="w-10 h-10 flex-shrink-0">
                     <AvatarFallback className="bg-primary/10 text-primary">{order.patient.avatar}</AvatarFallback>
@@ -309,6 +310,23 @@ export default function DiagnosticsWorklist() {
                       GDID - {order.patient.gdid} • {order.patient.age} | {order.patient.sex}
                     </div>
                   </div>
+                </div>
+
+                <div className="space-y-1">
+                  <a
+                    href="tel:+919876543210"
+                    className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
+                  >
+                    <Phone className="w-3 h-3" />
+                    +91 98765 43210
+                  </a>
+                  <a
+                    href="mailto:9876543210@gooddoc.app"
+                    className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
+                  >
+                    <Mail className="w-3 h-3" />
+                    9876543210@gooddoc.app
+                  </a>
                 </div>
 
                 <div className="space-y-1">
