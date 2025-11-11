@@ -46,7 +46,7 @@ export default function OutpatientAppointments() {
               {appointment.patientName}
             </div>
             <div className="text-xs text-muted-foreground">
-              GDID-{appointment.gdid} • {appointment.age}y | {appointment.sex}
+              GDID - {appointment.gdid} • {appointment.age} | {appointment.sex}
             </div>
           </div>
         </div>

@@ -22,7 +22,9 @@ import { MoreVertical } from "lucide-react";
 interface PendingAppointment {
   id: string;
   patientName: string;
-  patientMRN: string;
+  patientGDID: string;
+  patientAge: number;
+  patientGender: string;
   patientAvatar?: string;
   appointmentType: "consultation" | "lab";
   requestedDateTime?: string;
@@ -36,7 +38,9 @@ const mockAppointments: PendingAppointment[] = [
   {
     id: "APT-001",
     patientName: "Sarah Johnson",
-    patientMRN: "MRN-445821",
+    patientGDID: "445821",
+    patientAge: 45,
+    patientGender: "F",
     appointmentType: "consultation",
     requestedDateTime: "Jan 15, 2025 at 10:00 AM",
     status: "Needs scheduling",
@@ -47,7 +51,9 @@ const mockAppointments: PendingAppointment[] = [
   {
     id: "APT-002",
     patientName: "Michael Chen",
-    patientMRN: "MRN-332109",
+    patientGDID: "332109",
+    patientAge: 38,
+    patientGender: "M",
     appointmentType: "lab",
     requestedDateTime: "Jan 16, 2025 at 8:00 AM",
     status: "Needs scheduling",
@@ -57,7 +63,9 @@ const mockAppointments: PendingAppointment[] = [
   {
     id: "APT-003",
     patientName: "Emily Davis",
-    patientMRN: "MRN-778934",
+    patientGDID: "778934",
+    patientAge: 32,
+    patientGender: "F",
     appointmentType: "consultation",
     status: "Needs scheduling",
     mode: "Virtual",
@@ -66,7 +74,9 @@ const mockAppointments: PendingAppointment[] = [
   {
     id: "APT-004",
     patientName: "Robert Martinez",
-    patientMRN: "MRN-556782",
+    patientGDID: "556782",
+    patientAge: 52,
+    patientGender: "M",
     appointmentType: "lab",
     requestedDateTime: "Jan 17, 2025 at 2:00 PM",
     status: "Needs scheduling",
@@ -84,7 +94,7 @@ export default function Inbox() {
   const filteredAppointments = mockAppointments.filter((apt) => {
     const matchesSearch =
       apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.patientMRN.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      apt.patientGDID.toLowerCase().includes(searchQuery.toLowerCase()) ||
       apt.appointmentType.toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesSearch;
@@ -179,7 +189,7 @@ export default function Inbox() {
                         {appointment.patientName}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {appointment.patientMRN}
+                        GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
                       </div>
                     </div>
                   </div>

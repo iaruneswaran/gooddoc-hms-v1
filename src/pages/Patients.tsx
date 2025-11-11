@@ -210,7 +210,7 @@ export default function Patients() {
                               {patient.name}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              GDID-{patient.gdid} • {patient.age} | {patient.gender}
+                              GDID - {patient.gdid} • {patient.age} | {patient.gender}
                             </div>
                             {patient.allergies.length > 0 && (
                               <Badge variant="destructive" className="mt-1 text-xs">

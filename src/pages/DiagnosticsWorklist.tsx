@@ -18,7 +18,7 @@ interface DiagnosticOrder {
   type: "laboratory" | "radiology";
   patient: {
     name: string;
-    mrn: string;
+    gdid: string;
     age: number;
     sex: string;
     phone: string;
@@ -47,7 +47,7 @@ const mockOrders: DiagnosticOrder[] = [
     type: "laboratory",
     patient: {
       name: "Anaya Shah",
-      mrn: "MRN-204983",
+      gdid: "204983",
       age: 34,
       sex: "F",
       phone: "+91 98xxxx210",
@@ -73,7 +73,7 @@ const mockOrders: DiagnosticOrder[] = [
     type: "laboratory",
     patient: {
       name: "Rohan Mehta",
-      mrn: "MRN-198733",
+      gdid: "198733",
       age: 62,
       sex: "M",
       phone: "+91 98xxxx345",
@@ -98,7 +98,7 @@ const mockOrders: DiagnosticOrder[] = [
     type: "radiology",
     patient: {
       name: "Kavya Iyer",
-      mrn: "MRN-217564",
+      gdid: "217564",
       age: 28,
       sex: "F",
       phone: "+91 98xxxx567",
@@ -123,7 +123,7 @@ const mockOrders: DiagnosticOrder[] = [
     type: "radiology",
     patient: {
       name: "Arnav Rao",
-      mrn: "MRN-176540",
+      gdid: "176540",
       age: 45,
       sex: "M",
       phone: "+91 98xxxx789",
@@ -148,7 +148,7 @@ const mockOrders: DiagnosticOrder[] = [
     type: "laboratory",
     patient: {
       name: "Priya Desai",
-      mrn: "MRN-209845",
+      gdid: "209845",
       age: 52,
       sex: "F",
       phone: "+91 98xxxx432",
@@ -195,7 +195,7 @@ export default function DiagnosticsWorklist() {
                        (selectedTab === "radiology" && order.type === "radiology");
     const matchesSearch = searchQuery === "" || 
                          order.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         order.patient.mrn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         order.patient.gdid.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          order.id.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
     
@@ -306,7 +306,7 @@ export default function DiagnosticsWorklist() {
                       {order.patient.name}
                     </button>
                     <div className="text-xs text-muted-foreground">
-                      {order.patient.mrn} • {order.patient.age}y | {order.patient.sex}
+                      GDID - {order.patient.gdid} • {order.patient.age} | {order.patient.sex}
                     </div>
                   </div>
                 </div>
