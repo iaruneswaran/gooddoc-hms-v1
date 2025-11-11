@@ -26,7 +26,7 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
       <div className="px-6 py-6">
         {/* Back Button */}
         <button
-          onClick={() => navigate("/appointments")}
+          onClick={() => navigate("/appointments/outpatient")}
           className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
         >
           <ChevronLeft className="h-4 w-4" />
