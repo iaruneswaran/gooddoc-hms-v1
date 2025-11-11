@@ -25,7 +25,7 @@ export default function Patient360() {
       <div className="flex min-h-screen bg-background">
         <AppSidebar />
         <div className="flex-1 ml-[196px]">
-          <AppHeader breadcrumbs={["Appointments", "Patient 360"]} />
+          <AppHeader breadcrumbs={["Outpatient", "Patient 360"]} />
           <main className="p-6">
             <div className="text-center py-12">
               <p className="text-muted-foreground">Patient not found</p>
@@ -45,7 +45,7 @@ export default function Patient360() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Appointments", "Patient 360", patient.name]} />
+        <AppHeader breadcrumbs={["Outpatient", "Patient 360"]} />
         <main>
           <PatientHeader patient={patient} vitals={vitals} />
           
