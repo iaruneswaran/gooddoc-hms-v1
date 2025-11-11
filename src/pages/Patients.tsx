@@ -165,12 +165,6 @@ export default function Patients() {
                 >
                   Outpatient (OP)
                 </TabsTrigger>
-                <TabsTrigger
-                  value="discharged"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Discharged
-                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
