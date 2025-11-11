@@ -185,7 +185,7 @@ const PatientInsights = () => {
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Back to Patients</span>
+              <span className="font-semibold">Patients</span>
             </button>
 
             {/* Header Content */}
