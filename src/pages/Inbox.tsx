@@ -1,23 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
 
 interface PendingAppointment {
   id: string;
@@ -25,13 +14,10 @@ interface PendingAppointment {
   patientGDID: string;
   patientAge: number;
   patientGender: string;
-  patientAvatar?: string;
-  appointmentType: "consultation" | "lab";
+  purpose: string;
+  serviceType: "Consultation" | "Laboratory";
+  doctor?: string;
   requestedDateTime?: string;
-  status: string;
-  mode?: string;
-  location?: string;
-  reason: string;
 }
 
 const mockAppointments: PendingAppointment[] = [
@@ -41,12 +27,9 @@ const mockAppointments: PendingAppointment[] = [
     patientGDID: "445821",
     patientAge: 45,
     patientGender: "F",
-    appointmentType: "consultation",
-    requestedDateTime: "Jan 15, 2025 at 10:00 AM",
-    status: "Needs scheduling",
-    mode: "In-person",
-    location: "Main Clinic",
-    reason: "Follow-up consultation for chronic back pain management and medication review",
+    purpose: "Follow-up for chronic back pain; medication review",
+    serviceType: "Consultation",
+    requestedDateTime: "15 Jan 2025, 10:00 AM",
   },
   {
     id: "APT-002",
@@ -54,54 +37,18 @@ const mockAppointments: PendingAppointment[] = [
     patientGDID: "332109",
     patientAge: 38,
     patientGender: "M",
-    appointmentType: "lab",
-    requestedDateTime: "Jan 16, 2025 at 8:00 AM",
-    status: "Needs scheduling",
-    mode: "Home collection",
-    reason: "Routine blood work - Complete blood count and lipid panel",
-  },
-  {
-    id: "APT-003",
-    patientName: "Emily Davis",
-    patientGDID: "778934",
-    patientAge: 32,
-    patientGender: "F",
-    appointmentType: "consultation",
-    status: "Needs scheduling",
-    mode: "Virtual",
-    reason: "New patient consultation for anxiety and stress management",
-  },
-  {
-    id: "APT-004",
-    patientName: "Robert Martinez",
-    patientGDID: "556782",
-    patientAge: 52,
-    patientGender: "M",
-    appointmentType: "lab",
-    requestedDateTime: "Jan 17, 2025 at 2:00 PM",
-    status: "Needs scheduling",
-    mode: "In-lab",
-    location: "Diagnostic Center",
-    reason: "Pre-operative screening - ECG and chest X-ray",
+    purpose: "Routine labs: CBC and Lipid Panel",
+    serviceType: "Laboratory",
+    requestedDateTime: "16 Jan 2025, 8:00 AM",
   },
 ];
 
 export default function Inbox() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("appointment");
 
-  const filteredAppointments = mockAppointments.filter((apt) => {
-    const matchesSearch =
-      apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.patientGDID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.appointmentType.toLowerCase().includes(searchQuery.toLowerCase());
-
-    return matchesSearch;
-  });
-
   const handleSchedule = (appointment: PendingAppointment) => {
-    navigate(`/book-appointment?id=${appointment.id}&type=${appointment.appointmentType}`);
+    navigate(`/book-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
   };
 
   return (
@@ -118,136 +65,93 @@ export default function Inbox() {
             </div>
           </Card>
 
-          {/* Navigation Tabs with Search */}
-          <div className="flex items-center justify-between">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="bg-transparent border-b border-border h-auto p-0 justify-start rounded-none">
-                <TabsTrigger 
-                  value="appointment" 
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
-                >
-                  Appointment
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="scheduled" 
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
-                >
-                  Scheduled
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <div className="relative w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by patient name, MRN, or appointment type..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-          </div>
+          {/* Navigation Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList className="bg-transparent border-b border-border h-auto p-0 justify-start rounded-none w-full">
+              <TabsTrigger 
+                value="appointment" 
+                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
+              >
+                Appointment
+              </TabsTrigger>
+              <TabsTrigger 
+                value="scheduled" 
+                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-6 py-3"
+              >
+                Scheduled
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Content based on active tab */}
-          {activeTab === "appointment" && (
-            <>
-          {/* Appointments List */}
-          {filteredAppointments.length === 0 ? (
-            <Card className="p-12 text-center">
-              <div className="max-w-md mx-auto space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">
-                  No appointments to schedule
-                </h3>
-                <p className="text-muted-foreground">
-                  You're all caught up. New requests will appear here.
-                </p>
-              </div>
-            </Card>
-          ) : (
-            <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <div className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                <div className="text-sm font-medium text-foreground">Patient Info</div>
-                <div className="text-sm font-medium text-foreground">Appointment Details</div>
-                <div className="text-sm font-medium text-foreground">Type</div>
-                <div className="text-sm font-medium text-foreground">Requested Time</div>
-                <div className="text-sm font-medium text-foreground">Action</div>
-              </div>
+            <TabsContent value="appointment" className="mt-0">
+              {mockAppointments.length === 0 ? (
+                <Card className="p-12 text-center">
+                  <div className="max-w-md mx-auto space-y-2">
+                    <h3 className="text-lg font-semibold text-foreground">
+                      No appointments to schedule
+                    </h3>
+                    <p className="text-muted-foreground">
+                      You're all caught up. New requests will appear here.
+                    </p>
+                  </div>
+                </Card>
+              ) : (
+                <div className="bg-card rounded-lg border border-border overflow-hidden">
+                  <div className="grid grid-cols-[300px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                    <div className="text-sm font-medium text-foreground">Patient Details</div>
+                    <div className="text-sm font-medium text-foreground">Purpose</div>
+                    <div className="text-sm font-medium text-foreground">Service Type</div>
+                    <div className="text-sm font-medium text-foreground">Doctor</div>
+                    <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
+                    <div className="text-sm font-medium text-foreground">Action</div>
+                  </div>
 
-              {filteredAppointments.map((appointment) => (
-                <div key={appointment.id} className="grid grid-cols-[200px_1fr_180px_140px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="h-10 w-10 flex-shrink-0">
-                      <AvatarImage src={appointment.patientAvatar} />
-                      <AvatarFallback className="bg-primary/10 text-primary">
-                        {appointment.patientName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-medium text-foreground text-sm">
-                        {appointment.patientName}
+                  {mockAppointments.map((appointment) => (
+                    <div key={appointment.id} className="grid grid-cols-[300px_1fr_140px_120px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                      <div className="text-sm text-foreground">
+                        {appointment.patientName} • GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
+
+                      <div className="text-sm text-foreground">
+                        {appointment.purpose}
+                      </div>
+
+                      <div className="text-sm text-foreground">
+                        {appointment.serviceType}
+                      </div>
+
+                      <div className="text-sm text-muted-foreground">
+                        {appointment.doctor || "—"}
+                      </div>
+
+                      <div className="text-sm text-foreground">
+                        {appointment.requestedDateTime || "—"}
+                      </div>
+
+                      <div>
+                        <Button
+                          onClick={() => handleSchedule(appointment)}
+                          size="sm"
+                          className="w-full"
+                        >
+                          Schedule
+                        </Button>
                       </div>
                     </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-foreground line-clamp-2 mb-1">
-                      {appointment.reason}
-                    </p>
-                    {appointment.mode && (
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{appointment.mode}</span>
-                        {appointment.location && (
-                          <span>• {appointment.location}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <span className="text-sm text-foreground">
-                      {appointment.appointmentType === "consultation"
-                        ? "Consultation"
-                        : "Lab"}
-                    </span>
-                  </div>
-
-                  <div className="text-sm text-muted-foreground">
-                    {appointment.requestedDateTime || "Not specified"}
-                  </div>
-
-                  <div>
-                    <Button
-                      onClick={() => handleSchedule(appointment)}
-                      size="sm"
-                      className="w-full"
-                    >
-                      Schedule
-                    </Button>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-            </>
-          )}
+              )}
+            </TabsContent>
 
-          {activeTab === "scheduled" && (
-            <Card className="p-12 text-center">
-              <div className="max-w-md mx-auto space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">
-                  Scheduled Appointments
-                </h3>
-                <p className="text-muted-foreground">
-                  View all scheduled appointments here.
-                </p>
-              </div>
-            </Card>
-          )}
+            <TabsContent value="scheduled" className="mt-0">
+              <Card className="p-12 text-center">
+                <div className="max-w-md mx-auto space-y-2">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    No items
+                  </h3>
+                </div>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </main>
       </div>
     </SidebarProvider>
