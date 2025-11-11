@@ -196,20 +196,14 @@ export default function Inbox() {
                   </div>
 
                   <div className="space-y-1">
-                    <a
-                      href="tel:+919876543210"
-                      className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
-                    >
+                    <div className="flex items-center gap-2 text-sm text-foreground">
                       <Phone className="w-3 h-3" />
                       +91 98765 43210
-                    </a>
-                    <a
-                      href="mailto:9876543210@gooddoc.app"
-                      className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
-                    >
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Mail className="w-3 h-3" />
                       9876543210@gooddoc.app
-                    </a>
+                    </div>
                   </div>
 
                   <div>
