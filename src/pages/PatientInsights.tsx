@@ -181,11 +181,11 @@ const PatientInsights = () => {
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/patients")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Appointments</span>
+              <span className="font-semibold">Back to Patients</span>
             </button>
 
             {/* Header Content */}
