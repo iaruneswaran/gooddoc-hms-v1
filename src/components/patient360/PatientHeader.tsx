@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronDown, ChevronUp, FileText, Pill, TestTube, Printer } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronLeft, FileText, Pill, TestTube, Printer } from "lucide-react";
 import { Patient, Vitals } from "@/types/patient360";
 
 interface PatientHeaderProps {
@@ -12,6 +13,7 @@ interface PatientHeaderProps {
 }
 
 export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
 
   const initials = patient.name
@@ -25,8 +27,16 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
   );
 
   return (
-    <div className="sticky top-0 z-10 bg-card border-b border-border shadow-sm">
-      <div className="p-6">
+    <div className="sticky top-0 z-10 bg-background border-b border-border">
+      <div className="px-6 py-6">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/appointments")}
+          className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span className="font-semibold">Outpatient</span>
+        </button>
         <div className="flex items-start gap-4 mb-4">
           <Avatar className="h-16 w-16">
             <AvatarFallback className="bg-primary text-primary-foreground text-xl">
