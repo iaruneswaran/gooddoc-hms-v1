@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, Mail } from "lucide-react";
+import { User, Phone, MessageCircle, Video } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 
@@ -34,7 +34,7 @@ export default function OutpatientAppointments() {
     return (
       <div
         key={appointment.id}
-        className="grid grid-cols-[200px_160px_120px_280px_240px_80px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
+        className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
         {/* Patient Info */}
         <div className="flex items-center gap-3">
@@ -51,28 +51,6 @@ export default function OutpatientAppointments() {
           </div>
         </div>
 
-        {/* Contact Details */}
-        <div className="space-y-1">
-          {appointment.phone && (
-            <a
-              href={`tel:${appointment.phone}`}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
-            >
-              <Phone className="w-3 h-3" />
-              {appointment.phone}
-            </a>
-          )}
-          {appointment.email && (
-            <a
-              href={`mailto:${appointment.email}`}
-              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
-            >
-              <Mail className="w-3 h-3" />
-              {appointment.email}
-            </a>
-          )}
-        </div>
-
         {/* Consultation Type */}
         <div>
           <Badge variant="outline" className="text-xs">
@@ -85,11 +63,6 @@ export default function OutpatientAppointments() {
           {appointment.chiefComplaint && (
             <div className="text-sm text-foreground">
               {appointment.chiefComplaint}
-            </div>
-          )}
-          {appointment.secondaryInfo && (
-            <div className="text-xs text-muted-foreground mt-1">
-              {appointment.secondaryInfo}
             </div>
           )}
         </div>
@@ -155,9 +128,8 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_160px_120px_280px_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
-                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
@@ -176,9 +148,8 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_160px_120px_280px_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_120px_1fr_240px_80px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
-                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
