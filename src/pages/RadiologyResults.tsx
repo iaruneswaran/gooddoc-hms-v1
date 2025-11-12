@@ -145,13 +145,13 @@ export default function RadiologyResults() {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Diagnostics", mockPatient.name, "Radiology Results"]} />
+        <AppHeader breadcrumbs={["Diagnostics", "Radiology Results"]} />
         
         <main className="p-8">
           {/* Back Button */}
           <Button variant="ghost" onClick={() => navigate("/diagnostics")} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Worklist
+            Diagnostics
           </Button>
 
           {/* Patient Card */}

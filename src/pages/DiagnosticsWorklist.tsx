@@ -207,7 +207,7 @@ export default function DiagnosticsWorklist() {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Diagnostics", "Worklist"]} />
+        <AppHeader breadcrumbs={["Diagnostics"]} />
         
         <main className="p-6">
           {/* Header with Calendar */}
