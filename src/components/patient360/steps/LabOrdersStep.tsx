@@ -27,7 +27,13 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTests = labTests.filter((test) => test.type === appointmentType);
+  const filteredTests = labTests.filter((test) => {
+    if (appointmentType === "Laboratory") {
+      return test.type === "Lab";
+    } else {
+      return test.type === "Radiology";
+    }
+  });
 
   const togglePackage = (code: string) => {
     setSelectedPackages((prev) =>
@@ -110,17 +116,19 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
                 </Tabs>
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-foreground mb-3 block">
-                  Lab Tests
-                </label>
-                <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                    <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
+              {appointmentType === "Laboratory" && (
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-3 block">
+                    Lab Tests
+                  </label>
+                  <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
+                      <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+              )}
             </div>
 
             {/* Search Bar */}
@@ -135,40 +143,72 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
             </div>
 
             {/* Health Packages / Individual Tests */}
-            <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-              <TabsContent value="health-packages" className="space-y-3 mt-0">
-                {filteredPackages.map((pkg) => {
-                  const isSelected = selectedPackages.includes(pkg.code);
-                  return (
-                    <Card
-                      key={pkg.code}
-                      className={cn(
-                        "p-4 cursor-pointer transition-all hover:border-primary",
-                        isSelected && "border-primary bg-primary/5"
-                      )}
-                      onClick={() => togglePackage(pkg.code)}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-sm font-semibold text-primary mb-1">{pkg.name}</h4>
-                          <p className="text-xs text-muted-foreground mb-2">
-                            Includes: {pkg.includes.join(", ")}
-                          </p>
-                          <p className="text-sm font-semibold text-foreground">₹{pkg.price.toLocaleString()}</p>
+            {appointmentType === "Laboratory" && (
+              <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+                <TabsContent value="health-packages" className="space-y-3 mt-0">
+                  {filteredPackages.map((pkg) => {
+                    const isSelected = selectedPackages.includes(pkg.code);
+                    return (
+                      <Card
+                        key={pkg.code}
+                        className={cn(
+                          "p-4 cursor-pointer transition-all hover:border-primary",
+                          isSelected && "border-primary bg-primary/5"
+                        )}
+                        onClick={() => togglePackage(pkg.code)}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="text-sm font-semibold text-primary mb-1">{pkg.name}</h4>
+                            <p className="text-xs text-muted-foreground mb-2">
+                              Includes: {pkg.includes.join(", ")}
+                            </p>
+                            <p className="text-sm font-semibold text-foreground">₹{pkg.price.toLocaleString()}</p>
+                          </div>
+                          <div className={cn(
+                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
+                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                          )}>
+                            {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
+                          </div>
                         </div>
-                        <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
-                          isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                        )}>
-                          {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                        </div>
-                      </div>
-                    </Card>
-                  );
-                })}
-              </TabsContent>
+                      </Card>
+                    );
+                  })}
+                </TabsContent>
 
-              <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 mt-0">
+                <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 mt-0">
+                  {filteredTestsList.map((test) => {
+                    const isSelected = selectedTests.includes(test.code);
+                    return (
+                      <Card
+                        key={test.code}
+                        className={cn(
+                          "p-4 cursor-pointer transition-all hover:border-primary",
+                          isSelected && "border-primary bg-primary/5"
+                        )}
+                        onClick={() => toggleTest(test.code)}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="text-sm font-semibold text-foreground flex-1 pr-2">{test.name}</h4>
+                          <div className={cn(
+                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                          )}>
+                            {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
+                          </div>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                      </Card>
+                    );
+                  })}
+                </TabsContent>
+              </Tabs>
+            )}
+
+            {/* Radiology Tests */}
+            {appointmentType === "Radiology" && (
+              <div className="grid grid-cols-2 gap-3">
                 {filteredTestsList.map((test) => {
                   const isSelected = selectedTests.includes(test.code);
                   return (
@@ -193,8 +233,8 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
                     </Card>
                   );
                 })}
-              </TabsContent>
-            </Tabs>
+              </div>
+            )}
 
             {/* Date & Time */}
             {(selectedPackages.length > 0 || selectedTests.length > 0) && (
