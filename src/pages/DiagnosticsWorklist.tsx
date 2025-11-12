@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, Search, Filter, Phone, Mail, MoreVertical, Clock, AlertCircle } from "lucide-react";
+import { Search, Filter, MoreVertical, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { CalendarWidget } from "@/components/CalendarWidget";
 
 interface DiagnosticOrder {
   id: string;
@@ -201,12 +202,6 @@ export default function DiagnosticsWorklist() {
     return matchesTab && matchesSearch && matchesStatus;
   });
 
-  const stats = {
-    total: mockOrders.length,
-    medianTAT: 120,
-    critical: mockOrders.filter(o => o.priority === "stat").length
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -215,25 +210,11 @@ export default function DiagnosticsWorklist() {
         <AppHeader breadcrumbs={["Diagnostics", "Worklist"]} />
         
         <main className="p-6">
-          {/* Header with Stats */}
+          {/* Header with Calendar */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <h1 className="text-lg font-semibold text-foreground">Diagnostics</h1>
-                <div className="flex gap-2">
-                  <Badge variant="secondary" className="px-3 py-1">
-                    Today: {stats.total} orders
-                  </Badge>
-                  <Badge variant="secondary" className="px-3 py-1">
-                    Median TAT: {stats.medianTAT}min
-                  </Badge>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon">
-                  <Calendar className="h-4 w-4" />
-                </Button>
-              </div>
+              <h1 className="text-lg font-semibold text-foreground">Diagnostics</h1>
+              <CalendarWidget />
             </div>
           </Card>
 
