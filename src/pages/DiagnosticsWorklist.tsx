@@ -171,7 +171,7 @@ const mockOrders: DiagnosticOrder[] = [
 ];
 
 export default function DiagnosticsWorklist() {
-  const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedTab, setSelectedTab] = useState("laboratory");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -190,8 +190,7 @@ export default function DiagnosticsWorklist() {
   };
 
   const filteredOrders = mockOrders.filter(order => {
-    const matchesTab = selectedTab === "all" || 
-                       (selectedTab === "laboratory" && order.type === "laboratory") ||
+    const matchesTab = (selectedTab === "laboratory" && order.type === "laboratory") ||
                        (selectedTab === "radiology" && order.type === "radiology");
     const matchesSearch = searchQuery === "" || 
                          order.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -242,14 +241,11 @@ export default function DiagnosticsWorklist() {
           <div className="flex items-center justify-between mb-6">
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
               <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
-                <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  All ({mockOrders.length})
-                </TabsTrigger>
                 <TabsTrigger value="laboratory" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  Laboratory ({mockOrders.filter(o => o.type === "laboratory").length})
+                  Laboratory
                 </TabsTrigger>
                 <TabsTrigger value="radiology" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  Radiology ({mockOrders.filter(o => o.type === "radiology").length})
+                  Radiology
                 </TabsTrigger>
               </TabsList>
             </Tabs>
