@@ -10,6 +10,8 @@ export interface Appointment {
   gdid: string;
   age: number;
   sex: 'M' | 'F' | 'O';
+  phone?: string;
+  email?: string;
   chiefComplaint?: string;
   mode: 'In-Clinic' | 'Virtual';
   type: 'New' | 'Follow-up';

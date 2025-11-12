@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, MessageCircle, Video, Search } from "lucide-react";
+import { User, Phone, Mail, MessageCircle, Video, Search } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 
@@ -51,7 +51,7 @@ export default function OutpatientAppointments() {
     return (
       <div
         key={appointment.id}
-        className="grid grid-cols-[200px_120px_1fr_240px_140px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
+        className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
         {/* Patient Info */}
         <div className="flex items-center gap-3">
@@ -65,6 +65,18 @@ export default function OutpatientAppointments() {
             <div className="text-xs text-muted-foreground">
               GDID - {appointment.gdid} • {appointment.age} | {appointment.sex}
             </div>
+          </div>
+        </div>
+
+        {/* Contact Details */}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-xs text-foreground">
+            <Phone className="w-3.5 h-3.5" />
+            <span>{appointment.phone || "—"}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-foreground">
+            <Mail className="w-3.5 h-3.5" />
+            <span>{appointment.email || "—"}</span>
           </div>
         </div>
 
@@ -155,8 +167,9 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
+                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
@@ -177,8 +190,9 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Info</div>
+                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
