@@ -181,6 +181,9 @@ export default function Patients() {
                       Contact
                     </th>
                     <th className="text-left p-4 text-sm font-medium text-foreground">
+                      Visit ID
+                    </th>
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Admission & Visit
                     </th>
                     <th className="text-left p-4 text-sm font-medium text-foreground">
@@ -231,10 +234,12 @@ export default function Patients() {
                         </div>
                       </td>
                       <td className="p-4">
+                        <Badge variant="secondary" className="text-xs">
+                          Active Visit: {patient.visitId}
+                        </Badge>
+                      </td>
+                      <td className="p-4">
                         <div className="space-y-1">
-                          <Badge variant="secondary" className="text-xs">
-                            Active Visit: {patient.visitId}
-                          </Badge>
                           <div className="text-xs text-muted-foreground">
                             Admitted: {patient.admissionTime}
                           </div>
