@@ -70,25 +70,77 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
             className="grid grid-cols-12 gap-3 p-4 border border-border rounded-lg"
           >
             <div className="col-span-3">
-              <Input
-                placeholder="Medicine Name"
-                value={med.name || ""}
-                onChange={(e) => updateMedication(med.id!, "name", e.target.value)}
-              />
+              <Select
+                value={med.name}
+                onValueChange={(value) => updateMedication(med.id!, "name", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Medicine Name" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Paracetamol">Paracetamol</SelectItem>
+                  <SelectItem value="Ibuprofen">Ibuprofen</SelectItem>
+                  <SelectItem value="Amoxicillin">Amoxicillin</SelectItem>
+                  <SelectItem value="Azithromycin">Azithromycin</SelectItem>
+                  <SelectItem value="Ciprofloxacin">Ciprofloxacin</SelectItem>
+                  <SelectItem value="Metformin">Metformin</SelectItem>
+                  <SelectItem value="Amlodipine">Amlodipine</SelectItem>
+                  <SelectItem value="Atorvastatin">Atorvastatin</SelectItem>
+                  <SelectItem value="Omeprazole">Omeprazole</SelectItem>
+                  <SelectItem value="Pantoprazole">Pantoprazole</SelectItem>
+                  <SelectItem value="Cetirizine">Cetirizine</SelectItem>
+                  <SelectItem value="Montelukast">Montelukast</SelectItem>
+                  <SelectItem value="Salbutamol">Salbutamol</SelectItem>
+                  <SelectItem value="Levothyroxine">Levothyroxine</SelectItem>
+                  <SelectItem value="Aspirin">Aspirin</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2">
-              <Input
-                placeholder="Strength"
-                value={med.strength || ""}
-                onChange={(e) => updateMedication(med.id!, "strength", e.target.value)}
-              />
+              <Select
+                value={med.strength}
+                onValueChange={(value) => updateMedication(med.id!, "strength", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Strength" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5mg">5mg</SelectItem>
+                  <SelectItem value="10mg">10mg</SelectItem>
+                  <SelectItem value="25mg">25mg</SelectItem>
+                  <SelectItem value="50mg">50mg</SelectItem>
+                  <SelectItem value="100mg">100mg</SelectItem>
+                  <SelectItem value="250mg">250mg</SelectItem>
+                  <SelectItem value="500mg">500mg</SelectItem>
+                  <SelectItem value="1000mg">1000mg</SelectItem>
+                  <SelectItem value="5ml">5ml</SelectItem>
+                  <SelectItem value="10ml">10ml</SelectItem>
+                  <SelectItem value="15ml">15ml</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2">
-              <Input
-                placeholder="Dosage"
-                value={med.dosage || ""}
-                onChange={(e) => updateMedication(med.id!, "dosage", e.target.value)}
-              />
+              <Select
+                value={med.dosage}
+                onValueChange={(value) => updateMedication(med.id!, "dosage", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Dosage" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1/2 tablet">1/2 tablet</SelectItem>
+                  <SelectItem value="1 tablet">1 tablet</SelectItem>
+                  <SelectItem value="2 tablets">2 tablets</SelectItem>
+                  <SelectItem value="3 tablets">3 tablets</SelectItem>
+                  <SelectItem value="1 capsule">1 capsule</SelectItem>
+                  <SelectItem value="2 capsules">2 capsules</SelectItem>
+                  <SelectItem value="5ml">5ml</SelectItem>
+                  <SelectItem value="10ml">10ml</SelectItem>
+                  <SelectItem value="15ml">15ml</SelectItem>
+                  <SelectItem value="1 puff">1 puff</SelectItem>
+                  <SelectItem value="2 puffs">2 puffs</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2">
               <Select
