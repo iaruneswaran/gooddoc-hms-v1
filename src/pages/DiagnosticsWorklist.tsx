@@ -269,7 +269,7 @@ export default function DiagnosticsWorklist() {
               <div className="text-sm font-medium text-foreground">Service</div>
               <div className="text-sm font-medium text-foreground">Token & Time</div>
               <div className="text-sm font-medium text-foreground">Status</div>
-              <div className="text-sm font-medium text-foreground">Actions</div>
+              <div className="text-sm font-medium text-foreground text-right">Actions</div>
             </div>
 
             {filteredOrders.map((order) => (
