@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ChevronLeft, CheckCircle2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -17,10 +17,13 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { PaymentsHeader } from "@/components/payments/PaymentsHeader";
+import type { PaymentMethod, SummaryResponse } from "@/types/payment-summary";
 
 const Payments = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedInvoices, setSelectedInvoices] = useState<string[]>(["INV-2025-001"]);
   const [useAdvance, setUseAdvance] = useState(false);
   const [paymentRows, setPaymentRows] = useState([
@@ -29,6 +32,9 @@ const Payments = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
   const [actionType, setActionType] = useState<"payment" | "advance" | "refund">("payment");
+  const [activeFilter, setActiveFilter] = useState<PaymentMethod | null>(
+    (searchParams.get("method") as PaymentMethod) || null
+  );
 
   const invoices = [
     {
@@ -66,6 +72,75 @@ const Payments = () => {
   const advanceAmount = 3200;
   const outstandingTotal = 6600;
   const insuranceApproved = 10000;
+
+  // Mock summary data for the new header
+  const summaryData: SummaryResponse = {
+    period: { from: "2025-11-01", to: "2025-11-12" },
+    items: [
+      {
+        id: "upi",
+        title: "UPI",
+        amountInPaise: 412000,
+        transactionCount: 18,
+        delta: { pct: 6.5, direction: "up" },
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "card",
+        title: "Card",
+        amountInPaise: 228000,
+        transactionCount: 9,
+        delta: { pct: -3.1, direction: "down" },
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "cash",
+        title: "Cash",
+        amountInPaise: 76000,
+        transactionCount: 6,
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "insurance",
+        title: "Insurance",
+        amountInPaise: insuranceApproved * 100,
+        statusBreakdown: { approved: insuranceApproved * 100, pending: 0 },
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "outstanding",
+        title: "Outstanding",
+        amountInPaise: outstandingTotal * 100,
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "advance",
+        title: "Advance",
+        amountInPaise: advanceAmount * 100,
+        updatedAt: new Date().toISOString(),
+      },
+    ],
+    totals: {
+      collected: 716000,
+      outstanding: outstandingTotal * 100,
+      advance: advanceAmount * 100,
+      insuranceApproved: insuranceApproved * 100,
+    },
+  };
+
+  const handleFilterChange = (filter: PaymentMethod | null) => {
+    setActiveFilter(filter);
+    if (filter) {
+      setSearchParams({ method: filter });
+    } else {
+      setSearchParams({});
+    }
+  };
+
+  const handleExport = () => {
+    console.log("Exporting transactions with filter:", activeFilter);
+    // TODO: Implement CSV export
+  };
 
   const totalSelected = invoices
     .filter(inv => selectedInvoices.includes(inv.id))
@@ -112,12 +187,6 @@ const Payments = () => {
     setPrintingStatus("printing");
   };
 
-  const handleConfirmRefund = () => {
-    setActionType("refund");
-    setShowSuccess(true);
-    setPrintingStatus("printing");
-  };
-
   const addPaymentRow = () => {
     const newId = Math.max(...paymentRows.map(row => row.id)) + 1;
     setPaymentRows([...paymentRows, { id: newId, amount: "0.00", method: "Cash" }]);
@@ -152,20 +221,14 @@ const Payments = () => {
               <span className="font-semibold">Patient Insights</span>
             </button>
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-6">
-            <Card className="p-6">
-              <p className="text-sm text-muted-foreground mb-2">Outstanding Total</p>
-              <p className="text-3xl font-semibold text-primary">₹{outstandingTotal.toLocaleString()}</p>
-            </Card>
-            <Card className="p-6">
-              <p className="text-sm text-muted-foreground mb-2">Advance Amount</p>
-              <p className="text-3xl font-semibold text-primary">₹{advanceAmount.toLocaleString()}</p>
-            </Card>
-            <Card className="p-6">
-              <p className="text-sm text-muted-foreground mb-2">Insurance Approved</p>
-              <p className="text-3xl font-semibold text-primary">₹{insuranceApproved.toLocaleString()}</p>
-            </Card>
+          {/* Payment Summary Header */}
+          <div className="mb-6">
+            <PaymentsHeader
+              data={summaryData}
+              activeFilter={activeFilter}
+              onFilterChange={handleFilterChange}
+              onExport={handleExport}
+            />
           </div>
 
           {/* Tabs */}
