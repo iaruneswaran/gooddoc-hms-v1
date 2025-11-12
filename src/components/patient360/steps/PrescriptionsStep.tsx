@@ -151,14 +151,13 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
         ))}
       </div>
 
-      <Button
-        variant="outline"
-        className="w-full mt-4"
+      <button
+        className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors mt-4"
         onClick={addMedication}
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="w-4 h-4" />
         Add More Medicines
-      </Button>
+      </button>
 
       <div className="flex items-center justify-between mt-6">
         <Button variant="ghost" onClick={onBack}>
