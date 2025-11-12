@@ -147,7 +147,7 @@ export default function RadiologyResults() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Diagnostics", "Radiology Results"]} />
         
-        <main className="p-8 pb-24 overflow-y-auto" style={{ maxHeight: "calc(100vh - 64px)" }}>
+        <main className="px-6 py-6 pb-24 overflow-y-auto" style={{ maxHeight: "calc(100vh - 64px)" }}>
           {/* Back Link */}
           <button
             onClick={() => navigate("/diagnostics")}
