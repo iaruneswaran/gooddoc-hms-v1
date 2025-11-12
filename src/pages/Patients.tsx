@@ -186,8 +186,8 @@ export default function Patients() {
                     <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="text-right p-4 pr-36 text-sm font-medium text-foreground">
-                      Action
+                    <th className="p-4 text-sm font-medium text-foreground">
+                      <div className="flex justify-end pr-20">Action</div>
                     </th>
                   </tr>
                 </thead>
