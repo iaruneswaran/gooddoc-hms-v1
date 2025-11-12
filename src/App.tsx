@@ -24,6 +24,7 @@ import OutpatientAppointments from "./pages/OutpatientAppointments";
 import Patient360 from "./pages/Patient360";
 import Patients from "./pages/Patients";
 import RecordVitals from "./pages/RecordVitals";
+import TransactionsBillingReports from "./pages/TransactionsBillingReports";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/patients/:gdid/360" element={<Patient360 />} />
           <Route path="/patients" element={<Patients />} />
           <Route path="/vitals/new" element={<RecordVitals />} />
+          <Route path="/reports/transactions-billing" element={<TransactionsBillingReports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
