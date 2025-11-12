@@ -6,8 +6,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, MessageCircle, Video } from "lucide-react";
+import { User, Phone, MessageCircle, Video, Search } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 
@@ -17,13 +18,29 @@ export default function OutpatientAppointments() {
   const defaultTab = searchParams.get("tab") || "scheduled";
   
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const scheduledAppointments = mockAppointments.filter(
-    (apt) => apt.status === "Scheduled" || apt.status === "InProgress"
+  const filterAppointments = (appointments: Appointment[]) => {
+    if (!searchQuery) return appointments;
+    return appointments.filter(
+      (apt) =>
+        apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        apt.gdid.includes(searchQuery) ||
+        apt.chiefComplaint?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        apt.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  const scheduledAppointments = filterAppointments(
+    mockAppointments.filter(
+      (apt) => apt.status === "Scheduled" || apt.status === "InProgress"
+    )
   );
   
-  const visitedAppointments = mockAppointments.filter(
-    (apt) => apt.status === "Visited"
+  const visitedAppointments = filterAppointments(
+    mockAppointments.filter(
+      (apt) => apt.status === "Visited"
+    )
   );
 
   const handlePatient360Click = (appointment: Appointment) => {
@@ -111,20 +128,31 @@ export default function OutpatientAppointments() {
           </Card>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start mb-6">
-              <TabsTrigger
-                value="scheduled"
-                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-              >
-                Scheduled
-              </TabsTrigger>
-              <TabsTrigger
-                value="visited"
-                className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-              >
-                Visited
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-center justify-between mb-6">
+              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
+                <TabsTrigger
+                  value="scheduled"
+                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                >
+                  Scheduled
+                </TabsTrigger>
+                <TabsTrigger
+                  value="visited"
+                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                >
+                  Visited
+                </TabsTrigger>
+              </TabsList>
+              <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by patient name, GDID, or details..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
@@ -138,7 +166,7 @@ export default function OutpatientAppointments() {
                 </div>
                 {scheduledAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
-                    No scheduled appointments for today
+                    {searchQuery ? "No appointments found matching your search" : "No scheduled appointments for today"}
                   </div>
                 ) : (
                   scheduledAppointments.map(renderAppointmentCard)
@@ -158,7 +186,7 @@ export default function OutpatientAppointments() {
                 </div>
                 {visitedAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
-                    No visited appointments yet
+                    {searchQuery ? "No appointments found matching your search" : "No visited appointments yet"}
                   </div>
                 ) : (
                   visitedAppointments.map(renderAppointmentCard)
