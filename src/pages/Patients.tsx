@@ -186,8 +186,8 @@ export default function Patients() {
                     <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="p-4 text-sm font-medium text-foreground">
-                      <div className="pl-4">Action</div>
+                    <th className="text-left pl-8 pr-4 py-4 text-sm font-medium text-foreground">
+                      Action
                     </th>
                   </tr>
                 </thead>
