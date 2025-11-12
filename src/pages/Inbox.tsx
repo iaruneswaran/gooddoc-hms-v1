@@ -7,7 +7,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { User } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { User, Search } from "lucide-react";
 
 interface PendingAppointment {
   id: string;
@@ -47,6 +48,15 @@ const mockAppointments: PendingAppointment[] = [
 export default function Inbox() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("appointment");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredAppointments = mockAppointments.filter(
+    (appointment) =>
+      appointment.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.patientGDID.includes(searchQuery) ||
+      appointment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.purpose.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSchedule = (appointment: PendingAppointment) => {
     navigate(`/book-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
@@ -62,7 +72,18 @@ export default function Inbox() {
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
-              <CalendarWidget />
+              <div className="flex items-center gap-4">
+                <div className="relative w-80">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by patient name, GDID, or appointment..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <CalendarWidget />
+              </div>
             </div>
           </Card>
 
@@ -94,12 +115,12 @@ export default function Inbox() {
                   <div className="text-sm font-medium text-foreground">Action</div>
                 </div>
 
-                {mockAppointments.length === 0 ? (
+                {filteredAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
-                    No appointments to schedule
+                    {searchQuery ? "No appointments found matching your search" : "No appointments to schedule"}
                   </div>
                 ) : (
-                  mockAppointments.map((appointment) => (
+                  filteredAppointments.map((appointment) => (
                     <div key={appointment.id} className="grid grid-cols-[220px_1fr_140px_120px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                       {/* Patient Info */}
                       <div className="flex items-center gap-3">
