@@ -148,12 +148,12 @@ export default function Inbox() {
 
                       {/* Contact Details */}
                       <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-xs text-foreground">
-                          <Phone className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 text-sm">
+                          <Phone className="w-3.5 h-3.5 text-foreground" />
                           <span>{appointment.phone}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-foreground">
-                          <Mail className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 text-sm">
+                          <Mail className="w-3.5 h-3.5 text-foreground" />
                           <span>{appointment.email}</span>
                         </div>
                       </div>
@@ -174,7 +174,7 @@ export default function Inbox() {
                       </div>
 
                       {/* Requested Date & Time */}
-                      <div className="text-sm text-foreground">
+                      <div className="text-sm font-medium text-foreground">
                         {appointment.requestedDateTime || "—"}
                       </div>
 
