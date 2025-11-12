@@ -186,7 +186,7 @@ export default function Patients() {
                     <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="text-right p-4 pr-16 text-sm font-medium text-foreground">
+                    <th className="text-left p-4 text-sm font-medium text-foreground">
                       Action
                     </th>
                   </tr>
@@ -250,7 +250,7 @@ export default function Patients() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="flex items-center justify-end">
+                        <div className="flex items-center">
                           <Button
                             variant="default"
                             onClick={() => navigate(`/patient-insights/${patient.id}`)}
