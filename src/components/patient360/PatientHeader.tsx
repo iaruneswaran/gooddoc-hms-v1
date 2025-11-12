@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, FileText, Pill, TestTube, Printer } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { Patient, Vitals } from "@/types/patient360";
 
@@ -32,7 +31,7 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
 
         {/* Header Content */}
         <div className="flex items-center justify-between gap-6">
-          {/* Left: Patient Info and Action Buttons */}
+          {/* Left: Patient Info */}
           <div className="flex items-center gap-3">
             <PatientChip
               name={patient.name}
@@ -40,25 +39,6 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
               age={age}
               gender={patient.sex}
             />
-            
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <FileText className="w-4 h-4 mr-2" />
-                Add Note
-              </Button>
-              <Button variant="outline" size="sm">
-                <Pill className="w-4 h-4 mr-2" />
-                eRx
-              </Button>
-              <Button variant="outline" size="sm">
-                <TestTube className="w-4 h-4 mr-2" />
-                Order Lab
-              </Button>
-              <Button variant="outline" size="sm">
-                <Printer className="w-4 h-4 mr-2" />
-                Print
-              </Button>
-            </div>
           </div>
 
           {/* Right: Badges for allergies and conditions */}
