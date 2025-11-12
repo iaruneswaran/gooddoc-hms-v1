@@ -252,7 +252,7 @@ export default function DoctorsList() {
                     <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
                   </div>
 
-                  <div className="text-sm font-medium text-foreground">{doctor.availability}</div>
+                  <div className="text-sm text-foreground">{doctor.availability}</div>
 
                   <div className="flex flex-wrap gap-1">
                     {doctor.locations.map((loc, i) => (
@@ -262,7 +262,7 @@ export default function DoctorsList() {
                     ))}
                   </div>
 
-                  <div className="text-sm font-medium text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
+                  <div className="text-sm text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
 
                   <div>
                     <Badge variant={getStatusVariant(doctor.status)}>
