@@ -94,9 +94,9 @@ export default function OutpatientAppointments() {
           )}
         </div>
 
-        {/* Time */}
+        {/* Token & Time */}
         <div className="text-sm font-medium text-foreground">
-          {appointment.time}
+          {appointment.token} | {appointment.time}
         </div>
 
         {/* Action - Patient 360 */}
@@ -160,7 +160,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
-                  <div className="text-sm font-medium text-foreground">Time</div>
+                  <div className="text-sm font-medium text-foreground">Token & Time</div>
                   <div className="text-sm font-medium text-foreground pl-4">
                     Action
                   </div>
@@ -182,7 +182,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
-                  <div className="text-sm font-medium text-foreground">Time</div>
+                  <div className="text-sm font-medium text-foreground">Token & Time</div>
                   <div className="text-sm font-medium text-foreground pl-4">
                     Action
                   </div>

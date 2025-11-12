@@ -4,6 +4,7 @@ export interface Appointment {
   id: ID;
   date: string;
   time: string;
+  token?: string;
   patientId: ID;
   patientName: string;
   gdid: string;
