@@ -64,7 +64,7 @@ const mockOrders: DiagnosticOrder[] = [
     },
     token: "T-045",
     scheduledTime: "10:30 AM",
-    status: "Sample Collected",
+    status: "Saved draft",
     priority: "stat",
     tatMinutes: 45,
     isOverdue: false
@@ -115,7 +115,7 @@ const mockOrders: DiagnosticOrder[] = [
     },
     token: "R-023",
     scheduledTime: "09:45 AM",
-    status: "In Progress",
+    status: "Submitted for Review",
     priority: "stat",
     tatMinutes: 60
   },
@@ -140,7 +140,7 @@ const mockOrders: DiagnosticOrder[] = [
     },
     token: "R-031",
     scheduledTime: "02:30 PM",
-    status: "Scheduled",
+    status: "Completed",
     priority: "routine",
     tatMinutes: 180
   },
@@ -165,7 +165,7 @@ const mockOrders: DiagnosticOrder[] = [
     },
     token: "T-058",
     scheduledTime: "01:00 PM",
-    status: "Checked-in",
+    status: "Pending",
     priority: "routine",
     tatMinutes: 240
   }
@@ -178,14 +178,10 @@ export default function DiagnosticsWorklist() {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case "pending": return "bg-muted text-muted-foreground";
-      case "checked-in": return "bg-primary/10 text-primary";
-      case "sample collected": return "bg-secondary text-secondary-foreground";
-      case "in progress": return "bg-accent/20 text-accent-foreground";
-      case "entered": return "bg-primary/10 text-primary";
-      case "under review": return "bg-secondary text-secondary-foreground";
-      case "released": return "bg-primary/20 text-primary";
-      case "critical": return "bg-destructive text-destructive-foreground";
+      case "saved draft": return "bg-muted text-muted-foreground";
+      case "pending": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "submitted for review": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+      case "completed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
       default: return "bg-muted text-muted-foreground";
     }
   };
