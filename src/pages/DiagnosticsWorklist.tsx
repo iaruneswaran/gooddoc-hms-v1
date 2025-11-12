@@ -293,11 +293,11 @@ export default function DiagnosticsWorklist() {
                   <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
                 </div>
 
-                <div className="text-sm text-foreground">
+                <div className="text-sm font-medium text-foreground">
                   {order.service.department || order.service.modality}
                 </div>
 
-                <div className="text-sm text-foreground">
+                <div className="text-sm font-medium text-foreground">
                   {order.token} | {order.scheduledTime}
                 </div>
 
