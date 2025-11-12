@@ -210,33 +210,17 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData }: Labor
       </div>
 
       <div className="space-y-6">
-        {/* Diagnostics Type and Lab Tests */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm font-medium text-foreground mb-3 block">
-              Diagnostics Type
-            </label>
-            <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
-                <TabsTrigger value="radiology">Radiology</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-
-          {mode === "laboratory" && (
-            <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">
-                Lab Tests
-              </label>
-              <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                  <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          )}
+        {/* Lab Tests */}
+        <div>
+          <label className="text-sm font-medium text-foreground mb-3 block">
+            Lab Tests
+          </label>
+          <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
+              <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
 
         {/* Lab Tests Content */}
