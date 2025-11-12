@@ -307,7 +307,7 @@ export default function DiagnosticsWorklist() {
                   </Badge>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-end">
                   <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
                     <Button size="sm" className="bg-primary hover:bg-primary/90">
                       Enter Results
