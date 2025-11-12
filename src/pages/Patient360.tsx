@@ -51,10 +51,16 @@ export default function Patient360() {
           
           <div className="p-6">
             <Tabs value={activeTab} onValueChange={handleTabChange}>
-              <TabsList className="mb-6">
-                <TabsTrigger value="clinical-notes">Clinical Notes</TabsTrigger>
-                <TabsTrigger value="medical-history">Medical History</TabsTrigger>
-                <TabsTrigger value="patient-details">Patient Details</TabsTrigger>
+              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start mb-6">
+                <TabsTrigger value="clinical-notes" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  Clinical Notes
+                </TabsTrigger>
+                <TabsTrigger value="medical-history" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  Medical History
+                </TabsTrigger>
+                <TabsTrigger value="patient-details" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                  Patient Details
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="clinical-notes">
