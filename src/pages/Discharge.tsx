@@ -25,12 +25,8 @@ const Discharge = () => {
       case 1:
         return <ClearancesStep />;
       case 2:
-        return <ClinicalSummaryStep />;
-      case 3:
-        return <MedicationsStep />;
-      case 4:
         return <BillingStep />;
-      case 5:
+      case 3:
         return <FinalizeStep />;
       default:
         return <ClearancesStep />;
@@ -66,7 +62,7 @@ const Discharge = () => {
           <div className="max-w-[1400px] mx-auto">
             {renderStepContent()}
             
-            {currentStep === 5 ? (
+            {currentStep === 3 ? (
               <div className="flex justify-end items-center gap-3 mt-4">
                 <Button 
                   variant="outline" 
@@ -85,10 +81,10 @@ const Discharge = () => {
                   Previous
                 </Button>
                 <div className="text-sm text-muted-foreground">
-                  Step {currentStep} of 5
+                  Step {currentStep} of 3
                 </div>
                 <Button 
-                  onClick={() => setCurrentStep(Math.min(5, currentStep + 1))}
+                  onClick={() => setCurrentStep(Math.min(3, currentStep + 1))}
                 >
                   Next
                 </Button>

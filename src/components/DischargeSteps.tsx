@@ -1,4 +1,4 @@
-import { ClipboardCheck, FileText, Pill, CreditCard, CheckCircle } from "lucide-react";
+import { ClipboardCheck, CreditCard, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Step {
@@ -9,10 +9,8 @@ interface Step {
 
 const steps: Step[] = [
   { icon: ClipboardCheck, label: "Clearances", value: 1 },
-  { icon: FileText, label: "Clinical Summary", value: 2 },
-  { icon: Pill, label: "Medications & Follow-up", value: 3 },
-  { icon: CreditCard, label: "Billing & Settlement", value: 4 },
-  { icon: CheckCircle, label: "Finalize Discharge", value: 5 },
+  { icon: CreditCard, label: "Billing & Settlement", value: 2 },
+  { icon: CheckCircle, label: "Finalize Discharge", value: 3 },
 ];
 
 interface DischargeStepsProps {
