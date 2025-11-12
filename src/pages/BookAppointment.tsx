@@ -525,6 +525,7 @@ const BookAppointment = () => {
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
                               initialData={laboratoryData}
+                              hideMode={isSingleAppointmentMode}
                             />
                           );
                         }
