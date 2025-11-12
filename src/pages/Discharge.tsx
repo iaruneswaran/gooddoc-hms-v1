@@ -103,14 +103,11 @@ const Discharge = () => {
 
 const ClearancesStep = () => {
   const departments = [
-    { name: "Doctor", status: "Pending", notes: "—", lastUpdated: "—" },
-    { name: "Nursing", status: "Pending", notes: "—", lastUpdated: "—" },
-    { name: "Pharmacy", status: "Pending", notes: "—", lastUpdated: "—" },
+    { name: "Admission", status: "Pending", notes: "—", lastUpdated: "—" },
     { name: "Laboratory", status: "Cleared", notes: "All reports collected", lastUpdated: "Lab Technician\n07 Oct, 03:30 pm" },
+    { name: "Pharmacy", status: "Pending", notes: "—", lastUpdated: "—" },
     { name: "Radiology", status: "Cleared", notes: "Images and reports provided", lastUpdated: "Radiologist\n07 Oct, 04:00 pm" },
-    { name: "Billing", status: "In Review", notes: "Reviewing final charges", lastUpdated: "Requested 08 Oct, 08:00 am" },
-    { name: "Insurance/TPA", status: "Requested", notes: "Awaiting final approval", lastUpdated: "Requested 08 Oct, 08:00 am" },
-    { name: "Ward Admin", status: "Pending", notes: "—", lastUpdated: "—" },
+    { name: "Services", status: "Pending", notes: "—", lastUpdated: "—" },
   ];
 
   return (
@@ -124,7 +121,7 @@ const ClearancesStep = () => {
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="flex items-center gap-2">
-            Request All Clearances (4)
+            Request All Clearances (3)
           </Button>
           <Button variant="outline" className="flex items-center gap-2">
             <RefreshCw className="w-4 h-4" />
