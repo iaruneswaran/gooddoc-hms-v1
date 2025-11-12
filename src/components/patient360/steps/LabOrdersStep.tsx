@@ -275,8 +275,8 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
 
           {(selectedPackageObjects.length > 0 || selectedTestObjects.length > 0) && (
             <div className="space-y-3">
-              {selectedPackageObjects.map((pkg) => (
-                <div key={pkg.code} className="pb-3 border-b border-border last:border-0">
+              {selectedPackageObjects.map((pkg, index) => (
+                <div key={pkg.code} className="pb-3">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="text-sm font-medium text-foreground">{pkg.name}</h4>
                   </div>
@@ -286,8 +286,8 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
                   </div>
                 </div>
               ))}
-              {selectedTestObjects.map((test) => (
-                <div key={test.code} className="pb-3 border-b border-border last:border-0">
+              {selectedTestObjects.map((test, index) => (
+                <div key={test.code} className="pb-3">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="text-sm font-medium text-foreground">{test.name}</h4>
                   </div>
