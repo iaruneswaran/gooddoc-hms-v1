@@ -186,9 +186,6 @@ export default function Patients() {
                     <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Status
-                    </th>
                     <th className="text-right p-4 text-sm font-medium text-foreground">
                       Action
                     </th>
@@ -212,11 +209,6 @@ export default function Patients() {
                             <div className="text-xs text-muted-foreground">
                               GDID - {patient.gdid} • {patient.age} | {patient.gender}
                             </div>
-                            {patient.allergies.length > 0 && (
-                              <Badge variant="destructive" className="mt-1 text-xs">
-                                Allergy: {patient.allergies.join(", ")}
-                              </Badge>
-                            )}
                           </div>
                         </div>
                       </td>
@@ -255,25 +247,6 @@ export default function Patients() {
                       <td className="p-4">
                         <div className="text-sm text-foreground">
                           {patient.doctor} — {patient.specialty}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <Badge variant="outline" className="text-xs">
-                            {patient.status}
-                          </Badge>
-                          <Badge
-                            variant={
-                              patient.condition === "Stable"
-                                ? "secondary"
-                                : patient.condition === "Under Observation"
-                                ? "default"
-                                : "outline"
-                            }
-                            className="text-xs"
-                          >
-                            {patient.condition}
-                          </Badge>
                         </div>
                       </td>
                       <td className="p-4 text-right">
