@@ -402,11 +402,11 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
 
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-sm">
-                <Phone className="w-3.5 h-3.5 text-muted-foreground" />
+                <Phone className="w-3.5 h-3.5 text-foreground" />
                 <span>{appointment.patient.phone}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-3.5 h-3.5 text-muted-foreground" />
+                <Mail className="w-3.5 h-3.5 text-foreground" />
                 <span className="truncate">{appointment.patient.email}</span>
               </div>
             </div>
