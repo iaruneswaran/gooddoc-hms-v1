@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, FileText, Printer } from "lucide-react";
+import { FileText, Printer } from "lucide-react";
 import { VisitSummary } from "@/types/patient360";
 
 interface MedicalHistoryTimelineProps {
@@ -10,17 +9,6 @@ interface MedicalHistoryTimelineProps {
 }
 
 export function MedicalHistoryTimeline({ visits }: MedicalHistoryTimelineProps) {
-  const [expandedVisits, setExpandedVisits] = useState<Set<string>>(new Set());
-
-  const toggleVisit = (appointmentId: string) => {
-    const newExpanded = new Set(expandedVisits);
-    if (newExpanded.has(appointmentId)) {
-      newExpanded.delete(appointmentId);
-    } else {
-      newExpanded.add(appointmentId);
-    }
-    setExpandedVisits(newExpanded);
-  };
 
   if (visits.length === 0) {
     return (
@@ -33,8 +21,6 @@ export function MedicalHistoryTimeline({ visits }: MedicalHistoryTimelineProps) 
   return (
     <div className="space-y-4">
       {visits.map((visit) => {
-        const isExpanded = expandedVisits.has(visit.appointmentId);
-        
         return (
           <Card key={visit.appointmentId} className="p-6">
             <div className="flex items-start justify-between mb-4">
@@ -81,22 +67,10 @@ export function MedicalHistoryTimeline({ visits }: MedicalHistoryTimelineProps) 
                   <Printer className="w-4 h-4 mr-2" />
                   Print
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleVisit(visit.appointmentId)}
-                >
-                  {isExpanded ? (
-                    <ChevronUp className="w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
-                </Button>
               </div>
             </div>
 
-            {isExpanded && (
-              <div className="space-y-4 pt-4 border-t border-border">
+            <div className="space-y-4 pt-4 border-t border-border">
                 {visit.vitals && (
                   <div>
                     <h4 className="text-sm font-semibold text-foreground mb-2">Vitals</h4>
@@ -188,20 +162,7 @@ export function MedicalHistoryTimeline({ visits }: MedicalHistoryTimelineProps) 
                     </div>
                   </div>
                 )}
-
-                {visit.aiSummary && (
-                  <div className="bg-accent/10 p-4 rounded-lg">
-                    <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                      <span className="text-xs bg-accent text-accent-foreground px-2 py-0.5 rounded">
-                        AI
-                      </span>
-                      Summary
-                    </h4>
-                    <p className="text-sm text-foreground">{visit.aiSummary}</p>
-                  </div>
-                )}
               </div>
-            )}
           </Card>
         );
       })}
