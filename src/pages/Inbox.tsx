@@ -87,7 +87,7 @@ export default function Inbox() {
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[220px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Details</div>
-                  <div className="text-sm font-medium text-foreground">Purpose</div>
+                  <div className="text-sm font-medium text-foreground">Appointment Summary</div>
                   <div className="text-sm font-medium text-foreground">Service Type</div>
                   <div className="text-sm font-medium text-foreground">Doctor</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
