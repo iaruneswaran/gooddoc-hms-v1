@@ -48,178 +48,252 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
     onNext();
   };
 
-  return (
-    <Card className="p-6">
-      {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
-        <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <Badge variant="destructive" className="text-xs">
-              Allergy Alert
-            </Badge>
-          </div>
-          <p className="text-sm text-foreground">
-            Patient has allergies to: {patient.alerts.allergies.join(", ")}
-          </p>
-        </div>
-      )}
+  const completedMedications = medications.filter(med => med.name && med.strength && med.dosage);
 
-      <div className="space-y-4">
-        {medications.map((med, index) => (
-          <div
-            key={med.id}
-            className="grid grid-cols-12 gap-3 p-4 border border-border rounded-lg"
+  return (
+    <div className="grid grid-cols-3 gap-6">
+      <div className="col-span-2">
+        <Card className="p-6">
+          {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
+            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="destructive" className="text-xs">
+                  Allergy Alert
+                </Badge>
+              </div>
+              <p className="text-sm text-foreground">
+                Patient has allergies to: {patient.alerts.allergies.join(", ")}
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            {medications.map((med, index) => (
+              <div
+                key={med.id}
+                className="grid grid-cols-12 gap-3 p-4 border border-border rounded-lg"
+              >
+                <div className="col-span-3">
+                  <Select
+                    value={med.name}
+                    onValueChange={(value) => updateMedication(med.id!, "name", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Medicine Name" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Paracetamol">Paracetamol</SelectItem>
+                      <SelectItem value="Ibuprofen">Ibuprofen</SelectItem>
+                      <SelectItem value="Amoxicillin">Amoxicillin</SelectItem>
+                      <SelectItem value="Azithromycin">Azithromycin</SelectItem>
+                      <SelectItem value="Ciprofloxacin">Ciprofloxacin</SelectItem>
+                      <SelectItem value="Metformin">Metformin</SelectItem>
+                      <SelectItem value="Amlodipine">Amlodipine</SelectItem>
+                      <SelectItem value="Atorvastatin">Atorvastatin</SelectItem>
+                      <SelectItem value="Omeprazole">Omeprazole</SelectItem>
+                      <SelectItem value="Pantoprazole">Pantoprazole</SelectItem>
+                      <SelectItem value="Cetirizine">Cetirizine</SelectItem>
+                      <SelectItem value="Montelukast">Montelukast</SelectItem>
+                      <SelectItem value="Salbutamol">Salbutamol</SelectItem>
+                      <SelectItem value="Levothyroxine">Levothyroxine</SelectItem>
+                      <SelectItem value="Aspirin">Aspirin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Select
+                    value={med.strength}
+                    onValueChange={(value) => updateMedication(med.id!, "strength", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Strength" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5mg">5mg</SelectItem>
+                      <SelectItem value="10mg">10mg</SelectItem>
+                      <SelectItem value="25mg">25mg</SelectItem>
+                      <SelectItem value="50mg">50mg</SelectItem>
+                      <SelectItem value="100mg">100mg</SelectItem>
+                      <SelectItem value="250mg">250mg</SelectItem>
+                      <SelectItem value="500mg">500mg</SelectItem>
+                      <SelectItem value="1000mg">1000mg</SelectItem>
+                      <SelectItem value="5ml">5ml</SelectItem>
+                      <SelectItem value="10ml">10ml</SelectItem>
+                      <SelectItem value="15ml">15ml</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Select
+                    value={med.dosage}
+                    onValueChange={(value) => updateMedication(med.id!, "dosage", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Dosage" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1/2 tablet">1/2 tablet</SelectItem>
+                      <SelectItem value="1 tablet">1 tablet</SelectItem>
+                      <SelectItem value="2 tablets">2 tablets</SelectItem>
+                      <SelectItem value="3 tablets">3 tablets</SelectItem>
+                      <SelectItem value="1 capsule">1 capsule</SelectItem>
+                      <SelectItem value="2 capsules">2 capsules</SelectItem>
+                      <SelectItem value="5ml">5ml</SelectItem>
+                      <SelectItem value="10ml">10ml</SelectItem>
+                      <SelectItem value="15ml">15ml</SelectItem>
+                      <SelectItem value="1 puff">1 puff</SelectItem>
+                      <SelectItem value="2 puffs">2 puffs</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Select
+                    value={med.frequency}
+                    onValueChange={(value) => updateMedication(med.id!, "frequency", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="OD">OD</SelectItem>
+                      <SelectItem value="BD">BD</SelectItem>
+                      <SelectItem value="TID">TID</SelectItem>
+                      <SelectItem value="QID">QID</SelectItem>
+                      <SelectItem value="HS">HS</SelectItem>
+                      <SelectItem value="PRN">PRN</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Select
+                    value={med.durationDays?.toString()}
+                    onValueChange={(value) =>
+                      updateMedication(med.id!, "durationDays", parseInt(value))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="3">3 Days</SelectItem>
+                      <SelectItem value="5">5 Days</SelectItem>
+                      <SelectItem value="7">7 Days</SelectItem>
+                      <SelectItem value="14">14 Days</SelectItem>
+                      <SelectItem value="30">30 Days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-1 flex items-center justify-end">
+                  {medications.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeMedication(med.id!)}
+                    >
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  )}
+                </div>
+                {med.notes !== undefined && (
+                  <div className="col-span-12">
+                    <Input
+                      placeholder="Notes / PRN instructions"
+                      value={med.notes}
+                      onChange={(e) => updateMedication(med.id!, "notes", e.target.value)}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors mt-4"
+            onClick={addMedication}
           >
-            <div className="col-span-3">
-              <Select
-                value={med.name}
-                onValueChange={(value) => updateMedication(med.id!, "name", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Medicine Name" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Paracetamol">Paracetamol</SelectItem>
-                  <SelectItem value="Ibuprofen">Ibuprofen</SelectItem>
-                  <SelectItem value="Amoxicillin">Amoxicillin</SelectItem>
-                  <SelectItem value="Azithromycin">Azithromycin</SelectItem>
-                  <SelectItem value="Ciprofloxacin">Ciprofloxacin</SelectItem>
-                  <SelectItem value="Metformin">Metformin</SelectItem>
-                  <SelectItem value="Amlodipine">Amlodipine</SelectItem>
-                  <SelectItem value="Atorvastatin">Atorvastatin</SelectItem>
-                  <SelectItem value="Omeprazole">Omeprazole</SelectItem>
-                  <SelectItem value="Pantoprazole">Pantoprazole</SelectItem>
-                  <SelectItem value="Cetirizine">Cetirizine</SelectItem>
-                  <SelectItem value="Montelukast">Montelukast</SelectItem>
-                  <SelectItem value="Salbutamol">Salbutamol</SelectItem>
-                  <SelectItem value="Levothyroxine">Levothyroxine</SelectItem>
-                  <SelectItem value="Aspirin">Aspirin</SelectItem>
-                </SelectContent>
-              </Select>
+            <Plus className="w-4 h-4" />
+            Add More Medicines
+          </button>
+
+          <div className="flex items-center justify-between mt-6">
+            <Button variant="ghost" onClick={onBack}>
+              Back
+            </Button>
+            <div className="flex gap-3">
+              <Button variant="ghost">Skip, Fill later</Button>
+              <Button onClick={handleSave}>Save & Continue</Button>
             </div>
-            <div className="col-span-2">
-              <Select
-                value={med.strength}
-                onValueChange={(value) => updateMedication(med.id!, "strength", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Strength" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5mg">5mg</SelectItem>
-                  <SelectItem value="10mg">10mg</SelectItem>
-                  <SelectItem value="25mg">25mg</SelectItem>
-                  <SelectItem value="50mg">50mg</SelectItem>
-                  <SelectItem value="100mg">100mg</SelectItem>
-                  <SelectItem value="250mg">250mg</SelectItem>
-                  <SelectItem value="500mg">500mg</SelectItem>
-                  <SelectItem value="1000mg">1000mg</SelectItem>
-                  <SelectItem value="5ml">5ml</SelectItem>
-                  <SelectItem value="10ml">10ml</SelectItem>
-                  <SelectItem value="15ml">15ml</SelectItem>
-                </SelectContent>
-              </Select>
+          </div>
+        </Card>
+      </div>
+
+      <div>
+        <Card className="p-6 sticky top-24">
+          <h3 className="text-sm font-semibold text-foreground mb-4">Prescription Summary</h3>
+          
+          <div className="space-y-3 mb-4 pb-4 border-b border-border">
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Patient</p>
+              <p className="text-sm font-medium text-foreground">{patient.name}</p>
+              <p className="text-xs text-muted-foreground">
+                GDID - {patient.gdid} • {Math.floor(
+                  (new Date().getTime() - new Date(patient.dob).getTime()) / 
+                  (365.25 * 24 * 60 * 60 * 1000)
+                )} | {patient.sex}
+              </p>
             </div>
-            <div className="col-span-2">
-              <Select
-                value={med.dosage}
-                onValueChange={(value) => updateMedication(med.id!, "dosage", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Dosage" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1/2 tablet">1/2 tablet</SelectItem>
-                  <SelectItem value="1 tablet">1 tablet</SelectItem>
-                  <SelectItem value="2 tablets">2 tablets</SelectItem>
-                  <SelectItem value="3 tablets">3 tablets</SelectItem>
-                  <SelectItem value="1 capsule">1 capsule</SelectItem>
-                  <SelectItem value="2 capsules">2 capsules</SelectItem>
-                  <SelectItem value="5ml">5ml</SelectItem>
-                  <SelectItem value="10ml">10ml</SelectItem>
-                  <SelectItem value="15ml">15ml</SelectItem>
-                  <SelectItem value="1 puff">1 puff</SelectItem>
-                  <SelectItem value="2 puffs">2 puffs</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="col-span-2">
-              <Select
-                value={med.frequency}
-                onValueChange={(value) => updateMedication(med.id!, "frequency", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="OD">OD</SelectItem>
-                  <SelectItem value="BD">BD</SelectItem>
-                  <SelectItem value="TID">TID</SelectItem>
-                  <SelectItem value="QID">QID</SelectItem>
-                  <SelectItem value="HS">HS</SelectItem>
-                  <SelectItem value="PRN">PRN</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="col-span-2">
-              <Select
-                value={med.durationDays?.toString()}
-                onValueChange={(value) =>
-                  updateMedication(med.id!, "durationDays", parseInt(value))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="3">3 Days</SelectItem>
-                  <SelectItem value="5">5 Days</SelectItem>
-                  <SelectItem value="7">7 Days</SelectItem>
-                  <SelectItem value="14">14 Days</SelectItem>
-                  <SelectItem value="30">30 Days</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="col-span-1 flex items-center justify-end">
-              {medications.length > 1 && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeMedication(med.id!)}
-                >
-                  <Trash2 className="w-4 h-4 text-destructive" />
-                </Button>
-              )}
-            </div>
-            {med.notes !== undefined && (
-              <div className="col-span-12">
-                <Input
-                  placeholder="Notes / PRN instructions"
-                  value={med.notes}
-                  onChange={(e) => updateMedication(med.id!, "notes", e.target.value)}
-                />
+            {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
+              <div>
+                <Badge variant="destructive" className="text-xs mb-2">
+                  Allergy Alert
+                </Badge>
+                <p className="text-xs text-muted-foreground">
+                  {patient.alerts.allergies.join(", ")}
+                </p>
               </div>
             )}
           </div>
-        ))}
-      </div>
 
-      <button
-        className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors mt-4"
-        onClick={addMedication}
-      >
-        <Plus className="w-4 h-4" />
-        Add More Medicines
-      </button>
-
-      <div className="flex items-center justify-between mt-6">
-        <Button variant="ghost" onClick={onBack}>
-          Back
-        </Button>
-        <div className="flex gap-3">
-          <Button variant="ghost">Skip, Fill later</Button>
-          <Button onClick={handleSave}>Save & Continue</Button>
-        </div>
+          {completedMedications.length > 0 ? (
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-foreground mb-3">Medications ({completedMedications.length})</p>
+              {completedMedications.map((med) => (
+                <div key={med.id} className="pb-3 border-b border-border last:border-0">
+                  <h4 className="text-sm font-medium text-foreground mb-1">{med.name}</h4>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Strength:</span>
+                      <span className="text-foreground">{med.strength}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Dosage:</span>
+                      <span className="text-foreground">{med.dosage}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Frequency:</span>
+                      <span className="text-foreground">{med.frequency}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Duration:</span>
+                      <span className="text-foreground">{med.durationDays} Days</span>
+                    </div>
+                    {med.notes && (
+                      <div className="mt-2 pt-2 border-t border-border">
+                        <p className="text-xs text-muted-foreground">Notes:</p>
+                        <p className="text-xs text-foreground">{med.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-sm text-muted-foreground">No medications added yet</p>
+            </div>
+          )}
+        </Card>
       </div>
-    </Card>
+    </div>
   );
 }
