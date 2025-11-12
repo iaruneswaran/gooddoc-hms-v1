@@ -231,16 +231,20 @@ export default function Patients() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="space-y-1">
-                          <Badge variant="secondary" className="text-xs">
-                            Active Visit: {patient.visitId}
-                          </Badge>
-                          <div className="text-xs text-muted-foreground">
-                            Admitted: {patient.admissionTime}
+                        <div className="space-y-2">
+                          <div>
+                            <Badge variant="secondary" className="text-xs">
+                              Active Visit: {patient.visitId}
+                            </Badge>
                           </div>
-                          <div className="text-xs text-foreground">
-                            {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS:{" "}
-                            {patient.los}
+                          <div className="space-y-1">
+                            <div className="text-xs text-muted-foreground">
+                              Admitted: {patient.admissionTime}
+                            </div>
+                            <div className="text-xs text-foreground">
+                              {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS:{" "}
+                              {patient.los}
+                            </div>
                           </div>
                         </div>
                       </td>
