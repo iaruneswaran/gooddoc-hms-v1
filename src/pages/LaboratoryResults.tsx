@@ -499,7 +499,6 @@ export default function LaboratoryResults() {
                   Save Draft
                 </Button>
                 <Button variant="outline" onClick={handleValidate}>
-                  <CheckCircle className="h-4 w-4 mr-2" />
                   Submit for Review
                 </Button>
                 <Button onClick={handleRelease}>
