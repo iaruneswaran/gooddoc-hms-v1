@@ -500,7 +500,7 @@ export default function LaboratoryResults() {
                 </Button>
                 <Button variant="outline" onClick={handleValidate}>
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Validate
+                  Submit for Review
                 </Button>
                 <Button onClick={handleRelease}>
                   <FileText className="h-4 w-4 mr-2" />
