@@ -279,9 +279,9 @@ export default function DiagnosticsWorklist() {
                     <AvatarFallback className="bg-primary/10 text-primary">{order.patient.avatar}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="text-sm font-medium text-foreground">
+                    <button className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left">
                       {order.patient.name}
-                    </div>
+                    </button>
                     <div className="text-xs text-muted-foreground">
                       GDID - {order.patient.gdid} • {order.patient.age} | {order.patient.sex}
                     </div>
