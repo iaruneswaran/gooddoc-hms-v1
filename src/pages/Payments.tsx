@@ -277,12 +277,6 @@ const Payments = () => {
               >
                 History
               </TabsTrigger>
-              <TabsTrigger 
-                value="transactions"
-                className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
-              >
-                Patient Transactions
-              </TabsTrigger>
             </TabsList>
 
             {/* Collection Tab */}
@@ -329,16 +323,6 @@ const Payments = () => {
               <TransactionsTable
                 transactions={allTransactions}
                 title="Transaction History"
-                showFilters={true}
-                onDownloadStatement={handleDownloadStatement}
-              />
-            </TabsContent>
-
-            {/* Patient Transactions Tab */}
-            <TabsContent value="transactions" className="mt-6">
-              <TransactionsTable
-                transactions={allTransactions}
-                title="All Patient Transactions"
                 showFilters={true}
                 onDownloadStatement={handleDownloadStatement}
               />
