@@ -78,8 +78,8 @@ export default function Inbox() {
 
           {/* Navigation Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex items-center justify-between border-b border-border mb-6">
-              <TabsList className="bg-transparent border-0 rounded-none h-auto p-0 justify-start">
+            <div className="flex items-center justify-between mb-6">
+              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
                 <TabsTrigger 
                   value="appointment" 
                   className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
@@ -93,7 +93,7 @@ export default function Inbox() {
                   Scheduled
                 </TabsTrigger>
               </TabsList>
-              <div className="relative w-80 mb-1">
+              <div className="relative w-80">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search by patient name, GDID, or appointment..."
