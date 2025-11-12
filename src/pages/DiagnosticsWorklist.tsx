@@ -309,7 +309,7 @@ export default function DiagnosticsWorklist() {
 
                 <div className="flex items-center justify-end">
                   <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
+                    <Button variant="default" className="h-9 w-32">
                       Enter Results
                     </Button>
                   </Link>

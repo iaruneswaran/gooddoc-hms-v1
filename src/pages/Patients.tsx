@@ -252,8 +252,9 @@ export default function Patients() {
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Button
-                            size="sm"
+                            variant="default"
                             onClick={() => navigate(`/patient-insights/${patient.id}`)}
+                            className="h-9 w-32"
                           >
                             Patient Insight
                           </Button>

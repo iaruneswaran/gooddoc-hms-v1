@@ -103,9 +103,8 @@ export default function OutpatientAppointments() {
         <div>
           <Button
             variant="default"
-            size="sm"
             onClick={() => handlePatient360Click(appointment)}
-            className="w-full"
+            className="h-9 w-32"
           >
             Patient 360
           </Button>

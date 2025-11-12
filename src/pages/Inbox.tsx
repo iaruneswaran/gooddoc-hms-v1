@@ -161,9 +161,8 @@ export default function Inbox() {
                       <div>
                         <Button
                           variant="default"
-                          size="sm"
                           onClick={() => handleSchedule(appointment)}
-                          className="w-full"
+                          className="h-9 w-32"
                         >
                           Schedule
                         </Button>
