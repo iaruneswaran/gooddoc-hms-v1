@@ -290,7 +290,6 @@ export default function DiagnosticsWorklist() {
 
                 <div className="space-y-1">
                   <div className="text-sm font-medium text-foreground">{order.id}</div>
-                  <div className="text-sm text-muted-foreground">{order.orderSummary.indication}</div>
                   <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
                 </div>
 
@@ -298,12 +297,8 @@ export default function DiagnosticsWorklist() {
                   {order.service.department || order.service.modality}
                 </div>
 
-                <div className="space-y-1">
-                  <div className="text-sm font-medium text-foreground">{order.token}</div>
-                  <div className="text-sm text-muted-foreground flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    {order.scheduledTime}
-                  </div>
+                <div className="text-sm text-foreground">
+                  {order.token} | {order.scheduledTime}
                 </div>
 
                 <div>
