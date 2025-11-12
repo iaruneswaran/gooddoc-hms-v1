@@ -160,7 +160,7 @@ export default function Inbox() {
                       </div>
 
                       {/* Action */}
-                      <div>
+                      <div className="flex justify-end">
                         <Button
                           variant="default"
                           onClick={() => handleSchedule(appointment)}
