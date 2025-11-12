@@ -1,4 +1,4 @@
-import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formatINR } from "@/utils/currency";
@@ -6,18 +6,14 @@ import type { SummaryItem } from "@/types/payment-summary";
 
 interface SummaryCardProps {
   item: SummaryItem;
-  icon: LucideIcon;
   colorClass: string;
-  gradientClass: string;
   isActive?: boolean;
   onClick: () => void;
 }
 
 export function SummaryCard({
   item,
-  icon: Icon,
   colorClass,
-  gradientClass,
   isActive = false,
   onClick,
 }: SummaryCardProps) {
@@ -35,42 +31,24 @@ export function SummaryCard({
         }
       }}
       className={cn(
-        "relative overflow-hidden cursor-pointer transition-all duration-300",
-        "hover:shadow-lg hover:-translate-y-1",
-        "border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        "cursor-pointer",
+        "border",
         isActive 
-          ? `${colorClass} border-current shadow-lg` 
-          : "border-border hover:border-primary/30",
-        "group"
+          ? `${colorClass} border-current` 
+          : "border-border",
+        "bg-background"
       )}
     >
-      <div className={cn(
-        "absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10",
-        gradientClass
-      )} />
-      
-      <div className="relative p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className={cn(
-            "p-3 rounded-lg transition-colors",
-            isActive ? "bg-current/10" : "bg-muted",
-            "group-hover:bg-current/10"
-          )}>
-            <Icon className={cn(
-              "w-5 h-5 transition-colors",
-              isActive ? colorClass : "text-muted-foreground",
-              "group-hover:" + colorClass
-            )} />
-          </div>
-          
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
           {item.delta && (
             <div className={cn(
-              "flex items-center gap-1 text-xs font-medium px-2 py-1 rounded",
+              "flex items-center gap-1 text-xs font-medium",
               item.delta.direction === 'up' 
-                ? "text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-950"
+                ? "text-green-600"
                 : item.delta.direction === 'down'
-                ? "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950"
-                : "text-muted-foreground bg-muted"
+                ? "text-red-600"
+                : "text-muted-foreground"
             )}>
               {item.delta.direction === 'up' ? (
                 <TrendingUp className="w-3 h-3" />
@@ -82,19 +60,19 @@ export function SummaryCard({
           )}
         </div>
         
-        <div className="space-y-2">
+        <div className="space-y-1">
           <h3 className="text-sm font-medium text-muted-foreground">
             {item.title}
           </h3>
           
           <p className={cn(
-            "text-2xl font-bold transition-colors",
+            "text-xl font-bold",
             isActive ? colorClass : "text-foreground"
           )}>
             {formatINR(item.amountInPaise)}
           </p>
           
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground">
             {item.transactionCount !== undefined ? (
               <span>{item.transactionCount} txns</span>
             ) : item.statusBreakdown ? (

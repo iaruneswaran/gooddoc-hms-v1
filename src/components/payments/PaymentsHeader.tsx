@@ -1,11 +1,5 @@
 import { useState } from "react";
 import { 
-  QrCode, 
-  CreditCard, 
-  Banknote, 
-  Shield, 
-  Clock, 
-  Wallet,
   Download,
   Calendar,
   Info
@@ -37,34 +31,22 @@ interface PaymentsHeaderProps {
 
 const cardConfigs = {
   upi: {
-    icon: QrCode,
     colorClass: "text-indigo-600 dark:text-indigo-400",
-    gradientClass: "bg-gradient-to-br from-indigo-500 to-purple-600",
   },
   card: {
-    icon: CreditCard,
     colorClass: "text-blue-600 dark:text-blue-400",
-    gradientClass: "bg-gradient-to-br from-blue-500 to-cyan-600",
   },
   cash: {
-    icon: Banknote,
     colorClass: "text-green-600 dark:text-green-400",
-    gradientClass: "bg-gradient-to-br from-green-500 to-emerald-600",
   },
   insurance: {
-    icon: Shield,
     colorClass: "text-teal-600 dark:text-teal-400",
-    gradientClass: "bg-gradient-to-br from-teal-500 to-cyan-600",
   },
   outstanding: {
-    icon: Clock,
     colorClass: "text-amber-600 dark:text-amber-400",
-    gradientClass: "bg-gradient-to-br from-amber-500 to-orange-600",
   },
   advance: {
-    icon: Wallet,
     colorClass: "text-violet-600 dark:text-violet-400",
-    gradientClass: "bg-gradient-to-br from-violet-500 to-purple-600",
   },
 };
 
@@ -140,9 +122,7 @@ export function PaymentsHeader({
               <SummaryCard
                 key={item.id}
                 item={item}
-                icon={config.icon}
                 colorClass={config.colorClass}
-                gradientClass={config.gradientClass}
                 isActive={activeFilter === item.id}
                 onClick={() => handleCardClick(item.id)}
               />
