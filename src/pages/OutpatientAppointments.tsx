@@ -161,8 +161,8 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
                   <div className="text-sm font-medium text-foreground">Time</div>
-                  <div className="text-sm font-medium text-foreground">
-                    <div className="flex justify-end pr-6">Action</div>
+                  <div className="text-sm font-medium text-foreground text-right pr-4">
+                    Action
                   </div>
                 </div>
                 {scheduledAppointments.length === 0 ? (
@@ -183,8 +183,8 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals</div>
                   <div className="text-sm font-medium text-foreground">Time</div>
-                  <div className="text-sm font-medium text-foreground">
-                    <div className="flex justify-end pr-6">Action</div>
+                  <div className="text-sm font-medium text-foreground text-right pr-4">
+                    Action
                   </div>
                 </div>
                 {visitedAppointments.length === 0 ? (
