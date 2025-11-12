@@ -229,7 +229,7 @@ export default function DoctorsList() {
                 <div className="text-sm font-medium text-foreground">Locations</div>
                 <div className="text-sm font-medium text-foreground">Duration / Fee</div>
                 <div className="text-sm font-medium text-foreground">Status</div>
-                <div className="text-sm font-medium text-foreground"></div>
+                <div className="text-sm font-medium text-foreground">Action</div>
               </div>
 
               {doctors.map((doctor) => (
