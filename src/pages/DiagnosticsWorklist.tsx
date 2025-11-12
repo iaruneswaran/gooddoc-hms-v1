@@ -313,19 +313,6 @@ export default function DiagnosticsWorklist() {
                       Enter Results
                     </Button>
                   </Link>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>View Order</DropdownMenuItem>
-                      <DropdownMenuItem>Reassign</DropdownMenuItem>
-                      <DropdownMenuItem>Print Barcodes</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">Cancel</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
               </div>
             ))}
