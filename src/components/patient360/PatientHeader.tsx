@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ChevronDown, ChevronUp, ChevronLeft, FileText, Pill, TestTube, Printer } from "lucide-react";
+import { ChevronLeft, FileText, Pill, TestTube, Printer } from "lucide-react";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { Patient, Vitals } from "@/types/patient360";
 
@@ -14,7 +12,6 @@ interface PatientHeaderProps {
 
 export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
 
   const age = Math.floor(
     (new Date().getTime() - new Date(patient.dob).getTime()) / 
@@ -42,7 +39,6 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
               gdid={patient.gdid}
               age={age}
               gender={patient.sex}
-              onClick={() => setExpanded(!expanded)}
             />
             
             <div className="flex gap-2">
@@ -62,21 +58,6 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
                 <Printer className="w-4 h-4 mr-2" />
                 Print
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setExpanded(!expanded)}
-              >
-                {expanded ? (
-                  <>
-                    Less <ChevronUp className="w-4 h-4 ml-1" />
-                  </>
-                ) : (
-                  <>
-                    More Details <ChevronDown className="w-4 h-4 ml-1" />
-                  </>
-                )}
-              </Button>
             </div>
           </div>
 
@@ -94,73 +75,6 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
             ))}
           </div>
         </div>
-
-        {expanded && (
-          <Card className="p-4 bg-muted/50 mt-4">
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Contact Information
-                </h3>
-                <div className="space-y-2 text-sm">
-                  {patient.phone && (
-                    <div>
-                      <span className="text-muted-foreground">Phone: </span>
-                      <span className="text-foreground">{patient.phone}</span>
-                    </div>
-                  )}
-                  {patient.email && (
-                    <div>
-                      <span className="text-muted-foreground">Email: </span>
-                      <span className="text-foreground">{patient.email}</span>
-                    </div>
-                  )}
-                  {patient.whatsapp && (
-                    <div>
-                      <span className="text-muted-foreground">WhatsApp: </span>
-                      <span className="text-foreground">{patient.whatsapp}</span>
-                    </div>
-                  )}
-                  {patient.nationalId && (
-                    <div>
-                      <span className="text-muted-foreground">National ID: </span>
-                      <span className="text-foreground">{patient.nationalId}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Insurance & Address
-                </h3>
-                <div className="space-y-2 text-sm">
-                  {patient.insurance && (
-                    <div>
-                      <span className="text-muted-foreground">Insurance: </span>
-                      <span className="text-foreground">
-                        {patient.insurance.provider} • {patient.insurance.policyNumber}
-                      </span>
-                      {patient.insurance.validTo && (
-                        <span className="text-muted-foreground ml-2">
-                          (Valid till {new Date(patient.insurance.validTo).toLocaleDateString()})
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {patient.address && (
-                    <div>
-                      <span className="text-muted-foreground">Address: </span>
-                      <span className="text-foreground">
-                        {patient.address.street}, {patient.address.city}, {patient.address.state} {patient.address.pincode}, {patient.address.country}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </Card>
-        )}
       </div>
     </div>
   );

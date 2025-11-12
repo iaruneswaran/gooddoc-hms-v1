@@ -5,7 +5,7 @@ interface PatientChipProps {
   gdid: string;
   age: number;
   gender: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipProps) {
@@ -14,12 +14,8 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
     .map((n) => n[0])
     .join("");
 
-  return (
-    <button
-      onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent/50 transition-colors group"
-      title="View profile details"
-    >
+  const content = (
+    <>
       <Avatar className="h-12 w-12">
         <AvatarFallback className="bg-primary text-primary-foreground text-base">
           {initials}
@@ -33,6 +29,24 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
           GDID-{gdid} • {age} | {gender[0]}
         </p>
       </div>
+    </>
+  );
+
+  if (!onClick) {
+    return (
+      <div className="flex items-center gap-3 px-4 py-2 rounded-lg">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent/50 transition-colors group"
+      title="View profile details"
+    >
+      {content}
     </button>
   );
 }
