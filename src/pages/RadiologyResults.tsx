@@ -148,11 +148,14 @@ export default function RadiologyResults() {
         <AppHeader breadcrumbs={["Diagnostics", "Radiology Results"]} />
         
         <main className="p-8">
-          {/* Back Button */}
-          <Button variant="ghost" onClick={() => navigate("/diagnostics")} className="mb-4">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Diagnostics
-          </Button>
+          {/* Back Link */}
+          <button
+            onClick={() => navigate("/diagnostics")}
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="font-medium">Diagnostics</span>
+          </button>
 
           {/* Patient Card */}
           <Card className="mb-4">
