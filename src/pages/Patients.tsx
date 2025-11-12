@@ -250,11 +250,11 @@ export default function Patients() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="flex items-center justify-end">
+                        <div className="flex items-center justify-end px-4">
                           <Button
                             variant="default"
                             onClick={() => navigate(`/patient-insights/${patient.id}`)}
-                            className="h-9 w-32"
+                            className="h-9 w-full"
                           >
                             Patient Insight
                           </Button>

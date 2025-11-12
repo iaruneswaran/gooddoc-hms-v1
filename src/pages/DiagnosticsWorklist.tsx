@@ -307,9 +307,9 @@ export default function DiagnosticsWorklist() {
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-end">
-                  <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
-                    <Button variant="default" className="h-9 w-32">
+                <div className="flex items-center justify-end px-4">
+                  <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`} className="w-full">
+                    <Button variant="default" className="h-9 w-full">
                       Enter Results
                     </Button>
                   </Link>

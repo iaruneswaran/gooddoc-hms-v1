@@ -100,11 +100,11 @@ export default function OutpatientAppointments() {
         </div>
 
         {/* Action - Patient 360 */}
-        <div>
+        <div className="px-4">
           <Button
             variant="default"
             onClick={() => handlePatient360Click(appointment)}
-            className="h-9 w-32"
+            className="h-9 w-full"
           >
             Patient 360
           </Button>

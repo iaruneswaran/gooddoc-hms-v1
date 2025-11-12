@@ -160,11 +160,11 @@ export default function Inbox() {
                       </div>
 
                       {/* Action */}
-                      <div className="flex justify-end">
+                      <div className="flex justify-end px-4">
                         <Button
                           variant="default"
                           onClick={() => handleSchedule(appointment)}
-                          className="h-9 w-32"
+                          className="h-9 w-full"
                         >
                           Schedule
                         </Button>
