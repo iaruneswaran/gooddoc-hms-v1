@@ -1,4 +1,4 @@
-import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Users, UserCog, Network, FileBarChart, Settings, LogOut } from "lucide-react";
+import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Users, UserCog, Network, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -13,7 +13,6 @@ const menuItems = [
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
   { icon: Network, label: "Networks", href: "/networks" },
-  { icon: FileBarChart, label: "Reports", href: "/reports/transactions-billing" },
 ];
 
 export function AppSidebar() {
@@ -31,8 +30,7 @@ export function AppSidebar() {
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.href || 
-                          (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics")) ||
-                          (item.href === "/reports/transactions-billing" && location.pathname.startsWith("/reports"));
+                          (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics"));
           
           return (
             <Link

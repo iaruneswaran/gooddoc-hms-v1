@@ -14,6 +14,7 @@ import PatientTimeline from "./pages/PatientTimeline";
 import Payments from "./pages/Payments";
 import Discharge from "./pages/Discharge";
 import FrontOfficeDischarge from "./pages/FrontOfficeDischarge";
+import QuickDischarge from "./pages/QuickDischarge";
 import DoctorsList from "./pages/DoctorsList";
 import DoctorForm from "./pages/DoctorForm";
 import NotFound from "./pages/NotFound";
@@ -24,7 +25,6 @@ import OutpatientAppointments from "./pages/OutpatientAppointments";
 import Patient360 from "./pages/Patient360";
 import Patients from "./pages/Patients";
 import RecordVitals from "./pages/RecordVitals";
-import TransactionsBillingReports from "./pages/TransactionsBillingReports";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +46,7 @@ const App = () => (
           <Route path="/patient-insights/:patientId/payments" element={<Payments />} />
           <Route path="/patient-insights/:patientId/discharge" element={<Discharge />} />
           <Route path="/patient-insights/:patientId/discharge-fo" element={<FrontOfficeDischarge />} />
+          <Route path="/discharge/quick" element={<QuickDischarge />} />
           <Route path="/doctors" element={<DoctorsList />} />
           <Route path="/doctors/new" element={<DoctorForm />} />
           <Route path="/doctors/:id" element={<DoctorsList />} />
@@ -57,7 +58,6 @@ const App = () => (
           <Route path="/patients/:gdid/360" element={<Patient360 />} />
           <Route path="/patients" element={<Patients />} />
           <Route path="/vitals/new" element={<RecordVitals />} />
-          <Route path="/reports/transactions-billing" element={<TransactionsBillingReports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
