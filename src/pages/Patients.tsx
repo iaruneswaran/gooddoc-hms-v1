@@ -221,14 +221,14 @@ export default function Patients() {
                             href={`tel:${patient.phone}`}
                             className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
                           >
-                            <Phone className="w-3 h-3" />
+                            <Phone className="w-3.5 h-3.5" />
                             {patient.phone}
                           </a>
                           <a
                             href={`mailto:${patient.email}`}
-                            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
+                            className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
                           >
-                            <Mail className="w-3 h-3" />
+                            <Mail className="w-3.5 h-3.5" />
                             {patient.email}
                           </a>
                         </div>
@@ -250,7 +250,7 @@ export default function Patients() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="text-sm text-foreground">
+                        <div className="text-sm font-medium text-foreground">
                           {patient.doctor} — {patient.specialty}
                         </div>
                       </td>
