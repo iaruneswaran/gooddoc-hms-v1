@@ -115,7 +115,7 @@ const mockOrders: DiagnosticOrder[] = [
     },
     token: "R-023",
     scheduledTime: "09:45 AM",
-    status: "Submitted for Review",
+    status: "For Review",
     priority: "stat",
     tatMinutes: 60
   },
@@ -180,7 +180,7 @@ export default function DiagnosticsWorklist() {
     switch (status.toLowerCase()) {
       case "saved draft": return "bg-muted text-muted-foreground";
       case "pending": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "submitted for review": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+      case "for review": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
       case "completed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
       default: return "bg-muted text-muted-foreground";
     }
