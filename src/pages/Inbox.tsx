@@ -112,13 +112,13 @@ export default function Inbox() {
 
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[220px_1fr_140px_120px_200px_180px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-sm font-medium text-foreground">Patient Details</div>
+                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Appointment Summary</div>
                   <div className="text-sm font-medium text-foreground">Service Type</div>
                   <div className="text-sm font-medium text-foreground">Doctor</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
-                  <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">
                     <div className="flex justify-end pr-16">Action</div>
                   </div>
@@ -130,7 +130,7 @@ export default function Inbox() {
                   </div>
                 ) : (
                   filteredAppointments.map((appointment) => (
-                    <div key={appointment.id} className="grid grid-cols-[220px_1fr_140px_120px_200px_180px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                    <div key={appointment.id} className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                       {/* Patient Info */}
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -143,6 +143,18 @@ export default function Inbox() {
                           <div className="text-xs text-muted-foreground">
                             GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
                           </div>
+                        </div>
+                      </div>
+
+                      {/* Contact Details */}
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <Phone className="w-3.5 h-3.5" />
+                          <span>{appointment.phone}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <Mail className="w-3.5 h-3.5" />
+                          <span>{appointment.email}</span>
                         </div>
                       </div>
 
@@ -164,18 +176,6 @@ export default function Inbox() {
                       {/* Requested Date & Time */}
                       <div className="text-sm text-foreground">
                         {appointment.requestedDateTime || "—"}
-                      </div>
-
-                      {/* Contact Details */}
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Phone className="w-3.5 h-3.5" />
-                          <span>{appointment.phone}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Mail className="w-3.5 h-3.5" />
-                          <span>{appointment.email}</span>
-                        </div>
                       </div>
 
                       {/* Action */}
