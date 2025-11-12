@@ -186,7 +186,7 @@ export default function Patients() {
                     <th className="text-left p-4 text-sm font-medium text-foreground">
                       Care Team
                     </th>
-                    <th className="text-right p-4 text-sm font-medium text-foreground">
+                    <th className="text-right p-4 pr-8 text-sm font-medium text-foreground">
                       Action
                     </th>
                   </tr>
@@ -249,8 +249,8 @@ export default function Patients() {
                           {patient.doctor} — {patient.specialty}
                         </div>
                       </td>
-                      <td className="p-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="p-4">
+                        <div className="flex items-center justify-end">
                           <Button
                             variant="default"
                             onClick={() => navigate(`/patient-insights/${patient.id}`)}
@@ -258,25 +258,6 @@ export default function Patients() {
                           >
                             Patient Insight
                           </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreVertical className="w-4 h-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-card z-50">
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  navigate(`/vitals/new?patientId=${patient.id}&visitId=${patient.visitId}`)
-                                }
-                              >
-                                Record Vitals
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>Transfer</DropdownMenuItem>
-                              <DropdownMenuItem>Discharge Plan</DropdownMenuItem>
-                              <DropdownMenuItem>Add Note</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
                         </div>
                       </td>
                     </tr>
