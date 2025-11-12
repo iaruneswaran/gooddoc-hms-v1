@@ -291,11 +291,19 @@ export default function LaboratoryResults() {
             <div className="col-span-2 space-y-6">
               {/* Panel Selector */}
               <Tabs value={selectedPanel} onValueChange={setSelectedPanel}>
-                <TabsList>
-                  <TabsTrigger value="all">All Tests</TabsTrigger>
-                  <TabsTrigger value="cardiac">Cardiac Panel</TabsTrigger>
-                  <TabsTrigger value="cbc">CBC</TabsTrigger>
-                  <TabsTrigger value="cmp">CMP</TabsTrigger>
+                <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start mb-6">
+                  <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    All Tests
+                  </TabsTrigger>
+                  <TabsTrigger value="cardiac" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    Cardiac Panel
+                  </TabsTrigger>
+                  <TabsTrigger value="cbc" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    CBC
+                  </TabsTrigger>
+                  <TabsTrigger value="cmp" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    CMP
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
 
