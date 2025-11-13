@@ -14,7 +14,7 @@ export default function AddPricingItem() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Pricing Catalog", "Add Item"]} />
 
-        <main className="p-6 pb-32">
+        <main className="p-6 pb-6">
           {/* Back Button */}
           <button
             onClick={() => navigate("/pricing-catalog")}
