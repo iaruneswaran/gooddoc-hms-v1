@@ -298,26 +298,6 @@ export default function RecordVitals() {
                   </Command>
                 </PopoverContent>
               </Popover>
-
-              {selectedPatient && (
-                <div className="mt-4 flex items-center gap-4 p-4 bg-accent/50 rounded-lg">
-                  <Badge variant="secondary" className="text-xs">
-                    Active Visit: {selectedPatient.visitId}
-                  </Badge>
-                  <div className="text-xs text-muted-foreground">
-                    {selectedPatient.ward} • Room {selectedPatient.room} • Bed {selectedPatient.bed}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2 ml-auto"
-                    onClick={() => window.open(`/patient-insights/${selectedPatient.id}`, "_blank")}
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    View Patient Insight
-                  </Button>
-                </div>
-              )}
             </Card>
 
             {/* Form */}
