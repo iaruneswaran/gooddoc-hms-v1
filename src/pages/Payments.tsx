@@ -308,12 +308,6 @@ const Payments = () => {
                 <AdvanceCollectionForm onConfirmAdvance={handleConfirmAdvance} />
                 <AdvanceTransactionsTable
                   transactions={advanceTransactions}
-                  onAdjustToInvoice={(id) =>
-                    toast({ title: "Adjust advance", description: `Adjusting ${id}` })
-                  }
-                  onRefund={(id) =>
-                    toast({ title: "Refund initiated", description: `Refunding ${id}` })
-                  }
                 />
               </div>
             </TabsContent>

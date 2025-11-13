@@ -1,19 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Download, Printer } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { TransactionRow } from "@/types/billing";
 import { formatINR } from "@/utils/currency";
-import { FileText } from "lucide-react";
 
 interface AdvanceTransactionsTableProps {
   transactions: TransactionRow[];
-  onAdjustToInvoice?: (transactionId: string) => void;
-  onRefund?: (transactionId: string) => void;
 }
 
 export function AdvanceTransactionsTable({
   transactions,
-  onAdjustToInvoice,
-  onRefund,
 }: AdvanceTransactionsTableProps) {
   if (transactions.length === 0) {
     return (
@@ -65,27 +60,12 @@ export function AdvanceTransactionsTable({
                 </td>
                 <td className="p-4">
                   <div className="flex gap-2">
-                    {onAdjustToInvoice && txn.amount > 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onAdjustToInvoice(txn.id)}
-                      >
-                        Adjust
-                      </Button>
-                    )}
-                    {onRefund && txn.amount > 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onRefund(txn.id)}
-                      >
-                        Refund
-                      </Button>
-                    )}
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <FileText className="h-4 w-4" />
-                    </Button>
+                    <button className="text-muted-foreground hover:text-foreground">
+                      <Download className="h-4 w-4" />
+                    </button>
+                    <button className="text-muted-foreground hover:text-foreground">
+                      <Printer className="h-4 w-4" />
+                    </button>
                   </div>
                 </td>
               </tr>
