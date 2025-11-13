@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
-import { ProfileSlideOver } from "@/components/patient-insights/ProfileSlideOver";
 import { VisitsList } from "@/components/patient-insights/VisitsList";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
 import { Visit } from "@/components/patient-insights/VisitListItem";
@@ -15,7 +14,6 @@ import { Visit } from "@/components/patient-insights/VisitListItem";
 const PatientInsights = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("appointments");
 
   // Mock patient data
@@ -198,7 +196,6 @@ const PatientInsights = () => {
                     gdid={patient.gdid}
                     age={patient.age}
                     gender={patient.gender}
-                    onClick={() => setIsProfileOpen(true)}
                   />
                   {selectedVisit && (
                     <div className="flex items-center gap-2 px-3 h-9 bg-muted rounded-md">
@@ -272,21 +269,11 @@ const PatientInsights = () => {
               selectedVisit={selectedVisit}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              patient={patient}
             />
           </div>
         </main>
       </div>
-
-      {/* Profile Slide-over */}
-      <ProfileSlideOver
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        patient={patient}
-        onEdit={() => {
-          // Handle edit action
-          setIsProfileOpen(false);
-        }}
-      />
     </div>
   );
 };

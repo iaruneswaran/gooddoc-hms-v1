@@ -3,15 +3,34 @@ import { AppointmentsTab } from "./tabs/AppointmentsTab";
 import { PaymentsTab } from "./tabs/PaymentsTab";
 import { DocumentsTab } from "./tabs/DocumentsTab";
 import { InsuranceTab } from "./tabs/InsuranceTab";
+import { PatientDetailsTab } from "./tabs/PatientDetailsTab";
 import { Visit } from "./VisitListItem";
+
+interface Patient {
+  name: string;
+  gdid: string;
+  title: string;
+  age: number;
+  gender: string;
+  dob: string;
+  mobile: string;
+  email: string;
+  nationalId: string;
+  address: string;
+  pincode: string;
+  state: string;
+  city: string;
+  country: string;
+}
 
 interface VisitDetailsTabsProps {
   selectedVisit: Visit | null;
   activeTab: string;
   onTabChange: (tab: string) => void;
+  patient: Patient;
 }
 
-export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange }: VisitDetailsTabsProps) {
+export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patient }: VisitDetailsTabsProps) {
   return (
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
@@ -42,6 +61,12 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange }: Visi
             >
               Insurance
             </TabsTrigger>
+            <TabsTrigger
+              value="patient-details"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Patient Details
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -61,6 +86,10 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange }: Visi
 
           <TabsContent value="insurance" className="mt-0">
             <InsuranceTab selectedVisit={selectedVisit} />
+          </TabsContent>
+
+          <TabsContent value="patient-details" className="mt-0">
+            <PatientDetailsTab patient={patient} />
           </TabsContent>
         </div>
       </Tabs>
