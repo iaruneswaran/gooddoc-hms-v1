@@ -119,14 +119,13 @@ export default function DoctorForm() {
         
         <main className="p-6 max-w-4xl mx-auto">
           {/* Back Button */}
-          <Button
-            variant="ghost"
+          <button
             onClick={() => navigate("/doctors")}
-            className="mb-6"
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
+            <ChevronLeft className="w-4 h-4" />
             Back to Doctors
-          </Button>
+          </button>
 
           {/* Stepper */}
           <div className="mb-8 flex items-center justify-center gap-4">
