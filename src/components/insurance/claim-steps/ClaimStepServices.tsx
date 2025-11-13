@@ -162,69 +162,49 @@ export function ClaimStepServices({ data, onChange, errors }: ClaimStepServicesP
       {/* Added Services */}
       {services.length > 0 && (
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Selected Services ({services.length})</h2>
+          <h2 className="text-lg font-semibold mb-4">Services & Procedures</h2>
           
-          <div className="space-y-3">
+          <div className="space-y-2">
             {services.map((service: any, index: number) => (
-              <div key={service.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-medium">{service.description}</p>
-                      <Badge variant="secondary" className="text-xs">
-                        {service.type}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{service.code}</p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
+              <div key={service.id} className="flex justify-between items-center gap-3 py-2 group">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{service.description}</p>
+                  <button
                     onClick={() => removeService(index)}
+                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
                   >
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
                 
-                <div className="grid grid-cols-4 gap-3">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Units</Label>
+                <div className="flex items-center gap-3 shrink-0">
+                  {/* Units editor */}
+                  <div className="flex items-center gap-1.5">
                     <Input
                       type="number"
                       value={service.units}
                       onChange={(e) => updateService(index, "units", Number(e.target.value))}
-                      className="h-9 mt-1"
+                      className="h-7 w-14 text-xs text-center"
                       min="1"
                     />
+                    <span className="text-xs text-muted-foreground">×</span>
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Unit Cost</Label>
+                  
+                  {/* Price editor */}
+                  <div className="flex items-center gap-1">
                     <Input
                       type="number"
-                      value={service.unitCost / 100}
-                      onChange={(e) => updateService(index, "unitCost", Number(e.target.value) * 100)}
-                      className="h-9 mt-1"
+                      value={(service.unitCost / 100).toFixed(2)}
+                      onChange={(e) => updateService(index, "unitCost", Math.round(Number(e.target.value) * 100))}
+                      className="h-7 w-24 text-sm text-right font-semibold"
                       min="0"
                       step="0.01"
                     />
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Discount</Label>
-                    <Input
-                      type="number"
-                      value={service.discount / 100}
-                      onChange={(e) => updateService(index, "discount", Number(e.target.value) * 100)}
-                      className="h-9 mt-1"
-                      min="0"
-                      step="0.01"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Total</Label>
-                    <div className="h-9 mt-1 flex items-center font-semibold text-lg">
-                      {formatINR(service.total)}
-                    </div>
+                  
+                  {/* Total */}
+                  <div className="w-24 text-right">
+                    <p className="text-sm font-semibold">{formatINR(service.total)}</p>
                   </div>
                 </div>
               </div>
