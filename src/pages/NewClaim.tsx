@@ -31,6 +31,7 @@ const NewClaim = () => {
   const [claimData, setClaimData] = useState<any>({});
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [hasAttemptedNext, setHasAttemptedNext] = useState(false);
 
   // Autosave every 5 seconds
   useEffect(() => {
@@ -48,12 +49,14 @@ const NewClaim = () => {
   };
 
   const handleNext = () => {
+    setHasAttemptedNext(true);
     const errors = validateCurrentStep();
     if (errors.length > 0) {
       setValidationErrors(errors);
       return;
     }
     setValidationErrors([]);
+    setHasAttemptedNext(false);
     if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1);
       handleSaveDraft();
@@ -61,6 +64,8 @@ const NewClaim = () => {
   };
 
   const handleBack = () => {
+    setValidationErrors([]);
+    setHasAttemptedNext(false);
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
@@ -200,7 +205,7 @@ const NewClaim = () => {
           </div>
 
           {/* Validation Errors */}
-          {validationErrors.length > 0 && (
+          {hasAttemptedNext && validationErrors.length > 0 && (
             <Card className="p-4 mb-6 border-destructive bg-destructive/10">
               <div className="flex items-start gap-3">
                 <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
