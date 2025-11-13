@@ -72,6 +72,7 @@ export interface PrescriptionItem {
   dosage?: string;
   route?: string;
   frequency?: string;
+  timing?: string;
   durationDays?: number;
   notes?: string;
 }

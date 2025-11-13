@@ -17,13 +17,13 @@ interface PrescriptionsStepProps {
 export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStepProps) {
   const { toast } = useToast();
   const [medications, setMedications] = useState<Partial<PrescriptionItem>[]>([
-    { id: "1", name: "", frequency: "OD", durationDays: 7 }
+    { id: "1", name: "", frequency: "OD", durationDays: 7, timing: "Morning & Night" }
   ]);
 
   const addMedication = () => {
     setMedications([
       ...medications,
-      { id: Date.now().toString(), name: "", frequency: "OD", durationDays: 7 }
+      { id: Date.now().toString(), name: "", frequency: "OD", durationDays: 7, timing: "Morning & Night" }
     ]);
   };
 
@@ -123,7 +123,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-1">
                   <Select
                     value={med.dosage}
                     onValueChange={(value) => updateMedication(med.id!, "dosage", value)}
@@ -132,17 +132,38 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                       <SelectValue placeholder="Dosage" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1/2 tablet">1/2 tablet</SelectItem>
-                      <SelectItem value="1 tablet">1 tablet</SelectItem>
-                      <SelectItem value="2 tablets">2 tablets</SelectItem>
-                      <SelectItem value="3 tablets">3 tablets</SelectItem>
-                      <SelectItem value="1 capsule">1 capsule</SelectItem>
-                      <SelectItem value="2 capsules">2 capsules</SelectItem>
+                      <SelectItem value="1/2 tablet">1/2</SelectItem>
+                      <SelectItem value="1 tablet">1</SelectItem>
+                      <SelectItem value="2 tablets">2</SelectItem>
+                      <SelectItem value="3 tablets">3</SelectItem>
+                      <SelectItem value="1 capsule">1 cap</SelectItem>
+                      <SelectItem value="2 capsules">2 cap</SelectItem>
                       <SelectItem value="5ml">5ml</SelectItem>
                       <SelectItem value="10ml">10ml</SelectItem>
                       <SelectItem value="15ml">15ml</SelectItem>
                       <SelectItem value="1 puff">1 puff</SelectItem>
-                      <SelectItem value="2 puffs">2 puffs</SelectItem>
+                      <SelectItem value="2 puffs">2 puff</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Select
+                    value={med.timing}
+                    onValueChange={(value) => updateMedication(med.id!, "timing", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Timing" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Morning">Morning</SelectItem>
+                      <SelectItem value="Afternoon">Afternoon</SelectItem>
+                      <SelectItem value="Evening">Evening</SelectItem>
+                      <SelectItem value="Night">Night</SelectItem>
+                      <SelectItem value="Morning & Night">Morning & Night</SelectItem>
+                      <SelectItem value="Morning, Afternoon & Night">Morning, Afternoon & Night</SelectItem>
+                      <SelectItem value="Before Meals">Before Meals</SelectItem>
+                      <SelectItem value="After Meals">After Meals</SelectItem>
+                      <SelectItem value="With Meals">With Meals</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -164,7 +185,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-1">
                   <Select
                     value={med.durationDays?.toString()}
                     onValueChange={(value) =>
@@ -175,11 +196,11 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="3">3 Days</SelectItem>
-                      <SelectItem value="5">5 Days</SelectItem>
-                      <SelectItem value="7">7 Days</SelectItem>
-                      <SelectItem value="14">14 Days</SelectItem>
-                      <SelectItem value="30">30 Days</SelectItem>
+                      <SelectItem value="3">3d</SelectItem>
+                      <SelectItem value="5">5d</SelectItem>
+                      <SelectItem value="7">7d</SelectItem>
+                      <SelectItem value="14">14d</SelectItem>
+                      <SelectItem value="30">30d</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -269,6 +290,12 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                       <span className="text-muted-foreground">Dosage:</span>
                       <span className="text-foreground">{med.dosage}</span>
                     </div>
+                    {med.timing && (
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Timing:</span>
+                        <span className="text-foreground">{med.timing}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Frequency:</span>
                       <span className="text-foreground">{med.frequency}</span>
