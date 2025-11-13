@@ -163,8 +163,8 @@ const PricingCatalog = () => {
           </div>
 
           {/* Filters Bar */}
-          <Card className="p-4 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               {/* Search */}
               <div className="md:col-span-2 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -213,43 +213,26 @@ const PricingCatalog = () => {
               </Select>
             </div>
 
-            {/* Active Filters & Sort */}
-            <div className="flex items-center justify-between mt-4 pt-4 border-t">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>{filteredItems.length} items</span>
-                {selectedItems.length > 0 && (
-                  <>
-                    <span>•</span>
-                    <span className="text-primary font-medium">
-                      {selectedItems.length} selected
-                    </span>
-                    {selectedItems.length > 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-7 text-xs ml-2"
-                      >
-                        Bulk Update
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
-
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[180px] h-8">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">Name (A-Z)</SelectItem>
-                  <SelectItem value="category">Category</SelectItem>
-                  <SelectItem value="price-asc">Price (Low to High)</SelectItem>
-                  <SelectItem value="price-desc">Price (High to Low)</SelectItem>
-                  <SelectItem value="updated">Recently Updated</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Active Filters */}
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>{filteredItems.length} items</span>
+              {selectedItems.length > 0 && (
+                <>
+                  <span>•</span>
+                  <span className="text-primary font-medium">
+                    {selectedItems.length} selected
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 text-xs ml-2"
+                  >
+                    Bulk Update
+                  </Button>
+                </>
+              )}
             </div>
-          </Card>
+          </div>
 
           {/* Table */}
           {filteredItems.length === 0 ? (
