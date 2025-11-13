@@ -175,7 +175,7 @@ export default function AskGoodDoc() {
               )}
 
               {/* Refresh Prompts */}
-              <div className="flex justify-center">
+              <div className="flex justify-center items-center my-4">
                 <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                   <RefreshCw className="h-4 w-4" />
                   <span>Refresh Prompts</span>
