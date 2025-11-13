@@ -119,9 +119,7 @@ export default function Inbox() {
                   <div className="text-sm font-medium text-foreground">Service Type</div>
                   <div className="text-sm font-medium text-foreground">Doctor</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
-                  <div className="text-sm font-medium text-foreground">
-                    <div className="flex justify-end pr-16">Action</div>
-                  </div>
+                  <div className="text-sm font-medium text-foreground text-right">Action</div>
                 </div>
 
                 {filteredAppointments.length === 0 ? (
@@ -179,11 +177,11 @@ export default function Inbox() {
                       </div>
 
                       {/* Action */}
-                      <div className="flex justify-end px-4">
+                      <div className="flex justify-end">
                         <Button
                           variant="default"
                           onClick={() => handleSchedule(appointment)}
-                          className="h-9 w-full"
+                          className="h-9"
                         >
                           Schedule
                         </Button>
