@@ -253,37 +253,37 @@ const PricingCatalog = () => {
                 <table className="w-full">
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
-                      <th className="text-left p-4 w-12">
+                      <th className="text-left p-3 w-12">
                         <Checkbox
                           checked={selectedItems.length === filteredItems.length}
                           onCheckedChange={toggleAll}
                         />
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Item Name
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Category
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Department
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Code
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Unit
                       </th>
-                      <th className="text-right text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-right text-sm font-medium text-muted-foreground p-3">
                         Base Price
                       </th>
-                      <th className="text-right text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-right text-sm font-medium text-muted-foreground p-3">
                         Net Price
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Status
                       </th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">
+                      <th className="text-left text-sm font-medium text-muted-foreground p-3">
                         Actions
                       </th>
                     </tr>
@@ -291,25 +291,25 @@ const PricingCatalog = () => {
                   <tbody>
                     {filteredItems.map((item) => (
                       <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
-                        <td className="p-4">
+                        <td className="p-3">
                           <Checkbox
                             checked={selectedItems.includes(item.id)}
                             onCheckedChange={() => toggleItem(item.id)}
                           />
                         </td>
-                        <td className="p-4">
+                        <td className="p-3">
                           <div className="font-medium text-sm">{item.name}</div>
                           <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                             {item.description}
                           </div>
                         </td>
-                        <td className="p-4">
+                        <td className="p-3">
                           <Badge variant="secondary" className="text-xs">
                             {item.category}
                           </Badge>
                         </td>
-                        <td className="p-4 text-sm">{item.department}</td>
-                        <td className="p-4">
+                        <td className="p-3 text-sm">{item.department}</td>
+                        <td className="p-3">
                           <div className="text-xs font-mono">{item.codes.internal}</div>
                           {item.codes.cpt && (
                             <div className="text-xs text-muted-foreground">
@@ -317,14 +317,14 @@ const PricingCatalog = () => {
                             </div>
                           )}
                         </td>
-                        <td className="p-4 text-sm capitalize">{item.unit}</td>
-                        <td className="p-4 text-right text-sm font-medium">
+                        <td className="p-3 text-sm capitalize">{item.unit}</td>
+                        <td className="p-3 text-right text-sm font-medium">
                           {formatINR(item.pricing.basePrice)}
                         </td>
-                        <td className="p-4 text-right text-sm font-semibold">
+                        <td className="p-3 text-right text-sm font-semibold">
                           {formatINR(item.pricing.netPrice)}
                         </td>
-                        <td className="p-4">
+                        <td className="p-3">
                           <Badge variant="outline" className={getStatusColor(item.status)}>
                             {item.status}
                           </Badge>
