@@ -189,8 +189,8 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
 
         <div className="min-h-[400px]">{renderStep()}</div>
 
-        {/* Sticky Footer */}
-        <div className="sticky bottom-0 left-0 right-0 p-4 shadow-lg z-10 mt-8">
+        {/* Footer */}
+        <div className="p-4 z-10 mt-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {currentStep > 1 && (
