@@ -134,30 +134,29 @@ const PricingCatalog = () => {
 
         <main className="p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
-
-            <Card className="p-3">
-              <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Upload className="h-4 w-4" />
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
+              <div className="flex gap-3">
+                <Button variant="outline">
+                  <Upload className="w-4 h-4 mr-2" />
                   Import
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="h-4 w-4" />
+                <Button variant="outline">
+                  <Download className="w-4 h-4 mr-2" />
                   Export
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Printer className="h-4 w-4" />
+                <Button variant="outline">
+                  <Printer className="w-4 h-4 mr-2" />
                   Print
                 </Button>
-                <Button size="sm" className="gap-2">
-                  <Plus className="h-4 w-4" />
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
                   Add Item
                 </Button>
               </div>
-            </Card>
-          </div>
+            </div>
+          </Card>
 
           {/* Filters Bar */}
           <div className="mb-6">
