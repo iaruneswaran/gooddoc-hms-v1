@@ -191,7 +191,7 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
 
         {/* Sticky Footer */}
         <div className="sticky bottom-0 left-0 right-0 bg-background border-t border-border p-4 shadow-lg z-10 mt-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between max-w-5xl mx-auto">
             <div className="flex items-center gap-3">
               {currentStep > 1 && (
                 <Button
