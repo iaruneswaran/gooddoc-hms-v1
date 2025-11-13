@@ -152,51 +152,49 @@ export function PaymentSummaryPanel({
       </div>
 
       {/* Advance Section */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium text-foreground">Advance Amount</span>
-          <span className="text-lg font-semibold text-primary">{formatINR(advanceBalance)}</span>
+          <span className="text-xl font-semibold text-primary">{formatINR(advanceBalance)}</span>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Switch
             id="use-advance"
             checked={useAdvance}
             onCheckedChange={handleUseAdvanceToggle}
           />
-          <Label htmlFor="use-advance" className="text-sm cursor-pointer">
+          <Label htmlFor="use-advance" className="text-sm font-normal cursor-pointer text-foreground">
             Use advance amount for this bill
           </Label>
         </div>
         
         {useAdvance && (
-          <div className="space-y-3 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-md">
-            <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-              <div className="h-5 w-5 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center">
-                <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          <div className="space-y-3 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center flex-shrink-0">
+                <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span className="font-medium text-sm">Advance Amount Used!</span>
+              <span className="font-medium text-sm text-green-700 dark:text-green-400">Advance Amount Used!</span>
             </div>
             
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Current bill ({formatINR(subtotal)}) Used from advance</span>
-              </div>
-              
-              <div className="flex justify-between pt-2 border-t border-green-200 dark:border-green-800">
-                <span className="font-medium text-foreground">Remaining Advance Balance</span>
-                <span className="font-semibold text-foreground">{formatINR(advanceBalance - appliedAdvance)}</span>
-              </div>
+            <p className="text-sm text-muted-foreground">
+              Current bill ({formatINR(subtotal)}) Used from advance
+            </p>
+            
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-sm font-medium text-foreground">Remaining Advance Balance</span>
+              <span className="text-base font-semibold text-foreground">{formatINR(advanceBalance - appliedAdvance)}</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Net Payable */}
+      {/* Payable Amount */}
       <div className="flex justify-between items-center py-3 border-t border-b">
-        <span className="font-semibold">Payable amount</span>
+        <span className="font-semibold text-foreground">Payable amount</span>
         <span className="text-xl font-bold text-primary">{formatINR(netPayable)}</span>
       </div>
 
