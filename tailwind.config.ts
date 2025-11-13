@@ -57,6 +57,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "ask-orange": "hsl(var(--ask-good-doc-orange))",
+        "ask-red": "hsl(var(--ask-good-doc-red))",
+      },
+      backgroundImage: {
+        "ask-gradient": "var(--ask-good-doc-gradient)",
       },
       borderRadius: {
         lg: "var(--radius)",
