@@ -411,7 +411,7 @@ const Payments = () => {
             {/* Insurance Tab */}
             <TabsContent value="insurance" className="mt-6">
               <Card className="p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <ClaimFilters
                       onSearchChange={setSearchQuery}
