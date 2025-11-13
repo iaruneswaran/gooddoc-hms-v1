@@ -43,128 +43,104 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
   };
 
   return (
-    <Card className="p-8 sticky top-24 border-2">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-bold text-foreground mb-1">Vitals Overview</h3>
-          <p className="text-sm text-muted-foreground">
-            Last Update: {new Date(vitals.recordedAt).toLocaleDateString("en-IN", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            })}
-          </p>
-        </div>
+    <Card className="p-6 sticky top-24">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-foreground">Vitals Overview</h3>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setUnit(unit === "metric" ? "us" : "metric")}
         >
-          <Badge variant="secondary" className="text-xs font-medium">
+          <Badge variant="secondary" className="text-xs">
             {unit === "metric" ? "Metric" : "US"}
           </Badge>
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <p className="text-xs text-muted-foreground mb-4">
+        Last Update: {new Date(vitals.recordedAt).toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        })}
+      </p>
+
+      <div className="space-y-4">
         {vitals.bpSystolic && vitals.bpDiastolic && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Blood Pressure
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Blood Pressure</p>
+            <p className="text-lg font-semibold text-foreground">
+              {vitals.bpSystolic}/{vitals.bpDiastolic}{" "}
+              <span className="text-xs font-normal text-muted-foreground">mmHg</span>
             </p>
-            <p className="text-2xl font-bold text-foreground">
-              {vitals.bpSystolic}/{vitals.bpDiastolic}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">mmHg</p>
           </div>
         )}
 
         {vitals.spo2 && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              SpO₂
-            </p>
-            <p className="text-2xl font-bold text-foreground">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">SpO₂</p>
+            <p className="text-lg font-semibold text-foreground">
               {vitals.spo2}
+              <span className="text-xs font-normal text-muted-foreground">%</span>
             </p>
-            <p className="text-xs text-muted-foreground mt-1">%</p>
           </div>
         )}
 
         {vitals.heartRate && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Heart Rate
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Heart Rate</p>
+            <p className="text-lg font-semibold text-foreground">
+              {vitals.heartRate}{" "}
+              <span className="text-xs font-normal text-muted-foreground">bpm</span>
             </p>
-            <p className="text-2xl font-bold text-foreground">
-              {vitals.heartRate}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">bpm</p>
           </div>
         )}
 
         {vitals.respiratoryRate && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Respiratory Rate
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Respiratory Rate</p>
+            <p className="text-lg font-semibold text-foreground">
+              {vitals.respiratoryRate}{" "}
+              <span className="text-xs font-normal text-muted-foreground">bpm</span>
             </p>
-            <p className="text-2xl font-bold text-foreground">
-              {vitals.respiratoryRate}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">bpm</p>
           </div>
         )}
 
         {vitals.temperatureC && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Temperature
-            </p>
-            <p className="text-2xl font-bold text-foreground">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Temperature</p>
+            <p className="text-lg font-semibold text-foreground">
               {unit === "metric"
-                ? vitals.temperatureC
-                : convertTemp(vitals.temperatureC).toFixed(1)}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {unit === "metric" ? "°C" : "°F"}
+                ? `${vitals.temperatureC}°C`
+                : `${convertTemp(vitals.temperatureC).toFixed(1)}°F`}
             </p>
           </div>
         )}
 
         {vitals.weightKg && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Weight
-            </p>
-            <p className="text-2xl font-bold text-foreground">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Weight</p>
+            <p className="text-lg font-semibold text-foreground">
               {unit === "metric"
-                ? vitals.weightKg
-                : convertWeight(vitals.weightKg).toFixed(0)}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {unit === "metric" ? "kg" : "lb"}
+                ? `${vitals.weightKg} kg`
+                : `${convertWeight(vitals.weightKg).toFixed(0)} lb`}
             </p>
           </div>
         )}
 
         {vitals.heightCm && (
-          <div className="border-l-4 border-foreground/10 pl-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Height
-            </p>
-            <p className="text-2xl font-bold text-foreground">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Height</p>
+            <p className="text-lg font-semibold text-foreground">
               {unit === "metric"
-                ? vitals.heightCm
+                ? `${vitals.heightCm} cm`
                 : convertHeight(vitals.heightCm)}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {unit === "metric" ? "cm" : ""}
             </p>
           </div>
         )}
       </div>
 
-      <Button variant="outline" size="default" className="w-full">
+      <Button variant="outline" size="sm" className="w-full mt-6">
         <Plus className="w-4 h-4 mr-2" />
         Add Vitals
       </Button>
