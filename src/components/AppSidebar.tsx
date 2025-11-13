@@ -1,11 +1,9 @@
-import { MessageCircle, Mail, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag } from "lucide-react";
+import { Mail, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
-import askGoodDocIcon from "@/assets/ask-gooddoc-icon.svg";
 
 const menuItems = [
-  { icon: MessageCircle, label: "Ask Good Doc", href: "/ask", highlight: true },
   { icon: Mail, label: "Inbox", href: "/inbox" },
   { icon: Calendar, label: "Appointments", href: "/" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
@@ -38,16 +36,11 @@ export function AppSidebar() {
               to={item.href}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm mb-1 transition-colors",
-                item.highlight && "mb-4",
                 isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
                 !isActive && "hover:bg-sidebar-accent/50"
               )}
             >
-              {item.highlight ? (
-                <img src={askGoodDocIcon} alt="" className="w-5 h-5" />
-              ) : (
-                <Icon className="w-4 h-4" />
-              )}
+              <Icon className="w-4 h-4" />
               <span>{item.label}</span>
             </Link>
           );

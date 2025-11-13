@@ -27,7 +27,6 @@ import Insurance from "./pages/Insurance";
 import NewClaim from "./pages/NewClaim";
 import PricingCatalog from "./pages/PricingCatalog";
 import AddPricingItem from "./pages/AddPricingItem";
-import AskGoodDoc from "./pages/AskGoodDoc";
 
 const queryClient = new QueryClient();
 
@@ -39,7 +38,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/ask" element={<AskGoodDoc />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/new-appointment" element={<NewAppointment />} />
           <Route path="/registration" element={<Registration />} />
