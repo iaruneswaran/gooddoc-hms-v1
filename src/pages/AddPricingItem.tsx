@@ -26,10 +26,7 @@ export default function AddPricingItem() {
 
           {/* Page Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold text-foreground">Add New Pricing Item</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Complete all required fields to add a new item to the pricing catalog
-            </p>
+            <h1 className="text-lg font-semibold text-foreground">Add New Pricing Item</h1>
           </div>
 
           {/* Form */}
