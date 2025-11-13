@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Plus, User, Paperclip, Mic, Search, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Plus, User, Paperclip, Mic, Send, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGoodDocChat } from "@/hooks/useGoodDocChat";
 
 export default function AskGoodDoc() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient] = useState("GD-10321");
+  const { messages, isLoading, sendMessage, clearChat } = useGoodDocChat(selectedPatient);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const recentChats = [
     "Summary of Patient GD-10014",
@@ -45,74 +55,137 @@ export default function AskGoodDoc() {
           {/* Main Content Area */}
           <main className="flex-1 p-8">
             <div className="max-w-4xl mx-auto">
-              {/* Welcome Message */}
-              <div className="text-center mb-8">
-                <h1 className="text-4xl font-normal bg-ask-gradient bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
-                  <Sparkles className="h-8 w-8 text-ask-orange" />
-                  hello Dr. Neha
-                </h1>
-                <p className="text-muted-foreground">
-                  How can I help you with today's care plan?
-                </p>
-              </div>
+              {/* Welcome Message or Chat History */}
+              {messages.length === 0 ? (
+                <div className="text-center mb-8">
+                  <h1 className="text-4xl font-normal bg-ask-gradient bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
+                    <Sparkles className="h-8 w-8 text-ask-orange" />
+                    hello Dr. Neha
+                  </h1>
+                  <p className="text-muted-foreground">
+                    How can I help you with today's care plan?
+                  </p>
+                </div>
+              ) : (
+                <ScrollArea className="h-[calc(100vh-400px)] mb-8">
+                  <div className="space-y-4">
+                    {messages.map((message, index) => (
+                      <div
+                        key={index}
+                        className={cn(
+                          "flex gap-3",
+                          message.role === "user" ? "justify-end" : "justify-start"
+                        )}
+                      >
+                        {message.role === "assistant" && (
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-ask-orange to-ask-red flex items-center justify-center flex-shrink-0">
+                            <Sparkles className="h-4 w-4 text-white" />
+                          </div>
+                        )}
+                        <Card
+                          className={cn(
+                            "p-4 max-w-[80%]",
+                            message.role === "user"
+                              ? "bg-ask-gradient text-white"
+                              : "bg-card"
+                          )}
+                        >
+                          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                        </Card>
+                        {message.role === "user" && (
+                          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                            <User className="h-4 w-4" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
+                </ScrollArea>
+              )}
 
-              {/* Search Input */}
+              {/* Input Area */}
               <Card className="p-6 mb-8 shadow-sm">
-                <div className="space-y-4">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (searchQuery.trim() && !isLoading) {
+                      sendMessage(searchQuery);
+                      setSearchQuery("");
+                    }
+                  }}
+                  className="space-y-4"
+                >
                   <Input
                     placeholder="Ask anything about today's care plan..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    disabled={isLoading}
                     className="text-base border-0 focus-visible:ring-0 shadow-none px-0"
                   />
                   
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="flex items-center gap-4">
-                      <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <button
+                        type="button"
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         <User className="h-4 w-4" />
                         <span>Patient: {selectedPatient}</span>
                       </button>
                       
-                      <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <button
+                        type="button"
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         <Paperclip className="h-4 w-4" />
                         <span>Attach File</span>
                       </button>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button type="button" variant="ghost" size="icon">
                         <Mic className="h-4 w-4" />
                       </Button>
                       
-                      <Button className="bg-ask-gradient hover:opacity-90 text-white">
-                        <Search className="h-4 w-4 mr-2" />
-                        Search
+                      <Button
+                        type="submit"
+                        disabled={!searchQuery.trim() || isLoading}
+                        className="bg-ask-gradient hover:opacity-90 text-white"
+                      >
+                        <Send className="h-4 w-4 mr-2" />
+                        {isLoading ? "Sending..." : "Send"}
                       </Button>
                     </div>
                   </div>
-                </div>
+                </form>
               </Card>
 
-              {/* Suggestion Prompts */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                {suggestionPrompts.map((prompt, index) => (
-                  <Card
-                    key={index}
-                    className="p-4 cursor-pointer hover:shadow-md transition-all hover-scale border-border"
-                  >
-                    <div className="flex flex-col gap-3">
-                      <p className="text-sm text-foreground leading-relaxed">
-                        {prompt.text}
-                      </p>
-                      <div className="flex justify-end">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-ask-orange to-ask-red flex items-center justify-center">
-                          <prompt.icon className="h-4 w-4 text-white" />
+              {/* Suggestion Prompts - Only show when no messages */}
+              {messages.length === 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {suggestionPrompts.map((prompt, index) => (
+                    <Card
+                      key={index}
+                      onClick={() => {
+                        sendMessage(prompt.text);
+                      }}
+                      className="p-4 cursor-pointer hover:shadow-md transition-all hover-scale border-border"
+                    >
+                      <div className="flex flex-col gap-3">
+                        <p className="text-sm text-foreground leading-relaxed">
+                          {prompt.text}
+                        </p>
+                        <div className="flex justify-end">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-ask-orange to-ask-red flex items-center justify-center">
+                            <prompt.icon className="h-4 w-4 text-white" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
 
               {/* Refresh Prompts */}
               <div className="flex justify-end">
@@ -127,7 +200,10 @@ export default function AskGoodDoc() {
           {/* Right Sidebar */}
           <aside className="w-80 border-l bg-background p-6 space-y-6">
             {/* Start New Chat */}
-            <Button className="w-full bg-ask-gradient hover:opacity-90 text-white">
+            <Button
+              onClick={clearChat}
+              className="w-full bg-ask-gradient hover:opacity-90 text-white"
+            >
               <Plus className="h-4 w-4 mr-2" />
               Start New Chat
             </Button>
