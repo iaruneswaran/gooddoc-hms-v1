@@ -220,13 +220,11 @@ const NewClaim = () => {
           )}
 
           {/* Step Content */}
-          <div className="max-w-5xl mx-auto">
-            <CurrentStepComponent
-              data={claimData}
-              onChange={setClaimData}
-              errors={validationErrors}
-            />
-          </div>
+          <CurrentStepComponent
+            data={claimData}
+            onChange={setClaimData}
+            errors={validationErrors}
+          />
         </main>
 
         {/* Sticky Footer */}
