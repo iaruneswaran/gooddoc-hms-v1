@@ -94,14 +94,17 @@ export default function OutpatientAppointments() {
           )}
         </div>
 
-        {/* Vitals */}
+        {/* Vitals Status */}
         <div>
-          {appointment.vitalsPreview && (
-            <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
-              <span>Temp {appointment.vitalsPreview.temp}°C | HR {appointment.vitalsPreview.hr} | RR {appointment.vitalsPreview.rr} | SpO₂ {appointment.vitalsPreview.spo2}%</span>
-              <span>BP {appointment.vitalsPreview.bp} mmHg | BG {appointment.vitalsPreview.bg} mg/dL</span>
-            </div>
-          )}
+          <Badge 
+            className={
+              appointment.vitalsPreview 
+                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+            }
+          >
+            {appointment.vitalsPreview ? "Completed" : "Pending"}
+          </Badge>
         </div>
 
         {/* Token & Time */}
@@ -170,7 +173,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
-                  <div className="text-sm font-medium text-foreground">Vitals</div>
+                  <div className="text-sm font-medium text-foreground">Vitals Status</div>
                   <div className="text-sm font-medium text-foreground">Token & Time</div>
                   <div className="text-sm font-medium text-foreground pl-4">
                     Action
@@ -193,7 +196,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Consultation Type</div>
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
-                  <div className="text-sm font-medium text-foreground">Vitals</div>
+                  <div className="text-sm font-medium text-foreground">Vitals Status</div>
                   <div className="text-sm font-medium text-foreground">Token & Time</div>
                   <div className="text-sm font-medium text-foreground pl-4">
                     Action
