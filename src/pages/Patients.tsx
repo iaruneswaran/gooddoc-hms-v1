@@ -128,6 +128,10 @@ export default function Patients() {
                   <Download className="w-4 h-4" />
                   Export
                 </Button>
+                <Button variant="outline" onClick={() => navigate("/registration")} className="gap-2">
+                  <User className="w-4 h-4" />
+                  New Patient
+                </Button>
                 <Button onClick={() => navigate("/vitals/new")} className="gap-2">
                   Record Vitals
                 </Button>
