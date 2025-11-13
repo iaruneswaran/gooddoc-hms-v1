@@ -26,6 +26,7 @@ import RecordVitals from "./pages/RecordVitals";
 import Insurance from "./pages/Insurance";
 import NewClaim from "./pages/NewClaim";
 import PricingCatalog from "./pages/PricingCatalog";
+import AddPricingItem from "./pages/AddPricingItem";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/patient-insights/:patientId/insurance" element={<Insurance />} />
           <Route path="/insurance/claims/new" element={<NewClaim />} />
           <Route path="/pricing-catalog" element={<PricingCatalog />} />
+          <Route path="/pricing-catalog/new" element={<AddPricingItem />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

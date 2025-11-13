@@ -150,7 +150,7 @@ const PricingCatalog = () => {
                   <Printer className="w-4 h-4 mr-2" />
                   Print
                 </Button>
-                <Button>
+                <Button onClick={() => navigate("/pricing-catalog/new")}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Item
                 </Button>
@@ -242,7 +242,7 @@ const PricingCatalog = () => {
                     : "Get started by adding your first pricing item"}
                 </p>
                 {!searchQuery && categoryFilter === "All" && statusFilter === "All" && (
-                  <Button className="gap-2">
+                  <Button className="gap-2" onClick={() => navigate("/pricing-catalog/new")}>
                     <Plus className="h-4 w-4" />
                     Add First Item
                   </Button>
