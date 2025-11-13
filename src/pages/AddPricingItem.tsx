@@ -15,22 +15,22 @@ export default function AddPricingItem() {
         <AppHeader breadcrumbs={["Pricing Catalog", "Add Item"]} />
 
         <main className="p-6 pb-6">
-          {/* Back Button */}
-          <button
-            onClick={() => navigate("/pricing-catalog")}
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span className="font-semibold">Back to Catalog</span>
-          </button>
-
-          {/* Page Title */}
-          <div className="mb-8">
-            <h1 className="text-lg font-semibold text-foreground">Add New Pricing Item</h1>
-          </div>
-
-          {/* Form */}
           <div className="max-w-5xl mx-auto">
+            {/* Back Button */}
+            <button
+              onClick={() => navigate("/pricing-catalog")}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="font-semibold">Back to Catalog</span>
+            </button>
+
+            {/* Page Title */}
+            <div className="mb-8">
+              <h1 className="text-lg font-semibold text-foreground">Add New Pricing Item</h1>
+            </div>
+
+            {/* Form */}
             <AddItemForm mode="create" />
           </div>
         </main>
