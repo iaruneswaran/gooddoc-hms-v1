@@ -328,21 +328,6 @@ const Payments = () => {
                   <span className="font-semibold text-green-600">{formatINR(insuranceApproved)}</span>
                 </div>
               </div>
-              <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="7d">Last 7 Days</SelectItem>
-                  <SelectItem value="30d">Last 30 Days</SelectItem>
-                  <SelectItem value="custom">Custom Range</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm" onClick={handleDownloadStatement} className="gap-2">
-                <Download className="h-4 w-4" />
-                Statement
-              </Button>
             </div>
           </div>
 
