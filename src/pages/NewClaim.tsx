@@ -14,7 +14,6 @@ import { ClaimStepServices } from "@/components/insurance/claim-steps/ClaimStepS
 import { ClaimStepDocuments } from "@/components/insurance/claim-steps/ClaimStepDocuments";
 import { ClaimStepPaymentBanking } from "@/components/insurance/claim-steps/ClaimStepPaymentBanking";
 import { ClaimStepReview } from "@/components/insurance/claim-steps/ClaimStepReview";
-import { ClaimInvoicesList } from "@/components/insurance/ClaimInvoicesList";
 
 const STEPS = [
   { id: 1, name: "Patient & Policy", component: ClaimStepPatientPolicy },
@@ -221,19 +220,12 @@ const NewClaim = () => {
           )}
 
           {/* Step Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <CurrentStepComponent
-                data={claimData}
-                onChange={setClaimData}
-                errors={validationErrors}
-              />
-            </div>
-            
-            {/* Invoices List */}
-            <div className="lg:col-span-1">
-              <ClaimInvoicesList />
-            </div>
+          <div className="max-w-5xl mx-auto">
+            <CurrentStepComponent
+              data={claimData}
+              onChange={setClaimData}
+              errors={validationErrors}
+            />
           </div>
         </main>
 
