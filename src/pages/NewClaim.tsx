@@ -49,14 +49,11 @@ const NewClaim = () => {
   };
 
   const handleNext = () => {
-    setHasAttemptedNext(true);
+    // Show warnings but don't block navigation
     const errors = validateCurrentStep();
-    if (errors.length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-    setValidationErrors([]);
+    setValidationErrors(errors);
     setHasAttemptedNext(false);
+    
     if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1);
       handleSaveDraft();
@@ -204,16 +201,16 @@ const NewClaim = () => {
             <Progress value={progress} className="h-2" />
           </div>
 
-          {/* Validation Errors */}
-          {hasAttemptedNext && validationErrors.length > 0 && (
-            <Card className="p-4 mb-6 border-destructive bg-destructive/10">
+          {/* Validation Warnings - Non-blocking */}
+          {validationErrors.length > 0 && currentStep < STEPS.length && (
+            <Card className="p-4 mb-6 border-yellow-500 bg-yellow-500/10">
               <div className="flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-destructive mb-2">
-                    Please fix the following errors:
+                  <h3 className="font-semibold text-yellow-600 mb-2">
+                    Incomplete fields (optional warnings):
                   </h3>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-destructive">
+                  <ul className="list-disc list-inside space-y-1 text-sm text-yellow-600">
                     {validationErrors.map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
