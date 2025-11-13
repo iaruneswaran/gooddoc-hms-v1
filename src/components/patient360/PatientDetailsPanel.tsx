@@ -224,36 +224,6 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
           </div>
         )}
 
-        {patient.insurance && (
-          <div className="mt-6 pt-6 border-t border-border">
-            <h3 className="text-sm font-semibold text-foreground mb-3">Insurance</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <span className="text-sm text-muted-foreground">Provider</span>
-                <p className="text-sm text-foreground font-medium">{patient.insurance.provider}</p>
-              </div>
-              <div>
-                <span className="text-sm text-muted-foreground">Policy Number</span>
-                <p className="text-sm text-foreground font-medium">
-                  {patient.insurance.policyNumber}
-                </p>
-              </div>
-              {patient.insurance.validTo && (
-                <div>
-                  <span className="text-sm text-muted-foreground">Valid Till</span>
-                  <p className="text-sm text-foreground font-medium">
-                    {new Date(patient.insurance.validTo).toLocaleDateString("en-IN", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric"
-                    })}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
         {patient.address && (
           <div className="mt-6 pt-6 border-t border-border">
             <h3 className="text-sm font-semibold text-foreground mb-3">Address Details</h3>
