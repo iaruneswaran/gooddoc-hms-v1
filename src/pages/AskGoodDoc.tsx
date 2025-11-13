@@ -46,16 +46,10 @@ export default function AskGoodDoc() {
           <main className="flex-1 p-8">
             <div className="max-w-4xl mx-auto">
               {/* Header Actions */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4 mr-2" />
-                    Share
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </div>
+              <div className="flex items-center justify-end mb-8">
+                <Button variant="ghost" size="sm">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
               </div>
 
               {/* Welcome Message */}
@@ -129,10 +123,10 @@ export default function AskGoodDoc() {
 
               {/* Refresh Prompts */}
               <div className="flex justify-center">
-                <Button variant="ghost" size="sm">
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh Prompts
-                </Button>
+                <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <RefreshCw className="h-4 w-4" />
+                  <span>Refresh Prompts</span>
+                </button>
               </div>
             </div>
           </main>
