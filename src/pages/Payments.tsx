@@ -132,17 +132,6 @@ const Payments = () => {
   // Mock all transactions
   const allTransactions: TransactionRow[] = [
     {
-      id: "REP-2025-001",
-      date: "06 Oct 2025",
-      type: "refund",
-      category: "Refund",
-      serviceOrReason: "Overpayment",
-      method: "cash",
-      party: "Robb Stark",
-      amount: -160000,
-      status: "Success",
-    },
-    {
       id: "INV-2025-001",
       date: "15 Jun 2025",
       type: "payment",
