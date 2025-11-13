@@ -211,10 +211,8 @@ const PricingCatalog = () => {
 
             {/* Active Filters */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{filteredItems.length} items</span>
               {selectedItems.length > 0 && (
                 <>
-                  <span>•</span>
                   <span className="text-primary font-medium">
                     {selectedItems.length} selected
                   </span>
