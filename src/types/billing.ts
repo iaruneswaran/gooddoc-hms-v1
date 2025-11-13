@@ -1,5 +1,5 @@
 export type PaymentMethod = 'cash' | 'card' | 'upi' | 'insurance' | 'other';
-export type TransactionType = 'payment' | 'advance' | 'refund';
+export type TransactionType = 'payment' | 'advance' | 'refund' | 'insurance';
 export type InvoiceStatus = 'Pending' | 'Partially Paid' | 'Paid';
 export type TransactionStatus = 'Success' | 'Pending' | 'Failed';
 

@@ -132,6 +132,17 @@ const Payments = () => {
   // Mock all transactions
   const allTransactions: TransactionRow[] = [
     {
+      id: "CLM-2025-001",
+      date: "18 Jun 2025",
+      type: "insurance",
+      category: "Insurance Claim",
+      serviceOrReason: "Hospitalization",
+      method: "insurance",
+      party: "Star Health Insurance",
+      amount: 1000000,
+      status: "Success",
+    },
+    {
       id: "INV-2025-001",
       date: "15 Jun 2025",
       type: "payment",
