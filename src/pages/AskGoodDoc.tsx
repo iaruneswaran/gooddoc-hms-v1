@@ -53,8 +53,8 @@ export default function AskGoodDoc() {
         
         <div className="flex-1 flex">
           {/* Main Content Area */}
-          <main className="flex-1 p-8">
-            <div className="max-w-4xl mx-auto">
+          <main className="flex-1 p-8 flex items-center">
+            <div className={cn("max-w-4xl mx-auto w-full", messages.length === 0 && "flex flex-col justify-center")}>
               {/* Welcome Message or Chat History */}
               {messages.length === 0 ? (
                 <div className="text-center mb-8">
