@@ -5,6 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -117,7 +118,7 @@ export default function Inbox() {
                   <div className="text-sm font-medium text-foreground">Contact Details</div>
                   <div className="text-sm font-medium text-foreground">Appointment Summary</div>
                   <div className="text-sm font-medium text-foreground">Service Type</div>
-                  <div className="text-sm font-medium text-foreground">Doctor</div>
+                  <div className="text-sm font-medium text-foreground">Status</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
                   <div className="text-sm font-medium text-foreground px-4">
                     Action
@@ -168,9 +169,11 @@ export default function Inbox() {
                         {appointment.serviceType}
                       </div>
 
-                      {/* Doctor */}
-                      <div className="text-sm text-muted-foreground">
-                        {appointment.doctor || "—"}
+                      {/* Status */}
+                      <div>
+                        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300">
+                          Pending
+                        </Badge>
                       </div>
 
                       {/* Requested Date & Time */}
