@@ -108,8 +108,8 @@ export default function OutpatientAppointments() {
         </div>
 
         {/* Token & Time */}
-        <div className="text-sm font-medium text-foreground">
-          {appointment.token} | {appointment.time}
+        <div className="text-sm text-foreground">
+          {appointment.token} | {appointment.time} AM
         </div>
 
         {/* Action - Patient 360 */}
