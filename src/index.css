@@ -38,6 +38,10 @@ All colors MUST be HSL.
 
     --tab-active: 11 91% 57%;
 
+    --ask-good-doc-orange: 22 75% 51%;
+    --ask-good-doc-red: 2 77% 54%;
+    --ask-good-doc-gradient: linear-gradient(135deg, hsl(22 75% 51%), hsl(2 77% 54%));
+
     --radius: 0.5rem;
 
     --sidebar-background: 215 54% 16%;

@@ -60,8 +60,8 @@ export default function AskGoodDoc() {
 
               {/* Welcome Message */}
               <div className="text-center mb-8">
-                <h1 className="text-4xl font-normal text-primary mb-2 flex items-center justify-center gap-2">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                <h1 className="text-4xl font-normal bg-ask-gradient bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
+                  <Sparkles className="h-8 w-8 text-ask-orange" />
                   hello Dr. Neha
                 </h1>
                 <p className="text-muted-foreground">
@@ -97,7 +97,7 @@ export default function AskGoodDoc() {
                         <Mic className="h-4 w-4" />
                       </Button>
                       
-                      <Button className="bg-primary hover:bg-primary/90">
+                      <Button className="bg-ask-gradient hover:opacity-90 text-white">
                         <Search className="h-4 w-4 mr-2" />
                         Search
                       </Button>
@@ -111,15 +111,15 @@ export default function AskGoodDoc() {
                 {suggestionPrompts.map((prompt, index) => (
                   <Card
                     key={index}
-                    className="p-4 cursor-pointer hover:shadow-md transition-shadow border-border"
+                    className="p-4 cursor-pointer hover:shadow-md transition-all hover-scale border-border"
                   >
                     <div className="flex flex-col gap-3">
                       <p className="text-sm text-foreground leading-relaxed">
                         {prompt.text}
                       </p>
                       <div className="flex justify-end">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <prompt.icon className="h-4 w-4 text-primary" />
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-ask-orange to-ask-red flex items-center justify-center">
+                          <prompt.icon className="h-4 w-4 text-white" />
                         </div>
                       </div>
                     </div>
@@ -140,7 +140,7 @@ export default function AskGoodDoc() {
           {/* Right Sidebar */}
           <aside className="w-80 border-l bg-background p-6 space-y-6">
             {/* Start New Chat */}
-            <Button className="w-full bg-primary hover:bg-primary/90">
+            <Button className="w-full bg-ask-gradient hover:opacity-90 text-white">
               <Plus className="h-4 w-4 mr-2" />
               Start New Chat
             </Button>
