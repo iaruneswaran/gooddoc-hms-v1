@@ -235,16 +235,13 @@ export default function RecordVitals() {
 
             {/* Patient Selection */}
             <Card className="p-6 mb-6">
-              <Label className="text-sm font-medium text-foreground mb-2 block">
-                Select Patient
-              </Label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between"
+                    className="w-full justify-between h-auto py-3"
                   >
                     {selectedPatient ? (
                       <div className="flex items-center gap-3">
@@ -258,14 +255,14 @@ export default function RecordVitals() {
                         </div>
                       </div>
                     ) : (
-                      "Select a patient to record vitals..."
+                      "Search and select a patient..."
                     )}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-full p-0" align="start">
+                <PopoverContent className="w-[calc(100vw-448px)] p-0" align="start">
                   <Command>
-                    <CommandInput placeholder="Search patients..." />
+                    <CommandInput placeholder="Search by name, GDID, or patient details..." />
                     <CommandEmpty>No patient found.</CommandEmpty>
                     <CommandGroup>
                       {samplePatients.map((patient) => (
