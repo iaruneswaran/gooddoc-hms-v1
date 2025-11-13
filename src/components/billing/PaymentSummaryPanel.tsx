@@ -173,10 +173,8 @@ export function PaymentSummaryPanel({
               <Input
                 type="number"
                 value={appliedAdvance}
-                onChange={(e) => handleAdvanceAmountChange(e.target.value)}
+                disabled
                 className="flex-1"
-                min={0}
-                max={maxAdvance}
               />
               <Button
                 variant="outline"
