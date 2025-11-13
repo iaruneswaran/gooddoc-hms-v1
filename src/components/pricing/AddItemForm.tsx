@@ -190,7 +190,7 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
         <div className="min-h-[400px]">{renderStep()}</div>
 
         {/* Footer */}
-        <div className="p-4 z-10 mt-8">
+        <div className="p-4 pb-6 z-10 mt-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {currentStep > 1 && (
