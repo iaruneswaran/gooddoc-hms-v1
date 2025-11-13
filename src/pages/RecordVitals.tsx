@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -87,6 +87,19 @@ export default function RecordVitals() {
   // Patient selection state
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (patientId) {
@@ -235,71 +248,71 @@ export default function RecordVitals() {
 
             {/* Patient Selection */}
             <Card className="p-6 mb-6">
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between h-auto py-3"
-                  >
-                    {selectedPatient ? (
-                      <div className="flex items-center gap-3">
-                        <div className="text-left">
-                          <div className="text-sm font-medium">
-                            {selectedPatient.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            GDID-{selectedPatient.gdid} • {selectedPatient.age} | {selectedPatient.gender}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      "Search and select a patient..."
-                    )}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0" align="start">
-                  <Command shouldFilter={true}>
-                    <CommandInput 
-                      placeholder="Search by name, GDID, or patient details..." 
-                      className="h-12"
-                    />
-                    <CommandEmpty>No patient found.</CommandEmpty>
-                    <CommandGroup className="max-h-[300px] overflow-auto">
-                      {samplePatients.map((patient) => (
-                        <CommandItem
-                          key={patient.id}
-                          value={`${patient.name} GDID${patient.gdid} ${patient.age} ${patient.gender}`}
-                          keywords={[patient.name, patient.gdid, patient.age.toString(), patient.gender]}
-                          onSelect={() => {
-                            setSelectedPatient({
-                              ...patient,
-                              visitId: `VST-${Math.floor(100000 + Math.random() * 900000)}`,
-                            });
-                            setOpen(false);
-                          }}
-                          className="cursor-pointer"
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedPatient?.id === patient.id ? "opacity-100" : "opacity-0"
-                            )}
-                          />
-                          <div className="flex-1">
-                            <div className="text-sm font-medium">{patient.name}</div>
-                            <div className="text-xs text-muted-foreground">
-                              GDID-{patient.gdid} • {patient.age} | {patient.gender}
+              <div className="relative" ref={searchRef}>
+                <Command shouldFilter={true} className="border rounded-lg">
+                  <CommandInput 
+                    placeholder="Search and select a patient..." 
+                    className="h-12"
+                    onFocus={() => setOpen(true)}
+                  />
+                  {open && (
+                    <div className="absolute top-full left-0 right-0 z-50 mt-1 border rounded-lg bg-popover shadow-md">
+                      <CommandEmpty className="py-6 text-center text-sm">No patient found.</CommandEmpty>
+                      <CommandGroup className="max-h-[300px] overflow-auto p-2">
+                        {samplePatients.map((patient) => (
+                          <CommandItem
+                            key={patient.id}
+                            value={`${patient.name} GDID${patient.gdid} ${patient.age} ${patient.gender}`}
+                            keywords={[patient.name, patient.gdid, patient.age.toString(), patient.gender]}
+                            onSelect={() => {
+                              setSelectedPatient({
+                                ...patient,
+                                visitId: `VST-${Math.floor(100000 + Math.random() * 900000)}`,
+                              });
+                              setOpen(false);
+                            }}
+                            className="cursor-pointer rounded-md"
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedPatient?.id === patient.id ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            <div className="flex-1">
+                              <div className="text-sm font-medium">{patient.name}</div>
+                              <div className="text-xs text-muted-foreground">
+                                GDID-{patient.gdid} • {patient.age} | {patient.gender}
+                              </div>
                             </div>
-                          </div>
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </div>
+                  )}
+                </Command>
+                
+                {selectedPatient && (
+                  <div className="mt-3 p-3 bg-muted/50 rounded-lg flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium">{selectedPatient.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        GDID-{selectedPatient.gdid} • {selectedPatient.age} | {selectedPatient.gender}
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedPatient(null);
+                        setOpen(true);
+                      }}
+                    >
+                      Change
+                    </Button>
+                  </div>
+                )}
+              </div>
             </Card>
 
             {/* Form */}
