@@ -285,7 +285,7 @@ export default function DiagnosticsWorklist() {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-sm font-medium text-foreground">{order.id}</div>
+                  <div className="text-sm text-foreground">{order.id}</div>
                   <div className="text-sm text-foreground">{order.orderSummary.tests.join(", ")}</div>
                 </div>
 
