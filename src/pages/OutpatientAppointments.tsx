@@ -81,10 +81,8 @@ export default function OutpatientAppointments() {
         </div>
 
         {/* Consultation Type */}
-        <div>
-          <Badge variant="outline" className="text-xs">
-            {appointment.type}
-          </Badge>
+        <div className="text-sm text-foreground">
+          {appointment.type === "New" ? "First Visit" : "Follow-up"}
         </div>
 
         {/* Appointment Details */}
