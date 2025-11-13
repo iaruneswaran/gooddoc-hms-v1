@@ -124,15 +124,6 @@ export default function Patients() {
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Patients</h1>
               <div className="flex items-center gap-3">
-                <div className="relative w-80">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by name, GDID, phone, email..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
                 <Button variant="outline" className="gap-2">
                   <Download className="w-4 h-4" />
                   Export
@@ -146,26 +137,37 @@ export default function Patients() {
 
           <div className="mb-6">
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
-                <TabsTrigger
-                  value="all"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  All Patients
-                </TabsTrigger>
-                <TabsTrigger
-                  value="inpatient"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Inpatient (IP)
-                </TabsTrigger>
-                <TabsTrigger
-                  value="outpatient"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Outpatient (OP)
-                </TabsTrigger>
-              </TabsList>
+              <div className="flex items-center justify-between">
+                <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
+                  <TabsTrigger
+                    value="all"
+                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                  >
+                    All Patients
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="inpatient"
+                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                  >
+                    Inpatient (IP)
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="outpatient"
+                    className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                  >
+                    Outpatient (OP)
+                  </TabsTrigger>
+                </TabsList>
+                <div className="relative w-80 pb-2">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, GDID, phone, email..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
             </Tabs>
           </div>
 
