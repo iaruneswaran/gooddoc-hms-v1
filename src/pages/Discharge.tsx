@@ -50,7 +50,7 @@ const Discharge = () => {
           </button>
 
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-foreground mb-2">Patient Discharge</h1>
+            <h1 className="text-lg font-semibold text-foreground mb-2">Patient Discharge</h1>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Visit ID:</span>
               <Badge variant="secondary" className="font-mono">{visitId}</Badge>

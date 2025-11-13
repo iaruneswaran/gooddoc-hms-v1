@@ -156,7 +156,7 @@ const Insurance = () => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Insurance</h1>
+              <h1 className="text-lg font-semibold text-foreground">Insurance</h1>
               <p className="text-sm text-muted-foreground mt-1">
                 Manage insurance claims, policies, and payers
               </p>
