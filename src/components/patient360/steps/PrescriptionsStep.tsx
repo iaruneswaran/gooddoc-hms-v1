@@ -71,7 +71,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
             {medications.map((med, index) => (
               <div
                 key={med.id}
-                className="grid grid-cols-12 gap-3 p-4 border border-border rounded-lg"
+                className="grid grid-cols-12 gap-3"
               >
                 <div className="col-span-3">
                   <Select
