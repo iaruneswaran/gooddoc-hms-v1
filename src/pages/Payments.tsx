@@ -272,6 +272,12 @@ const Payments = () => {
                 Advance
               </TabsTrigger>
               <TabsTrigger 
+                value="insurance"
+                className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
+              >
+                Insurance
+              </TabsTrigger>
+              <TabsTrigger 
                 value="history"
                 className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-base font-normal data-[state=active]:font-medium border-b-0"
               >
@@ -310,6 +316,21 @@ const Payments = () => {
                   transactions={advanceTransactions}
                 />
               </div>
+            </TabsContent>
+
+            {/* Insurance Tab */}
+            <TabsContent value="insurance" className="mt-6">
+              <Card className="p-6 text-center">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Insurance Claims
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  View and manage insurance claims for this patient
+                </p>
+                <Button onClick={() => navigate(`/patient-insights/${patientId}/insurance`)}>
+                  Go to Insurance
+                </Button>
+              </Card>
             </TabsContent>
 
             {/* History Tab */}
