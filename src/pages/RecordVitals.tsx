@@ -18,8 +18,65 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ExternalLink } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ExternalLink, Check, ChevronsUpDown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+// Sample patients data
+const samplePatients = [
+  {
+    id: "1",
+    name: "Harish Kalyan",
+    gdid: "001",
+    age: 35,
+    gender: "M",
+    ward: "Cardiology Ward 3B",
+    room: "312",
+    bed: "12",
+  },
+  {
+    id: "2",
+    name: "Sneha Reddy",
+    gdid: "004",
+    age: 28,
+    gender: "F",
+    ward: "General Ward 2A",
+    room: "205",
+    bed: "8",
+  },
+  {
+    id: "3",
+    name: "Rajesh Kumar",
+    gdid: "007",
+    age: 42,
+    gender: "M",
+    ward: "ICU Ward 1",
+    room: "101",
+    bed: "3",
+  },
+  {
+    id: "4",
+    name: "Priya Sharma",
+    gdid: "012",
+    age: 31,
+    gender: "F",
+    ward: "Maternity Ward 4C",
+    room: "408",
+    bed: "15",
+  },
+];
 
 export default function RecordVitals() {
   const navigate = useNavigate();
@@ -27,23 +84,20 @@ export default function RecordVitals() {
   const patientId = searchParams.get("patientId");
   const visitId = searchParams.get("visitId");
 
-  // Mock patient data
+  // Patient selection state
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (patientId) {
-      // Mock fetch patient
-      setSelectedPatient({
-        id: patientId,
-        name: "Harish Kalyan",
-        gdid: "001",
-        age: 35,
-        gender: "M",
-        visitId: visitId || "VST-205431",
-        ward: "Cardiology Ward 3B",
-        room: "312",
-        bed: "12",
-      });
+      // Find patient from sample data
+      const patient = samplePatients.find(p => p.id === patientId);
+      if (patient) {
+        setSelectedPatient({
+          ...patient,
+          visitId: visitId || `VST-${Math.floor(100000 + Math.random() * 900000)}`,
+        });
+      }
     }
   }, [patientId, visitId]);
 
@@ -167,49 +221,99 @@ export default function RecordVitals() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Patients", "Record Vitals"]} />
 
-        <main className="p-6 max-w-7xl">
-          <h1 className="text-lg font-semibold text-foreground mb-6">Record Vitals</h1>
+        <main className="p-6">
+          <div className="max-w-5xl mx-auto">
+            <h1 className="text-lg font-semibold text-foreground mb-6">Record Vitals</h1>
 
-          {/* Patient Context Bar */}
-          <Card className="p-4 mb-6">
-            {selectedPatient ? (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-6">
-                  <div>
-                    <div className="text-sm font-medium text-foreground">
-                      {selectedPatient.name}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      GDID-{selectedPatient.gdid} • {selectedPatient.age} | {selectedPatient.gender}
-                    </div>
-                  </div>
+            {/* Patient Selection */}
+            <Card className="p-6 mb-6">
+              <Label className="text-sm font-medium text-foreground mb-2 block">
+                Select Patient
+              </Label>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between"
+                  >
+                    {selectedPatient ? (
+                      <div className="flex items-center gap-3">
+                        <div className="text-left">
+                          <div className="text-sm font-medium">
+                            {selectedPatient.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            GDID-{selectedPatient.gdid} • {selectedPatient.age} | {selectedPatient.gender}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      "Select a patient to record vitals..."
+                    )}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search patients..." />
+                    <CommandEmpty>No patient found.</CommandEmpty>
+                    <CommandGroup>
+                      {samplePatients.map((patient) => (
+                        <CommandItem
+                          key={patient.id}
+                          value={`${patient.name} ${patient.gdid}`}
+                          onSelect={() => {
+                            setSelectedPatient({
+                              ...patient,
+                              visitId: `VST-${Math.floor(100000 + Math.random() * 900000)}`,
+                            });
+                            setOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedPatient?.id === patient.id ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          <div>
+                            <div className="text-sm font-medium">{patient.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              GDID-{patient.gdid} • {patient.age} | {patient.gender}
+                            </div>
+                          </div>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+
+              {selectedPatient && (
+                <div className="mt-4 flex items-center gap-4 p-4 bg-accent/50 rounded-lg">
                   <Badge variant="secondary" className="text-xs">
                     Active Visit: {selectedPatient.visitId}
                   </Badge>
                   <div className="text-xs text-muted-foreground">
-                    {selectedPatient.ward} • Room {selectedPatient.room} • Bed{" "}
-                    {selectedPatient.bed}
+                    {selectedPatient.ward} • Room {selectedPatient.room} • Bed {selectedPatient.bed}
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 ml-auto"
+                    onClick={() => window.open(`/patient-insights/${selectedPatient.id}`, "_blank")}
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    View Patient Insight
+                  </Button>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => window.open(`/patient-insights/${selectedPatient.id}`, "_blank")}
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  View Patient Insight
-                </Button>
-              </div>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                Select a patient to record vitals
-              </div>
-            )}
-          </Card>
+              )}
+            </Card>
 
-          {/* Form */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Form */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Body Measurements */}
             <Card className="p-6">
               <h2 className="text-base font-semibold text-foreground mb-4">Body Measurements</h2>
@@ -543,6 +647,7 @@ export default function RecordVitals() {
             </Button>
             <Button variant="outline">Save Draft</Button>
             <Button onClick={handleSaveAndSubmit}>Save & Submit</Button>
+          </div>
           </div>
         </main>
       </div>
