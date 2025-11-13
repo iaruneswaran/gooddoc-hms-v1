@@ -119,8 +119,8 @@ export default function Inbox() {
                   <div className="text-sm font-medium text-foreground">Service Type</div>
                   <div className="text-sm font-medium text-foreground">Doctor</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
-                  <div className="text-sm font-medium text-foreground">
-                    <div className="flex justify-end pr-16">Action</div>
+                  <div className="text-sm font-medium text-foreground flex justify-end px-4">
+                    Action
                   </div>
                 </div>
 
