@@ -1,6 +1,3 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Download, Printer } from "lucide-react";
 import { Visit } from "../VisitListItem";
 
@@ -48,32 +45,6 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Insurance Card */}
-      <Card className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-semibold text-foreground">
-                Star Health Insurance
-              </span>
-              <Badge className="bg-green-100 text-green-800">Active</Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">Family Health Optima Plan</p>
-            <div className="space-y-1 text-sm text-muted-foreground">
-              <p>Member ID: SH123456789</p>
-              <p>Group: GRP-2025-456</p>
-              <p>Effective: Jan 01, 2025 – Dec 31, 2025</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button className="bg-primary">Verify Eligibility</Button>
-          <Button variant="outline">Update</Button>
-          <Button variant="outline">Replace</Button>
-          <Button variant="outline">View coverage</Button>
-        </div>
-      </Card>
-
       {/* Claims Table */}
       <div>
         <h3 className="text-lg font-semibold text-primary mb-4">Insurance Claims</h3>
