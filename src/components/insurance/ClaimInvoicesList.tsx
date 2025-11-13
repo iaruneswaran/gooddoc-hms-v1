@@ -1,124 +1,149 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Download, Printer, FileText } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Download, Printer } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 
 // Mock invoices data
 const MOCK_INVOICES = [
   {
-    id: "INV-2025-001234",
+    id: "INV-2025-001",
     date: "15 Jun 2025",
-    service: "Consultation - Dr. Sharma",
+    service: "Consultation",
     totalAmount: 150000,
-    partiallyPaid: 50000,
-    balance: 100000,
+    partiallyPaid: 0,
+    balance: 150000,
     status: "Pending",
   },
   {
-    id: "INV-2025-001189",
-    date: "12 Jun 2025",
-    service: "Laboratory Tests",
-    totalAmount: 85000,
-    partiallyPaid: 85000,
-    balance: 0,
-    status: "Paid",
+    id: "INV-2025-002",
+    date: "20 May 2025",
+    service: "Laboratory",
+    totalAmount: 65000,
+    partiallyPaid: 0,
+    balance: 65000,
+    status: "Pending",
   },
   {
-    id: "INV-2025-001156",
-    date: "10 Jun 2025",
-    service: "Radiology - X-Ray",
+    id: "INV-2025-003",
+    date: "10 Apr 2025",
+    service: "Imaging",
     totalAmount: 120000,
-    partiallyPaid: 60000,
-    balance: 60000,
-    status: "Partially Paid",
+    partiallyPaid: 0,
+    balance: 120000,
+    status: "Pending",
   },
 ];
 
 export function ClaimInvoicesList() {
+  const [selectedInvoices, setSelectedInvoices] = useState<string[]>([]);
+
+  const toggleInvoice = (invoiceId: string) => {
+    setSelectedInvoices((prev) =>
+      prev.includes(invoiceId)
+        ? prev.filter((id) => id !== invoiceId)
+        : [...prev, invoiceId]
+    );
+  };
+
+  const toggleAll = () => {
+    if (selectedInvoices.length === MOCK_INVOICES.length) {
+      setSelectedInvoices([]);
+    } else {
+      setSelectedInvoices(MOCK_INVOICES.map((inv) => inv.id));
+    }
+  };
+
+  const allSelected = MOCK_INVOICES.length > 0 && selectedInvoices.length === MOCK_INVOICES.length;
+
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-muted-foreground" />
-          <h3 className="font-semibold text-foreground">Available Invoices</h3>
-        </div>
-        <Badge variant="secondary">{MOCK_INVOICES.length} invoices</Badge>
+    <Card className="overflow-hidden">
+      <div className="p-6 border-b">
+        <h2 className="text-lg font-semibold text-foreground">Payment Collection</h2>
       </div>
 
-      <div className="space-y-3">
-        {MOCK_INVOICES.map((invoice) => (
-          <div
-            key={invoice.id}
-            className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-          >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <p className="font-medium text-sm">{invoice.id}</p>
-                  <Badge
-                    variant={
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-muted/50">
+            <tr>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4 w-12">
+                <Checkbox
+                  checked={allSelected}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all invoices"
+                />
+              </th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Invoice No</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Partially Paid</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Balance</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-background">
+            {MOCK_INVOICES.map((invoice) => (
+              <tr key={invoice.id} className="border-t hover:bg-muted/20 transition-colors">
+                <td className="p-4">
+                  <Checkbox
+                    checked={selectedInvoices.includes(invoice.id)}
+                    onCheckedChange={() => toggleInvoice(invoice.id)}
+                    aria-label={`Select invoice ${invoice.id}`}
+                  />
+                </td>
+                <td className="p-4 text-sm font-medium">{invoice.id}</td>
+                <td className="p-4 text-sm">{invoice.date}</td>
+                <td className="p-4 text-sm">{invoice.service}</td>
+                <td className="p-4 text-sm font-medium text-primary">
+                  {formatINR(invoice.totalAmount)}
+                </td>
+                <td className="p-4 text-sm text-muted-foreground">
+                  {formatINR(invoice.partiallyPaid)}
+                </td>
+                <td className="p-4 text-sm font-semibold text-primary">
+                  {formatINR(invoice.balance)}
+                </td>
+                <td className="p-4 text-sm">
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
                       invoice.status === "Paid"
-                        ? "default"
+                        ? "bg-green-100 text-green-800"
                         : invoice.status === "Partially Paid"
-                        ? "secondary"
-                        : "outline"
-                    }
-                    className={
-                      invoice.status === "Paid"
-                        ? "bg-green-100 text-green-800 hover:bg-green-100"
-                        : invoice.status === "Partially Paid"
-                        ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
-                        : "bg-orange-100 text-orange-800 hover:bg-orange-100"
-                    }
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-orange-100 text-orange-800"
+                    }`}
                   >
                     {invoice.status}
-                  </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground mb-2">{invoice.date}</p>
-                <p className="text-sm">{invoice.service}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 mb-3">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Total Amount</p>
-                <p className="text-sm font-semibold">{formatINR(invoice.totalAmount)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Paid</p>
-                <p className="text-sm font-medium text-green-600">
-                  {formatINR(invoice.partiallyPaid)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Balance</p>
-                <p className="text-sm font-semibold text-orange-600">
-                  {formatINR(invoice.balance)}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-2 pt-3 border-t">
-              <Button variant="outline" size="sm" className="flex-1">
-                <Download className="h-3 w-3 mr-1" />
-                Download
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1">
-                <Printer className="h-3 w-3 mr-1" />
-                Print
-              </Button>
-            </div>
-          </div>
-        ))}
+                  </span>
+                </td>
+                <td className="p-4">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      aria-label="Download invoice"
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      aria-label="Print invoice"
+                    >
+                      <Printer className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {MOCK_INVOICES.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
-          <FileText className="h-12 w-12 mx-auto mb-3 opacity-20" />
-          <p className="text-sm">No invoices available</p>
-        </div>
-      )}
     </Card>
   );
 }
