@@ -51,8 +51,8 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
   const completedMedications = medications.filter(med => med.name && med.strength && med.dosage);
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      <div className="col-span-2">
+    <div className="grid grid-cols-4 gap-6">
+      <div className="col-span-3">
         <Card className="p-6">
           {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
             <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">

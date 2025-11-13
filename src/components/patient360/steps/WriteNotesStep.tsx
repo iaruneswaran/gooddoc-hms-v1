@@ -19,8 +19,8 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
   const [assessmentPlan, setAssessmentPlan] = useState("");
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      <div className="col-span-2 space-y-6">
+    <div className="grid grid-cols-4 gap-6">
+      <div className="col-span-3 space-y-6">
         <Card className="p-6">
           <p className="text-sm text-muted-foreground mb-6">Write patient clinical notes</p>
 
