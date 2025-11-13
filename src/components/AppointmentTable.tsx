@@ -424,12 +424,12 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
             <div>
               <Button
                 onClick={() => handleCheckInClick(appointment.id)}
-                variant={checkedInIds.has(appointment.id) ? "default" : "outline"}
+                variant="default"
                 size="sm"
                 disabled={checkedInIds.has(appointment.id)}
                 className={checkedInIds.has(appointment.id) 
-                  ? "w-full bg-primary text-primary-foreground cursor-not-allowed opacity-70" 
-                  : "w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"}
+                  ? "w-full cursor-not-allowed opacity-70" 
+                  : "w-full"}
               >
                 {checkedInIds.has(appointment.id) ? "Checked In" : "Check In"}
               </Button>
