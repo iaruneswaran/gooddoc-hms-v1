@@ -43,7 +43,7 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
   };
 
   return (
-    <Card className="p-6 sticky top-24">
+    <Card className="p-6 sticky top-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-foreground">Vitals Overview</h3>
         <Button
@@ -139,11 +139,6 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
           </div>
         )}
       </div>
-
-      <Button variant="outline" size="sm" className="w-full mt-6">
-        <Plus className="w-4 h-4 mr-2" />
-        Add Vitals
-      </Button>
     </Card>
   );
 }
