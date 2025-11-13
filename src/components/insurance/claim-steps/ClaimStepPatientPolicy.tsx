@@ -3,7 +3,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Plus, Search, User } from "lucide-react";
+import { useState } from "react";
 
 interface ClaimStepPatientPolicyProps {
   data: any;
@@ -12,6 +14,49 @@ interface ClaimStepPatientPolicyProps {
 }
 
 export function ClaimStepPatientPolicy({ data, onChange, errors }: ClaimStepPatientPolicyProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Mock patient data
+  const mockPatients = [
+    { id: "p1", name: "Harish Kalyan", age: 44, gender: "M", mrn: "GDID-001", phone: "+91 98765 43210" },
+    { id: "p2", name: "Priya Shah", age: 32, gender: "F", mrn: "GDID-002", phone: "+91 98765 43211" },
+    { id: "p3", name: "Rajesh Kumar", age: 56, gender: "M", mrn: "GDID-003", phone: "+91 98765 43212" },
+  ];
+
+  const filteredPatients = searchQuery.length >= 2
+    ? mockPatients.filter(p => 
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.mrn.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  const handleSelectPatient = (patient: typeof mockPatients[0]) => {
+    onChange({
+      ...data,
+      patient: {
+        id: patient.id,
+        name: patient.name,
+        phone: patient.phone
+      }
+    });
+    setSearchQuery(patient.name);
+    setIsSearchOpen(false);
+  };
+
+  const handleAddNewPatient = () => {
+    // For now, use the search query as name
+    onChange({
+      ...data,
+      patient: {
+        id: "new-" + Date.now(),
+        name: searchQuery,
+        phone: ""
+      }
+    });
+    setIsSearchOpen(false);
+  };
+
   return (
     <Card className="p-6">
       <h2 className="text-lg font-semibold mb-6">Patient & Policy Information</h2>
@@ -21,29 +66,81 @@ export function ClaimStepPatientPolicy({ data, onChange, errors }: ClaimStepPati
         <div>
           <Label htmlFor="patient">Patient *</Label>
           <div className="flex gap-2 mt-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="patient"
-                placeholder="Search patient by name or ID (min 2 chars)"
-                className="pl-10"
-                value={data.patient?.name || ""}
-                onChange={(e) => {
-                  if (e.target.value.length >= 2) {
-                    // Mock patient selection
-                    onChange({
-                      ...data,
-                      patient: {
-                        id: "p1",
-                        name: e.target.value,
-                        phone: "+91 98765 43210"
-                      }
-                    });
-                  }
-                }}
-              />
-            </div>
-            <Button variant="outline" size="icon">
+            <Popover open={isSearchOpen && searchQuery.length >= 2} onOpenChange={setIsSearchOpen}>
+              <PopoverTrigger asChild>
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="patient"
+                    placeholder="Search patient by name or ID (min 2 chars)"
+                    className="pl-10"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setIsSearchOpen(e.target.value.length >= 2);
+                    }}
+                    onFocus={() => setIsSearchOpen(searchQuery.length >= 2)}
+                  />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-[400px] p-0" align="start">
+                <div className="max-h-[300px] overflow-y-auto">
+                  {filteredPatients.length > 0 ? (
+                    <>
+                      {filteredPatients.map((patient) => (
+                        <button
+                          key={patient.id}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-accent transition-colors text-left"
+                          onClick={() => handleSelectPatient(patient)}
+                        >
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <User className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium">{patient.name}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {patient.mrn} • {patient.age} | {patient.gender}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                      <div className="border-t border-border">
+                        <button
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-accent transition-colors text-left"
+                          onClick={handleAddNewPatient}
+                        >
+                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                            <Plus className="h-5 w-5 text-primary-foreground" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium">Add new patient</div>
+                            <div className="text-sm text-muted-foreground">
+                              Create "{searchQuery}"
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <button
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-accent transition-colors text-left"
+                      onClick={handleAddNewPatient}
+                    >
+                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                        <Plus className="h-5 w-5 text-primary-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">Add new patient</div>
+                        <div className="text-sm text-muted-foreground">
+                          Create "{searchQuery}"
+                        </div>
+                      </div>
+                    </button>
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Button variant="outline" size="icon" onClick={handleAddNewPatient}>
               <Plus className="h-4 w-4" />
             </Button>
           </div>
