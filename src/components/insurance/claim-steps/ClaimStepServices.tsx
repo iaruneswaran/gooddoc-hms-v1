@@ -1,10 +1,13 @@
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Trash2, Search, Plus } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { searchServices } from "@/data/services.mock";
+import { useDebounce } from "@/hooks/useDebounce";
 import { formatINR } from "@/utils/currency";
 
 interface ClaimStepServicesProps {
@@ -13,167 +16,222 @@ interface ClaimStepServicesProps {
   errors: string[];
 }
 
-export function ClaimStepServices({ data, onChange, errors }: ClaimStepServicesProps) {
-  const services = data.services || [];
+const CATEGORIES = ['Procedure', 'Nursing', 'Pharmacy', 'Lab', 'Room'];
 
-  const addService = () => {
-    const newService = {
-      id: `s${Date.now()}`,
-      type: "Consultation",
-      description: "",
-      code: "",
-      units: 1,
-      unitCost: 0,
-      tax: 0,
-      discount: 0,
-      total: 0
-    };
-    onChange({ ...data, services: [...services, newService] });
+export function ClaimStepServices({ data, onChange, errors }: ClaimStepServicesProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  
+  const services = data.services || [];
+  const debouncedSearch = useDebounce(searchQuery, 300);
+  
+  const searchResults = useMemo(() => 
+    searchServices(debouncedSearch, selectedCategories),
+    [debouncedSearch, selectedCategories]
+  );
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const addService = (service: any) => {
+    const taxAmount = Math.round(service.price * (service.taxPct || 0) / 100);
+    onChange({
+      ...data,
+      services: [
+        ...services,
+        {
+          id: `${service.id}-${Date.now()}`,
+          type: service.category,
+          description: service.name,
+          code: service.code,
+          units: 1,
+          unitCost: service.price * 100, // Convert to paise
+          tax: taxAmount * 100, // Convert to paise
+          discount: 0,
+          total: (service.price + taxAmount) * 100, // Convert to paise
+        },
+      ],
+    });
   };
 
   const updateService = (index: number, field: string, value: any) => {
-    const updated = [...services];
-    updated[index] = { ...updated[index], [field]: value };
-    
+    const updatedServices = [...services];
+    updatedServices[index] = {
+      ...updatedServices[index],
+      [field]: value,
+    };
+
     // Recalculate total
-    const unitCost = updated[index].unitCost || 0;
-    const units = updated[index].units || 1;
-    const tax = updated[index].tax || 0;
-    const discount = updated[index].discount || 0;
-    updated[index].total = (unitCost * units) + tax - discount;
-    
-    onChange({ ...data, services: updated });
+    const { units, unitCost, tax, discount } = updatedServices[index];
+    const subtotal = units * unitCost;
+    const total = subtotal + tax - discount;
+    updatedServices[index].total = total;
+
+    onChange({ ...data, services: updatedServices });
   };
 
   const removeService = (index: number) => {
-    const updated = services.filter((_: any, i: number) => i !== index);
-    onChange({ ...data, services: updated });
+    onChange({
+      ...data,
+      services: services.filter((_: any, i: number) => i !== index),
+    });
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Services</h2>
-        <Button onClick={addService} size="sm" className="gap-2">
-          <Plus className="h-4 w-4" />
-          Add Service
-        </Button>
-      </div>
-      
-      {services.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          <p>No services added yet</p>
-          <Button onClick={addService} variant="outline" className="mt-4 gap-2">
-            <Plus className="h-4 w-4" />
-            Add First Service
-          </Button>
-        </div>
-      ) : (
-        <div className="border rounded-lg overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Type</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead className="w-20">Units</TableHead>
-                <TableHead className="w-28">Unit Cost</TableHead>
-                <TableHead className="w-28">Tax</TableHead>
-                <TableHead className="w-28">Discount</TableHead>
-                <TableHead className="w-28">Total</TableHead>
-                <TableHead className="w-12"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {services.map((service: any, index: number) => (
-                <TableRow key={service.id}>
-                  <TableCell>
-                    <Select
-                      value={service.type}
-                      onValueChange={(value) => updateService(index, "type", value)}
+    <div className="space-y-6">
+      {/* Search Panel */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Search Services</h2>
+        
+        <div className="space-y-4">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search services/procedures by name or code…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map((category) => (
+              <Badge
+                key={category}
+                variant={selectedCategories.includes(category) ? "default" : "outline"}
+                className="cursor-pointer transition-colors"
+                onClick={() => toggleCategory(category)}
+              >
+                {category}
+              </Badge>
+            ))}
+          </div>
+          
+          {/* Search Results */}
+          <div className="border rounded-lg">
+            <ScrollArea className="h-[300px]">
+              {searchResults.length === 0 ? (
+                <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
+                  No services found
+                </div>
+              ) : (
+                <div className="divide-y">
+                  {searchResults.map((service) => (
+                    <div
+                      key={service.id}
+                      className="flex items-center justify-between py-3 px-4 hover:bg-muted/50 transition-colors"
                     >
-                      <SelectTrigger className="w-36">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Consultation">Consultation</SelectItem>
-                        <SelectItem value="Laboratory">Laboratory</SelectItem>
-                        <SelectItem value="Imaging">Imaging</SelectItem>
-                        <SelectItem value="Procedure">Procedure</SelectItem>
-                        <SelectItem value="Pharmacy">Pharmacy</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      placeholder="Description"
-                      value={service.description}
-                      onChange={(e) => updateService(index, "description", e.target.value)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      placeholder="Code"
-                      value={service.code}
-                      onChange={(e) => updateService(index, "code", e.target.value)}
-                      className="w-24"
-                    />
-                  </TableCell>
-                  <TableCell>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-sm font-medium truncate">{service.name}</p>
+                          <Badge variant="secondary" className="text-xs">
+                            {service.category}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{service.code}</p>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 ml-4">
+                        <p className="text-sm font-semibold">{formatINR(service.price * 100)}</p>
+                        
+                        <Button
+                          size="sm"
+                          onClick={() => addService(service)}
+                          className="h-8 px-3"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </div>
+        </div>
+      </Card>
+
+      {/* Added Services */}
+      {services.length > 0 && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Selected Services ({services.length})</h2>
+          
+          <div className="space-y-3">
+            {services.map((service: any, index: number) => (
+              <div key={service.id} className="border rounded-lg p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="font-medium">{service.description}</p>
+                      <Badge variant="secondary" className="text-xs">
+                        {service.type}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{service.code}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => removeService(index)}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-4 gap-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Units</Label>
                     <Input
                       type="number"
-                      min="1"
                       value={service.units}
-                      onChange={(e) => updateService(index, "units", parseInt(e.target.value) || 1)}
+                      onChange={(e) => updateService(index, "units", Number(e.target.value))}
+                      className="h-9 mt-1"
+                      min="1"
                     />
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Unit Cost</Label>
                     <Input
                       type="number"
-                      min="0"
-                      placeholder="₹"
                       value={service.unitCost / 100}
-                      onChange={(e) => updateService(index, "unitCost", (parseFloat(e.target.value) || 0) * 100)}
+                      onChange={(e) => updateService(index, "unitCost", Number(e.target.value) * 100)}
+                      className="h-9 mt-1"
+                      min="0"
+                      step="0.01"
                     />
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Discount</Label>
                     <Input
                       type="number"
-                      min="0"
-                      placeholder="₹"
-                      value={service.tax / 100}
-                      onChange={(e) => updateService(index, "tax", (parseFloat(e.target.value) || 0) * 100)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      min="0"
-                      placeholder="₹"
                       value={service.discount / 100}
-                      onChange={(e) => updateService(index, "discount", (parseFloat(e.target.value) || 0) * 100)}
+                      onChange={(e) => updateService(index, "discount", Number(e.target.value) * 100)}
+                      className="h-9 mt-1"
+                      min="0"
+                      step="0.01"
                     />
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {formatINR(service.total)}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeService(index)}
-                      className="h-8 w-8"
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Total</Label>
+                    <div className="h-9 mt-1 flex items-center font-semibold text-lg">
+                      {formatINR(service.total)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
       )}
-    </Card>
+    </div>
   );
 }
