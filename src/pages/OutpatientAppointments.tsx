@@ -70,7 +70,7 @@ export default function OutpatientAppointments() {
 
         {/* Contact Details */}
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs text-foreground">
+          <div className="flex items-center gap-1.5 text-sm text-foreground">
             <Phone className="w-3.5 h-3.5" />
             <span>{appointment.phone || "—"}</span>
           </div>
@@ -113,7 +113,7 @@ export default function OutpatientAppointments() {
         </div>
 
         {/* Action - Patient 360 */}
-        <div className="px-4">
+        <div className="flex justify-end px-4">
           <Button
             variant="default"
             onClick={() => handlePatient360Click(appointment)}
@@ -175,7 +175,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals Status</div>
                   <div className="text-sm font-medium text-foreground">Token & Time</div>
-                  <div className="text-sm font-medium text-foreground pl-4">
+                  <div className="text-sm font-medium text-foreground px-4">
                     Action
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export default function OutpatientAppointments() {
                   <div className="text-sm font-medium text-foreground">Appointment Details</div>
                   <div className="text-sm font-medium text-foreground">Vitals Status</div>
                   <div className="text-sm font-medium text-foreground">Token & Time</div>
-                  <div className="text-sm font-medium text-foreground pl-4">
+                  <div className="text-sm font-medium text-foreground px-4">
                     Action
                   </div>
                 </div>

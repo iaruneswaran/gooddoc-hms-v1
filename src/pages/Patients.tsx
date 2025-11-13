@@ -170,106 +170,78 @@ export default function Patients() {
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30">
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Patient Info
-                    </th>
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Contact
-                    </th>
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Visit ID
-                    </th>
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Admission & Visit
-                    </th>
-                    <th className="text-left p-4 text-sm font-medium text-foreground">
-                      Care Team
-                    </th>
-                    <th className="text-left pl-8 pr-4 py-4 text-sm font-medium text-foreground">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPatients.map((patient) => (
-                    <tr
-                      key={patient.id}
-                      className="border-b border-border last:border-b-0 hover:bg-muted/20 transition-colors"
-                    >
-                      <td className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                            <User className="w-5 h-5 text-primary" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-foreground">
-                              {patient.name}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              GDID - {patient.gdid} • {patient.age} | {patient.gender}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <a
-                            href={`tel:${patient.phone}`}
-                            className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
-                          >
-                            <Phone className="w-3 h-3" />
-                            {patient.phone}
-                          </a>
-                          <a
-                            href={`mailto:${patient.email}`}
-                            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
-                          >
-                            <Mail className="w-3 h-3" />
-                            {patient.email}
-                          </a>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <Badge variant="secondary" className="text-xs">
-                          Active Visit: {patient.visitId}
-                        </Badge>
-                      </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <div className="text-xs text-muted-foreground">
-                            Admitted: {patient.admissionTime}
-                          </div>
-                          <div className="text-xs text-foreground">
-                            {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS:{" "}
-                            {patient.los}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="text-sm text-foreground">
-                          {patient.doctor} — {patient.specialty}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center justify-end px-4">
-                          <Button
-                            variant="default"
-                            onClick={() => navigate(`/patient-insights/${patient.id}`)}
-                            className="h-9 w-full"
-                          >
-                            Patient Insight
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-[200px_180px_180px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="text-sm font-medium text-foreground">Patient Info</div>
+              <div className="text-sm font-medium text-foreground">Contact</div>
+              <div className="text-sm font-medium text-foreground">Visit ID</div>
+              <div className="text-sm font-medium text-foreground">Admission & Visit</div>
+              <div className="text-sm font-medium text-foreground">Care Team</div>
+              <div className="text-sm font-medium text-foreground px-4">Action</div>
             </div>
+            {filteredPatients.map((patient) => (
+              <div key={patient.id} className="grid grid-cols-[200px_180px_180px_1fr_200px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-foreground">
+                      {patient.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      GDID - {patient.gdid} • {patient.age} | {patient.gender}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <a
+                    href={`tel:${patient.phone}`}
+                    className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    {patient.phone}
+                  </a>
+                  <a
+                    href={`mailto:${patient.email}`}
+                    className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    {patient.email}
+                  </a>
+                </div>
+
+                <div>
+                  <Badge variant="secondary" className="text-xs">
+                    Active Visit: {patient.visitId}
+                  </Badge>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground">
+                    Admitted: {patient.admissionTime}
+                  </div>
+                  <div className="text-xs text-foreground">
+                    {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS:{" "}
+                    {patient.los}
+                  </div>
+                </div>
+
+                <div className="text-sm text-foreground">
+                  {patient.doctor} — {patient.specialty}
+                </div>
+
+                <div className="flex justify-end px-4">
+                  <Button
+                    variant="default"
+                    onClick={() => navigate(`/patient-insights/${patient.id}`)}
+                    className="h-9 w-full"
+                  >
+                    Patient Insight
+                  </Button>
+                </div>
+              </div>
+            ))}
 
             {filteredPatients.length === 0 && (
               <div className="text-center py-12 text-muted-foreground text-sm">

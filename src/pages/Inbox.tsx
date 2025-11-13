@@ -148,7 +148,7 @@ export default function Inbox() {
 
                       {/* Contact Details */}
                       <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-xs text-foreground">
+                        <div className="flex items-center gap-1.5 text-sm text-foreground">
                           <Phone className="w-3.5 h-3.5" />
                           <span>{appointment.phone}</span>
                         </div>

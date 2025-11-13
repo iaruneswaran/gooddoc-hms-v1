@@ -375,7 +375,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden">
-      <div className="grid grid-cols-[180px_220px_1fr_200px_150px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+      <div className="grid grid-cols-[200px_180px_1fr_200px_150px_120px] gap-4 p-4 border-b border-border bg-muted/30">
         <div className="text-sm font-medium text-foreground">Patient Info</div>
         <div className="text-sm font-medium text-foreground">Contact Details</div>
         <div className="text-sm font-medium text-foreground">Appointment Summary</div>
@@ -385,7 +385,7 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
       </div>
 
       {appointments.map((appointment) => (
-        <div key={appointment.id} className="grid grid-cols-[180px_220px_1fr_200px_150px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+        <div key={appointment.id} className="grid grid-cols-[200px_180px_1fr_200px_150px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <User className="w-5 h-5 text-primary" />
@@ -401,12 +401,12 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
             </div>
 
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-sm">
-                <Phone className="w-3.5 h-3.5 text-foreground" />
+              <div className="flex items-center gap-2 text-sm text-foreground">
+                <Phone className="w-3.5 h-3.5" />
                 <span>{appointment.patient.phone}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-3.5 h-3.5 text-foreground" />
+              <div className="flex items-center gap-2 text-sm text-foreground">
+                <Mail className="w-3.5 h-3.5" />
                 <span className="truncate">{appointment.patient.email}</span>
               </div>
             </div>
