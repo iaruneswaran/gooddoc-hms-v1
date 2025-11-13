@@ -286,191 +286,204 @@ export default function LaboratoryResults() {
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
-            {/* Panel Selector */}
-            <Tabs value={selectedPanel} onValueChange={setSelectedPanel}>
-              <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
-                <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  All Tests
-                </TabsTrigger>
-                <TabsTrigger value="cardiac" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  Cardiac Panel
-                </TabsTrigger>
-                <TabsTrigger value="cbc" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  CBC
-                </TabsTrigger>
-                <TabsTrigger value="cmp" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  CMP
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+          <div className="grid grid-cols-3 gap-6">
+            {/* Results Grid - Left Column (2/3) */}
+            <div className="col-span-2 space-y-6">
+              {/* Panel Selector */}
+              <Tabs value={selectedPanel} onValueChange={setSelectedPanel}>
+                <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
+                  <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    All Tests
+                  </TabsTrigger>
+                  <TabsTrigger value="cardiac" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    Cardiac Panel
+                  </TabsTrigger>
+                  <TabsTrigger value="cbc" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    CBC
+                  </TabsTrigger>
+                  <TabsTrigger value="cmp" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                    CMP
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
 
-            {/* Results Table */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Test Results</CardTitle>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <Calculator className="h-4 w-4 mr-1" />
-                      Calculators
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add Test
-                    </Button>
+              {/* Results Table */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Test Results</CardTitle>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">
+                        <Calculator className="h-4 w-4 mr-1" />
+                        Calculators
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-1" />
+                        Add Test
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Test Name</TableHead>
-                      <TableHead>Value</TableHead>
-                      <TableHead>Unit</TableHead>
-                      <TableHead>Reference Range</TableHead>
-                      <TableHead>Flag</TableHead>
-                      <TableHead>Delta</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {tests.map((test) => (
-                      <TableRow key={test.id}>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">{test.name}</div>
-                            {test.loinc && (
-                              <div className="text-xs text-muted-foreground">{test.loinc}</div>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={test.value}
-                            onChange={(e) => handleTestValueChange(test.id, e.target.value)}
-                            className="w-24"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Select value={test.unit} onValueChange={(v) => handleTestUnitChange(test.id, v)}>
-                            <SelectTrigger className="w-32">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value={test.unit}>{test.unit}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {test.referenceRange}
-                        </TableCell>
-                        <TableCell>
-                          {test.flag && getFlagBadge(test.flag)}
-                        </TableCell>
-                        <TableCell>
-                          {test.priorValue && (
-                            <div className="text-xs">
-                              <div className="text-muted-foreground">Prior: {test.priorValue}</div>
-                              {test.delta !== undefined && getDeltaIndicator(test.delta)}
-                            </div>
-                          )}
-                        </TableCell>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Test Name</TableHead>
+                        <TableHead>Value</TableHead>
+                        <TableHead>Unit</TableHead>
+                        <TableHead>Reference Range</TableHead>
+                        <TableHead>Flag</TableHead>
+                        <TableHead>Delta</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+                    </TableHeader>
+                    <TableBody>
+                      {tests.map((test) => (
+                        <TableRow key={test.id}>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">{test.name}</div>
+                              {test.loinc && (
+                                <div className="text-xs text-muted-foreground">{test.loinc}</div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              value={test.value}
+                              onChange={(e) => handleTestValueChange(test.id, e.target.value)}
+                              className="w-24"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Select value={test.unit} onValueChange={(v) => handleTestUnitChange(test.id, v)}>
+                              <SelectTrigger className="w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value={test.unit}>{test.unit}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {test.referenceRange}
+                          </TableCell>
+                          <TableCell>
+                            {getFlagBadge(test.flag)}
+                          </TableCell>
+                          <TableCell>
+                            {test.priorValue && (
+                              <div className="space-y-1">
+                                <div className="text-xs text-muted-foreground">
+                                  Prior: {test.priorValue}
+                                </div>
+                                {getDeltaIndicator(test.delta)}
+                              </div>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
-            {/* Narratives */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Narratives</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Findings</label>
-                  <Textarea
-                    value={findings}
-                    onChange={(e) => setFindings(e.target.value)}
-                    placeholder="Enter key findings..."
-                    rows={3}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Comments</label>
-                  <Textarea
-                    value={comments}
-                    onChange={(e) => setComments(e.target.value)}
-                    placeholder="Additional comments or interpretation..."
-                    rows={3}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Other Notes</label>
-                  <Textarea
-                    value={otherNotes}
-                    onChange={(e) => setOtherNotes(e.target.value)}
-                    placeholder="Technical notes, limitations, etc..."
-                    rows={2}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+              {/* Narratives */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Narratives</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Findings</label>
+                    <Textarea
+                      value={findings}
+                      onChange={(e) => setFindings(e.target.value)}
+                      placeholder="Enter key findings..."
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Comments</label>
+                    <Textarea
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      placeholder="Additional comments or interpretation..."
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Other Notes</label>
+                    <Textarea
+                      value={otherNotes}
+                      onChange={(e) => setOtherNotes(e.target.value)}
+                      placeholder="Technical notes, limitations, etc..."
+                      rows={2}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Reference Information - Now Below */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Reference Information</CardTitle>
-                  <Button variant="outline" size="sm">
+            {/* Reference Panel - Right Column (1/3) */}
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm">Reference Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Selected Test</div>
+                    <div className="text-sm font-medium">Troponin I</div>
+                  </div>
+                  <Separator />
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Reference Range</div>
+                    <div className="text-sm">{'< 0.04 ng/mL'}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Normal adults</div>
+                  </div>
+                  <Separator />
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Critical Values</div>
+                    <div className="text-sm text-destructive">{'>'}0.40 ng/mL</div>
+                  </div>
+                  <Separator />
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Prior Results</div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">1 month ago</span>
+                        <span>0.02 ng/mL</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">3 months ago</span>
+                        <span>0.01 ng/mL</span>
+                      </div>
+                    </div>
+                  </div>
+                  <Separator />
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">QC Status</div>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Passed
+                    </Badge>
+                    <div className="text-xs text-muted-foreground mt-1">Last calibration: Today 8:00 AM</div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm">Attachments</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" size="sm" className="w-full">
                     <Upload className="h-4 w-4 mr-2" />
                     Upload File
                   </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-1">Selected Test</div>
-                  <div className="text-sm font-medium">Troponin I</div>
-                </div>
-                <Separator />
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-1">Reference Range</div>
-                  <div className="text-sm">{'< 0.04 ng/mL'}</div>
-                  <div className="text-xs text-muted-foreground mt-1">Normal adults</div>
-                </div>
-                <Separator />
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-1">Critical Values</div>
-                  <div className="text-sm text-destructive">{'>'}0.40 ng/mL</div>
-                </div>
-                <Separator />
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-1">Prior Results</div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">1 month ago</span>
-                      <span>0.02 ng/mL</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">3 months ago</span>
-                      <span>0.01 ng/mL</span>
-                    </div>
-                  </div>
-                </div>
-                <Separator />
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-1">QC Status</div>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    <CheckCircle className="h-3 w-3 mr-1" />
-                    Passed
-                  </Badge>
-                  <div className="text-xs text-muted-foreground mt-1">Last calibration: Today 8:00 AM</div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* Action Footer */}
