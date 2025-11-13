@@ -30,7 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ExternalLink, Check, ChevronsUpDown } from "lucide-react";
+import { ExternalLink, Check, ChevronsUpDown, ChevronLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -223,6 +223,14 @@ export default function RecordVitals() {
 
         <main className="p-6">
           <div className="max-w-5xl mx-auto">
+            <button
+              onClick={() => navigate("/patients")}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span className="font-semibold">Patients</span>
+            </button>
+
             <h1 className="text-lg font-semibold text-foreground mb-6">Record Vitals</h1>
 
             {/* Patient Selection */}
