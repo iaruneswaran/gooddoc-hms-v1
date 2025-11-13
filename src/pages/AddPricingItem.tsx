@@ -33,7 +33,7 @@ export default function AddPricingItem() {
           </div>
 
           {/* Form */}
-          <div className="max-w-5xl">
+          <div className="max-w-5xl mx-auto">
             <AddItemForm mode="create" />
           </div>
         </main>
