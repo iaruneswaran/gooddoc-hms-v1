@@ -119,7 +119,7 @@ export default function Inbox() {
                   <div className="text-sm font-medium text-foreground">Service Type</div>
                   <div className="text-sm font-medium text-foreground">Doctor</div>
                   <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
-                  <div className="text-sm font-medium text-foreground text-right">Action</div>
+                  <div className="text-sm font-medium text-foreground flex justify-end">Action</div>
                 </div>
 
                 {filteredAppointments.length === 0 ? (
