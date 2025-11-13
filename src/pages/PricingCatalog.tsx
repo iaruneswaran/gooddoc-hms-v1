@@ -159,7 +159,7 @@ const PricingCatalog = () => {
           </Card>
 
           {/* Filters Bar */}
-          <div className="mb-6">
+          <div className="mb-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               {/* Search */}
               <div className="md:col-span-2 relative">
