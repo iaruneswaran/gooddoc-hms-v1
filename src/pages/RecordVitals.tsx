@@ -261,14 +261,18 @@ export default function RecordVitals() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search by name, GDID, or patient details..." />
+                  <Command shouldFilter={true}>
+                    <CommandInput 
+                      placeholder="Search by name, GDID, or patient details..." 
+                      className="h-12"
+                    />
                     <CommandEmpty>No patient found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="max-h-[300px] overflow-auto">
                       {samplePatients.map((patient) => (
                         <CommandItem
                           key={patient.id}
-                          value={`${patient.name} ${patient.gdid}`}
+                          value={`${patient.name} GDID${patient.gdid} ${patient.age} ${patient.gender}`}
+                          keywords={[patient.name, patient.gdid, patient.age.toString(), patient.gender]}
                           onSelect={() => {
                             setSelectedPatient({
                               ...patient,
@@ -276,6 +280,7 @@ export default function RecordVitals() {
                             });
                             setOpen(false);
                           }}
+                          className="cursor-pointer"
                         >
                           <Check
                             className={cn(
@@ -283,7 +288,7 @@ export default function RecordVitals() {
                               selectedPatient?.id === patient.id ? "opacity-100" : "opacity-0"
                             )}
                           />
-                          <div>
+                          <div className="flex-1">
                             <div className="text-sm font-medium">{patient.name}</div>
                             <div className="text-xs text-muted-foreground">
                               GDID-{patient.gdid} • {patient.age} | {patient.gender}
