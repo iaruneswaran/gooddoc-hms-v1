@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Download } from "lucide-react";
+import { ChevronLeft, Download, ExternalLink } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,11 @@ import { AdvanceCollectionForm } from "@/components/billing/AdvanceCollectionFor
 import { AdvanceTransactionsTable } from "@/components/billing/AdvanceTransactionsTable";
 import { TransactionsTable } from "@/components/billing/TransactionsTable";
 import { SuccessModal } from "@/components/billing/SuccessModal";
+import { ClaimFilters } from "@/components/insurance/ClaimFilters";
+import { ClaimsTable } from "@/components/insurance/ClaimsTable";
+import { mockClaims } from "@/data/insurance.mock";
 import { Invoice, TransactionRow } from "@/types/billing";
+import { Claim, ClaimStatus, ServiceType } from "@/types/insurance";
 import { formatINR } from "@/utils/currency";
 import { toast } from "@/hooks/use-toast";
 
@@ -31,6 +35,42 @@ const Payments = () => {
   const [successType, setSuccessType] = useState<"payment" | "advance">("payment");
   const [dateRange, setDateRange] = useState("30d");
   const [advanceBalance, setAdvanceBalance] = useState(320000); // in paise
+  
+  // Insurance filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<ClaimStatus | "All">("All");
+  const [serviceTypeFilter, setServiceTypeFilter] = useState<ServiceType | "All">("All");
+
+  // Filter insurance claims
+  const filteredClaims = useMemo(() => {
+    return mockClaims.filter((claim) => {
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesClaimNo = claim.claimNo.toLowerCase().includes(query);
+        const matchesPatient = claim.patient?.name.toLowerCase().includes(query);
+        const matchesPolicy = claim.policy?.policyNo.toLowerCase().includes(query);
+        
+        if (!matchesClaimNo && !matchesPatient && !matchesPolicy) {
+          return false;
+        }
+      }
+
+      if (statusFilter !== "All" && claim.status !== statusFilter) {
+        return false;
+      }
+
+      if (serviceTypeFilter !== "All") {
+        const hasServiceType = claim.services.some(
+          (service) => service.type === serviceTypeFilter
+        );
+        if (!hasServiceType) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [searchQuery, statusFilter, serviceTypeFilter]);
 
   // Mock data - invoices in paise
   const invoices: Invoice[] = [
@@ -195,6 +235,56 @@ const Payments = () => {
     });
   };
 
+  // Insurance handlers
+  const handleViewClaim = (claim: Claim) => {
+    toast({
+      title: "View Claim",
+      description: `Viewing claim ${claim.claimNo}`,
+    });
+  };
+
+  const handleEditClaim = (claim: Claim) => {
+    toast({
+      title: "Edit Claim",
+      description: `Editing claim ${claim.claimNo}`,
+    });
+  };
+
+  const handleDeleteClaim = (claim: Claim) => {
+    toast({
+      title: "Delete Claim",
+      description: `Deleting claim ${claim.claimNo}`,
+      variant: "destructive",
+    });
+  };
+
+  const handleAddPayment = (claim: Claim) => {
+    toast({
+      title: "Add Payment",
+      description: `Adding payment to claim ${claim.claimNo}`,
+    });
+  };
+
+  const handleAddDocument = (claim: Claim) => {
+    toast({
+      title: "Add Document",
+      description: `Adding document to claim ${claim.claimNo}`,
+    });
+  };
+
+  const handleDownloadPDF = (claim: Claim) => {
+    toast({
+      title: "Downloading PDF",
+      description: `Downloading ${claim.claimNo}.pdf`,
+    });
+  };
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("All");
+    setServiceTypeFilter("All");
+  };
+
   const selectedInvoicesData = invoices.filter((inv) =>
     selectedInvoices.includes(inv.id)
   );
@@ -320,16 +410,37 @@ const Payments = () => {
 
             {/* Insurance Tab */}
             <TabsContent value="insurance" className="mt-6">
-              <Card className="p-6 text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Insurance Claims
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  View and manage insurance claims for this patient
-                </p>
-                <Button onClick={() => navigate(`/patient-insights/${patientId}/insurance`)}>
-                  Go to Insurance
-                </Button>
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <ClaimFilters
+                      onSearchChange={setSearchQuery}
+                      onStatusChange={setStatusFilter}
+                      onServiceTypeChange={setServiceTypeFilter}
+                      onClearFilters={handleClearFilters}
+                    />
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    className="ml-4 gap-2"
+                    onClick={() => navigate(`/patient-insights/${patientId}/insurance`)}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Go to Insurance
+                  </Button>
+                </div>
+                
+                <div className="mt-6">
+                  <ClaimsTable
+                    claims={filteredClaims}
+                    onViewClaim={handleViewClaim}
+                    onEditClaim={handleEditClaim}
+                    onDeleteClaim={handleDeleteClaim}
+                    onAddPayment={handleAddPayment}
+                    onAddDocument={handleAddDocument}
+                    onDownloadPDF={handleDownloadPDF}
+                  />
+                </div>
               </Card>
             </TabsContent>
 
