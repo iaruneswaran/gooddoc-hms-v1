@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Plus, User, Paperclip, Mic, Send, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
+import { Plus, User, Paperclip, Send, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGoodDocChat } from "@/hooks/useGoodDocChat";
 
@@ -144,10 +144,6 @@ export default function AskGoodDoc() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Button type="button" variant="ghost" size="icon">
-                        <Mic className="h-4 w-4" />
-                      </Button>
-                      
                       <Button
                         type="submit"
                         disabled={!searchQuery.trim() || isLoading}
@@ -163,26 +159,17 @@ export default function AskGoodDoc() {
 
               {/* Suggestion Prompts - Only show when no messages */}
               {messages.length === 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="flex flex-wrap gap-4 mb-6">
                   {suggestionPrompts.map((prompt, index) => (
-                    <Card
+                    <button
                       key={index}
                       onClick={() => {
                         sendMessage(prompt.text);
                       }}
-                      className="p-4 cursor-pointer hover:shadow-md transition-all hover-scale border-border"
+                      className="text-sm text-muted-foreground hover:text-ask-orange transition-colors underline-offset-4 hover:underline"
                     >
-                      <div className="flex flex-col gap-3">
-                        <p className="text-sm text-foreground leading-relaxed">
-                          {prompt.text}
-                        </p>
-                        <div className="flex justify-end">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-ask-orange to-ask-red flex items-center justify-center">
-                            <prompt.icon className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
+                      {prompt.text}
+                    </button>
                   ))}
                 </div>
               )}
@@ -234,14 +221,12 @@ export default function AskGoodDoc() {
               <h3 className="text-sm font-medium text-foreground mb-3">
                 Recent Chats
               </h3>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 {recentChats.map((chat, index) => (
                   <button
                     key={index}
-                    className={cn(
-                      "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
-                      "text-foreground hover:bg-accent"
-                    )}
+                    onClick={() => sendMessage(chat)}
+                    className="w-full text-left text-sm text-muted-foreground hover:text-ask-orange transition-colors"
                   >
                     {chat}
                   </button>
