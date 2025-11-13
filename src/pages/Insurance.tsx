@@ -8,6 +8,9 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ClaimsTable } from "@/components/insurance/ClaimsTable";
 import { ClaimFilters } from "@/components/insurance/ClaimFilters";
+import { PoliciesTab } from "@/components/insurance/PoliciesTab";
+import { PayersTab } from "@/components/insurance/PayersTab";
+import { ReportsTab } from "@/components/insurance/ReportsTab";
 import { mockClaims } from "@/data/insurance.mock";
 import { Claim, ClaimStatus, ServiceType } from "@/types/insurance";
 import { formatINR } from "@/utils/currency";
@@ -110,10 +113,7 @@ const Insurance = () => {
   };
 
   const handleNewClaim = () => {
-    toast({
-      title: "New Claim",
-      description: "Opening new claim form",
-    });
+    navigate("/insurance/claims/new");
   };
 
   const handleExportCSV = () => {
@@ -258,40 +258,19 @@ const Insurance = () => {
               </Card>
             </TabsContent>
 
-            {/* Policies Tab (Stub) */}
+            {/* Policies Tab */}
             <TabsContent value="policies" className="mt-6">
-              <Card className="p-12 text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Policies
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Policy management coming soon
-                </p>
-              </Card>
+              <PoliciesTab />
             </TabsContent>
 
-            {/* Payers Tab (Stub) */}
+            {/* Payers Tab */}
             <TabsContent value="payers" className="mt-6">
-              <Card className="p-12 text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Payers
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Payer management coming soon
-                </p>
-              </Card>
+              <PayersTab />
             </TabsContent>
 
-            {/* Reports Tab (Stub) */}
+            {/* Reports Tab */}
             <TabsContent value="reports" className="mt-6">
-              <Card className="p-12 text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Reports
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Insurance reports coming soon
-                </p>
-              </Card>
+              <ReportsTab />
             </TabsContent>
           </Tabs>
         </main>

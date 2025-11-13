@@ -142,3 +142,137 @@ export interface Claim {
   updatedAt: string;
   history: HistoryEntry[];
 }
+
+// Extended types for Policies
+export interface PolicyCoverage {
+  sumInsured: number; // in paise
+  deductible: number; // in paise
+  copayPct: number;
+  roomRentCap: number; // in paise
+  sublimits: Array<{ name: string; amount: number }>;
+}
+
+export interface PolicyDetails {
+  id: string;
+  policyNo: string;
+  patient: Patient;
+  payer: Payer;
+  plan: string;
+  tpa?: string;
+  validFrom: string;
+  validTo: string;
+  network: Network;
+  coverage: PolicyCoverage;
+  ecardNo?: string;
+  kycStatus: "Verified" | "Pending";
+  status: "Active" | "Expired" | "Inactive";
+  documents: ClaimDocument[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Extended types for Payers
+export interface PayerCodes {
+  payerCode: string;
+  ediCode?: string;
+}
+
+export interface PayerSubmission {
+  method: "Portal" | "Email" | "EDI";
+  portalURL?: string;
+  emails: string[];
+}
+
+export interface PayerPaymentRules {
+  payoutMode: PaymentMode;
+  remittanceFormat: string;
+}
+
+export interface PayerRequiredDocs {
+  Cashless: DocumentTag[];
+  Reimbursement: DocumentTag[];
+}
+
+export interface PayerDefaults {
+  copayPct: number;
+  deductible: number; // in paise
+}
+
+export interface PayerContacts {
+  claimEmail: string;
+  preauthEmail?: string;
+  phone?: string;
+}
+
+export interface PayerSLAs {
+  preauthTATDays: number;
+  claimTATDays: number;
+}
+
+export interface PayerPlan {
+  id: string;
+  name: string;
+  network: Network;
+  copayPct: number;
+  deductible: number; // in paise
+}
+
+export interface PayerDetails {
+  id: string;
+  name: string;
+  type: "Insurer" | "TPA";
+  status: "Active" | "Inactive";
+  codes: PayerCodes;
+  submission: PayerSubmission;
+  paymentRules: PayerPaymentRules;
+  requiredDocs: PayerRequiredDocs;
+  defaults: PayerDefaults;
+  contacts: PayerContacts;
+  slas: PayerSLAs;
+  plans: PayerPlan[];
+}
+
+// Report types
+export interface ReportSummary {
+  totalBilled: number; // in paise
+  insurancePaid: number; // in paise
+  adjustments: number; // in paise
+  balance: number; // in paise
+  totalClaims: number;
+  submitted: number;
+  inReview: number;
+  paid: number;
+  denied: number;
+  partiallyPaid: number;
+  denialRate: number;
+  avgTAT: number; // days
+}
+
+export interface TrendData {
+  period: string;
+  billed: number;
+  paid: number;
+}
+
+export interface PayerPerformance {
+  payerId: string;
+  payerName: string;
+  paidPct: number;
+  avgTAT: number;
+  denialRate: number;
+}
+
+export interface DenialRecord {
+  claimNo: string;
+  payer: string;
+  reason: string;
+  amount: number; // in paise
+  daysSinceDenial: number;
+  attempts: number;
+}
+
+export interface ARAgingBucket {
+  range: string;
+  count: number;
+  amount: number; // in paise
+}
