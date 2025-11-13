@@ -135,31 +135,28 @@ const PricingCatalog = () => {
         <main className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">Pricing Catalog</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Manage prices for services, procedures, and packages
-              </p>
-            </div>
+            <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
 
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Upload className="h-4 w-4" />
-                Import
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Printer className="h-4 w-4" />
-                Print
-              </Button>
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Item
-              </Button>
-            </div>
+            <Card className="p-3">
+              <div className="flex items-center gap-3">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Upload className="h-4 w-4" />
+                  Import
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Printer className="h-4 w-4" />
+                  Print
+                </Button>
+                <Button size="sm" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add Item
+                </Button>
+              </div>
+            </Card>
           </div>
 
           {/* Filters Bar */}
