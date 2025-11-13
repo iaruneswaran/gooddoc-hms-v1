@@ -14,7 +14,7 @@ import { ClaimStepServices } from "@/components/insurance/claim-steps/ClaimStepS
 import { ClaimStepDocuments } from "@/components/insurance/claim-steps/ClaimStepDocuments";
 import { ClaimStepPaymentBanking } from "@/components/insurance/claim-steps/ClaimStepPaymentBanking";
 import { ClaimStepReview } from "@/components/insurance/claim-steps/ClaimStepReview";
-import { ClaimSummaryDrawer } from "@/components/insurance/ClaimSummaryDrawer";
+import { ClaimInvoicesList } from "@/components/insurance/ClaimInvoicesList";
 
 const STEPS = [
   { id: 1, name: "Patient & Policy", component: ClaimStepPatientPolicy },
@@ -230,9 +230,9 @@ const NewClaim = () => {
               />
             </div>
             
-            {/* Summary Drawer */}
+            {/* Invoices List */}
             <div className="lg:col-span-1">
-              <ClaimSummaryDrawer data={claimData} />
+              <ClaimInvoicesList />
             </div>
           </div>
         </main>
