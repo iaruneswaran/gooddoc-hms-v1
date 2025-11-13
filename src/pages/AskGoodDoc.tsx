@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Share2, MoreVertical, Plus, User, Paperclip, Mic, Search, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
+import { Plus, User, Paperclip, Mic, Search, RefreshCw, Sparkles, BookOpen, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function AskGoodDoc() {
@@ -45,13 +45,6 @@ export default function AskGoodDoc() {
           {/* Main Content Area */}
           <main className="flex-1 p-8">
             <div className="max-w-4xl mx-auto">
-              {/* Header Actions */}
-              <div className="flex items-center justify-end mb-8">
-                <Button variant="ghost" size="sm">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </div>
-
               {/* Welcome Message */}
               <div className="text-center mb-8">
                 <h1 className="text-4xl font-normal bg-ask-gradient bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
