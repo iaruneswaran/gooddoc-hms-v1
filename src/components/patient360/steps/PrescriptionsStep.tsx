@@ -51,8 +51,8 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
   const completedMedications = medications.filter(med => med.name && med.strength && med.dosage);
 
   return (
-    <div className="grid grid-cols-4 gap-6">
-      <div className="col-span-3">
+    <div className="grid grid-cols-5 gap-6">
+      <div className="col-span-4">
         <Card className="p-6">
           {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
             <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
@@ -204,14 +204,15 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="col-span-1 flex items-center justify-end">
+                <div className="col-span-1 flex items-center justify-center">
                   {medications.length > 1 && (
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="sm"
                       onClick={() => removeMedication(med.id!)}
+                      className="h-8 w-8 p-0"
                     >
-                      <Trash2 className="w-4 h-4 text-destructive" />
+                      <Trash2 className="w-3 h-3 text-destructive" />
                     </Button>
                   )}
                 </div>
