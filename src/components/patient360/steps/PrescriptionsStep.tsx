@@ -211,7 +211,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                       size="icon"
                       onClick={() => removeMedication(med.id!)}
                     >
-                      <Trash2 className="w-4 h-4 text-destructive" />
+                      <Trash2 className="w-3 h-3 text-destructive" />
                     </Button>
                   )}
                 </div>
