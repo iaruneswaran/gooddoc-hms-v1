@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Patient, Vitals } from "@/types/patient360";
@@ -16,7 +15,6 @@ interface WriteNotesStepProps {
 export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps) {
   const [chiefComplaint, setChiefComplaint] = useState("");
   const [hpi, setHpi] = useState("");
-  const [assessmentPlan, setAssessmentPlan] = useState("");
 
   return (
     <div className="grid grid-cols-4 gap-6">
@@ -29,12 +27,12 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
               <Label htmlFor="chiefComplaint" className="text-sm font-medium">
                 Chief Complaint
               </Label>
-              <Input
+              <Textarea
                 id="chiefComplaint"
                 value={chiefComplaint}
                 onChange={(e) => setChiefComplaint(e.target.value)}
                 placeholder="Enter chief complaint"
-                className="mt-2"
+                className="mt-2 min-h-[120px]"
               />
             </div>
 
@@ -52,48 +50,6 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
             </div>
 
             <div>
-              <Label className="text-sm font-medium">Review of Systems (ROS)</Label>
-              <div className="grid grid-cols-2 gap-4 mt-2">
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Constitutional</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Cardiovascular</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Respiratory</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Gastrointestinal</span>
-                  </label>
-                </div>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Neurological</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Musculoskeletal</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Genitourinary</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="rounded border-input" />
-                    <span>Psychiatric</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div>
               <Label htmlFor="physicalExam" className="text-sm font-medium">
                 Physical Examination
               </Label>
@@ -101,19 +57,6 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
                 id="physicalExam"
                 placeholder="Document physical examination findings"
                 className="mt-2 min-h-[100px]"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="assessmentPlan" className="text-sm font-medium">
-                Assessment & Plan
-              </Label>
-              <Textarea
-                id="assessmentPlan"
-                value={assessmentPlan}
-                onChange={(e) => setAssessmentPlan(e.target.value)}
-                placeholder="Enter assessment and plan"
-                className="mt-2 min-h-[120px]"
               />
             </div>
           </div>
