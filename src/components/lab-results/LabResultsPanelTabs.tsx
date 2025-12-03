@@ -14,7 +14,7 @@ export function LabResultsPanelTabs({
 }: LabResultsPanelTabsProps) {
   return (
     <Tabs value={selectedPanel} onValueChange={onPanelChange}>
-      <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start w-full">
+      <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start w-auto">
         {panelsCatalog.map((panel) => (
           <TabsTrigger
             key={panel.id}
