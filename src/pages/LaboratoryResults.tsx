@@ -15,8 +15,9 @@ import {
   AlertTriangle,
   Upload,
   Plus,
-  Calculator,
+  Search,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useLabResults, LabResultRow } from "@/hooks/useLabResults";
 import { LabResultsTable } from "@/components/lab-results/LabResultsTable";
@@ -110,6 +111,7 @@ export default function LaboratoryResults() {
   const [comments, setComments] = useState("");
   const [otherNotes, setOtherNotes] = useState("");
   const [showAddTestModal, setShowAddTestModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedTestRow, setSelectedTestRow] = useState<LabResultRow | null>(
     null
   );
@@ -135,10 +137,20 @@ export default function LaboratoryResults() {
     initialResults: initialMockResults,
   });
 
-  // Filter rows by selected panel
+  // Filter rows by selected panel and search query
   const filteredRows = useMemo(() => {
-    return getRowsByPanel(selectedPanel);
-  }, [getRowsByPanel, selectedPanel]);
+    let rows = getRowsByPanel(selectedPanel);
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      rows = rows.filter(
+        (row) =>
+          row.testDef.displayName.toLowerCase().includes(query) ||
+          row.testDef.loinc?.toLowerCase().includes(query) ||
+          row.testDef.synonyms?.some((s) => s.toLowerCase().includes(query))
+      );
+    }
+    return rows;
+  }, [getRowsByPanel, selectedPanel, searchQuery]);
 
   // Count tests per panel
   const testCounts = useMemo(() => {
@@ -332,15 +344,16 @@ export default function LaboratoryResults() {
                         </Badge>
                       )}
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={recalculateAll}
-                      >
-                        <Calculator className="h-4 w-4 mr-1" />
-                        Recalculate
-                      </Button>
+                    <div className="flex items-center gap-2">
+                      <div className="relative">
+                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search tests..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-8 w-[200px] h-9"
+                        />
+                      </div>
                       <Button
                         variant="outline"
                         size="sm"
