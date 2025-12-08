@@ -40,6 +40,7 @@ interface DiagnosticOrder {
   priority: "routine" | "stat";
   tatMinutes?: number;
   isOverdue?: boolean;
+  approvedBy?: string;
 }
 
 const mockOrders: DiagnosticOrder[] = [
@@ -67,7 +68,8 @@ const mockOrders: DiagnosticOrder[] = [
     status: "Saved draft",
     priority: "stat",
     tatMinutes: 45,
-    isOverdue: false
+    isOverdue: false,
+    approvedBy: "Dr. Mehta"
   },
   {
     id: "OR-LL-10367",
@@ -92,7 +94,8 @@ const mockOrders: DiagnosticOrder[] = [
     scheduledTime: "11:15 AM",
     status: "Pending",
     priority: "routine",
-    tatMinutes: 120
+    tatMinutes: 120,
+    approvedBy: "Dr. Sharma"
   },
   {
     id: "OR-RD-55421",
@@ -117,7 +120,8 @@ const mockOrders: DiagnosticOrder[] = [
     scheduledTime: "09:45 AM",
     status: "For Review",
     priority: "stat",
-    tatMinutes: 60
+    tatMinutes: 60,
+    approvedBy: "Dr. Patel"
   },
   {
     id: "OR-RD-55438",
@@ -142,7 +146,8 @@ const mockOrders: DiagnosticOrder[] = [
     scheduledTime: "02:30 PM",
     status: "Completed",
     priority: "routine",
-    tatMinutes: 180
+    tatMinutes: 180,
+    approvedBy: "Dr. Kumar"
   },
   {
     id: "OR-LL-10389",
@@ -167,7 +172,8 @@ const mockOrders: DiagnosticOrder[] = [
     scheduledTime: "01:00 PM",
     status: "Pending",
     priority: "routine",
-    tatMinutes: 240
+    tatMinutes: 240,
+    approvedBy: "Dr. Singh"
   }
 ];
 
@@ -259,17 +265,18 @@ export default function DiagnosticsWorklist() {
 
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[200px_1fr_180px_150px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+            <div className="grid grid-cols-[200px_1fr_160px_140px_120px_140px_130px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-sm font-medium text-foreground">Patient</div>
               <div className="text-sm font-medium text-foreground">Order Summary</div>
               <div className="text-sm font-medium text-foreground">Service</div>
               <div className="text-sm font-medium text-foreground">Token & Time</div>
               <div className="text-sm font-medium text-foreground">Status</div>
+              <div className="text-sm font-medium text-foreground">Approved by</div>
               <div className="text-sm font-medium text-foreground px-4">Action</div>
             </div>
 
             {filteredOrders.map((order) => (
-              <div key={order.id} className="grid grid-cols-[200px_1fr_180px_150px_140px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+              <div key={order.id} className="grid grid-cols-[200px_1fr_160px_140px_120px_140px_130px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                 <div className="flex items-start gap-3">
                   <Avatar className="w-10 h-10 flex-shrink-0">
                     <AvatarFallback className="bg-primary/10 text-primary">{order.patient.avatar}</AvatarFallback>
@@ -300,6 +307,10 @@ export default function DiagnosticsWorklist() {
                   <Badge className={getStatusColor(order.status)}>
                     {order.status}
                   </Badge>
+                </div>
+
+                <div className="text-sm text-foreground">
+                  {order.approvedBy || "—"}
                 </div>
 
                 <div className="flex items-center justify-end px-4">
