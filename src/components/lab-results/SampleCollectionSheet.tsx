@@ -25,6 +25,34 @@ import { TestDefinition } from "@/types/lab-tests";
 import { Sample, TestSampleStatus, TECHNICIANS } from "@/types/sample-collection";
 import { panelsCatalog, getTestsByPanel } from "@/data/tests-catalog";
 
+// Generate a compact barcode SVG for individual tests
+function generateTestBarcode(sampleId: string, testId: string): string {
+  const combined = `${sampleId}-${testId.slice(0, 4)}`;
+  const bars: string[] = [];
+  const barWidth = 1.5;
+  let x = 5;
+  
+  for (let i = 0; i < combined.length; i++) {
+    const charCode = combined.charCodeAt(i);
+    const pattern = charCode.toString(2).padStart(8, "0");
+    
+    for (let j = 0; j < pattern.length; j++) {
+      if (pattern[j] === "1") {
+        bars.push(`<rect x="${x}" y="2" width="${barWidth}" height="28" fill="black"/>`);
+      }
+      x += barWidth;
+    }
+    x += barWidth;
+  }
+  
+  const width = x + 5;
+  
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} 32" width="${Math.min(width, 120)}" height="32">
+    <rect x="0" y="0" width="${width}" height="32" fill="white"/>
+    ${bars.join("")}
+  </svg>`;
+}
+
 interface SampleCollectionSheetProps {
   open: boolean;
   onClose: () => void;
@@ -258,22 +286,35 @@ export function SampleCollectionSheet({
 
         <div className="flex-1 overflow-y-auto px-6">
           {showBarcodePreview && sampleToShow ? (
-            // Barcode Preview Mode
-            <div className="space-y-6">
-              <div className="text-center">
-                <h3 className="text-sm font-medium mb-4">Sample Label</h3>
-                <div className="bg-white border rounded-lg p-6 inline-block">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: sampleToShow.barcodeSvg || "" }}
-                    className="mb-2"
-                  />
-                  <p className="text-sm font-mono font-medium">
-                    Sample ID: {sampleToShow.sampleId}
-                  </p>
-                </div>
+            // Barcode Preview Mode - Individual barcodes per test
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium">Sample Labels</h3>
+              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+                {sampleToShow.testIds.map((testId) => {
+                  const testDef = testDefinitions.get(testId);
+                  const testBarcode = generateTestBarcode(sampleToShow.sampleId, testId);
+                  return (
+                    <div
+                      key={testId}
+                      className="bg-white border rounded-lg p-3 flex items-center gap-3"
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{ __html: testBarcode }}
+                        className="flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium truncate">
+                          {testDef?.displayName || testId}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground font-mono">
+                          {sampleToShow.sampleId}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-
-              <div className="space-y-2 text-sm">
+              <div className="space-y-1 text-xs pt-2 border-t">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Collected by</span>
                   <span className="font-medium">{sampleToShow.collectedBy}</span>
@@ -283,10 +324,6 @@ export function SampleCollectionSheet({
                   <span className="font-medium">
                     {new Date(sampleToShow.collectedAt).toLocaleString()}
                   </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tests included</span>
-                  <span className="font-medium">{sampleToShow.testIds.length}</span>
                 </div>
               </div>
             </div>
