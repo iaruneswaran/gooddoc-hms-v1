@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -29,10 +29,12 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useLabResults, LabResultRow } from "@/hooks/useLabResults";
 import { useSampleCollection } from "@/hooks/useSampleCollection";
+import { useLabDiagnosticsAI } from "@/hooks/useLabDiagnosticsAI";
 import { LabResultsTable } from "@/components/lab-results/LabResultsTable";
 import { LabResultsPanelTabs } from "@/components/lab-results/LabResultsPanelTabs";
 import { AddTestModal } from "@/components/lab-results/AddTestModal";
 import { SampleCollectionSheet } from "@/components/lab-results/SampleCollectionSheet";
+import { DiagnosticsAIPanel } from "@/components/lab-results/DiagnosticsAIPanel";
 import { PatientContext, Sex, TestDefinition } from "@/types/lab-tests";
 import { panelsCatalog, getTestsByPanel, getTestDefinition } from "@/data/tests-catalog";
 
@@ -171,6 +173,40 @@ export default function LaboratoryResults() {
     });
     return map;
   }, [rows]);
+
+  // Lab Diagnostics AI
+  const {
+    analyze: analyzeWithAI,
+    response: aiResponse,
+    isAnalyzing,
+    error: aiError,
+    getTestDiagnostics,
+  } = useLabDiagnosticsAI({
+    orderId: mockOrder.id,
+    patient: { ...patientContext, mrn: mockPatient.mrn },
+    physician: mockPatient.physician,
+    panels: mockOrder.panels,
+  });
+
+  const handleAnalyze = useCallback(() => {
+    analyzeWithAI(rows, testDefinitionsMap);
+  }, [analyzeWithAI, rows, testDefinitionsMap]);
+
+  const handleApplyNarrative = useCallback((text: string) => {
+    setFindings(text);
+    toast({
+      title: "Narrative Applied",
+      description: "AI-suggested narrative has been applied to findings.",
+    });
+  }, [toast]);
+
+  const handleApplyComments = useCallback((text: string) => {
+    setComments(text);
+    toast({
+      title: "Comments Applied",
+      description: "AI-suggested comments have been applied.",
+    });
+  }, [toast]);
 
   // Get sample status for display
   const sampleInfo = useMemo(() => {
@@ -509,8 +545,18 @@ export default function LaboratoryResults() {
                 </Card>
               </div>
 
-              {/* Right Column (1/3) - QC and Attachments */}
+              {/* Right Column (1/3) - AI Panel, QC and Attachments */}
               <div className="space-y-4">
+                {/* Diagnostics AI Panel */}
+                <DiagnosticsAIPanel
+                  response={aiResponse}
+                  isAnalyzing={isAnalyzing}
+                  error={aiError}
+                  onAnalyze={handleAnalyze}
+                  onApplyNarrative={handleApplyNarrative}
+                  onApplyComments={handleApplyComments}
+                />
+
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-sm">QC Status</CardTitle>
