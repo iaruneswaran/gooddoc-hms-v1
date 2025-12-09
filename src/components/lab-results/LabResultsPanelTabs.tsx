@@ -38,7 +38,7 @@ export function LabResultsPanelTabs({
       </Tabs>
 
       {onCollectSample && (
-        <Button variant="ghost" size="sm" onClick={onCollectSample} className="gap-2">
+        <Button variant="outline" size="sm" onClick={onCollectSample} className="gap-2">
           <TestTube className="h-4 w-4" />
           Collect Sample
         </Button>
