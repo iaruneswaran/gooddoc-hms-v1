@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, FileText } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CalendarWidget } from "@/components/CalendarWidget";
 
@@ -315,9 +315,8 @@ export default function DiagnosticsWorklist() {
                   {/* Action */}
                   <div className="flex justify-center">
                     <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`} className="w-full">
-                      <Button variant="default" className="h-9 w-full gap-2">
-                        <FileText className="h-4 w-4" />
-                        Results
+                      <Button variant="default" className="h-9 w-full">
+                        Enter Results
                       </Button>
                     </Link>
                   </div>
@@ -325,23 +324,25 @@ export default function DiagnosticsWorklist() {
 
                 {/* Departments & Tests Row */}
                 <div className="px-4 pb-4 pt-0">
-                  <div className="flex items-start gap-6 text-sm">
-                    <div className="flex items-center gap-3">
-                      <span className="text-muted-foreground font-medium">Departments</span>
-                      <div className="flex gap-2">
-                        {order.departments.map((dept, idx) => (
-                          <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary font-normal">
-                            {dept.name}
-                          </Badge>
-                        ))}
+                  <div className="border-t border-border pt-4 mx-0" style={{ width: 'fit-content' }}>
+                    <div className="flex items-start gap-6 text-sm">
+                      <div className="flex items-center gap-3">
+                        <span className="text-muted-foreground font-medium">Departments</span>
+                        <div className="flex gap-2">
+                          {order.departments.map((dept, idx) => (
+                            <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary font-normal">
+                              {dept.name}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-muted-foreground">All Tests ({getTotalTests(order.departments)})</span>
-                      <div className="flex gap-4 text-foreground">
-                        {order.departments.flatMap(dept => dept.tests).map((test, idx) => (
-                          <span key={idx}>{test}</span>
-                        ))}
+                      <div className="flex items-center gap-3">
+                        <span className="text-muted-foreground">All Tests ({getTotalTests(order.departments)})</span>
+                        <div className="flex gap-4 text-foreground">
+                          {order.departments.flatMap(dept => dept.tests).map((test, idx) => (
+                            <span key={idx}>{test}</span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
