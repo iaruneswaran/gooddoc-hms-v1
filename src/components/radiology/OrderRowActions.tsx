@@ -50,7 +50,6 @@ export function OrderRowActions({ order, onStatusChange, onAssign }: OrderRowAct
       <div className="flex items-center gap-2">
         <Link to={`/diagnostics/radiology/${order.id}`}>
           <Button variant="default" size="sm" className="h-8">
-            <FileText className="h-3 w-3 mr-1" />
             Enter Results
           </Button>
         </Link>
