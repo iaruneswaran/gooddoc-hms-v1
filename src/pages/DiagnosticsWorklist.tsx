@@ -5,13 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Filter, MoreVertical, Clock } from "lucide-react";
+import { Search, Filter, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CalendarWidget } from "@/components/CalendarWidget";
 
 interface DiagnosticOrder {
@@ -23,24 +20,18 @@ interface DiagnosticOrder {
     age: number;
     sex: string;
     phone: string;
-    avatar: string;
   };
-  orderSummary: {
-    indication: string;
-    tests: string[];
-    referringDoctor: string;
-  };
-  service: {
-    department?: string;
-    modality?: string;
-  };
-  token: string;
-  scheduledTime: string;
+  workorderId: string;
+  orderDate: string;
+  orderTime: string;
   status: string;
-  priority: "routine" | "stat";
-  tatMinutes?: number;
-  isOverdue?: boolean;
-  approvedBy?: string;
+  waitingForApproval: string;
+  approvedBy: string;
+  price: number;
+  departments: {
+    name: string;
+    tests: string[];
+  }[];
 }
 
 const mockOrders: DiagnosticOrder[] = [
@@ -48,132 +39,125 @@ const mockOrders: DiagnosticOrder[] = [
     id: "OR-LL-10342",
     type: "laboratory",
     patient: {
-      name: "Anaya Shah",
-      gdid: "204983",
-      age: 34,
-      sex: "F",
+      name: "Harish Kalyan",
+      gdid: "GD2028",
+      age: 35,
+      sex: "M",
       phone: "+91 98xxxx210",
-      avatar: "AS"
     },
-    orderSummary: {
-      indication: "Chest pain evaluation",
-      tests: ["Troponin I", "CMP", "CBC with Diff"],
-      referringDoctor: "Dr. Mehta"
-    },
-    service: {
-      department: "Central Diagnostic Lab"
-    },
-    token: "T-045",
-    scheduledTime: "10:30 AM",
-    status: "Saved draft",
-    priority: "stat",
-    tatMinutes: 45,
-    isOverdue: false,
-    approvedBy: "Dr. Mehta"
+    workorderId: "GD2028",
+    orderDate: "08-12-2025",
+    orderTime: "11:52:23",
+    status: "Pending",
+    waitingForApproval: "-",
+    approvedBy: "Dr. Arjun Reddy",
+    price: 756.00,
+    departments: [
+      {
+        name: "Biochemistry",
+        tests: ["ST Order Test", "Liver Function Test (LFT)", "Overall Test", "24-Hour Urine BUN"]
+      }
+    ]
   },
   {
     id: "OR-LL-10367",
     type: "laboratory",
     patient: {
       name: "Rohan Mehta",
-      gdid: "198733",
+      gdid: "GD2035",
       age: 62,
       sex: "M",
       phone: "+91 98xxxx345",
-      avatar: "RM"
     },
-    orderSummary: {
-      indication: "DM2 follow-up",
-      tests: ["HbA1c", "Lipid Panel"],
-      referringDoctor: "Dr. Sharma"
-    },
-    service: {
-      department: "Central Diagnostic Lab"
-    },
-    token: "T-052",
-    scheduledTime: "11:15 AM",
+    workorderId: "GD2035",
+    orderDate: "08-12-2025",
+    orderTime: "10:30:15",
     status: "Pending",
-    priority: "routine",
-    tatMinutes: 120,
-    approvedBy: "Dr. Sharma"
+    waitingForApproval: "Dr. Sharma",
+    approvedBy: "Dr. Sharma",
+    price: 1250.00,
+    departments: [
+      {
+        name: "Biochemistry",
+        tests: ["HbA1c", "Lipid Panel", "Fasting Glucose"]
+      },
+      {
+        name: "Hematology",
+        tests: ["CBC with Diff"]
+      }
+    ]
   },
   {
     id: "OR-RD-55421",
     type: "radiology",
     patient: {
       name: "Kavya Iyer",
-      gdid: "217564",
+      gdid: "GD2042",
       age: 28,
       sex: "F",
       phone: "+91 98xxxx567",
-      avatar: "KI"
     },
-    orderSummary: {
-      indication: "r/o PE",
-      tests: ["CT Chest with contrast"],
-      referringDoctor: "Dr. Patel"
-    },
-    service: {
-      modality: "CT"
-    },
-    token: "R-023",
-    scheduledTime: "09:45 AM",
+    workorderId: "GD2042",
+    orderDate: "08-12-2025",
+    orderTime: "09:45:00",
     status: "For Review",
-    priority: "stat",
-    tatMinutes: 60,
-    approvedBy: "Dr. Patel"
+    waitingForApproval: "-",
+    approvedBy: "Dr. Patel",
+    price: 3500.00,
+    departments: [
+      {
+        name: "Radiology",
+        tests: ["CT Chest with contrast"]
+      }
+    ]
   },
   {
     id: "OR-RD-55438",
     type: "radiology",
     patient: {
       name: "Arnav Rao",
-      gdid: "176540",
+      gdid: "GD2048",
       age: 45,
       sex: "M",
       phone: "+91 98xxxx789",
-      avatar: "AR"
     },
-    orderSummary: {
-      indication: "Persistent headache",
-      tests: ["MRI Brain w/o contrast"],
-      referringDoctor: "Dr. Kumar"
-    },
-    service: {
-      modality: "MRI"
-    },
-    token: "R-031",
-    scheduledTime: "02:30 PM",
+    workorderId: "GD2048",
+    orderDate: "08-12-2025",
+    orderTime: "14:30:00",
     status: "Completed",
-    priority: "routine",
-    tatMinutes: 180,
-    approvedBy: "Dr. Kumar"
+    waitingForApproval: "-",
+    approvedBy: "Dr. Kumar",
+    price: 8500.00,
+    departments: [
+      {
+        name: "Radiology",
+        tests: ["MRI Brain w/o contrast"]
+      }
+    ]
   },
   {
     id: "OR-LL-10389",
     type: "laboratory",
     patient: {
       name: "Priya Desai",
-      gdid: "209845",
+      gdid: "GD2055",
       age: 52,
       sex: "F",
       phone: "+91 98xxxx432",
-      avatar: "PD"
     },
-    orderSummary: {
-      indication: "UTI symptoms",
-      tests: ["Urinalysis", "Urine Culture"],
-      referringDoctor: "Dr. Singh"
-    },
-    service: {
-      department: "Microbiology Lab"
-    },
-    token: "T-058",
-    scheduledTime: "01:00 PM",
+    workorderId: "GD2055",
+    orderDate: "08-12-2025",
+    orderTime: "13:00:00",
     status: "Pending",
-    priority: "routine",
-    tatMinutes: 240,
-    approvedBy: "Dr. Singh"
+    waitingForApproval: "Dr. Singh",
+    approvedBy: "-",
+    price: 450.00,
+    departments: [
+      {
+        name: "Microbiology",
+        tests: ["Urinalysis", "Urine Culture"]
+      }
+    ]
   }
 ];
 
@@ -184,7 +168,6 @@ export default function DiagnosticsWorklist() {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case "saved draft": return "bg-muted text-muted-foreground";
       case "pending": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
       case "for review": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
       case "completed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
@@ -198,11 +181,15 @@ export default function DiagnosticsWorklist() {
     const matchesSearch = searchQuery === "" || 
                          order.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          order.patient.gdid.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         order.id.toLowerCase().includes(searchQuery.toLowerCase());
+                         order.workorderId.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
     
     return matchesTab && matchesSearch && matchesStatus;
   });
+
+  const getTotalTests = (departments: DiagnosticOrder["departments"]) => {
+    return departments.reduce((acc, dept) => acc + dept.tests.length, 0);
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -250,10 +237,8 @@ export default function DiagnosticsWorklist() {
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
                   <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Checked-in">Checked-in</SelectItem>
-                  <SelectItem value="Sample Collected">Sample Collected</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Released">Released</SelectItem>
+                  <SelectItem value="For Review">For Review</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="outline" size="sm" className="h-9">
@@ -265,60 +250,101 @@ export default function DiagnosticsWorklist() {
 
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[200px_1fr_160px_140px_120px_140px_130px] gap-4 p-4 border-b border-border bg-muted/30">
-              <div className="text-sm font-medium text-foreground">Patient</div>
-              <div className="text-sm font-medium text-foreground">Order Summary</div>
-              <div className="text-sm font-medium text-foreground">Service</div>
-              <div className="text-sm font-medium text-foreground">Token & Time</div>
+            {/* Table Header */}
+            <div className="grid grid-cols-[180px_120px_140px_100px_160px_140px_100px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="text-sm font-medium text-foreground">Patient Info</div>
+              <div className="text-sm font-medium text-foreground">Workorder ID</div>
+              <div className="text-sm font-medium text-foreground">Order</div>
               <div className="text-sm font-medium text-foreground">Status</div>
+              <div className="text-sm font-medium text-foreground">Waiting for Approval</div>
               <div className="text-sm font-medium text-foreground">Approved by</div>
-              <div className="text-sm font-medium text-foreground px-4">Action</div>
+              <div className="text-sm font-medium text-foreground">Price</div>
+              <div className="text-sm font-medium text-foreground text-center">Action</div>
             </div>
 
             {filteredOrders.map((order) => (
-              <div key={order.id} className="grid grid-cols-[200px_1fr_160px_140px_120px_140px_130px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                <div className="flex items-start gap-3">
-                  <Avatar className="w-10 h-10 flex-shrink-0">
-                    <AvatarFallback className="bg-primary/10 text-primary">{order.patient.avatar}</AvatarFallback>
-                  </Avatar>
+              <div key={order.id} className="border-b border-border last:border-b-0">
+                {/* Main Row */}
+                <div className="grid grid-cols-[180px_120px_140px_100px_160px_140px_100px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+                  {/* Patient Info */}
                   <div>
-                    <button className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left">
+                    <Link 
+                      to={`/patient/${order.patient.gdid}`}
+                      className="text-sm font-medium text-primary hover:underline"
+                    >
                       {order.patient.name}
-                    </button>
+                    </Link>
                     <div className="text-xs text-muted-foreground">
-                      GDID - {order.patient.gdid} • {order.patient.age} | {order.patient.sex}
+                      {order.patient.age}Y | {order.patient.sex}
                     </div>
+                  </div>
+
+                  {/* Workorder ID */}
+                  <div className="text-sm text-foreground">
+                    {order.workorderId}
+                  </div>
+
+                  {/* Order Date & Time */}
+                  <div>
+                    <div className="text-sm text-foreground">{order.orderDate}</div>
+                    <div className="text-xs text-muted-foreground">{order.orderTime}</div>
+                  </div>
+
+                  {/* Status */}
+                  <div>
+                    <Badge className={getStatusColor(order.status)}>
+                      {order.status}
+                    </Badge>
+                  </div>
+
+                  {/* Waiting for Approval */}
+                  <div className="text-sm text-foreground">
+                    {order.waitingForApproval}
+                  </div>
+
+                  {/* Approved by */}
+                  <div className="text-sm text-foreground">
+                    {order.approvedBy}
+                  </div>
+
+                  {/* Price */}
+                  <div className="text-sm text-foreground">
+                    ₹{order.price.toFixed(2)}
+                  </div>
+
+                  {/* Action */}
+                  <div className="flex justify-center">
+                    <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
+                      <Button variant="outline" size="sm" className="h-9 gap-2">
+                        <FileText className="h-4 w-4" />
+                        Results
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
-                <div className="text-sm text-foreground">
-                  {order.orderSummary.tests.join(", ")}
-                </div>
-
-                <div className="text-sm text-foreground">
-                  {order.service.department || order.service.modality}
-                </div>
-
-                <div className="text-sm text-foreground">
-                  {order.token} | {order.scheduledTime}
-                </div>
-
-                <div>
-                  <Badge className={getStatusColor(order.status)}>
-                    {order.status}
-                  </Badge>
-                </div>
-
-                <div className="text-sm text-foreground">
-                  {order.approvedBy || "—"}
-                </div>
-
-                <div className="flex items-center justify-end px-4">
-                  <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`} className="w-full">
-                    <Button variant="default" className="h-9 w-full">
-                      Enter Results
-                    </Button>
-                  </Link>
+                {/* Departments & Tests Row */}
+                <div className="px-4 pb-4 pt-0">
+                  <div className="flex items-start gap-6 text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className="text-muted-foreground font-medium">Departments</span>
+                      <div className="flex gap-2">
+                        {order.departments.map((dept, idx) => (
+                          <Badge key={idx} variant="secondary" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 font-normal">
+                            {dept.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-muted-foreground">All Tests ({getTotalTests(order.departments)})</span>
+                      <div className="flex gap-4 text-foreground">
+                        {order.departments.flatMap(dept => dept.tests).map((test, idx) => (
+                          <span key={idx}>{test}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
