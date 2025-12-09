@@ -259,7 +259,7 @@ export default function DiagnosticsWorklist() {
               <div className="text-sm font-medium text-foreground">Waiting for Approval</div>
               <div className="text-sm font-medium text-foreground">Approved by</div>
               <div className="text-sm font-medium text-foreground">Price</div>
-              <div className="text-sm font-medium text-foreground text-center">Action</div>
+              <div className="text-sm font-medium text-foreground">Action</div>
             </div>
 
             {filteredOrders.map((order) => (
