@@ -397,252 +397,225 @@ export default function LaboratoryResults() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-3 gap-6">
-            {/* Results Grid - Left Column (2/3) */}
-            <div className="col-span-2 space-y-6">
-              {/* Panel Selector */}
-              <LabResultsPanelTabs
-                selectedPanel={selectedPanel}
-                onPanelChange={setSelectedPanel}
-                testCounts={testCounts}
-                onCollectSample={() => setShowSampleSheet(true)}
-              />
+          <div className="space-y-6">
+            {/* Panel Selector */}
+            <LabResultsPanelTabs
+              selectedPanel={selectedPanel}
+              onPanelChange={setSelectedPanel}
+              testCounts={testCounts}
+            />
 
-              {/* Results Table */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <CardTitle>Test Results</CardTitle>
-                      {hasCriticalValues && (
-                        <Badge variant="destructive" className="gap-1">
-                          <AlertTriangle className="h-3 w-3" />
-                          Critical
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="relative">
-                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          placeholder="Search tests..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-8 w-[200px] h-9"
-                        />
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setShowAddTestModal(true)}
-                      >
-                        <Plus className="h-4 w-4 mr-1" />
-                        Add Test
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {filteredRows.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                      <p>No tests in this panel.</p>
-                      <Button
-                        variant="link"
-                        onClick={() => setShowAddTestModal(true)}
-                      >
-                        Add a test
-                      </Button>
-                    </div>
-                  ) : (
-                    <LabResultsTable
-                      rows={filteredRows}
-                      onValueChange={updateValue}
-                      onUnitChange={updateUnit}
-                      onRemove={removeTest}
-                      onRecalculate={recalculateAll}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Narratives */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Narratives</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Findings
-                    </label>
-                    <Textarea
-                      value={findings}
-                      onChange={(e) => setFindings(e.target.value)}
-                      placeholder="Enter key findings..."
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Comments
-                    </label>
-                    <Textarea
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      placeholder="Additional comments or interpretation..."
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Other Notes
-                    </label>
-                    <Textarea
-                      value={otherNotes}
-                      onChange={(e) => setOtherNotes(e.target.value)}
-                      placeholder="Technical notes, limitations, etc..."
-                      rows={2}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Reference Panel - Right Column (1/3) */}
-            <div className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">
-                    Reference Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {selectedRowForRef ? (
-                    <>
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground mb-1">
-                          Selected Test
-                        </div>
-                        <div className="text-sm font-medium">
-                          {selectedRowForRef.testDef.displayName}
-                        </div>
-                        {selectedRowForRef.testDef.loinc && (
-                          <div className="text-xs text-muted-foreground">
-                            LOINC: {selectedRowForRef.testDef.loinc}
-                          </div>
+            <div className="grid grid-cols-3 gap-6">
+              {/* Results Grid - Left Column (2/3) */}
+              <div className="col-span-2 space-y-6">
+                {/* Results Table */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CardTitle>Test Results</CardTitle>
+                        {hasCriticalValues && (
+                          <Badge variant="destructive" className="gap-1">
+                            <AlertTriangle className="h-3 w-3" />
+                            Critical
+                          </Badge>
                         )}
                       </div>
-                      <Separator />
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground mb-1">
-                          Reference Range
+                      <div className="flex items-center gap-2">
+                        <div className="relative">
+                          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            placeholder="Search tests..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-8 w-[200px] h-9"
+                          />
                         </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowAddTestModal(true)}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add Test
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {filteredRows.length === 0 ? (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <p>No tests in this panel.</p>
+                        <Button
+                          variant="link"
+                          onClick={() => setShowAddTestModal(true)}
+                        >
+                          Add a test
+                        </Button>
+                      </div>
+                    ) : (
+                      <LabResultsTable
+                        rows={filteredRows}
+                        onValueChange={updateValue}
+                        onUnitChange={updateUnit}
+                        onRemove={removeTest}
+                        onRecalculate={recalculateAll}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Narratives */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Narratives</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Findings
+                      </label>
+                      <Textarea
+                        value={findings}
+                        onChange={(e) => setFindings(e.target.value)}
+                        placeholder="Enter key findings..."
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Comments
+                      </label>
+                      <Textarea
+                        value={comments}
+                        onChange={(e) => setComments(e.target.value)}
+                        placeholder="Additional comments or interpretation..."
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Other Notes
+                      </label>
+                      <Textarea
+                        value={otherNotes}
+                        onChange={(e) => setOtherNotes(e.target.value)}
+                        placeholder="Technical notes, limitations, etc..."
+                        rows={2}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Right Column (1/3) - QC and Attachments */}
+              <div className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">QC Status</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                      <span className="text-sm text-emerald-600 dark:text-emerald-400">
+                        All QC passed
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-2">
+                      Last QC: Today 09:00 AM
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Attachments</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" size="sm" className="w-full">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Upload Attachment
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Reference Information - Below Results */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Reference Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {selectedRowForRef ? (
+                  <div className="grid grid-cols-5 gap-6">
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground mb-1">
+                        Selected Test
+                      </div>
+                      <div className="text-sm font-medium">
+                        {selectedRowForRef.testDef.displayName}
+                      </div>
+                      {selectedRowForRef.testDef.loinc && (
+                        <div className="text-xs text-muted-foreground">
+                          LOINC: {selectedRowForRef.testDef.loinc}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground mb-1">
+                        Reference Range
+                      </div>
+                      <div className="text-sm">
+                        {selectedRowForRef.refRangeText} {selectedRowForRef.unit}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        For {mockPatient.age}y {mockPatient.sex}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground mb-1">
+                        Critical Values
+                      </div>
+                      {selectedRowForRef.testDef.criticalRanges.length > 0 ? (
+                        selectedRowForRef.testDef.criticalRanges.map((crit, i) => (
+                          <div key={i} className="text-sm text-destructive">
+                            {crit.lowSI !== null && `≤ ${crit.lowSI}`}
+                            {crit.lowSI !== null && crit.highSI !== null && " or "}
+                            {crit.highSI !== null && `≥ ${crit.highSI}`}{" "}
+                            {selectedRowForRef.unit}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-sm text-muted-foreground">None defined</div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground mb-1">
+                        Prior Results
+                      </div>
+                      {selectedRowForRef.priorValue ? (
                         <div className="text-sm">
-                          {selectedRowForRef.refRangeText}{" "}
-                          {selectedRowForRef.unit}
+                          {selectedRowForRef.priorValue} {selectedRowForRef.unit}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          For {mockPatient.age}y {mockPatient.sex}
-                        </div>
-                      </div>
-                      <Separator />
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground mb-1">
-                          Critical Values
-                        </div>
-                        {selectedRowForRef.testDef.criticalRanges.length > 0 ? (
-                          selectedRowForRef.testDef.criticalRanges.map(
-                            (crit, i) => (
-                              <div key={i} className="text-sm text-destructive">
-                                {crit.lowSI !== null && `≤ ${crit.lowSI}`}
-                                {crit.lowSI !== null &&
-                                  crit.highSI !== null &&
-                                  " or "}
-                                {crit.highSI !== null && `≥ ${crit.highSI}`}{" "}
-                                {selectedRowForRef.unit}
-                              </div>
-                            )
-                          )
-                        ) : (
-                          <div className="text-sm text-muted-foreground">
-                            None defined
-                          </div>
-                        )}
-                      </div>
-                      <Separator />
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground mb-1">
-                          Prior Results
-                        </div>
-                        {selectedRowForRef.priorValue ? (
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-xs">
-                              <span className="text-muted-foreground">
-                                Previous
-                              </span>
-                              <span>
-                                {selectedRowForRef.priorValue}{" "}
-                                {selectedRowForRef.unit}
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-sm text-muted-foreground">
-                            No prior results
-                          </div>
-                        )}
-                      </div>
-                      {selectedRowForRef.testDef.notes && (
-                        <>
-                          <Separator />
-                          <div>
-                            <div className="text-xs font-medium text-muted-foreground mb-1">
-                              Notes
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {selectedRowForRef.testDef.notes}
-                            </div>
-                          </div>
-                        </>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">No prior results</div>
                       )}
-                    </>
-                  ) : (
-                    <div className="text-sm text-muted-foreground">
-                      No test selected
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">QC Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-                    <span className="text-sm text-emerald-600 dark:text-emerald-400">
-                      All QC passed
-                    </span>
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground mb-1">
+                        Notes
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {selectedRowForRef.testDef.notes || "—"}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-2">
-                    Last QC: Today 09:00 AM
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Attachments</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Upload Attachment
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground">No test selected</div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </main>
 
@@ -672,6 +645,10 @@ export default function LaboratoryResults() {
               Validate
             </Button>
             <Button onClick={handleRelease}>Release Results</Button>
+            <Button variant="ghost" onClick={() => setShowSampleSheet(true)} className="gap-2">
+              <TestTube className="h-4 w-4" />
+              Collect Sample
+            </Button>
           </div>
         </div>
       </div>
