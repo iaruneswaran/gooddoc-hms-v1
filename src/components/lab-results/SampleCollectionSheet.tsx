@@ -101,17 +101,36 @@ export function SampleCollectionSheet({
       } else {
         setSelectedTests(new Set());
       }
-      setCollectedSample(null);
+      // Only reset collectedSample if there are pending tests to collect
+      const hasPendingTests = testIds.some((id) => {
+        const status = testStatuses.get(id);
+        return status?.status !== "collected";
+      });
+      if (hasPendingTests) {
+        setCollectedSample(null);
+      }
       setValidationError(null);
       setCollectionTime(new Date().toISOString().slice(0, 16));
     }
   }, [open, testIds, testStatuses, allSameSpecimen]);
 
-  // Check for existing sample
+  // Check for existing sample - check all tests if none are pending
   const existingSample = useMemo(() => {
+    // Check if all tests are already collected
+    const allCollected = testIds.every((id) => {
+      const status = testStatuses.get(id);
+      return status?.status === "collected";
+    });
+    
+    // If all tests are collected, find the sample for them
+    if (allCollected) {
+      return getExistingSampleForTests(testIds);
+    }
+    
+    // Otherwise check selected tests
     const selectedArray = Array.from(selectedTests);
     return getExistingSampleForTests(selectedArray);
-  }, [selectedTests, getExistingSampleForTests]);
+  }, [selectedTests, testIds, testStatuses, getExistingSampleForTests]);
 
   const handleToggleTest = (testId: string) => {
     const status = testStatuses.get(testId);
