@@ -268,12 +268,9 @@ export default function DiagnosticsWorklist() {
                 <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
                   {/* Patient Info */}
                   <div>
-                    <Link 
-                      to={`/patient/${order.patient.gdid}`}
-                      className="text-sm font-medium text-primary hover:underline"
-                    >
+                    <div className="text-sm font-medium text-foreground">
                       {order.patient.name}
-                    </Link>
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       {order.patient.age}Y | {order.patient.sex}
                     </div>
