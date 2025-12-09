@@ -405,6 +405,7 @@ export default function LaboratoryResults() {
                 selectedPanel={selectedPanel}
                 onPanelChange={setSelectedPanel}
                 testCounts={testCounts}
+                onCollectSample={() => setShowSampleSheet(true)}
               />
 
               {/* Results Table */}
@@ -438,15 +439,6 @@ export default function LaboratoryResults() {
                         <Plus className="h-4 w-4 mr-1" />
                         Add Test
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowSampleSheet(true)}
-                        className="gap-2"
-                      >
-                        <TestTube className="h-4 w-4" />
-                        Collect Sample
-                      </Button>
                     </div>
                   </div>
                 </CardHeader>
@@ -473,7 +465,51 @@ export default function LaboratoryResults() {
                 </CardContent>
               </Card>
 
-              {/* Reference Information - Moved here */}
+              {/* Narratives */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Narratives</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Findings
+                    </label>
+                    <Textarea
+                      value={findings}
+                      onChange={(e) => setFindings(e.target.value)}
+                      placeholder="Enter key findings..."
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Comments
+                    </label>
+                    <Textarea
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      placeholder="Additional comments or interpretation..."
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Other Notes
+                    </label>
+                    <Textarea
+                      value={otherNotes}
+                      onChange={(e) => setOtherNotes(e.target.value)}
+                      placeholder="Technical notes, limitations, etc..."
+                      rows={2}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Reference Panel - Right Column (1/3) */}
+            <div className="space-y-4">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">
@@ -578,51 +614,6 @@ export default function LaboratoryResults() {
                 </CardContent>
               </Card>
 
-              {/* Narratives */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Narratives</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Findings
-                    </label>
-                    <Textarea
-                      value={findings}
-                      onChange={(e) => setFindings(e.target.value)}
-                      placeholder="Enter key findings..."
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Comments
-                    </label>
-                    <Textarea
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      placeholder="Additional comments or interpretation..."
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">
-                      Other Notes
-                    </label>
-                    <Textarea
-                      value={otherNotes}
-                      onChange={(e) => setOtherNotes(e.target.value)}
-                      placeholder="Technical notes, limitations, etc..."
-                      rows={2}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right Column (1/3) */}
-            <div className="space-y-4">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">QC Status</CardTitle>
