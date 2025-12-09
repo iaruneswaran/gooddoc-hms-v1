@@ -321,7 +321,7 @@ export default function DiagnosticsWorklist() {
 
                 {/* Departments & Tests Row */}
                 <div className="px-4 pb-4 pt-0">
-                  <div className="border-t border-border pt-4 mx-0" style={{ width: 'fit-content' }}>
+                  <div className="border-t border-border pt-4">
                     <div className="flex items-start gap-6 text-sm">
                       <div className="flex items-center gap-3">
                         <span className="text-muted-foreground font-medium">Departments</span>
