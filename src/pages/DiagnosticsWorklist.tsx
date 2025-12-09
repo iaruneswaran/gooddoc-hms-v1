@@ -46,7 +46,6 @@ export default function DiagnosticsWorklist() {
   const [selectedTab, setSelectedTab] = useState("laboratory");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [radiologyOrders, setRadiologyOrders] = useState(mockRadiologyOrders);
   const { toast } = useToast();
 
@@ -82,11 +81,6 @@ export default function DiagnosticsWorklist() {
     toast({ title: "Staff Assigned", description: `${role} assigned to ${orderId}` });
   };
 
-  const handleBulkApprove = () => {
-    toast({ title: "Bulk Approved", description: `${selectedOrders.length} orders approved` });
-    setSelectedOrders([]);
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -108,12 +102,6 @@ export default function DiagnosticsWorklist() {
               </TabsList>
             </Tabs>
             <div className="flex gap-3 pb-2">
-              {selectedTab === "radiology" && selectedOrders.length > 0 && (
-                <Button size="sm" className="h-9" onClick={handleBulkApprove}>
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Approve ({selectedOrders.length})
-                </Button>
-              )}
               <div className="relative w-[320px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input placeholder="Search by patient name, MRN, or order ID..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-9 h-9" />
@@ -132,9 +120,7 @@ export default function DiagnosticsWorklist() {
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[40px_1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 border-b border-border bg-muted/30">
-              {selectedTab === "radiology" && <div></div>}
-              {selectedTab === "laboratory" && <div></div>}
+            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-sm font-medium text-foreground">Patient Info</div>
               <div className="text-sm font-medium text-foreground">Workorder ID</div>
               <div className="text-sm font-medium text-foreground">Order</div>
@@ -147,8 +133,7 @@ export default function DiagnosticsWorklist() {
 
             {selectedTab === "laboratory" && filteredLabOrders.map((order) => (
               <div key={order.id} className="border-b border-border last:border-b-0">
-                <div className="grid grid-cols-[40px_1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
-                  <div></div>
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
                   <div><div className="text-sm font-medium text-foreground">{order.patient.name}</div><div className="text-xs text-muted-foreground">{order.patient.age}Y | {order.patient.sex}</div></div>
                   <div className="text-sm text-foreground">{order.workorderId}</div>
                   <div><div className="text-sm text-foreground">{order.orderDate}</div><div className="text-xs text-muted-foreground">{order.orderTime}</div></div>
@@ -171,8 +156,7 @@ export default function DiagnosticsWorklist() {
 
             {selectedTab === "radiology" && filteredRadiologyOrders.map((order) => (
               <div key={order.id} className="border-b border-border last:border-b-0">
-                <div className="grid grid-cols-[40px_1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
-                  <div className="flex justify-center"><Checkbox checked={selectedOrders.includes(order.id)} onCheckedChange={(checked) => setSelectedOrders(prev => checked ? [...prev, order.id] : prev.filter(id => id !== order.id))} /></div>
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_180px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
                   <div><div className="text-sm font-medium text-foreground">{order.patient.name}</div><div className="text-xs text-muted-foreground">{order.patient.age}Y | {order.patient.sex}</div></div>
                   <div className="text-sm text-foreground">{order.workorderId}</div>
                   <div><div className="text-sm text-foreground">{order.orderDate}</div><div className="text-xs text-muted-foreground">{order.orderTime}</div></div>
