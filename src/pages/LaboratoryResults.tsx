@@ -403,6 +403,7 @@ export default function LaboratoryResults() {
               selectedPanel={selectedPanel}
               onPanelChange={setSelectedPanel}
               testCounts={testCounts}
+              onCollectSample={() => setShowSampleSheet(true)}
             />
 
             <div className="grid grid-cols-3 gap-6">
@@ -645,10 +646,6 @@ export default function LaboratoryResults() {
               Validate
             </Button>
             <Button onClick={handleRelease}>Release Results</Button>
-            <Button variant="ghost" onClick={() => setShowSampleSheet(true)} className="gap-2">
-              <TestTube className="h-4 w-4" />
-              Collect Sample
-            </Button>
           </div>
         </div>
       </div>
