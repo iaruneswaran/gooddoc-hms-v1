@@ -16,15 +16,25 @@ import {
   Upload,
   Plus,
   Search,
+  TestTube,
+  AlertCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { useLabResults, LabResultRow } from "@/hooks/useLabResults";
+import { useSampleCollection } from "@/hooks/useSampleCollection";
 import { LabResultsTable } from "@/components/lab-results/LabResultsTable";
 import { LabResultsPanelTabs } from "@/components/lab-results/LabResultsPanelTabs";
 import { AddTestModal } from "@/components/lab-results/AddTestModal";
-import { PatientContext, Sex } from "@/types/lab-tests";
-import { panelsCatalog, getTestsByPanel } from "@/data/tests-catalog";
+import { SampleCollectionSheet } from "@/components/lab-results/SampleCollectionSheet";
+import { PatientContext, Sex, TestDefinition } from "@/types/lab-tests";
+import { panelsCatalog, getTestsByPanel, getTestDefinition } from "@/data/tests-catalog";
 
 const mockPatient = {
   name: "Anaya Shah",
@@ -111,6 +121,7 @@ export default function LaboratoryResults() {
   const [comments, setComments] = useState("");
   const [otherNotes, setOtherNotes] = useState("");
   const [showAddTestModal, setShowAddTestModal] = useState(false);
+  const [showSampleSheet, setShowSampleSheet] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTestRow, setSelectedTestRow] = useState<LabResultRow | null>(
     null
@@ -136,6 +147,42 @@ export default function LaboratoryResults() {
     patient: patientContext,
     initialResults: initialMockResults,
   });
+
+  // Sample collection state
+  const testIdsForSample = useMemo(() => rows.map((r) => r.testId), [rows]);
+  
+  const {
+    testStatuses,
+    collectSample,
+    getExistingSampleForTests,
+    getSampleForTest,
+    hasCollectedTests,
+  } = useSampleCollection({
+    orderId: mockOrder.id,
+    testIds: testIdsForSample,
+    specimenType: mockOrder.specimen.type,
+  });
+
+  // Build test definitions map
+  const testDefinitionsMap = useMemo(() => {
+    const map = new Map<string, TestDefinition>();
+    rows.forEach((r) => {
+      map.set(r.testId, r.testDef);
+    });
+    return map;
+  }, [rows]);
+
+  // Get sample status for display
+  const sampleInfo = useMemo(() => {
+    // Check if any test has a sample
+    for (const row of rows) {
+      const sample = getSampleForTest(row.testId);
+      if (sample) {
+        return sample;
+      }
+    }
+    return null;
+  }, [rows, getSampleForTest]);
 
   // Filter rows by selected panel and search query
   const filteredRows = useMemo(() => {
@@ -295,12 +342,41 @@ export default function LaboratoryResults() {
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Specimen</div>
-                  <div className="text-sm font-medium">
+                  <div className="text-sm font-medium flex items-center gap-2">
                     {mockOrder.specimen.type}
+                    {sampleInfo ? (
+                      <>
+                        <span className="text-muted-foreground">·</span>
+                        <span className="text-xs">Sample ID: {sampleInfo.sampleId}</span>
+                        <span className="text-muted-foreground">·</span>
+                        <Badge
+                          variant="default"
+                          className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-xs"
+                        >
+                          Collected
+                        </Badge>
+                      </>
+                    ) : (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="flex items-center gap-1 text-muted-foreground text-xs">
+                              <AlertCircle className="h-3 w-3" />
+                              Not Collected
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Collect sample to proceed with testing.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    Barcode: {mockOrder.specimen.barcode}
-                  </div>
+                  {sampleInfo && (
+                    <div className="text-xs text-muted-foreground">
+                      Barcode: {sampleInfo.sampleId}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">
@@ -329,6 +405,7 @@ export default function LaboratoryResults() {
                 selectedPanel={selectedPanel}
                 onPanelChange={setSelectedPanel}
                 testCounts={testCounts}
+                onCollectSample={() => setShowSampleSheet(true)}
               />
 
               {/* Results Table */}
@@ -605,6 +682,19 @@ export default function LaboratoryResults() {
         onClose={() => setShowAddTestModal(false)}
         onAddTest={handleAddTest}
         existingTestIds={existingTestIds}
+      />
+
+      {/* Sample Collection Sheet */}
+      <SampleCollectionSheet
+        open={showSampleSheet}
+        onClose={() => setShowSampleSheet(false)}
+        orderId={mockOrder.id}
+        specimenType={mockOrder.specimen.type}
+        testIds={testIdsForSample}
+        testStatuses={testStatuses}
+        onCollect={collectSample}
+        getExistingSampleForTests={getExistingSampleForTests}
+        testDefinitions={testDefinitionsMap}
       />
     </div>
   );
