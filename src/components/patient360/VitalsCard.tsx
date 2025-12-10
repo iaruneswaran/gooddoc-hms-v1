@@ -65,51 +65,47 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
         })}
       </p>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {vitals.bpSystolic && vitals.bpDiastolic && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Blood Pressure</p>
-            <p className="text-lg font-semibold text-foreground">
-              {vitals.bpSystolic}/{vitals.bpDiastolic}{" "}
-              <span className="text-xs font-normal text-muted-foreground">mmHg</span>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Blood Pressure</p>
+            <p className="text-sm font-semibold text-foreground">
+              {vitals.bpSystolic}/{vitals.bpDiastolic} <span className="font-normal text-muted-foreground">mmHg</span>
             </p>
           </div>
         )}
 
         {vitals.spo2 && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">SpO₂</p>
-            <p className="text-lg font-semibold text-foreground">
-              {vitals.spo2}
-              <span className="text-xs font-normal text-muted-foreground">%</span>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">SpO₂</p>
+            <p className="text-sm font-semibold text-foreground">
+              {vitals.spo2}<span className="font-normal text-muted-foreground">%</span>
             </p>
           </div>
         )}
 
         {vitals.heartRate && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Heart Rate</p>
-            <p className="text-lg font-semibold text-foreground">
-              {vitals.heartRate}{" "}
-              <span className="text-xs font-normal text-muted-foreground">bpm</span>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Heart Rate</p>
+            <p className="text-sm font-semibold text-foreground">
+              {vitals.heartRate} <span className="font-normal text-muted-foreground">bpm</span>
             </p>
           </div>
         )}
 
         {vitals.respiratoryRate && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Respiratory Rate</p>
-            <p className="text-lg font-semibold text-foreground">
-              {vitals.respiratoryRate}{" "}
-              <span className="text-xs font-normal text-muted-foreground">bpm</span>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Respiratory Rate</p>
+            <p className="text-sm font-semibold text-foreground">
+              {vitals.respiratoryRate} <span className="font-normal text-muted-foreground">bpm</span>
             </p>
           </div>
         )}
 
         {vitals.temperatureC && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Temperature</p>
-            <p className="text-lg font-semibold text-foreground">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Temperature</p>
+            <p className="text-sm font-semibold text-foreground">
               {unit === "metric"
                 ? `${vitals.temperatureC}°C`
                 : `${convertTemp(vitals.temperatureC).toFixed(1)}°F`}
@@ -118,9 +114,9 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
         )}
 
         {vitals.weightKg && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Weight</p>
-            <p className="text-lg font-semibold text-foreground">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Weight</p>
+            <p className="text-sm font-semibold text-foreground">
               {unit === "metric"
                 ? `${vitals.weightKg} kg`
                 : `${convertWeight(vitals.weightKg).toFixed(0)} lb`}
@@ -129,9 +125,9 @@ export function VitalsCard({ vitals }: VitalsCardProps) {
         )}
 
         {vitals.heightCm && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Height</p>
-            <p className="text-lg font-semibold text-foreground">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Height</p>
+            <p className="text-sm font-semibold text-foreground">
               {unit === "metric"
                 ? `${vitals.heightCm} cm`
                 : convertHeight(vitals.heightCm)}
