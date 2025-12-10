@@ -238,7 +238,7 @@ export default function DoctorsList() {
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={doctor.avatar} />
                       <AvatarFallback className="bg-primary/10 text-primary">
-                        {doctor.displayName.split(" ").map(n => n[0]).join("")}
+                        {doctor.displayName.split(" ").slice(0, 2).map(n => n[0]).join("")}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -254,12 +254,8 @@ export default function DoctorsList() {
 
                   <div className="text-sm text-foreground">{doctor.availability}</div>
 
-                  <div className="flex flex-wrap gap-1">
-                    {doctor.locations.map((loc, i) => (
-                      <Badge key={i} variant="outline" className="text-xs">
-                        {loc}
-                      </Badge>
-                    ))}
+                  <div className="text-sm text-foreground">
+                    {doctor.locations.join(", ")}
                   </div>
 
                   <div className="text-sm text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
@@ -333,7 +329,7 @@ export default function DoctorsList() {
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={selectedDoctor.avatar} />
                   <AvatarFallback className="bg-primary/10 text-primary">
-                    {selectedDoctor.displayName.split(" ").map(n => n[0]).join("")}
+                    {selectedDoctor.displayName.split(" ").slice(0, 2).map(n => n[0]).join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div>
@@ -361,10 +357,8 @@ export default function DoctorsList() {
                 </div>
                 <div>
                   <div className="text-sm font-medium mb-1">Locations</div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedDoctor.locations.map((loc, i) => (
-                      <Badge key={i} variant="outline">{loc}</Badge>
-                    ))}
+                  <div className="text-sm text-muted-foreground">
+                    {selectedDoctor.locations.join(", ")}
                   </div>
                 </div>
                 <div>
