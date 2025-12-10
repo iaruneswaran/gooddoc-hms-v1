@@ -152,9 +152,9 @@ export default function OutpatientAppointments() {
         {appointment.chiefComplaint && (
           <div className="px-4 pb-4 pt-0">
             <div className="border-t border-border pt-4">
-              <div className="flex items-center gap-3 text-sm">
-                <span className="text-muted-foreground font-medium">Chief Complaint</span>
-                <span className="text-foreground">{appointment.chiefComplaint}</span>
+              <div className="space-y-1">
+                <div className="text-[12px] font-medium text-muted-foreground">Chief Complaint</div>
+                <div className="text-sm text-foreground">{appointment.chiefComplaint}</div>
               </div>
             </div>
           </div>
