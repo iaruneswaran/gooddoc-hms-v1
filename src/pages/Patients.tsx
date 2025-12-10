@@ -414,7 +414,7 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
-                <div className="grid grid-cols-[minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(160px,1fr)_auto] gap-4 px-4 py-3 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(160px,1fr)_auto] gap-4 px-4 py-3 items-center border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground pl-[52px]">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
