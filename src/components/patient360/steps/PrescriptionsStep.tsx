@@ -11,8 +11,10 @@ import { useToast } from "@/hooks/use-toast";
 interface PrescriptionsStepProps {
   patient: Patient;
   onBack: () => void;
-  onNext: () => void;
+  onNext: (prescription?: Prescription) => void;
 }
+
+import { Prescription } from "@/types/patient360";
 
 export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStepProps) {
   const { toast } = useToast();
@@ -45,6 +47,29 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
         variant: "destructive"
       });
     }
+    const prescription: Prescription = {
+      id: Date.now().toString(),
+      patientId: patient.id,
+      items: medications.filter(m => m.name && m.id).map(m => ({
+        id: m.id!,
+        name: m.name!,
+        form: m.form,
+        strength: m.strength,
+        dosage: m.dosage,
+        route: m.route,
+        frequency: m.frequency,
+        timing: m.timing,
+        durationDays: m.durationDays,
+        notes: m.notes
+      })),
+      createdAt: new Date().toISOString(),
+      createdBy: "current-user",
+      status: "Draft"
+    };
+    onNext(prescription);
+  };
+
+  const handleSkip = () => {
     onNext();
   };
 
@@ -241,7 +266,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
               Back
             </Button>
             <div className="flex gap-3">
-              <Button variant="ghost">Skip, Fill later</Button>
+              <Button variant="ghost" onClick={handleSkip}>Skip, Fill later</Button>
               <Button onClick={handleSave}>Save & Continue</Button>
             </div>
           </div>
