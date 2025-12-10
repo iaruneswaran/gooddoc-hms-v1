@@ -253,12 +253,6 @@ const PricingCatalog = () => {
                 <table className="w-full">
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
-                      <th className="text-left p-3 w-12">
-                        <Checkbox
-                          checked={selectedItems.length === filteredItems.length}
-                          onCheckedChange={toggleAll}
-                        />
-                      </th>
                       <th className="text-left text-xs font-medium text-muted-foreground p-3">
                         Item Name
                       </th>
@@ -292,22 +286,12 @@ const PricingCatalog = () => {
                     {filteredItems.map((item) => (
                       <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
                         <td className="p-3">
-                          <Checkbox
-                            checked={selectedItems.includes(item.id)}
-                            onCheckedChange={() => toggleItem(item.id)}
-                          />
-                        </td>
-                        <td className="p-3">
                           <div className="font-medium text-sm">{item.name}</div>
                           <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                             {item.description}
                           </div>
                         </td>
-                        <td className="p-3">
-                          <Badge variant="secondary">
-                            {item.category}
-                          </Badge>
-                        </td>
+                        <td className="p-3 text-sm">{item.category}</td>
                         <td className="p-3 text-sm">{item.department}</td>
                         <td className="p-3">
                           <div className="text-sm font-mono">{item.codes.internal}</div>
