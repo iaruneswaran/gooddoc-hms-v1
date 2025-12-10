@@ -368,7 +368,7 @@ export default function LaboratoryResults() {
                   <div className="text-sm text-muted-foreground">Allergies</div>
                   <div className="flex gap-1 mt-1">
                     {mockPatient.allergies.map((a) => (
-                      <Badge key={a} variant="destructive" className="text-xs">
+                      <Badge key={a} variant="outline" className="text-xs">
                         {a}
                       </Badge>
                     ))}
@@ -385,7 +385,7 @@ export default function LaboratoryResults() {
                 <div>
                   <div className="text-sm text-muted-foreground">Order ID</div>
                   <div className="font-medium">{mockOrder.id}</div>
-                  <Badge variant="destructive" className="mt-1">
+                  <Badge variant="secondary" className="mt-1">
                     {mockOrder.priority}
                   </Badge>
                 </div>
