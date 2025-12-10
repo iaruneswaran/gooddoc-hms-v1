@@ -330,16 +330,35 @@ const allAppointments: Appointment[] = [
 
 interface AppointmentTableProps {
   category?: string;
+  searchQuery?: string;
+  doctorFilter?: string;
+  specialtyFilter?: string;
 }
 
-export function AppointmentTable({ category = "outpatient-care" }: AppointmentTableProps) {
+export function AppointmentTable({ 
+  category = "outpatient-care",
+  searchQuery = "",
+  doctorFilter = "all",
+  specialtyFilter = "all"
+}: AppointmentTableProps) {
   const navigate = useNavigate();
   const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
   const [tokenGeneratedIds, setTokenGeneratedIds] = useState<Set<string>>(new Set());
   const [activeTokenCard, setActiveTokenCard] = useState<string | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingAppointmentId, setPendingAppointmentId] = useState<string | null>(null);
-  const appointments = allAppointments.filter(apt => apt.category === category);
+  
+  const appointments = allAppointments.filter(apt => {
+    const matchesCategory = apt.category === category;
+    const matchesSearch = !searchQuery || 
+      apt.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      apt.patient.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      apt.summary.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDoctor = doctorFilter === "all" || apt.doctor === doctorFilter;
+    const matchesSpecialty = specialtyFilter === "all" || apt.specialty === specialtyFilter;
+    
+    return matchesCategory && matchesSearch && matchesDoctor && matchesSpecialty;
+  });
   
   const handleCheckInClick = (appointmentId: string) => {
     setPendingAppointmentId(appointmentId);
