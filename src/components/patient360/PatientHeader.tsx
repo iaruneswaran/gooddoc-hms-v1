@@ -80,59 +80,64 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
           <span className="font-semibold">Outpatient</span>
         </button>
 
-        {/* Header Content */}
-        <div className="flex items-center gap-3 mb-4">
+        {/* Header Content - Patient Info + Appointment Box */}
+        <div className="flex items-start justify-between gap-4 mb-4">
           <PatientChip
             name={patient.name}
             gdid={patient.gdid}
             age={age}
             gender={patient.sex}
           />
+          
+          {/* Appointment Details Box */}
+          <Card className="p-3 bg-muted/30 border-border">
+            <h3 className="text-xs font-semibold text-foreground mb-2">Today's Appointment</h3>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                <div>
+                  <p className="text-[10px] text-muted-foreground">Date</p>
+                  <p className="text-xs font-medium text-foreground">{appointmentInfo.date}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                <div>
+                  <p className="text-[10px] text-muted-foreground">Time</p>
+                  <p className="text-xs font-medium text-foreground">{appointmentInfo.time}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <User className="h-3.5 w-3.5 text-muted-foreground" />
+                <div>
+                  <p className="text-[10px] text-muted-foreground">Doctor</p>
+                  <p className="text-xs font-medium text-foreground">{appointmentInfo.doctor}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                <div>
+                  <p className="text-[10px] text-muted-foreground">Mode</p>
+                  <p className="text-xs font-medium text-foreground">{appointmentInfo.mode}</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Badge variant="outline" className="text-[10px] h-5">{appointmentInfo.type}</Badge>
+                <Badge variant="secondary" className="text-[10px] h-5">{appointmentInfo.department}</Badge>
+              </div>
+            </div>
+          </Card>
         </div>
 
-        {/* Appointment Summary Card */}
+        {/* Chief Complaint + AI Summary Card */}
         <Card className="w-full p-4 bg-muted/30 border-border">
           <div className="flex flex-col lg:flex-row gap-4">
-            {/* Appointment Details */}
+            {/* Chief Complaint */}
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Today's Appointment</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Date</p>
-                    <p className="text-sm font-medium text-foreground">{appointmentInfo.date}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Time</p>
-                    <p className="text-sm font-medium text-foreground">{appointmentInfo.time}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Doctor</p>
-                    <p className="text-sm font-medium text-foreground">{appointmentInfo.doctor}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Mode</p>
-                    <p className="text-sm font-medium text-foreground">{appointmentInfo.mode}</p>
-                  </div>
-                </div>
+              <div className="space-y-1">
+                <div className="text-[12px] font-medium text-muted-foreground">Chief Complaint</div>
+                <p className="text-sm text-foreground">{appointmentInfo.chiefComplaint}</p>
               </div>
-              <div className="flex gap-2 mt-3">
-                <Badge variant="outline" className="text-xs">{appointmentInfo.type}</Badge>
-                <Badge variant="secondary" className="text-xs">{appointmentInfo.department}</Badge>
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                <span className="font-medium text-foreground">Chief Complaint:</span> {appointmentInfo.chiefComplaint}
-              </p>
             </div>
 
             {/* AI Summary */}
