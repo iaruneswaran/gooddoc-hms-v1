@@ -172,16 +172,15 @@ export default function Patients() {
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[200px_180px_160px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+            <div className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
               <div className="text-xs font-medium text-muted-foreground">Contact</div>
-              <div className="text-xs font-medium text-muted-foreground">Visit ID</div>
               <div className="text-xs font-medium text-muted-foreground">Admission & Visit</div>
               <div className="text-xs font-medium text-muted-foreground">Care Team</div>
               <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
             </div>
             {filteredPatients.map((patient) => (
-              <div key={patient.id} className="grid grid-cols-[200px_180px_160px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+              <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <User className="w-5 h-5 text-primary" />
@@ -207,17 +206,11 @@ export default function Patients() {
                   </div>
                 </div>
 
-                <div>
-                  <Badge variant="secondary" className="text-xs">
-                    Active Visit: {patient.visitId}
-                  </Badge>
-                </div>
-
                 <div className="space-y-1">
                   <div className="text-xs text-muted-foreground">
                     Admitted: {patient.admissionTime}
                   </div>
-                  <div className="text-xs text-foreground">
+                  <div className="text-sm text-foreground">
                     {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS:{" "}
                     {patient.los}
                   </div>
