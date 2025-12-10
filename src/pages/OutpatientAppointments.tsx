@@ -51,7 +51,7 @@ export default function OutpatientAppointments() {
     return (
       <div key={appointment.id} className="border-b border-border last:border-b-0">
         {/* Main Row */}
-        <div className="grid grid-cols-[200px_180px_140px_140px_100px_100px_120px_110px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+        <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
           {/* Patient Info */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -181,7 +181,7 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_140px_140px_100px_100px_120px_110px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Doctor</div>
@@ -203,7 +203,7 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_140px_140px_100px_100px_120px_110px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Doctor</div>
