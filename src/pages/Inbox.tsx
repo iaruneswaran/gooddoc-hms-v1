@@ -234,12 +234,10 @@ export default function Inbox() {
                       </div>
                       
                       {/* Appointment Summary - Below row */}
-                      <div className="px-4 pb-4 pt-0 border-t border-border/50">
-                        <div className="pt-3">
-                          <div className="text-xs text-muted-foreground mb-1">Chief Complaint</div>
-                          <div className="text-sm text-foreground leading-relaxed">
-                            {appointment.purpose}
-                          </div>
+                      <div className="p-4 border-t border-border/50 w-full">
+                        <div className="text-xs text-muted-foreground mb-1">Chief Complaint</div>
+                        <div className="text-sm text-foreground leading-relaxed">
+                          {appointment.purpose}
                         </div>
                       </div>
                     </div>
