@@ -123,7 +123,7 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
               </div>
               <div className="flex flex-col gap-1">
                 <Badge variant="outline" className="text-[10px] h-5">{appointmentInfo.type}</Badge>
-                <Badge variant="secondary" className="text-[10px] h-5">{appointmentInfo.department}</Badge>
+                <Badge variant="outline" className="text-[10px] h-5">{appointmentInfo.department}</Badge>
               </div>
             </div>
           </Card>
