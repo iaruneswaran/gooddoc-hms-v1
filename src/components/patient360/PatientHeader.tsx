@@ -30,7 +30,7 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
     mode: "In-Clinic",
     doctor: "Dr. Priya Sharma",
     department: "General Medicine",
-    chiefComplaint: "Routine checkup and medication review"
+    chiefComplaint: "Patient presents with recurring chest pain, described as a dull ache in the left side of the chest, worsening with physical exertion. Symptoms began two weeks ago and have gradually increased in frequency. No associated shortness of breath or palpitations noted."
   };
 
   useEffect(() => {
