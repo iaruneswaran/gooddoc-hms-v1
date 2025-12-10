@@ -84,26 +84,6 @@ export function OrderSummaryStep({
                   </p>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Physical Examination</p>
-                  <div className="text-small text-foreground bg-muted/30 rounded-md p-3 min-h-[60px]">
-                    {clinicalNote.physicalExam && Object.keys(clinicalNote.physicalExam).length > 0 ? (
-                      <div className="space-y-1">
-                        {Object.entries(clinicalNote.physicalExam).map(([key, value]) => (
-                          <p key={key}><span className="font-medium">{key}:</span> {value}</p>
-                        ))}
-                      </div>
-                    ) : "—"}
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Assessment & Plan</p>
-                  <p className="text-small text-foreground bg-muted/30 rounded-md p-3">
-                    {clinicalNote.assessmentPlan || "—"}
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </Card>
