@@ -104,6 +104,7 @@ const mockOutpatients = [
     appointmentType: "Follow-up",
     appointmentStatus: "Confirmed",
     visitCount: 5,
+    vitals: { bp: "120/80", spo2: 98, hr: 72, rr: 16, temp: 37 },
   },
   {
     id: "6",
@@ -119,6 +120,7 @@ const mockOutpatients = [
     appointmentType: "Consultation",
     appointmentStatus: "Pending",
     visitCount: 8,
+    vitals: { bp: "130/85", spo2: 97, hr: 78, rr: 18, temp: 36.8 },
   },
   {
     id: "7",
@@ -134,6 +136,7 @@ const mockOutpatients = [
     appointmentType: "Review",
     appointmentStatus: "Confirmed",
     visitCount: 12,
+    vitals: { bp: "140/90", spo2: 96, hr: 68, rr: 14, temp: 37.2 },
   },
   {
     id: "8",
@@ -149,6 +152,7 @@ const mockOutpatients = [
     appointmentType: "New Visit",
     appointmentStatus: "Not Scheduled",
     visitCount: 3,
+    vitals: { bp: "118/76", spo2: 99, hr: 70, rr: 15, temp: 36.6 },
   },
 ];
 
@@ -410,15 +414,16 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[180px_160px_1fr_200px_160px_100px] gap-3 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
                   <div className="text-xs font-medium text-muted-foreground">Care Team</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_1fr_200px_160px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
@@ -453,6 +458,10 @@ export default function Patients() {
                         </Badge>
                       </div>
                       <div className="text-xs text-muted-foreground">{patient.visitCount} total visits</div>
+                    </div>
+                    <div className="text-xs text-foreground space-y-0.5">
+                      <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
+                      <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
                     </div>
                     <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
                     <div>
