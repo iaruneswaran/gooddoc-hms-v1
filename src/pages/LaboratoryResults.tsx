@@ -18,6 +18,7 @@ import {
   Search,
   TestTube,
   AlertCircle,
+  Phone,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,23 +36,30 @@ import { LabResultsPanelTabs } from "@/components/lab-results/LabResultsPanelTab
 import { AddTestModal } from "@/components/lab-results/AddTestModal";
 import { SampleCollectionSheet } from "@/components/lab-results/SampleCollectionSheet";
 import { DiagnosticsAIPanel } from "@/components/lab-results/DiagnosticsAIPanel";
+import { CriticalBanner } from "@/components/lab-results/CriticalBanner";
+import { PatientLabHeader } from "@/components/lab-results/PatientLabHeader";
+import { SpecimenStatusBar } from "@/components/lab-results/SpecimenStatusBar";
+import { ImportCSVModal } from "@/components/lab-results/ImportCSVModal";
 import { PatientContext, Sex, TestDefinition } from "@/types/lab-tests";
 import { panelsCatalog, getTestsByPanel, getTestDefinition } from "@/data/tests-catalog";
 
+// Sample patient data per requirements: Anaya Shah
 const mockPatient = {
   name: "Anaya Shah",
   mrn: "MRN-204983",
   age: 34,
-  sex: "F" as Sex,
-  type: "OPD",
+  sex: "F" as const,
+  type: "OPD" as const,
   physician: "Dr. Mehta",
   encounterId: "ENC-45821",
   allergies: ["Penicillin"],
+  location: "Cardiology Wing",
 };
 
+// Order with full specimen details
 const mockOrder = {
   id: "OR-LL-10342",
-  priority: "STAT",
+  priority: "STAT" as const,
   panels: ["Cardiac Panel", "CBC with Diff", "CMP"],
   specimen: {
     type: "Blood (Serum)",
@@ -63,7 +71,7 @@ const mockOrder = {
   },
 };
 
-// Initial mock results with prior values
+// Initial mock results with prior values per requirements
 const initialMockResults = [
   {
     id: "1",
@@ -74,43 +82,67 @@ const initialMockResults = [
   },
   {
     id: "2",
+    testId: "bnp",
+    value: "250",
+    unit: "pg/mL",
+    priorValue: "85",
+  },
+  {
+    id: "3",
+    testId: "d_dimer",
+    value: "0.45",
+    unit: "µg/mL FEU",
+    priorValue: "0.32",
+  },
+  {
+    id: "4",
     testId: "hemoglobin",
     value: "13.2",
     unit: "g/dL",
     priorValue: "13.5",
   },
-  { id: "3", testId: "wbc", value: "11.5", unit: "10^3/µL", priorValue: "9.2" },
   {
-    id: "4",
+    id: "5",
+    testId: "wbc",
+    value: "11.5",
+    unit: "10^3/µL",
+    priorValue: "9.2",
+  },
+  {
+    id: "6",
     testId: "platelets",
     value: "245",
     unit: "10^3/µL",
     priorValue: "268",
   },
   {
-    id: "5",
+    id: "7",
     testId: "sodium",
     value: "138",
     unit: "mmol/L",
     priorValue: "140",
   },
   {
-    id: "6",
+    id: "8",
     testId: "potassium",
     value: "4.2",
     unit: "mmol/L",
     priorValue: "4.1",
   },
   {
-    id: "7",
+    id: "9",
     testId: "creatinine",
     value: "0.9",
     unit: "mg/dL",
     priorValue: "0.8",
   },
-  { id: "8", testId: "egfr", value: "", unit: "mL/min/1.73m²", priorValue: "98" },
-  { id: "9", testId: "bnp", value: "250", unit: "pg/mL", priorValue: "85" },
-  { id: "10", testId: "d_dimer", value: "0.45", unit: "µg/mL FEU", priorValue: "0.32" },
+  {
+    id: "10",
+    testId: "egfr",
+    value: "",
+    unit: "mL/min/1.73m²",
+    priorValue: "98",
+  },
 ];
 
 export default function LaboratoryResults() {
@@ -124,10 +156,10 @@ export default function LaboratoryResults() {
   const [otherNotes, setOtherNotes] = useState("");
   const [showAddTestModal, setShowAddTestModal] = useState(false);
   const [showSampleSheet, setShowSampleSheet] = useState(false);
+  const [showImportCSV, setShowImportCSV] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTestRow, setSelectedTestRow] = useState<LabResultRow | null>(
-    null
-  );
+  const [selectedTestRow, setSelectedTestRow] = useState<LabResultRow | null>(null);
+  const [criticalDismissed, setCriticalDismissed] = useState(false);
 
   const patientContext: PatientContext = {
     age: mockPatient.age,
@@ -152,7 +184,7 @@ export default function LaboratoryResults() {
 
   // Sample collection state
   const testIdsForSample = useMemo(() => rows.map((r) => r.testId), [rows]);
-  
+
   const {
     testStatuses,
     collectSample,
@@ -192,25 +224,30 @@ export default function LaboratoryResults() {
     analyzeWithAI(rows, testDefinitionsMap);
   }, [analyzeWithAI, rows, testDefinitionsMap]);
 
-  const handleApplyNarrative = useCallback((text: string) => {
-    setFindings(text);
-    toast({
-      title: "Narrative Applied",
-      description: "AI-suggested narrative has been applied to findings.",
-    });
-  }, [toast]);
+  const handleApplyNarrative = useCallback(
+    (text: string) => {
+      setFindings(text);
+      toast({
+        title: "Narrative Applied",
+        description: "AI-suggested narrative has been applied to findings.",
+      });
+    },
+    [toast]
+  );
 
-  const handleApplyComments = useCallback((text: string) => {
-    setComments(text);
-    toast({
-      title: "Comments Applied",
-      description: "AI-suggested comments have been applied.",
-    });
-  }, [toast]);
+  const handleApplyComments = useCallback(
+    (text: string) => {
+      setComments(text);
+      toast({
+        title: "Comments Applied",
+        description: "AI-suggested comments have been applied.",
+      });
+    },
+    [toast]
+  );
 
   // Get sample status for display
   const sampleInfo = useMemo(() => {
-    // Check if any test has a sample
     for (const row of rows) {
       const sample = getSampleForTest(row.testId);
       if (sample) {
@@ -220,19 +257,25 @@ export default function LaboratoryResults() {
     return null;
   }, [rows, getSampleForTest]);
 
+  // Compute specimen status
+  const specimenStatus = useMemo(() => {
+    if (sampleInfo) return "received" as const;
+    return "not_collected" as const;
+  }, [sampleInfo]);
+
   // Filter rows by selected panel and search query
   const filteredRows = useMemo(() => {
-    let rows = getRowsByPanel(selectedPanel);
+    let filtered = getRowsByPanel(selectedPanel);
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      rows = rows.filter(
+      filtered = filtered.filter(
         (row) =>
           row.testDef.displayName.toLowerCase().includes(query) ||
           row.testDef.loinc?.toLowerCase().includes(query) ||
           row.testDef.synonyms?.some((s) => s.toLowerCase().includes(query))
       );
     }
-    return rows;
+    return filtered;
   }, [getRowsByPanel, selectedPanel, searchQuery]);
 
   // Count tests per panel
@@ -247,6 +290,18 @@ export default function LaboratoryResults() {
   // Existing test IDs for AddTestModal
   const existingTestIds = useMemo(() => {
     return new Set(rows.map((r) => r.testId));
+  }, [rows]);
+
+  // Get critical values for banner
+  const criticalValues = useMemo(() => {
+    return rows
+      .filter((r) => r.flag === "C")
+      .map((r) => ({
+        testName: r.testDef.displayName,
+        value: r.value,
+        unit: r.unit,
+        refRange: r.refRangeText,
+      }));
   }, [rows]);
 
   const handleSaveDraft = () => {
@@ -290,11 +345,26 @@ export default function LaboratoryResults() {
     setTimeout(() => navigate("/diagnostics"), 1500);
   };
 
+  const handleEscalate = () => {
+    toast({
+      title: "Escalation Initiated",
+      description: "Critical value alert sent to ordering physician.",
+      variant: "destructive",
+    });
+  };
+
   const handleAddTest = (testId: string) => {
     addTest(testId);
     toast({
       title: "Test Added",
       description: `Test has been added to the results.`,
+    });
+  };
+
+  const handleImportCSV = (importedRows: { testName: string; value: string }[]) => {
+    toast({
+      title: "Import Complete",
+      description: `${importedRows.length} results imported successfully.`,
     });
   };
 
@@ -321,126 +391,63 @@ export default function LaboratoryResults() {
             <span className="font-medium">Diagnostics</span>
           </button>
 
-          {/* Patient Card */}
-          <Card className="mb-4">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-4 gap-6">
-                <div>
-                  <div className="text-sm text-muted-foreground">Patient</div>
-                  <div className="font-medium text-lg">{mockPatient.name}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {mockPatient.mrn} • {mockPatient.age}y | {mockPatient.sex}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Type</div>
-                  <Badge variant="outline">{mockPatient.type}</Badge>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    Encounter: {mockPatient.encounterId}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Physician</div>
-                  <div className="font-medium">{mockPatient.physician}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Allergies</div>
-                  <div className="flex gap-1 mt-1">
-                    {mockPatient.allergies.map((a) => (
-                      <Badge key={a} variant="destructive" className="text-xs">
-                        {a}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Critical Banner - Top Level Alert */}
+          {hasCriticalValues && !criticalDismissed && (
+            <CriticalBanner
+              criticalValues={criticalValues}
+              onEscalate={handleEscalate}
+              onDismiss={() => setCriticalDismissed(true)}
+            />
+          )}
 
-          {/* Order Card */}
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-5 gap-4">
-                <div>
-                  <div className="text-sm text-muted-foreground">Order ID</div>
-                  <div className="font-medium">{mockOrder.id}</div>
-                  <Badge variant="destructive" className="mt-1">
-                    {mockOrder.priority}
-                  </Badge>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Panels</div>
-                  {mockOrder.panels.map((p) => (
-                    <div key={p} className="text-sm">
-                      {p}
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Specimen</div>
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    {mockOrder.specimen.type}
-                    {sampleInfo ? (
-                      <>
-                        <span className="text-muted-foreground">·</span>
-                        <span className="text-xs">Sample ID: {sampleInfo.sampleId}</span>
-                        <span className="text-muted-foreground">·</span>
-                        <Badge
-                          variant="default"
-                          className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-xs"
-                        >
-                          Collected
-                        </Badge>
-                      </>
-                    ) : (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="flex items-center gap-1 text-muted-foreground text-xs">
-                              <AlertCircle className="h-3 w-3" />
-                              Not Collected
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Collect sample to proceed with testing.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                  </div>
-                  {sampleInfo && (
-                    <div className="text-xs text-muted-foreground">
-                      Barcode: {sampleInfo.sampleId}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">
-                    Collected / Received
-                  </div>
-                  <div className="text-xs">{mockOrder.specimen.collected}</div>
-                  <div className="text-xs">{mockOrder.specimen.received}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Analyzer</div>
-                  <div className="text-sm">{mockOrder.specimen.analyzer}</div>
-                  <Button variant="outline" size="sm" className="mt-2">
-                    <Upload className="h-3 w-3 mr-1" />
-                    Import CSV
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Patient Header Strip */}
+          <PatientLabHeader
+            name={mockPatient.name}
+            mrn={mockPatient.mrn}
+            age={mockPatient.age}
+            sex={mockPatient.sex}
+            encounterId={mockPatient.encounterId}
+            encounterType={mockPatient.type}
+            allergies={mockPatient.allergies}
+            physician={mockPatient.physician}
+            location={mockPatient.location}
+            orderId={mockOrder.id}
+            priority={mockOrder.priority}
+            className="mb-4"
+          />
+
+          {/* Specimen Status Bar */}
+          <SpecimenStatusBar
+            status={specimenStatus}
+            specimenType={mockOrder.specimen.type}
+            barcode={sampleInfo?.sampleId || mockOrder.specimen.barcode}
+            collectedAt={mockOrder.specimen.collected}
+            receivedAt={mockOrder.specimen.received}
+            analyzer={mockOrder.specimen.analyzer}
+            collectedBy={mockOrder.specimen.collectedBy}
+            className="mb-6"
+          />
 
           <div className="space-y-6">
-            {/* Panel Selector */}
-            <LabResultsPanelTabs
-              selectedPanel={selectedPanel}
-              onPanelChange={setSelectedPanel}
-              testCounts={testCounts}
-              onCollectSample={() => setShowSampleSheet(true)}
-            />
+            {/* Panel Selector with Actions */}
+            <div className="flex items-center justify-between">
+              <LabResultsPanelTabs
+                selectedPanel={selectedPanel}
+                onPanelChange={setSelectedPanel}
+                testCounts={testCounts}
+                onCollectSample={() => setShowSampleSheet(true)}
+              />
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowImportCSV(true)}
+                >
+                  <Upload className="h-4 w-4 mr-1" />
+                  Import CSV
+                </Button>
+              </div>
+            </div>
 
             <div className="grid grid-cols-3 gap-6">
               {/* Results Grid - Left Column (2/3) */}
@@ -634,7 +641,9 @@ export default function LaboratoryResults() {
                           </div>
                         ))
                       ) : (
-                        <div className="text-sm text-muted-foreground">None defined</div>
+                        <div className="text-sm text-muted-foreground">
+                          None defined
+                        </div>
                       )}
                     </div>
                     <div>
@@ -646,7 +655,9 @@ export default function LaboratoryResults() {
                           {selectedRowForRef.priorValue} {selectedRowForRef.unit}
                         </div>
                       ) : (
-                        <div className="text-sm text-muted-foreground">No prior results</div>
+                        <div className="text-sm text-muted-foreground">
+                          No prior results
+                        </div>
                       )}
                     </div>
                     <div>
@@ -659,7 +670,9 @@ export default function LaboratoryResults() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-sm text-muted-foreground">No test selected</div>
+                  <div className="text-sm text-muted-foreground">
+                    No test selected
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -715,6 +728,13 @@ export default function LaboratoryResults() {
         onCollect={collectSample}
         getExistingSampleForTests={getExistingSampleForTests}
         testDefinitions={testDefinitionsMap}
+      />
+
+      {/* Import CSV Modal */}
+      <ImportCSVModal
+        open={showImportCSV}
+        onClose={() => setShowImportCSV(false)}
+        onImport={handleImportCSV}
       />
     </div>
   );
