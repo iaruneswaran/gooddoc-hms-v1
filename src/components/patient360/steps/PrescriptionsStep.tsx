@@ -266,7 +266,7 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
               Back
             </Button>
             <div className="flex gap-3">
-              <Button variant="ghost" onClick={handleSkip}>Skip, Fill later</Button>
+              <Button variant="outline" onClick={handleSkip}>Skip, Fill later</Button>
               <Button onClick={handleSave}>Save & Continue</Button>
             </div>
           </div>
