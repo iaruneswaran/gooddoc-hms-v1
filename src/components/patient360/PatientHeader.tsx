@@ -80,82 +80,77 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
           <span className="font-semibold">Outpatient</span>
         </button>
 
+        {/* Header Content */}
+        <div className="flex items-center gap-3 mb-4">
+          <PatientChip
+            name={patient.name}
+            gdid={patient.gdid}
+            age={age}
+            gender={patient.sex}
+          />
+        </div>
+
         {/* Appointment Summary Card */}
-        <Card className="w-full p-5 bg-muted/30 border-border">
-          <div className="flex flex-col gap-4">
-            {/* Patient Info + Appointment Header Row */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <PatientChip
-                  name={patient.name}
-                  gdid={patient.gdid}
-                  age={age}
-                  gender={patient.sex}
-                />
+        <Card className="w-full p-4 bg-muted/30 border-border">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Appointment Details */}
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-foreground mb-3">Today's Appointment</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Date</p>
+                    <p className="text-sm font-medium text-foreground">{appointmentInfo.date}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Time</p>
+                    <p className="text-sm font-medium text-foreground">{appointmentInfo.time}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Doctor</p>
+                    <p className="text-sm font-medium text-foreground">{appointmentInfo.doctor}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Mode</p>
+                    <p className="text-sm font-medium text-foreground">{appointmentInfo.mode}</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex gap-2 mt-3">
                 <Badge variant="outline" className="text-xs">{appointmentInfo.type}</Badge>
                 <Badge variant="secondary" className="text-xs">{appointmentInfo.department}</Badge>
               </div>
+              <p className="text-sm text-muted-foreground mt-2">
+                <span className="font-medium text-foreground">Chief Complaint:</span> {appointmentInfo.chiefComplaint}
+              </p>
             </div>
 
-            {/* Main Content: Appointment Details + AI Summary */}
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Appointment Details */}
-              <div className="flex-1">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Today's Appointment</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
-                  <div className="flex items-start gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Date</p>
-                      <p className="text-sm font-medium text-foreground">{appointmentInfo.date}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Time</p>
-                      <p className="text-sm font-medium text-foreground">{appointmentInfo.time}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <User className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Doctor</p>
-                      <p className="text-sm font-medium text-foreground">{appointmentInfo.doctor}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Mode</p>
-                      <p className="text-sm font-medium text-foreground">{appointmentInfo.mode}</p>
-                    </div>
-                  </div>
+            {/* AI Summary */}
+            <div className="lg:w-[400px] lg:border-l lg:border-border lg:pl-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-semibold text-foreground">AI Summary</h3>
+              </div>
+              {isLoadingSummary ? (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-sm">Generating summary...</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-4">
-                  <span className="font-medium text-foreground">Chief Complaint:</span> {appointmentInfo.chiefComplaint}
+              ) : (
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {aiSummary}
                 </p>
-              </div>
-
-              {/* AI Summary */}
-              <div className="lg:w-[380px] lg:border-l lg:border-border lg:pl-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <h3 className="text-sm font-semibold text-foreground">AI Summary</h3>
-                </div>
-                {isLoadingSummary ? (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm">Generating summary...</span>
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {aiSummary}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </Card>
