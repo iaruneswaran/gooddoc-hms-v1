@@ -202,7 +202,7 @@ export default function DiagnosticsWorklist() {
           {/* Header with Calendar */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-h3 text-foreground">Diagnostics</h1>
+              <h1 className="text-lg font-semibold text-foreground">Diagnostics</h1>
               <CalendarWidget />
             </div>
           </Card>
@@ -252,14 +252,14 @@ export default function DiagnosticsWorklist() {
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 border-b border-border bg-muted/30">
-              <div className="text-label text-muted-foreground">Patient Info</div>
-              <div className="text-label text-muted-foreground">Workorder ID</div>
-              <div className="text-label text-muted-foreground">Order</div>
-              <div className="text-label text-muted-foreground">Status</div>
-              <div className="text-label text-muted-foreground">Waiting for Approval</div>
-              <div className="text-label text-muted-foreground">Approved by</div>
-              <div className="text-label text-muted-foreground">Price</div>
-              <div className="text-label text-muted-foreground">Action</div>
+              <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
+              <div className="text-xs font-medium text-muted-foreground">Workorder ID</div>
+              <div className="text-xs font-medium text-muted-foreground">Order</div>
+              <div className="text-xs font-medium text-muted-foreground">Status</div>
+              <div className="text-xs font-medium text-muted-foreground">Waiting for Approval</div>
+              <div className="text-xs font-medium text-muted-foreground">Approved by</div>
+              <div className="text-xs font-medium text-muted-foreground">Price</div>
+              <div className="text-xs font-medium text-muted-foreground">Action</div>
             </div>
 
             {filteredOrders.map((order) => (

@@ -376,12 +376,12 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden">
       <div className="grid grid-cols-[200px_180px_1fr_200px_150px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-        <div className="text-label text-muted-foreground">Patient Info</div>
-        <div className="text-label text-muted-foreground">Contact Details</div>
-        <div className="text-label text-muted-foreground">Appointment Summary</div>
-        <div className="text-label text-muted-foreground">{getSpecialtyLabel()}</div>
-        <div className="text-label text-muted-foreground">Token & Time</div>
-        <div className="text-label text-muted-foreground">Action</div>
+        <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
+        <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
+        <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+        <div className="text-xs font-medium text-muted-foreground">{getSpecialtyLabel()}</div>
+        <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
+        <div className="text-xs font-medium text-muted-foreground">Action</div>
       </div>
 
       {appointments.map((appointment) => (

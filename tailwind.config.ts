@@ -159,23 +159,30 @@ export default {
         l: "var(--shadow-l)",
       },
       
-      /* Typography - Hospital-Grade 2025 */
+      /* Typography */
       fontFamily: {
-        sans: ["var(--gd-font-family)"],
+        sans: [
+          "Inter var",
+          "SF Pro Text",
+          "Segoe UI",
+          "Roboto",
+          "Arial",
+          "sans-serif",
+        ],
       },
       
       fontSize: {
-        /* Heading Scale */
-        display: ["var(--gd-fs-display)", { lineHeight: "var(--gd-lh-display)", fontWeight: "700", letterSpacing: "var(--gd-ls-heading)" }],
-        h1: ["var(--gd-fs-h1)", { lineHeight: "var(--gd-lh-h1)", fontWeight: "700", letterSpacing: "var(--gd-ls-heading)" }],
-        h2: ["var(--gd-fs-h2)", { lineHeight: "var(--gd-lh-h2)", fontWeight: "600", letterSpacing: "var(--gd-ls-heading)" }],
-        h3: ["var(--gd-fs-h3)", { lineHeight: "var(--gd-lh-h3)", fontWeight: "600", letterSpacing: "var(--gd-ls-heading)" }],
-        /* Body Scale */
-        body: ["var(--gd-fs-body)", { lineHeight: "var(--gd-lh-body)", fontWeight: "400", letterSpacing: "var(--gd-ls-body)" }],
-        "body-strong": ["var(--gd-fs-body)", { lineHeight: "var(--gd-lh-body)", fontWeight: "600", letterSpacing: "var(--gd-ls-body)" }],
-        small: ["var(--gd-fs-small)", { lineHeight: "var(--gd-lh-small)", fontWeight: "400", letterSpacing: "var(--gd-ls-body)" }],
-        label: ["var(--gd-fs-label)", { lineHeight: "var(--gd-lh-label)", fontWeight: "600", letterSpacing: "0" }],
-        caption: ["var(--gd-fs-caption)", { lineHeight: "var(--gd-lh-caption)", fontWeight: "500", letterSpacing: "var(--gd-ls-caption)" }],
+        display: ["1.75rem", { lineHeight: "1.2", fontWeight: "700" }],
+        h1: ["1.25rem", { lineHeight: "1.3", fontWeight: "700" }],
+        h2: ["1.125rem", { lineHeight: "1.3", fontWeight: "600" }],
+        h3: ["1rem", { lineHeight: "1.35", fontWeight: "600" }],
+        body: ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "body-strong": ["0.875rem", { lineHeight: "1.5", fontWeight: "600" }],
+        small: ["0.75rem", { lineHeight: "1.5", fontWeight: "400" }],
+        label: ["0.75rem", { lineHeight: "1.4", fontWeight: "600" }],
+        caption: ["0.6875rem", { lineHeight: "1.4", fontWeight: "500" }],
+        content: ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        subcontent: ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }],
       },
       
       /* Spacing Scale */

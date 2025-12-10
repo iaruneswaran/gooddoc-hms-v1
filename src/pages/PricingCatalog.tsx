@@ -136,7 +136,7 @@ const PricingCatalog = () => {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-h3 text-foreground">Pricing Catalog</h1>
+              <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
               <div className="flex gap-3">
                 <Button variant="outline">
                   <Upload className="w-4 h-4 mr-2" />

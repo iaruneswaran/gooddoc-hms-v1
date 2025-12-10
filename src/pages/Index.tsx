@@ -24,7 +24,7 @@ const Index = () => {
         <main className="p-6">
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-h3 text-foreground">Appointments List</h1>
+              <h1 className="text-lg font-semibold text-foreground">Appointments List</h1>
               <div className="flex items-center gap-4">
                 <CalendarWidget />
                 <Button 

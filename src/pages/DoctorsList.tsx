@@ -189,7 +189,7 @@ export default function DoctorsList() {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-h3 text-foreground">Doctors</h1>
+              <h1 className="text-lg font-semibold text-foreground">Doctors</h1>
               <div className="flex gap-3">
                 <Button variant="outline">
                   <Download className="w-4 h-4 mr-2" />
@@ -223,13 +223,13 @@ export default function DoctorsList() {
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
               <div className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
-                <div className="text-label text-muted-foreground">Doctor</div>
-                <div className="text-label text-muted-foreground">Department / Specialty</div>
-                <div className="text-label text-muted-foreground">Availability</div>
-                <div className="text-label text-muted-foreground">Locations</div>
-                <div className="text-label text-muted-foreground">Duration / Fee</div>
-                <div className="text-label text-muted-foreground">Status</div>
-                <div className="text-label text-muted-foreground">Action</div>
+                <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
+                <div className="text-xs font-medium text-muted-foreground">Availability</div>
+                <div className="text-xs font-medium text-muted-foreground">Locations</div>
+                <div className="text-xs font-medium text-muted-foreground">Duration / Fee</div>
+                <div className="text-xs font-medium text-muted-foreground">Status</div>
+                <div className="text-xs font-medium text-muted-foreground">Action</div>
               </div>
 
               {doctors.map((doctor) => (

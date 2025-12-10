@@ -78,7 +78,7 @@ export default function Inbox() {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-h3 text-foreground">Inbox</h1>
+              <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
               <CalendarWidget />
             </div>
           </Card>
@@ -114,13 +114,13 @@ export default function Inbox() {
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-label text-muted-foreground">Patient Details</div>
-                  <div className="text-label text-muted-foreground">Contact Details</div>
-                  <div className="text-label text-muted-foreground">Appointment Summary</div>
-                  <div className="text-label text-muted-foreground">Service Type</div>
-                  <div className="text-label text-muted-foreground">Status</div>
-                  <div className="text-label text-muted-foreground">Requested Date & Time</div>
-                  <div className="text-label text-muted-foreground px-4">
+                  <div className="text-xs font-medium text-muted-foreground">Patient Details</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Service Type</div>
+                  <div className="text-xs font-medium text-muted-foreground">Status</div>
+                  <div className="text-xs font-medium text-muted-foreground">Requested Date & Time</div>
+                  <div className="text-xs font-medium text-muted-foreground px-4">
                     Action
                   </div>
                 </div>
