@@ -458,9 +458,8 @@ export default function Patients() {
                         </Badge>
                       </div>
                     </div>
-                    <div className="text-xs text-foreground space-y-0.5">
-                      <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
-                      <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
+                    <div className="text-xs text-foreground">
+                      BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr} • RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C
                     </div>
                     <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
                     <div>
