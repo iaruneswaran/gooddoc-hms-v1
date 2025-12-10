@@ -268,7 +268,7 @@ export default function DiagnosticsWorklist() {
                 <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
                   {/* Patient Info */}
                   <div>
-                    <div className="text-xs font-medium text-foreground">
+                    <div className="text-sm font-medium text-foreground">
                       {order.patient.name}
                     </div>
                     <div className="text-xs text-muted-foreground">
@@ -277,13 +277,13 @@ export default function DiagnosticsWorklist() {
                   </div>
 
                   {/* Workorder ID */}
-                  <div className="text-xs text-foreground">
+                  <div className="text-sm text-foreground">
                     {order.workorderId}
                   </div>
 
                   {/* Order Date & Time */}
                   <div>
-                    <div className="text-xs text-foreground">{order.orderDate}</div>
+                    <div className="text-sm text-foreground">{order.orderDate}</div>
                     <div className="text-xs text-muted-foreground">{order.orderTime}</div>
                   </div>
 
@@ -295,17 +295,17 @@ export default function DiagnosticsWorklist() {
                   </div>
 
                   {/* Waiting for Approval */}
-                  <div className="text-xs text-foreground">
+                  <div className="text-sm text-foreground">
                     {order.waitingForApproval}
                   </div>
 
                   {/* Approved by */}
-                  <div className="text-xs text-foreground">
+                  <div className="text-sm text-foreground">
                     {order.approvedBy}
                   </div>
 
                   {/* Price */}
-                  <div className="text-xs text-foreground">
+                  <div className="text-sm text-foreground">
                     ₹{order.price.toFixed(2)}
                   </div>
 
