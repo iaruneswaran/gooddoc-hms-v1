@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -8,9 +8,16 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, Mail, MessageCircle, Video, Search } from "lucide-react";
+import { User, Phone, Mail, MessageCircle, Video, Search, Filter } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function OutpatientAppointments() {
   const navigate = useNavigate();
@@ -19,16 +26,33 @@ export default function OutpatientAppointments() {
   
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [searchQuery, setSearchQuery] = useState("");
+  const [doctorFilter, setDoctorFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [vitalsFilter, setVitalsFilter] = useState("all");
+
+  // Get unique doctors and departments for filter options
+  const filterOptions = useMemo(() => {
+    const doctors = [...new Set(mockAppointments.map(apt => apt.doctorName).filter(Boolean))];
+    const departments = [...new Set(mockAppointments.map(apt => apt.department).filter(Boolean))];
+    return { doctors, departments };
+  }, []);
 
   const filterAppointments = (appointments: Appointment[]) => {
-    if (!searchQuery) return appointments;
-    return appointments.filter(
-      (apt) =>
+    return appointments.filter((apt) => {
+      const matchesSearch = !searchQuery || 
         apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         apt.gdid.includes(searchQuery) ||
         apt.chiefComplaint?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        apt.type.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+        apt.type.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesDoctor = doctorFilter === "all" || apt.doctorName === doctorFilter;
+      const matchesDepartment = departmentFilter === "all" || apt.department === departmentFilter;
+      const matchesVitals = vitalsFilter === "all" || 
+        (vitalsFilter === "completed" && apt.vitalsPreview) ||
+        (vitalsFilter === "pending" && !apt.vitalsPreview);
+      
+      return matchesSearch && matchesDoctor && matchesDepartment && matchesVitals;
+    });
   };
 
   const scheduledAppointments = filterAppointments(
@@ -168,14 +192,48 @@ export default function OutpatientAppointments() {
                   Visited
                 </TabsTrigger>
               </TabsList>
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by patient name, GDID, or details..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+              <div className="flex items-center gap-3">
+                <Select value={doctorFilter} onValueChange={setDoctorFilter}>
+                  <SelectTrigger className="w-[160px] h-9">
+                    <SelectValue placeholder="All Doctors" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Doctors</SelectItem>
+                    {filterOptions.doctors.map((doctor) => (
+                      <SelectItem key={doctor} value={doctor!}>{doctor}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                  <SelectTrigger className="w-[160px] h-9">
+                    <SelectValue placeholder="All Departments" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Departments</SelectItem>
+                    {filterOptions.departments.map((dept) => (
+                      <SelectItem key={dept} value={dept!}>{dept}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={vitalsFilter} onValueChange={setVitalsFilter}>
+                  <SelectTrigger className="w-[140px] h-9">
+                    <SelectValue placeholder="Vitals Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Vitals</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="relative w-72">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by patient name, GDID..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-9"
+                  />
+                </div>
               </div>
             </div>
 
