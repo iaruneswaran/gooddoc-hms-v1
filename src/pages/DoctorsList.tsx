@@ -223,13 +223,13 @@ export default function DoctorsList() {
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
               <div className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
-                <div className="text-sm font-medium text-foreground">Doctor</div>
-                <div className="text-sm font-medium text-foreground">Department / Specialty</div>
-                <div className="text-sm font-medium text-foreground">Availability</div>
-                <div className="text-sm font-medium text-foreground">Locations</div>
-                <div className="text-sm font-medium text-foreground">Duration / Fee</div>
-                <div className="text-sm font-medium text-foreground">Status</div>
-                <div className="text-sm font-medium text-foreground">Action</div>
+                <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
+                <div className="text-xs font-medium text-muted-foreground">Availability</div>
+                <div className="text-xs font-medium text-muted-foreground">Locations</div>
+                <div className="text-xs font-medium text-muted-foreground">Duration / Fee</div>
+                <div className="text-xs font-medium text-muted-foreground">Status</div>
+                <div className="text-xs font-medium text-muted-foreground">Action</div>
               </div>
 
               {doctors.map((doctor) => (

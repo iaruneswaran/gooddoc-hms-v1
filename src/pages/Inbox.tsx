@@ -114,13 +114,13 @@ export default function Inbox() {
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-sm font-medium text-foreground">Patient Details</div>
-                  <div className="text-sm font-medium text-foreground">Contact Details</div>
-                  <div className="text-sm font-medium text-foreground">Appointment Summary</div>
-                  <div className="text-sm font-medium text-foreground">Service Type</div>
-                  <div className="text-sm font-medium text-foreground">Status</div>
-                  <div className="text-sm font-medium text-foreground">Requested Date & Time</div>
-                  <div className="text-sm font-medium text-foreground px-4">
+                  <div className="text-xs font-medium text-muted-foreground">Patient Details</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Service Type</div>
+                  <div className="text-xs font-medium text-muted-foreground">Status</div>
+                  <div className="text-xs font-medium text-muted-foreground">Requested Date & Time</div>
+                  <div className="text-xs font-medium text-muted-foreground px-4">
                     Action
                   </div>
                 </div>

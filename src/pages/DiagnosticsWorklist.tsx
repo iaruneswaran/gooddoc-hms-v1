@@ -252,14 +252,14 @@ export default function DiagnosticsWorklist() {
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 border-b border-border bg-muted/30">
-              <div className="text-sm font-medium text-foreground">Patient Info</div>
-              <div className="text-sm font-medium text-foreground">Workorder ID</div>
-              <div className="text-sm font-medium text-foreground">Order</div>
-              <div className="text-sm font-medium text-foreground">Status</div>
-              <div className="text-sm font-medium text-foreground">Waiting for Approval</div>
-              <div className="text-sm font-medium text-foreground">Approved by</div>
-              <div className="text-sm font-medium text-foreground">Price</div>
-              <div className="text-sm font-medium text-foreground">Action</div>
+              <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
+              <div className="text-xs font-medium text-muted-foreground">Workorder ID</div>
+              <div className="text-xs font-medium text-muted-foreground">Order</div>
+              <div className="text-xs font-medium text-muted-foreground">Status</div>
+              <div className="text-xs font-medium text-muted-foreground">Waiting for Approval</div>
+              <div className="text-xs font-medium text-muted-foreground">Approved by</div>
+              <div className="text-xs font-medium text-muted-foreground">Price</div>
+              <div className="text-xs font-medium text-muted-foreground">Action</div>
             </div>
 
             {filteredOrders.map((order) => (
