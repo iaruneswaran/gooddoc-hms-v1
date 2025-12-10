@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Patient, ClinicalNote, Prescription, LabOrder } from "@/types/patient360";
-import { FileText, Pill, FlaskConical, Stethoscope, Clock, Calendar } from "lucide-react";
+import { FileText, Pill, FlaskConical, Stethoscope, Clock, Calendar, Printer, CreditCard } from "lucide-react";
 import { format } from "date-fns";
 
 interface OrderSummaryStepProps {
@@ -225,10 +225,20 @@ export function OrderSummaryStep({
       )}
 
       {/* Footer Navigation */}
-      <div className="flex items-center justify-start pt-4 border-t border-border">
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => window.print()}>
+            <Printer className="w-4 h-4 mr-2" />
+            Print
+          </Button>
+          <Button>
+            <CreditCard className="w-4 h-4 mr-2" />
+            Proceed to Payment
+          </Button>
+        </div>
       </div>
     </div>
   );
