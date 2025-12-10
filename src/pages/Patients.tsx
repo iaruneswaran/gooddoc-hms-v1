@@ -415,12 +415,12 @@ export default function Patients() {
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
                 <div className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_auto] gap-6 px-4 py-3 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
-                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Patient Info</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Contact</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Vitals</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
                   <div key={patient.id} className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_auto] gap-6 px-4 py-3 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
