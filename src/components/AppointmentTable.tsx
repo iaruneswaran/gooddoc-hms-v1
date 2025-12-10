@@ -375,17 +375,17 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden">
-      <div className="grid grid-cols-[200px_180px_1fr_200px_150px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+      <div className="grid grid-cols-[200px_180px_1fr_200px_140px_100px] gap-4 p-4 border-b border-border bg-muted/30">
         <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
         <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
         <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
         <div className="text-xs font-medium text-muted-foreground">{getSpecialtyLabel()}</div>
         <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-        <div className="text-xs font-medium text-muted-foreground">Action</div>
+        <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
       </div>
 
       {appointments.map((appointment) => (
-        <div key={appointment.id} className="grid grid-cols-[200px_180px_1fr_200px_150px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+        <div key={appointment.id} className="grid grid-cols-[200px_180px_1fr_200px_140px_100px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <User className="w-5 h-5 text-primary" />
@@ -421,15 +421,12 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
               {tokenGeneratedIds.has(appointment.id) ? appointment.token : "Pending"} | {appointment.time}
             </div>
 
-            <div>
+            <div className="flex justify-center">
               <Button
                 onClick={() => handleCheckInClick(appointment.id)}
                 variant="default"
                 size="sm"
                 disabled={checkedInIds.has(appointment.id)}
-                className={checkedInIds.has(appointment.id) 
-                  ? "w-full cursor-not-allowed opacity-70" 
-                  : "w-full"}
               >
                 {checkedInIds.has(appointment.id) ? "Checked In" : "Check In"}
               </Button>

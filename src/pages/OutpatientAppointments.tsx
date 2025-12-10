@@ -51,7 +51,7 @@ export default function OutpatientAppointments() {
     return (
       <div
         key={appointment.id}
-        className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
+        className="grid grid-cols-[200px_180px_100px_1fr_100px_120px_110px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
       >
         {/* Patient Info */}
         <div className="flex items-center gap-3">
@@ -113,11 +113,11 @@ export default function OutpatientAppointments() {
         </div>
 
         {/* Action - Patient 360 */}
-        <div className="flex justify-end px-4">
+        <div className="flex justify-center">
           <Button
             variant="default"
+            size="sm"
             onClick={() => handlePatient360Click(appointment)}
-            className="h-9 w-full"
           >
             Patient 360
           </Button>
@@ -168,16 +168,14 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_100px_1fr_100px_120px_110px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
                   <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground px-4">
-                    Action
-                  </div>
+                  <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
                 </div>
                 {scheduledAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
@@ -191,16 +189,14 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_100px_1fr_100px_120px_110px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
                   <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground px-4">
-                    Action
-                  </div>
+                  <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
                 </div>
                 {visitedAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
