@@ -243,7 +243,7 @@ export default function Inbox() {
                       {/* Appointment Summary Row */}
                       {appointment.purpose && (
                         <div className="px-4 pb-4 pt-0">
-                          <div className="ml-[220px] mr-[100px] border-t border-border/50 pt-3">
+                          <div className="mr-[100px] border-t border-border/50 pt-3">
                             <div className="flex items-start gap-3 text-sm">
                               <span className="text-muted-foreground font-medium whitespace-nowrap">Appointment Summary</span>
                               <span className="text-foreground">{appointment.purpose}</span>
