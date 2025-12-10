@@ -455,7 +455,6 @@ export default function Patients() {
                       <div className="text-xs text-muted-foreground">{patient.visitCount} total visits</div>
                     </div>
                     <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
-                    <div className="text-sm text-foreground">{patient.nextAppointment}</div>
                     <div>
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
                         Patient Insight
