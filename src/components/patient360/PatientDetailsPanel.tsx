@@ -310,44 +310,6 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
         )}
       </Card>
 
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Clinical Information</h2>
-        
-        {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-foreground mb-2">Allergies</h3>
-            <div className="flex flex-wrap gap-2">
-              {patient.alerts.allergies.map((allergy) => (
-                <Badge key={allergy} variant="destructive">
-                  {allergy}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {patient.tags && patient.tags.length > 0 && (
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-foreground mb-2">Active Problems</h3>
-            <div className="flex flex-wrap gap-2">
-              {patient.tags.map((tag) => (
-                <Badge key={tag} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="mt-6 pt-6 border-t border-border">
-          <h3 className="text-sm font-semibold text-foreground mb-2">Latest Clinician Notes</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Patient reported mild dizziness in the morning, advised to monitor BP twice daily.
-            Weight stable compared to last visit, continue with current diet plan. Slightly
-            elevated blood pressure post lunch, recommend salt intake reduction.
-          </p>
-        </div>
-      </Card>
     </div>
   );
 }
