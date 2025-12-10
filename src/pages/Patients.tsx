@@ -413,87 +413,63 @@ export default function Patients() {
 
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
-              <div className="bg-card rounded-lg border border-border overflow-hidden w-full overflow-x-auto">
-                <table className="w-full" style={{ tableLayout: 'fixed', borderCollapse: 'separate', borderSpacing: 0, minWidth: '1200px' }}>
-                  <colgroup>
-                    <col style={{ width: '280px' }} />
-                    <col style={{ width: '220px' }} />
-                    <col style={{ width: '240px' }} />
-                    <col style={{ width: '220px' }} />
-                    <col style={{ width: '220px' }} />
-                    <col style={{ width: '140px' }} />
-                  </colgroup>
-                  <thead className="bg-muted/30 sticky top-0 z-10">
-                    <tr className="border-b border-border">
-                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground align-middle">Patient Info</th>
-                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground align-middle">Contact</th>
-                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground align-middle">Appointment Summary</th>
-                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground align-middle">Vitals</th>
-                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground align-middle">Care Team</th>
-                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground align-middle">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredOutpatients.map((patient) => (
-                      <tr key={patient.id} className="border-b border-border last:border-b-0 hover:bg-muted/20 transition-colors">
-                        <td className="px-4 py-3 align-middle">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <User className="w-5 h-5 text-primary" />
-                            </div>
-                            <div className="min-w-0">
-                              <div className="text-sm font-medium text-foreground truncate">{patient.name}</div>
-                              <div className="text-xs text-muted-foreground truncate">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 align-middle">
-                          <div className="space-y-1 min-w-0">
-                            <div className="flex items-center gap-2 text-xs text-foreground">
-                              <Phone className="w-3 h-3 flex-shrink-0" />
-                              <span className="truncate">{patient.phone}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-foreground">
-                              <Mail className="w-3 h-3 flex-shrink-0" />
-                              <span className="truncate">{patient.email}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 align-middle">
-                          <div className="space-y-1">
-                            <div className="text-sm text-foreground">{patient.nextAppointment}</div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
-                              <Badge className={
-                                patient.appointmentStatus === "Confirmed" 
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                                  : patient.appointmentStatus === "Pending"
-                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
-                                  : "bg-muted text-muted-foreground"
-                              }>
-                                {patient.appointmentStatus}
-                              </Badge>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 align-middle">
-                          <div className="text-xs text-foreground space-y-0.5">
-                            <div className="truncate">BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
-                            <div className="truncate">RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 align-middle">
-                          <div className="text-sm text-foreground truncate">{patient.doctor} — {patient.specialty}</div>
-                        </td>
-                        <td className="px-4 py-3 align-middle text-right">
-                          <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)} aria-label={`View patient insight for ${patient.name}`}>
-                            Patient Insight
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="bg-card rounded-lg border border-border overflow-hidden">
+                <div className="grid grid-cols-[200px_180px_1fr_180px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
+                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                </div>
+                {filteredOutpatients.map((patient) => (
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_180px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
+                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <Phone className="w-3 h-3 flex-shrink-0" />
+                        <span>{patient.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <Mail className="w-3 h-3 flex-shrink-0" />
+                        <span>{patient.email}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-sm text-foreground">{patient.nextAppointment}</div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
+                        <Badge className={
+                          patient.appointmentStatus === "Confirmed" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : patient.appointmentStatus === "Pending"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+                            : "bg-muted text-muted-foreground"
+                        }>
+                          {patient.appointmentStatus}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="text-xs text-foreground space-y-0.5">
+                      <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
+                      <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
+                    </div>
+                    <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
+                    <div>
+                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
+                        Patient Insight
+                      </Button>
+                    </div>
+                  </div>
+                ))}
                 {filteredOutpatients.length === 0 && (
                   <div className="text-center py-12 text-muted-foreground text-sm">No outpatients found</div>
                 )}
