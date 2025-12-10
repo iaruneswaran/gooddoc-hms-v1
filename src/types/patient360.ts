@@ -15,6 +15,8 @@ export interface Appointment {
   chiefComplaint?: string;
   mode: 'In-Clinic' | 'Virtual';
   type: 'New' | 'Follow-up';
+  doctorName?: string;
+  department?: string;
   vitalsPreview?: { bp?: string; hr?: number; temp?: number; rr?: number; spo2?: number; bg?: number };
   status: 'Scheduled' | 'Visited' | 'NoShow' | 'Cancelled' | 'InProgress';
 }

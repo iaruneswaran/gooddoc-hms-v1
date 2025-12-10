@@ -75,6 +75,8 @@ export const mockAppointments: Appointment[] = [
     chiefComplaint: "Chest pain evaluation",
     mode: "In-Clinic",
     type: "Follow-up",
+    doctorName: "Dr. Meera Nair",
+    department: "Cardiology",
     vitalsPreview: { bp: "120/80", hr: 78, rr: 18, spo2: 98, temp: 37.2, bg: 95 },
     status: "Scheduled"
   },
@@ -93,6 +95,8 @@ export const mockAppointments: Appointment[] = [
     chiefComplaint: "Routine checkup",
     mode: "In-Clinic",
     type: "New",
+    doctorName: "Dr. Rajesh Kumar",
+    department: "General Medicine",
     vitalsPreview: { bp: "118/78", hr: 70, rr: 16, spo2: 99, temp: 36.8, bg: 92 },
     status: "Scheduled"
   }
