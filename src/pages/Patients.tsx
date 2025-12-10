@@ -457,7 +457,6 @@ export default function Patients() {
                           {patient.appointmentStatus}
                         </Badge>
                       </div>
-                      <div className="text-xs text-muted-foreground">{patient.visitCount} total visits</div>
                     </div>
                     <div className="text-xs text-foreground space-y-0.5">
                       <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
