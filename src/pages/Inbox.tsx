@@ -26,7 +26,8 @@ interface PendingAppointment {
   patientGender: string;
   purpose: string;
   serviceType: "Consultation" | "Laboratory";
-  doctor?: string;
+  doctor: string;
+  department: string;
   requestedDateTime?: string;
   phone: string;
   email: string;
@@ -39,8 +40,10 @@ const mockAppointments: PendingAppointment[] = [
     patientGDID: "445821",
     patientAge: 45,
     patientGender: "F",
-    purpose: "Patient presents with recurring chest pain, described as a dull ache in the left side of the chest, worsening with physical exertion. Symptoms began two weeks ago and have gradually increased in frequency. No associated shortness of breath or palpitations noted.",
+    purpose: "Patient presents with recurring chest pain, described as a dull ache in the left side of the chest, worsening with physical exertion. Symptoms began two weeks ago and have gradually increased in frequency.",
     serviceType: "Consultation",
+    doctor: "Dr. Meera Nair",
+    department: "Cardiology",
     requestedDateTime: "15 Jan 2025, 10:00 AM",
     phone: "+91 98765 43210",
     email: "9876543210@gooddoc.app",
@@ -51,8 +54,10 @@ const mockAppointments: PendingAppointment[] = [
     patientGDID: "332109",
     patientAge: 38,
     patientGender: "M",
-    purpose: "Annual health screening and routine laboratory workup requested. Patient has no acute complaints but wishes to monitor cholesterol levels and blood sugar as part of preventive care. Family history of diabetes and cardiovascular disease.",
+    purpose: "Annual health screening and routine laboratory workup requested. Patient has no acute complaints but wishes to monitor cholesterol levels and blood sugar as part of preventive care.",
     serviceType: "Laboratory",
+    doctor: "Dr. Rajesh Kumar",
+    department: "General Medicine",
     requestedDateTime: "16 Jan 2025, 8:00 AM",
     phone: "+91 98765 43210",
     email: "9876543210@gooddoc.app",
@@ -149,13 +154,13 @@ export default function Inbox() {
 
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[220px_180px_1fr_120px_100px_180px_100px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_200px_120px_100px_160px_100px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Doctor & Department</div>
                   <div className="text-xs font-medium text-muted-foreground">Service Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Requested Date & Time</div>
+                  <div className="text-xs font-medium text-muted-foreground">Requested Date</div>
                   <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
                 </div>
 
@@ -165,65 +170,75 @@ export default function Inbox() {
                   </div>
                 ) : (
                   filteredAppointments.map((appointment) => (
-                    <div key={appointment.id} className="grid grid-cols-[220px_180px_1fr_120px_100px_180px_100px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                      {/* Patient Info */}
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <User className="w-5 h-5 text-primary" />
+                    <div key={appointment.id} className="border-b border-border last:border-b-0 hover:bg-muted/20 transition-colors">
+                      <div className="grid grid-cols-[200px_180px_200px_120px_100px_160px_100px] gap-4 p-4 items-center">
+                        {/* Patient Info */}
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <User className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-foreground">
+                              {appointment.patientName}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
+                            </div>
+                          </div>
                         </div>
+
+                        {/* Contact Details */}
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 text-xs text-foreground">
+                            <Phone className="w-3 h-3 flex-shrink-0" />
+                            <span>{appointment.phone}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-foreground">
+                            <Mail className="w-3 h-3 flex-shrink-0" />
+                            <span>{appointment.email}</span>
+                          </div>
+                        </div>
+
+                        {/* Doctor & Department */}
+                        <div className="text-sm text-foreground">
+                          {appointment.doctor} — {appointment.department}
+                        </div>
+
+                        {/* Service Type */}
+                        <div className="text-sm text-foreground">
+                          {appointment.serviceType}
+                        </div>
+
+                        {/* Status */}
                         <div>
-                          <div className="text-sm font-medium text-foreground">
-                            {appointment.patientName}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
-                          </div>
+                          <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300">
+                            Pending
+                          </Badge>
+                        </div>
+
+                        {/* Requested Date & Time */}
+                        <div className="text-sm text-foreground">
+                          {appointment.requestedDateTime || "—"}
+                        </div>
+
+                        {/* Action */}
+                        <div className="flex justify-center">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() => handleSchedule(appointment)}
+                          >
+                            Schedule
+                          </Button>
                         </div>
                       </div>
-
-                      {/* Contact Details */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-xs text-foreground">
-                          <Phone className="w-3 h-3 flex-shrink-0" />
-                          <span>{appointment.phone}</span>
+                      
+                      {/* Appointment Summary - Below row */}
+                      <div className="px-4 pb-4 pt-0">
+                        <div className="text-xs text-muted-foreground mb-1">Chief Complaint</div>
+                        <div className="text-sm text-foreground leading-relaxed">
+                          {appointment.purpose}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-foreground">
-                          <Mail className="w-3 h-3 flex-shrink-0" />
-                          <span>{appointment.email}</span>
-                        </div>
-                      </div>
-
-                      {/* Purpose */}
-                      <div className="text-sm text-foreground">
-                        {appointment.purpose}
-                      </div>
-
-                      {/* Service Type */}
-                      <div className="text-sm text-foreground">
-                        {appointment.serviceType}
-                      </div>
-
-                      {/* Status */}
-                      <div>
-                        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300">
-                          Pending
-                        </Badge>
-                      </div>
-
-                      {/* Requested Date & Time */}
-                      <div className="text-sm text-foreground">
-                        {appointment.requestedDateTime || "—"}
-                      </div>
-
-                      {/* Action */}
-                      <div className="flex justify-center">
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => handleSchedule(appointment)}
-                        >
-                          Schedule
-                        </Button>
                       </div>
                     </div>
                   ))
