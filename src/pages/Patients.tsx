@@ -414,16 +414,16 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
-                <div className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_auto] gap-6 px-4 py-3 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground text-left pl-[52px]">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground text-left">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground text-left">Appointment Summary</div>
-                  <div className="text-xs font-medium text-muted-foreground text-left">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground text-left">Care Team</div>
-                  <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
+                <div className="grid grid-cols-[200px_180px_200px_180px_180px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
+                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_auto] gap-6 px-4 py-3 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_200px_180px_180px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
