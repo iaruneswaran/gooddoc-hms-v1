@@ -130,11 +130,7 @@ export function DiagnosticsAIPanel({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">{error}</p>
-          <Button onClick={onAnalyze} variant="outline" className="w-full">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
-          </Button>
+          <p className="text-sm text-muted-foreground">{error}</p>
         </CardContent>
       </Card>
     );
@@ -145,15 +141,10 @@ export function DiagnosticsAIPanel({
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            AI Analysis
-          </CardTitle>
-          <Button variant="ghost" size="sm" onClick={onAnalyze}>
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        </div>
+        <CardTitle className="text-base flex items-center gap-2">
+          <Brain className="h-5 w-5 text-primary" />
+          AI Analysis
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Summary Status */}
