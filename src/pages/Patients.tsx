@@ -122,7 +122,7 @@ export default function Patients() {
         <main className="p-6">
           <Card className="p-6 mb-6">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Patients</h1>
+              <h1 className="text-h3 text-foreground">Patients</h1>
               <div className="flex items-center gap-3">
                 <Button variant="outline" className="gap-2">
                   <Download className="w-4 h-4" />
@@ -173,12 +173,12 @@ export default function Patients() {
 
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             <div className="grid grid-cols-[200px_180px_180px_1fr_200px_140px] gap-4 p-4 border-b border-border bg-muted/30">
-              <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-              <div className="text-xs font-medium text-muted-foreground">Contact</div>
-              <div className="text-xs font-medium text-muted-foreground">Visit ID</div>
-              <div className="text-xs font-medium text-muted-foreground">Admission & Visit</div>
-              <div className="text-xs font-medium text-muted-foreground">Care Team</div>
-              <div className="text-xs font-medium text-muted-foreground px-4">Action</div>
+              <div className="text-label text-muted-foreground">Patient Info</div>
+              <div className="text-label text-muted-foreground">Contact</div>
+              <div className="text-label text-muted-foreground">Visit ID</div>
+              <div className="text-label text-muted-foreground">Admission & Visit</div>
+              <div className="text-label text-muted-foreground">Care Team</div>
+              <div className="text-label text-muted-foreground px-4">Action</div>
             </div>
             {filteredPatients.map((patient) => (
               <div key={patient.id} className="grid grid-cols-[200px_180px_180px_1fr_200px_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">

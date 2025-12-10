@@ -134,7 +134,7 @@ export default function OutpatientAppointments() {
         <main className="p-6">
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Today's Appointments</h1>
+              <h1 className="text-h3 text-foreground">Today's Appointments</h1>
               <CalendarWidget />
             </div>
           </Card>
@@ -169,13 +169,13 @@ export default function OutpatientAppointments() {
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground px-4">
+                  <div className="text-label text-muted-foreground">Patient Info</div>
+                  <div className="text-label text-muted-foreground">Contact Details</div>
+                  <div className="text-label text-muted-foreground">Consultation Type</div>
+                  <div className="text-label text-muted-foreground">Appointment Details</div>
+                  <div className="text-label text-muted-foreground">Vitals Status</div>
+                  <div className="text-label text-muted-foreground">Token & Time</div>
+                  <div className="text-label text-muted-foreground px-4">
                     Action
                   </div>
                 </div>
@@ -192,13 +192,13 @@ export default function OutpatientAppointments() {
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[200px_180px_120px_1fr_240px_140px_140px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground px-4">
+                  <div className="text-label text-muted-foreground">Patient Info</div>
+                  <div className="text-label text-muted-foreground">Contact Details</div>
+                  <div className="text-label text-muted-foreground">Consultation Type</div>
+                  <div className="text-label text-muted-foreground">Appointment Details</div>
+                  <div className="text-label text-muted-foreground">Vitals Status</div>
+                  <div className="text-label text-muted-foreground">Token & Time</div>
+                  <div className="text-label text-muted-foreground px-4">
                     Action
                   </div>
                 </div>
