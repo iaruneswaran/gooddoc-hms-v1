@@ -450,7 +450,7 @@ export default function LaboratoryResults() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CardTitle>Test Results</CardTitle>
+                        <CardTitle className="text-[18px]">Test Results</CardTitle>
                         {hasCriticalValues && (
                           <Badge variant="destructive" className="gap-1">
                             <AlertTriangle className="h-3 w-3" />
