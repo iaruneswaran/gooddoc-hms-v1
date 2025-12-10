@@ -86,18 +86,14 @@ export function DiagnosticsAIPanel({
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
+            <Brain className="h-5 w-5 text-muted-foreground" />
             AI Analysis
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Run AI analysis to get validation insights, critical alerts, and narrative suggestions.
+          <p className="text-sm text-muted-foreground">
+            AI analysis will run automatically when test results are entered.
           </p>
-          <Button onClick={onAnalyze} className="w-full">
-            <Brain className="h-4 w-4 mr-2" />
-            Analyze Results
-          </Button>
         </CardContent>
       </Card>
     );
