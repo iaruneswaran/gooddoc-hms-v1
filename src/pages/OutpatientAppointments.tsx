@@ -113,7 +113,7 @@ export default function OutpatientAppointments() {
           </div>
 
           {/* Action - Patient 360 */}
-          <div className="flex justify-center">
+          <div className="flex justify-start">
             <Button
               variant="default"
               size="sm"
@@ -189,7 +189,7 @@ export default function OutpatientAppointments() {
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
                   <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {scheduledAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
@@ -211,7 +211,7 @@ export default function OutpatientAppointments() {
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
                   <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {visitedAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
