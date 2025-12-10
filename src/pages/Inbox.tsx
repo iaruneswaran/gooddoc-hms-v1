@@ -10,6 +10,13 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { User, Search, Phone, Mail } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PendingAppointment {
   id: string;
@@ -56,14 +63,21 @@ export default function Inbox() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("appointment");
   const [searchQuery, setSearchQuery] = useState("");
+  const [serviceTypeFilter, setServiceTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  const filteredAppointments = mockAppointments.filter(
-    (appointment) =>
+  const filteredAppointments = mockAppointments.filter((appointment) => {
+    const matchesSearch = 
       appointment.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       appointment.patientGDID.includes(searchQuery) ||
       appointment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      appointment.purpose.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      appointment.purpose.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesServiceType = serviceTypeFilter === "all" || appointment.serviceType === serviceTypeFilter;
+    const matchesStatus = statusFilter === "all" || statusFilter === "pending"; // All are pending in mock
+    
+    return matchesSearch && matchesServiceType && matchesStatus;
+  });
 
   const handleSchedule = (appointment: PendingAppointment) => {
     navigate(`/book-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
@@ -100,14 +114,36 @@ export default function Inbox() {
                   Scheduled
                 </TabsTrigger>
               </TabsList>
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by patient name, GDID, or appointment..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+              <div className="flex items-center gap-3">
+                <Select value={serviceTypeFilter} onValueChange={setServiceTypeFilter}>
+                  <SelectTrigger className="w-[150px] h-9">
+                    <SelectValue placeholder="Service Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Services</SelectItem>
+                    <SelectItem value="Consultation">Consultation</SelectItem>
+                    <SelectItem value="Laboratory">Laboratory</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-[130px] h-9">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="scheduled">Scheduled</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="relative w-72">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by patient name, GDID..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-9"
+                  />
+                </div>
               </div>
             </div>
 
