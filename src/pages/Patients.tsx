@@ -414,7 +414,7 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[auto_auto_1fr_auto_auto_auto] gap-6 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[180px_160px_1fr_200px_160px_100px] gap-3 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
@@ -423,22 +423,22 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[auto_auto_1fr_auto_auto_auto] gap-6 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_1fr_200px_160px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-foreground whitespace-nowrap">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground whitespace-nowrap">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
+                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
+                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground whitespace-nowrap">
+                      <div className="flex items-center gap-2 text-xs text-foreground">
                         <Phone className="w-3 h-3 flex-shrink-0" />
                         <span>{patient.phone}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground whitespace-nowrap">
+                      <div className="flex items-center gap-2 text-xs text-foreground">
                         <Mail className="w-3 h-3 flex-shrink-0" />
                         <span>{patient.email}</span>
                       </div>
@@ -459,7 +459,7 @@ export default function Patients() {
                       </div>
                       <div className="text-xs text-muted-foreground">{patient.visitCount} total visits</div>
                     </div>
-                    <div className="text-xs text-foreground space-y-0.5 whitespace-nowrap">
+                    <div className="text-xs text-foreground space-y-0.5">
                       <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
                       <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
                     </div>
