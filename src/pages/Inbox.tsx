@@ -154,7 +154,7 @@ export default function Inbox() {
 
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[1fr_1fr_1fr_120px_100px_160px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1fr_auto] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Doctor & Department</div>
@@ -171,7 +171,7 @@ export default function Inbox() {
                 ) : (
                   filteredAppointments.map((appointment) => (
                     <div key={appointment.id} className="border-b border-border last:border-b-0 hover:bg-muted/20 transition-colors">
-                      <div className="grid grid-cols-[1fr_1fr_1fr_120px_100px_160px_120px] gap-4 p-4 items-center">
+                      <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1fr_auto] gap-4 p-4 items-center">
                         {/* Patient Info */}
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
