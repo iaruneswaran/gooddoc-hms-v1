@@ -110,9 +110,9 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
       </div>
 
       {/* Right Side - Vitals + AI Copilot */}
-      <div className="col-span-5 space-y-4">
+      <div className="col-span-5 flex flex-col gap-4 max-h-[calc(100vh-200px)]">
         <VitalsCard vitals={vitals} />
-        <div className="h-[calc(100vh-400px)] min-h-[400px]">
+        <div className="flex-1 min-h-0 overflow-hidden">
           <ClinicalCopilotPanel
             response={response}
             isLoading={isLoading}
