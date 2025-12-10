@@ -35,7 +35,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
-        <div className="sticky top-0 bg-background z-10 border-b border-border">
+        <div className="sticky top-0 bg-background z-10 border-b border-border py-2">
           <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-8">
             <TabsTrigger
               value="appointments"
