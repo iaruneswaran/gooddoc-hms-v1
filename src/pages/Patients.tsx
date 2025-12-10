@@ -420,7 +420,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals</div>
                   <div className="text-xs font-medium text-muted-foreground">Care Team</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground justify-self-start">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
                   <div key={patient.id} className="grid grid-cols-[minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(180px,1fr)_minmax(160px,1fr)_auto] gap-4 px-4 py-3 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
