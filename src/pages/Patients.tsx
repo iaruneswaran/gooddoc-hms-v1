@@ -158,13 +158,13 @@ export default function Patients() {
                     Outpatient (OP)
                   </TabsTrigger>
                 </TabsList>
-                <div className="relative w-80 pb-2">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <div className="relative w-80 mb-2">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                   <Input
                     placeholder="Search by name, GDID, phone, email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
+                    className="pl-9"
                   />
                 </div>
               </div>
