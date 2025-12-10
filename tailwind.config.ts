@@ -172,15 +172,17 @@ export default {
       },
       
       fontSize: {
-        display: ["2rem", { lineHeight: "1.2", fontWeight: "700" }],
-        h1: ["1.5rem", { lineHeight: "1.3", fontWeight: "700" }],
-        h2: ["1.25rem", { lineHeight: "1.3", fontWeight: "600" }],
-        h3: ["1.125rem", { lineHeight: "1.35", fontWeight: "600" }],
-        body: ["1rem", { lineHeight: "1.5", fontWeight: "400" }],
-        "body-strong": ["1rem", { lineHeight: "1.5", fontWeight: "600" }],
-        small: ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
-        label: ["0.8125rem", { lineHeight: "1.4", fontWeight: "600" }],
-        caption: ["0.75rem", { lineHeight: "1.4", fontWeight: "500" }],
+        display: ["1.75rem", { lineHeight: "1.2", fontWeight: "700" }],
+        h1: ["1.25rem", { lineHeight: "1.3", fontWeight: "700" }],
+        h2: ["1.125rem", { lineHeight: "1.3", fontWeight: "600" }],
+        h3: ["1rem", { lineHeight: "1.35", fontWeight: "600" }],
+        body: ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "body-strong": ["0.875rem", { lineHeight: "1.5", fontWeight: "600" }],
+        small: ["0.75rem", { lineHeight: "1.5", fontWeight: "400" }],
+        label: ["0.75rem", { lineHeight: "1.4", fontWeight: "600" }],
+        caption: ["0.6875rem", { lineHeight: "1.4", fontWeight: "500" }],
+        content: ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        subcontent: ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }],
       },
       
       /* Spacing Scale */
