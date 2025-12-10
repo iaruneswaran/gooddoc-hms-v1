@@ -79,19 +79,6 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
     <div className="grid grid-cols-4 gap-6">
       <div className="col-span-3">
         <Card className="p-6">
-          {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
-            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge variant="destructive" className="text-xs">
-                  Allergy Alert
-                </Badge>
-              </div>
-              <p className="text-sm text-foreground">
-                Patient has allergies to: {patient.alerts.allergies.join(", ")}
-              </p>
-            </div>
-          )}
-
           <div className="space-y-4">
             {medications.map((med, index) => (
               <div
@@ -288,16 +275,6 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                 )} | {patient.sex}
               </p>
             </div>
-            {patient.alerts?.allergies && patient.alerts.allergies.length > 0 && (
-              <div>
-                <Badge variant="destructive" className="text-xs mb-2">
-                  Allergy Alert
-                </Badge>
-                <p className="text-xs text-muted-foreground">
-                  {patient.alerts.allergies.join(", ")}
-                </p>
-              </div>
-            )}
           </div>
 
           {completedMedications.length > 0 ? (
