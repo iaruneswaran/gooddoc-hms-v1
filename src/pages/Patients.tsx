@@ -271,7 +271,7 @@ export default function Patients() {
             {/* All Patients Tab */}
             <TabsContent value="all">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_80px_1fr_180px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_80px_1fr_180px_120px] gap-4 p-4 border-b border-border bg-muted/30 items-start justify-items-start">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Type</div>
