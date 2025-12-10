@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -14,6 +14,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Mock data for inpatients with visit information
 const mockInpatients = [
@@ -103,14 +110,31 @@ export default function Patients() {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("inpatient");
   const [searchQuery, setSearchQuery] = useState("");
+  const [wardFilter, setWardFilter] = useState("all");
+  const [doctorFilter, setDoctorFilter] = useState("all");
+  const [conditionFilter, setConditionFilter] = useState("all");
 
-  const filteredPatients = mockInpatients.filter(
-    (patient) =>
+  // Get unique values for filter options
+  const filterOptions = useMemo(() => {
+    const wards = [...new Set(mockInpatients.map(p => p.ward))];
+    const doctors = [...new Set(mockInpatients.map(p => p.doctor))];
+    const conditions = [...new Set(mockInpatients.map(p => p.condition))];
+    return { wards, doctors, conditions };
+  }, []);
+
+  const filteredPatients = mockInpatients.filter((patient) => {
+    const matchesSearch = 
       patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patient.gdid.includes(searchQuery) ||
       patient.phone.includes(searchQuery) ||
-      patient.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      patient.email.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesWard = wardFilter === "all" || patient.ward === wardFilter;
+    const matchesDoctor = doctorFilter === "all" || patient.doctor === doctorFilter;
+    const matchesCondition = conditionFilter === "all" || patient.condition === conditionFilter;
+    
+    return matchesSearch && matchesWard && matchesDoctor && matchesCondition;
+  });
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -158,14 +182,49 @@ export default function Patients() {
                     Outpatient (OP)
                   </TabsTrigger>
                 </TabsList>
-                <div className="relative w-80 mb-2">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                  <Input
-                    placeholder="Search by name, GDID, phone, email..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
-                  />
+                <div className="flex items-center gap-3 mb-2">
+                  <Select value={wardFilter} onValueChange={setWardFilter}>
+                    <SelectTrigger className="w-[180px] h-9">
+                      <SelectValue placeholder="All Wards" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Wards</SelectItem>
+                      {filterOptions.wards.map((ward) => (
+                        <SelectItem key={ward} value={ward}>{ward}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={doctorFilter} onValueChange={setDoctorFilter}>
+                    <SelectTrigger className="w-[160px] h-9">
+                      <SelectValue placeholder="All Doctors" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Doctors</SelectItem>
+                      {filterOptions.doctors.map((doctor) => (
+                        <SelectItem key={doctor} value={doctor}>{doctor}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={conditionFilter} onValueChange={setConditionFilter}>
+                    <SelectTrigger className="w-[150px] h-9">
+                      <SelectValue placeholder="Condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Conditions</SelectItem>
+                      {filterOptions.conditions.map((condition) => (
+                        <SelectItem key={condition} value={condition}>{condition}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    <Input
+                      placeholder="Search by name, GDID..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9 h-9"
+                    />
+                  </div>
                 </div>
               </div>
             </Tabs>
