@@ -178,7 +178,7 @@ export function OrderSummaryStep({
         <Card className="overflow-hidden">
           <div className="bg-blue-500/10 px-5 py-3 border-b border-border flex items-center gap-2">
             <FlaskConical className="w-4 h-4 text-blue-600" />
-            <h4 className="text-label font-semibold text-foreground">{labOrder.type} Orders</h4>
+            <h4 className="text-label font-semibold text-foreground">Diagnostics Orders</h4>
             <Badge className="ml-auto bg-blue-500/20 text-blue-700 hover:bg-blue-500/30">
               {labOrder.tests.length} {labOrder.tests.length === 1 ? 'test' : 'tests'}
             </Badge>
