@@ -414,7 +414,7 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[160px_140px_1fr_160px_160px_100px] gap-3 px-3 py-2.5 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[160px_130px_1fr_150px_150px_100px] gap-4 px-4 py-3 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
@@ -423,7 +423,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[160px_140px_1fr_160px_160px_100px] gap-3 px-3 py-2.5 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[160px_130px_1fr_150px_150px_100px] gap-4 px-4 py-3 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
