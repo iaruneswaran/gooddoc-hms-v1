@@ -92,8 +92,8 @@ export function ClinicalCopilotPanel({
   const hasClarifications = data?.audit?.clarifications_needed && data.audit.clarifications_needed.length > 0;
 
   return (
-    <Card className="h-full flex flex-col">
-      <div className="p-4 border-b border-border">
+    <Card className="h-full flex flex-col overflow-hidden">
+      <div className="p-4 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
           <span className="font-medium text-sm">Clinical Copilot</span>
@@ -101,8 +101,8 @@ export function ClinicalCopilotPanel({
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4">
+      <ScrollArea className="flex-1 min-h-0">
+        <div className="p-4 space-y-4 pb-6">
           {/* Quick Actions */}
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground font-medium">Quick Actions</p>
