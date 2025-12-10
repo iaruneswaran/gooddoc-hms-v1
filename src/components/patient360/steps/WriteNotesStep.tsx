@@ -49,16 +49,6 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
               />
             </div>
 
-            <div>
-              <Label htmlFor="physicalExam" className="text-sm font-medium">
-                Physical Examination
-              </Label>
-              <Textarea
-                id="physicalExam"
-                placeholder="Document physical examination findings"
-                className="mt-2 min-h-[100px]"
-              />
-            </div>
           </div>
 
           <div className="flex items-center justify-end gap-3 mt-6">
