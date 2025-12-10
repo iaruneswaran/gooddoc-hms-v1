@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDebounce } from "@/hooks/useDebounce";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -191,6 +192,27 @@ export default function LaboratoryResults() {
   const handleAnalyze = useCallback(() => {
     analyzeWithAI(rows, testDefinitionsMap);
   }, [analyzeWithAI, rows, testDefinitionsMap]);
+
+  // Create a debounced version of rows to trigger AI analysis
+  const rowValuesSignature = useMemo(() => {
+    return rows.map(r => `${r.testId}:${r.valueSI}`).join('|');
+  }, [rows]);
+  
+  const debouncedSignature = useDebounce(rowValuesSignature, 1500);
+  const hasAnalyzedRef = useRef(false);
+  const lastSignatureRef = useRef<string>('');
+
+  // Auto-trigger AI analysis when values change (debounced)
+  useEffect(() => {
+    // Check if any row has a value
+    const hasValues = rows.some(r => r.valueSI !== null && r.valueSI !== undefined);
+    
+    // Only analyze if signature changed and we have values
+    if (hasValues && debouncedSignature !== lastSignatureRef.current) {
+      lastSignatureRef.current = debouncedSignature;
+      handleAnalyze();
+    }
+  }, [debouncedSignature, rows, handleAnalyze]);
 
   const handleApplyNarrative = useCallback((text: string) => {
     setFindings(text);
