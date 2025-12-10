@@ -298,7 +298,7 @@ const PricingCatalog = () => {
                           />
                         </td>
                         <td className="p-3">
-                          <div className="font-medium text-sm">{item.name}</div>
+                          <div className="font-medium text-xs">{item.name}</div>
                           <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                             {item.description}
                           </div>
@@ -308,7 +308,7 @@ const PricingCatalog = () => {
                             {item.category}
                           </Badge>
                         </td>
-                        <td className="p-3 text-sm">{item.department}</td>
+                        <td className="p-3 text-xs">{item.department}</td>
                         <td className="p-3">
                           <div className="text-xs font-mono">{item.codes.internal}</div>
                           {item.codes.cpt && (
@@ -317,11 +317,11 @@ const PricingCatalog = () => {
                             </div>
                           )}
                         </td>
-                        <td className="p-3 text-sm capitalize">{item.unit}</td>
-                        <td className="p-3 text-right text-sm font-medium">
+                        <td className="p-3 text-xs capitalize">{item.unit}</td>
+                        <td className="p-3 text-right text-xs font-medium">
                           {formatINR(item.pricing.basePrice)}
                         </td>
-                        <td className="p-3 text-right text-sm font-semibold">
+                        <td className="p-3 text-right text-xs font-semibold">
                           {formatINR(item.pricing.netPrice)}
                         </td>
                         <td className="p-3">
