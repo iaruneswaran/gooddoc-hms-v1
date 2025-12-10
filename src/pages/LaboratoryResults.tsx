@@ -12,7 +12,6 @@ import {
   ArrowLeft,
   Save,
   CheckCircle,
-  FileText,
   AlertTriangle,
   Upload,
   Plus,
@@ -596,17 +595,6 @@ export default function LaboratoryResults() {
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Attachments</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" size="sm" className="w-full">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Upload Attachment
-                    </Button>
-                  </CardContent>
-                </Card>
               </div>
             </div>
 
