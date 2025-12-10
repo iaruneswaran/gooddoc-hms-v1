@@ -449,17 +449,18 @@ export default function Patients() {
                     </div>
                     <div className="space-y-1">
                       <div className="text-sm text-foreground">{patient.nextAppointment}</div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
-                        <Badge className={
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="text-muted-foreground">{patient.appointmentType}</span>
+                        <span className="text-muted-foreground">•</span>
+                        <span className={
                           patient.appointmentStatus === "Confirmed" 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            ? "text-green-600 dark:text-green-400" 
                             : patient.appointmentStatus === "Pending"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
-                            : "bg-muted text-muted-foreground"
+                            ? "text-yellow-600 dark:text-yellow-400"
+                            : "text-muted-foreground"
                         }>
                           {patient.appointmentStatus}
-                        </Badge>
+                        </span>
                       </div>
                     </div>
                     <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
