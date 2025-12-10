@@ -62,7 +62,7 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
           </div>
 
           <div className="flex items-center justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => onNext()}>Skip, Fill later</Button>
+            <Button variant="outline" onClick={() => onNext()}>Skip, Fill later</Button>
             <Button onClick={() => {
               const note: ClinicalNote = {
                 id: Date.now().toString(),
