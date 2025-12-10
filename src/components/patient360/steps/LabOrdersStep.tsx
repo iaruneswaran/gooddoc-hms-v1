@@ -15,9 +15,12 @@ import { format } from "date-fns";
 interface LabOrdersStepProps {
   patient: Patient;
   onBack: () => void;
+  onNext: (order?: LabOrder) => void;
 }
 
-export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
+import { LabOrder } from "@/types/patient360";
+
+export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
   const { toast } = useToast();
   const [appointmentType, setAppointmentType] = useState<"Laboratory" | "Radiology">("Laboratory");
   const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
@@ -81,20 +84,25 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
     test.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleOrderNow = () => {
-    if (!selectedTime) {
-      toast({
-        title: "Select Time Slot",
-        description: "Please select a time slot for the appointment",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    toast({
-      title: "Order Placed",
-      description: "Lab order has been successfully placed"
-    });
+  const handleSaveAndContinue = () => {
+    const order: LabOrder = {
+      id: Date.now().toString(),
+      patientId: patient.id,
+      mode: "In-Clinic",
+      type: appointmentType,
+      tests: [
+        ...selectedPackageObjects.map(pkg => ({ code: pkg.code, name: pkg.name, price: pkg.price })),
+        ...selectedTestObjects.map(test => ({ code: test.code, name: test.name, price: test.price }))
+      ],
+      scheduledAt: selectedTime ? `${format(selectedDate, "yyyy-MM-dd")}T${selectedTime}:00` : new Date().toISOString(),
+      status: "Pending",
+      totals: { subtotal, cgst, sgst, net, currency: "INR" }
+    };
+    onNext(order);
+  };
+
+  const handleSkip = () => {
+    onNext();
   };
 
   return (
@@ -277,9 +285,8 @@ export function LabOrdersStep({ patient, onBack }: LabOrdersStepProps) {
               Back
             </Button>
             <div className="flex gap-2">
-              <Button variant="outline">Print Requisition</Button>
-              <Button variant="outline">Share to patient</Button>
-              <Button onClick={handleOrderNow}>Order Now</Button>
+              <Button variant="outline" onClick={handleSkip}>Skip, Fill later</Button>
+              <Button onClick={handleSaveAndContinue}>Save & Continue</Button>
             </div>
           </div>
         </Card>

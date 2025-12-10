@@ -3,13 +3,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Patient, Vitals } from "@/types/patient360";
+import { Patient, Vitals, ClinicalNote } from "@/types/patient360";
 import { VitalsCard } from "../VitalsCard";
 
 interface WriteNotesStepProps {
   patient: Patient;
   vitals?: Vitals;
-  onNext: () => void;
+  onNext: (note?: ClinicalNote) => void;
 }
 
 export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps) {
@@ -62,8 +62,19 @@ export function WriteNotesStep({ patient, vitals, onNext }: WriteNotesStepProps)
           </div>
 
           <div className="flex items-center justify-end gap-3 mt-6">
-            <Button variant="ghost">Skip, Fill later</Button>
-            <Button onClick={onNext}>Save & Continue</Button>
+            <Button variant="ghost" onClick={() => onNext()}>Skip, Fill later</Button>
+            <Button onClick={() => {
+              const note: ClinicalNote = {
+                id: Date.now().toString(),
+                patientId: patient.id,
+                createdBy: "current-user",
+                createdAt: new Date().toISOString(),
+                chiefComplaint,
+                hpi,
+                status: "Draft"
+              };
+              onNext(note);
+            }}>Save & Continue</Button>
           </div>
         </Card>
       </div>
