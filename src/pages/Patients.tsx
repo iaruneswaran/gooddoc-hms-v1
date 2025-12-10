@@ -443,8 +443,9 @@ export default function Patients() {
                         <span>{patient.email}</span>
                       </div>
                     </div>
-                    <div className="text-xs text-foreground">
-                      BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr} • RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C
+                    <div className="text-xs text-foreground space-y-0.5">
+                      <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
+                      <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
                     </div>
                     <div className="space-y-1 pl-6">
                       <div className="text-sm text-foreground">{patient.nextAppointment}</div>
