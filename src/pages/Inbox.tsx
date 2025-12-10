@@ -148,13 +148,13 @@ export default function Inbox() {
                       </div>
 
                       {/* Contact Details */}
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-sm text-foreground">
-                          <Phone className="w-3.5 h-3.5" />
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-xs text-foreground">
+                          <Phone className="w-3 h-3 flex-shrink-0" />
                           <span>{appointment.phone}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-foreground">
-                          <Mail className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 text-xs text-foreground">
+                          <Mail className="w-3 h-3 flex-shrink-0" />
                           <span>{appointment.email}</span>
                         </div>
                       </div>
