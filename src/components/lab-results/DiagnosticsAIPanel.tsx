@@ -38,11 +38,11 @@ export function DiagnosticsAIPanel({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "ok":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-status-success" />;
       case "attention":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+        return <AlertTriangle className="h-4 w-4 text-status-warning" />;
       case "block":
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
       default:
         return null;
     }
@@ -51,9 +51,9 @@ export function DiagnosticsAIPanel({
   const getChecklistIcon = (status: ChecklistStatus) => {
     switch (status) {
       case "ok":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-status-success" />;
       case "needs_attention":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+        return <AlertTriangle className="h-4 w-4 text-status-warning" />;
       case "pending":
         return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
@@ -62,11 +62,11 @@ export function DiagnosticsAIPanel({
   const getBannerStyles = (type: BannerType) => {
     switch (type) {
       case "critical":
-        return "bg-red-50 border-red-200 text-red-800 dark:bg-red-950 dark:border-red-900 dark:text-red-200";
+        return "bg-destructive/10 border-destructive/30 text-destructive";
       case "warning":
-        return "bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-950 dark:border-yellow-900 dark:text-yellow-200";
+        return "bg-status-warning/10 border-status-warning/30 text-status-warning";
       case "info":
-        return "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-900 dark:text-blue-200";
+        return "bg-primary/10 border-primary/30 text-primary";
     }
   };
 
@@ -182,7 +182,7 @@ export function DiagnosticsAIPanel({
             <Separator />
             <div>
               <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-red-500" />
+                <AlertCircle className="h-4 w-4 text-destructive" />
                 Critical Alerts ({response.criticalAlerts.length})
               </h4>
               <ScrollArea className="max-h-32">
@@ -190,9 +190,9 @@ export function DiagnosticsAIPanel({
                   {response.criticalAlerts.map((alert, idx) => (
                     <div
                       key={idx}
-                      className="text-sm p-2 bg-red-50 dark:bg-red-950 rounded border border-red-200 dark:border-red-900"
+                      className="text-sm p-2 bg-destructive/10 rounded border border-destructive/30"
                     >
-                      <div className="font-medium">{alert.testId}: {alert.value}</div>
+                      <div className="font-medium text-destructive">{alert.testId}: {alert.value}</div>
                       <div className="text-xs text-muted-foreground">{alert.recommendedAction}</div>
                     </div>
                   ))}
@@ -208,7 +208,7 @@ export function DiagnosticsAIPanel({
             <Separator />
             <div>
               <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                <ClipboardCheck className="h-4 w-4" />
+                <ClipboardCheck className="h-4 w-4 text-primary" />
                 Validation Checklist
               </h4>
               <div className="space-y-1">
@@ -216,7 +216,7 @@ export function DiagnosticsAIPanel({
                   <div key={idx} className="flex items-center gap-2 text-sm">
                     {getChecklistIcon(item.status)}
                     <span className={cn(
-                      item.status === "needs_attention" && "text-yellow-700 dark:text-yellow-300",
+                      item.status === "needs_attention" && "text-status-warning",
                       item.status === "pending" && "text-muted-foreground"
                     )}>
                       {item.item}
@@ -233,11 +233,11 @@ export function DiagnosticsAIPanel({
           <>
             <Separator />
             <div>
-              <h4 className="text-sm font-medium mb-2">Suggested Reflex Tests</h4>
+              <h4 className="text-sm font-medium mb-2 text-primary">Suggested Reflex Tests</h4>
               <div className="space-y-1">
                 {response.reflexSuggestions.map((suggestion, idx) => (
                   <div key={idx} className="text-sm">
-                    <span className="font-medium">{suggestion.testId}</span>
+                    <span className="font-medium text-primary">{suggestion.testId}</span>
                     <span className="text-muted-foreground"> — {suggestion.reason}</span>
                   </div>
                 ))}
@@ -253,20 +253,21 @@ export function DiagnosticsAIPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-4 w-4 text-primary" />
                   Suggested Narrative
                 </h4>
                 {onApplyNarrative && (
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
+                    className="text-primary border-primary/30 hover:bg-primary/10"
                     onClick={() => onApplyNarrative(response.narrativeDraft)}
                   >
                     Apply
                   </Button>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground bg-muted p-2 rounded">
+              <p className="text-sm text-foreground bg-muted/50 p-3 rounded-md border border-border">
                 {response.narrativeDraft}
               </p>
             </div>
@@ -279,18 +280,19 @@ export function DiagnosticsAIPanel({
             <Separator />
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium">Suggested Comments</h4>
+                <h4 className="text-sm font-medium text-primary">Suggested Comments</h4>
                 {onApplyComments && (
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
+                    className="text-primary border-primary/30 hover:bg-primary/10"
                     onClick={() => onApplyComments(response.commentsDraft)}
                   >
                     Apply
                   </Button>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground bg-muted p-2 rounded">
+              <p className="text-sm text-foreground bg-muted/50 p-3 rounded-md border border-border">
                 {response.commentsDraft}
               </p>
             </div>
