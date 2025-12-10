@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CalendarWidget } from "@/components/CalendarWidget";
 
@@ -165,6 +165,15 @@ export default function DiagnosticsWorklist() {
   const [selectedTab, setSelectedTab] = useState("laboratory");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [approvedByFilter, setApprovedByFilter] = useState("all");
+
+  // Get unique departments and approvers for filter options
+  const filterOptions = useMemo(() => {
+    const departments = [...new Set(mockOrders.flatMap(order => order.departments.map(d => d.name)))];
+    const approvers = [...new Set(mockOrders.map(order => order.approvedBy).filter(a => a !== "-"))];
+    return { departments, approvers };
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -183,8 +192,11 @@ export default function DiagnosticsWorklist() {
                          order.patient.gdid.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          order.workorderId.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
+    const matchesDepartment = departmentFilter === "all" || 
+                              order.departments.some(d => d.name === departmentFilter);
+    const matchesApprover = approvedByFilter === "all" || order.approvedBy === approvedByFilter;
     
-    return matchesTab && matchesSearch && matchesStatus;
+    return matchesTab && matchesSearch && matchesStatus && matchesDepartment && matchesApprover;
   });
 
   const getTotalTests = (departments: DiagnosticOrder["departments"]) => {
@@ -221,18 +233,9 @@ export default function DiagnosticsWorklist() {
             </Tabs>
 
             <div className="flex gap-3 pb-2">
-              <div className="relative w-[320px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by patient name, MRN, or order ID..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-9"
-                />
-              </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[160px] h-9">
-                  <SelectValue placeholder="Filter by status" />
+                <SelectTrigger className="w-[140px] h-9">
+                  <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
@@ -241,10 +244,37 @@ export default function DiagnosticsWorklist() {
                   <SelectItem value="Completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="sm" className="h-9">
-                <Filter className="h-4 w-4 mr-2" />
-                More Filters
-              </Button>
+              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                <SelectTrigger className="w-[150px] h-9">
+                  <SelectValue placeholder="Department" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Departments</SelectItem>
+                  {filterOptions.departments.map((dept) => (
+                    <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={approvedByFilter} onValueChange={setApprovedByFilter}>
+                <SelectTrigger className="w-[150px] h-9">
+                  <SelectValue placeholder="Approved By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Approvers</SelectItem>
+                  {filterOptions.approvers.map((approver) => (
+                    <SelectItem key={approver} value={approver}>{approver}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="relative w-[280px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by patient name, MRN..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 h-9"
+                />
+              </div>
             </div>
           </div>
 
