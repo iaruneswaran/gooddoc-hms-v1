@@ -417,7 +417,7 @@ export default function Patients() {
                 <div className="grid grid-cols-[200px_180px_1fr_180px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground pl-6">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals</div>
                   <div className="text-xs font-medium text-muted-foreground">Care Team</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
@@ -443,7 +443,7 @@ export default function Patients() {
                         <span>{patient.email}</span>
                       </div>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1 pl-6">
                       <div className="text-sm text-foreground">{patient.nextAppointment}</div>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
