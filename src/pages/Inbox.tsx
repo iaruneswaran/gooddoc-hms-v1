@@ -113,16 +113,14 @@ export default function Inbox() {
 
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[220px_180px_1fr_120px_100px_180px_100px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Service Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Status</div>
                   <div className="text-xs font-medium text-muted-foreground">Requested Date & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground px-4">
-                    Action
-                  </div>
+                  <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
                 </div>
 
                 {filteredAppointments.length === 0 ? (
@@ -131,7 +129,7 @@ export default function Inbox() {
                   </div>
                 ) : (
                   filteredAppointments.map((appointment) => (
-                    <div key={appointment.id} className="grid grid-cols-[220px_180px_1fr_140px_120px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                    <div key={appointment.id} className="grid grid-cols-[220px_180px_1fr_120px_100px_180px_100px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                       {/* Patient Info */}
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -182,11 +180,11 @@ export default function Inbox() {
                       </div>
 
                       {/* Action */}
-                      <div className="flex justify-end px-4">
+                      <div className="flex justify-center">
                         <Button
                           variant="default"
+                          size="sm"
                           onClick={() => handleSchedule(appointment)}
-                          className="h-9 w-full"
                         >
                           Schedule
                         </Button>

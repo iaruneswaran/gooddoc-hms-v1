@@ -251,7 +251,7 @@ export default function DiagnosticsWorklist() {
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             {/* Table Header */}
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 border-b border-border bg-muted/30">
+            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
               <div className="text-xs font-medium text-muted-foreground">Workorder ID</div>
               <div className="text-xs font-medium text-muted-foreground">Order</div>
@@ -259,13 +259,13 @@ export default function DiagnosticsWorklist() {
               <div className="text-xs font-medium text-muted-foreground">Waiting for Approval</div>
               <div className="text-xs font-medium text-muted-foreground">Approved by</div>
               <div className="text-xs font-medium text-muted-foreground">Price</div>
-              <div className="text-xs font-medium text-muted-foreground">Action</div>
+              <div className="text-xs font-medium text-muted-foreground text-center">Action</div>
             </div>
 
             {filteredOrders.map((order) => (
               <div key={order.id} className="border-b border-border last:border-b-0">
                 {/* Main Row */}
-                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_140px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
                   {/* Patient Info */}
                   <div>
                     <div className="text-sm font-medium text-foreground">
@@ -311,8 +311,8 @@ export default function DiagnosticsWorklist() {
 
                   {/* Action */}
                   <div className="flex justify-center">
-                    <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`} className="w-full">
-                      <Button variant="default" className="h-9 w-full">
+                    <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
+                      <Button variant="default" size="sm">
                         Enter Results
                       </Button>
                     </Link>
