@@ -414,16 +414,16 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_180px_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_200px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground pl-6">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Care Team</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_180px_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_200px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
@@ -447,7 +447,7 @@ export default function Patients() {
                       <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
                       <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
                     </div>
-                    <div className="space-y-1 pl-6">
+                    <div className="space-y-1">
                       <div className="text-sm text-foreground">{patient.nextAppointment}</div>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
