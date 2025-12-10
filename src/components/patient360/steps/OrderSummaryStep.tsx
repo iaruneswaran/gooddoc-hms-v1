@@ -1,7 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Patient, ClinicalNote, Prescription, LabOrder } from "@/types/patient360";
-import { FileText, Pill, FlaskConical } from "lucide-react";
+import { FileText, Pill, FlaskConical, Stethoscope, Clock, Calendar } from "lucide-react";
+import { format } from "date-fns";
 
 interface OrderSummaryStepProps {
   patient: Patient;
@@ -23,127 +25,204 @@ export function OrderSummaryStep({
     (365.25 * 24 * 60 * 60 * 1000)
   );
 
+  const hasContent = clinicalNote || (prescription && prescription.items.length > 0) || (labOrder && labOrder.tests.length > 0);
+
   return (
     <div className="space-y-6">
       {/* Patient Info Header */}
-      <Card className="p-4 bg-muted/30">
+      <Card className="p-5 bg-gradient-to-r from-primary/5 to-transparent border-primary/20">
         <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-h3 font-semibold text-foreground">{patient.name}</h3>
-            <p className="text-small text-muted-foreground">
-              GDID: {patient.gdid} • {age} yrs • {patient.sex === 'M' ? 'Male' : 'Female'}
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-lg font-semibold text-primary">
+                {patient.name.split(' ').map(n => n[0]).join('')}
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">{patient.name}</h3>
+              <p className="text-small text-muted-foreground">
+                {patient.gdid} • {age} yrs • {patient.sex === 'M' ? 'Male' : patient.sex === 'F' ? 'Female' : 'Other'}
+              </p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-small text-muted-foreground">Phone: {patient.phone}</p>
-            <p className="text-small text-muted-foreground">Email: {patient.email}</p>
+          <div className="text-right text-small text-muted-foreground">
+            <p>{patient.phone}</p>
+            <p>{patient.email}</p>
           </div>
         </div>
       </Card>
 
-      {/* Clinical Notes - Full Width */}
+      {!hasContent && (
+        <Card className="p-8 text-center">
+          <p className="text-muted-foreground">No clinical data recorded for this visit.</p>
+        </Card>
+      )}
+
+      {/* Clinical Notes */}
       {clinicalNote && (
-        <Card className="p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <FileText className="w-4 h-4 text-primary" />
+        <Card className="overflow-hidden">
+          <div className="bg-primary/5 px-5 py-3 border-b border-border flex items-center gap-2">
+            <Stethoscope className="w-4 h-4 text-primary" />
             <h4 className="text-label font-semibold text-foreground">Clinical Notes</h4>
+            <Badge variant="outline" className="ml-auto text-xs">
+              {clinicalNote.status}
+            </Badge>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-3">
-              <div>
-                <p className="text-caption text-muted-foreground mb-1">Chief Complaint</p>
-                <p className="text-small text-foreground">{clinicalNote.chiefComplaint || "Not specified"}</p>
-              </div>
-              <div>
-                <p className="text-caption text-muted-foreground mb-1">History of Present Illness (HPI)</p>
-                <p className="text-small text-foreground">{clinicalNote.hpi || "Not specified"}</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {clinicalNote.physicalExam && Object.keys(clinicalNote.physicalExam).length > 0 && (
+          <div className="p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
-                  <p className="text-caption text-muted-foreground mb-1">Physical Examination</p>
-                  <div className="space-y-1">
-                    {Object.entries(clinicalNote.physicalExam).map(([key, value]) => (
-                      <p key={key} className="text-small text-foreground">
-                        <span className="font-medium">{key}:</span> {value}
-                      </p>
-                    ))}
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Chief Complaint</p>
+                  <p className="text-small text-foreground bg-muted/30 rounded-md p-3">
+                    {clinicalNote.chiefComplaint || "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">History of Present Illness</p>
+                  <p className="text-small text-foreground bg-muted/30 rounded-md p-3 min-h-[60px]">
+                    {clinicalNote.hpi || "—"}
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Physical Examination</p>
+                  <div className="text-small text-foreground bg-muted/30 rounded-md p-3 min-h-[60px]">
+                    {clinicalNote.physicalExam && Object.keys(clinicalNote.physicalExam).length > 0 ? (
+                      <div className="space-y-1">
+                        {Object.entries(clinicalNote.physicalExam).map(([key, value]) => (
+                          <p key={key}><span className="font-medium">{key}:</span> {value}</p>
+                        ))}
+                      </div>
+                    ) : "—"}
                   </div>
                 </div>
-              )}
-              {clinicalNote.assessmentPlan && (
                 <div>
-                  <p className="text-caption text-muted-foreground mb-1">Assessment & Plan</p>
-                  <p className="text-small text-foreground">{clinicalNote.assessmentPlan}</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Assessment & Plan</p>
+                  <p className="text-small text-foreground bg-muted/30 rounded-md p-3">
+                    {clinicalNote.assessmentPlan || "—"}
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </Card>
       )}
 
-      <div className="grid grid-cols-1 gap-6">
-        {/* Prescription Summary */}
-        {prescription && prescription.items.length > 0 && (
-          <Card className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Pill className="w-4 h-4 text-primary" />
-              <h4 className="text-label font-semibold text-foreground">Prescriptions ({prescription.items.length})</h4>
-            </div>
-            <div className="space-y-2">
-              {prescription.items.map((item, index) => (
-                <div key={index} className="flex items-center justify-between text-small py-2 border-b border-border last:border-0">
-                  <div className="flex-1">
-                    <span className="font-medium text-foreground">{item.name}</span>
-                    {item.strength && <span className="text-muted-foreground ml-2">{item.strength}</span>}
+      {/* Prescriptions */}
+      {prescription && prescription.items.length > 0 && (
+        <Card className="overflow-hidden">
+          <div className="bg-emerald-500/10 px-5 py-3 border-b border-border flex items-center gap-2">
+            <Pill className="w-4 h-4 text-emerald-600" />
+            <h4 className="text-label font-semibold text-foreground">Medications</h4>
+            <Badge className="ml-auto bg-emerald-500/20 text-emerald-700 hover:bg-emerald-500/30">
+              {prescription.items.length} {prescription.items.length === 1 ? 'item' : 'items'}
+            </Badge>
+          </div>
+          <div className="divide-y divide-border">
+            {prescription.items.map((item, index) => (
+              <div key={index} className="p-4 hover:bg-muted/20 transition-colors">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-xs font-semibold text-emerald-600 shrink-0">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">{item.name}</p>
+                      <p className="text-small text-muted-foreground">
+                        {item.strength && <span>{item.strength}</span>}
+                        {item.form && <span> • {item.form}</span>}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4 text-muted-foreground">
-                    {item.dosage && <span>{item.dosage}</span>}
-                    {item.timing && <span>{item.timing}</span>}
-                    {item.frequency && <span>{item.frequency}</span>}
-                    {item.durationDays && <span>{item.durationDays}d</span>}
+                  <div className="text-right">
+                    <div className="flex items-center gap-2 text-small">
+                      {item.dosage && (
+                        <Badge variant="secondary" className="font-normal">
+                          {item.dosage}
+                        </Badge>
+                      )}
+                      {item.frequency && (
+                        <Badge variant="outline" className="font-normal">
+                          {item.frequency}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </Card>
-        )}
+                <div className="mt-2 ml-11 flex items-center gap-4 text-xs text-muted-foreground">
+                  {item.timing && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {item.timing}
+                    </span>
+                  )}
+                  {item.durationDays && (
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      {item.durationDays} days
+                    </span>
+                  )}
+                  {item.notes && (
+                    <span className="text-amber-600">Note: {item.notes}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
 
-        {/* Lab Orders Summary */}
-        {labOrder && labOrder.tests.length > 0 && (
-          <Card className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <FlaskConical className="w-4 h-4 text-primary" />
-              <h4 className="text-label font-semibold text-foreground">{labOrder.type} Orders ({labOrder.tests.length})</h4>
-            </div>
-            <div className="space-y-2">
+      {/* Lab / Radiology Orders */}
+      {labOrder && labOrder.tests.length > 0 && (
+        <Card className="overflow-hidden">
+          <div className="bg-blue-500/10 px-5 py-3 border-b border-border flex items-center gap-2">
+            <FlaskConical className="w-4 h-4 text-blue-600" />
+            <h4 className="text-label font-semibold text-foreground">{labOrder.type} Orders</h4>
+            <Badge className="ml-auto bg-blue-500/20 text-blue-700 hover:bg-blue-500/30">
+              {labOrder.tests.length} {labOrder.tests.length === 1 ? 'test' : 'tests'}
+            </Badge>
+          </div>
+          <div className="p-4">
+            <div className="space-y-2 mb-4">
               {labOrder.tests.map((test, index) => (
-                <div key={index} className="flex items-center justify-between text-small py-2 border-b border-border last:border-0">
-                  <span className="text-foreground">{test.name}</span>
-                  <span className="font-medium text-foreground">₹{test.price.toLocaleString()}</span>
+                <div 
+                  key={index} 
+                  className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded bg-blue-500/10 flex items-center justify-center text-xs font-medium text-blue-600">
+                      {index + 1}
+                    </div>
+                    <span className="text-small font-medium text-foreground">{test.name}</span>
+                  </div>
+                  <span className="text-small font-semibold text-foreground">₹{test.price.toLocaleString()}</span>
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between pt-3 mt-3 border-t border-border">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span className="text-foreground">₹{labOrder.totals.subtotal.toLocaleString()}</span>
+            
+            {/* Totals */}
+            <div className="border-t border-border pt-4 space-y-2">
+              <div className="flex items-center justify-between text-small">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-foreground">₹{labOrder.totals.subtotal.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center justify-between text-small">
+                <span className="text-muted-foreground">CGST (9%)</span>
+                <span className="text-foreground">₹{labOrder.totals.cgst.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center justify-between text-small">
+                <span className="text-muted-foreground">SGST (9%)</span>
+                <span className="text-foreground">₹{labOrder.totals.sgst.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center justify-between pt-2 border-t border-border">
+                <span className="font-semibold text-foreground">Net Payable</span>
+                <span className="text-lg font-bold text-primary">₹{Math.round(labOrder.totals.net).toLocaleString()}</span>
+              </div>
             </div>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-muted-foreground">CGST (9%)</span>
-              <span className="text-foreground">₹{labOrder.totals.cgst.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-muted-foreground">SGST (9%)</span>
-              <span className="text-foreground">₹{labOrder.totals.sgst.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center justify-between pt-3 mt-2 border-t border-border">
-              <span className="font-semibold text-foreground">Net Payable</span>
-              <span className="font-semibold text-foreground">₹{Math.round(labOrder.totals.net).toLocaleString()}</span>
-            </div>
-          </Card>
-        )}
-      </div>
+          </div>
+        </Card>
+      )}
 
       {/* Footer Navigation */}
       <div className="flex items-center justify-start pt-4 border-t border-border">
