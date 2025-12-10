@@ -98,11 +98,11 @@ const mockOutpatients = [
     gender: "M",
     phone: "+91 98765 43214",
     email: "9876543214@gooddoc.app",
-    lastVisit: "05 Aug 2025",
     nextAppointment: "12 Aug 2025, 10:00 AM",
     doctor: "Dr. Meera Nair",
     specialty: "Cardiology",
-    diagnosis: "Hypertension",
+    appointmentType: "Follow-up",
+    appointmentStatus: "Confirmed",
     visitCount: 5,
   },
   {
@@ -113,11 +113,11 @@ const mockOutpatients = [
     gender: "F",
     phone: "+91 98765 43215",
     email: "9876543215@gooddoc.app",
-    lastVisit: "01 Aug 2025",
     nextAppointment: "08 Aug 2025, 11:30 AM",
     doctor: "Dr. Rajesh Kumar",
     specialty: "Endocrinology",
-    diagnosis: "Diabetes Type 2",
+    appointmentType: "Consultation",
+    appointmentStatus: "Pending",
     visitCount: 8,
   },
   {
@@ -128,11 +128,11 @@ const mockOutpatients = [
     gender: "M",
     phone: "+91 98765 43216",
     email: "9876543216@gooddoc.app",
-    lastVisit: "28 Jul 2025",
     nextAppointment: "10 Aug 2025, 09:00 AM",
     doctor: "Dr. Anita Singh",
     specialty: "Orthopedics",
-    diagnosis: "Chronic Back Pain",
+    appointmentType: "Review",
+    appointmentStatus: "Confirmed",
     visitCount: 12,
   },
   {
@@ -143,11 +143,11 @@ const mockOutpatients = [
     gender: "F",
     phone: "+91 98765 43217",
     email: "9876543217@gooddoc.app",
-    lastVisit: "03 Aug 2025",
     nextAppointment: "—",
     doctor: "Dr. Sunil Reddy",
     specialty: "Dermatology",
-    diagnosis: "Eczema",
+    appointmentType: "New Visit",
+    appointmentStatus: "Not Scheduled",
     visitCount: 3,
   },
 ];
@@ -339,7 +339,7 @@ export default function Patients() {
                       <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">OP</Badge>
                     </div>
                     <div className="text-sm text-foreground">
-                      Last visit: {patient.lastVisit} • {patient.visitCount} total visits
+                      {patient.nextAppointment !== "—" ? patient.nextAppointment : "No upcoming"} • {patient.visitCount} visits
                     </div>
                     <div className="text-sm text-foreground">{patient.doctor}</div>
                     <div>
@@ -410,15 +410,15 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_180px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Visit History & Diagnosis</div>
-                  <div className="text-xs font-medium text-muted-foreground">Next Appointment</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_180px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
@@ -439,13 +439,22 @@ export default function Patients() {
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <div className="text-xs text-muted-foreground">
-                        Last visit: {patient.lastVisit} • {patient.visitCount} total visits
+                      <div className="text-sm text-foreground">{patient.nextAppointment}</div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">{patient.appointmentType}</Badge>
+                        <Badge className={
+                          patient.appointmentStatus === "Confirmed" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : patient.appointmentStatus === "Pending"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+                            : "bg-muted text-muted-foreground"
+                        }>
+                          {patient.appointmentStatus}
+                        </Badge>
                       </div>
-                      <div className="text-sm text-foreground">
-                        {patient.diagnosis} • {patient.doctor} — {patient.specialty}
-                      </div>
+                      <div className="text-xs text-muted-foreground">{patient.visitCount} total visits</div>
                     </div>
+                    <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
                     <div className="text-sm text-foreground">{patient.nextAppointment}</div>
                     <div>
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
