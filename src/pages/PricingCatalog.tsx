@@ -304,7 +304,7 @@ const PricingCatalog = () => {
                           </div>
                         </td>
                         <td className="p-3">
-                          <Badge variant="secondary" className="text-sm">
+                          <Badge variant="secondary">
                             {item.category}
                           </Badge>
                         </td>
