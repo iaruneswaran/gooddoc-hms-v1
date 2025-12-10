@@ -197,20 +197,14 @@ export default function Patients() {
                 </div>
 
                 <div className="space-y-1">
-                  <a
-                    href={`tel:${patient.phone}`}
-                    className="flex items-center gap-2 text-sm text-foreground hover:text-primary"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                    {patient.phone}
-                  </a>
-                  <a
-                    href={`mailto:${patient.email}`}
-                    className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary"
-                  >
-                    <Mail className="w-3.5 h-3.5" />
-                    {patient.email}
-                  </a>
+                  <div className="flex items-center gap-2 text-xs text-foreground">
+                    <Phone className="w-3 h-3 flex-shrink-0" />
+                    <span>{patient.phone}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-foreground">
+                    <Mail className="w-3 h-3 flex-shrink-0" />
+                    <span>{patient.email}</span>
+                  </div>
                 </div>
 
                 <div>
