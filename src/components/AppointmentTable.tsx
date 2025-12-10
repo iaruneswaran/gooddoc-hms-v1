@@ -451,14 +451,14 @@ export function AppointmentTable({ category = "outpatient-care" }: AppointmentTa
       <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <AlertDialogContent className="w-[320px] p-0 gap-0 fixed bottom-6 right-6 top-auto left-auto translate-x-0 translate-y-0">
           <div className="p-4 space-y-3">
-            <h3 className="text-lg font-semibold text-foreground">Confirm to Generate Token</h3>
+            <h3 className="text-base font-semibold text-foreground">Confirm to Generate Token</h3>
             
             {pendingAppointmentId && (() => {
               const appointment = appointments.find(apt => apt.id === pendingAppointmentId);
               return appointment ? (
                 <>
                   <div className="text-center py-2">
-                    <div className="text-2xl font-semibold" style={{ color: '#7e0137' }}>
+                    <div className="text-2xl font-semibold text-primary">
                       Pending
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">{appointment.patient.name}</div>

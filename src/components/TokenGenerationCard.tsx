@@ -46,10 +46,10 @@ export function TokenGenerationCard({
   return (
     <div className="fixed bottom-6 right-6 w-[320px] bg-card border border-border rounded-lg shadow-lg p-4 animate-in slide-in-from-bottom-5 z-50">
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-foreground">Token Generated</h3>
+        <h3 className="text-base font-semibold text-foreground">Token Generated</h3>
         
         <div className="text-center py-2">
-          <div className="text-2xl font-semibold" style={{ color: '#7e0137' }}>
+          <div className="text-2xl font-semibold text-primary">
             {token}
           </div>
           <div className="text-sm text-muted-foreground mt-1">{patientName}</div>
@@ -67,7 +67,7 @@ export function TokenGenerationCard({
         </div>
 
         <div className="flex items-center gap-2 pt-2 border-t border-border">
-          <Printer className="w-4 h-4" style={{ color: '#7e0137' }} />
+          <Printer className="w-4 h-4 text-primary" />
           <span className="text-xs text-muted-foreground">
             {stage === "generating" && "Sending to printer"}
             {stage === "printing" && "Sending to printer"}
