@@ -148,12 +148,12 @@ export default function OutpatientAppointments() {
           </div>
         </div>
 
-        {/* Appointment Details Row */}
+        {/* Appointment Summary Row */}
         {appointment.chiefComplaint && (
           <div className="px-4 pb-4 pt-0">
             <div className="border-t border-border pt-4">
               <div className="space-y-1">
-                <div className="text-[12px] font-medium text-muted-foreground">Chief Complaint</div>
+                <div className="text-[12px] font-medium text-muted-foreground">Appointment Summary</div>
                 <div className="text-sm text-foreground">{appointment.chiefComplaint}</div>
               </div>
             </div>
