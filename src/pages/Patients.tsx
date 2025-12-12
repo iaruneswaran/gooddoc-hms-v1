@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, User, Download, Phone, Mail } from "lucide-react";
+import { Search, User, Download, Phone, Mail, Building2, Calendar } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,8 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Mock data for inpatients
-const mockInpatients = [
+// Mock data for all patients with unified structure
+const mockPatients = [
   {
     id: "1",
     name: "Harish Kalyan",
@@ -26,6 +26,9 @@ const mockInpatients = [
     gender: "M",
     phone: "+91 98765 43210",
     email: "9876543210@gooddoc.app",
+    type: "IP" as const,
+    visitId: "VST-205431",
+    visitPurpose: "Admitted",
     admissionTime: "03 Aug 2025, 10:30 AM",
     ward: "Cardiology Ward 3B",
     room: "312",
@@ -33,7 +36,8 @@ const mockInpatients = [
     los: "2d",
     doctor: "Dr. Meera Nair",
     specialty: "Cardiology",
-    condition: "Stable",
+    vitals: null,
+    isActive: true,
   },
   {
     id: "2",
@@ -43,6 +47,9 @@ const mockInpatients = [
     gender: "F",
     phone: "+91 98765 43211",
     email: "9876543211@gooddoc.app",
+    type: "IP" as const,
+    visitId: "VST-205432",
+    visitPurpose: "Admitted",
     admissionTime: "02 Aug 2025, 02:15 PM",
     ward: "General Medicine Ward 2A",
     room: "208",
@@ -50,7 +57,8 @@ const mockInpatients = [
     los: "3d",
     doctor: "Dr. Rajesh Kumar",
     specialty: "Endocrinology",
-    condition: "Under Observation",
+    vitals: null,
+    isActive: true,
   },
   {
     id: "3",
@@ -60,6 +68,9 @@ const mockInpatients = [
     gender: "M",
     phone: "+91 98765 43212",
     email: "9876543212@gooddoc.app",
+    type: "IP" as const,
+    visitId: "VST-205433",
+    visitPurpose: "Admitted",
     admissionTime: "04 Aug 2025, 08:45 AM",
     ward: "Orthopedics Ward 1C",
     room: "115",
@@ -67,7 +78,8 @@ const mockInpatients = [
     los: "1d",
     doctor: "Dr. Anita Singh",
     specialty: "Orthopedics",
-    condition: "Pending Tests",
+    vitals: null,
+    isActive: true,
   },
   {
     id: "4",
@@ -77,6 +89,9 @@ const mockInpatients = [
     gender: "F",
     phone: "+91 98765 43213",
     email: "9876543213@gooddoc.app",
+    type: "IP" as const,
+    visitId: "VST-205434",
+    visitPurpose: "Admitted",
     admissionTime: "01 Aug 2025, 06:20 PM",
     ward: "Dermatology Ward 4A",
     room: "402",
@@ -84,12 +99,9 @@ const mockInpatients = [
     los: "4d",
     doctor: "Dr. Sunil Reddy",
     specialty: "Dermatology",
-    condition: "Stable",
+    vitals: null,
+    isActive: true,
   },
-];
-
-// Mock data for outpatients
-const mockOutpatients = [
   {
     id: "5",
     name: "Ravi Kumar",
@@ -98,13 +110,17 @@ const mockOutpatients = [
     gender: "M",
     phone: "+91 98765 43214",
     email: "9876543214@gooddoc.app",
-    nextAppointment: "12 Aug 2025, 10:00 AM",
-    doctor: "Dr. Meera Nair",
-    specialty: "Cardiology",
+    type: "OP" as const,
+    visitId: "VST-205435",
+    visitPurpose: "Follow-up",
+    appointmentDate: "12 Aug 2025, 10:00 AM",
     appointmentType: "Follow-up",
     appointmentStatus: "Confirmed",
-    visitCount: 5,
+    doctor: "Dr. Meera Nair",
+    specialty: "Cardiology",
     vitals: { bp: "120/80", spo2: 98, hr: 72, rr: 16, temp: 37 },
+    pastVisits: 5,
+    isActive: true,
   },
   {
     id: "6",
@@ -114,13 +130,17 @@ const mockOutpatients = [
     gender: "F",
     phone: "+91 98765 43215",
     email: "9876543215@gooddoc.app",
-    nextAppointment: "08 Aug 2025, 11:30 AM",
-    doctor: "Dr. Rajesh Kumar",
-    specialty: "Endocrinology",
+    type: "OP" as const,
+    visitId: "VST-205436",
+    visitPurpose: "Consultation",
+    appointmentDate: "08 Aug 2025, 11:30 AM",
     appointmentType: "Consultation",
     appointmentStatus: "Pending",
-    visitCount: 8,
+    doctor: "Dr. Rajesh Kumar",
+    specialty: "Endocrinology",
     vitals: { bp: "130/85", spo2: 97, hr: 78, rr: 18, temp: 36.8 },
+    pastVisits: 8,
+    isActive: true,
   },
   {
     id: "7",
@@ -130,13 +150,17 @@ const mockOutpatients = [
     gender: "M",
     phone: "+91 98765 43216",
     email: "9876543216@gooddoc.app",
-    nextAppointment: "10 Aug 2025, 09:00 AM",
-    doctor: "Dr. Anita Singh",
-    specialty: "Orthopedics",
+    type: "OP" as const,
+    visitId: "VST-205437",
+    visitPurpose: "Review",
+    appointmentDate: "10 Aug 2025, 09:00 AM",
     appointmentType: "Review",
     appointmentStatus: "Confirmed",
-    visitCount: 12,
+    doctor: "Dr. Anita Singh",
+    specialty: "Orthopedics",
     vitals: { bp: "140/90", spo2: 96, hr: 68, rr: 14, temp: 37.2 },
+    pastVisits: 12,
+    isActive: true,
   },
   {
     id: "8",
@@ -146,31 +170,37 @@ const mockOutpatients = [
     gender: "F",
     phone: "+91 98765 43217",
     email: "9876543217@gooddoc.app",
-    nextAppointment: "—",
-    doctor: "Dr. Sunil Reddy",
-    specialty: "Dermatology",
+    type: "OP" as const,
+    visitId: null,
+    visitPurpose: "New Visit",
+    appointmentDate: null,
     appointmentType: "New Visit",
     appointmentStatus: "Not Scheduled",
-    visitCount: 3,
+    doctor: "Dr. Sunil Reddy",
+    specialty: "Dermatology",
     vitals: { bp: "118/76", spo2: 99, hr: 70, rr: 15, temp: 36.6 },
+    pastVisits: 3,
+    isActive: false,
   },
 ];
 
+type Patient = typeof mockPatients[number];
+
 export default function Patients() {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedTab, setSelectedTab] = useState("active");
   const [searchQuery, setSearchQuery] = useState("");
   const [doctorFilter, setDoctorFilter] = useState("all");
   const [specialtyFilter, setSpecialtyFilter] = useState("all");
 
   // Get unique values for filter options
   const filterOptions = useMemo(() => {
-    const allDoctors = [...new Set([...mockInpatients, ...mockOutpatients].map(p => p.doctor))];
-    const allSpecialties = [...new Set([...mockInpatients, ...mockOutpatients].map(p => p.specialty))];
+    const allDoctors = [...new Set(mockPatients.map(p => p.doctor))];
+    const allSpecialties = [...new Set(mockPatients.map(p => p.specialty))];
     return { doctors: allDoctors, specialties: allSpecialties };
   }, []);
 
-  const filterPatients = <T extends { name: string; gdid: string; phone: string; email: string; doctor: string; specialty: string }>(patients: T[]) => {
+  const filterPatients = (patients: Patient[]) => {
     return patients.filter((patient) => {
       const matchesSearch = 
         patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -185,8 +215,73 @@ export default function Patients() {
     });
   };
 
-  const filteredInpatients = filterPatients(mockInpatients);
-  const filteredOutpatients = filterPatients(mockOutpatients);
+  // Active patients = admitted IP or OP with scheduled visit
+  const activePatients = useMemo(() => {
+    return mockPatients.filter(p => p.isActive);
+  }, []);
+
+  const filteredActivePatients = filterPatients(activePatients);
+  const filteredAllPatients = filterPatients(mockPatients);
+
+  const renderVitals = (patient: Patient) => {
+    if (!patient.vitals) return "—";
+    const v = patient.vitals;
+    return `BP ${v.bp} • SpO₂ ${v.spo2}% • HR ${v.hr} • RR ${v.rr} • Temp ${v.temp}°C`;
+  };
+
+  const renderLocationOrAppointment = (patient: Patient) => {
+    if (patient.type === "IP") {
+      return (
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 text-sm text-foreground">
+            <Building2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+            <span>Admitted {patient.admissionTime}</span>
+          </div>
+          <div className="text-xs text-muted-foreground pl-5">
+            {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS: {patient.los}
+          </div>
+        </div>
+      );
+    } else {
+      if (!patient.appointmentDate) {
+        return (
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>Not Scheduled</span>
+          </div>
+        );
+      }
+      return (
+        <div className="flex items-center gap-1.5 text-sm text-foreground">
+          <Calendar className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+          <span>{patient.appointmentDate} • {patient.appointmentType} • {patient.appointmentStatus}</span>
+        </div>
+      );
+    }
+  };
+
+  const renderAllPatientsStatus = (patient: Patient) => {
+    if (patient.type === "IP") {
+      return (
+        <div className="text-sm text-foreground">
+          Admitted {patient.admissionTime?.split(',')[0]} • {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS: {patient.los}
+        </div>
+      );
+    } else {
+      if (!patient.appointmentDate) {
+        return (
+          <div className="text-sm text-foreground">
+            New Visit • Not Scheduled • {patient.pastVisits} past visits
+          </div>
+        );
+      }
+      return (
+        <div className="text-sm text-foreground">
+          {patient.appointmentDate} • {patient.appointmentType} • {patient.appointmentStatus}
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -215,22 +310,16 @@ export default function Patients() {
             <div className="flex items-center justify-between mb-6">
               <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
                 <TabsTrigger
+                  value="active"
+                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
+                >
+                  Active Patients
+                </TabsTrigger>
+                <TabsTrigger
                   value="all"
                   className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
                 >
                   All Patients
-                </TabsTrigger>
-                <TabsTrigger
-                  value="inpatient"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Inpatient (IP)
-                </TabsTrigger>
-                <TabsTrigger
-                  value="outpatient"
-                  className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Outpatient (OP)
                 </TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-3">
@@ -268,47 +357,119 @@ export default function Patients() {
               </div>
             </div>
 
+            {/* Active Patients Tab */}
+            <TabsContent value="active">
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground">
+                  Shows anyone currently admitted or with an upcoming scheduled visit. Includes Active Visit ID + Purpose for quick triage.
+                </p>
+              </div>
+              <div className="bg-card rounded-lg border border-border overflow-hidden">
+                <div className="grid grid-cols-[180px_160px_180px_1fr_200px_160px_100px] gap-3 p-4 border-b border-border bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground">Patient</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
+                  <div className="text-xs font-medium text-muted-foreground">Active Visit & Purpose</div>
+                  <div className="text-xs font-medium text-muted-foreground">Location / Appointment</div>
+                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
+                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                </div>
+                {filteredActivePatients.map((patient) => (
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_1fr_200px_160px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                    <div className="flex items-start gap-2">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-foreground truncate">{patient.name}</div>
+                        <div className="text-xs text-muted-foreground">GDID-{patient.gdid} • {patient.age} | {patient.gender}</div>
+                      </div>
+                    </div>
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-xs text-foreground">
+                        <Phone className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{patient.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-xs text-foreground">
+                        <Mail className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{patient.email}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-0.5">
+                      <div className="text-xs text-muted-foreground">
+                        {patient.visitId ? `Active Visit: ${patient.visitId}` : "No Active Visit"}
+                      </div>
+                      <div className="text-sm font-medium text-foreground">{patient.visitPurpose}</div>
+                    </div>
+                    <div>{renderLocationOrAppointment(patient)}</div>
+                    <div className="text-sm text-foreground whitespace-nowrap truncate">
+                      {patient.doctor} — {patient.specialty}
+                    </div>
+                    <div className="text-xs text-foreground">
+                      {renderVitals(patient)}
+                    </div>
+                    <div>
+                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
+                        Patient Insight
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                {filteredActivePatients.length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground text-sm">No active patients found</div>
+                )}
+              </div>
+            </TabsContent>
+
             {/* All Patients Tab */}
             <TabsContent value="all">
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground">
+                  Everyone in the system—quickly shows status and what's next.
+                </p>
+              </div>
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_80px_1fr_180px_120px] gap-4 p-4 border-b border-border bg-muted/30 items-start justify-items-start">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
+                <div className="grid grid-cols-[200px_60px_200px_1fr_220px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Provider</div>
+                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
+                  <div className="text-xs font-medium text-muted-foreground">Status</div>
+                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
-                
-                {/* Inpatients in All tab */}
-                {filteredInpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_80px_1fr_180px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border">
+                {filteredAllPatients.map((patient) => (
+                  <div key={patient.id} className="grid grid-cols-[200px_60px_200px_1fr_220px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
                       </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Phone className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.email}</span>
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-foreground truncate">{patient.name}</div>
+                        <div className="text-xs text-muted-foreground">GDID-{patient.gdid} • {patient.age} | {patient.gender}</div>
                       </div>
                     </div>
                     <div>
-                      <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">IP</Badge>
+                      <Badge className={patient.type === "IP" 
+                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300" 
+                        : "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                      }>
+                        {patient.type}
+                      </Badge>
                     </div>
-                    <div className="text-sm text-foreground">
-                      {patient.ward} • Room {patient.room} • Bed {patient.bed}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-xs text-foreground">
+                        <Phone className="w-3 h-3 flex-shrink-0" />
+                        <span>{patient.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-xs text-foreground">
+                        <Mail className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{patient.email}</span>
+                      </div>
                     </div>
-                    <div className="text-sm text-foreground">{patient.doctor}</div>
+                    <div>{renderAllPatientsStatus(patient)}</div>
+                    <div className="text-sm text-foreground whitespace-nowrap truncate">
+                      {patient.doctor} — {patient.specialty}
+                    </div>
                     <div>
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
                         Patient Insight
@@ -316,163 +477,8 @@ export default function Patients() {
                     </div>
                   </div>
                 ))}
-                
-                {/* Outpatients in All tab */}
-                {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_80px_1fr_180px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Phone className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.email}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">OP</Badge>
-                    </div>
-                    <div className="text-sm text-foreground">
-                      {patient.nextAppointment !== "—" ? patient.nextAppointment : "No upcoming"} • {patient.visitCount} visits
-                    </div>
-                    <div className="text-sm text-foreground">{patient.doctor}</div>
-                    <div>
-                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
-                        Patient Insight
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-
-                {filteredInpatients.length === 0 && filteredOutpatients.length === 0 && (
+                {filteredAllPatients.length === 0 && (
                   <div className="text-center py-12 text-muted-foreground text-sm">No patients found</div>
-                )}
-              </div>
-            </TabsContent>
-
-            {/* Inpatient Tab */}
-            <TabsContent value="inpatient">
-              <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_240px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Admission & Ward</div>
-                  <div className="text-xs font-medium text-muted-foreground">Attending Doctor</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
-                </div>
-                {filteredInpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_240px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Phone className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.email}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-xs text-muted-foreground">Admitted: {patient.admissionTime}</div>
-                      <div className="text-sm text-foreground">
-                        {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS: {patient.los}
-                      </div>
-                    </div>
-                    <div className="text-sm text-foreground whitespace-nowrap">{patient.doctor} — {patient.specialty}</div>
-                    <div>
-                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
-                        Patient Insight
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                {filteredInpatients.length === 0 && (
-                  <div className="text-center py-12 text-muted-foreground text-sm">No inpatients found</div>
-                )}
-              </div>
-            </TabsContent>
-
-            {/* Outpatient Tab */}
-            <TabsContent value="outpatient">
-              <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_minmax(160px,1fr)_1fr_240px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground pl-4">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
-                </div>
-                {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_minmax(160px,1fr)_1fr_240px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID - {patient.gdid} • {patient.age} | {patient.gender}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Phone className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.email}</span>
-                      </div>
-                    </div>
-                    <div className="text-xs text-foreground space-y-0.5 pl-4">
-                      <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
-                      <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-sm text-foreground">{patient.nextAppointment}</div>
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className="text-muted-foreground">{patient.appointmentType}</span>
-                        <span className="text-muted-foreground">•</span>
-                        <span className={
-                          patient.appointmentStatus === "Confirmed" 
-                            ? "text-green-600 dark:text-green-400" 
-                            : patient.appointmentStatus === "Pending"
-                            ? "text-yellow-600 dark:text-yellow-400"
-                            : "text-muted-foreground"
-                        }>
-                          {patient.appointmentStatus}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-sm text-foreground whitespace-nowrap">{patient.doctor} — {patient.specialty}</div>
-                    <div>
-                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
-                        Patient Insight
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                {filteredOutpatients.length === 0 && (
-                  <div className="text-center py-12 text-muted-foreground text-sm">No outpatients found</div>
                 )}
               </div>
             </TabsContent>
