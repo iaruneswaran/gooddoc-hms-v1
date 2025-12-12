@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentsTab } from "./tabs/AppointmentsTab";
+import { InvoicesTab } from "./tabs/InvoicesTab";
 import { PaymentsTab } from "./tabs/PaymentsTab";
 import { DocumentsTab } from "./tabs/DocumentsTab";
 import { InsuranceTab } from "./tabs/InsuranceTab";
@@ -44,6 +45,12 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               Appointments
             </TabsTrigger>
             <TabsTrigger
+              value="invoices"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Invoices
+            </TabsTrigger>
+            <TabsTrigger
               value="payments"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
@@ -74,6 +81,10 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
         <div className="flex-1 overflow-y-auto">
           <TabsContent value="appointments" className="mt-0">
             <AppointmentsTab selectedVisit={selectedVisit} />
+          </TabsContent>
+
+          <TabsContent value="invoices" className="mt-0">
+            <InvoicesTab selectedVisit={selectedVisit} />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-0">
