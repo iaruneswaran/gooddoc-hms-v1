@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, X } from "lucide-react";
+import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, Copy, Users } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -32,8 +32,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { DoctorFilters } from "@/components/doctors/DoctorFilters";
+import { supabase } from "@/integrations/supabase/client";
+import { useDoctorAvailability } from "@/hooks/useDoctorAvailability";
+import { format, parseISO, addDays } from "date-fns";
 
-interface Doctor {
+interface DoctorRow {
+  id: string;
+  name: string;
+  degrees?: string;
+  department_id?: string;
+  specialty_id?: string;
+  avatar_url?: string;
+  default_duration: number;
+  default_buffer: number;
+  status: string;
+  timezone: string;
+}
+
+interface DoctorDisplay {
   id: string;
   displayName: string;
   degrees: string;
@@ -41,65 +57,132 @@ interface Doctor {
   specialty: string;
   avatar?: string;
   availability: string;
+  availabilityStatus: 'today' | 'tomorrow' | 'this_week' | 'on_leave' | 'no_schedule';
+  nextAvailableTime?: string;
+  leaveUntil?: string;
   locations: string[];
   duration: number;
   fee: number;
   status: "active" | "inactive" | "pending";
 }
 
+const DEPARTMENT_MAP: Record<string, string> = {
+  cardiology: "Cardiology",
+  endocrinology: "Endocrinology",
+  orthopedics: "Orthopedics",
+  neurology: "Neurology",
+  general: "General Medicine",
+};
+
+const SPECIALTY_MAP: Record<string, string> = {
+  interventional: "Interventional Cardiology",
+  diabetes: "Diabetes & Metabolism",
+  joint: "Joint Replacement",
+  spine: "Spine Surgery",
+};
+
 export default function DoctorsList() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<DoctorDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorDisplay | null>(null);
   const [viewDrawerOpen, setViewDrawerOpen] = useState(false);
   const [deactivateDialogOpen, setDeactivateDialogOpen] = useState(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  
+  const { getAvailability } = useDoctorAvailability();
 
-  // Mock data
+  // Fetch doctors from database
   useEffect(() => {
-    setDoctors([
-      {
-        id: "1",
-        displayName: "Dr. Meera Nair",
-        degrees: "MBBS, MD",
-        department: "Cardiology",
-        specialty: "Interventional Cardiology",
-        availability: "Today at 2:30 PM",
-        locations: ["Main Campus", "Telemedicine"],
-        duration: 20,
-        fee: 1500,
-        status: "active",
-      },
-      {
-        id: "2",
-        displayName: "Dr. Rajesh Kumar",
-        degrees: "MBBS, DM",
-        department: "Endocrinology",
-        specialty: "Diabetes & Metabolism",
-        availability: "Tomorrow at 10:00 AM",
-        locations: ["Main Campus"],
-        duration: 30,
-        fee: 1200,
-        status: "active",
-      },
-      {
-        id: "3",
-        displayName: "Dr. Priya Sharma",
-        degrees: "MBBS, MS",
-        department: "Orthopedics",
-        specialty: "Joint Replacement",
-        availability: "On leave",
-        locations: ["Main Campus", "Branch A"],
-        duration: 20,
-        fee: 1800,
-        status: "inactive",
-      },
-    ]);
+    fetchDoctors();
   }, []);
+
+  const fetchDoctors = async () => {
+    setLoading(true);
+    try {
+      const { data: doctorsData, error } = await supabase
+        .from('doctors')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+
+      // Fetch availability for each doctor
+      const doctorsWithAvailability = await Promise.all(
+        (doctorsData as DoctorRow[]).map(async (doc) => {
+          const today = new Date();
+          const weekEnd = addDays(today, 7);
+          
+          let availabilityText = "No schedule";
+          let availabilityStatus: DoctorDisplay['availabilityStatus'] = 'no_schedule';
+          let nextAvailableTime: string | undefined;
+          let leaveUntil: string | undefined;
+
+          try {
+            const availability = await getAvailability(doc.id, today, weekEnd);
+            
+            if (availability) {
+              const todayStr = format(today, 'yyyy-MM-dd');
+              const tomorrowStr = format(addDays(today, 1), 'yyyy-MM-dd');
+              
+              // Check for leave
+              const todayData = availability.days.find(d => d.date === todayStr);
+              if (todayData?.status === 'leave' && todayData.leaveInfo) {
+                availabilityStatus = 'on_leave';
+                leaveUntil = todayData.leaveInfo.endDate;
+                availabilityText = `On leave until ${format(parseISO(leaveUntil + 'T00:00:00'), 'MMM d')}`;
+              } else if (todayData?.slots && todayData.slots.length > 0) {
+                availabilityStatus = 'today';
+                nextAvailableTime = todayData.slots[0].start;
+                availabilityText = `Today ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
+              } else {
+                const tomorrowData = availability.days.find(d => d.date === tomorrowStr);
+                if (tomorrowData?.slots && tomorrowData.slots.length > 0) {
+                  availabilityStatus = 'tomorrow';
+                  nextAvailableTime = tomorrowData.slots[0].start;
+                  availabilityText = `Tomorrow ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
+                } else if (availability.nextAvailable) {
+                  availabilityStatus = 'this_week';
+                  nextAvailableTime = availability.nextAvailable;
+                  availabilityText = format(parseISO(nextAvailableTime), 'EEE, MMM d h:mm a');
+                }
+              }
+            }
+          } catch {
+            // Availability fetch failed, keep default
+          }
+
+          return {
+            id: doc.id,
+            displayName: doc.name,
+            degrees: doc.degrees || '',
+            department: DEPARTMENT_MAP[doc.department_id || ''] || doc.department_id || 'General',
+            specialty: SPECIALTY_MAP[doc.specialty_id || ''] || doc.specialty_id || '',
+            avatar: doc.avatar_url,
+            availability: availabilityText,
+            availabilityStatus,
+            nextAvailableTime,
+            leaveUntil,
+            locations: ['Main Clinic'], // TODO: fetch from schedule
+            duration: doc.default_duration,
+            fee: 1500, // TODO: add to doctors table
+            status: doc.status as DoctorDisplay['status'],
+          };
+        })
+      );
+
+      setDoctors(doctorsWithAvailability);
+    } catch (err) {
+      console.error('Error fetching doctors:', err);
+      toast({ title: "Error loading doctors", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle deep link with view parameter
   useEffect(() => {
@@ -125,7 +208,18 @@ export default function DoctorsList() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const handleView = (doctor: Doctor) => {
+  // Filter doctors by search
+  const filteredDoctors = useMemo(() => {
+    if (!search) return doctors;
+    const lowerSearch = search.toLowerCase();
+    return doctors.filter(d => 
+      d.displayName.toLowerCase().includes(lowerSearch) ||
+      d.department.toLowerCase().includes(lowerSearch) ||
+      d.specialty.toLowerCase().includes(lowerSearch)
+    );
+  }, [doctors, search]);
+
+  const handleView = (doctor: DoctorDisplay) => {
     setSelectedDoctor(doctor);
     setViewDrawerOpen(true);
   };
@@ -134,40 +228,66 @@ export default function DoctorsList() {
     navigate(`/doctors/${doctorId}/edit`);
   };
 
+  const handleViewCalendar = (doctorId: string) => {
+    navigate(`/doctors/${doctorId}/calendar`);
+  };
+
   const handleManageSchedule = (doctorId: string) => {
     navigate(`/doctors/${doctorId}/edit?step=availability`);
+  };
+
+  const handleAddLeave = (doctorId: string) => {
+    navigate(`/doctors/${doctorId}/leave/new`);
   };
 
   const handleDeactivate = async () => {
     if (!selectedDoctor) return;
     setActionLoading(true);
     
-    // Mock API call
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('doctors')
+        .update({ status: 'inactive' })
+        .eq('id', selectedDoctor.id);
+
+      if (error) throw error;
+
       setDoctors(doctors.map(d => 
         d.id === selectedDoctor.id ? { ...d, status: "inactive" as const } : d
       ));
       toast({ title: "Doctor deactivated." });
       setDeactivateDialogOpen(false);
-      setActionLoading(false);
       setSelectedDoctor(null);
-    }, 500);
+    } catch {
+      toast({ title: "Error deactivating doctor", variant: "destructive" });
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleActivate = async () => {
     if (!selectedDoctor) return;
     setActionLoading(true);
     
-    // Mock API call
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('doctors')
+        .update({ status: 'active' })
+        .eq('id', selectedDoctor.id);
+
+      if (error) throw error;
+
       setDoctors(doctors.map(d => 
         d.id === selectedDoctor.id ? { ...d, status: "active" as const } : d
       ));
       toast({ title: "Doctor activated." });
       setActivateDialogOpen(false);
-      setActionLoading(false);
       setSelectedDoctor(null);
-    }, 500);
+    } catch {
+      toast({ title: "Error activating doctor", variant: "destructive" });
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const getStatusVariant = (status: string) => {
@@ -176,6 +296,22 @@ export default function DoctorsList() {
       case "inactive": return "secondary";
       case "pending": return "outline";
       default: return "default";
+    }
+  };
+
+  const getAvailabilityBadge = (doctor: DoctorDisplay) => {
+    switch (doctor.availabilityStatus) {
+      case 'today':
+        return <Badge variant="default" className="bg-green-600 hover:bg-green-700">Today {doctor.nextAvailableTime ? format(parseISO(doctor.nextAvailableTime), 'h:mm a') : ''}</Badge>;
+      case 'tomorrow':
+        return <Badge variant="secondary">Tomorrow {doctor.nextAvailableTime ? format(parseISO(doctor.nextAvailableTime), 'h:mm a') : ''}</Badge>;
+      case 'this_week':
+        return <Badge variant="outline">{doctor.nextAvailableTime ? format(parseISO(doctor.nextAvailableTime), 'EEE h:mm a') : 'This week'}</Badge>;
+      case 'on_leave':
+        return <Badge variant="secondary" className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">On leave until {doctor.leaveUntil ? format(parseISO(doctor.leaveUntil + 'T00:00:00'), 'MMM d') : ''}</Badge>;
+      case 'no_schedule':
+      default:
+        return <Badge variant="outline" className="text-muted-foreground">No schedule</Badge>;
     }
   };
 
@@ -207,22 +343,28 @@ export default function DoctorsList() {
           <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
-          {doctors.length === 0 ? (
+          {loading ? (
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
+              <p className="text-muted-foreground">Loading doctors...</p>
+            </div>
+          ) : filteredDoctors.length === 0 ? (
             <div className="bg-card rounded-lg border border-border p-12 text-center">
               <div className="max-w-md mx-auto">
-                <h3 className="text-lg font-medium mb-2">No doctors yet</h3>
+                <h3 className="text-lg font-medium mb-2">No doctors found</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Get started by adding your first doctor
+                  {search ? "Try a different search term" : "Get started by adding your first doctor"}
                 </p>
-                <Button onClick={() => navigate("/doctors/new")}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Doctor
-                </Button>
+                {!search && (
+                  <Button onClick={() => navigate("/doctors/new")}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Doctor
+                  </Button>
+                )}
               </div>
             </div>
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <div className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
                 <div className="text-xs font-medium text-muted-foreground">Doctor</div>
                 <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
                 <div className="text-xs font-medium text-muted-foreground">Availability</div>
@@ -232,8 +374,8 @@ export default function DoctorsList() {
                 <div className="text-xs font-medium text-muted-foreground">Action</div>
               </div>
 
-              {doctors.map((doctor) => (
-                <div key={doctor.id} className="grid grid-cols-[240px_1fr_180px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+              {filteredDoctors.map((doctor) => (
+                <div key={doctor.id} className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={doctor.avatar} />
@@ -252,7 +394,7 @@ export default function DoctorsList() {
                     <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
                   </div>
 
-                  <div className="text-sm text-foreground">{doctor.availability}</div>
+                  <div>{getAvailabilityBadge(doctor)}</div>
 
                   <div className="text-sm text-foreground">
                     {doctor.locations.join(", ")}
@@ -282,16 +424,35 @@ export default function DoctorsList() {
                           <Edit className="w-4 h-4 mr-2" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleViewCalendar(doctor.id)}>
                           <Calendar className="w-4 h-4 mr-2" />
-                          Manage Schedule
+                          View Calendar
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit Schedule
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAddLeave(doctor.id)}>
+                          <PlusCircle className="w-4 h-4 mr-2" />
+                          Add Leave
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copy Schedule
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Users className="w-4 h-4 mr-2" />
+                          Set Covering Doctor
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         {doctor.status === "active" ? (
                           <DropdownMenuItem 
                             onClick={() => {
                               setSelectedDoctor(doctor);
                               setDeactivateDialogOpen(true);
                             }}
+                            className="text-destructive"
                           >
                             <Ban className="w-4 h-4 mr-2" />
                             Deactivate
@@ -353,7 +514,7 @@ export default function DoctorsList() {
                 </div>
                 <div>
                   <div className="text-sm font-medium mb-1">Next Availability</div>
-                  <div className="text-sm text-muted-foreground">{selectedDoctor.availability}</div>
+                  <div>{getAvailabilityBadge(selectedDoctor)}</div>
                 </div>
                 <div>
                   <div className="text-sm font-medium mb-1">Locations</div>
@@ -376,11 +537,11 @@ export default function DoctorsList() {
                 </Button>
                 <Button 
                   variant="outline" 
-                  onClick={() => handleManageSchedule(selectedDoctor.id)}
+                  onClick={() => handleViewCalendar(selectedDoctor.id)}
                   className="flex-1"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
-                  Manage Schedule
+                  View Calendar
                 </Button>
               </div>
             </div>
@@ -402,7 +563,7 @@ export default function DoctorsList() {
             <AlertDialogAction
               onClick={handleDeactivate}
               disabled={actionLoading}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {actionLoading ? "Deactivating..." : "Deactivate"}
             </AlertDialogAction>
