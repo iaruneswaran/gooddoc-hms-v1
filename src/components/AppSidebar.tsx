@@ -6,9 +6,9 @@ import logo from "@/assets/logo.svg";
 const menuItems = [
   { icon: Mail, label: "Inbox", href: "/inbox" },
   { icon: Calendar, label: "Appointments", href: "/" },
+  { icon: Users, label: "Patients", href: "/patients" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
-  { icon: Users, label: "Patients", href: "/patients" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
   { icon: Tag, label: "Pricing Catalog", href: "/pricing-catalog" },
 ];
