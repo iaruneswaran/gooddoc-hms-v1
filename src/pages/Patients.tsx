@@ -236,21 +236,21 @@ export default function Patients() {
               <div className="flex items-center gap-3">
                 <Select value={doctorFilter} onValueChange={setDoctorFilter}>
                   <SelectTrigger className="w-[160px] h-9">
-                    <SelectValue placeholder="All Doctors" />
+                    <SelectValue placeholder="All Providers" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Doctors</SelectItem>
+                    <SelectItem value="all">All Providers</SelectItem>
                     {filterOptions.doctors.map((doctor) => (
                       <SelectItem key={doctor} value={doctor}>{doctor}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 <Select value={specialtyFilter} onValueChange={setSpecialtyFilter}>
-                  <SelectTrigger className="w-[150px] h-9">
-                    <SelectValue placeholder="Specialty" />
+                  <SelectTrigger className="w-[160px] h-9">
+                    <SelectValue placeholder="All Departments" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Specialties</SelectItem>
+                    <SelectItem value="all">All Departments</SelectItem>
                     {filterOptions.specialties.map((specialty) => (
                       <SelectItem key={specialty} value={specialty}>{specialty}</SelectItem>
                     ))}
@@ -276,7 +276,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground">Provider</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 
@@ -367,7 +367,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Admission & Ward</div>
-                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground">Attending Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredInpatients.map((patient) => (
@@ -419,7 +419,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground pl-4">Vitals</div>
                   <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
-                  <div className="text-xs font-medium text-muted-foreground">Care Team</div>
+                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
