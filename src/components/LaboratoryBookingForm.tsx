@@ -359,7 +359,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     onClick={() => handleRadiologyTestToggle(test)}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-foreground flex-1 pr-2">{test.name}</h4>
+                      <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
                         isSelected ? "border-primary bg-primary" : "border-muted-foreground"
