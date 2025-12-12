@@ -126,7 +126,7 @@ export function DoctorSelector({
                     className="py-3 cursor-pointer hover:bg-accent"
                   >
                     <div className="flex items-center gap-3 flex-1">
-                      <UserRound className="h-4 w-4 text-muted-foreground" />
+                      <UserRound className="h-4 w-4 text-foreground" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <p className="font-medium text-foreground truncate">{doctor.name}</p>
@@ -137,7 +137,7 @@ export function DoctorSelector({
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-foreground/70 truncate">
+                        <p className="text-xs text-foreground truncate">
                           {doctor.degrees || doctor.specialty_id}
                         </p>
                       </div>
