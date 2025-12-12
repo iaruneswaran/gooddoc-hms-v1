@@ -7,7 +7,7 @@ import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { ConsultationBookingForm, ConsultationData } from "@/components/ConsultationBookingForm";
+import { DynamicConsultationBookingForm, DynamicConsultationData } from "@/components/DynamicConsultationBookingForm";
 import { LaboratoryBookingForm, LaboratoryData } from "@/components/LaboratoryBookingForm";
 import { IPDAdmissionBookingForm, IPDAdmissionData } from "@/components/IPDAdmissionBookingForm";
 import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
@@ -44,7 +44,7 @@ const BookAppointment = () => {
   const patientId = location.state?.patientId;
   const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [consultationData, setConsultationData] = useState<ConsultationData | null>(null);
+  const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
   
@@ -74,13 +74,14 @@ const BookAppointment = () => {
       // Initialize the data based on type
       if (validType === "consultation") {
         setConsultationData({
-          mode: "in-person",
+          mode: "in_person",
           type: "",
           department: "",
-          doctor: "",
+          doctorId: null,
+          doctorName: "",
           clinicalInfo: "",
-          date: new Date(),
-          time: "",
+          selectedSlot: null,
+          holdId: null,
         });
       } else if (validType === "laboratory") {
         setLaboratoryData({
@@ -209,13 +210,14 @@ const BookAppointment = () => {
     if (type === "consultation") {
       // Initialize with default data
       setConsultationData({
-        mode: "in-person",
-        type: "First Visit",
-        department: "Cardiology",
-        doctor: "Dr. Meera Nair – Cardiology",
+        mode: "in_person",
+        type: "first_visit",
+        department: "",
+        doctorId: null,
+        doctorName: "Any available doctor",
         clinicalInfo: "",
-        date: new Date(2025, 7, 5),
-        time: "07:30",
+        selectedSlot: null,
+        holdId: null,
       });
     } else if (type === "laboratory") {
       // Initialize with default data
@@ -265,7 +267,7 @@ const BookAppointment = () => {
     setIpdAdmissionData(null);
   };
 
-  const handleConsultationUpdate = (data: ConsultationData) => {
+  const handleConsultationUpdate = (data: DynamicConsultationData) => {
     setConsultationData(data);
   };
 
@@ -400,9 +402,8 @@ const BookAppointment = () => {
     if (selectedTypes.includes("consultation") && consultationData) {
       return !!(
         consultationData.department &&
-        consultationData.doctor &&
-        consultationData.date &&
-        consultationData.time
+        consultationData.doctorId &&
+        consultationData.selectedSlot
       );
     }
     
@@ -426,11 +427,11 @@ const BookAppointment = () => {
     };
 
     if (consultationData) {
-      details.provider = consultationData.doctor;
-      details.mode = consultationData.mode === "in-person" ? "In-person" : "Virtual";
-      details.location = consultationData.mode === "in-person" ? "Main Clinic" : undefined;
-      details.date = consultationData.date ? format(consultationData.date, "PPP") : undefined;
-      details.time = consultationData.time;
+      details.provider = consultationData.doctorName;
+      details.mode = consultationData.mode === "in_person" ? "In-person" : "Virtual";
+      details.location = consultationData.mode === "in_person" ? "Main Clinic" : undefined;
+      details.date = consultationData.selectedSlot ? format(new Date(consultationData.selectedSlot.start), "PPP") : undefined;
+      details.time = consultationData.selectedSlot ? format(new Date(consultationData.selectedSlot.start), "h:mm a") : undefined;
     }
 
     if (laboratoryData) {
@@ -531,7 +532,7 @@ const BookAppointment = () => {
                         }
                         if (type === "consultation" && consultationData) {
                           return (
-                            <ConsultationBookingForm
+                            <DynamicConsultationBookingForm
                               key="consultation"
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveConsultation}
                               onUpdate={handleConsultationUpdate}
@@ -758,13 +759,15 @@ const BookAppointment = () => {
                                 <div>
                                   <p className="text-muted-foreground mb-1">When</p>
                                   <p className="text-foreground font-medium">
-                                    {format(consultationData.date, "dd/MM/yyyy")} {consultationData.time} AM
+                                    {consultationData.selectedSlot 
+                                      ? `${format(new Date(consultationData.selectedSlot.start), "dd/MM/yyyy")} ${format(new Date(consultationData.selectedSlot.start), "h:mm a")}`
+                                      : "Not selected"}
                                   </p>
                                 </div>
 
                                 <div>
                                   <p className="text-muted-foreground mb-1">Provider</p>
-                                  <p className="text-foreground font-medium">{consultationData.doctor}</p>
+                                  <p className="text-foreground font-medium">{consultationData.doctorName || "Any available doctor"}</p>
                                 </div>
 
                                 <div className="flex justify-between items-center pt-2 border-t border-border">
