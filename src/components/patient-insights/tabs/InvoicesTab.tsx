@@ -52,7 +52,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-h3 font-semibold">Patient Invoices</h3>
+        <h3 className="text-h3 font-semibold">Payment Collection</h3>
       </div>
       <div className="border rounded-lg overflow-hidden">
         <table className="w-full">
