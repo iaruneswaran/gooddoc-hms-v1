@@ -185,7 +185,7 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
                   })}
                 </TabsContent>
 
-                <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 mt-0">
+                <TabsContent value="individual-tests" className="space-y-3 mt-0">
                   {filteredTestsList.map((test) => {
                     const isSelected = selectedTests.includes(test.code);
                     return (
@@ -197,16 +197,18 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
                         )}
                         onClick={() => toggleTest(test.code)}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="text-sm font-semibold text-foreground flex-1 pr-2">{test.name}</h4>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="text-sm font-semibold text-primary mb-1">{test.name}</h4>
+                            <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                          </div>
                           <div className={cn(
-                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
                             isSelected ? "border-primary bg-primary" : "border-muted-foreground"
                           )}>
                             {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
                           </div>
                         </div>
-                        <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
                       </Card>
                     );
                   })}
@@ -216,7 +218,7 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
 
             {/* Radiology Tests */}
             {appointmentType === "Radiology" && (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-3">
                 {filteredTestsList.map((test) => {
                   const isSelected = selectedTests.includes(test.code);
                   return (
@@ -228,16 +230,18 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
                       )}
                       onClick={() => toggleTest(test.code)}
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-sm font-semibold text-foreground flex-1 pr-2">{test.name}</h4>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-primary mb-1">{test.name}</h4>
+                          <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                        </div>
                         <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
                           isSelected ? "border-primary bg-primary" : "border-muted-foreground"
                         )}>
                           {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
                         </div>
                       </div>
-                      <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
                     </Card>
                   );
                 })}
