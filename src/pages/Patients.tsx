@@ -424,57 +424,7 @@ export default function Patients() {
             {/* All Patients Tab */}
             <TabsContent value="all">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_60px_200px_1fr_220px_120px] gap-4 p-4 border-b border-border bg-muted/30">
-                  <div className="text-xs font-medium text-muted-foreground">Patient</div>
-                  <div className="text-xs font-medium text-muted-foreground">Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
-                </div>
-                {filteredAllPatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_60px_200px_1fr_220px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-medium text-foreground truncate">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID-{patient.gdid} • {patient.age} | {patient.gender}</div>
-                      </div>
-                    </div>
-                    <div>
-                      <Badge className={patient.type === "IP" 
-                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300" 
-                        : "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                      }>
-                        {patient.type}
-                      </Badge>
-                    </div>
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-1.5 text-xs text-foreground">
-                        <Phone className="w-3 h-3 flex-shrink-0" />
-                        <span>{patient.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs text-foreground">
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        <span className="truncate">{patient.email}</span>
-                      </div>
-                    </div>
-                    <div>{renderAllPatientsStatus(patient)}</div>
-                    <div className="text-sm text-foreground whitespace-nowrap truncate">
-                      {patient.doctor} — {patient.specialty}
-                    </div>
-                    <div>
-                      <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
-                        Patient Insight
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                {filteredAllPatients.length === 0 && (
-                  <div className="text-center py-12 text-muted-foreground text-sm">No patients found</div>
-                )}
+                <div className="text-center py-12 text-muted-foreground text-sm">No Items</div>
               </div>
             </TabsContent>
           </Tabs>
