@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { Trash2, Calendar as CalendarIcon, Check, Minus, Search } from "lucide-react";
+import { Check, Minus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
 
 export interface LabTest {
   id: string;
@@ -97,16 +95,6 @@ const radiologyTests: RadiologyTest[] = [
   { id: "r8", name: "Pelvis", category: "Radiology", price: 600 },
 ];
 
-const timeSlots = [
-  "00:00", "00:30", "01:00", "01:30", "02:00", "02:30",
-  "03:00", "03:30", "04:00", "04:30", "05:00", "05:30",
-  "06:00", "06:30", "07:00", "07:30", "08:00", "08:30",
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-  "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
-  "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
-];
 
 export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMode = false }: LaboratoryBookingFormProps) => {
   const [mode, setMode] = useState<"laboratory" | "radiology">(initialData?.mode || "laboratory");
@@ -160,11 +148,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
     onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime: time, radiologyDate, radiologyTime });
   };
 
-  const handleLaboratoryDateSelect = (newDate: Date | undefined) => {
-    if (newDate) {
-      setLaboratoryDate(newDate);
-      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate: newDate, laboratoryTime, radiologyDate, radiologyTime });
-    }
+  const handleLaboratoryDateSelect = (newDate: Date) => {
+    setLaboratoryDate(newDate);
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate: newDate, laboratoryTime, radiologyDate, radiologyTime });
   };
 
   const handleRadiologyTimeSelect = (time: string) => {
@@ -172,11 +158,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
     onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate, radiologyTime: time });
   };
 
-  const handleRadiologyDateSelect = (newDate: Date | undefined) => {
-    if (newDate) {
-      setRadiologyDate(newDate);
-      onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate: newDate, radiologyTime });
-    }
+  const handleRadiologyDateSelect = (newDate: Date) => {
+    setRadiologyDate(newDate);
+    onUpdate({ mode, selectedTests, selectedPackages, selectedRadiologyTests, laboratoryDate, laboratoryTime, radiologyDate: newDate, radiologyTime });
   };
 
   const filteredPackages = healthPackages.filter(pkg => 
@@ -378,72 +362,26 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
 
         {/* Date & Time for Laboratory */}
         {mode === "laboratory" && (selectedTests.length > 0 || selectedPackages.length > 0) && (
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-medium text-foreground">Laboratory Date & Time</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-foreground">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(laboratoryDate, "dd/MM/yyyy")}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={laboratoryDate} onSelect={handleLaboratoryDateSelect} initialFocus />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
-              {timeSlots.map((time) => (
-                <Button
-                  key={time}
-                  type="button"
-                  variant={laboratoryTime === time ? "default" : "outline"}
-                  size="sm"
-                  className="h-9 text-xs"
-                  onClick={() => handleLaboratoryTimeSelect(time)}
-                >
-                  {time}
-                </Button>
-              ))}
-            </div>
-          </div>
+          <DiagnosticsSlotPicker
+            selectedDate={laboratoryDate}
+            selectedTime={laboratoryTime}
+            onDateSelect={handleLaboratoryDateSelect}
+            onTimeSelect={handleLaboratoryTimeSelect}
+            label="Laboratory Date & Time"
+            locationName="Main Lab"
+          />
         )}
 
         {/* Date & Time for Radiology */}
         {mode === "radiology" && selectedRadiologyTests.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-medium text-foreground">Radiology Date & Time</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-foreground">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(radiologyDate, "dd/MM/yyyy")}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={radiologyDate} onSelect={handleRadiologyDateSelect} initialFocus />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
-              {timeSlots.map((time) => (
-                <Button
-                  key={time}
-                  type="button"
-                  variant={radiologyTime === time ? "default" : "outline"}
-                  size="sm"
-                  className="h-9 text-xs"
-                  onClick={() => handleRadiologyTimeSelect(time)}
-                >
-                  {time}
-                </Button>
-              ))}
-            </div>
-          </div>
+          <DiagnosticsSlotPicker
+            selectedDate={radiologyDate}
+            selectedTime={radiologyTime}
+            onDateSelect={handleRadiologyDateSelect}
+            onTimeSelect={handleRadiologyTimeSelect}
+            label="Radiology Date & Time"
+            locationName="Radiology Center"
+          />
         )}
       </div>
     </Card>
