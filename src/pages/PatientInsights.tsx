@@ -34,6 +34,8 @@ const PatientInsights = () => {
     country: "India",
     outstandingTotal: "6,600",
     advanceAmount: "3,200",
+    billsAmount: "9,800",
+    balanceAmount: "3,400",
   };
 
   // Transform mock data into visits format
@@ -247,6 +249,8 @@ const PatientInsights = () => {
               <div className="flex gap-3">
                 <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
                 <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
+                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
+                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
               </div>
             </div>
           </div>
