@@ -25,9 +25,12 @@ interface PendingAppointment {
   patientAge: number;
   patientGender: string;
   purpose: string;
-  serviceType: "Consultation" | "Laboratory";
-  doctor?: string;
-  department?: string;
+  serviceType: "Consultation" | "Laboratory" | "Radiology";
+  // Provider roles
+  consultingDoctor?: { id: string; name: string } | null;
+  referringDoctor?: { id: string; name: string; external?: boolean } | null;
+  department?: { id: string; name: string } | null;
+  performingDepartment?: { id: string; name: string } | null;
   requestedDateTime?: string;
   phone: string;
   email: string;
@@ -42,8 +45,8 @@ const mockAppointments: PendingAppointment[] = [
     patientGender: "F",
     purpose: "Patient presents with recurring chest pain, described as a dull ache in the left side of the chest, worsening with physical exertion. Symptoms began two weeks ago and have gradually increased in frequency. No associated shortness of breath or palpitations noted.",
     serviceType: "Consultation",
-    doctor: "Dr. Meera Nair",
-    department: "Cardiology",
+    consultingDoctor: { id: "DR-001", name: "Dr. Meera Nair" },
+    department: { id: "DEPT-CARDIO", name: "Cardiology" },
     requestedDateTime: "15 Jan 2025, 10:00 AM",
     phone: "+91 98765 43210",
     email: "9876543210@gooddoc.app",
@@ -56,13 +59,32 @@ const mockAppointments: PendingAppointment[] = [
     patientGender: "M",
     purpose: "Annual health screening and routine laboratory workup requested. Patient has no acute complaints but wishes to monitor cholesterol levels and blood sugar as part of preventive care. Family history of diabetes and cardiovascular disease.",
     serviceType: "Laboratory",
-    doctor: "Dr. Rajesh Kumar",
-    department: "General Medicine",
+    referringDoctor: { id: "DR-002", name: "Dr. Rajesh Kumar" },
+    performingDepartment: { id: "DEPT-LAB", name: "Laboratory Dept" },
     requestedDateTime: "16 Jan 2025, 8:00 AM",
     phone: "+91 98765 43210",
     email: "9876543210@gooddoc.app",
   },
+  {
+    id: "APT-003",
+    patientName: "Priya Sharma",
+    patientGDID: "556789",
+    patientAge: 52,
+    patientGender: "F",
+    purpose: "MRI scan requested for persistent lower back pain. Patient has tried conservative treatment for 3 months with limited improvement. Need to rule out disc herniation.",
+    serviceType: "Radiology",
+    referringDoctor: null, // Self-requested
+    performingDepartment: { id: "DEPT-RAD", name: "Radiology Dept" },
+    requestedDateTime: "17 Jan 2025, 2:00 PM",
+    phone: "+91 98765 43211",
+    email: "9876543211@gooddoc.app",
+  },
 ];
+
+// Helper to determine if appointment is diagnostics type
+function isDiagnosticsType(serviceType: string): boolean {
+  return serviceType === "Laboratory" || serviceType === "Radiology";
+}
 
 export default function Inbox() {
   const navigate = useNavigate();
@@ -88,50 +110,95 @@ export default function Inbox() {
     navigate(`/book-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
   };
 
+  // Get provider display value based on appointment type
+  const getProviderDisplay = (appointment: PendingAppointment): string => {
+    if (isDiagnosticsType(appointment.serviceType)) {
+      if (appointment.referringDoctor) {
+        return appointment.referringDoctor.external 
+          ? `External: ${appointment.referringDoctor.name}`
+          : appointment.referringDoctor.name;
+      }
+      return "Self";
+    }
+    return appointment.consultingDoctor?.name || "—";
+  };
+
+  // Get department display value based on appointment type
+  const getDeptDisplay = (appointment: PendingAppointment): string => {
+    if (isDiagnosticsType(appointment.serviceType)) {
+      return appointment.performingDepartment?.name || 
+        (appointment.serviceType === "Laboratory" ? "Laboratory Team" : "Radiology Team");
+    }
+    return appointment.department?.name || "—";
+  };
+
+  // Get column labels based on whether we're showing mixed content
+  const getProviderLabel = (appointment: PendingAppointment): string => {
+    return isDiagnosticsType(appointment.serviceType) ? "Referring Doctor" : "Consulting Doctor";
+  };
+
+  const getDeptLabel = (appointment: PendingAppointment): string => {
+    return isDiagnosticsType(appointment.serviceType) ? "Performing Dept" : "Department";
+  };
+
+  const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(140px,1fr)_minmax(140px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(150px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";
+
   const renderAppointmentCard = (appointment: PendingAppointment) => {
+    const isDiag = isDiagnosticsType(appointment.serviceType);
+    
     return (
       <div key={appointment.id} className="border-b border-border last:border-b-0">
         {/* Main Row */}
-        <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(150px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+        <div className={`${gridClasses} items-center hover:bg-muted/20 transition-colors`}>
           {/* Patient Info */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
               <User className="w-5 h-5 text-primary" />
             </div>
-            <div>
-              <div className="text-sm font-medium text-foreground">
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-foreground truncate">
                 {appointment.patientName}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-xs text-muted-foreground truncate">
                 GDID - {appointment.patientGDID} • {appointment.patientAge} | {appointment.patientGender}
               </div>
             </div>
           </div>
 
           {/* Contact Details */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2 text-xs text-foreground">
               <Phone className="w-3 h-3 flex-shrink-0" />
-              <span>{appointment.phone}</span>
+              <span className="truncate">{appointment.phone}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-foreground">
               <Mail className="w-3 h-3 flex-shrink-0" />
-              <span>{appointment.email}</span>
+              <span className="truncate">{appointment.email}</span>
             </div>
           </div>
 
-          {/* Doctor */}
-          <div className="text-sm text-foreground">
-            {appointment.doctor || "—"}
+          {/* Provider - Context-aware */}
+          <div className="min-w-0">
+            <div className="text-[10px] text-muted-foreground mb-0.5">
+              {isDiag ? "Referring Doctor" : "Consulting Doctor"}
+            </div>
+            <div className="text-sm text-foreground truncate">
+              {getProviderDisplay(appointment)}
+            </div>
           </div>
 
-          {/* Department/Specialty */}
-          <div className="text-sm text-foreground">
-            {appointment.department || "—"}
+          {/* Department - Context-aware */}
+          <div className="min-w-0">
+            <div className="text-[10px] text-muted-foreground mb-0.5">
+              {isDiag ? "Performing Dept" : "Department"}
+            </div>
+            <div className="text-sm text-foreground truncate">
+              {getDeptDisplay(appointment)}
+            </div>
           </div>
 
           {/* Service Type */}
-          <div className="text-sm text-foreground">
+          <div className="text-sm text-foreground min-w-0 truncate">
             {appointment.serviceType}
           </div>
 
@@ -143,7 +210,7 @@ export default function Inbox() {
           </div>
 
           {/* Requested Date & Time */}
-          <div className="text-sm text-foreground">
+          <div className="text-sm text-foreground whitespace-nowrap">
             {appointment.requestedDateTime || "—"}
           </div>
 
@@ -159,7 +226,7 @@ export default function Inbox() {
           </div>
         </div>
 
-        {/* Chief Complaint Row */}
+        {/* Appointment Summary Row */}
         {appointment.purpose && (
           <div className="px-4 pb-4 pt-0">
             <div className="border-t border-border pt-4">
@@ -214,6 +281,7 @@ export default function Inbox() {
                     <SelectItem value="all">All Services</SelectItem>
                     <SelectItem value="Consultation">Consultation</SelectItem>
                     <SelectItem value="Laboratory">Laboratory</SelectItem>
+                    <SelectItem value="Radiology">Radiology</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -240,10 +308,10 @@ export default function Inbox() {
 
             <TabsContent value="appointment">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(150px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className={`${gridClasses} border-b border-border bg-muted/30`}>
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Provider</div>
                   <div className="text-xs font-medium text-muted-foreground">Department</div>
                   <div className="text-xs font-medium text-muted-foreground">Service Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Status</div>

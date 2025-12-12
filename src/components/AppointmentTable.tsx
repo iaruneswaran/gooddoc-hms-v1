@@ -8,8 +8,17 @@ import {
   AlertDialog,
   AlertDialogContent,
 } from "@/components/ui/alert-dialog";
+import {
+  UnifiedAppointment,
+  AppointmentType,
+  getDoctorLabel,
+  getDepartmentLabel,
+  getDoctorValue,
+  getDepartmentValue,
+  categoryToType,
+} from "@/types/appointment";
 
-interface Appointment {
+interface LegacyAppointment {
   id: string;
   date: string;
   category: string;
@@ -28,9 +37,14 @@ interface Appointment {
   serviceType: string;
   token: string;
   time: string;
+  // New fields for provider roles
+  referringDoctor?: { id: string; name: string; external?: boolean } | null;
+  consultingDoctor?: { id: string; name: string } | null;
+  performingDepartment?: { id: string; name: string } | null;
+  reportingClinician?: { id: string; name: string } | null;
 }
 
-const allAppointments: Appointment[] = [
+const allAppointments: LegacyAppointment[] = [
   // Outpatient Care
   {
     id: "1",
@@ -48,6 +62,7 @@ const allAppointments: Appointment[] = [
     specialty: "Cardiology",
     department: "Cardiology",
     doctor: "Dr. Meera Nair",
+    consultingDoctor: { id: "DR-001", name: "Dr. Meera Nair" },
     serviceType: "Consultation",
     token: "T-015",
     time: "10:30 AM",
@@ -68,6 +83,7 @@ const allAppointments: Appointment[] = [
     specialty: "Endocrinology",
     department: "Endocrinology",
     doctor: "Dr. Rajesh Kumar",
+    consultingDoctor: { id: "DR-002", name: "Dr. Rajesh Kumar" },
     serviceType: "Follow-up",
     token: "T-016",
     time: "11:00 AM",
@@ -88,6 +104,7 @@ const allAppointments: Appointment[] = [
     specialty: "Orthopedics",
     department: "Orthopedics",
     doctor: "Dr. Anita Singh",
+    consultingDoctor: { id: "DR-003", name: "Dr. Anita Singh" },
     serviceType: "Consultation",
     token: "T-017",
     time: "11:30 AM",
@@ -108,6 +125,7 @@ const allAppointments: Appointment[] = [
     specialty: "Dermatology",
     department: "Dermatology",
     doctor: "Dr. Sunil Reddy",
+    consultingDoctor: { id: "DR-004", name: "Dr. Sunil Reddy" },
     serviceType: "Consultation",
     token: "T-018",
     time: "12:00 PM",
@@ -129,6 +147,7 @@ const allAppointments: Appointment[] = [
     specialty: "Ophthalmology",
     department: "Ophthalmology",
     doctor: "Dr. A. Joseph",
+    consultingDoctor: { id: "DR-005", name: "Dr. A. Joseph" },
     serviceType: "Surgery",
     token: "T-015",
     time: "10:30 AM",
@@ -149,6 +168,7 @@ const allAppointments: Appointment[] = [
     specialty: "Orthopedics Ward",
     department: "Orthopedics",
     doctor: "Dr. Prakash Nair",
+    consultingDoctor: { id: "DR-006", name: "Dr. Prakash Nair" },
     serviceType: "Post-Op Care",
     token: "T-019",
     time: "09:00 AM",
@@ -169,6 +189,7 @@ const allAppointments: Appointment[] = [
     specialty: "General Medicine",
     department: "General Medicine",
     doctor: "Dr. Meera Nair",
+    consultingDoctor: { id: "DR-001", name: "Dr. Meera Nair" },
     serviceType: "Admission",
     token: "T-020",
     time: "02:00 PM",
@@ -189,11 +210,12 @@ const allAppointments: Appointment[] = [
     specialty: "Cardiology Ward",
     department: "Cardiology",
     doctor: "Dr. Rajesh Kumar",
+    consultingDoctor: { id: "DR-002", name: "Dr. Rajesh Kumar" },
     serviceType: "Post-Op Care",
     token: "T-021",
     time: "03:30 PM",
   },
-  // Diagnostics
+  // Diagnostics - with proper provider roles
   {
     id: "3",
     date: "05 AUG 2025",
@@ -209,7 +231,9 @@ const allAppointments: Appointment[] = [
     summary: "Chest pain – referred for ECG. Doctor suspects possible cardiac abnormality. Urgent assessment required.",
     specialty: "ECG Room 2",
     department: "Cardiology",
-    doctor: "Radiology Dept",
+    doctor: "Dr. Meera Nair", // Legacy field
+    referringDoctor: { id: "DR-001", name: "Dr. Meera Nair" },
+    performingDepartment: { id: "DEPT-CARDIO-DIAG", name: "Cardiology Diagnostics Unit" },
     serviceType: "ECG",
     token: "T-015",
     time: "10:30 AM",
@@ -229,7 +253,9 @@ const allAppointments: Appointment[] = [
     summary: "Abdominal ultrasound for suspected gallstones. Patient reports recurring pain after meals.",
     specialty: "Ultrasound Room 1",
     department: "Radiology",
-    doctor: "Dr. Anita Singh",
+    doctor: "Dr. Anita Singh", // Legacy field
+    referringDoctor: { id: "DR-003", name: "Dr. Anita Singh" },
+    performingDepartment: { id: "DEPT-RAD", name: "Radiology Dept" },
     serviceType: "Ultrasound",
     token: "T-022",
     time: "01:00 PM",
@@ -249,7 +275,10 @@ const allAppointments: Appointment[] = [
     summary: "MRI scan for persistent headaches lasting over 2 weeks. CT scan was inconclusive. Neurologist referral.",
     specialty: "MRI Lab",
     department: "Radiology",
-    doctor: "Radiology Dept",
+    doctor: "Radiology Dept", // Legacy - no referring doctor
+    referringDoctor: null, // Self-requested
+    performingDepartment: { id: "DEPT-RAD", name: "Radiology Dept" },
+    reportingClinician: null, // Unassigned until verified
     serviceType: "MRI",
     token: "T-023",
     time: "02:30 PM",
@@ -269,8 +298,10 @@ const allAppointments: Appointment[] = [
     summary: "Blood tests - Complete Blood Count and Lipid Profile. Annual health checkup requirement.",
     specialty: "Lab Room 3",
     department: "Laboratory",
-    doctor: "Laboratory Dept",
-    serviceType: "Laboratory",
+    doctor: "Laboratory Dept", // Legacy
+    referringDoctor: null, // Self-requested
+    performingDepartment: { id: "DEPT-LAB", name: "Laboratory Dept" },
+    serviceType: "CBC, Lipid Profile",
     token: "T-024",
     time: "09:30 AM",
   },
@@ -291,6 +322,7 @@ const allAppointments: Appointment[] = [
     specialty: "Emergency Surgery Team",
     department: "Emergency",
     doctor: "ICU",
+    consultingDoctor: { id: "ICU", name: "ICU Team" },
     serviceType: "Emergency",
     token: "T-015",
     time: "10:30 AM",
@@ -311,6 +343,7 @@ const allAppointments: Appointment[] = [
     specialty: "Emergency Cardiology",
     department: "Emergency",
     doctor: "Dr. Meera Nair",
+    consultingDoctor: { id: "DR-001", name: "Dr. Meera Nair" },
     serviceType: "Emergency",
     token: "T-025",
     time: "08:15 AM",
@@ -331,6 +364,7 @@ const allAppointments: Appointment[] = [
     specialty: "Emergency Neurology",
     department: "Emergency",
     doctor: "ICU",
+    consultingDoctor: { id: "ICU", name: "ICU Team" },
     serviceType: "Emergency",
     token: "T-026",
     time: "07:45 AM",
@@ -351,6 +385,7 @@ const allAppointments: Appointment[] = [
     specialty: "Emergency Medicine",
     department: "Emergency",
     doctor: "Dr. Sunil Reddy",
+    consultingDoctor: { id: "DR-004", name: "Dr. Sunil Reddy" },
     serviceType: "Emergency",
     token: "T-027",
     time: "11:45 AM",
@@ -377,16 +412,37 @@ export function AppointmentTable({
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingAppointmentId, setPendingAppointmentId] = useState<string | null>(null);
   
+  // Determine if this is a diagnostics view
+  const isDiagnosticsCategory = category === "diagnostics";
+  const appointmentType: AppointmentType = categoryToType(category);
+  
   const appointments = allAppointments.filter(apt => {
     const matchesCategory = apt.category === category;
     const matchesSearch = !searchQuery || 
       apt.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       apt.patient.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       apt.summary.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDoctor = doctorFilter === "all" || apt.doctor === doctorFilter;
-    const matchesSpecialty = specialtyFilter === "all" || apt.specialty === specialtyFilter || apt.department === specialtyFilter;
     
-    return matchesCategory && matchesSearch && matchesDoctor && matchesSpecialty;
+    // Provider filter - search across all provider roles
+    let matchesProvider = doctorFilter === "all";
+    if (!matchesProvider) {
+      const consultingMatch = apt.consultingDoctor?.name === doctorFilter;
+      const referringMatch = apt.referringDoctor?.name === doctorFilter;
+      const reportingMatch = apt.reportingClinician?.name === doctorFilter;
+      const legacyMatch = apt.doctor === doctorFilter;
+      matchesProvider = consultingMatch || referringMatch || reportingMatch || legacyMatch;
+    }
+    
+    // Department filter - includes performing department
+    let matchesDepartment = specialtyFilter === "all";
+    if (!matchesDepartment) {
+      const deptMatch = apt.department === specialtyFilter;
+      const perfDeptMatch = apt.performingDepartment?.name === specialtyFilter;
+      const specialtyMatch = apt.specialty === specialtyFilter;
+      matchesDepartment = deptMatch || perfDeptMatch || specialtyMatch;
+    }
+    
+    return matchesCategory && matchesSearch && matchesProvider && matchesDepartment;
   });
   
   const handleCheckInClick = (appointmentId: string) => {
@@ -408,6 +464,41 @@ export function AppointmentTable({
     setActiveTokenCard(null);
   };
 
+  // Helper to get the doctor/provider display value
+  const getProviderDisplay = (apt: LegacyAppointment): string => {
+    if (isDiagnosticsCategory) {
+      if (apt.referringDoctor) {
+        return apt.referringDoctor.external 
+          ? `External: ${apt.referringDoctor.name}`
+          : apt.referringDoctor.name;
+      }
+      return "Self";
+    }
+    return apt.consultingDoctor?.name || apt.doctor || "—";
+  };
+
+  // Helper to get the department display value
+  const getDeptDisplay = (apt: LegacyAppointment): string => {
+    if (isDiagnosticsCategory) {
+      if (apt.performingDepartment?.name) {
+        return apt.performingDepartment.name;
+      }
+      // Fallback based on service type
+      if (apt.serviceType === "MRI" || apt.serviceType === "Ultrasound" || apt.serviceType === "X-Ray") {
+        return "Radiology Team";
+      }
+      if (apt.department === "Laboratory" || apt.serviceType.includes("CBC") || apt.serviceType.includes("Lipid")) {
+        return "Laboratory Team";
+      }
+      return apt.department || "—";
+    }
+    return apt.department || "—";
+  };
+
+  // Column headers based on appointment type
+  const doctorColumnLabel = isDiagnosticsCategory ? "Referring Doctor" : "Consulting Doctor";
+  const deptColumnLabel = isDiagnosticsCategory ? "Performing Dept" : "Department";
+
   const gridClasses = "grid grid-cols-appointments gap-4 px-4 box-border";
 
   return (
@@ -416,8 +507,8 @@ export function AppointmentTable({
       <div className={`${gridClasses} py-4 border-b border-border bg-muted/30`}>
         <div className="text-xs font-medium text-muted-foreground text-left">Patient Info</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Contact Details</div>
-        <div className="text-xs font-medium text-muted-foreground text-left">Doctor</div>
-        <div className="text-xs font-medium text-muted-foreground text-left">Department</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">{doctorColumnLabel}</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">{deptColumnLabel}</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Service Type</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Token & Time</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
@@ -459,14 +550,14 @@ export function AppointmentTable({
                 </div>
               </div>
 
-              {/* Doctor */}
+              {/* Doctor/Provider - Context-aware */}
               <div className="text-sm text-foreground min-w-0 truncate">
-                {appointment.doctor}
+                {getProviderDisplay(appointment)}
               </div>
 
-              {/* Department */}
+              {/* Department - Context-aware */}
               <div className="text-sm text-foreground min-w-0 truncate">
-                {appointment.department}
+                {getDeptDisplay(appointment)}
               </div>
 
               {/* Service Type */}
@@ -523,7 +614,7 @@ export function AppointmentTable({
             token={appointment.token}
             patientName={appointment.patient.name}
             specialty={appointment.specialty}
-            doctor={appointment.doctor}
+            doctor={getProviderDisplay(appointment)}
             time={appointment.time}
             onComplete={() => handleTokenGenerationComplete(activeTokenCard)}
           />
@@ -548,12 +639,12 @@ export function AppointmentTable({
 
                   <div className="space-y-1.5 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Doctor:</span>
-                      <span className="text-foreground font-medium">{appointment.doctor}</span>
+                      <span className="text-muted-foreground">{doctorColumnLabel}:</span>
+                      <span className="text-foreground font-medium">{getProviderDisplay(appointment)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Department:</span>
-                      <span className="text-foreground font-medium">{appointment.department}</span>
+                      <span className="text-muted-foreground">{deptColumnLabel}:</span>
+                      <span className="text-foreground font-medium">{getDeptDisplay(appointment)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Time:</span>
