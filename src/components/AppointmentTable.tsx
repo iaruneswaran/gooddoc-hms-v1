@@ -418,7 +418,7 @@ export function AppointmentTable({
         <div className="text-xs font-medium text-muted-foreground">Department</div>
         <div className="text-xs font-medium text-muted-foreground">Service Type</div>
         <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-        <div className="text-xs font-medium text-muted-foreground">Action</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
       </div>
 
       {appointments.length === 0 ? (
