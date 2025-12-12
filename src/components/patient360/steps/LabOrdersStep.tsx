@@ -3,14 +3,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Patient } from "@/types/patient360";
 import { labPackages, labTests } from "@/data/patient360.mock";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { Search, Calendar as CalendarIcon, Check, Minus } from "lucide-react";
+import { Search, Check, Minus } from "lucide-react";
 import { format } from "date-fns";
+import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
 
 interface LabOrdersStepProps {
   patient: Patient;
@@ -64,16 +63,6 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
   const sgst = subtotal * 0.09;
   const net = subtotal + cgst + sgst;
 
-  const timeSlots = [
-    "00:00", "00:30", "01:00", "01:30", "02:00", "02:30",
-    "03:00", "03:30", "04:00", "04:30", "05:00", "05:30",
-    "06:00", "06:30", "07:00", "07:30", "08:00", "08:30",
-    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-    "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
-    "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
-  ];
 
   const filteredPackages = labPackages.filter(pkg => 
     pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -248,37 +237,14 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
 
             {/* Date & Time */}
             {(selectedPackages.length > 0 || selectedTests.length > 0) && (
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <label className="text-sm font-medium text-foreground">Laboratory Date & Time</label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="ghost" size="sm" className="text-foreground">
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {format(selectedDate, "dd/MM/yyyy")}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar mode="single" selected={selectedDate} onSelect={(date) => date && setSelectedDate(date)} initialFocus />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
-                  {timeSlots.map((time) => (
-                    <Button
-                      key={time}
-                      type="button"
-                      variant={selectedTime === time ? "default" : "outline"}
-                      size="sm"
-                      className="h-9 text-xs"
-                      onClick={() => setSelectedTime(time)}
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div>
+              <DiagnosticsSlotPicker
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                onDateSelect={setSelectedDate}
+                onTimeSelect={setSelectedTime}
+                label={appointmentType === "Laboratory" ? "Laboratory Date & Time" : "Radiology Date & Time"}
+                locationName={appointmentType === "Laboratory" ? "Main Lab" : "Radiology Center"}
+              />
             )}
           </div>
 
