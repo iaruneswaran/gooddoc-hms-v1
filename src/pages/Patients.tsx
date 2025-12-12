@@ -360,27 +360,27 @@ export default function Patients() {
             {/* Active Patients Tab */}
             <TabsContent value="active">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[180px_160px_180px_auto_180px_140px_100px] gap-3 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[180px_160px_180px_minmax(0,1fr)_180px_160px_120px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Active Visit & Purpose</div>
                   <div className="text-xs font-medium text-muted-foreground">Location / Appointment</div>
                   <div className="text-xs font-medium text-muted-foreground">Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
                 </div>
                 {filteredActivePatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_auto_180px_140px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
-                    <div className="flex items-start gap-2">
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_minmax(0,1fr)_180px_160px_120px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border">
+                    <div className="flex items-start gap-2 min-w-0">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-4 h-4 text-primary" />
                       </div>
                       <div className="min-w-0">
                         <div className="text-sm font-medium text-foreground truncate">{patient.name}</div>
-                        <div className="text-xs text-muted-foreground">GDID-{patient.gdid} • {patient.age} | {patient.gender}</div>
+                        <div className="text-xs text-muted-foreground truncate">GDID-{patient.gdid} • {patient.age} | {patient.gender}</div>
                       </div>
                     </div>
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 min-w-0">
                       <div className="flex items-center gap-1.5 text-xs text-foreground">
                         <Phone className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{patient.phone}</span>
@@ -390,20 +390,20 @@ export default function Patients() {
                         <span className="truncate">{patient.email}</span>
                       </div>
                     </div>
-                    <div className="space-y-0.5">
-                      <div className="text-xs text-muted-foreground">
+                    <div className="space-y-0.5 min-w-0">
+                      <div className="text-xs text-muted-foreground truncate">
                         {patient.visitId ? `Active Visit: ${patient.visitId}` : "No Active Visit"}
                       </div>
-                      <div className="text-sm font-medium text-foreground">{patient.visitPurpose}</div>
+                      <div className="text-sm font-medium text-foreground truncate">{patient.visitPurpose}</div>
                     </div>
-                    <div>{renderLocationOrAppointment(patient)}</div>
-                    <div className="text-sm text-foreground whitespace-nowrap truncate">
+                    <div className="min-w-0">{renderLocationOrAppointment(patient)}</div>
+                    <div className="text-sm text-foreground min-w-0 truncate">
                       {patient.doctor} — {patient.specialty}
                     </div>
-                    <div className="text-xs text-foreground">
+                    <div className="text-xs text-foreground min-w-0 whitespace-nowrap">
                       {renderVitals(patient)}
                     </div>
-                    <div>
+                    <div className="w-[120px] flex justify-end">
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
                         Patient Insight
                       </Button>
