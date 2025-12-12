@@ -80,7 +80,7 @@ export interface Leave {
   start_datetime: string;
   end_datetime: string;
   leave_type: LeaveType;
-  reason?: string;
+  reason?: string | null;
   status: LeaveStatus;
   keep_existing_bookings: boolean;
 }

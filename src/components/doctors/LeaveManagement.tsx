@@ -112,7 +112,7 @@ export function LeaveManagement({
         start_datetime: startDateTime.toISOString(),
         end_datetime: endDateTime.toISOString(),
         leave_type: form.leaveType,
-        reason: form.reason || undefined,
+        reason: form.reason || null,
         keep_existing_bookings: form.keepExistingBookings,
       });
 

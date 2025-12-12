@@ -90,17 +90,25 @@ export default function DoctorCalendarPage() {
   };
 
   const handleCreateLeave = async (leave: Omit<Leave, 'id' | 'status'>) => {
-    const { data, error } = await supabase
-      .from('leaves')
-      .insert([{ ...leave, status: 'active' }])
-      .select()
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('leaves')
+        .insert([{ ...leave, status: 'active' }])
+        .select()
+        .single();
 
-    if (error) throw error;
-    setLeaves(prev => [...prev, data as Leave].sort(
-      (a, b) => new Date(a.start_datetime).getTime() - new Date(b.start_datetime).getTime()
-    ));
-    setShowLeavePanel(false);
+      if (error) {
+        console.error('Error creating leave:', error);
+        throw error;
+      }
+      setLeaves(prev => [...prev, data as Leave].sort(
+        (a, b) => new Date(a.start_datetime).getTime() - new Date(b.start_datetime).getTime()
+      ));
+      setShowLeavePanel(false);
+    } catch (err) {
+      console.error('Failed to create leave:', err);
+      throw err;
+    }
   };
 
   const handleCancelLeave = async (leaveId: string) => {
