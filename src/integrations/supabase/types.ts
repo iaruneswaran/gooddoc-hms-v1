@@ -14,6 +14,284 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointment_types: {
+        Row: {
+          buffer: number
+          created_at: string
+          duration: number
+          id: string
+          is_active: boolean
+          mode: Database["public"]["Enums"]["schedule_mode"] | null
+          name: string
+        }
+        Insert: {
+          buffer?: number
+          created_at?: string
+          duration?: number
+          id?: string
+          is_active?: boolean
+          mode?: Database["public"]["Enums"]["schedule_mode"] | null
+          name: string
+        }
+        Update: {
+          buffer?: number
+          created_at?: string
+          duration?: number
+          id?: string
+          is_active?: boolean
+          mode?: Database["public"]["Enums"]["schedule_mode"] | null
+          name?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          appointment_type_id: string | null
+          created_at: string
+          created_by: string | null
+          doctor_id: string
+          end_time: string
+          hold_expires_at: string | null
+          id: string
+          location_id: string | null
+          mode: Database["public"]["Enums"]["schedule_mode"]
+          notes: string | null
+          patient_id: string
+          patient_name: string | null
+          source: string | null
+          start_time: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          appointment_type_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          doctor_id: string
+          end_time: string
+          hold_expires_at?: string | null
+          id?: string
+          location_id?: string | null
+          mode?: Database["public"]["Enums"]["schedule_mode"]
+          notes?: string | null
+          patient_id: string
+          patient_name?: string | null
+          source?: string | null
+          start_time: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          appointment_type_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          doctor_id?: string
+          end_time?: string
+          hold_expires_at?: string | null
+          id?: string
+          location_id?: string | null
+          mode?: Database["public"]["Enums"]["schedule_mode"]
+          notes?: string | null
+          patient_id?: string
+          patient_name?: string | null
+          source?: string | null
+          start_time?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_appointment_type_id_fkey"
+            columns: ["appointment_type_id"]
+            isOneToOne: false
+            referencedRelation: "appointment_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctors: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          default_buffer: number
+          default_duration: number
+          degrees: string | null
+          department_id: string | null
+          id: string
+          max_future_days: number
+          min_lead_time: number
+          name: string
+          specialty_id: string | null
+          status: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          default_buffer?: number
+          default_duration?: number
+          degrees?: string | null
+          department_id?: string | null
+          id?: string
+          max_future_days?: number
+          min_lead_time?: number
+          name: string
+          specialty_id?: string | null
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          default_buffer?: number
+          default_duration?: number
+          degrees?: string | null
+          department_id?: string | null
+          id?: string
+          max_future_days?: number
+          min_lead_time?: number
+          name?: string
+          specialty_id?: string | null
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      holidays: {
+        Row: {
+          block_bookings: boolean
+          created_at: string
+          holiday_date: string
+          id: string
+          location_id: string | null
+          name: string
+        }
+        Insert: {
+          block_bookings?: boolean
+          created_at?: string
+          holiday_date: string
+          id?: string
+          location_id?: string | null
+          name: string
+        }
+        Update: {
+          block_bookings?: boolean
+          created_at?: string
+          holiday_date?: string
+          id?: string
+          location_id?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "holidays_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leaves: {
+        Row: {
+          created_at: string
+          doctor_id: string
+          end_datetime: string
+          id: string
+          keep_existing_bookings: boolean
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          reason: string | null
+          start_datetime: string
+          status: Database["public"]["Enums"]["leave_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_id: string
+          end_datetime: string
+          id?: string
+          keep_existing_bookings?: boolean
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          start_datetime: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_id?: string
+          end_datetime?: string
+          id?: string
+          keep_existing_bookings?: boolean
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          start_datetime?: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leaves_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      locations: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          timezone: string
+          type: Database["public"]["Enums"]["schedule_mode"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          timezone?: string
+          type?: Database["public"]["Enums"]["schedule_mode"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          timezone?: string
+          type?: Database["public"]["Enums"]["schedule_mode"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -32,15 +310,159 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_exceptions: {
+        Row: {
+          buffer: number | null
+          capacity: number | null
+          created_at: string
+          doctor_id: string
+          duration: number | null
+          end_time: string
+          exception_date: string
+          exception_type: Database["public"]["Enums"]["exception_type"]
+          id: string
+          location_id: string | null
+          mode: Database["public"]["Enums"]["schedule_mode"] | null
+          notes: string | null
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          buffer?: number | null
+          capacity?: number | null
+          created_at?: string
+          doctor_id: string
+          duration?: number | null
+          end_time: string
+          exception_date: string
+          exception_type: Database["public"]["Enums"]["exception_type"]
+          id?: string
+          location_id?: string | null
+          mode?: Database["public"]["Enums"]["schedule_mode"] | null
+          notes?: string | null
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          buffer?: number | null
+          capacity?: number | null
+          created_at?: string
+          doctor_id?: string
+          duration?: number | null
+          end_time?: string
+          exception_date?: string
+          exception_type?: Database["public"]["Enums"]["exception_type"]
+          id?: string
+          location_id?: string | null
+          mode?: Database["public"]["Enums"]["schedule_mode"] | null
+          notes?: string | null
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedule_exceptions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_exceptions_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schedule_templates: {
+        Row: {
+          created_at: string
+          doctor_id: string
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+          week_pattern: Json
+        }
+        Insert: {
+          created_at?: string
+          doctor_id: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+          week_pattern?: Json
+        }
+        Update: {
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+          week_pattern?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedule_templates_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduling_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          payload: Json | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          payload?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          payload?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_holds: { Args: never; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      appointment_status:
+        | "held"
+        | "booked"
+        | "checked_in"
+        | "completed"
+        | "no_show"
+        | "cancelled"
+      exception_type: "add" | "block"
+      leave_status: "active" | "cancelled"
+      leave_type: "full_day" | "partial_day"
+      schedule_mode: "in_person" | "telehealth" | "both"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -167,6 +589,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      appointment_status: [
+        "held",
+        "booked",
+        "checked_in",
+        "completed",
+        "no_show",
+        "cancelled",
+      ],
+      exception_type: ["add", "block"],
+      leave_status: ["active", "cancelled"],
+      leave_type: ["full_day", "partial_day"],
+      schedule_mode: ["in_person", "telehealth", "both"],
+    },
   },
 } as const
