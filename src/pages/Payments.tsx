@@ -338,7 +338,7 @@ const Payments = () => {
                 value="collection"
                 className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
               >
-                Collection
+                Invoices
               </TabsTrigger>
               <TabsTrigger 
                 value="advance"
@@ -365,7 +365,7 @@ const Payments = () => {
               <div className="grid grid-cols-[1fr_420px] gap-6">
                 <Card className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold">Payment Collection</h2>
+                    <h2 className="text-lg font-semibold">Invoices</h2>
                   </div>
                   <InvoicesTable
                     invoices={invoices}
