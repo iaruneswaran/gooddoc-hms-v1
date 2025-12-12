@@ -411,7 +411,7 @@ export function AppointmentTable({
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
       {/* Table Header */}
-      <div className="grid grid-cols-7 gap-4 px-4 py-4 border-b border-border bg-muted/30">
+      <div className="grid grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-4 border-b border-border bg-muted/30">
         <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
         <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
         <div className="text-xs font-medium text-muted-foreground">Doctor</div>
@@ -429,7 +429,7 @@ export function AppointmentTable({
         appointments.map((appointment) => (
           <div key={appointment.id} className="border-b border-border last:border-b-0">
             {/* Main Row */}
-            <div className="grid grid-cols-7 gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors">
+            <div className="grid grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors">
               {/* Patient Info */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
