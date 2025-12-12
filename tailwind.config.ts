@@ -275,6 +275,11 @@ export default {
       minWidth: {
         touch: "44px",
       },
+      
+      /* Grid Templates */
+      gridTemplateColumns: {
+        appointments: "1.5fr 1.5fr 1fr 1fr 1fr 1fr 120px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
