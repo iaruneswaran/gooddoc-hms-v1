@@ -69,45 +69,25 @@ export function DoctorSelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto py-3"
+          className="w-full justify-between h-10"
           disabled={loading}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 truncate">
             <UserRound className="h-4 w-4 text-muted-foreground shrink-0" />
-            <div className="text-left">
-              {selectedDoctor ? (
-                <>
-                  <p className="font-medium">{selectedDoctor.name}</p>
-                  {selectedSummary && (
-                    <p className="text-xs text-muted-foreground">
-                      {selectedSummary.availabilityStatus === 'today' && selectedSummary.nextAvailable && (
-                        <>Next: Today at {formatNextTime(selectedSummary.nextAvailable)}</>
-                      )}
-                      {selectedSummary.availabilityStatus === 'tomorrow' && selectedSummary.nextAvailable && (
-                        <>Next: Tomorrow at {formatNextTime(selectedSummary.nextAvailable)}</>
-                      )}
-                      {selectedSummary.availabilityStatus === 'this_week' && selectedSummary.nextAvailable && (
-                        <>Next: {format(parseISO(selectedSummary.nextAvailable), "EEE 'at' h:mm a")}</>
-                      )}
-                      {selectedSummary.availabilityStatus === 'on_leave' && (
-                        <>On leave until {format(parseISO(selectedSummary.leaveUntil!), "MMM d")}</>
-                      )}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <span className="text-muted-foreground">Select a doctor...</span>
-              )}
-            </div>
+            {selectedDoctor ? (
+              <span className="font-normal text-foreground truncate">{selectedDoctor.name}</span>
+            ) : (
+              <span className="text-muted-foreground font-normal">Select a doctor...</span>
+            )}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search doctors..." />
-          <CommandList>
-            <CommandEmpty>No doctor found.</CommandEmpty>
+      <PopoverContent className="w-[400px] p-0 bg-popover border shadow-lg z-50" align="start">
+        <Command className="bg-popover">
+          <CommandInput placeholder="Search doctors..." className="text-foreground" />
+          <CommandList className="bg-popover">
+            <CommandEmpty className="text-muted-foreground">No doctor found.</CommandEmpty>
             <CommandGroup>
               {/* Any Doctor option */}
               <CommandItem
@@ -116,18 +96,18 @@ export function DoctorSelector({
                   onSelect(null);
                   setOpen(false);
                 }}
-                className="py-3"
+                className="py-3 cursor-pointer hover:bg-accent"
               >
                 <div className="flex items-center gap-3 flex-1">
                   <UserRound className="h-4 w-4 text-muted-foreground" />
                   <div className="flex-1">
-                    <p className="font-medium">Any available doctor</p>
+                    <p className="font-medium text-foreground">Any available doctor</p>
                     <p className="text-xs text-muted-foreground">
                       First available across all doctors
                     </p>
                   </div>
                 </div>
-                <Check className={cn("h-4 w-4", !selectedDoctorId ? "opacity-100" : "opacity-0")} />
+                <Check className={cn("h-4 w-4 text-foreground", !selectedDoctorId ? "opacity-100" : "opacity-0")} />
               </CommandItem>
               
               {/* Individual doctors */}
@@ -143,15 +123,15 @@ export function DoctorSelector({
                       onSelect(doctor.id);
                       setOpen(false);
                     }}
-                    className="py-3"
+                    className="py-3 cursor-pointer hover:bg-accent"
                   >
                     <div className="flex items-center gap-3 flex-1">
                       <UserRound className="h-4 w-4 text-muted-foreground" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium truncate">{doctor.name}</p>
+                          <p className="font-medium text-foreground truncate">{doctor.name}</p>
                           {availability && (
-                            <Badge variant={availability.variant} className="text-[10px] px-1.5 py-0">
+                            <Badge variant={availability.variant} className="text-[10px] px-1.5 py-0 shrink-0">
                               {availability.label}
                               {availability.time && ` ${formatNextTime(availability.time)}`}
                             </Badge>
@@ -162,7 +142,7 @@ export function DoctorSelector({
                         </p>
                       </div>
                     </div>
-                    <Check className={cn("h-4 w-4", selectedDoctorId === doctor.id ? "opacity-100" : "opacity-0")} />
+                    <Check className={cn("h-4 w-4 text-foreground", selectedDoctorId === doctor.id ? "opacity-100" : "opacity-0")} />
                   </CommandItem>
                 );
               })}
