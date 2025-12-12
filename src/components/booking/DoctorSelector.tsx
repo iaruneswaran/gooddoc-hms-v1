@@ -137,7 +137,7 @@ export function DoctorSelector({
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-xs text-foreground/70 truncate">
                           {doctor.degrees || doctor.specialty_id}
                         </p>
                       </div>
