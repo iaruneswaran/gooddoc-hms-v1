@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, Mail, MessageCircle, Video, Search, Filter } from "lucide-react";
+import { User, Phone, Mail, Search } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 import {
@@ -26,7 +26,7 @@ export default function OutpatientAppointments() {
   
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [searchQuery, setSearchQuery] = useState("");
-  const [doctorFilter, setDoctorFilter] = useState("all");
+  const [providerFilter, setProviderFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [vitalsFilter, setVitalsFilter] = useState("all");
 
@@ -45,13 +45,13 @@ export default function OutpatientAppointments() {
         apt.chiefComplaint?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         apt.type.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesDoctor = doctorFilter === "all" || apt.doctorName === doctorFilter;
+      const matchesProvider = providerFilter === "all" || apt.doctorName === providerFilter;
       const matchesDepartment = departmentFilter === "all" || apt.department === departmentFilter;
       const matchesVitals = vitalsFilter === "all" || 
         (vitalsFilter === "completed" && apt.vitalsPreview) ||
         (vitalsFilter === "pending" && !apt.vitalsPreview);
       
-      return matchesSearch && matchesDoctor && matchesDepartment && matchesVitals;
+      return matchesSearch && matchesProvider && matchesDepartment && matchesVitals;
     });
   };
 
@@ -71,50 +71,52 @@ export default function OutpatientAppointments() {
     navigate(`/patients/${appointment.gdid}/360`);
   };
 
+  const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";
+
   const renderAppointmentCard = (appointment: Appointment) => {
     return (
       <div key={appointment.id} className="border-b border-border last:border-b-0">
         {/* Main Row */}
-        <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+        <div className={`${gridClasses} items-center hover:bg-muted/20 transition-colors`}>
           {/* Patient Info */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
               <User className="w-5 h-5 text-primary" />
             </div>
-            <div>
-              <div className="text-sm font-medium text-foreground">
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-foreground truncate">
                 {appointment.patientName}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-xs text-muted-foreground truncate">
                 GDID - {appointment.gdid} • {appointment.age} | {appointment.sex}
               </div>
             </div>
           </div>
 
           {/* Contact Details */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2 text-xs text-foreground">
               <Phone className="w-3 h-3 flex-shrink-0" />
-              <span>{appointment.phone || "—"}</span>
+              <span className="truncate">{appointment.phone || "—"}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-foreground">
               <Mail className="w-3 h-3 flex-shrink-0" />
-              <span>{appointment.email || "—"}</span>
+              <span className="truncate">{appointment.email || "—"}</span>
             </div>
           </div>
 
-          {/* Doctor */}
-          <div className="text-sm text-foreground">
+          {/* Consulting Doctor */}
+          <div className="text-sm text-foreground min-w-0 truncate">
             {appointment.doctorName || "—"}
           </div>
 
           {/* Department */}
-          <div className="text-sm text-foreground">
+          <div className="text-sm text-foreground min-w-0 truncate">
             {appointment.department || "—"}
           </div>
 
           {/* Consultation Type */}
-          <div className="text-sm text-foreground">
+          <div className="text-sm text-foreground min-w-0 truncate">
             {appointment.type === "New" ? "First Visit" : "Follow-up"}
           </div>
 
@@ -132,7 +134,7 @@ export default function OutpatientAppointments() {
           </div>
 
           {/* Token & Time */}
-          <div className="text-sm text-foreground">
+          <div className="text-sm text-foreground whitespace-nowrap">
             {appointment.token} | {appointment.time} AM
           </div>
 
@@ -193,12 +195,12 @@ export default function OutpatientAppointments() {
                 </TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-3">
-                <Select value={doctorFilter} onValueChange={setDoctorFilter}>
+                <Select value={providerFilter} onValueChange={setProviderFilter}>
                   <SelectTrigger className="w-[160px] h-9">
-                    <SelectValue placeholder="All Doctors" />
+                    <SelectValue placeholder="All Providers" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Doctors</SelectItem>
+                    <SelectItem value="all">All Providers</SelectItem>
                     {filterOptions.doctors.map((doctor) => (
                       <SelectItem key={doctor} value={doctor!}>{doctor}</SelectItem>
                     ))}
@@ -239,10 +241,10 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className={`${gridClasses} border-b border-border bg-muted/30`}>
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Department</div>
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
@@ -261,10 +263,10 @@ export default function OutpatientAppointments() {
 
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className={`${gridClasses} border-b border-border bg-muted/30`}>
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
                   <div className="text-xs font-medium text-muted-foreground">Department</div>
                   <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
                   <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>

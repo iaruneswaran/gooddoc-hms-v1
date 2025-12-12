@@ -21,8 +21,11 @@ const Index = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("outpatient-care");
   const [searchQuery, setSearchQuery] = useState("");
-  const [doctorFilter, setDoctorFilter] = useState("all");
-  const [specialtyFilter, setSpecialtyFilter] = useState("all");
+  const [providerFilter, setProviderFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+
+  // Determine if viewing diagnostics tab
+  const isDiagnosticsView = selectedCategory === "diagnostics";
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -51,28 +54,37 @@ const Index = () => {
           <div className="flex items-center justify-between mb-6">
             <AppointmentTabs onTabChange={setSelectedCategory} />
             <div className="flex items-center gap-3">
-              <Select value={doctorFilter} onValueChange={setDoctorFilter}>
+              <Select value={providerFilter} onValueChange={setProviderFilter}>
                 <SelectTrigger className="w-[160px] h-9">
-                  <SelectValue placeholder="All Doctors" />
+                  <SelectValue placeholder="All Providers" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Doctors</SelectItem>
+                  <SelectItem value="all">All Providers</SelectItem>
                   <SelectItem value="Dr. Meera Nair">Dr. Meera Nair</SelectItem>
                   <SelectItem value="Dr. Rajesh Kumar">Dr. Rajesh Kumar</SelectItem>
                   <SelectItem value="Dr. Anita Singh">Dr. Anita Singh</SelectItem>
                   <SelectItem value="Dr. Sunil Reddy">Dr. Sunil Reddy</SelectItem>
+                  <SelectItem value="Dr. A. Joseph">Dr. A. Joseph</SelectItem>
+                  <SelectItem value="Dr. Prakash Nair">Dr. Prakash Nair</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={specialtyFilter} onValueChange={setSpecialtyFilter}>
+              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
                 <SelectTrigger className="w-[160px] h-9">
-                  <SelectValue placeholder="All Specialties" />
+                  <SelectValue placeholder="All Departments" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Specialties</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
                   <SelectItem value="Cardiology">Cardiology</SelectItem>
                   <SelectItem value="Endocrinology">Endocrinology</SelectItem>
                   <SelectItem value="Orthopedics">Orthopedics</SelectItem>
                   <SelectItem value="Dermatology">Dermatology</SelectItem>
+                  <SelectItem value="General Medicine">General Medicine</SelectItem>
+                  <SelectItem value="Ophthalmology">Ophthalmology</SelectItem>
+                  <SelectItem value="Emergency">Emergency</SelectItem>
+                  {/* Diagnostics departments */}
+                  <SelectItem value="Laboratory Dept">Laboratory</SelectItem>
+                  <SelectItem value="Radiology Dept">Radiology</SelectItem>
+                  <SelectItem value="Cardiology Diagnostics Unit">Cardiology Diagnostics</SelectItem>
                 </SelectContent>
               </Select>
               <div className="relative w-64">
@@ -90,8 +102,8 @@ const Index = () => {
           <AppointmentTable 
             category={selectedCategory} 
             searchQuery={searchQuery}
-            doctorFilter={doctorFilter}
-            specialtyFilter={specialtyFilter}
+            doctorFilter={providerFilter}
+            specialtyFilter={departmentFilter}
           />
         </main>
       </div>
