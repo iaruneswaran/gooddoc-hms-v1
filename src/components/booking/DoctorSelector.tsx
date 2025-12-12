@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Check, ChevronsUpDown, Clock, AlertCircle, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -85,9 +85,7 @@ export function DoctorSelector({
       </PopoverTrigger>
       <PopoverContent className="w-[400px] p-0 bg-popover border shadow-lg z-50" align="start">
         <Command className="bg-popover">
-          <CommandInput placeholder="Search doctors..." className="text-foreground" />
-          <CommandList className="bg-popover">
-            <CommandEmpty className="text-muted-foreground">No doctor found.</CommandEmpty>
+          <CommandList className="bg-popover max-h-[300px]">
             <CommandGroup>
               {/* Any Doctor option */}
               <CommandItem
