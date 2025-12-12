@@ -52,13 +52,13 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-h3 font-semibold">Patient Invoices</h3>
+        <h3 className="text-h3 font-semibold">Patient Bills</h3>
       </div>
       <div className="border rounded-lg overflow-hidden">
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Invoice No</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Bill No</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
