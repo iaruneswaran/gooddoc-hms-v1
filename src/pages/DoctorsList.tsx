@@ -102,7 +102,6 @@ export default function DoctorsList() {
   }, []);
 
   const fetchDoctors = async () => {
-    setLoading(true);
     try {
       const { data: doctorsData, error } = await supabase
         .from('doctors')
@@ -179,8 +178,6 @@ export default function DoctorsList() {
     } catch (err) {
       console.error('Error fetching doctors:', err);
       toast({ title: "Error loading doctors", variant: "destructive" });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -343,11 +340,7 @@ export default function DoctorsList() {
           <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
-          {loading ? (
-            <div className="bg-card rounded-lg border border-border p-12 text-center">
-              <p className="text-muted-foreground">Loading doctors...</p>
-            </div>
-          ) : filteredDoctors.length === 0 ? (
+          {filteredDoctors.length === 0 ? (
             <div className="bg-card rounded-lg border border-border p-12 text-center">
               <div className="max-w-md mx-auto">
                 <h3 className="text-lg font-medium mb-2">No doctors found</h3>
