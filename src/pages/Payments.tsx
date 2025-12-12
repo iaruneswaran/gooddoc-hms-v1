@@ -21,6 +21,7 @@ import { TransactionsTable } from "@/components/billing/TransactionsTable";
 import { SuccessModal } from "@/components/billing/SuccessModal";
 import { ClaimFilters } from "@/components/insurance/ClaimFilters";
 import { ClaimsTable } from "@/components/insurance/ClaimsTable";
+import { KpiTile } from "@/components/patient-insights/KpiTile";
 import { mockClaims } from "@/data/insurance.mock";
 import { Invoice, TransactionRow } from "@/types/billing";
 import { Claim, ClaimStatus, ServiceType } from "@/types/insurance";
@@ -313,21 +314,11 @@ const Payments = () => {
                 Active Visit: <span className="font-medium text-foreground">VST-205431</span>
               </span>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex gap-4 text-sm">
-                <div>
-                  <span className="text-muted-foreground">Outstanding: </span>
-                  <span className="font-semibold text-orange-600">{formatINR(outstandingTotal)}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Advance: </span>
-                  <span className="font-semibold text-primary">{formatINR(advanceBalance)}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Insurance: </span>
-                  <span className="font-semibold text-green-600">{formatINR(insuranceApproved)}</span>
-                </div>
-              </div>
+            <div className="flex gap-3">
+              <KpiTile label="Outstanding Total" amount="6,600" />
+              <KpiTile label="Advance Amount" amount="3,200" />
+              <KpiTile label="Bills Amount" amount="9,800" />
+              <KpiTile label="Balance Amount" amount="3,400" />
             </div>
           </div>
 
