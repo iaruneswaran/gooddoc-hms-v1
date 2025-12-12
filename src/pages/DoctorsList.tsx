@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, Copy, Users } from "lucide-react";
+import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -436,14 +436,6 @@ export default function DoctorsList() {
                         <DropdownMenuItem onClick={() => handleAddLeave(doctor.id)}>
                           <PlusCircle className="w-4 h-4 mr-2" />
                           Add Leave
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copy Schedule
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Users className="w-4 h-4 mr-2" />
-                          Set Covering Doctor
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {doctor.status === "active" ? (
