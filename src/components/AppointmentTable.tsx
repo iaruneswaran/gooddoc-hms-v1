@@ -420,7 +420,7 @@ export function AppointmentTable({
         <div className="text-xs font-medium text-muted-foreground text-left">Department</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Service Type</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Token & Time</div>
-        <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
       </div>
 
       {appointments.length === 0 ? (
@@ -489,7 +489,7 @@ export function AppointmentTable({
               </div>
 
               {/* Action */}
-              <div className="w-[120px] flex justify-end">
+              <div className="w-[120px] flex justify-start">
                 <Button
                   onClick={() => handleCheckInClick(appointment.id)}
                   variant="default"
