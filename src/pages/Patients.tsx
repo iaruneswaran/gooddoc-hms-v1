@@ -363,15 +363,15 @@ export default function Patients() {
             {/* Inpatient Tab */}
             <TabsContent value="inpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_240px_1fr_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground">Admission & Ward</div>
                   <div className="text-xs font-medium text-muted-foreground">Attending Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Admission & Ward</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredInpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_240px_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
@@ -391,13 +391,16 @@ export default function Patients() {
                         <span>{patient.email}</span>
                       </div>
                     </div>
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-medium text-foreground whitespace-nowrap">{patient.doctor}</div>
+                      <div className="text-xs text-muted-foreground">{patient.specialty}</div>
+                    </div>
                     <div className="space-y-1">
                       <div className="text-xs text-muted-foreground">Admitted: {patient.admissionTime}</div>
                       <div className="text-sm text-foreground">
                         {patient.ward} • Room {patient.room} • Bed {patient.bed} • LOS: {patient.los}
                       </div>
                     </div>
-                    <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
                     <div>
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
                         Patient Insight
@@ -414,16 +417,16 @@ export default function Patients() {
             {/* Outpatient Tab */}
             <TabsContent value="outpatient">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[200px_180px_1fr_1fr_200px_120px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[200px_180px_240px_1fr_1fr_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
-                  <div className="text-xs font-medium text-muted-foreground pl-4">Vitals</div>
-                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
+                  <div className="text-xs font-medium text-muted-foreground">Vitals</div>
+                  <div className="text-xs font-medium text-muted-foreground">Appointment Summary</div>
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredOutpatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[200px_180px_1fr_1fr_200px_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[200px_180px_240px_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-primary" />
@@ -443,7 +446,11 @@ export default function Patients() {
                         <span>{patient.email}</span>
                       </div>
                     </div>
-                    <div className="text-xs text-foreground space-y-0.5 pl-4">
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-medium text-foreground whitespace-nowrap">{patient.doctor}</div>
+                      <div className="text-xs text-muted-foreground">{patient.specialty}</div>
+                    </div>
+                    <div className="text-xs text-foreground space-y-0.5">
                       <div>BP: {patient.vitals.bp} • SpO₂: {patient.vitals.spo2}% • HR: {patient.vitals.hr}</div>
                       <div>RR: {patient.vitals.rr} • Temp: {patient.vitals.temp}°C</div>
                     </div>
@@ -463,7 +470,6 @@ export default function Patients() {
                         </span>
                       </div>
                     </div>
-                    <div className="text-sm text-foreground">{patient.doctor} — {patient.specialty}</div>
                     <div>
                       <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
                         Patient Insight
