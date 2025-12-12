@@ -412,12 +412,12 @@ export function AppointmentTable({
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
       {/* Table Header */}
       <div className="grid grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-4 border-b border-border bg-muted/30">
-        <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-        <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-        <div className="text-xs font-medium text-muted-foreground">Doctor</div>
-        <div className="text-xs font-medium text-muted-foreground">Department</div>
-        <div className="text-xs font-medium text-muted-foreground">Service Type</div>
-        <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Patient Info</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Contact Details</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Doctor</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Department</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Service Type</div>
+        <div className="text-xs font-medium text-muted-foreground text-left">Token & Time</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
       </div>
 
