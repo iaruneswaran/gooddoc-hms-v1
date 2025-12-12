@@ -359,11 +359,6 @@ export default function Patients() {
 
             {/* Active Patients Tab */}
             <TabsContent value="active">
-              <div className="mb-4">
-                <p className="text-sm text-muted-foreground">
-                  Shows anyone currently admitted or with an upcoming scheduled visit. Includes Active Visit ID + Purpose for quick triage.
-                </p>
-              </div>
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[180px_160px_180px_1fr_200px_160px_100px] gap-3 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
@@ -423,11 +418,6 @@ export default function Patients() {
 
             {/* All Patients Tab */}
             <TabsContent value="all">
-              <div className="mb-4">
-                <p className="text-sm text-muted-foreground">
-                  Everyone in the system—quickly shows status and what's next.
-                </p>
-              </div>
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-[200px_60px_200px_1fr_220px_120px] gap-4 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
