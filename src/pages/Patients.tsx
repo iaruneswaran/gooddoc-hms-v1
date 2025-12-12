@@ -360,7 +360,7 @@ export default function Patients() {
             {/* Active Patients Tab */}
             <TabsContent value="active">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[180px_160px_180px_1fr_200px_160px_100px] gap-3 p-4 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[180px_160px_180px_1fr_180px_140px_100px] gap-3 p-4 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Active Visit & Purpose</div>
@@ -370,7 +370,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground">Action</div>
                 </div>
                 {filteredActivePatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_1fr_200px_160px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_1fr_180px_140px_100px] gap-3 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                     <div className="flex items-start gap-2">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-4 h-4 text-primary" />
