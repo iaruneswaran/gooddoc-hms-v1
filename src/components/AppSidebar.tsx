@@ -9,9 +9,9 @@ const menuItems = [
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
+  { icon: Pill, label: "Pharmacy", href: "/pharmacy" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
   { icon: Tag, label: "Pricing Catalog", href: "/pricing-catalog" },
-  { icon: Pill, label: "Pharmacy", href: "/pharmacy" },
   { icon: BarChart3, label: "Reports", href: "/reports" },
 ];
 

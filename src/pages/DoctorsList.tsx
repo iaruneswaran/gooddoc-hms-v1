@@ -86,6 +86,7 @@ export default function DoctorsList() {
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [doctors, setDoctors] = useState<DoctorDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorDisplay | null>(null);
   const [viewDrawerOpen, setViewDrawerOpen] = useState(false);
@@ -101,6 +102,7 @@ export default function DoctorsList() {
   }, []);
 
   const fetchDoctors = async () => {
+    setLoading(true);
     try {
       const { data: doctorsData, error } = await supabase
         .from('doctors')
@@ -177,6 +179,8 @@ export default function DoctorsList() {
     } catch (err) {
       console.error('Error fetching doctors:', err);
       toast({ title: "Error loading doctors", variant: "destructive" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -339,118 +343,130 @@ export default function DoctorsList() {
           <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
-          <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
-              <div className="text-xs font-medium text-muted-foreground">Doctor</div>
-              <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
-              <div className="text-xs font-medium text-muted-foreground">Availability</div>
-              <div className="text-xs font-medium text-muted-foreground">Locations</div>
-              <div className="text-xs font-medium text-muted-foreground">Duration / Fee</div>
-              <div className="text-xs font-medium text-muted-foreground">Status</div>
-              <div className="text-xs font-medium text-muted-foreground">Action</div>
+          {loading ? (
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
+              <p className="text-muted-foreground">Loading doctors...</p>
             </div>
+          ) : filteredDoctors.length === 0 ? (
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <h3 className="text-lg font-medium mb-2">No doctors found</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {search ? "Try a different search term" : "Get started by adding your first doctor"}
+                </p>
+                {!search && (
+                  <Button onClick={() => navigate("/doctors/new")}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Doctor
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card rounded-lg border border-border overflow-hidden">
+              <div className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
+                <div className="text-xs font-medium text-muted-foreground">Doctor</div>
+                <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
+                <div className="text-xs font-medium text-muted-foreground">Availability</div>
+                <div className="text-xs font-medium text-muted-foreground">Locations</div>
+                <div className="text-xs font-medium text-muted-foreground">Duration / Fee</div>
+                <div className="text-xs font-medium text-muted-foreground">Status</div>
+                <div className="text-xs font-medium text-muted-foreground">Action</div>
+              </div>
 
-            {filteredDoctors.map((doctor) => (
-              <div
-                key={doctor.id}
-                className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0"
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10 flex-shrink-0">
-                    <AvatarImage src={doctor.avatar} />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      {doctor.displayName
-                        .split(" ")
-                        .slice(0, 2)
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
+              {filteredDoctors.map((doctor) => (
+                <div key={doctor.id} className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
+                      <AvatarImage src={doctor.avatar} />
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {doctor.displayName.split(" ").slice(0, 2).map(n => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{doctor.displayName}</div>
+                      <div className="text-xs text-muted-foreground">{doctor.degrees}</div>
+                    </div>
+                  </div>
+
                   <div>
-                    <div className="text-sm font-medium text-foreground">{doctor.displayName}</div>
-                    <div className="text-xs text-muted-foreground">{doctor.degrees}</div>
+                    <div className="text-sm font-medium text-foreground">{doctor.department}</div>
+                    <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
+                  </div>
+
+                  <div>{getAvailabilityBadge(doctor)}</div>
+
+                  <div className="text-sm text-foreground">
+                    {doctor.locations.join(", ")}
+                  </div>
+
+                  <div className="text-sm text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
+
+                  <div>
+                    <Badge variant={getStatusVariant(doctor.status)}>
+                      {doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}
+                    </Badge>
+                  </div>
+
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleView(doctor)}>
+                          <Eye className="w-4 h-4 mr-2" />
+                          View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(doctor.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleViewCalendar(doctor.id)}>
+                          <Calendar className="w-4 h-4 mr-2" />
+                          View Calendar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit Schedule
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAddLeave(doctor.id)}>
+                          <PlusCircle className="w-4 h-4 mr-2" />
+                          Add Leave
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {doctor.status === "active" ? (
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              setSelectedDoctor(doctor);
+                              setDeactivateDialogOpen(true);
+                            }}
+                            className="text-destructive"
+                          >
+                            <Ban className="w-4 h-4 mr-2" />
+                            Deactivate
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              setSelectedDoctor(doctor);
+                              setActivateDialogOpen(true);
+                            }}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Activate
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
-
-                <div>
-                  <div className="text-sm font-medium text-foreground">{doctor.department}</div>
-                  <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
-                </div>
-
-                <div>{getAvailabilityBadge(doctor)}</div>
-
-                <div className="text-sm text-foreground">
-                  {doctor.locations.join(", ")}
-                </div>
-
-                <div className="text-sm text-foreground">
-                  {doctor.duration} min / ₹{doctor.fee.toLocaleString("en-IN")}
-                </div>
-
-                <div>
-                  <Badge variant={getStatusVariant(doctor.status)}>
-                    {doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}
-                  </Badge>
-                </div>
-
-                <div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleView(doctor)}>
-                        <Eye className="w-4 h-4 mr-2" />
-                        View
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleEdit(doctor.id)}>
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleViewCalendar(doctor.id)}>
-                        <Calendar className="w-4 h-4 mr-2" />
-                        View Calendar
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleManageSchedule(doctor.id)}>
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit Schedule
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleAddLeave(doctor.id)}>
-                        <PlusCircle className="w-4 h-4 mr-2" />
-                        Add Leave
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      {doctor.status === "active" ? (
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelectedDoctor(doctor);
-                            setDeactivateDialogOpen(true);
-                          }}
-                          className="text-destructive"
-                        >
-                          <Ban className="w-4 h-4 mr-2" />
-                          Deactivate
-                        </DropdownMenuItem>
-                      ) : (
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelectedDoctor(doctor);
-                            setActivateDialogOpen(true);
-                          }}
-                        >
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Activate
-                        </DropdownMenuItem>
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </main>
       </div>
 
