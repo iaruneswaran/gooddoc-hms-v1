@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { AvailabilityResponse, DoctorAvailabilitySummary, ScheduleMode } from '@/types/scheduling';
 import { format, addDays } from 'date-fns';
 
@@ -35,12 +34,7 @@ export function useDoctorAvailability() {
         params.locationId = options.locationId;
       }
 
-      const { data, error: fnError } = await supabase.functions.invoke('doctor-availability', {
-        body: null,
-        method: 'GET',
-      });
-
-      // Since invoke doesn't support query params well, we'll use fetch directly
+      // Use fetch directly with query params
       const url = new URL(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/doctor-availability`);
       Object.entries(params).forEach(([key, value]) => {
         url.searchParams.append(key, value);
