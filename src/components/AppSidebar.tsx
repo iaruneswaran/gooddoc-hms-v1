@@ -1,4 +1,4 @@
-import { Mail, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag } from "lucide-react";
+import { Mail, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag, Pill, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -9,8 +9,10 @@ const menuItems = [
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
+  { icon: Pill, label: "Pharmacy", href: "/pharmacy" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
   { icon: Tag, label: "Pricing Catalog", href: "/pricing-catalog" },
+  { icon: BarChart3, label: "Reports", href: "/reports" },
 ];
 
 export function AppSidebar() {
