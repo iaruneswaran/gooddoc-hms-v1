@@ -365,7 +365,7 @@ export default function Patients() {
             {/* Active Patients Tab */}
             <TabsContent value="active">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="grid grid-cols-[180px_160px_180px_minmax(280px,1.4fr)_minmax(180px,0.9fr)_minmax(200px,1.1fr)_144px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
+                <div className="grid grid-cols-[180px_160px_180px_minmax(280px,1.4fr)_minmax(180px,0.9fr)_minmax(200px,1.1fr)_144px] gap-2 px-4 py-3 border-b border-border bg-muted/30 box-border">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Contact</div>
                   <div className="text-xs font-medium text-muted-foreground">Active Visit & Purpose</div>
@@ -375,7 +375,7 @@ export default function Patients() {
                   <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
                 </div>
                 {filteredActivePatients.map((patient) => (
-                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_minmax(280px,1.4fr)_minmax(180px,0.9fr)_minmax(200px,1.1fr)_144px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border">
+                  <div key={patient.id} className="grid grid-cols-[180px_160px_180px_minmax(280px,1.4fr)_minmax(180px,0.9fr)_minmax(200px,1.1fr)_144px] gap-2 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border">
                     <div className="flex items-start gap-2 min-w-0">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <User className="w-4 h-4 text-primary" />
