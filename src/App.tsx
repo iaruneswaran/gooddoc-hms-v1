@@ -29,6 +29,8 @@ import Insurance from "./pages/Insurance";
 import NewClaim from "./pages/NewClaim";
 import PricingCatalog from "./pages/PricingCatalog";
 import AddPricingItem from "./pages/AddPricingItem";
+import Pharmacy from "./pages/Pharmacy";
+import Reports from "./pages/Reports";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +68,8 @@ const App = () => (
           <Route path="/insurance/claims/new" element={<NewClaim />} />
           <Route path="/pricing-catalog" element={<PricingCatalog />} />
           <Route path="/pricing-catalog/new" element={<AddPricingItem />} />
+          <Route path="/pharmacy" element={<Pharmacy />} />
+          <Route path="/reports" element={<Reports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
