@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Calendar as CalendarIcon, Check, Minus, Search } from "lucide-react";
+import { Check, Minus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
 
 export interface RadiologyTest {
   id: string;
@@ -41,16 +39,6 @@ const radiologyTests: RadiologyTest[] = [
   { id: "8", name: "Cervical Spine", category: "Radiology", price: 600 },
 ];
 
-const timeSlots = [
-  "00:00", "00:30", "01:00", "01:30", "02:00", "02:30",
-  "03:00", "03:30", "04:00", "04:30", "05:00", "05:30",
-  "06:00", "06:30", "07:00", "07:30", "08:00", "08:30",
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-  "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
-  "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
-];
 
 export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFormProps) => {
   const [radiologyType, setRadiologyType] = useState("X-Ray");
@@ -87,11 +75,9 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
     onUpdate({ radiologyType, ageGroup, selectedTests, date, time });
   };
 
-  const handleDateSelect = (newDate: Date | undefined) => {
-    if (newDate) {
-      setDate(newDate);
-      onUpdate({ radiologyType, ageGroup, selectedTests, date: newDate, time: selectedTime });
-    }
+  const handleDateSelect = (newDate: Date) => {
+    setDate(newDate);
+    onUpdate({ radiologyType, ageGroup, selectedTests, date: newDate, time: selectedTime });
   };
 
   const filteredTests = radiologyTests.filter(test =>
@@ -218,37 +204,14 @@ export const RadiologyBookingForm = ({ onRemove, onUpdate }: RadiologyBookingFor
         </div>
 
         {/* Date & Time */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-medium text-foreground">Date & Time</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-foreground">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(date, "dd/MM/yyyy")}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          <div className="grid grid-cols-10 gap-2 p-4 border rounded-md">
-            {timeSlots.map((time) => (
-              <Button
-                key={time}
-                type="button"
-                variant={selectedTime === time ? "default" : "outline"}
-                size="sm"
-                className="h-9 text-xs"
-                onClick={() => handleTimeSelect(time)}
-              >
-                {time}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <DiagnosticsSlotPicker
+          selectedDate={date}
+          selectedTime={selectedTime}
+          onDateSelect={handleDateSelect}
+          onTimeSelect={handleTimeSelect}
+          label="Radiology Date & Time"
+          locationName="Radiology Center"
+        />
       </div>
     </Card>
   );
