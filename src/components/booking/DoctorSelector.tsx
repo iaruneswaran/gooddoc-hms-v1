@@ -97,10 +97,10 @@ export function DoctorSelector({
                 className="py-3 cursor-pointer hover:bg-accent"
               >
                 <div className="flex items-center gap-3 flex-1">
-                  <UserRound className="h-4 w-4 text-muted-foreground" />
+                  <UserRound className="h-4 w-4 text-foreground" />
                   <div className="flex-1">
                     <p className="font-medium text-foreground">Any available doctor</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-foreground">
                       First available across all doctors
                     </p>
                   </div>
