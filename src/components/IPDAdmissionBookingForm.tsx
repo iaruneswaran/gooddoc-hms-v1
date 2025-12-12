@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,9 @@ import { format } from "date-fns";
 import { ServicesPanel } from "@/components/booking/ServicesPanel";
 import { useServicesCart } from "@/hooks/useServicesCart";
 import { AdmissionTab } from "@/types/booking/ipAdmission";
+import { DoctorSelector } from "@/components/booking/DoctorSelector";
+import { useSchedulingData } from "@/hooks/useSchedulingData";
+import { useDoctorAvailability } from "@/hooks/useDoctorAvailability";
 
 export interface IPDAdmissionData {
   department: string;
@@ -47,8 +50,8 @@ const timeSlots = [
 
 export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }: IPDAdmissionBookingFormProps) => {
   const [activeTab, setActiveTab] = useState<AdmissionTab>("Admission");
-  const [department, setDepartment] = useState("General Medicine");
-  const [attendingDoctor, setAttendingDoctor] = useState("Dr. A. Joseph (Ophthalmology)");
+  const [department, setDepartment] = useState("general-medicine");
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
   const [ward, setWard] = useState("General Ward - 01A");
   const [bed, setBed] = useState("Bed - 35A");
   const [reasonForAdmission, setReasonForAdmission] = useState("");
@@ -58,6 +61,30 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
   const [relationship, setRelationship] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [summaries, setSummaries] = useState<import('@/types/scheduling').DoctorAvailabilitySummary[]>([]);
+  
+  // Fetch doctors from database
+  const { doctors, loading: doctorsLoading } = useSchedulingData();
+  
+  // Filter doctors by department
+  const filteredDoctors = useMemo(() => {
+    if (!department) return doctors;
+    return doctors.filter(d => d.department_id === department);
+  }, [doctors, department]);
+  
+  // Get availability summaries for doctors
+  const { getDoctorsSummary, loading: availabilityLoading } = useDoctorAvailability();
+  
+  // Fetch summaries when doctors change
+  useEffect(() => {
+    if (filteredDoctors.length > 0) {
+      getDoctorsSummary(filteredDoctors.map(d => d.id)).then(setSummaries);
+    }
+  }, [filteredDoctors, getDoctorsSummary]);
+  
+  // Get selected doctor name for update
+  const selectedDoctor = doctors.find(d => d.id === selectedDoctorId);
+  const attendingDoctor = selectedDoctor?.name || "";
   
   // Services cart
   const servicesCart = useServicesCart(5000); // baseCharge of 5000 for admission
@@ -71,12 +98,14 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
 
   const handleDepartmentChange = (value: string) => {
     setDepartment(value);
-    onUpdate({ department: value, attendingDoctor, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
+    setSelectedDoctorId(null); // Reset doctor when department changes
+    onUpdate({ department: value, attendingDoctor: "", ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
-  const handleAttendingDoctorChange = (value: string) => {
-    setAttendingDoctor(value);
-    onUpdate({ department, attendingDoctor: value, ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
+  const handleDoctorSelect = (doctorId: string | null) => {
+    setSelectedDoctorId(doctorId);
+    const doctor = doctors.find(d => d.id === doctorId);
+    onUpdate({ department, attendingDoctor: doctor?.name || "", ward, bed, reasonForAdmission, date, time: selectedTime, emergencyContactName, relationship, contactNumber, address });
   };
 
   const handleWardChange = (value: string) => {
@@ -182,16 +211,14 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
             <label className="text-sm font-medium text-foreground mb-3 block">
               Attending Doctor
             </label>
-            <Select value={attendingDoctor} onValueChange={handleAttendingDoctorChange}>
-              <SelectTrigger className="h-10">
-                <SelectValue placeholder="Select doctor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Dr. A. Joseph (Ophthalmology)">Dr. A. Joseph (Ophthalmology)</SelectItem>
-                <SelectItem value="Dr. Meera Nair (Cardiology)">Dr. Meera Nair (Cardiology)</SelectItem>
-                <SelectItem value="Dr. Rajesh Kumar (Neurology)">Dr. Rajesh Kumar (Neurology)</SelectItem>
-              </SelectContent>
-            </Select>
+            <DoctorSelector
+              doctors={filteredDoctors}
+              summaries={summaries}
+              selectedDoctorId={selectedDoctorId}
+              onSelect={handleDoctorSelect}
+              departmentId={department}
+              loading={doctorsLoading || availabilityLoading}
+            />
           </div>
         </div>
 
