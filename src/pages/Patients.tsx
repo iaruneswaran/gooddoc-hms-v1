@@ -226,7 +226,12 @@ export default function Patients() {
   const renderVitals = (patient: Patient) => {
     if (!patient.vitals) return "—";
     const v = patient.vitals;
-    return `BP ${v.bp} • SpO₂ ${v.spo2}% • HR ${v.hr} • RR ${v.rr} • Temp ${v.temp}°C`;
+    return (
+      <div className="space-y-0.5">
+        <div>BP {v.bp} • SpO₂ {v.spo2}%</div>
+        <div>HR {v.hr} • RR {v.rr} • Temp {v.temp}°C</div>
+      </div>
+    );
   };
 
   const renderLocationOrAppointment = (patient: Patient) => {
