@@ -180,7 +180,7 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate }: DynamicCo
               Consultation Type
             </label>
             <Select value={consultationType} onValueChange={setConsultationType}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -202,7 +202,7 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate }: DynamicCo
             Department/Specialty
           </label>
           <Select value={department} onValueChange={handleDepartmentChange}>
-            <SelectTrigger>
+            <SelectTrigger className="h-10">
               <SelectValue placeholder="Select department" />
             </SelectTrigger>
             <SelectContent>

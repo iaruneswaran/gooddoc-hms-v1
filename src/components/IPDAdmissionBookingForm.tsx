@@ -165,7 +165,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Department
             </label>
             <Select value={department} onValueChange={handleDepartmentChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>
@@ -183,7 +183,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Attending Doctor
             </label>
             <Select value={attendingDoctor} onValueChange={handleAttendingDoctorChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select doctor" />
               </SelectTrigger>
               <SelectContent>
@@ -202,7 +202,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Select Ward
             </label>
             <Select value={ward} onValueChange={handleWardChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select ward" />
               </SelectTrigger>
               <SelectContent>
@@ -219,7 +219,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Select Bed
             </label>
             <Select value={bed} onValueChange={handleBedChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select bed" />
               </SelectTrigger>
               <SelectContent>
@@ -239,6 +239,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Emergency Contact Name
             </label>
             <Input
+              className="h-10"
               placeholder="John Doe"
               value={emergencyContactName}
               onChange={handleEmergencyContactNameChange}
@@ -250,7 +251,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Relationship
             </label>
             <Select value={relationship} onValueChange={handleRelationshipChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select relationship" />
               </SelectTrigger>
               <SelectContent>
@@ -271,6 +272,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Contact Number
             </label>
             <Input
+              className="h-10"
               placeholder="+91 98765 43210"
               value={contactNumber}
               onChange={handleContactNumberChange}
@@ -282,6 +284,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
               Address
             </label>
             <Input
+              className="h-10"
               placeholder="House No, Street, City"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
