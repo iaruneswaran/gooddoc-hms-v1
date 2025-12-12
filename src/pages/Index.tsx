@@ -31,7 +31,7 @@ const Index = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Appointments"]} />
         
-        <main className="p-6">
+        <main className="p-6 pr-4">
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Appointments List</h1>
