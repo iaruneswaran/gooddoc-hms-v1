@@ -28,7 +28,6 @@ const mockPatients = [
     email: "9876543210@gooddoc.app",
     type: "IP" as const,
     visitId: "VST-205431",
-    visitPurpose: "Admitted",
     admissionTime: "03 Aug 2025, 10:30 AM",
     ward: "Cardiology Ward 3B",
     room: "312",
@@ -36,7 +35,7 @@ const mockPatients = [
     los: "2d",
     doctor: "Dr. Meera Nair",
     specialty: "Cardiology",
-    vitals: null,
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 08:30 AM" },
     isActive: true,
   },
   {
@@ -49,7 +48,6 @@ const mockPatients = [
     email: "9876543211@gooddoc.app",
     type: "IP" as const,
     visitId: "VST-205432",
-    visitPurpose: "Admitted",
     admissionTime: "02 Aug 2025, 02:15 PM",
     ward: "General Medicine Ward 2A",
     room: "208",
@@ -57,7 +55,7 @@ const mockPatients = [
     los: "3d",
     doctor: "Dr. Rajesh Kumar",
     specialty: "Endocrinology",
-    vitals: null,
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 09:15 AM" },
     isActive: true,
   },
   {
@@ -70,7 +68,6 @@ const mockPatients = [
     email: "9876543212@gooddoc.app",
     type: "IP" as const,
     visitId: "VST-205433",
-    visitPurpose: "Admitted",
     admissionTime: "04 Aug 2025, 08:45 AM",
     ward: "Orthopedics Ward 1C",
     room: "115",
@@ -78,7 +75,7 @@ const mockPatients = [
     los: "1d",
     doctor: "Dr. Anita Singh",
     specialty: "Orthopedics",
-    vitals: null,
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 07:45 AM" },
     isActive: true,
   },
   {
@@ -91,7 +88,6 @@ const mockPatients = [
     email: "9876543213@gooddoc.app",
     type: "IP" as const,
     visitId: "VST-205434",
-    visitPurpose: "Admitted",
     admissionTime: "01 Aug 2025, 06:20 PM",
     ward: "Dermatology Ward 4A",
     room: "402",
@@ -99,7 +95,7 @@ const mockPatients = [
     los: "4d",
     doctor: "Dr. Sunil Reddy",
     specialty: "Dermatology",
-    vitals: null,
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 10:00 AM" },
     isActive: true,
   },
   {
@@ -112,13 +108,12 @@ const mockPatients = [
     email: "9876543214@gooddoc.app",
     type: "OP" as const,
     visitId: "VST-205435",
-    visitPurpose: "Follow-up",
-    appointmentDate: "12 Aug 2025, 10:00 AM",
+    appointmentDate: "13 Dec 2025, 10:00 AM",
     appointmentType: "Follow-up",
     appointmentStatus: "Confirmed",
     doctor: "Dr. Meera Nair",
     specialty: "Cardiology",
-    vitals: { status: "Taken", takenAt: "12 Aug 2025, 09:45 AM" },
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 09:45 AM" },
     pastVisits: 5,
     isActive: true,
   },
@@ -132,13 +127,12 @@ const mockPatients = [
     email: "9876543215@gooddoc.app",
     type: "OP" as const,
     visitId: "VST-205436",
-    visitPurpose: "Consultation",
-    appointmentDate: "08 Aug 2025, 11:30 AM",
+    appointmentDate: "13 Dec 2025, 11:30 AM",
     appointmentType: "Consultation",
     appointmentStatus: "Pending",
     doctor: "Dr. Rajesh Kumar",
     specialty: "Endocrinology",
-    vitals: { status: "Taken", takenAt: "08 Aug 2025, 11:15 AM" },
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 11:15 AM" },
     pastVisits: 8,
     isActive: true,
   },
@@ -152,13 +146,12 @@ const mockPatients = [
     email: "9876543216@gooddoc.app",
     type: "OP" as const,
     visitId: "VST-205437",
-    visitPurpose: "Review",
-    appointmentDate: "10 Aug 2025, 09:00 AM",
+    appointmentDate: "13 Dec 2025, 09:00 AM",
     appointmentType: "Review",
     appointmentStatus: "Confirmed",
     doctor: "Dr. Anita Singh",
     specialty: "Orthopedics",
-    vitals: { status: "Taken", takenAt: "10 Aug 2025, 08:50 AM" },
+    vitals: { status: "Taken", takenAt: "13 Dec 2025, 08:50 AM" },
     pastVisits: 12,
     isActive: true,
   },
@@ -172,7 +165,6 @@ const mockPatients = [
     email: "9876543217@gooddoc.app",
     type: "OP" as const,
     visitId: null,
-    visitPurpose: "New Visit",
     appointmentDate: null,
     appointmentType: "New Visit",
     appointmentStatus: "Not Scheduled",
@@ -402,7 +394,9 @@ export default function Patients() {
                       <div className="text-xs text-muted-foreground truncate">
                         {patient.visitId ? `Active Visit: ${patient.visitId}` : "No Active Visit"}
                       </div>
-                      <div className="text-sm font-medium text-foreground truncate">{patient.visitPurpose}</div>
+                      <div className="text-sm font-medium text-foreground truncate">
+                        {patient.type === "IP" ? "IP Patient" : "OP Patient"}
+                      </div>
                     </div>
                     <div className="min-w-0 line-clamp-2 whitespace-normal break-words">{renderLocationOrAppointment(patient)}</div>
                     <div className="text-sm text-foreground min-w-0 truncate">
