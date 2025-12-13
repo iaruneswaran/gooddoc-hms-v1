@@ -32,14 +32,14 @@ export function VisitHeader({
     <div className="sticky top-0 z-10 bg-background border-b border-border">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-4">
-          {/* Left: Status and Title */}
+          {/* Left: Patient Summary */}
           <div className="flex items-center gap-3">
-            <Badge variant={isActive ? "default" : "secondary"}>
-              {isActive ? "Active" : "Completed"}
-            </Badge>
             <h1 className="text-lg font-semibold text-foreground">
-              {isActive ? "Active Visit:" : "Completed Visit:"} {visitId}
+              {patient.name}
             </h1>
+            <span className="text-sm text-muted-foreground">
+              MRN: {patient.mrn} • {patient.age}yo {patient.sex}
+            </span>
           </div>
 
           {/* Right: Actions */}
@@ -67,10 +67,6 @@ export function VisitHeader({
           </div>
         </div>
 
-        {/* Patient Summary */}
-        <div className="mt-3 text-sm text-muted-foreground">
-          {patient.name} • MRN: {patient.mrn} • {patient.age}yo {patient.sex}
-        </div>
       </div>
     </div>
   );
