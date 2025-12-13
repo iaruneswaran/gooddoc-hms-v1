@@ -118,7 +118,7 @@ const mockPatients = [
     appointmentStatus: "Confirmed",
     doctor: "Dr. Meera Nair",
     specialty: "Cardiology",
-    vitals: { bp: "120/80", spo2: 98, hr: 72, rr: 16, temp: 37 },
+    vitals: { status: "Taken", takenAt: "12 Aug 2025, 09:45 AM" },
     pastVisits: 5,
     isActive: true,
   },
@@ -138,7 +138,7 @@ const mockPatients = [
     appointmentStatus: "Pending",
     doctor: "Dr. Rajesh Kumar",
     specialty: "Endocrinology",
-    vitals: { bp: "130/85", spo2: 97, hr: 78, rr: 18, temp: 36.8 },
+    vitals: { status: "Taken", takenAt: "08 Aug 2025, 11:15 AM" },
     pastVisits: 8,
     isActive: true,
   },
@@ -158,7 +158,7 @@ const mockPatients = [
     appointmentStatus: "Confirmed",
     doctor: "Dr. Anita Singh",
     specialty: "Orthopedics",
-    vitals: { bp: "140/90", spo2: 96, hr: 68, rr: 14, temp: 37.2 },
+    vitals: { status: "Taken", takenAt: "10 Aug 2025, 08:50 AM" },
     pastVisits: 12,
     isActive: true,
   },
@@ -178,7 +178,7 @@ const mockPatients = [
     appointmentStatus: "Not Scheduled",
     doctor: "Dr. Sunil Reddy",
     specialty: "Dermatology",
-    vitals: { bp: "118/76", spo2: 99, hr: 70, rr: 15, temp: 36.6 },
+    vitals: { status: "Pending", takenAt: null },
     pastVisits: 3,
     isActive: false,
   },
@@ -224,12 +224,15 @@ export default function Patients() {
   const filteredAllPatients = filterPatients(mockPatients);
 
   const renderVitals = (patient: Patient) => {
-    if (!patient.vitals) return "—";
+    if (!patient.vitals) return <span className="text-muted-foreground">—</span>;
     const v = patient.vitals;
+    if (v.status === "Pending" || !v.takenAt) {
+      return <span className="text-muted-foreground">Pending</span>;
+    }
     return (
       <div className="space-y-0.5">
-        <div>BP {v.bp} • SpO₂ {v.spo2}%</div>
-        <div>HR {v.hr} • RR {v.rr} • Temp {v.temp}°C</div>
+        <div className="font-medium text-foreground">{v.status}</div>
+        <div className="text-muted-foreground">{v.takenAt}</div>
       </div>
     );
   };
