@@ -71,15 +71,6 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
   return (
     <div className="bg-background border-b border-border flex-shrink-0">
       <div className="px-6 py-4">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/appointments/outpatient")}
-          className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          <span className="font-semibold">Outpatient</span>
-        </button>
-
         {/* Header Content - Patient Info + Appointment Box */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <PatientChip
