@@ -233,13 +233,20 @@ const Registration = () => {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="mobileNumber">Mobile Number</Label>
-                    <Input
-                      id="mobileNumber"
-                      placeholder="10 digits"
-                      maxLength={10}
-                      {...register("mobileNumber")}
-                      className={errors.mobileNumber ? "border-destructive" : ""}
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        value="+91"
+                        readOnly
+                        className="w-16 bg-muted text-center"
+                      />
+                      <Input
+                        id="mobileNumber"
+                        placeholder="98765 43210"
+                        maxLength={10}
+                        {...register("mobileNumber")}
+                        className={errors.mobileNumber ? "border-destructive flex-1" : "flex-1"}
+                      />
+                    </div>
                     {errors.mobileNumber && (
                       <p className="text-xs text-destructive">{errors.mobileNumber.message}</p>
                     )}
