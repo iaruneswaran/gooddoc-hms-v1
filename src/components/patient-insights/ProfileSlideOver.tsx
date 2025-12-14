@@ -13,7 +13,7 @@ interface Patient {
   dob: string;
   mobile: string;
   email: string;
-  nationalId: string;
+  bloodGroup: string;
   address: string;
   pincode: string;
   state: string;
@@ -143,8 +143,8 @@ export function ProfileSlideOver({ isOpen, onClose, patient, onEdit }: ProfileSl
                 <p className="text-sm font-medium text-foreground mt-1">GDID-{patient.gdid}</p>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">National ID</Label>
-                <p className="text-sm font-medium text-foreground mt-1">{patient.nationalId}</p>
+                <Label className="text-xs text-muted-foreground">Blood Group</Label>
+                <p className="text-sm font-medium text-foreground mt-1">{patient.bloodGroup}</p>
               </div>
             </div>
           </Card>

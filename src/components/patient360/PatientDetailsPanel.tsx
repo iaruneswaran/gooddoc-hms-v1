@@ -118,8 +118,8 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
                 <p className="text-sm text-foreground font-medium mt-1">{patient.whatsapp || "—"}</p>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">National ID</Label>
-                <p className="text-sm text-foreground font-medium mt-1">{patient.nationalId || "—"}</p>
+                <Label className="text-xs text-muted-foreground">Blood Group</Label>
+                <p className="text-sm text-foreground font-medium mt-1">{patient.bloodGroup || "—"}</p>
               </div>
             </div>
           </div>
@@ -214,12 +214,22 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
             </div>
 
             <div>
-              <Label className="text-sm text-foreground">National ID</Label>
-              <Input 
-                defaultValue={patient.nationalId}
-                placeholder="9876 5432 1098"
-                className="mt-2"
-              />
+              <Label className="text-sm text-foreground">Blood Group</Label>
+              <Select defaultValue={patient.bloodGroup}>
+                <SelectTrigger className="mt-2">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A+">A+</SelectItem>
+                  <SelectItem value="A-">A−</SelectItem>
+                  <SelectItem value="B+">B+</SelectItem>
+                  <SelectItem value="B-">B−</SelectItem>
+                  <SelectItem value="AB+">AB+</SelectItem>
+                  <SelectItem value="AB-">AB−</SelectItem>
+                  <SelectItem value="O+">O+</SelectItem>
+                  <SelectItem value="O-">O−</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         )}
