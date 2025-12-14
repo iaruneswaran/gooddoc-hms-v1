@@ -38,10 +38,11 @@ const BookAppointment = () => {
   // Check if this is single-appointment mode from Inbox
   const appointmentId = searchParams.get("id");
   const appointmentType = searchParams.get("type");
+  const fromPage = searchParams.get("from");
   const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
   
   const fromPatientInsights = location.state?.fromPatientInsights;
-  const patientId = location.state?.patientId;
+  const patientId = location.state?.patientId || searchParams.get("patient");
   const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
@@ -463,12 +464,22 @@ const BookAppointment = () => {
         
         <main className="p-6 pb-32">
           <button
-            onClick={() => navigate(isSingleAppointmentMode ? "/inbox" : (fromPatientInsights ? `/patient-insights/${patientId}` : "/registration"))}
+            onClick={() => {
+              if (isSingleAppointmentMode) {
+                navigate("/inbox");
+              } else if (fromPage === "patients") {
+                navigate("/patients");
+              } else if (fromPatientInsights) {
+                navigate(`/patient-insights/${patientId}`);
+              } else {
+                navigate("/registration");
+              }
+            }}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">
-              {isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")}
+              {isSingleAppointmentMode ? "Inbox" : (fromPage === "patients" ? "Patients" : (fromPatientInsights ? "Patient Insights" : "Registration"))}
             </span>
           </button>
 

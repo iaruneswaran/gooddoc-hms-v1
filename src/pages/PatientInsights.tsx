@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -14,7 +14,23 @@ import { Visit } from "@/components/patient-insights/VisitListItem";
 const PatientInsights = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("appointments");
+  
+  const fromPage = searchParams.get("from");
+
+  const handleBack = () => {
+    if (fromPage === "patients") {
+      navigate("/patients");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const getBackLabel = () => {
+    if (fromPage === "patients") return "Patients";
+    return "Appointments";
+  };
 
   // Mock patient data
   const patient = {
@@ -181,11 +197,11 @@ const PatientInsights = () => {
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate("/")}
+              onClick={handleBack}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Appointments</span>
+              <span className="font-semibold">{getBackLabel()}</span>
             </button>
 
             {/* Header Content */}
