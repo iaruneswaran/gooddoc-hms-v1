@@ -68,7 +68,7 @@ export default function OutpatientAppointments() {
   );
 
   const handlePatient360Click = (appointment: Appointment) => {
-    navigate(`/patients/${appointment.gdid}/360?from=outpatient`);
+    navigate(`/patients/${appointment.gdid}/360`);
   };
 
   const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";

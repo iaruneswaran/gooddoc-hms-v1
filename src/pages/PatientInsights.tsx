@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -14,23 +14,7 @@ import { Visit } from "@/components/patient-insights/VisitListItem";
 const PatientInsights = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("appointments");
-  
-  const fromPage = searchParams.get("from");
-
-  const handleBack = () => {
-    if (fromPage === "patients") {
-      navigate("/patients");
-    } else {
-      navigate("/");
-    }
-  };
-
-  const getBackLabel = () => {
-    if (fromPage === "patients") return "Patients";
-    return "Appointments";
-  };
 
   // Mock patient data
   const patient = {
@@ -42,7 +26,7 @@ const PatientInsights = () => {
     dob: "10/04/1980",
     mobile: "+91 98765 43210",
     email: "name@example.com",
-    bloodGroup: "O+",
+    nationalId: "9876 5432 1098",
     address: "Anna Nagar",
     pincode: "012 345",
     state: "Tamil Nadu",
@@ -190,18 +174,18 @@ const PatientInsights = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
-        <AppHeader breadcrumbs={["Patient Insight"]} />
+        <AppHeader breadcrumbs={["Patients"]} />
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={handleBack}
+              onClick={() => navigate("/patients")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">{getBackLabel()}</span>
+              <span className="font-semibold">Patients</span>
             </button>
 
             {/* Header Content */}

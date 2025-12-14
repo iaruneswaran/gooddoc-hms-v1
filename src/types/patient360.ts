@@ -30,7 +30,7 @@ export interface Patient {
   phone?: string;
   email?: string;
   whatsapp?: string;
-  bloodGroup?: string;
+  nationalId?: string;
   insurance?: { provider: string; policyNumber: string; validTo?: string };
   address?: { street?: string; city?: string; state?: string; pincode?: string; country?: string };
   alerts?: { allergies?: string[]; critical?: string[] };

@@ -16,7 +16,7 @@ interface Patient {
   dob: string;
   mobile: string;
   email: string;
-  bloodGroup: string;
+  nationalId: string;
   address: string;
   pincode: string;
   state: string;

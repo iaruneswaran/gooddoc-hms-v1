@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PatientHeader } from "@/components/patient360/PatientHeader";
@@ -13,34 +12,13 @@ import { mockPatients, mockVitals, mockVisitHistory } from "@/data/patient360.mo
 export default function Patient360() {
   const { gdid } = useParams<{ gdid: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const defaultView = searchParams.get("view") || "clinical-notes";
-  const fromPage = searchParams.get("from");
   
   const [activeTab, setActiveTab] = useState(defaultView);
 
-  // Find patient by gdid or id (for patients from registry)
-  const patient = mockPatients.find((p) => p.gdid === gdid || p.id === gdid);
+  const patient = mockPatients.find((p) => p.gdid === gdid);
   const vitals = patient ? mockVitals[patient.id] : undefined;
   const visitHistory = patient ? mockVisitHistory[patient.id] || [] : [];
-
-  const handleBack = () => {
-    if (fromPage === "patients") {
-      navigate("/patients");
-    } else {
-      navigate("/appointments/outpatient");
-    }
-  };
-
-  const getBackLabel = () => {
-    return fromPage === "patients" ? "Patients" : "Outpatient";
-  };
-
-  const getBreadcrumbs = () => {
-    return fromPage === "patients" 
-      ? ["Patients", "Patient 360"] 
-      : ["Outpatient", "Patient 360"];
-  };
 
   if (!patient) {
     return (
@@ -60,27 +38,15 @@ export default function Patient360() {
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("view", value);
-    setSearchParams(newParams);
+    setSearchParams({ view: value });
   };
 
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={getBreadcrumbs()} />
+        <AppHeader breadcrumbs={["Outpatient", "Patient 360"]} />
         <main>
-          {/* Back Navigation */}
-          <div className="px-6 pt-6">
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">{getBackLabel()}</span>
-            </button>
-          </div>
           <PatientHeader patient={patient} vitals={vitals} />
           
           <div className="p-6">
