@@ -278,7 +278,7 @@ export default {
       
       /* Grid Templates */
       gridTemplateColumns: {
-        appointments: "1.4fr 1.3fr 1fr 1fr 0.8fr 0.9fr 200px",
+        appointments: "1.3fr 1.2fr 1fr 1fr 0.8fr 0.9fr 220px",
       },
     },
   },
