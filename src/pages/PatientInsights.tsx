@@ -178,8 +178,8 @@ const PatientInsights = () => {
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
         <AppHeader breadcrumbs={[
           { 
-            label: fromPage === "patients" ? "Patients" : "Outpatient", 
-            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/appointments/outpatient") 
+            label: fromPage === "patients" ? "Patients" : "Appointments", 
+            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/inbox") 
           }, 
           "Patient Insight"
         ]} />
@@ -189,11 +189,11 @@ const PatientInsights = () => {
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/appointments/outpatient")}
+              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/inbox")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">{fromPage === "patients" ? "Patients" : "Outpatient"}</span>
+              <span className="font-semibold">{fromPage === "patients" ? "Patients" : "Appointments"}</span>
             </button>
 
             {/* Header Content */}
