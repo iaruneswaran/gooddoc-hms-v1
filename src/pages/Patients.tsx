@@ -6,7 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, User, Download, Phone, Mail } from "lucide-react";
+import { Search, Download, MoreVertical, Pencil, User, Eye, CalendarPlus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EditPatientModal } from "@/components/patients/EditPatientModal";
+import { toast } from "@/hooks/use-toast";
 
 // Mock data for patient registry
 const PATIENTS = [
@@ -137,9 +145,12 @@ type Patient = typeof PATIENTS[number];
 export default function Patients() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [patients, setPatients] = useState(PATIENTS);
 
   const filteredPatients = useMemo(() => {
-    return PATIENTS.filter((patient) => {
+    return patients.filter((patient) => {
       const matchesSearch =
         patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         patient.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -149,7 +160,34 @@ export default function Patients() {
 
       return matchesSearch;
     });
-  }, [searchQuery]);
+  }, [searchQuery, patients]);
+
+  const handleEditPatient = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setEditModalOpen(true);
+  };
+
+  const handleSavePatient = (updatedPatient: Patient) => {
+    setPatients((prev) =>
+      prev.map((p) => (p.id === updatedPatient.id ? updatedPatient : p))
+    );
+    toast({
+      title: "Patient updated",
+      description: "Patient information has been saved successfully.",
+    });
+  };
+
+  const handlePatient360 = (patient: Patient) => {
+    navigate(`/patient360/${patient.id}?from=patients`);
+  };
+
+  const handlePatientInsight = (patient: Patient) => {
+    navigate(`/patient-insights/${patient.id}?from=patients`);
+  };
+
+  const handleBookAppointment = (patient: Patient) => {
+    navigate(`/book-appointment?from=patients&patientId=${patient.id}`);
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -192,7 +230,7 @@ export default function Patients() {
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_120px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
+            <div className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_100px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
               <div className="text-xs font-medium text-muted-foreground">Patient ID</div>
               <div className="text-xs font-medium text-muted-foreground">Full Name</div>
               <div className="text-xs font-medium text-muted-foreground">Age</div>
@@ -208,7 +246,7 @@ export default function Patients() {
             {filteredPatients.map((patient) => (
               <div
                 key={patient.id}
-                className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_120px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border"
+                className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_100px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border"
               >
                 <div className="text-sm font-medium text-foreground truncate">{patient.id}</div>
                 <div className="text-sm text-foreground truncate">{patient.name}</div>
@@ -228,9 +266,31 @@ export default function Patients() {
                   </Badge>
                 </div>
                 <div className="flex justify-end">
-                  <Button variant="default" size="sm" onClick={() => navigate(`/patient-insights/${patient.id}`)}>
-                    Patient Insight
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48 bg-popover z-50">
+                      <DropdownMenuItem onClick={() => handleEditPatient(patient)} className="gap-2 cursor-pointer">
+                        <Pencil className="w-4 h-4" />
+                        Edit Patient Info
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePatient360(patient)} className="gap-2 cursor-pointer">
+                        <User className="w-4 h-4" />
+                        Patient 360
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePatientInsight(patient)} className="gap-2 cursor-pointer">
+                        <Eye className="w-4 h-4" />
+                        Patient Insight
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleBookAppointment(patient)} className="gap-2 cursor-pointer">
+                        <CalendarPlus className="w-4 h-4" />
+                        Book Appointment
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             ))}
@@ -240,6 +300,13 @@ export default function Patients() {
           </div>
         </main>
       </div>
+
+      <EditPatientModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        patient={selectedPatient}
+        onSave={handleSavePatient}
+      />
     </div>
   );
 }

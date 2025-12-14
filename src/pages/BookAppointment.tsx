@@ -38,10 +38,12 @@ const BookAppointment = () => {
   // Check if this is single-appointment mode from Inbox
   const appointmentId = searchParams.get("id");
   const appointmentType = searchParams.get("type");
+  const fromPatients = searchParams.get("from") === "patients";
+  const patientIdFromQuery = searchParams.get("patientId");
   const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
   
   const fromPatientInsights = location.state?.fromPatientInsights;
-  const patientId = location.state?.patientId;
+  const patientId = location.state?.patientId || patientIdFromQuery;
   const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
@@ -459,21 +461,31 @@ const BookAppointment = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Appointments", "Appointment"]} />
+        <AppHeader breadcrumbs={fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"]} />
         
         <main className="p-6 pb-32">
           <button
-            onClick={() => navigate(isSingleAppointmentMode ? "/inbox" : (fromPatientInsights ? `/patient-insights/${patientId}` : "/registration"))}
+            onClick={() => {
+              if (fromPatients) {
+                navigate("/patients");
+              } else if (isSingleAppointmentMode) {
+                navigate("/inbox");
+              } else if (fromPatientInsights) {
+                navigate(`/patient-insights/${patientId}`);
+              } else {
+                navigate("/registration");
+              }
+            }}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">
-              {isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")}
+              {fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration"))}
             </span>
           </button>
 
           {!isSingleAppointmentMode && (
-            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
+            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients ? ["search", "registration"] : []} />
           )}
 
           <div className="max-w-[1600px] mx-auto">
