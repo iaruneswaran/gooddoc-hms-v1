@@ -580,10 +580,17 @@ export function AppointmentTable({
               </div>
 
               {/* Action */}
-              <div className="w-[120px] flex justify-start">
+              <div className="w-[120px] flex justify-start gap-2">
+                <Button
+                  onClick={() => navigate(`/patient-insights/${appointment.patient.id.replace('GDID - ', '')}`)}
+                  variant="default"
+                  size="sm"
+                >
+                  Patient Insight
+                </Button>
                 <Button
                   onClick={() => handleCheckInClick(appointment.id)}
-                  variant="default"
+                  variant="outline"
                   size="sm"
                   disabled={checkedInIds.has(appointment.id)}
                 >
