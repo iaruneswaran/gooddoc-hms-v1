@@ -3,18 +3,28 @@ import { Badge } from "@/components/ui/badge";
 
 interface AppHeaderProps {
   breadcrumbs: string[];
+  onBreadcrumbClick?: (index: number) => void;
 }
 
-export function AppHeader({ breadcrumbs }: AppHeaderProps) {
+export function AppHeader({ breadcrumbs, onBreadcrumbClick }: AppHeaderProps) {
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-8">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {breadcrumbs.map((crumb, index) => (
           <span key={index} className="flex items-center gap-2">
             {index > 0 && <span>/</span>}
-            <span className={index === breadcrumbs.length - 1 ? "text-foreground font-medium" : ""}>
-              {crumb}
-            </span>
+            {index < breadcrumbs.length - 1 && onBreadcrumbClick ? (
+              <button
+                onClick={() => onBreadcrumbClick(index)}
+                className="hover:text-primary transition-colors"
+              >
+                {crumb}
+              </button>
+            ) : (
+              <span className={index === breadcrumbs.length - 1 ? "text-foreground font-medium" : ""}>
+                {crumb}
+              </span>
+            )}
           </span>
         ))}
       </div>
