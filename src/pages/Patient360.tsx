@@ -19,7 +19,8 @@ export default function Patient360() {
   
   const [activeTab, setActiveTab] = useState(defaultView);
 
-  const patient = mockPatients.find((p) => p.gdid === gdid);
+  // Find patient by gdid or id (for patients from registry)
+  const patient = mockPatients.find((p) => p.gdid === gdid || p.id === gdid);
   const vitals = patient ? mockVitals[patient.id] : undefined;
   const visitHistory = patient ? mockVisitHistory[patient.id] || [] : [];
 
@@ -65,7 +66,16 @@ export default function Patient360() {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Patient 360"]} />
         <main>
-          
+          {/* Back Navigation */}
+          <div className="px-6 pt-6">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="font-semibold">{getBackLabel()}</span>
+            </button>
+          </div>
           <PatientHeader patient={patient} vitals={vitals} />
           
           <div className="p-6">
