@@ -13,8 +13,13 @@ export default function Patient360() {
   const { gdid } = useParams<{ gdid: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultView = searchParams.get("view") || "clinical-notes";
+  const fromPage = searchParams.get("from");
   
   const [activeTab, setActiveTab] = useState(defaultView);
+  
+  const breadcrumbs = fromPage === "patients" 
+    ? ["Patients", "Patient 360"] 
+    : ["Outpatient", "Patient 360"];
 
   const patient = mockPatients.find((p) => p.gdid === gdid);
   const vitals = patient ? mockVitals[patient.id] : undefined;
@@ -25,7 +30,7 @@ export default function Patient360() {
       <div className="flex min-h-screen bg-background">
         <AppSidebar />
         <div className="flex-1 ml-[196px]">
-          <AppHeader breadcrumbs={["Outpatient", "Patient 360"]} />
+          <AppHeader breadcrumbs={breadcrumbs} />
           <main className="p-6">
             <div className="text-center py-12">
               <p className="text-muted-foreground">Patient not found</p>
@@ -45,7 +50,7 @@ export default function Patient360() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Outpatient", "Patient 360"]} />
+        <AppHeader breadcrumbs={breadcrumbs} />
         <main>
           <PatientHeader patient={patient} vitals={vitals} />
           
