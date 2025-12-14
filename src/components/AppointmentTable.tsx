@@ -502,7 +502,7 @@ export function AppointmentTable({
   const gridClasses = "grid grid-cols-appointments gap-4 px-4 box-border";
 
   return (
-    <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
+    <div className="bg-card rounded-lg border border-border overflow-hidden w-full p-4">
       {/* Table Header */}
       <div className={`${gridClasses} py-4 border-b border-border bg-muted/30`}>
         <div className="text-xs font-medium text-muted-foreground text-left">Patient Info</div>
