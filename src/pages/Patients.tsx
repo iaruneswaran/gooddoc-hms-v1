@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, MoreVertical, Pencil, User, Eye, CalendarPlus } from "lucide-react";
+import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -177,10 +177,6 @@ export default function Patients() {
     });
   };
 
-  const handlePatient360 = (patient: Patient) => {
-    navigate(`/patient360/${patient.id}?from=patients`);
-  };
-
   const handlePatientInsight = (patient: Patient) => {
     navigate(`/patient-insights/${patient.id}?from=patients`);
   };
@@ -229,8 +225,8 @@ export default function Patients() {
             </div>
           </div>
 
-          <div className="bg-card rounded-lg border border-border overflow-hidden">
-            <div className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_100px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
+          <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
+            <div className="grid grid-cols-[80px_1fr_50px_70px_1fr_1fr_100px_90px_110px_80px_60px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
               <div className="text-xs font-medium text-muted-foreground">Patient ID</div>
               <div className="text-xs font-medium text-muted-foreground">Full Name</div>
               <div className="text-xs font-medium text-muted-foreground">Age</div>
@@ -246,7 +242,7 @@ export default function Patients() {
             {filteredPatients.map((patient) => (
               <div
                 key={patient.id}
-                className="grid grid-cols-[90px_140px_50px_70px_120px_160px_100px_80px_110px_80px_100px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border"
+                className="grid grid-cols-[80px_1fr_50px_70px_1fr_1fr_100px_90px_110px_80px_60px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border"
               >
                 <div className="text-sm font-medium text-foreground truncate">{patient.id}</div>
                 <div className="text-sm text-foreground truncate">{patient.name}</div>
@@ -276,10 +272,6 @@ export default function Patients() {
                       <DropdownMenuItem onClick={() => handleEditPatient(patient)} className="gap-2 cursor-pointer">
                         <Pencil className="w-4 h-4" />
                         Edit Patient Info
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handlePatient360(patient)} className="gap-2 cursor-pointer">
-                        <User className="w-4 h-4" />
-                        Patient 360
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handlePatientInsight(patient)} className="gap-2 cursor-pointer">
                         <Eye className="w-4 h-4" />
