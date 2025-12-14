@@ -176,7 +176,13 @@ const PatientInsights = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
-        <AppHeader breadcrumbs={[fromPage === "patients" ? "Patients" : "Outpatient", "Patient Insight"]} />
+        <AppHeader breadcrumbs={[
+          { 
+            label: fromPage === "patients" ? "Patients" : "Outpatient", 
+            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/outpatient") 
+          }, 
+          "Patient Insight"
+        ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
