@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus } from "lucide-react";
+import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -185,6 +185,10 @@ export default function Patients() {
     navigate(`/book-appointment?from=patients&patientId=${patient.id}`);
   };
 
+  const handlePatient360 = (patient: Patient) => {
+    navigate(`/patient360/${patient.id}?from=patients`);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -272,6 +276,10 @@ export default function Patients() {
                       <DropdownMenuItem onClick={() => handleEditPatient(patient)} className="gap-2 cursor-pointer">
                         <Pencil className="w-4 h-4" />
                         Edit Patient Info
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePatient360(patient)} className="gap-2 cursor-pointer">
+                        <User className="w-4 h-4" />
+                        Patient 360
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handlePatientInsight(patient)} className="gap-2 cursor-pointer">
                         <Eye className="w-4 h-4" />

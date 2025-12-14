@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PatientHeader } from "@/components/patient360/PatientHeader";
@@ -12,14 +12,15 @@ import { mockPatients, mockVitals, mockVisitHistory } from "@/data/patient360.mo
 export default function Patient360() {
   const { gdid } = useParams<{ gdid: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const defaultView = searchParams.get("view") || "clinical-notes";
   const fromPage = searchParams.get("from");
   
   const [activeTab, setActiveTab] = useState(defaultView);
   
   const breadcrumbs = fromPage === "patients" 
-    ? ["Patients", "Patient 360"] 
-    : ["Outpatient", "Patient 360"];
+    ? [{ label: "Patients", onClick: () => navigate("/patients") }, "Patient 360"] 
+    : [{ label: "Outpatient", onClick: () => navigate("/outpatient") }, "Patient 360"];
 
   const patient = mockPatients.find((p) => p.gdid === gdid);
   const vitals = patient ? mockVitals[patient.id] : undefined;
