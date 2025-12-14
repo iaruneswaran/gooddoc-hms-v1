@@ -186,7 +186,7 @@ export default function Patients() {
   };
 
   const handlePatient360 = (patient: Patient) => {
-    navigate(`/patient360/${patient.id}?from=patients`);
+    navigate(`/patients/${patient.id}/360?from=patients`);
   };
 
   return (
