@@ -28,6 +28,13 @@ interface Patient {
   bloodGroup: string;
   registeredDate: string;
   status: "Active" | "Inactive";
+  // Extended fields
+  title?: string;
+  dob?: string;
+  pincode?: string;
+  city?: string;
+  state?: string;
+  country?: string;
 }
 
 interface EditPatientModalProps {
@@ -42,7 +49,15 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
 
   useEffect(() => {
     if (patient) {
-      setFormData({ ...patient });
+      setFormData({ 
+        ...patient,
+        title: patient.title || "mr",
+        dob: patient.dob || "",
+        pincode: patient.pincode || "",
+        city: patient.city || patient.address,
+        state: patient.state || "",
+        country: patient.country || "India",
+      });
     }
   }, [patient]);
 
@@ -58,6 +73,9 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
   const nameParts = formData.name.split(" ");
   const firstName = nameParts[0] || "";
   const surname = nameParts.slice(1).join(" ") || "";
+  
+  // Convert P-0001 to GDID - 001 format
+  const gdidNumber = formData.id.replace("P-", "").replace(/^0+/, "") || "001";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -69,7 +87,7 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
         <div className="space-y-6 py-4">
           {/* Patient ID */}
           <div className="text-sm font-medium text-foreground">
-            #{formData.id}
+            #GDID - {gdidNumber.padStart(3, '0')}
           </div>
 
           {/* Patient Information */}
@@ -79,7 +97,10 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm text-foreground">Title</Label>
-                  <Select defaultValue="mr">
+                  <Select 
+                    value={formData.title || "mr"}
+                    onValueChange={(value) => setFormData({ ...formData, title: value })}
+                  >
                     <SelectTrigger className="mt-2">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -138,45 +159,32 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm text-foreground">Age</Label>
+                  <Label className="text-sm text-foreground">Date of Birth</Label>
                   <Input
-                    value={formData.age}
-                    onChange={(e) => setFormData({ ...formData, age: parseInt(e.target.value) || 0 })}
-                    placeholder="Age"
-                    type="number"
+                    value={formData.dob || ""}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    placeholder="dd/mm/yyyy"
                     className="mt-2"
                   />
                 </div>
                 <div>
-                  <Label className="text-sm text-foreground">Blood Group</Label>
-                  <Select
-                    value={formData.bloodGroup}
-                    onValueChange={(value) => setFormData({ ...formData, bloodGroup: value })}
-                  >
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A+">A+</SelectItem>
-                      <SelectItem value="A−">A−</SelectItem>
-                      <SelectItem value="B+">B+</SelectItem>
-                      <SelectItem value="B−">B−</SelectItem>
-                      <SelectItem value="AB+">AB+</SelectItem>
-                      <SelectItem value="AB−">AB−</SelectItem>
-                      <SelectItem value="O+">O+</SelectItem>
-                      <SelectItem value="O−">O−</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-sm text-foreground">Age</Label>
+                  <Input
+                    value={formData.age}
+                    placeholder="Calculated from DOB"
+                    disabled
+                    className="mt-2"
+                  />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm text-foreground">Phone Number</Label>
+                  <Label className="text-sm text-foreground">Mobile Number</Label>
                   <Input
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="Phone number"
+                    placeholder="+91 98765 43210"
                     className="mt-2"
                   />
                 </div>
@@ -185,29 +193,33 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
                   <Input
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="email@example.com"
+                    placeholder="name@example.com"
                     type="email"
                     className="mt-2"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm text-foreground">Status</Label>
-                  <Select
-                    value={formData.status.toLowerCase()}
-                    onValueChange={(value) => setFormData({ ...formData, status: value === "active" ? "Active" : "Inactive" })}
-                  >
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div>
+                <Label className="text-sm text-foreground">Blood Group</Label>
+                <Select
+                  value={formData.bloodGroup}
+                  onValueChange={(value) => setFormData({ ...formData, bloodGroup: value })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="A+">A+</SelectItem>
+                    <SelectItem value="A−">A−</SelectItem>
+                    <SelectItem value="B+">B+</SelectItem>
+                    <SelectItem value="B−">B−</SelectItem>
+                    <SelectItem value="AB+">AB+</SelectItem>
+                    <SelectItem value="AB−">AB−</SelectItem>
+                    <SelectItem value="O+">O+</SelectItem>
+                    <SelectItem value="O−">O−</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </Card>
@@ -216,12 +228,54 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
           <Card className="p-6">
             <h3 className="text-base font-semibold text-foreground mb-4">Address Details</h3>
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm text-foreground">Street, Apartment</Label>
+                  <Input
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    placeholder="Anna Nagar"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm text-foreground">Pin code</Label>
+                  <Input
+                    value={formData.pincode || ""}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    placeholder="012 345"
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm text-foreground">City</Label>
+                  <Input
+                    value={formData.city || ""}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    placeholder="Chennai"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm text-foreground">State</Label>
+                  <Input
+                    value={formData.state || ""}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    placeholder="Tamil Nadu"
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
               <div>
-                <Label className="text-sm text-foreground">Address / City</Label>
+                <Label className="text-sm text-foreground">Country</Label>
                 <Input
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="City name"
+                  value={formData.country || "India"}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                  placeholder="India"
                   className="mt-2"
                 />
               </div>
