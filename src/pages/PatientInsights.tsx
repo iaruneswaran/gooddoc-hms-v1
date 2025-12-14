@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -14,6 +14,8 @@ import { Visit } from "@/components/patient-insights/VisitListItem";
 const PatientInsights = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
 
   // Mock patient data
@@ -174,18 +176,18 @@ const PatientInsights = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
-        <AppHeader breadcrumbs={["Patients"]} />
+        <AppHeader breadcrumbs={[fromPage === "patients" ? "Patients" : "Outpatient", "Patient Insight"]} />
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate("/patients")}
+              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/outpatient")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Patients</span>
+              <span className="font-semibold">{fromPage === "patients" ? "Patients" : "Outpatient"}</span>
             </button>
 
             {/* Header Content */}
