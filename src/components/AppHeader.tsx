@@ -1,22 +1,39 @@
 import { Bell, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+type BreadcrumbItem = string | { label: string; onClick: () => void };
+
 interface AppHeaderProps {
-  breadcrumbs: string[];
+  breadcrumbs: BreadcrumbItem[];
 }
 
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-8">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        {breadcrumbs.map((crumb, index) => (
-          <span key={index} className="flex items-center gap-2">
-            {index > 0 && <span>/</span>}
-            <span className={index === breadcrumbs.length - 1 ? "text-foreground font-medium" : ""}>
-              {crumb}
+        {breadcrumbs.map((crumb, index) => {
+          const isClickable = typeof crumb === "object";
+          const label = isClickable ? crumb.label : crumb;
+          const isLast = index === breadcrumbs.length - 1;
+          
+          return (
+            <span key={index} className="flex items-center gap-2">
+              {index > 0 && <span>/</span>}
+              {isClickable && !isLast ? (
+                <button
+                  onClick={crumb.onClick}
+                  className="hover:text-primary transition-colors cursor-pointer"
+                >
+                  {label}
+                </button>
+              ) : (
+                <span className={isLast ? "text-foreground font-medium" : ""}>
+                  {label}
+                </span>
+              )}
             </span>
-          </span>
-        ))}
+          );
+        })}
       </div>
 
       <div className="flex items-center gap-4">
