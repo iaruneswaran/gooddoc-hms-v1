@@ -499,7 +499,7 @@ export function AppointmentTable({
   const doctorColumnLabel = isDiagnosticsCategory ? "Referring Doctor" : "Consulting Doctor";
   const deptColumnLabel = isDiagnosticsCategory ? "Performing Dept" : "Department";
 
-  const gridClasses = "grid grid-cols-appointments gap-4 px-6 box-border";
+  const gridClasses = "grid grid-cols-appointments gap-4 px-4 box-border";
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
@@ -601,7 +601,7 @@ export function AppointmentTable({
 
             {/* Appointment Summary Row */}
             {appointment.summary && (
-              <div className="px-6 pb-4 pt-0">
+              <div className="px-4 pb-4 pt-0">
                 <div className="border-t border-border pt-4">
                   <div className="space-y-1">
                     <div className="text-[12px] font-medium text-muted-foreground">Appointment Summary</div>
