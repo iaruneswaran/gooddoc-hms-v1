@@ -19,13 +19,13 @@ import { toast } from "@/hooks/use-toast";
 // Mock data for patient registry
 const PATIENTS = [
   {
-    id: "P-0001",
-    name: "Anaya Shah",
-    age: 34,
-    gender: "Female",
-    phone: "98XXXXXX21",
-    email: "anaya@email.com",
-    address: "Mumbai",
+    id: "GDID-001",
+    name: "Harish Kalyan",
+    age: 35,
+    gender: "Male",
+    phone: "+91 98765 43210",
+    email: "9876543210@gooddoc.app",
+    address: "Chennai",
     bloodGroup: "O+",
     registeredDate: "14-Dec-2025",
     status: "Active" as const,
