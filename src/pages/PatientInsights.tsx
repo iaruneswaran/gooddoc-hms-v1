@@ -179,7 +179,7 @@ const PatientInsights = () => {
         <AppHeader breadcrumbs={[
           { 
             label: fromPage === "patients" ? "Patients" : "Outpatient", 
-            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/outpatient") 
+            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/appointments/outpatient") 
           }, 
           "Patient Insight"
         ]} />
@@ -189,7 +189,7 @@ const PatientInsights = () => {
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/outpatient")}
+              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/appointments/outpatient")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
