@@ -33,8 +33,13 @@ export default function Patient360() {
   };
 
   const getBackLabel = () => {
-    if (fromPage === "patients") return "Patients";
-    return "Outpatient";
+    return fromPage === "patients" ? "Patients" : "Outpatient";
+  };
+
+  const getBreadcrumbs = () => {
+    return fromPage === "patients" 
+      ? ["Patients", "Patient 360"] 
+      : ["Outpatient", "Patient 360"];
   };
 
   if (!patient) {
@@ -64,7 +69,7 @@ export default function Patient360() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Patient 360"]} />
+        <AppHeader breadcrumbs={getBreadcrumbs()} />
         <main>
           {/* Back Navigation */}
           <div className="px-6 pt-6">
