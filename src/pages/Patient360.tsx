@@ -63,10 +63,7 @@ export default function Patient360() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader 
-          breadcrumbs={[getBackLabel(), "Patient 360"]} 
-          onBreadcrumbClick={(index) => index === 0 && handleBack()}
-        />
+        <AppHeader breadcrumbs={["Patient 360"]} />
         <main>
           
           <PatientHeader patient={patient} vitals={vitals} />
