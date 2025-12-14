@@ -28,13 +28,13 @@ export default function Patient360() {
     if (fromPage === "patients") {
       navigate("/patients");
     } else {
-      navigate("/");
+      navigate("/appointments/outpatient");
     }
   };
 
   const getBackLabel = () => {
     if (fromPage === "patients") return "Patients";
-    return "Appointments";
+    return "Outpatient";
   };
 
   if (!patient) {
