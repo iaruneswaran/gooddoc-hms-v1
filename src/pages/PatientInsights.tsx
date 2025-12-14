@@ -174,18 +174,18 @@ const PatientInsights = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
-        <AppHeader breadcrumbs={["Patients"]} />
+        <AppHeader breadcrumbs={["Appointments", "Patient Insight"]} />
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate("/patients")}
+              onClick={() => navigate("/")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Patients</span>
+              <span className="font-semibold">Appointments</span>
             </button>
 
             {/* Header Content */}
