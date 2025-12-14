@@ -580,7 +580,7 @@ export function AppointmentTable({
               </div>
 
               {/* Action */}
-              <div className="w-[200px] flex justify-start gap-2">
+              <div className="w-[220px] flex justify-start gap-2">
                 <Button
                   onClick={() => navigate(`/patient-insights/${appointment.patient.id.replace('GDID - ', '')}`)}
                   variant="default"
