@@ -29,7 +29,7 @@ const registrationSchema = z.object({
   dateOfBirth: z.date({ required_error: "Date of birth is required" }),
   mobileNumber: z.string().regex(/^\d{10}$/, "Mobile number must be 10 digits"),
   email: z.string().email("Invalid email address").max(255),
-  nationalId: z.string().min(12, "National ID must be at least 12 characters").max(20),
+  bloodGroup: z.string().min(1, "Blood group is required"),
   street: z.string().min(5, "Street address is required").max(200),
   pinCode: z.string().regex(/^\d{6}$/, "Pin code must be 6 digits"),
   city: z.string().min(2, "City is required").max(100),
@@ -259,15 +259,27 @@ const Registration = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="nationalId">National ID</Label>
-                    <Input
-                      id="nationalId"
-                      placeholder="9876 5432 1098"
-                      {...register("nationalId")}
-                      className={errors.nationalId ? "border-destructive" : ""}
-                    />
-                    {errors.nationalId && (
-                      <p className="text-xs text-destructive">{errors.nationalId.message}</p>
+                    <Label htmlFor="bloodGroup">Blood Group</Label>
+                    <Select 
+                      value={watch("bloodGroup")} 
+                      onValueChange={(value) => setValue("bloodGroup", value)}
+                    >
+                      <SelectTrigger className={errors.bloodGroup ? "border-destructive" : ""}>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="A+">A+</SelectItem>
+                        <SelectItem value="A-">A−</SelectItem>
+                        <SelectItem value="B+">B+</SelectItem>
+                        <SelectItem value="B-">B−</SelectItem>
+                        <SelectItem value="AB+">AB+</SelectItem>
+                        <SelectItem value="AB-">AB−</SelectItem>
+                        <SelectItem value="O+">O+</SelectItem>
+                        <SelectItem value="O-">O−</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.bloodGroup && (
+                      <p className="text-xs text-destructive">{errors.bloodGroup.message}</p>
                     )}
                   </div>
                 </div>
