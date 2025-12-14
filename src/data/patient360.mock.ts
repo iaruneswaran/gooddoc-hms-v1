@@ -10,7 +10,7 @@ export const mockPatients: Patient[] = [
     phone: "+91 98765 43210",
     email: "name@example.com",
     whatsapp: "+91 98765 43210",
-    nationalId: "9876 5432 1098",
+    bloodGroup: "O+",
     insurance: {
       provider: "Star Life Insurance",
       policyNumber: "IND1000012345",
@@ -38,7 +38,7 @@ export const mockPatients: Patient[] = [
     phone: "+91 98765 43211",
     email: "siva@example.com",
     whatsapp: "+91 98765 43211",
-    nationalId: "9876 5432 1099",
+    bloodGroup: "B+",
     insurance: {
       provider: "Health Plus Insurance",
       policyNumber: "IND1000012346",

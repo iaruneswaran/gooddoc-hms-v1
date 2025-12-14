@@ -28,7 +28,7 @@ const PatientInsights = () => {
     dob: "10/04/1980",
     mobile: "+91 98765 43210",
     email: "name@example.com",
-    nationalId: "9876 5432 1098",
+    bloodGroup: "O+",
     address: "Anna Nagar",
     pincode: "012 345",
     state: "Tamil Nadu",
