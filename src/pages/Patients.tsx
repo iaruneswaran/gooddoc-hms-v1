@@ -258,7 +258,7 @@ export default function Patients() {
                         <UserPen className="mr-2 h-4 w-4" />
                         Edit Patient Info
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate(`/patient-360/${patient.id}?from=patients`)}>
+                      <DropdownMenuItem onClick={() => navigate(`/patients/${patient.id}/360?from=patients`)}>
                         <User className="mr-2 h-4 w-4" />
                         Patient 360
                       </DropdownMenuItem>
