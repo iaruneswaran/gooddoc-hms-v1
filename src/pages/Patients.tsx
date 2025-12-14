@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { EditPatientModal } from "@/components/patients/EditPatientModal";
 
 // Mock data for patient registry
 const PATIENTS = [
@@ -143,6 +144,8 @@ type Patient = typeof PATIENTS[number];
 export default function Patients() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   const filteredPatients = useMemo(() => {
     return PATIENTS.filter((patient) => {
@@ -156,6 +159,16 @@ export default function Patients() {
       return matchesSearch;
     });
   }, [searchQuery]);
+
+  const handleEditPatient = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setEditModalOpen(true);
+  };
+
+  const handleSavePatient = (updatedPatient: Patient) => {
+    // In a real app, this would update the database
+    console.log("Saving patient:", updatedPatient);
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -241,19 +254,19 @@ export default function Patients() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => navigate(`/patients/${patient.id}/edit`)}>
+                      <DropdownMenuItem onClick={() => handleEditPatient(patient)}>
                         <UserPen className="mr-2 h-4 w-4" />
                         Edit Patient Info
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate(`/patient-360/${patient.id}`)}>
+                      <DropdownMenuItem onClick={() => navigate(`/patient-360/${patient.id}?from=patients`)}>
                         <User className="mr-2 h-4 w-4" />
                         Patient 360
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate(`/patient-insights/${patient.id}`)}>
+                      <DropdownMenuItem onClick={() => navigate(`/patient-insights/${patient.id}?from=patients`)}>
                         <Eye className="mr-2 h-4 w-4" />
                         Patient Insight
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate(`/book-appointment?patient=${patient.id}`)}>
+                      <DropdownMenuItem onClick={() => navigate(`/book-appointment?from=patients&patient=${patient.id}`)}>
                         <CalendarPlus className="mr-2 h-4 w-4" />
                         Book Appointment
                       </DropdownMenuItem>
@@ -268,6 +281,13 @@ export default function Patients() {
           </div>
         </main>
       </div>
+
+      <EditPatientModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        patient={selectedPatient}
+        onSave={handleSavePatient}
+      />
     </div>
   );
 }
