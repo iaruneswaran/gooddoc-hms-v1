@@ -64,11 +64,18 @@ export default function Patient360() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <div className="flex-1 ml-[196px]">
-        <AppHeader 
-          breadcrumbs={[getBackLabel(), "Patient 360"]} 
-          onBreadcrumbClick={(index) => index === 0 && handleBack()}
-        />
+        <AppHeader breadcrumbs={["Patient 360"]} />
         <main>
+          {/* Back Navigation */}
+          <div className="px-6 pt-6">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="font-semibold">{getBackLabel()}</span>
+            </button>
+          </div>
           <PatientHeader patient={patient} vitals={vitals} />
           
           <div className="p-6">
