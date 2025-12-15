@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Save, Check, AlertCircle } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -136,10 +135,10 @@ const NewClaim = () => {
   const progress = (currentStep / STEPS.length) * 100;
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Insurance", "Claims", "New Claim"]} />
         
         <main className="p-6 pb-32">
@@ -256,7 +255,7 @@ const NewClaim = () => {
             </div>
           </div>
         </div>
-      </PageContent>
+      </div>
     </div>
   );
 };

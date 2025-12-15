@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -142,10 +141,10 @@ export default function RadiologyResults() {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Diagnostics", "Radiology Results"]} />
         
         <main className="px-6 py-6 pb-24 overflow-y-auto" style={{ maxHeight: "calc(100vh - 64px)" }}>
@@ -476,7 +475,7 @@ export default function RadiologyResults() {
             </div>
           </div>
         </main>
-      </PageContent>
+      </div>
     </div>
   );
 }

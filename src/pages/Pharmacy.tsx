@@ -1,15 +1,14 @@
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { Pill, Clock } from "lucide-react";
 
 export default function Pharmacy() {
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Pharmacy"]} />
 
         <main className="p-6">
@@ -27,7 +26,7 @@ export default function Pharmacy() {
             </p>
           </Card>
         </main>
-      </PageContent>
+      </div>
     </div>
   );
 }

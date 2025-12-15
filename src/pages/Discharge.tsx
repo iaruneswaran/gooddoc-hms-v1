@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, RefreshCw, Plus, Upload, Printer, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { DischargeSteps } from "@/components/DischargeSteps";
 import { Button } from "@/components/ui/button";
@@ -47,10 +46,10 @@ const Discharge = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
         <main className="p-6">
@@ -105,7 +104,7 @@ const Discharge = () => {
             )}
           </div>
         </main>
-      </PageContent>
+      </div>
     </div>
   );
 };

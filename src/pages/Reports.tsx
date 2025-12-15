@@ -1,15 +1,14 @@
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { BarChart3, Clock } from "lucide-react";
 
 export default function Reports() {
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Reports"]} />
 
         <main className="p-6">
@@ -27,7 +26,7 @@ export default function Reports() {
             </p>
           </Card>
         </main>
-      </PageContent>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
-import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Settings } from "lucide-react";
@@ -126,12 +125,12 @@ export default function DoctorCalendarPage() {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <PageContent className="flex-1 flex flex-col">
+        <div className="flex-1 ml-[196px]">
           <AppHeader breadcrumbs={["Doctors", "Calendar"]} />
           <main className="p-6">
             <p className="text-muted-foreground">{loading ? "Loading..." : "Doctor not found"}</p>
           </main>
-        </PageContent>
+        </div>
       </div>
     );
   }
@@ -139,7 +138,7 @@ export default function DoctorCalendarPage() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <PageContent className="flex-1 flex flex-col">
+      <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Doctors", doctor.name, "Calendar"]} />
         
         <main className="p-6 h-[calc(100vh-80px)]">
@@ -167,7 +166,7 @@ export default function DoctorCalendarPage() {
             onAddLeave={() => setShowLeavePanel(true)}
           />
         </main>
-      </PageContent>
+      </div>
 
       {/* Leave Panel */}
       <Sheet open={showLeavePanel} onOpenChange={setShowLeavePanel}>
