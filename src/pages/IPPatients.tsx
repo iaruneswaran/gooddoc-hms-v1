@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
+import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { ipPatients, PatientRecord } from "@/data/overview.mock";
 import { format } from "date-fns";
@@ -57,6 +57,11 @@ const IPPatients = () => {
     },
   ];
 
+  const urlParamFilters: UrlParamFilter[] = [
+    { paramKey: "admittedToday", paramValue: "true", displayLabel: "New Admissions" },
+    { paramKey: "erCase", paramValue: "true", displayLabel: "ER case today" },
+  ];
+
   const rowActions: RowAction<PatientRecord>[] = [
     { label: "View Profile", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
     { label: "Transfer Bed", onClick: (row) => console.log("Transfer", row.id) },
@@ -74,6 +79,7 @@ const IPPatients = () => {
       data={ipPatients}
       filters={filters}
       rowActions={rowActions}
+      urlParamFilters={urlParamFilters}
       emptyMessage="No active in-patients."
       emptyCta={{ label: "View recent discharges", route: "/patients/discharged?date=today" }}
       searchPlaceholder="Search by patient name or ID..."

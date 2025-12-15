@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
+import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { opPatients, PatientRecord } from "@/data/overview.mock";
 import { format } from "date-fns";
@@ -57,6 +57,12 @@ const OPPatientsToday = () => {
     },
   ];
 
+  const urlParamFilters: UrlParamFilter[] = [
+    { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "Consultation Completed" },
+    { paramKey: "visitStatus", paramValue: "Pending", displayLabel: "Check in completed" },
+    { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Pending to check in" },
+  ];
+
   const rowActions: RowAction<PatientRecord>[] = [
     { label: "View Profile", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
     { label: "Print OP Ticket", onClick: (row) => console.log("Print ticket", row.id) },
@@ -65,14 +71,15 @@ const OPPatientsToday = () => {
 
   return (
     <ListPageLayout
-      title="OP Patients Today"
+      title="OP Patients"
       count={opPatients.length}
       subtitle="Out-patient visits registered today"
-      breadcrumbs={["Overview", "OP Patients Today"]}
+      breadcrumbs={["Overview", "OP Patients"]}
       columns={columns}
       data={opPatients}
       filters={filters}
       rowActions={rowActions}
+      urlParamFilters={urlParamFilters}
       emptyMessage="No OP visits today."
       emptyCta={{ label: "View all patients", route: "/patients" }}
       searchPlaceholder="Search by patient name or ID..."

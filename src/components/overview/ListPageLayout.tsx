@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -62,6 +62,13 @@ export interface RowAction<T> {
   onClick: (row: T) => void;
 }
 
+// URL param to filter label mapping
+export interface UrlParamFilter {
+  paramKey: string;
+  paramValue: string;
+  displayLabel: string;
+}
+
 interface ListPageLayoutProps<T> {
   title: string;
   count: number;
@@ -79,6 +86,7 @@ interface ListPageLayoutProps<T> {
   onRetry?: () => void;
   onRowClick?: (row: T) => void;
   getRowId: (row: T) => string;
+  urlParamFilters?: UrlParamFilter[];
 }
 
 export function ListPageLayout<T>({
@@ -98,8 +106,10 @@ export function ListPageLayout<T>({
   onRetry,
   onRowClick,
   getRowId,
+  urlParamFilters = [],
 }: ListPageLayoutProps<T>) {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [sortKey, setSortKey] = useState<string | null>(null);
@@ -107,6 +117,17 @@ export function ListPageLayout<T>({
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"table" | "compact">("table");
   const pageSize = 25;
+
+  // Get active URL param filter label for display in header
+  const activeUrlFilter = useMemo(() => {
+    for (const filter of urlParamFilters) {
+      const paramValue = searchParams.get(filter.paramKey);
+      if (paramValue === filter.paramValue) {
+        return filter.displayLabel;
+      }
+    }
+    return null;
+  }, [searchParams, urlParamFilters]);
 
   // Filter chips
   const activeFilterChips = Object.entries(activeFilters)
@@ -163,6 +184,11 @@ export function ListPageLayout<T>({
                 <div>
                   <div className="flex items-center gap-3">
                     <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
+                    {activeUrlFilter && (
+                      <Badge className="bg-primary/10 text-primary border-primary/20 text-sm px-3 py-1">
+                        {activeUrlFilter}
+                      </Badge>
+                    )}
                     <Badge variant="secondary" className="text-lg px-3 py-1">
                       {count.toLocaleString()}
                     </Badge>

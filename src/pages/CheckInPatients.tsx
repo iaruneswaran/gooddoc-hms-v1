@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
+import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { checkInPatients, PatientRecord } from "@/data/overview.mock";
 import { format } from "date-fns";
@@ -61,6 +61,12 @@ const CheckInPatients = () => {
     },
   ];
 
+  const urlParamFilters: UrlParamFilter[] = [
+    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU" },
+    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward" },
+    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms" },
+  ];
+
   const rowActions: RowAction<PatientRecord>[] = [
     { label: "View Profile", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
     { label: "Update Status", onClick: (row) => console.log("Update status", row.id) },
@@ -77,6 +83,7 @@ const CheckInPatients = () => {
       data={checkInPatients}
       filters={filters}
       rowActions={rowActions}
+      urlParamFilters={urlParamFilters}
       emptyMessage="No check-ins today yet."
       searchPlaceholder="Search by patient name or ID..."
       getRowId={(row) => row.id}
