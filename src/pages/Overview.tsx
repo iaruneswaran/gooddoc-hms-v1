@@ -329,9 +329,10 @@ const Overview = () => {
           {/* Header Card */}
           <Card className="p-5 mb-6">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
-                <p className="text-sm text-muted-foreground">{format(today, "EEEE, MMMM d, yyyy")}</p>
+              <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CalendarClock className="w-4 h-4" />
+                <span>{format(today, "EEEE, MMMM d, yyyy")}</span>
               </div>
             </div>
           </Card>
