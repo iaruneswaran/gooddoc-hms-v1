@@ -45,7 +45,23 @@ export default function PatientSearch() {
         navigate(`/patient-insights/${gdid}/payments?action=advance&from=search&q=${searchQuery}`);
         break;
       case "Book appointment":
-        navigate(`/new-appointment?patientId=${gdid}&from=search&q=${searchQuery}`);
+        // Navigate directly to book-appointment with patient data
+        const patientData = {
+          id: gdid,
+          name: patient.name,
+          gdid: `GDID - ${gdid}`,
+          age: patient.age === "—" ? 0 : parseInt(patient.age),
+          gender: patient.gender === "Male" ? "M" : "F",
+        };
+        const visitId = `VST-${Math.floor(100000 + Math.random() * 900000)}`;
+        navigate("/book-appointment", { 
+          state: { 
+            patient: patientData, 
+            visitId,
+            fromSearch: true, 
+            patientSearchQuery: searchQuery 
+          } 
+        });
         break;
       case "Discharge":
         navigate(`/patient-insights/${gdid}/discharge?from=search&q=${searchQuery}`);
