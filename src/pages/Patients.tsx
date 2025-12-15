@@ -6,13 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus, User } from "lucide-react";
+import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus, User, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EditPatientModal } from "@/components/patients/EditPatientModal";
 import { toast } from "@/hooks/use-toast";
 
@@ -147,6 +154,9 @@ export default function Patients() {
   const [searchQuery, setSearchQuery] = useState("");
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [genderFilter, setGenderFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [bloodGroupFilter, setBloodGroupFilter] = useState<string>("all");
   const [patients, setPatients] = useState(PATIENTS);
 
   const filteredPatients = useMemo(() => {
@@ -158,9 +168,15 @@ export default function Patients() {
         patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         patient.address.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesSearch;
+      const matchesGender = genderFilter === "all" || patient.gender === genderFilter;
+      const matchesStatus = statusFilter === "all" || patient.status === statusFilter;
+      const matchesBloodGroup = bloodGroupFilter === "all" || patient.bloodGroup === bloodGroupFilter;
+
+      return matchesSearch && matchesGender && matchesStatus && matchesBloodGroup;
     });
-  }, [searchQuery, patients]);
+  }, [searchQuery, patients, genderFilter, statusFilter, bloodGroupFilter]);
+
+  const bloodGroups = ["O+", "O−", "A+", "A−", "B+", "B−", "AB+", "AB−"];
 
   const handleEditPatient = (patient: Patient) => {
     setSelectedPatient(patient);
@@ -213,10 +229,40 @@ export default function Patients() {
           </Card>
 
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 border-b border-border pb-0">
-              <div className="px-4 py-3 text-sm font-medium text-primary border-b-2 border-primary">
-                All Patients
-              </div>
+            <div className="flex items-center gap-4">
+              <Select value={genderFilter} onValueChange={setGenderFilter}>
+                <SelectTrigger className="w-[130px] h-9 bg-background">
+                  <SelectValue placeholder="All Genders" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover z-50">
+                  <SelectItem value="all">All Genders</SelectItem>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[130px] h-9 bg-background">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover z-50">
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={bloodGroupFilter} onValueChange={setBloodGroupFilter}>
+                <SelectTrigger className="w-[140px] h-9 bg-background">
+                  <SelectValue placeholder="All Blood Groups" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover z-50">
+                  <SelectItem value="all">All Blood Groups</SelectItem>
+                  {bloodGroups.map((bg) => (
+                    <SelectItem key={bg} value={bg}>{bg}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="relative w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
