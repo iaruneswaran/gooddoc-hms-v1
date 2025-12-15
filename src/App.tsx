@@ -37,9 +37,13 @@ import IPPatients from "./pages/IPPatients";
 import CheckInPatients from "./pages/CheckInPatients";
 import DischargedToday from "./pages/DischargedToday";
 import DoctorsOnDuty from "./pages/DoctorsOnDuty";
-import AvailableDoctors from "./pages/AvailableDoctors";
 import ScheduledToday from "./pages/ScheduledToday";
-import WalkInPatients from "./pages/WalkInPatients";
+import LabReportsPending from "./pages/LabReportsPending";
+import SurgeriesToday from "./pages/SurgeriesToday";
+import EmergencyCases from "./pages/EmergencyCases";
+import PharmacyPending from "./pages/PharmacyPending";
+import RadiologyQueue from "./pages/RadiologyQueue";
+import LowStockItems from "./pages/LowStockItems";
 
 const queryClient = new QueryClient();
 
@@ -86,9 +90,13 @@ const App = () => (
           <Route path="/patients/check-in" element={<CheckInPatients />} />
           <Route path="/patients/discharged" element={<DischargedToday />} />
           <Route path="/doctors/on-duty" element={<DoctorsOnDuty />} />
-          <Route path="/doctors/available" element={<AvailableDoctors />} />
           <Route path="/schedule/today" element={<ScheduledToday />} />
-          <Route path="/patients/walk-in" element={<WalkInPatients />} />
+          <Route path="/lab/pending" element={<LabReportsPending />} />
+          <Route path="/or/surgeries" element={<SurgeriesToday />} />
+          <Route path="/er/cases" element={<EmergencyCases />} />
+          <Route path="/pharmacy/pending" element={<PharmacyPending />} />
+          <Route path="/radiology/queue" element={<RadiologyQueue />} />
+          <Route path="/inventory/low-stock" element={<LowStockItems />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -9,11 +9,26 @@ import {
   UserCheck, 
   LogOut, 
   Stethoscope, 
-  CheckCircle, 
   CalendarClock, 
-  UserPlus,
+  FlaskConical,
+  Scissors,
+  AlertTriangle,
+  Pill,
+  ScanLine,
+  PackageOpen,
   ArrowRight
 } from "lucide-react";
+import {
+  opSubData,
+  ipSubData,
+  checkInSubData,
+  dischargedSubData,
+} from "@/data/overview.mock";
+
+interface SubDataItem {
+  label: string;
+  value: number | string;
+}
 
 interface MetricCardProps {
   title: string;
@@ -21,7 +36,9 @@ interface MetricCardProps {
   subtitle: string;
   icon: React.ElementType;
   route: string;
+  colorClass: string;
   isPrimary?: boolean;
+  subData?: SubDataItem[];
 }
 
 const MetricCard = ({ 
@@ -30,44 +47,90 @@ const MetricCard = ({
   subtitle, 
   icon: Icon, 
   route, 
-  isPrimary = false 
+  colorClass,
+  isPrimary = false,
+  subData,
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
+  if (isPrimary) {
+    return (
+      <button
+        onClick={() => navigate(route)}
+        aria-label={`Open ${title} list`}
+        className={`
+          group w-full text-left rounded-lg border border-border overflow-hidden
+          transition-all duration-200 ease-out
+          hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5
+          active:scale-[0.98]
+          focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+          h-[150px] flex flex-col
+        `}
+      >
+        {/* Main content */}
+        <div className={`flex-1 p-4 ${colorClass}`}>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-3xl font-bold text-foreground">
+                {count.toLocaleString()}
+              </p>
+              <p className="text-sm font-medium text-foreground mt-1">
+                {title}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                {subtitle}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-background/80">
+                <Icon className="w-5 h-5 text-foreground" />
+              </div>
+              <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200" />
+            </div>
+          </div>
+        </div>
+        
+        {/* Sub-data band */}
+        {subData && (
+          <div className="bg-card border-t border-border px-4 py-2 flex items-center gap-4">
+            {subData.map((item, idx) => (
+              <div key={idx} className="flex items-center gap-1.5">
+                <span className="text-xs text-muted-foreground">{item.label}:</span>
+                <span className="text-xs font-semibold text-foreground">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </button>
+    );
+  }
+  
+  // Operations card (compact)
   return (
     <button
       onClick={() => navigate(route)}
       aria-label={`Open ${title} list`}
       className={`
-        group w-full text-left bg-card rounded-lg border border-border
+        group w-full text-left rounded-lg border border-border
         transition-all duration-200 ease-out
         hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5
         active:scale-[0.98]
         focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-        ${isPrimary ? "p-4" : "p-3"}
+        h-[75px] px-4 flex items-center gap-3 ${colorClass}
       `}
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className={`
-          flex items-center justify-center rounded-md bg-primary/10
-          ${isPrimary ? "w-9 h-9" : "w-8 h-8"}
-        `}>
-          <Icon className={`text-primary ${isPrimary ? "w-4 h-4" : "w-4 h-4"}`} />
-        </div>
-        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200" />
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-background/80 shrink-0">
+        <Icon className="w-5 h-5 text-foreground" />
       </div>
-      
-      <p className={`font-bold text-foreground mb-0.5 ${isPrimary ? "text-2xl" : "text-xl"}`}>
-        {count.toLocaleString()}
-      </p>
-      
-      <p className={`font-medium text-foreground ${isPrimary ? "text-sm" : "text-xs"}`}>
-        {title}
-      </p>
-      
-      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-        {subtitle}
-      </p>
+      <div className="flex-1 min-w-0">
+        <p className="text-xl font-bold text-foreground">
+          {count.toLocaleString()}
+        </p>
+        <p className="text-xs text-muted-foreground truncate">
+          {subtitle}
+        </p>
+      </div>
+      <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
     </button>
   );
 };
@@ -80,7 +143,13 @@ const Overview = () => {
       subtitle: "Out-patient visits registered today",
       icon: Users,
       route: "/patients/op?date=today",
+      colorClass: "bg-[hsl(var(--gd-info-light))]",
       isPrimary: true,
+      subData: [
+        { label: "Completed", value: opSubData.completed },
+        { label: "In Consultation", value: opSubData.inConsultation },
+        { label: "Waiting", value: opSubData.waiting },
+      ],
     },
     {
       title: "IP Patients",
@@ -88,7 +157,13 @@ const Overview = () => {
       subtitle: "Currently admitted in-patients",
       icon: BedDouble,
       route: "/patients/ip?admitted=true",
+      colorClass: "bg-[hsl(var(--gd-primary-50))]",
       isPrimary: true,
+      subData: [
+        { label: "Admitted Today", value: ipSubData.admittedToday },
+        { label: "ICU Occupied", value: ipSubData.icuOccupied },
+        { label: "Avg LOS", value: `${ipSubData.avgLos}d` },
+      ],
     },
     {
       title: "Check In",
@@ -96,7 +171,13 @@ const Overview = () => {
       subtitle: "All patient check-ins today (OP, IP, ER)",
       icon: UserCheck,
       route: "/patients/check-in?date=today",
+      colorClass: "bg-[hsl(var(--gd-warning-light))]",
       isPrimary: true,
+      subData: [
+        { label: "OP", value: checkInSubData.op },
+        { label: "IP", value: checkInSubData.ip },
+        { label: "ER", value: checkInSubData.er },
+      ],
     },
     {
       title: "Discharged Today",
@@ -104,24 +185,24 @@ const Overview = () => {
       subtitle: "Discharges finalized today",
       icon: LogOut,
       route: "/patients/discharged?date=today",
+      colorClass: "bg-[hsl(var(--gd-success-light))]",
       isPrimary: true,
+      subData: [
+        { label: "Completed", value: dischargedSubData.completed },
+        { label: "Pending", value: dischargedSubData.pendingClearance },
+        { label: "Avg LOS", value: `${dischargedSubData.avgLos}d` },
+      ],
     },
   ];
 
-  const supportCards: MetricCardProps[] = [
+  const operationsCards: MetricCardProps[] = [
     {
       title: "Doctors on Duty",
       count: 89,
       subtitle: "Active shift only",
       icon: Stethoscope,
       route: "/doctors/on-duty?shift=active",
-    },
-    {
-      title: "Available Now",
-      count: 34,
-      subtitle: "Doctors marked available now",
-      icon: CheckCircle,
-      route: "/doctors/available?status=available",
+      colorClass: "bg-[hsl(var(--gd-primary-50))]",
     },
     {
       title: "Scheduled Today",
@@ -129,13 +210,55 @@ const Overview = () => {
       subtitle: "All appointments for today",
       icon: CalendarClock,
       route: "/schedule/today",
+      colorClass: "bg-[hsl(var(--gd-info-light))]",
     },
     {
-      title: "Walk-in Patients",
-      count: 56,
-      subtitle: "Visits without prior appointment today",
-      icon: UserPlus,
-      route: "/patients/walk-in?date=today",
+      title: "Lab Reports Pending",
+      count: 156,
+      subtitle: "Awaiting lab results",
+      icon: FlaskConical,
+      route: "/lab/pending?date=today",
+      colorClass: "bg-[hsl(var(--gd-warning-light))]",
+    },
+    {
+      title: "Surgeries Today",
+      count: 24,
+      subtitle: "Operating room schedule",
+      icon: Scissors,
+      route: "/or/surgeries?date=today",
+      colorClass: "bg-[hsl(var(--gd-primary-50))]",
+    },
+    {
+      title: "Emergency Cases",
+      count: 15,
+      subtitle: "ER arrivals and active cases",
+      icon: AlertTriangle,
+      route: "/er/cases?date=today",
+      colorClass: "bg-[hsl(var(--gd-error-light))]",
+    },
+    {
+      title: "Pharmacy Pending",
+      count: 89,
+      subtitle: "Orders awaiting dispensing",
+      icon: Pill,
+      route: "/pharmacy/pending?date=today",
+      colorClass: "bg-[hsl(var(--gd-warning-light))]",
+    },
+    {
+      title: "Radiology Queue",
+      count: 34,
+      subtitle: "Imaging studies in queue",
+      icon: ScanLine,
+      route: "/radiology/queue?date=today",
+      colorClass: "bg-[hsl(var(--gd-info-light))]",
+    },
+    {
+      title: "Low Stock Items",
+      count: 34,
+      subtitle: "Below reorder threshold",
+      icon: PackageOpen,
+      route: "/inventory/low-stock",
+      colorClass: "bg-[hsl(var(--gd-error-light))]",
     },
   ];
 
@@ -146,9 +269,9 @@ const Overview = () => {
       <div className="flex-1 ml-[196px]">
         <AppHeader breadcrumbs={["Overview"]} />
         
-        <main className="p-6 pr-4">
+        <main className="p-6">
           {/* Header Card */}
-          <Card className="p-6 mb-6">
+          <Card className="p-5 mb-6">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Overview</h1>
               <CalendarWidget />
@@ -160,8 +283,8 @@ const Overview = () => {
             <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Patient Metrics</h2>
           </div>
 
-          {/* Primary Metrics Row */}
-          <div className="grid grid-cols-4 gap-3 mb-6">
+          {/* Primary Metrics Row - 4 columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
             {primaryCards.map((card) => (
               <MetricCard key={card.title} {...card} />
             ))}
@@ -172,9 +295,9 @@ const Overview = () => {
             <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Operations</h2>
           </div>
 
-          {/* Support Metrics Row */}
-          <div className="grid grid-cols-4 gap-3">
-            {supportCards.map((card) => (
+          {/* Operations Metrics - 4 columns grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {operationsCards.map((card) => (
               <MetricCard key={card.title} {...card} />
             ))}
           </div>
