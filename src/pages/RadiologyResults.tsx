@@ -16,6 +16,8 @@ import {
   Play, Pause
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 const mockPatient = {
   name: "Kavya Iyer",
@@ -140,11 +142,13 @@ export default function RadiologyResults() {
     setTimeout(() => navigate("/diagnostics"), 1500);
   };
 
+  const { isCollapsed } = useSidebarContext();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={["Diagnostics", "Radiology Results"]} />
         
         <main className="px-6 py-6 pb-24 overflow-y-auto" style={{ maxHeight: "calc(100vh - 64px)" }}>

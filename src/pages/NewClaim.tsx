@@ -14,6 +14,8 @@ import { ClaimStepServices } from "@/components/insurance/claim-steps/ClaimStepS
 import { ClaimStepDocuments } from "@/components/insurance/claim-steps/ClaimStepDocuments";
 import { ClaimStepPaymentBanking } from "@/components/insurance/claim-steps/ClaimStepPaymentBanking";
 import { ClaimStepReview } from "@/components/insurance/claim-steps/ClaimStepReview";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 const STEPS = [
   { id: 1, name: "Patient & Policy", component: ClaimStepPatientPolicy },
@@ -134,11 +136,13 @@ const NewClaim = () => {
   const CurrentStepComponent = STEPS[currentStep - 1].component;
   const progress = (currentStep / STEPS.length) * 100;
 
+  const { isCollapsed } = useSidebarContext();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={["Insurance", "Claims", "New Claim"]} />
         
         <main className="p-6 pb-32">
@@ -228,7 +232,7 @@ const NewClaim = () => {
         </main>
 
         {/* Sticky Footer */}
-        <div className="fixed bottom-0 left-[196px] right-0 bg-background border-t border-border p-4 shadow-lg z-10">
+        <div className={cn("fixed bottom-0 right-0 bg-background border-t border-border p-4 shadow-lg z-10 transition-all duration-300", isCollapsed ? "left-[60px]" : "left-[220px]")}>
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-4">
               <Button variant="outline" onClick={handleBack} disabled={currentStep === 1}>

@@ -20,6 +20,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 export default function DoctorCalendarPage() {
   const { id } = useParams<{ id: string }>();
@@ -121,11 +123,13 @@ export default function DoctorCalendarPage() {
     setLeaves(prev => prev.filter(l => l.id !== leaveId));
   };
 
+  const { isCollapsed } = useSidebarContext();
+
   if (loading || !doctor) {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
           <AppHeader breadcrumbs={["Doctors", "Calendar"]} />
           <main className="p-6">
             <p className="text-muted-foreground">{loading ? "Loading..." : "Doctor not found"}</p>
@@ -138,7 +142,7 @@ export default function DoctorCalendarPage() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={["Doctors", doctor.name, "Calendar"]} />
         
         <main className="p-6 h-[calc(100vh-80px)]">
