@@ -229,37 +229,37 @@ export default function Patients() {
           </Card>
 
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <Select value={genderFilter} onValueChange={setGenderFilter}>
-                <SelectTrigger className="w-[130px] h-9 bg-background">
+                <SelectTrigger className="w-[140px] h-10 bg-white border border-border rounded-lg text-sm font-normal text-foreground shadow-none hover:border-primary/50 focus:ring-0 focus:border-primary">
                   <SelectValue placeholder="All Genders" />
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-50">
-                  <SelectItem value="all">All Genders</SelectItem>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
+                <SelectContent className="bg-white border border-border rounded-lg shadow-lg z-50">
+                  <SelectItem value="all" className="text-sm text-foreground hover:bg-muted/50 focus:bg-primary/10 focus:text-primary">All Genders</SelectItem>
+                  <SelectItem value="Male" className="text-sm text-foreground hover:bg-muted/50">Male</SelectItem>
+                  <SelectItem value="Female" className="text-sm text-foreground hover:bg-muted/50">Female</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[130px] h-9 bg-background">
+                <SelectTrigger className="w-[130px] h-10 bg-white border border-border rounded-lg text-sm font-normal text-foreground shadow-none hover:border-primary/50 focus:ring-0 focus:border-primary">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-50">
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
+                <SelectContent className="bg-white border border-border rounded-lg shadow-lg z-50">
+                  <SelectItem value="all" className="text-sm text-foreground hover:bg-muted/50 focus:bg-primary/10 focus:text-primary">All Status</SelectItem>
+                  <SelectItem value="Active" className="text-sm text-foreground hover:bg-muted/50">Active</SelectItem>
+                  <SelectItem value="Inactive" className="text-sm text-foreground hover:bg-muted/50">Inactive</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={bloodGroupFilter} onValueChange={setBloodGroupFilter}>
-                <SelectTrigger className="w-[140px] h-9 bg-background">
+                <SelectTrigger className="w-[150px] h-10 bg-white border border-border rounded-lg text-sm font-normal text-foreground shadow-none hover:border-primary/50 focus:ring-0 focus:border-primary">
                   <SelectValue placeholder="All Blood Groups" />
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-50">
-                  <SelectItem value="all">All Blood Groups</SelectItem>
+                <SelectContent className="bg-white border border-border rounded-lg shadow-lg z-50">
+                  <SelectItem value="all" className="text-sm text-foreground hover:bg-muted/50 focus:bg-primary/10 focus:text-primary">All Blood Groups</SelectItem>
                   {bloodGroups.map((bg) => (
-                    <SelectItem key={bg} value={bg}>{bg}</SelectItem>
+                    <SelectItem key={bg} value={bg} className="text-sm text-foreground hover:bg-muted/50">{bg}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -270,7 +270,7 @@ export default function Patients() {
                 placeholder="Search by name, ID, email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9"
+                className="pl-9 h-10 bg-white"
               />
             </div>
           </div>
