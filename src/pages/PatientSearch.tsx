@@ -90,8 +90,8 @@ export default function PatientSearch() {
                 </Button>
               </div>
 
-              {/* Content Grid */}
-              <div className="grid grid-cols-2 gap-6">
+              {/* Content Grid - 4 columns */}
+              <div className="grid grid-cols-4 gap-4">
                 {isIP ? (
                   <>
                     {/* Care & Bed */}
@@ -168,32 +168,19 @@ export default function PatientSearch() {
                     {/* Quick Actions */}
                     <div className="space-y-3">
                       <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Quick Actions</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="bg-muted/40 rounded-lg p-4 flex flex-col gap-2">
                         {patient.options.map((opt: string, idx: number) => (
                           <Button 
                             key={idx} 
                             variant={idx === 0 ? "default" : "outline"} 
                             size="sm" 
-                            className="text-sm"
+                            className="text-sm w-full"
                             onClick={() => handleOptionClick(opt)}
                           >
                             {opt}
                           </Button>
                         ))}
                       </div>
-                    </div>
-
-                    {/* Visit History - Full Width */}
-                    <div className="col-span-2 space-y-3 pt-2 border-t border-border mt-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Visit History</h4>
-                        <Button variant="link" size="sm" className="text-primary p-0 text-xs font-medium">
-                          View all visits →
-                        </Button>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Admitted: {patient.lastActivityShort.replace("In IP since ", "")}
-                      </p>
                     </div>
                   </>
                 ) : (
@@ -241,13 +228,13 @@ export default function PatientSearch() {
                     {/* Quick Actions */}
                     <div className="space-y-3">
                       <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Quick Actions</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="bg-muted/40 rounded-lg p-4 flex flex-col gap-2">
                         {patient.options.map((opt: string, idx: number) => (
                           <Button 
                             key={idx} 
                             variant={idx === 0 ? "default" : "outline"} 
                             size="sm" 
-                            className="text-sm"
+                            className="text-sm w-full"
                             onClick={() => handleOptionClick(opt)}
                           >
                             {opt}
