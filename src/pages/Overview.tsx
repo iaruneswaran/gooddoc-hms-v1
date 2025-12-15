@@ -207,7 +207,7 @@ const StandardMetricCard = ({
 const Overview = () => {
   const primaryCards: MetricCardProps[] = [
     {
-      title: "OP Patients Today",
+      title: "OP Patients",
       count: 847,
       icon: Users,
       route: "/patients/op?date=today",
