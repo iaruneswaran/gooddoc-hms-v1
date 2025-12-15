@@ -77,9 +77,6 @@ export default function PatientSearch() {
             </Button>
             <div>
               <h1 className="text-h3 font-semibold text-foreground">Search Results</h1>
-              <p className="text-sm text-muted-foreground">
-                {hasResults ? `1 match for "${query}"` : `No results for "${query}"`}
-              </p>
             </div>
           </div>
 
