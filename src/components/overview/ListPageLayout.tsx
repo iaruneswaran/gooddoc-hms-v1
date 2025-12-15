@@ -38,7 +38,8 @@ import {
   LayoutGrid,
   TableIcon,
   ArrowUpDown,
-  RefreshCw
+  RefreshCw,
+  ArrowLeft
 } from "lucide-react";
 
 export interface Column<T> {
@@ -148,14 +149,25 @@ export function ListPageLayout<T>({
           {/* Header */}
           <Card className="p-6 mb-6">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
-                  <Badge variant="secondary" className="text-lg px-3 py-1">
-                    {count.toLocaleString()}
-                  </Badge>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate("/overview")}
+                  className="h-9 w-9"
+                  aria-label="Back to Overview"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
+                    <Badge variant="secondary" className="text-lg px-3 py-1">
+                      {count.toLocaleString()}
+                    </Badge>
+                  </div>
+                  <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
                 </div>
-                <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" className="gap-2">
