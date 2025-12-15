@@ -41,7 +41,7 @@ export function OrderSummaryStep({
     }
 
     toast({
-      title: "Visit Submitted Successfully",
+      title: "Patient Visit Completed",
       description: (
         <div className="mt-2 space-y-1.5">
           {actions.map((action, index) => (
