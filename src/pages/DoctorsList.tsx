@@ -111,75 +111,91 @@ export default function DoctorsList() {
 
       if (error) throw error;
 
-      // Fetch availability for each doctor
-      const doctorsWithAvailability = await Promise.all(
-        (doctorsData as DoctorRow[]).map(async (doc) => {
-          const today = new Date();
-          const weekEnd = addDays(today, 7);
-          
-          let availabilityText = "No schedule";
-          let availabilityStatus: DoctorDisplay['availabilityStatus'] = 'no_schedule';
-          let nextAvailableTime: string | undefined;
-          let leaveUntil: string | undefined;
+      // First, map basic doctor data without availability
+      const basicDoctors: DoctorDisplay[] = (doctorsData as DoctorRow[]).map((doc) => ({
+        id: doc.id,
+        displayName: doc.name,
+        degrees: doc.degrees || '',
+        department: DEPARTMENT_MAP[doc.department_id || ''] || doc.department_id || 'General',
+        specialty: SPECIALTY_MAP[doc.specialty_id || ''] || doc.specialty_id || '',
+        avatar: doc.avatar_url,
+        availability: 'Loading...',
+        availabilityStatus: 'no_schedule' as const,
+        nextAvailableTime: undefined,
+        leaveUntil: undefined,
+        locations: ['Main Clinic'],
+        duration: doc.default_duration,
+        fee: 1500,
+        status: doc.status as DoctorDisplay['status'],
+      }));
 
-          try {
-            const availability = await getAvailability(doc.id, today, weekEnd);
+      // Set doctors immediately so UI shows
+      setDoctors(basicDoctors);
+      setLoading(false);
+
+      // Then fetch availability in background
+      const today = new Date();
+      const weekEnd = addDays(today, 7);
+
+      for (const doc of doctorsData as DoctorRow[]) {
+        try {
+          const availability = await getAvailability(doc.id, today, weekEnd);
+          
+          if (availability) {
+            const todayStr = format(today, 'yyyy-MM-dd');
+            const tomorrowStr = format(addDays(today, 1), 'yyyy-MM-dd');
             
-            if (availability) {
-              const todayStr = format(today, 'yyyy-MM-dd');
-              const tomorrowStr = format(addDays(today, 1), 'yyyy-MM-dd');
-              
-              // Check for leave
-              const todayData = availability.days.find(d => d.date === todayStr);
-              if (todayData?.status === 'leave' && todayData.leaveInfo) {
-                availabilityStatus = 'on_leave';
-                leaveUntil = todayData.leaveInfo.endDate;
-                availabilityText = `On leave until ${format(parseISO(leaveUntil + 'T00:00:00'), 'MMM d')}`;
-              } else if (todayData?.slots && todayData.slots.length > 0) {
-                availabilityStatus = 'today';
-                nextAvailableTime = todayData.slots[0].start;
-                availabilityText = `Today ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
-              } else {
-                const tomorrowData = availability.days.find(d => d.date === tomorrowStr);
-                if (tomorrowData?.slots && tomorrowData.slots.length > 0) {
-                  availabilityStatus = 'tomorrow';
-                  nextAvailableTime = tomorrowData.slots[0].start;
-                  availabilityText = `Tomorrow ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
-                } else if (availability.nextAvailable) {
-                  availabilityStatus = 'this_week';
-                  nextAvailableTime = availability.nextAvailable;
-                  availabilityText = format(parseISO(nextAvailableTime), 'EEE, MMM d h:mm a');
-                }
+            let availabilityText = "No schedule";
+            let availabilityStatus: DoctorDisplay['availabilityStatus'] = 'no_schedule';
+            let nextAvailableTime: string | undefined;
+            let leaveUntil: string | undefined;
+            
+            const todayData = availability.days.find(d => d.date === todayStr);
+            if (todayData?.status === 'leave' && todayData.leaveInfo) {
+              availabilityStatus = 'on_leave';
+              leaveUntil = todayData.leaveInfo.endDate;
+              availabilityText = `On leave until ${format(parseISO(leaveUntil + 'T00:00:00'), 'MMM d')}`;
+            } else if (todayData?.slots && todayData.slots.length > 0) {
+              availabilityStatus = 'today';
+              nextAvailableTime = todayData.slots[0].start;
+              availabilityText = `Today ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
+            } else {
+              const tomorrowData = availability.days.find(d => d.date === tomorrowStr);
+              if (tomorrowData?.slots && tomorrowData.slots.length > 0) {
+                availabilityStatus = 'tomorrow';
+                nextAvailableTime = tomorrowData.slots[0].start;
+                availabilityText = `Tomorrow ${format(parseISO(nextAvailableTime), 'h:mm a')}`;
+              } else if (availability.nextAvailable) {
+                availabilityStatus = 'this_week';
+                nextAvailableTime = availability.nextAvailable;
+                availabilityText = format(parseISO(nextAvailableTime), 'EEE, MMM d h:mm a');
               }
             }
-          } catch {
-            // Availability fetch failed, keep default
+
+            // Update this doctor's availability
+            setDoctors(prev => prev.map(d => 
+              d.id === doc.id 
+                ? { ...d, availability: availabilityText, availabilityStatus, nextAvailableTime, leaveUntil }
+                : d
+            ));
+          } else {
+            setDoctors(prev => prev.map(d => 
+              d.id === doc.id 
+                ? { ...d, availability: 'No schedule' }
+                : d
+            ));
           }
-
-          return {
-            id: doc.id,
-            displayName: doc.name,
-            degrees: doc.degrees || '',
-            department: DEPARTMENT_MAP[doc.department_id || ''] || doc.department_id || 'General',
-            specialty: SPECIALTY_MAP[doc.specialty_id || ''] || doc.specialty_id || '',
-            avatar: doc.avatar_url,
-            availability: availabilityText,
-            availabilityStatus,
-            nextAvailableTime,
-            leaveUntil,
-            locations: ['Main Clinic'], // TODO: fetch from schedule
-            duration: doc.default_duration,
-            fee: 1500, // TODO: add to doctors table
-            status: doc.status as DoctorDisplay['status'],
-          };
-        })
-      );
-
-      setDoctors(doctorsWithAvailability);
+        } catch {
+          setDoctors(prev => prev.map(d => 
+            d.id === doc.id 
+              ? { ...d, availability: 'No schedule' }
+              : d
+          ));
+        }
+      }
     } catch (err) {
       console.error('Error fetching doctors:', err);
       toast({ title: "Error loading doctors", variant: "destructive" });
-    } finally {
       setLoading(false);
     }
   };
