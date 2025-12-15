@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { BookingSteps } from "@/components/BookingSteps";
 import { PatientSearchForm } from "@/components/PatientSearchForm";
 import { PatientResultsList } from "@/components/PatientResultsList";
@@ -50,7 +51,7 @@ const NewAppointment = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Appointments", "Search"]} />
         
         <main className="p-6">
@@ -84,7 +85,7 @@ const NewAppointment = () => {
             )}
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };

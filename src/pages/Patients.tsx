@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -215,7 +216,7 @@ export default function Patients() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Patients"]} />
 
         <main className="p-6">
@@ -356,7 +357,7 @@ export default function Patients() {
             )}
           </div>
         </main>
-      </div>
+      </PageContent>
 
       <EditPatientModal
         open={editModalOpen}

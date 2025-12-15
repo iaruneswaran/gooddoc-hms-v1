@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -168,7 +169,7 @@ export default function OutpatientAppointments() {
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Outpatient"]} />
         <main className="p-6">
           <Card className="p-6 mb-8">
@@ -284,7 +285,7 @@ export default function OutpatientAppointments() {
             </TabsContent>
           </Tabs>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }

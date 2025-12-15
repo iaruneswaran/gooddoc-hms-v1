@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { 
@@ -318,7 +319,7 @@ const Overview = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Overview"]} />
         
         <main className="p-6">
@@ -346,7 +347,7 @@ const Overview = () => {
             ))}
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };
