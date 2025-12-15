@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -231,7 +232,7 @@ export default function RecordVitals() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Patients", "Record Vitals"]} />
 
         <main className="p-6">
@@ -653,7 +654,7 @@ export default function RecordVitals() {
           </div>
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }
