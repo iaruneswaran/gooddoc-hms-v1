@@ -45,7 +45,7 @@ export default function PatientSearch() {
         navigate(`/patient-insights/${gdid}/payments?action=advance&from=search&q=${searchQuery}`);
         break;
       case "Book appointment":
-        navigate(`/new-appointment?patientId=${gdid}&from=search&q=${searchQuery}`);
+        navigate(`/book-appointment?patientId=${gdid}&from=search&q=${searchQuery}`);
         break;
       case "Discharge":
         navigate(`/patient-insights/${gdid}/discharge?from=search&q=${searchQuery}`);

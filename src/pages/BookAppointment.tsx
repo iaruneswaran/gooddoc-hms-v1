@@ -40,6 +40,8 @@ const BookAppointment = () => {
   const appointmentId = searchParams.get("id");
   const appointmentType = searchParams.get("type");
   const fromPatients = searchParams.get("from") === "patients";
+  const fromSearch = searchParams.get("from") === "search";
+  const patientSearchQuery = searchParams.get("q") || "";
   const patientIdFromQuery = searchParams.get("patientId");
   const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
   
@@ -462,12 +464,14 @@ const BookAppointment = () => {
       <AppSidebar />
       
       <PageContent>
-        <AppHeader breadcrumbs={fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"] : (fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"])} />
         
         <main className="p-6 pb-32">
           <button
             onClick={() => {
-              if (fromPatients) {
+              if (fromSearch && patientSearchQuery) {
+                navigate(`/patients/search?q=${patientSearchQuery}`);
+              } else if (fromPatients) {
                 navigate("/patients");
               } else if (isSingleAppointmentMode) {
                 navigate("/inbox");
@@ -481,12 +485,12 @@ const BookAppointment = () => {
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">
-              {fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration"))}
+              {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
             </span>
           </button>
 
           {!isSingleAppointmentMode && (
-            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients ? ["search", "registration"] : []} />
+            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
           )}
 
           <div className="max-w-[1600px] mx-auto">
