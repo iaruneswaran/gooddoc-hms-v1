@@ -94,15 +94,15 @@ const PrimaryMetricCard = ({
             hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
             active:scale-[0.98]
             focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
-            h-[180px] flex flex-col
+            h-[160px] flex flex-col
           "
         >
           {/* Top section - Main metric */}
-          <div className="flex-1 p-4 flex flex-col">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm">
-                  <Icon className={`w-5 h-5 ${iconColorClass}`} />
+          <div className="flex-1 p-3 pb-2 flex flex-col">
+            <div className="flex items-start justify-between mb-1">
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
+                  <Icon className={`w-4 h-4 ${iconColorClass}`} />
                 </div>
                 <p className="text-sm font-semibold text-foreground">
                   {title}
@@ -122,7 +122,7 @@ const PrimaryMetricCard = ({
           <div className="h-px bg-[#E5E7EB]" />
           
           {/* Bottom section - Sub-metrics with dividers */}
-          <div className="px-4 py-3 flex items-center text-xs">
+          <div className="px-3 py-2.5 flex items-center text-xs">
             {subMetrics.map((metric, idx) => (
               <div key={idx} className="flex items-center">
                 {idx > 0 && (
