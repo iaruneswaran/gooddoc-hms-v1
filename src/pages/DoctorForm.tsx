@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,7 +115,7 @@ export default function DoctorForm() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Doctors", id ? "Edit Doctor" : "Add New Doctor"]} />
         
         <main className="p-6 max-w-4xl mx-auto">
@@ -501,7 +502,7 @@ export default function DoctorForm() {
             </div>
           </Card>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }
