@@ -1,5 +1,5 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { User, ArrowLeft, ExternalLink, Plus, ChevronLeft } from "lucide-react";
+import { User, ExternalLink, Plus } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
@@ -66,20 +66,6 @@ export default function PatientSearch() {
       <PageContent className="flex-1 flex flex-col">
         <AppHeader breadcrumbs={[{ label: "Patients", onClick: () => navigate("/patients") }, "Search Results"]} />
         <div className="p-4 flex-1">
-          {/* Back Button & Title */}
-          <div className="flex items-center gap-4 mb-6">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => navigate(-1)}
-              className="h-8 w-8"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-h3 font-semibold text-foreground">Search Results</h1>
-            </div>
-          </div>
 
           {hasResults ? (
             <Card className="p-6 w-full">
