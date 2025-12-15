@@ -62,9 +62,9 @@ const CheckInPatients = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU" },
-    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward" },
-    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms" },
+    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU", count: 25 },
+    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward", count: 21 },
+    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms", count: 3 },
   ];
 
   const rowActions: RowAction<PatientRecord>[] = [

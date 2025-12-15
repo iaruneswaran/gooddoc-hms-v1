@@ -67,6 +67,7 @@ export interface UrlParamFilter {
   paramKey: string;
   paramValue: string;
   displayLabel: string;
+  count: number;
 }
 
 interface ListPageLayoutProps<T> {
@@ -118,12 +119,12 @@ export function ListPageLayout<T>({
   const [viewMode, setViewMode] = useState<"table" | "compact">("table");
   const pageSize = 25;
 
-  // Get active URL param filter label for display in header
+  // Get active URL param filter for display in header
   const activeUrlFilter = useMemo(() => {
     for (const filter of urlParamFilters) {
       const paramValue = searchParams.get(filter.paramKey);
       if (paramValue === filter.paramValue) {
-        return filter.displayLabel;
+        return { label: filter.displayLabel, count: filter.count };
       }
     }
     return null;
@@ -186,11 +187,11 @@ export function ListPageLayout<T>({
                     <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
                     {activeUrlFilter && (
                       <Badge className="bg-primary/10 text-primary border-primary/20 text-sm px-3 py-1">
-                        {activeUrlFilter}
+                        {activeUrlFilter.label}
                       </Badge>
                     )}
                     <Badge variant="secondary" className="text-lg px-3 py-1">
-                      {count.toLocaleString()}
+                      {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
                     </Badge>
                   </div>
                   <p className="text-small text-muted-foreground mt-1">{subtitle}</p>

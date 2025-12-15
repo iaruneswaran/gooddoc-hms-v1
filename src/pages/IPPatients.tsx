@@ -58,8 +58,8 @@ const IPPatients = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "admittedToday", paramValue: "true", displayLabel: "New Admissions" },
-    { paramKey: "erCase", paramValue: "true", displayLabel: "ER case today" },
+    { paramKey: "admittedToday", paramValue: "true", displayLabel: "New Admissions", count: 19 },
+    { paramKey: "erCase", paramValue: "true", displayLabel: "ER case today", count: 8 },
   ];
 
   const rowActions: RowAction<PatientRecord>[] = [
