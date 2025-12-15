@@ -7,6 +7,7 @@ import { format, parse, isValid } from "date-fns";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,7 +96,7 @@ const Registration = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Appointments", "Registration"]} />
         
         <main className="p-6">
@@ -388,7 +389,7 @@ const Registration = () => {
             </form>
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Calendar, FlaskConical, Bed, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -460,7 +461,7 @@ const BookAppointment = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"]} />
         
         <main className="p-6 pb-32">
@@ -1034,7 +1035,7 @@ const BookAppointment = () => {
             appointmentDetails={getAppointmentDetails()}
           />
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };
