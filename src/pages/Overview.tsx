@@ -182,20 +182,6 @@ const Overview = () => {
 
   const operationsCards: MetricCardProps[] = [
     {
-      title: "Doctors on Duty",
-      count: 89,
-      icon: Stethoscope,
-      route: "/doctors/on-duty?shift=active",
-      colorClass: "",
-    },
-    {
-      title: "Scheduled Today",
-      count: 342,
-      icon: CalendarClock,
-      route: "/schedule/today",
-      colorClass: "",
-    },
-    {
       title: "Lab Reports Pending",
       count: 156,
       icon: FlaskConical,
