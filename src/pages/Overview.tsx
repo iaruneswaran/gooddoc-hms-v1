@@ -33,7 +33,7 @@ interface SubDataItem {
 interface MetricCardProps {
   title: string;
   count: number;
-  subtitle?: string;
+  subtitle: string;
   icon: React.ElementType;
   route: string;
   colorClass: string;
@@ -182,8 +182,25 @@ const Overview = () => {
 
   const operationsCards: MetricCardProps[] = [
     {
+      title: "Doctors on Duty",
+      count: 89,
+      subtitle: "Active shift only",
+      icon: Stethoscope,
+      route: "/doctors/on-duty?shift=active",
+      colorClass: "",
+    },
+    {
+      title: "Scheduled Today",
+      count: 342,
+      subtitle: "All appointments for today",
+      icon: CalendarClock,
+      route: "/schedule/today",
+      colorClass: "",
+    },
+    {
       title: "Lab Reports Pending",
       count: 156,
+      subtitle: "Awaiting lab results",
       icon: FlaskConical,
       route: "/lab/pending?date=today",
       colorClass: "",
@@ -191,6 +208,7 @@ const Overview = () => {
     {
       title: "Surgeries Today",
       count: 24,
+      subtitle: "Operating room schedule",
       icon: Scissors,
       route: "/or/surgeries?date=today",
       colorClass: "",
@@ -198,6 +216,7 @@ const Overview = () => {
     {
       title: "Emergency Cases",
       count: 15,
+      subtitle: "ER arrivals and active cases",
       icon: AlertTriangle,
       route: "/er/cases?date=today",
       colorClass: "",
@@ -205,6 +224,7 @@ const Overview = () => {
     {
       title: "Pharmacy Pending",
       count: 89,
+      subtitle: "Orders awaiting dispensing",
       icon: Pill,
       route: "/pharmacy/pending?date=today",
       colorClass: "",
@@ -212,6 +232,7 @@ const Overview = () => {
     {
       title: "Radiology Queue",
       count: 34,
+      subtitle: "Imaging studies in queue",
       icon: ScanLine,
       route: "/radiology/queue?date=today",
       colorClass: "",
@@ -219,6 +240,7 @@ const Overview = () => {
     {
       title: "Low Stock Items",
       count: 34,
+      subtitle: "Below reorder threshold",
       icon: PackageOpen,
       route: "/inventory/low-stock",
       colorClass: "",
