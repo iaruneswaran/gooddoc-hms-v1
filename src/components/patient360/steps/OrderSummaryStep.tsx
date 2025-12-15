@@ -2,8 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Patient, ClinicalNote, Prescription, LabOrder } from "@/types/patient360";
-import { FileText, Pill, FlaskConical, Stethoscope, Clock, Calendar, Printer, CreditCard } from "lucide-react";
-import { format } from "date-fns";
+import { Pill, FlaskConical, Stethoscope, Clock, Calendar, Printer, CheckCircle2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface OrderSummaryStepProps {
   patient: Patient;
@@ -26,6 +26,34 @@ export function OrderSummaryStep({
   );
 
   const hasContent = clinicalNote || (prescription && prescription.items.length > 0) || (labOrder && labOrder.tests.length > 0);
+
+  const handleSubmit = () => {
+    const actions: string[] = [];
+    
+    if (clinicalNote) {
+      actions.push("Clinical notes recorded");
+    }
+    if (prescription && prescription.items.length > 0) {
+      actions.push(`${prescription.items.length} medication${prescription.items.length > 1 ? 's' : ''} sent to pharmacy`);
+    }
+    if (labOrder && labOrder.tests.length > 0) {
+      actions.push(`${labOrder.tests.length} lab test${labOrder.tests.length > 1 ? 's' : ''} ordered`);
+    }
+
+    toast({
+      title: "Visit Submitted Successfully",
+      description: (
+        <div className="mt-2 space-y-1.5">
+          {actions.map((action, index) => (
+            <div key={index} className="flex items-center gap-2 text-sm">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>{action}</span>
+            </div>
+          ))}
+        </div>
+      ),
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -214,7 +242,7 @@ export function OrderSummaryStep({
             <Printer className="w-4 h-4 mr-2" />
             Print
           </Button>
-          <Button>
+          <Button onClick={handleSubmit}>
             Submit
           </Button>
         </div>
