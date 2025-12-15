@@ -62,9 +62,9 @@ export default function PatientSearch() {
   return (
     <div className="flex min-h-screen w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 flex flex-col">
+      <PageContent className="flex-1 flex flex-col">
         <AppHeader breadcrumbs={[{ label: "Patients", onClick: () => navigate("/patients") }, "Search Results"]} />
-        <PageContent className="p-4">
+        <div className="p-4 flex-1">
           {/* Back Button & Title */}
           <div className="flex items-center gap-4 mb-6">
             <Button 
@@ -281,8 +281,8 @@ export default function PatientSearch() {
               </Button>
             </Card>
           )}
-        </PageContent>
-      </div>
+        </div>
+      </PageContent>
     </div>
   );
 }
