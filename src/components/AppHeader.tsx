@@ -49,7 +49,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   };
 
   return (
-    <header className="relative h-16 border-b border-border bg-card flex items-center px-8">
+    <header className="relative h-16 border-b border-border bg-card flex items-center px-4">
       {/* Breadcrumbs - Left */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-[200px]">
         {breadcrumbs.map((crumb, index) => {
