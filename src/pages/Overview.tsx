@@ -82,7 +82,7 @@ const MetricCard = ({
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-card">
                 <Icon className="w-5 h-5 text-foreground" />
               </div>
               <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform duration-200" />
@@ -92,7 +92,7 @@ const MetricCard = ({
         
         {/* Sub-data band */}
         {subData && (
-          <div className="bg-muted/50 border-t border-border px-4 py-2 flex items-center gap-4">
+          <div className="bg-card border-t border-primary/10 px-4 py-2 flex items-center gap-4">
             {subData.map((item, idx) => (
               <div key={idx} className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">{item.label}:</span>
@@ -119,7 +119,7 @@ const MetricCard = ({
         h-[75px] px-4 flex items-center gap-3
       "
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted shrink-0">
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-card shrink-0">
         <Icon className="w-5 h-5 text-foreground" />
       </div>
       <div className="flex-1 min-w-0">
