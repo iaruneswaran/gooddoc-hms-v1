@@ -113,7 +113,7 @@ const PrimaryMetricCard = ({
                 className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
               />
             </div>
-            <p className="text-4xl font-bold text-foreground tracking-tight mt-auto">
+            <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
               {count.toLocaleString()}
             </p>
           </div>
@@ -121,25 +121,29 @@ const PrimaryMetricCard = ({
           {/* Divider */}
           <div className="h-px bg-[#E5E7EB]" />
           
-          {/* Bottom section - Sub-metrics */}
-          <div className="px-4 py-3 flex items-center gap-4 text-xs">
+          {/* Bottom section - Sub-metrics with dividers */}
+          <div className="px-4 py-3 flex items-center text-xs">
             {subMetrics.map((metric, idx) => (
-              <span
-                key={idx}
-                role="button"
-                tabIndex={0}
-                onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
-                className={`
-                  flex items-center gap-1.5 px-2 py-1 rounded-md
-                  ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
-                  transition-colors
-                `}
-                title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
-              >
-                <span className="text-muted-foreground">{metric.label}:</span>
-                <span className="font-semibold text-foreground">{metric.value}</span>
-              </span>
+              <div key={idx} className="flex items-center">
+                {idx > 0 && (
+                  <div className="w-px h-4 bg-[#E5E7EB] mx-3" />
+                )}
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
+                  className={`
+                    flex items-center gap-1.5 px-2 py-1 rounded-md
+                    ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
+                    transition-colors
+                  `}
+                  title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
+                >
+                  <span className="text-muted-foreground">{metric.label}:</span>
+                  <span className="font-semibold text-foreground">{metric.value}</span>
+                </span>
+              </div>
             ))}
           </div>
         </div>
