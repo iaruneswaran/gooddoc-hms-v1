@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
+import { PageContent } from "@/components/PageContent";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -163,12 +164,12 @@ export default function DoctorSchedulePage() {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <PageContent className="flex-1 flex flex-col">
           <AppHeader breadcrumbs={["Doctors", "Schedule"]} />
           <main className="p-6">
             <p className="text-muted-foreground">Loading...</p>
           </main>
-        </div>
+        </PageContent>
       </div>
     );
   }
@@ -177,12 +178,12 @@ export default function DoctorSchedulePage() {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <PageContent className="flex-1 flex flex-col">
           <AppHeader breadcrumbs={["Doctors", "Schedule"]} />
           <main className="p-6">
             <p className="text-muted-foreground">Doctor not found</p>
           </main>
-        </div>
+        </PageContent>
       </div>
     );
   }
@@ -190,7 +191,7 @@ export default function DoctorSchedulePage() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <PageContent className="flex-1 flex flex-col">
         <AppHeader breadcrumbs={["Doctors", doctor.name, "Schedule"]} />
         
         <main className="p-6">
@@ -293,7 +294,7 @@ export default function DoctorSchedulePage() {
             </TabsContent>
           </Tabs>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }
