@@ -82,7 +82,7 @@ export default function PatientSearch() {
           </div>
 
           {hasResults ? (
-            <Card className="p-6 max-w-4xl">
+            <Card className="p-6 w-full">
               {/* Header */}
               <div className="flex items-start justify-between mb-6 pb-5 border-b border-border">
                 <div className="flex items-center gap-4">
