@@ -2,6 +2,7 @@ import { LayoutDashboard, CalendarCheck, Calendar, Stethoscope, Activity, Users,
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
+import logoIcon from "@/assets/logo-icon.svg";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -29,16 +30,38 @@ export function AppSidebar() {
         isCollapsed ? "w-[60px]" : "w-[220px]"
       )}
     >
-      {/* Logo section */}
-      <div className={cn("p-4 flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
+      {/* Logo section with toggle */}
+      <div className={cn("p-4 flex items-center gap-2", isCollapsed ? "justify-center" : "justify-between")}>
         <Link to="/" className="flex items-center">
           {isCollapsed ? (
-            <img src={logo} alt="GoodDoc" className="h-6 w-6 object-contain" />
+            <img src={logoIcon} alt="GoodDoc" className="h-6 w-6" />
           ) : (
             <img src={logo} alt="GoodDoc" className="h-7" />
           )}
         </Link>
+        {!isCollapsed && (
+          <button
+            onClick={toggleSidebar}
+            className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-sidebar-accent/50 transition-colors"
+            aria-label="Collapse menu"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+        )}
       </div>
+
+      {/* Expand button when collapsed - inside menu area */}
+      {isCollapsed && (
+        <div className="px-2 mb-2">
+          <button
+            onClick={toggleSidebar}
+            className="w-full flex items-center justify-center py-2 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
+            aria-label="Expand menu"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className="flex-1 px-2">
@@ -140,18 +163,6 @@ export function AppSidebar() {
           </>
         )}
       </div>
-
-      {/* Collapse toggle button */}
-      <button
-        onClick={toggleSidebar}
-        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-sidebar border border-sidebar-border rounded-full flex items-center justify-center hover:bg-sidebar-accent transition-colors shadow-sm"
-      >
-        {isCollapsed ? (
-          <ChevronRight className="w-3.5 h-3.5" />
-        ) : (
-          <ChevronLeft className="w-3.5 h-3.5" />
-        )}
-      </button>
     </aside>
   );
 }
