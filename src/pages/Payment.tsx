@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Download, Printer, CheckCircle2, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -102,7 +103,7 @@ const Payment = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Appointments", "Payment"]} />
         
         <main className="p-6">
@@ -521,7 +522,6 @@ const Payment = () => {
             </div>
           </div>
         </main>
-      </div>
 
       {/* Success Modal */}
       {showSuccess && (
@@ -583,6 +583,7 @@ const Payment = () => {
           </div>
         </div>
       )}
+    </PageContent>
     </div>
   );
 };

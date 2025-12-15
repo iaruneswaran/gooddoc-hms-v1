@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, Plus, Download, FileDown } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -140,7 +141,7 @@ const Insurance = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Insurance"]} />
         
         <main className="p-6 space-y-6">
@@ -274,7 +275,7 @@ const Insurance = () => {
             </TabsContent>
           </Tabs>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };

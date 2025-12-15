@@ -2,6 +2,7 @@ import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { AddItemForm } from "@/components/pricing/AddItemForm";
 
 export default function AddPricingItem() {
@@ -11,7 +12,7 @@ export default function AddPricingItem() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Pricing Catalog", "Add Item"]} />
 
         <main className="p-6 pb-6">
@@ -34,7 +35,7 @@ export default function AddPricingItem() {
             <AddItemForm mode="create" />
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }

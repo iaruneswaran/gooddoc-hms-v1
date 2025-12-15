@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { PatientHeader } from "@/components/patient360/PatientHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ClinicalNotesStepper } from "@/components/patient360/ClinicalNotesStepper";
@@ -30,14 +31,14 @@ export default function Patient360() {
     return (
       <div className="flex min-h-screen bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <PageContent>
           <AppHeader breadcrumbs={breadcrumbs} />
           <main className="p-6">
             <div className="text-center py-12">
               <p className="text-muted-foreground">Patient not found</p>
             </div>
           </main>
-        </div>
+        </PageContent>
       </div>
     );
   }
@@ -50,7 +51,7 @@ export default function Patient360() {
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={breadcrumbs} />
         <main>
           <PatientHeader patient={patient} vitals={vitals} />
@@ -83,7 +84,7 @@ export default function Patient360() {
             </Tabs>
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }

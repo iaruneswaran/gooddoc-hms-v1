@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDebounce } from "@/hooks/useDebounce";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -326,7 +327,7 @@ export default function LaboratoryResults() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Diagnostics", "Lab Results"]} />
 
         <main
@@ -677,7 +678,7 @@ export default function LaboratoryResults() {
         </main>
 
         {/* Fixed Footer */}
-        <div className="fixed bottom-0 left-[196px] right-0 bg-background border-t p-4 flex justify-between items-center z-10">
+        <div className="fixed bottom-0 left-[60px] right-0 bg-background border-t p-4 flex justify-between items-center z-10">
           <div className="flex items-center gap-4">
             {dirtyRows.length > 0 && (
               <span className="text-sm text-muted-foreground">
@@ -704,28 +705,28 @@ export default function LaboratoryResults() {
             <Button onClick={handleRelease}>Release Results</Button>
           </div>
         </div>
-      </div>
 
-      {/* Add Test Modal */}
-      <AddTestModal
-        open={showAddTestModal}
-        onClose={() => setShowAddTestModal(false)}
-        onAddTest={handleAddTest}
-        existingTestIds={existingTestIds}
-      />
+        {/* Add Test Modal */}
+        <AddTestModal
+          open={showAddTestModal}
+          onClose={() => setShowAddTestModal(false)}
+          onAddTest={handleAddTest}
+          existingTestIds={existingTestIds}
+        />
 
-      {/* Sample Collection Sheet */}
-      <SampleCollectionSheet
-        open={showSampleSheet}
-        onClose={() => setShowSampleSheet(false)}
-        orderId={mockOrder.id}
-        specimenType={mockOrder.specimen.type}
-        testIds={testIdsForSample}
-        testStatuses={testStatuses}
-        onCollect={collectSample}
-        getExistingSampleForTests={getExistingSampleForTests}
-        testDefinitions={testDefinitionsMap}
-      />
+        {/* Sample Collection Sheet */}
+        <SampleCollectionSheet
+          open={showSampleSheet}
+          onClose={() => setShowSampleSheet(false)}
+          orderId={mockOrder.id}
+          specimenType={mockOrder.specimen.type}
+          testIds={testIdsForSample}
+          testStatuses={testStatuses}
+          onCollect={collectSample}
+          getExistingSampleForTests={getExistingSampleForTests}
+          testDefinitions={testDefinitionsMap}
+        />
+      </PageContent>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { VisitHeader } from "@/components/timeline/VisitHeader";
 import { HeatmapOverview } from "@/components/timeline/HeatmapOverview";
 import { TimelineView } from "@/components/timeline/TimelineView";
@@ -100,7 +101,7 @@ const PatientTimeline = () => {
     <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
+      <PageContent className="flex flex-col overflow-hidden">
         <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Timeline"]} />
         
         {/* Back Button */}
@@ -144,7 +145,7 @@ const PatientTimeline = () => {
             onFilterChange={setActiveFilters}
           />
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };

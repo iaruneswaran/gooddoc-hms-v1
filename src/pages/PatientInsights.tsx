@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
@@ -175,7 +176,7 @@ const PatientInsights = () => {
     <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px] flex flex-col overflow-hidden">
+      <PageContent className="flex flex-col overflow-hidden">
         <AppHeader breadcrumbs={[
           { 
             label: fromPage === "patients" ? "Patients" : "Appointments", 
@@ -285,7 +286,7 @@ const PatientInsights = () => {
             />
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };
