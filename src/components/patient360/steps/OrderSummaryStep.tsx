@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Patient, ClinicalNote, Prescription, LabOrder } from "@/types/patient360";
 import { Pill, FlaskConical, Stethoscope, Clock, Calendar, Printer, CheckCircle2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface OrderSummaryStepProps {
   patient: Patient;
@@ -20,6 +21,7 @@ export function OrderSummaryStep({
   labOrder,
   onBack 
 }: OrderSummaryStepProps) {
+  const navigate = useNavigate();
   const age = Math.floor(
     (new Date().getTime() - new Date(patient.dob).getTime()) / 
     (365.25 * 24 * 60 * 60 * 1000)
@@ -28,7 +30,7 @@ export function OrderSummaryStep({
   const hasContent = clinicalNote || (prescription && prescription.items.length > 0) || (labOrder && labOrder.tests.length > 0);
 
   const handleSubmit = () => {
-    const actions: string[] = [];
+    const actions: string[] = ["Patient visit completed"];
     
     if (clinicalNote) {
       actions.push("Clinical notes recorded");
@@ -53,6 +55,10 @@ export function OrderSummaryStep({
         </div>
       ),
     });
+
+    setTimeout(() => {
+      navigate("/outpatient");
+    }, 1500);
   };
 
   return (
