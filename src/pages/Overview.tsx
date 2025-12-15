@@ -207,16 +207,16 @@ const StandardMetricCard = ({
 const Overview = () => {
   const primaryCards: MetricCardProps[] = [
     {
-      title: "OP Patients Today",
+      title: "OP Patients",
       count: 847,
       icon: Users,
       route: "/patients/op?date=today",
       iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "Completed", value: 282, filterParam: "visitStatus=Completed" },
-        { label: "Pending", value: 54, filterParam: "visitStatus=Pending" },
-        { label: "Queue", value: 56, filterParam: "visitStatus=In_Queue" },
+        { label: "Consultation Completed", value: 282, filterParam: "visitStatus=Completed" },
+        { label: "Check in completed", value: 54, filterParam: "visitStatus=Pending" },
+        { label: "Pending to check in", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
     },
     {
@@ -227,7 +227,8 @@ const Overview = () => {
       iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "Admitted Today", value: 19, filterParam: "admittedToday=true" },
+        { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
+        { label: "ER case today", value: 8, filterParam: "erCase=true" },
       ],
     },
     {
@@ -238,11 +239,13 @@ const Overview = () => {
       iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "Outpatient", value: 41, filterParam: "status=OP" },
+        { label: "ICU", value: 25 },
+        { label: "Ward", value: 21 },
+        { label: "Rooms", value: "03" },
       ],
     },
     {
-      title: "Discharged Today",
+      title: "Discharged",
       count: 45,
       icon: LogOut,
       route: "/patients/discharged?date=today",
@@ -263,21 +266,21 @@ const Overview = () => {
       iconColorClass: iconColors.doctors,
     },
     {
-      title: "Scheduled Today",
+      title: "Appointment request received",
       count: 342,
       icon: CalendarClock,
       route: "/schedule/today?date=today",
       iconColorClass: iconColors.doctors,
     },
     {
-      title: "Lab Reports Pending",
+      title: "Lab orders today",
       count: 156,
       icon: FlaskConical,
       route: "/lab/pending?status=pending",
       iconColorClass: iconColors.labs,
     },
     {
-      title: "Surgeries Today",
+      title: "Surgeries",
       count: 24,
       icon: Scissors,
       route: "/or/surgeries?date=today",
@@ -291,21 +294,21 @@ const Overview = () => {
       iconColorClass: iconColors.emergency,
     },
     {
-      title: "Pharmacy Pending",
+      title: "Total medicine orders",
       count: 89,
       icon: Pill,
       route: "/pharmacy/pending?status=pending",
       iconColorClass: iconColors.pharmacy,
     },
     {
-      title: "Radiology Queue",
+      title: "Radiology orders today",
       count: 34,
       icon: ScanLine,
       route: "/radiology/queue?status=queued",
       iconColorClass: iconColors.labs,
     },
     {
-      title: "Low Stock Items",
+      title: "Low Stock",
       count: 34,
       icon: PackageOpen,
       route: "/inventory/low-stock",
