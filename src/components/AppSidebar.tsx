@@ -5,7 +5,7 @@ import logo from "@/assets/logo.svg";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/overview" },
-  { icon: CalendarCheck, label: "Appointment Request", href: "/inbox" },
+  { icon: CalendarCheck, label: "New Appointment", href: "/inbox" },
   { icon: Calendar, label: "Appointments", href: "/" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
