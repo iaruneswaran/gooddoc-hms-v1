@@ -13,6 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EditPatientModal } from "@/components/patients/EditPatientModal";
 import { toast } from "@/hooks/use-toast";
 
@@ -148,6 +155,17 @@ export default function Patients() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState(PATIENTS);
+  const [genderFilter, setGenderFilter] = useState("all");
+  const [bloodGroupFilter, setBloodGroupFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  // Get unique filter options
+  const filterOptions = useMemo(() => {
+    const genders = [...new Set(patients.map(p => p.gender))];
+    const bloodGroups = [...new Set(patients.map(p => p.bloodGroup))];
+    const statuses = [...new Set(patients.map(p => p.status))];
+    return { genders, bloodGroups, statuses };
+  }, [patients]);
 
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
@@ -158,9 +176,13 @@ export default function Patients() {
         patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         patient.address.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesSearch;
+      const matchesGender = genderFilter === "all" || patient.gender === genderFilter;
+      const matchesBloodGroup = bloodGroupFilter === "all" || patient.bloodGroup === bloodGroupFilter;
+      const matchesStatus = statusFilter === "all" || patient.status === statusFilter;
+
+      return matchesSearch && matchesGender && matchesBloodGroup && matchesStatus;
     });
-  }, [searchQuery, patients]);
+  }, [searchQuery, patients, genderFilter, bloodGroupFilter, statusFilter]);
 
   const handleEditPatient = (patient: Patient) => {
     setSelectedPatient(patient);
@@ -218,14 +240,49 @@ export default function Patients() {
                 All Patients
               </div>
             </div>
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              <Input
-                placeholder="Search by name, ID, email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9"
-              />
+            <div className="flex items-center gap-3">
+              <Select value={genderFilter} onValueChange={setGenderFilter}>
+                <SelectTrigger className="w-[140px] h-9">
+                  <SelectValue placeholder="All Genders" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Genders</SelectItem>
+                  {filterOptions.genders.map((gender) => (
+                    <SelectItem key={gender} value={gender}>{gender}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={bloodGroupFilter} onValueChange={setBloodGroupFilter}>
+                <SelectTrigger className="w-[140px] h-9">
+                  <SelectValue placeholder="All Blood Groups" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Blood Groups</SelectItem>
+                  {filterOptions.bloodGroups.map((bg) => (
+                    <SelectItem key={bg} value={bg}>{bg}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[120px] h-9">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  {filterOptions.statuses.map((status) => (
+                    <SelectItem key={status} value={status}>{status}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="relative w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                <Input
+                  placeholder="Search by name, ID, email..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 h-9"
+                />
+              </div>
             </div>
           </div>
 
