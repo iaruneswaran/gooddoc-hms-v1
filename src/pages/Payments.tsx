@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Download, ExternalLink } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -32,6 +32,10 @@ import { toast } from "@/hooks/use-toast";
 const Payments = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromSearch = searchParams.get("from") === "search";
+  const patientSearchQuery = searchParams.get("q") || "";
+  const actionType = searchParams.get("action");
   const [selectedInvoices, setSelectedInvoices] = useState<string[]>(["INV-2025-001"]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successType, setSuccessType] = useState<"payment" | "advance">("payment");
@@ -39,15 +43,23 @@ const Payments = () => {
   const [advanceBalance, setAdvanceBalance] = useState(320000); // in paise
   
   // Insurance filters
-  const [searchQuery, setSearchQuery] = useState("");
+  const [claimSearchQuery, setClaimSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<ClaimStatus | "All">("All");
   const [serviceTypeFilter, setServiceTypeFilter] = useState<ServiceType | "All">("All");
+
+  const handleBack = () => {
+    if (fromSearch && patientSearchQuery) {
+      navigate(`/patients/search?q=${patientSearchQuery}`);
+    } else {
+      navigate(`/patient-insights/${patientId}`);
+    }
+  };
 
   // Filter insurance claims
   const filteredClaims = useMemo(() => {
     return mockClaims.filter((claim) => {
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+      if (claimSearchQuery) {
+        const query = claimSearchQuery.toLowerCase();
         const matchesClaimNo = claim.claimNo.toLowerCase().includes(query);
         const matchesPatient = claim.patient?.name.toLowerCase().includes(query);
         const matchesPolicy = claim.policy?.policyNo.toLowerCase().includes(query);
@@ -72,7 +84,7 @@ const Payments = () => {
 
       return true;
     });
-  }, [searchQuery, statusFilter, serviceTypeFilter]);
+  }, [claimSearchQuery, statusFilter, serviceTypeFilter]);
 
   // Mock data - invoices in paise
   const invoices: Invoice[] = [
@@ -282,7 +294,7 @@ const Payments = () => {
   };
 
   const handleClearFilters = () => {
-    setSearchQuery("");
+    setClaimSearchQuery("");
     setStatusFilter("All");
     setServiceTypeFilter("All");
   };
@@ -296,16 +308,16 @@ const Payments = () => {
       <AppSidebar />
       
       <PageContent>
-        <AppHeader breadcrumbs={["Appointments", "Patient Insights", "Payments"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Payments"] : ["Appointments", "Patient Insights", "Payments"]} />
         
         <main className="p-6 space-y-6">
           {/* Back Button */}
           <button
-            onClick={() => navigate(`/patient-insights/${patientId}`)}
+            onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="font-semibold">Patient Insights</span>
+            <span className="font-semibold">{fromSearch ? "Search Results" : "Patient Insights"}</span>
           </button>
 
           {/* Header with KPIs */}
@@ -324,7 +336,7 @@ const Payments = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="collection" className="w-full">
+          <Tabs defaultValue={actionType === "advance" ? "advance" : "collection"} className="w-full">
             <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 border-b border-border">
               <TabsTrigger 
                 value="collection"
@@ -391,7 +403,7 @@ const Payments = () => {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <ClaimFilters
-                      onSearchChange={setSearchQuery}
+                      onSearchChange={setClaimSearchQuery}
                       onStatusChange={setStatusFilter}
                       onServiceTypeChange={setServiceTypeFilter}
                       onClearFilters={handleClearFilters}
