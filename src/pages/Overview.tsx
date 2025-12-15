@@ -39,6 +39,7 @@ interface MetricCardProps {
   iconColorClass: string;
   isPrimary?: boolean;
   subMetrics?: SubMetric[];
+  accentText?: string;
 }
 
 // Icon color classes per category
@@ -59,6 +60,7 @@ const PrimaryMetricCard = ({
   route, 
   iconColorClass,
   subMetrics = [],
+  accentText,
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
@@ -105,9 +107,14 @@ const PrimaryMetricCard = ({
                 <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
                   <Icon className={`w-4 h-4 ${iconColorClass}`} />
                 </div>
-                <p className="text-sm font-semibold text-foreground">
-                  {title}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-foreground">
+                    {title}
+                  </p>
+                  {accentText && (
+                    <span className="text-xs font-medium text-destructive">{accentText}</span>
+                  )}
+                </div>
               </div>
               <ChevronRight 
                 aria-hidden="true"
@@ -162,6 +169,7 @@ const StandardMetricCard = ({
   icon: Icon, 
   route, 
   iconColorClass,
+  accentText,
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
@@ -191,10 +199,15 @@ const StandardMetricCard = ({
               {title}
             </p>
           </div>
-          <ChevronRight 
-            aria-hidden="true"
-            className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" 
-          />
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            {accentText && (
+              <span className="text-xs font-medium text-destructive whitespace-nowrap">{accentText}</span>
+            )}
+            <ChevronRight 
+              aria-hidden="true"
+              className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
+            />
+          </div>
         </button>
       </TooltipTrigger>
       <TooltipContent side="bottom">
@@ -207,16 +220,17 @@ const StandardMetricCard = ({
 const Overview = () => {
   const primaryCards: MetricCardProps[] = [
     {
-      title: "OP Patients",
+      title: "OP Patients Today",
       count: 847,
       icon: Users,
       route: "/patients/op?date=today",
       iconColorClass: iconColors.patients,
       isPrimary: true,
+      accentText: "OP Patients",
       subMetrics: [
-        { label: "Completed", value: 282, filterParam: "visitStatus=Completed" },
-        { label: "Pending", value: 54, filterParam: "visitStatus=Pending" },
-        { label: "Queue", value: 56, filterParam: "visitStatus=In_Queue" },
+        { label: "Consultation Completed", value: 282, filterParam: "visitStatus=Completed" },
+        { label: "Check in completed", value: 54, filterParam: "visitStatus=Pending" },
+        { label: "Pending to check in", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
     },
     {
@@ -226,8 +240,10 @@ const Overview = () => {
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
       isPrimary: true,
+      accentText: "New Admissions",
       subMetrics: [
         { label: "Admitted Today", value: 19, filterParam: "admittedToday=true" },
+        { label: "Outpatient", value: 41, filterParam: "status=OP" },
       ],
     },
     {
@@ -237,8 +253,11 @@ const Overview = () => {
       route: "/patients/check-in?date=today",
       iconColorClass: iconColors.patients,
       isPrimary: true,
+      accentText: "Bed Availability",
       subMetrics: [
-        { label: "Outpatient", value: 41, filterParam: "status=OP" },
+        { label: "ICU", value: 25, filterParam: "bed=ICU" },
+        { label: "Ward", value: 21, filterParam: "bed=Ward" },
+        { label: "Rooms", value: "03", filterParam: "bed=Rooms" },
       ],
     },
     {
@@ -268,6 +287,7 @@ const Overview = () => {
       icon: CalendarClock,
       route: "/schedule/today?date=today",
       iconColorClass: iconColors.doctors,
+      accentText: "Appointment request received",
     },
     {
       title: "Lab Reports Pending",
@@ -275,6 +295,7 @@ const Overview = () => {
       icon: FlaskConical,
       route: "/lab/pending?status=pending",
       iconColorClass: iconColors.labs,
+      accentText: "Lab orders today",
     },
     {
       title: "Surgeries Today",
@@ -289,6 +310,7 @@ const Overview = () => {
       icon: AlertTriangle,
       route: "/er/cases?status=active",
       iconColorClass: iconColors.emergency,
+      accentText: "Walk-in Patients",
     },
     {
       title: "Pharmacy Pending",
@@ -296,6 +318,7 @@ const Overview = () => {
       icon: Pill,
       route: "/pharmacy/pending?status=pending",
       iconColorClass: iconColors.pharmacy,
+      accentText: "Total medicine orders",
     },
     {
       title: "Radiology Queue",
@@ -303,6 +326,7 @@ const Overview = () => {
       icon: ScanLine,
       route: "/radiology/queue?status=queued",
       iconColorClass: iconColors.labs,
+      accentText: "Radiology orders today",
     },
     {
       title: "Low Stock Items",
