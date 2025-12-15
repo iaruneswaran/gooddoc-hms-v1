@@ -186,9 +186,9 @@ function OPPatientContent({ patient }: { patient: OPPatientData }) {
       {/* Options */}
       <div className="bg-muted/50 rounded-lg p-3">
         <h4 className="text-sm font-medium text-foreground mb-2">Options</h4>
-        <div className="space-y-1">
+        <div className="space-y-2">
           {patient.options.map((opt, idx) => (
-            <Button key={idx} variant="link" size="sm" className="p-0 h-auto text-xs text-primary justify-start">
+            <Button key={idx} variant="outline" size="sm" className="w-full justify-start text-sm">
               {opt}
             </Button>
           ))}
