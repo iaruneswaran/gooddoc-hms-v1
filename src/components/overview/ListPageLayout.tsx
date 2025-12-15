@@ -185,11 +185,6 @@ export function ListPageLayout<T>({
                 <div>
                   <div className="flex items-center gap-3">
                     <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
-                    {activeUrlFilter && (
-                      <Badge className="bg-primary/10 text-primary border-primary/20 text-sm px-3 py-1">
-                        {activeUrlFilter.label}
-                      </Badge>
-                    )}
                     <Badge variant="secondary" className="text-lg px-3 py-1">
                       {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
                     </Badge>
