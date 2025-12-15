@@ -239,9 +239,9 @@ const Overview = () => {
       iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "ICU", value: 25 },
-        { label: "Ward", value: 21 },
-        { label: "Rooms", value: "03" },
+        { label: "ICU", value: 25, filterParam: "bedType=icu" },
+        { label: "Ward", value: 21, filterParam: "bedType=ward" },
+        { label: "Rooms", value: "03", filterParam: "bedType=rooms" },
       ],
     },
     {
