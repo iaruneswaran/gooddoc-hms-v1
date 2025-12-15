@@ -5,7 +5,7 @@ import logo from "@/assets/logo.svg";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/overview" },
-  { icon: CalendarCheck, label: "Schedule Request", href: "/inbox" },
+  { icon: CalendarCheck, label: "Schedule Request", href: "/inbox", badge: 12 },
   { icon: Calendar, label: "Appointments", href: "/" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
@@ -44,7 +44,12 @@ export function AppSidebar() {
               )}
             >
               <Icon className="w-4 h-4" />
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.badge && (
+                <span className="min-w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           );
         })}
