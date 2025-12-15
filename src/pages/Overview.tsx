@@ -140,8 +140,6 @@ const Overview = () => {
       isPrimary: true,
       subData: [
         { label: "Completed", value: opSubData.completed },
-        { label: "In Consultation", value: opSubData.inConsultation },
-        { label: "Waiting", value: opSubData.waiting },
       ],
     },
     {
@@ -154,8 +152,6 @@ const Overview = () => {
       isPrimary: true,
       subData: [
         { label: "Admitted Today", value: ipSubData.admittedToday },
-        { label: "ICU Occupied", value: ipSubData.icuOccupied },
-        { label: "Avg LOS", value: `${ipSubData.avgLos}d` },
       ],
     },
     {
@@ -167,9 +163,7 @@ const Overview = () => {
       colorClass: "",
       isPrimary: true,
       subData: [
-        { label: "OP", value: checkInSubData.op },
-        { label: "IP", value: checkInSubData.ip },
-        { label: "ER", value: checkInSubData.er },
+        { label: "Outpatient", value: checkInSubData.op },
       ],
     },
     {
@@ -181,9 +175,7 @@ const Overview = () => {
       colorClass: "",
       isPrimary: true,
       subData: [
-        { label: "Completed", value: dischargedSubData.completed },
         { label: "Pending", value: dischargedSubData.pendingClearance },
-        { label: "Avg LOS", value: `${dischargedSubData.avgLos}d` },
       ],
     },
   ];
