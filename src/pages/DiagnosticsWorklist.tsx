@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -207,7 +208,7 @@ export default function DiagnosticsWorklist() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Diagnostics"]} />
         
         <main className="p-6">
@@ -378,7 +379,7 @@ export default function DiagnosticsWorklist() {
             ))}
           </div>
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 }

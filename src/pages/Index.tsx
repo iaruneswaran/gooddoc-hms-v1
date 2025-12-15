@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { AppointmentTabs } from "@/components/AppointmentTabs";
 import { AppointmentTable } from "@/components/AppointmentTable";
@@ -31,7 +32,7 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Appointments"]} />
         
         <main className="p-6 pr-4">
@@ -106,7 +107,7 @@ const Index = () => {
             specialtyFilter={departmentFilter}
           />
         </main>
-      </div>
+      </PageContent>
     </div>
   );
 };

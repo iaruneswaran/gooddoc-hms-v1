@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
+import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle } from "lucide-react";
@@ -334,7 +335,7 @@ export default function DoctorsList() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <PageContent>
         <AppHeader breadcrumbs={["Doctors"]} />
         
         <main className="p-6">
@@ -484,7 +485,7 @@ export default function DoctorsList() {
             </div>
           )}
         </main>
-      </div>
+      </PageContent>
 
       {/* View Drawer */}
       <Sheet open={viewDrawerOpen} onOpenChange={setViewDrawerOpen}>
