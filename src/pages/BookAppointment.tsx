@@ -43,14 +43,9 @@ const BookAppointment = () => {
   const patientIdFromQuery = searchParams.get("patientId");
   const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
   
-  // Check if coming from patient search
-  const fromSearch = location.state?.fromSearch;
-  const patientSearchQuery = location.state?.patientSearchQuery || "";
-  
   const fromPatientInsights = location.state?.fromPatientInsights;
   const patientId = location.state?.patientId || patientIdFromQuery;
   const visitId = location.state?.visitId; // Visit ID for new appointments
-  const patientData = location.state?.patient;
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
@@ -467,38 +462,30 @@ const BookAppointment = () => {
       <AppSidebar />
       
       <PageContent>
-        <AppHeader breadcrumbs={
-          fromSearch 
-            ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"]
-            : fromPatients 
-              ? ["Patients", "Book Appointment"] 
-              : ["Appointments", "Appointment"]
-        } />
+        <AppHeader breadcrumbs={fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"]} />
         
         <main className="p-6 pb-32">
           <button
             onClick={() => {
-              if (fromSearch && patientSearchQuery) {
-                navigate(`/patients/search?q=${patientSearchQuery}`);
-              } else if (fromPatients) {
+              if (fromPatients) {
                 navigate("/patients");
               } else if (isSingleAppointmentMode) {
                 navigate("/inbox");
               } else if (fromPatientInsights) {
                 navigate(`/patient-insights/${patientId}`);
               } else {
-                navigate("/");
+                navigate("/registration");
               }
             }}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">
-              {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Appointments")))}
+              {fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration"))}
             </span>
           </button>
 
-          {!isSingleAppointmentMode && !fromSearch && (
+          {!isSingleAppointmentMode && (
             <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients ? ["search", "registration"] : []} />
           )}
 
@@ -589,8 +576,8 @@ const BookAppointment = () => {
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted-foreground mb-1.5">Patient</p>
-                    <p className="text-sm font-medium text-foreground">{patientData?.name || "Siva Karthikeyan"}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{patientData?.gdid || "GDID - 009"} • {patientData?.age || 35} | {patientData?.gender || "M"}</p>
+                    <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">GDID - 009 • 35 | M</p>
                   </div>
 
                   {visitId && (
