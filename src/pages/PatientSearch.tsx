@@ -39,18 +39,19 @@ export default function PatientSearch() {
   const handleOptionClick = (option: string) => {
     if (!patient) return;
     const gdid = patient.gdid;
+    const searchQuery = query;
     switch (option) {
       case "Add amount":
-        navigate(`/payments/${gdid}?action=add`);
+        navigate(`/patient-insights/${gdid}/payments?action=advance&from=search&q=${searchQuery}`);
         break;
       case "Book appointment":
-        navigate(`/new-appointment?patientId=${gdid}`);
+        navigate(`/new-appointment?patientId=${gdid}&from=search&q=${searchQuery}`);
         break;
       case "Discharge":
-        navigate(`/discharge/${gdid}`);
+        navigate(`/patient-insights/${gdid}/discharge?from=search&q=${searchQuery}`);
         break;
       case "Payments":
-        navigate(`/payments/${gdid}`);
+        navigate(`/patient-insights/${gdid}/payments?from=search&q=${searchQuery}`);
         break;
       default:
         break;

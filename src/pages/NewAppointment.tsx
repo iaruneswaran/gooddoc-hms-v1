@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -29,7 +29,20 @@ const mockPatients = [
 
 const NewAppointment = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [searchResults, setSearchResults] = useState<typeof mockPatients>([]);
+  
+  const fromSearch = searchParams.get("from") === "search";
+  const patientSearchQuery = searchParams.get("q") || "";
+  const patientIdFromSearch = searchParams.get("patientId");
+
+  const handleBack = () => {
+    if (fromSearch && patientSearchQuery) {
+      navigate(`/patients/search?q=${patientSearchQuery}`);
+    } else {
+      navigate("/");
+    }
+  };
 
   const handleSearch = (searchType: string, searchValue: string) => {
     // Mock search - in real app, this would call an API
@@ -40,7 +53,7 @@ const NewAppointment = () => {
     const patient = mockPatients.find(p => p.id === patientId);
     // Generate visit ID for new appointments (not from patient insights)
     const visitId = `VST-${Math.floor(100000 + Math.random() * 900000)}`;
-    navigate("/book-appointment", { state: { patient, visitId } });
+    navigate("/book-appointment", { state: { patient, visitId, fromSearch, patientSearchQuery } });
   };
 
   const handleCreateNewRegistration = () => {
@@ -52,15 +65,15 @@ const NewAppointment = () => {
       <AppSidebar />
       
       <PageContent>
-        <AppHeader breadcrumbs={["Appointments", "Search"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Book Appointment"] : ["Appointments", "Search"]} />
         
         <main className="p-6">
           <button
-            onClick={() => navigate("/")}
+            onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">Appointment List</span>
+            <span className="font-semibold">{fromSearch ? "Search Results" : "Appointment List"}</span>
           </button>
 
           <BookingSteps currentStep="search" />

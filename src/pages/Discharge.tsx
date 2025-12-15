@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, RefreshCw, Plus, Upload, Printer, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -16,9 +16,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 const Discharge = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { patientId } = useParams();
   const visitId = location.state?.visitId || "VST-205431";
   const [currentStep, setCurrentStep] = useState(1);
+  
+  const fromSearch = searchParams.get("from") === "search";
+  const patientSearchQuery = searchParams.get("q") || "";
+
+  const handleBack = () => {
+    if (fromSearch && patientSearchQuery) {
+      navigate(`/patients/search?q=${patientSearchQuery}`);
+    } else {
+      navigate(`/patient-insights/${patientId}`);
+    }
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -38,15 +50,15 @@ const Discharge = () => {
       <AppSidebar />
       
       <div className="flex-1 ml-[196px]">
-        <AppHeader breadcrumbs={["Patient Insights", "Discharge"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
         <main className="p-6">
           <button
-            onClick={() => navigate(`/patient-insights/${patientId}`)}
+            onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">Patient Insights</span>
+            <span className="font-semibold">{fromSearch ? "Search Results" : "Patient Insights"}</span>
           </button>
 
           <div className="mb-6">
