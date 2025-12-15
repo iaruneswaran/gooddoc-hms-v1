@@ -109,7 +109,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-[200px] h-10 pr-8"
+              className="w-[500px] h-10 pr-8"
               aria-label="Search patients"
             />
             {searchValue && (
