@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
-import { CalendarWidget } from "@/components/CalendarWidget";
 import { Card } from "@/components/ui/card";
+import { format } from "date-fns";
 import { 
-  Users, 
+  Users,
   BedDouble, 
   UserCheck, 
   LogOut, 
@@ -59,9 +59,9 @@ const MetricCard = ({
         onClick={() => navigate(route)}
         aria-label={`Open ${title} list`}
         className="
-          group w-full text-left rounded-lg border border-border overflow-hidden bg-card
+          group w-full text-left rounded-lg border border-primary/10 overflow-hidden bg-[hsl(var(--gd-primary-50))]
           transition-all duration-200 ease-out
-          hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5
+          hover:border-primary/30 hover:-translate-y-0.5
           active:scale-[0.98]
           focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
           h-[160px] flex flex-col
@@ -111,9 +111,9 @@ const MetricCard = ({
       onClick={() => navigate(route)}
       aria-label={`Open ${title} list`}
       className="
-        group w-full text-left rounded-lg border border-border bg-card
+        group w-full text-left rounded-lg border border-primary/10 bg-[hsl(var(--gd-primary-50))]
         transition-all duration-200 ease-out
-        hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5
+        hover:border-primary/30 hover:-translate-y-0.5
         active:scale-[0.98]
         focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
         h-[75px] px-4 flex items-center gap-3
@@ -262,6 +262,8 @@ const Overview = () => {
     },
   ];
 
+  const today = new Date();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -273,8 +275,10 @@ const Overview = () => {
           {/* Header Card */}
           <Card className="p-5 mb-6">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Overview</h1>
-              <CalendarWidget />
+              <div>
+                <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
+                <p className="text-sm text-muted-foreground">{format(today, "EEEE, MMMM d, yyyy")}</p>
+              </div>
             </div>
           </Card>
 
