@@ -59,44 +59,41 @@ const MetricCard = ({
         onClick={() => navigate(route)}
         aria-label={`Open ${title} list`}
         className="
-          group w-full text-left rounded-lg border border-primary/10 overflow-hidden bg-[hsl(var(--gd-primary-50))]
+          group w-full text-left rounded-xl border border-primary/15 overflow-hidden bg-card
           transition-all duration-200 ease-out
-          hover:border-primary/30 hover:-translate-y-0.5
+          hover:border-primary/40 hover:-translate-y-0.5
           active:scale-[0.98]
           focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
           h-[160px] flex flex-col
         "
       >
         {/* Main content */}
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-5">
           <div className="flex items-start justify-between">
-            <div>
-              <p className="text-3xl font-bold text-foreground">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  {title}
+                </p>
+              </div>
+              <p className="text-4xl font-bold text-foreground tracking-tight">
                 {count.toLocaleString()}
               </p>
-              <p className="text-sm font-medium text-foreground mt-1">
-                {title}
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                {subtitle}
-              </p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-card">
-                <Icon className="w-5 h-5 text-foreground" />
-              </div>
-              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform duration-200" />
-            </div>
+            <ArrowRight className="w-5 h-5 text-primary/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" />
           </div>
         </div>
         
         {/* Sub-data band */}
         {subData && (
-          <div className="bg-card border-t border-primary/10 px-4 py-2 flex items-center gap-4">
+          <div className="bg-primary/5 border-t border-primary/10 px-5 py-2.5 flex items-center gap-5">
             {subData.map((item, idx) => (
               <div key={idx} className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">{item.label}:</span>
-                <span className="text-xs font-semibold text-foreground">{item.value}</span>
+                <span className="text-xs font-bold text-primary">{item.value}</span>
               </div>
             ))}
           </div>
@@ -111,26 +108,26 @@ const MetricCard = ({
       onClick={() => navigate(route)}
       aria-label={`Open ${title} list`}
       className="
-        group w-full text-left rounded-lg border border-primary/10 bg-[hsl(var(--gd-primary-50))]
+        group w-full text-left rounded-xl border border-primary/15 bg-card
         transition-all duration-200 ease-out
-        hover:border-primary/30 hover:-translate-y-0.5
+        hover:border-primary/40 hover:-translate-y-0.5
         active:scale-[0.98]
         focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-        h-[75px] px-4 flex items-center gap-3
+        h-[72px] px-4 flex items-center gap-3
       "
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-card shrink-0">
-        <Icon className="w-5 h-5 text-foreground" />
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 shrink-0">
+        <Icon className="w-5 h-5 text-primary" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xl font-bold text-foreground">
+        <p className="text-2xl font-bold text-foreground tracking-tight">
           {count.toLocaleString()}
         </p>
         <p className="text-xs text-muted-foreground truncate">
           {subtitle}
         </p>
       </div>
-      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform duration-200 shrink-0" />
+      <ArrowRight className="w-4 h-4 text-primary/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
     </button>
   );
 };
