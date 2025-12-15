@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Overview from "./pages/Overview";
 import NewAppointment from "./pages/NewAppointment";
 import Registration from "./pages/Registration";
 import BookAppointment from "./pages/BookAppointment";
@@ -31,6 +32,14 @@ import PricingCatalog from "./pages/PricingCatalog";
 import AddPricingItem from "./pages/AddPricingItem";
 import Pharmacy from "./pages/Pharmacy";
 import Reports from "./pages/Reports";
+import OPPatientsToday from "./pages/OPPatientsToday";
+import IPPatients from "./pages/IPPatients";
+import CheckInPatients from "./pages/CheckInPatients";
+import DischargedToday from "./pages/DischargedToday";
+import DoctorsOnDuty from "./pages/DoctorsOnDuty";
+import AvailableDoctors from "./pages/AvailableDoctors";
+import ScheduledToday from "./pages/ScheduledToday";
+import WalkInPatients from "./pages/WalkInPatients";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +51,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/overview" element={<Overview />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/new-appointment" element={<NewAppointment />} />
           <Route path="/registration" element={<Registration />} />
@@ -70,6 +80,15 @@ const App = () => (
           <Route path="/pricing-catalog/new" element={<AddPricingItem />} />
           <Route path="/pharmacy" element={<Pharmacy />} />
           <Route path="/reports" element={<Reports />} />
+          {/* Overview drill-down routes */}
+          <Route path="/patients/op" element={<OPPatientsToday />} />
+          <Route path="/patients/ip" element={<IPPatients />} />
+          <Route path="/patients/check-in" element={<CheckInPatients />} />
+          <Route path="/patients/discharged" element={<DischargedToday />} />
+          <Route path="/doctors/on-duty" element={<DoctorsOnDuty />} />
+          <Route path="/doctors/available" element={<AvailableDoctors />} />
+          <Route path="/schedule/today" element={<ScheduledToday />} />
+          <Route path="/patients/walk-in" element={<WalkInPatients />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
