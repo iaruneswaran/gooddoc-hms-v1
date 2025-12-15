@@ -72,8 +72,9 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   }, [searchResult, showNotFound]);
 
   return (
-    <header className="relative h-16 border-b border-border bg-card flex items-center justify-between px-8" ref={containerRef}>
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <header className="relative h-16 border-b border-border bg-card flex items-center px-8" ref={containerRef}>
+      {/* Breadcrumbs - Left */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-[200px]">
         {breadcrumbs.map((crumb, index) => {
           const isClickable = typeof crumb === "object";
           const label = isClickable ? crumb.label : crumb;
@@ -99,17 +100,18 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
         })}
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Patient Search */}
+      {/* Patient Search - Center */}
+      <div className="flex-1 flex justify-center">
         <div className="relative flex items-center gap-2">
           <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               type="text"
               placeholder="Search by phone number"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-[500px] h-10 pr-8"
+              className="w-[500px] h-11 pl-10 pr-8 text-sm border-2 border-muted focus:border-primary shadow-sm"
               aria-label="Search patients"
             />
             {searchValue && (
@@ -121,14 +123,18 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
               </button>
             )}
           </div>
-          <Button size="sm" onClick={handleSearch} className="h-10">
-            <Search className="w-4 h-4" />
+          <Button onClick={handleSearch} className="h-11 px-4">
+            <Search className="w-4 h-4 mr-2" />
+            Search
           </Button>
           {validationError && (
             <p className="absolute top-full left-0 mt-1 text-xs text-destructive">{validationError}</p>
           )}
         </div>
+      </div>
 
+      {/* Icons - Right */}
+      <div className="flex items-center gap-2 min-w-[200px] justify-end">
         <button className="relative p-2 hover:bg-secondary rounded-lg transition-colors">
           <Bell className="w-5 h-5 text-foreground" />
         </button>
