@@ -16,115 +16,169 @@ import {
   Pill,
   ScanLine,
   PackageOpen,
-  ArrowRight
+  ChevronRight
 } from "lucide-react";
 import {
-  opSubData,
-  ipSubData,
-  checkInSubData,
-  dischargedSubData,
-} from "@/data/overview.mock";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-interface SubDataItem {
+interface SubMetric {
   label: string;
   value: number | string;
+  filterParam?: string;
 }
 
 interface MetricCardProps {
   title: string;
   count: number;
-  subtitle: string;
   icon: React.ElementType;
   route: string;
-  colorClass: string;
+  iconColorClass: string;
   isPrimary?: boolean;
-  subData?: SubDataItem[];
+  subMetrics?: SubMetric[];
 }
 
-const MetricCard = ({ 
+// Icon color classes per category
+const iconColors = {
+  patients: "text-blue-600",
+  doctors: "text-indigo-600",
+  labs: "text-teal-600",
+  surgery: "text-purple-600",
+  emergency: "text-red-600",
+  pharmacy: "text-amber-600",
+  inventory: "text-gray-700",
+};
+
+const PrimaryMetricCard = ({ 
   title, 
   count, 
-  subtitle, 
   icon: Icon, 
   route, 
-  colorClass,
-  isPrimary = false,
-  subData,
+  iconColorClass,
+  subMetrics = [],
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
-  if (isPrimary) {
-    return (
-      <button
-        onClick={() => navigate(route)}
-        aria-label={`Open ${title} list`}
-        className="
-          group w-full text-left rounded-xl border border-primary/15 overflow-hidden bg-card
-          transition-all duration-200 ease-out
-          hover:border-primary/40 hover:-translate-y-0.5
-          active:scale-[0.98]
-          focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-          h-[140px] flex flex-col p-4
-        "
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <div className="flex items-center gap-2.5 mb-2">
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary/10">
-                <Icon className="w-4 h-4 text-primary" />
+  const handleSubMetricClick = (e: React.MouseEvent, filterParam?: string) => {
+    e.stopPropagation();
+    if (filterParam) {
+      navigate(`${route}&${filterParam}`);
+    }
+  };
+  
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          onClick={() => navigate(route)}
+          aria-label={`Open ${title} list (${count})`}
+          className="
+            group w-full text-left rounded-xl border border-border bg-card overflow-hidden
+            transition-all duration-200 ease-out
+            hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+            active:scale-[0.98]
+            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+            h-[180px] flex flex-col
+          "
+        >
+          {/* Top section - Main metric */}
+          <div className="flex-1 p-4 flex flex-col">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm">
+                  <Icon className={`w-5 h-5 ${iconColorClass}`} />
+                </div>
+                <p className="text-sm font-semibold text-foreground">
+                  {title}
+                </p>
               </div>
-              <p className="text-xs font-medium text-muted-foreground">
-                {title}
-              </p>
+              <ChevronRight 
+                aria-hidden="true"
+                className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
+              />
             </div>
-            <p className="text-2xl font-bold text-foreground tracking-tight mb-2">
+            <p className="text-4xl font-bold text-foreground tracking-tight mt-auto">
               {count.toLocaleString()}
             </p>
-            {/* Sub-data inline */}
-            {subData && (
-              <div className="flex items-center gap-4">
-                {subData.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-1">
-                    <span className="text-[11px] text-muted-foreground">{item.label}:</span>
-                    <span className="text-[11px] font-semibold text-primary">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-          <ArrowRight className="w-4 h-4 text-primary/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" />
-        </div>
-      </button>
-    );
-  }
+          
+          {/* Divider */}
+          <div className="h-px bg-[#E5E7EB]" />
+          
+          {/* Bottom section - Sub-metrics */}
+          <div className="px-4 py-3 flex items-center gap-4 text-xs">
+            {subMetrics.map((metric, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+                className={`
+                  flex items-center gap-1.5 
+                  ${metric.filterParam ? 'hover:text-primary cursor-pointer' : 'cursor-default'}
+                  transition-colors
+                `}
+                title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
+              >
+                <span className="text-muted-foreground">{metric.label}:</span>
+                <span className="font-semibold text-foreground">{metric.value}</span>
+              </button>
+            ))}
+          </div>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        <p>View list</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
+const StandardMetricCard = ({ 
+  title, 
+  count, 
+  icon: Icon, 
+  route, 
+  iconColorClass,
+}: MetricCardProps) => {
+  const navigate = useNavigate();
   
-  // Operations card (compact)
   return (
-    <button
-      onClick={() => navigate(route)}
-      aria-label={`Open ${title} list`}
-      className="
-        group w-full text-left rounded-xl border border-primary/15 bg-card
-        transition-all duration-200 ease-out
-        hover:border-primary/40 hover:-translate-y-0.5
-        active:scale-[0.98]
-        focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-        h-[72px] px-4 flex items-center gap-3
-      "
-    >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 shrink-0">
-        <Icon className="w-5 h-5 text-primary" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-2xl font-bold text-foreground tracking-tight">
-          {count.toLocaleString()}
-        </p>
-        <p className="text-xs text-muted-foreground truncate">
-          {subtitle}
-        </p>
-      </div>
-      <ArrowRight className="w-4 h-4 text-primary/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          onClick={() => navigate(route)}
+          aria-label={`Open ${title} list (${count})`}
+          className="
+            group w-full text-left rounded-xl border border-border bg-card
+            transition-all duration-200 ease-out
+            hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+            active:scale-[0.98]
+            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+            h-[90px] px-4 flex items-center gap-3
+          "
+        >
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
+            <Icon className={`w-5 h-5 ${iconColorClass}`} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-2xl font-bold text-foreground tracking-tight">
+              {count.toLocaleString()}
+            </p>
+            <p className="text-xs font-medium text-muted-foreground truncate">
+              {title}
+            </p>
+          </div>
+          <ChevronRight 
+            aria-hidden="true"
+            className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" 
+          />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        <p>View list</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -133,117 +187,107 @@ const Overview = () => {
     {
       title: "OP Patients Today",
       count: 847,
-      subtitle: "Out-patient visits registered today",
       icon: Users,
       route: "/patients/op?date=today",
-      colorClass: "",
+      iconColorClass: iconColors.patients,
       isPrimary: true,
-      subData: [
-        { label: "Completed", value: opSubData.completed },
+      subMetrics: [
+        { label: "Completed", value: 282, filterParam: "visitStatus=Completed" },
+        { label: "Pending", value: 54, filterParam: "visitStatus=Pending" },
+        { label: "In Queue", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
     },
     {
       title: "IP Patients",
       count: 234,
-      subtitle: "Currently admitted in-patients",
       icon: BedDouble,
-      route: "/patients/ip?admitted=true",
-      colorClass: "",
+      route: "/patients/ip?status=admitted",
+      iconColorClass: iconColors.patients,
       isPrimary: true,
-      subData: [
-        { label: "Admitted Today", value: ipSubData.admittedToday },
+      subMetrics: [
+        { label: "Admitted Today", value: 19, filterParam: "admittedToday=true" },
       ],
     },
     {
       title: "Check In",
       count: 67,
-      subtitle: "All patient check-ins today (OP, IP, ER)",
       icon: UserCheck,
       route: "/patients/check-in?date=today",
-      colorClass: "",
+      iconColorClass: iconColors.patients,
       isPrimary: true,
-      subData: [
-        { label: "Outpatient", value: checkInSubData.op },
+      subMetrics: [
+        { label: "Outpatient", value: 41, filterParam: "status=OP" },
       ],
     },
     {
       title: "Discharged Today",
       count: 45,
-      subtitle: "Discharges finalized today",
       icon: LogOut,
       route: "/patients/discharged?date=today",
-      colorClass: "",
+      iconColorClass: iconColors.patients,
       isPrimary: true,
-      subData: [
-        { label: "Pending", value: dischargedSubData.pendingClearance },
+      subMetrics: [
+        { label: "Pending", value: 11, filterParam: "dischargeStatus=Pending" },
       ],
     },
   ];
 
-  const operationsCards: MetricCardProps[] = [
+  const standardCards: MetricCardProps[] = [
     {
       title: "Doctors on Duty",
       count: 89,
-      subtitle: "Active shift only",
       icon: Stethoscope,
-      route: "/doctors/on-duty?shift=active",
-      colorClass: "",
+      route: "/doctors/on-duty?shift=current",
+      iconColorClass: iconColors.doctors,
     },
     {
       title: "Scheduled Today",
       count: 342,
-      subtitle: "All appointments for today",
       icon: CalendarClock,
-      route: "/schedule/today",
-      colorClass: "",
+      route: "/schedule/today?date=today",
+      iconColorClass: iconColors.doctors,
     },
     {
       title: "Lab Reports Pending",
       count: 156,
-      subtitle: "Awaiting lab results",
       icon: FlaskConical,
-      route: "/lab/pending?date=today",
-      colorClass: "",
+      route: "/lab/pending?status=pending",
+      iconColorClass: iconColors.labs,
     },
     {
       title: "Surgeries Today",
       count: 24,
-      subtitle: "Operating room schedule",
       icon: Scissors,
       route: "/or/surgeries?date=today",
-      colorClass: "",
+      iconColorClass: iconColors.surgery,
     },
     {
       title: "Emergency Cases",
       count: 15,
-      subtitle: "ER arrivals and active cases",
       icon: AlertTriangle,
-      route: "/er/cases?date=today",
-      colorClass: "",
+      route: "/er/cases?status=active",
+      iconColorClass: iconColors.emergency,
     },
     {
       title: "Pharmacy Pending",
       count: 89,
-      subtitle: "Orders awaiting dispensing",
       icon: Pill,
-      route: "/pharmacy/pending?date=today",
-      colorClass: "",
+      route: "/pharmacy/pending?status=pending",
+      iconColorClass: iconColors.pharmacy,
     },
     {
       title: "Radiology Queue",
       count: 34,
-      subtitle: "Imaging studies in queue",
       icon: ScanLine,
-      route: "/radiology/queue?date=today",
-      colorClass: "",
+      route: "/radiology/queue?status=queued",
+      iconColorClass: iconColors.labs,
     },
     {
       title: "Low Stock Items",
       count: 34,
-      subtitle: "Below reorder threshold",
       icon: PackageOpen,
       route: "/inventory/low-stock",
-      colorClass: "",
+      iconColorClass: iconColors.inventory,
     },
   ];
 
@@ -267,17 +311,17 @@ const Overview = () => {
             </div>
           </Card>
 
-          {/* Primary Metrics Row - 4 columns */}
+          {/* Priority Cards Row - 4 columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
             {primaryCards.map((card) => (
-              <MetricCard key={card.title} {...card} />
+              <PrimaryMetricCard key={card.title} {...card} />
             ))}
           </div>
 
-          {/* Operations Metrics - 4 columns grid */}
+          {/* Standard Cards - 4 columns grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {operationsCards.map((card) => (
-              <MetricCard key={card.title} {...card} />
+            {standardCards.map((card) => (
+              <StandardMetricCard key={card.title} {...card} />
             ))}
           </div>
         </main>
