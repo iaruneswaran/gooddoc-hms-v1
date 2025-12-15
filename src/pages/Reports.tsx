@@ -2,13 +2,17 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { BarChart3, Clock } from "lucide-react";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 export default function Reports() {
+  const { isCollapsed } = useSidebarContext();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
 
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={["Reports"]} />
 
         <main className="p-6">

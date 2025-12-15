@@ -19,6 +19,8 @@ import {
   DaySchedule,
   Appointment 
 } from "@/types/scheduling";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 export default function DoctorSchedulePage() {
   const { id } = useParams<{ id: string }>();
@@ -159,11 +161,13 @@ export default function DoctorSchedulePage() {
     setLeaves(prev => prev.filter(l => l.id !== leaveId));
   };
 
+  const { isCollapsed } = useSidebarContext();
+
   if (loading) {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
           <AppHeader breadcrumbs={["Doctors", "Schedule"]} />
           <main className="p-6">
             <p className="text-muted-foreground">Loading...</p>
@@ -177,7 +181,7 @@ export default function DoctorSchedulePage() {
     return (
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 ml-[196px]">
+        <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
           <AppHeader breadcrumbs={["Doctors", "Schedule"]} />
           <main className="p-6">
             <p className="text-muted-foreground">Doctor not found</p>
@@ -190,7 +194,7 @@ export default function DoctorSchedulePage() {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={["Doctors", doctor.name, "Schedule"]} />
         
         <main className="p-6">

@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
 
 const Discharge = () => {
   const navigate = useNavigate();
@@ -45,11 +47,13 @@ const Discharge = () => {
     }
   };
 
+  const { isCollapsed } = useSidebarContext();
+
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       
-      <div className="flex-1 ml-[196px]">
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
         <main className="p-6">
