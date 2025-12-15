@@ -61,25 +61,39 @@ const PrimaryMetricCard = ({
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
+  const handleCardClick = () => {
+    navigate(route);
+  };
+  
   const handleSubMetricClick = (e: React.MouseEvent, filterParam?: string) => {
     e.stopPropagation();
+    e.preventDefault();
     if (filterParam) {
-      navigate(`${route}&${filterParam}`);
+      // Build proper URL with filter
+      const baseRoute = route.split('?')[0];
+      const existingParams = route.includes('?') ? route.split('?')[1] : '';
+      const newUrl = existingParams 
+        ? `${baseRoute}?${existingParams}&${filterParam}`
+        : `${baseRoute}?${filterParam}`;
+      navigate(newUrl);
     }
   };
   
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
-          onClick={() => navigate(route)}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={handleCardClick}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleCardClick(); }}
           aria-label={`Open ${title} list (${count})`}
           className="
             group w-full text-left rounded-xl border border-border bg-card overflow-hidden
-            transition-all duration-200 ease-out
+            transition-all duration-200 ease-out cursor-pointer
             hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
             active:scale-[0.98]
-            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
             h-[180px] flex flex-col
           "
         >
@@ -110,22 +124,25 @@ const PrimaryMetricCard = ({
           {/* Bottom section - Sub-metrics */}
           <div className="px-4 py-3 flex items-center gap-4 text-xs">
             {subMetrics.map((metric, idx) => (
-              <button
+              <span
                 key={idx}
+                role="button"
+                tabIndex={0}
                 onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
                 className={`
-                  flex items-center gap-1.5 
-                  ${metric.filterParam ? 'hover:text-primary cursor-pointer' : 'cursor-default'}
+                  flex items-center gap-1.5 px-2 py-1 rounded-md
+                  ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
                   transition-colors
                 `}
                 title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
               >
                 <span className="text-muted-foreground">{metric.label}:</span>
                 <span className="font-semibold text-foreground">{metric.value}</span>
-              </button>
+              </span>
             ))}
           </div>
-        </button>
+        </div>
       </TooltipTrigger>
       <TooltipContent side="bottom">
         <p>View list</p>
