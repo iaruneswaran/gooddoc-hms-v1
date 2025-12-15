@@ -215,8 +215,7 @@ export function OrderSummaryStep({
             Print
           </Button>
           <Button>
-            <CreditCard className="w-4 h-4 mr-2" />
-            Proceed to Payment
+            Submit
           </Button>
         </div>
       </div>
