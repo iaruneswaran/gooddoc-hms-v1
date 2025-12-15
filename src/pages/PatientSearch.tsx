@@ -82,114 +82,113 @@ export default function PatientSearch() {
           </div>
 
           {hasResults ? (
-            <Card className="p-6">
+            <Card className="p-6 max-w-4xl">
               {/* Header */}
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+              <div className="flex items-start justify-between mb-6 pb-5 border-b border-border">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                    <User className="w-6 h-6 text-muted-foreground" />
+                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="w-7 h-7 text-primary" />
                   </div>
                   <div>
-                    <h2 className="font-semibold text-foreground text-lg">{patient.name}</h2>
-                    <p className="text-sm text-muted-foreground">
+                    <h2 className="font-semibold text-foreground text-xl">{patient.name}</h2>
+                    <p className="text-sm text-muted-foreground mt-0.5">
                       GDID–{patient.gdid} • {patient.age} • {patient.gender}
                     </p>
+                    <Badge variant="secondary" className="text-xs font-normal mt-2">
+                      {isIP ? `Inpatient since ${patient.lastActivityShort.replace("In IP since ", "")}` : patient.lastActivityShort}
+                    </Badge>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <Badge variant="secondary" className="text-sm font-normal px-3 py-1">
-                    {isIP ? `Inpatient since ${patient.lastActivityShort.replace("In IP since ", "")}` : patient.lastActivityShort}
-                  </Badge>
-                  <Button variant="link" className="text-primary gap-1" onClick={handleGoTo360}>
-                    Open 360° record <ExternalLink className="w-4 h-4" />
-                  </Button>
-                </div>
+                <Button variant="outline" size="sm" className="gap-1.5" onClick={handleGoTo360}>
+                  Open 360° record <ExternalLink className="w-3.5 h-3.5" />
+                </Button>
               </div>
 
               {/* Content Grid */}
-              <div className="grid grid-cols-4 gap-5">
+              <div className="grid grid-cols-2 gap-6">
                 {isIP ? (
                   <>
                     {/* Care & Bed */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Care & bed</h4>
-                      <div className="space-y-2 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Primary doctor: </span>
-                          <span className="text-foreground">{patient.ipInfo.doctor}</span>
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Care & Bed</h4>
+                      <div className="bg-muted/40 rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Primary doctor</span>
+                          <span className="font-medium text-foreground">{patient.ipInfo.doctor}</span>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Ward/Bed: </span>
-                          <span className="text-foreground">{patient.ipInfo.ward} • {patient.ipInfo.bed}</span>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Ward / Bed</span>
+                          <span className="font-medium text-foreground">{patient.ipInfo.ward} • {patient.ipInfo.bed}</span>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Emergency contact: </span>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Emergency contact</span>
                           {patient.ipInfo.emergencyContact ? (
-                            <span className="text-foreground">{patient.ipInfo.emergencyContact}</span>
+                            <span className="font-medium text-foreground">{patient.ipInfo.emergencyContact}</span>
                           ) : (
-                            <span className="text-muted-foreground">
-                              Not added{" "}
-                              <Button variant="link" size="sm" className="text-primary p-0 h-auto text-xs">
-                                Add
-                              </Button>
-                            </span>
+                            <Button variant="link" size="sm" className="text-primary p-0 h-auto text-xs font-medium">
+                              + Add
+                            </Button>
                           )}
                         </div>
                       </div>
                     </div>
 
                     {/* Orders & Reports */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Orders & reports</h4>
-                      <div className="space-y-2">
-                        {patient.pending?.length > 0 ? (
-                          patient.pending.map((item: any, idx: number) => (
-                            <div key={idx} className="flex items-center justify-between text-sm">
-                              <span className="text-foreground">{item.item}</span>
-                              <StatusChip status={item.status} />
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-sm text-muted-foreground">No reports yet</p>
-                        )}
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Orders & Reports</h4>
+                      <div className="bg-muted/40 rounded-lg p-4">
+                        <div className="space-y-2.5">
+                          {patient.pending?.length > 0 ? (
+                            patient.pending.map((item: any, idx: number) => (
+                              <div key={idx} className="flex items-center justify-between text-sm">
+                                <span className="text-foreground">{item.item}</span>
+                                <StatusChip status={item.status} />
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-sm text-muted-foreground">No reports yet</p>
+                          )}
+                        </div>
+                        <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1 font-medium">
+                          <Plus className="w-3 h-3" /> Add report
+                        </Button>
                       </div>
-                      <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1">
-                        <Plus className="w-3 h-3" /> Add report
-                      </Button>
                     </div>
 
                     {/* Billing Summary */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Billing summary</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Billed to date</span>
-                          <span className="font-medium text-foreground">{patient.pendingAmount.bills}</span>
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Billing Summary</h4>
+                      <div className="bg-muted/40 rounded-lg p-4">
+                        <div className="space-y-2.5">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Billed to date</span>
+                            <span className="font-medium text-foreground">{patient.pendingAmount.bills}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Advance received</span>
+                            <span className="font-medium text-foreground">{patient.pendingAmount.advance}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm pt-2.5 border-t border-border">
+                            <span className="font-medium text-foreground">Due now</span>
+                            <span className="font-semibold text-lg text-foreground">{patient.pendingAmount.outstanding}</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Advance received</span>
-                          <span className="font-medium text-foreground">{patient.pendingAmount.advance}</span>
-                        </div>
-                        <div className="flex justify-between pt-2 border-t border-border">
-                          <span className="text-muted-foreground font-medium">Due now</span>
-                          <span className="font-semibold text-foreground">{patient.pendingAmount.outstanding}</span>
-                        </div>
+                        <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs font-medium">
+                          View details →
+                        </Button>
                       </div>
-                      <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs">
-                        View details
-                      </Button>
                     </div>
 
-                    {/* Options */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Options</h4>
-                      <div className="space-y-2">
+                    {/* Quick Actions */}
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Quick Actions</h4>
+                      <div className="flex flex-wrap gap-2">
                         {patient.options.map((opt: string, idx: number) => (
                           <Button 
                             key={idx} 
-                            variant="outline" 
+                            variant={idx === 0 ? "default" : "outline"} 
                             size="sm" 
-                            className="w-full justify-start text-sm"
+                            className="text-sm"
                             onClick={() => handleOptionClick(opt)}
                           >
                             {opt}
@@ -198,67 +197,71 @@ export default function PatientSearch() {
                       </div>
                     </div>
 
-                    {/* Visit History */}
-                    <div className="col-span-4 bg-muted/50 rounded-lg p-4">
+                    {/* Visit History - Full Width */}
+                    <div className="col-span-2 space-y-3 pt-2 border-t border-border mt-2">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-sm font-medium text-foreground mb-1">Visit history</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Admitted: {patient.lastActivityShort.replace("In IP since ", "")}
-                          </p>
-                        </div>
-                        <Button variant="link" size="sm" className="text-primary p-0 text-xs">
-                          View all visits
+                        <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Visit History</h4>
+                        <Button variant="link" size="sm" className="text-primary p-0 text-xs font-medium">
+                          View all visits →
                         </Button>
                       </div>
+                      <p className="text-sm text-muted-foreground">
+                        Admitted: {patient.lastActivityShort.replace("In IP since ", "")}
+                      </p>
                     </div>
                   </>
                 ) : (
                   <>
                     {/* Visit History */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Visit history</h4>
-                      <p className="text-sm text-muted-foreground">{patient.lastActivityShort}</p>
-                      <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1">
-                        <Plus className="w-3 h-3" /> Add item to visit
-                      </Button>
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Visit History</h4>
+                      <div className="bg-muted/40 rounded-lg p-4">
+                        <p className="text-sm text-foreground">{patient.lastActivityShort}</p>
+                        <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1 font-medium">
+                          <Plus className="w-3 h-3" /> Add item to visit
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Reports */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Reports</h4>
-                      {patient.pendingReports ? (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-foreground">Doctor's report</span>
-                          <StatusChip status="Pending" />
-                        </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">No reports yet</p>
-                      )}
-                      <Button variant="outline" size="sm" className="mt-3 text-xs">
-                        Book follow-up
-                      </Button>
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Reports</h4>
+                      <div className="bg-muted/40 rounded-lg p-4">
+                        {patient.pendingReports ? (
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-foreground">Doctor's report</span>
+                            <StatusChip status="Pending" />
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">No reports yet</p>
+                        )}
+                        <Button variant="outline" size="sm" className="mt-3 text-xs">
+                          Book follow-up
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Billing Summary */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Billing summary</h4>
-                      <p className="text-sm text-muted-foreground">No pending amount</p>
-                      <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1">
-                        <Plus className="w-3 h-3" /> Add pending amount
-                      </Button>
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Billing Summary</h4>
+                      <div className="bg-muted/40 rounded-lg p-4">
+                        <p className="text-sm text-muted-foreground">No pending amount</p>
+                        <Button variant="link" size="sm" className="text-primary p-0 mt-3 text-xs gap-1 font-medium">
+                          <Plus className="w-3 h-3" /> Add pending amount
+                        </Button>
+                      </div>
                     </div>
 
-                    {/* Options */}
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3">Options</h4>
-                      <div className="space-y-2">
+                    {/* Quick Actions */}
+                    <div className="space-y-3">
+                      <h4 className="text-label font-semibold text-foreground uppercase tracking-wide">Quick Actions</h4>
+                      <div className="flex flex-wrap gap-2">
                         {patient.options.map((opt: string, idx: number) => (
                           <Button 
                             key={idx} 
-                            variant="outline" 
+                            variant={idx === 0 ? "default" : "outline"} 
                             size="sm" 
-                            className="w-full justify-start text-sm"
+                            className="text-sm"
                             onClick={() => handleOptionClick(opt)}
                           >
                             {opt}
