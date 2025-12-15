@@ -45,7 +45,7 @@ import EmergencyCases from "./pages/EmergencyCases";
 import PharmacyPending from "./pages/PharmacyPending";
 import RadiologyQueue from "./pages/RadiologyQueue";
 import LowStockItems from "./pages/LowStockItems";
-
+import PatientSearch from "./pages/PatientSearch";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -79,6 +79,7 @@ const App = () => (
             <Route path="/appointments/outpatient" element={<OutpatientAppointments />} />
             <Route path="/patients/:gdid/360" element={<Patient360 />} />
             <Route path="/patients" element={<Patients />} />
+            <Route path="/patients/search" element={<PatientSearch />} />
             <Route path="/vitals/new" element={<RecordVitals />} />
             <Route path="/patient-insights/:patientId/insurance" element={<Insurance />} />
             <Route path="/insurance/claims/new" element={<NewClaim />} />
