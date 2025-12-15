@@ -3,8 +3,7 @@ import { Bell, User, Search, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PatientSearchCard } from "@/components/header/PatientSearchCard";
-import { mockPatientsByPhone } from "@/data/header-search.mock";
+import { useNavigate } from "react-router-dom";
 
 type BreadcrumbItem = string | { label: string; onClick: () => void };
 
@@ -13,19 +12,15 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
-  const [searchResult, setSearchResult] = useState<any>(null);
-  const [showNotFound, setShowNotFound] = useState(false);
   const [validationError, setValidationError] = useState("");
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const normalizePhone = (value: string) => value.replace(/[\s\-]/g, "");
 
   const handleSearch = () => {
     const normalized = normalizePhone(searchValue);
     setValidationError("");
-    setShowNotFound(false);
-    setSearchResult(null);
 
     if (!normalized) {
       setValidationError("Please enter a phone number");
@@ -37,12 +32,9 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
       return;
     }
 
-    const patient = mockPatientsByPhone[normalized];
-    if (patient) {
-      setSearchResult(patient);
-    } else {
-      setShowNotFound(true);
-    }
+    // Navigate to search results page
+    navigate(`/patients/search?q=${normalized}`);
+    setSearchValue("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -51,28 +43,13 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
     }
   };
 
-  const handleClose = () => {
-    setSearchResult(null);
-    setShowNotFound(false);
+  const handleClear = () => {
     setSearchValue("");
     setValidationError("");
   };
 
-  // Close on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        if (searchResult || showNotFound) {
-          handleClose();
-        }
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [searchResult, showNotFound]);
-
   return (
-    <header className="relative h-16 border-b border-border bg-card flex items-center px-8" ref={containerRef}>
+    <header className="relative h-16 border-b border-border bg-card flex items-center px-8">
       {/* Breadcrumbs - Left */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-[200px]">
         {breadcrumbs.map((crumb, index) => {
@@ -116,7 +93,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             />
             {searchValue && (
               <button
-                onClick={handleClose}
+                onClick={handleClear}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 <X className="w-4 h-4" />
@@ -148,19 +125,6 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
           <User className="w-5 h-5 text-foreground" />
         </button>
       </div>
-
-      {/* Search Result Card */}
-      {searchResult && (
-        <PatientSearchCard patient={searchResult} onClose={handleClose} />
-      )}
-
-      {/* Not Found State */}
-      {showNotFound && (
-        <div className="absolute top-full left-0 right-0 mt-2 mx-8 p-6 bg-card border border-border rounded-lg shadow-lg z-50 text-center">
-          <p className="text-foreground font-medium">No patient found</p>
-          <p className="text-sm text-muted-foreground mt-1">Try a different phone number</p>
-        </div>
-      )}
     </header>
   );
 }

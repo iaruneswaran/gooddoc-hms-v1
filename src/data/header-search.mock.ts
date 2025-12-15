@@ -36,9 +36,7 @@ export const mockPatientsByPhone: Record<string, any> = {
     options: [
       "Add amount",
       "Book appointment",
-      "View payment history",
-      "Documents",
-      "Insurance etc",
+      "Payments",
     ],
   },
 };
