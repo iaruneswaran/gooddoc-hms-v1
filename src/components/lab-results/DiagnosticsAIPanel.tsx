@@ -104,17 +104,53 @@ export function DiagnosticsAIPanel({
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary animate-pulse" />
-            Analyzing...
+            <Brain className="h-5 w-5 text-primary" />
+            AI Analysis
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center py-8">
-            <RefreshCw className="h-6 w-6 animate-spin text-primary" />
+          <div className="flex flex-col items-center justify-center py-10 space-y-4">
+            {/* Animated brain with pulse rings */}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" style={{ animationDuration: '1.5s' }} />
+              <div className="absolute inset-0 rounded-full bg-primary/10 animate-pulse" />
+              <div className="relative w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <Brain className="h-8 w-8 text-primary animate-pulse" />
+              </div>
+            </div>
+            
+            {/* Analyzing text with dots animation */}
+            <div className="flex items-center gap-1">
+              <span className="text-sm font-medium text-foreground">Analyzing</span>
+              <span className="flex gap-0.5">
+                <span className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </span>
+            </div>
+            
+            {/* Progress steps */}
+            <div className="w-full space-y-2 mt-2">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-primary" />
+                </div>
+                <span>Reading test values</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
+                  <RefreshCw className="w-3 h-3 text-primary animate-spin" />
+                </div>
+                <span>Applying clinical rules</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground opacity-50">
+                <div className="w-4 h-4 rounded-full bg-muted flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
+                </div>
+                <span>Generating insights</span>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground text-center">
-            Processing lab results...
-          </p>
         </CardContent>
       </Card>
     );
