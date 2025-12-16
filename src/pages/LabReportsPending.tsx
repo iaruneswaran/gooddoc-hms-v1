@@ -20,7 +20,7 @@ const LabOrdersToday = () => {
   const navigate = useNavigate();
 
   const columns: Column<LabOrderRecord>[] = [
-    { key: "orderId", label: "Order ID", sortable: true },
+    { key: "orderId", label: "Order ID", sortable: true, render: (row) => <span>GDID {row.orderId.replace(/\D/g, '').padStart(3, '0')}</span> },
     { key: "patient", label: "Patient", sortable: true },
     { key: "ageSex", label: "Age/Sex" },
     { key: "location", label: "Location" },
