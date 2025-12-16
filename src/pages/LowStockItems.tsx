@@ -1,45 +1,81 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
-import { lowStockItems, InventoryItemRecord } from "@/data/overview.mock";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { lowStockItems, LowStockRecord } from "@/data/overview.mock";
 
-const LowStockItems = () => {
+const severityStyles: Record<LowStockRecord["severity"], string> = {
+  "Normal": "bg-gray-100 text-gray-700",
+  "Low": "bg-amber-100 text-amber-700",
+  "Critical": "bg-red-100 text-red-700",
+};
+
+const categoryStyles: Record<LowStockRecord["category"], string> = {
+  "Drug": "bg-blue-100 text-blue-700",
+  "Consumable": "bg-green-100 text-green-700",
+  "Device": "bg-purple-100 text-purple-700",
+};
+
+const LowStock = () => {
   const navigate = useNavigate();
 
-  const statusStyles: Record<string, string> = {
-    Low: "badge-warning",
-    Critical: "badge-error",
-    OK: "badge-success",
-  };
-
-  const columns: Column<InventoryItemRecord>[] = [
-    { key: "id", label: "Item ID", sortable: true },
+  const columns: Column<LowStockRecord>[] = [
     { key: "itemName", label: "Item Name", sortable: true },
-    { key: "category", label: "Category", sortable: true },
     {
-      key: "currentStock",
-      label: "Current Stock",
-      sortable: true,
-      render: (row) => `${row.currentStock} ${row.unit}`,
-    },
-    {
-      key: "reorderLevel",
-      label: "Reorder Level",
-      render: (row) => `${row.reorderLevel} ${row.unit}`,
-    },
-    { key: "supplier", label: "Supplier", sortable: true },
-    {
-      key: "lastRefilled",
-      label: "Last Refilled",
-      sortable: true,
-      render: (row) => format(new Date(row.lastRefilled), "dd MMM yyyy"),
-    },
-    {
-      key: "status",
-      label: "Status",
+      key: "category",
+      label: "Category",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={categoryStyles[row.category]}>{row.category}</Badge>
+      ),
+    },
+    {
+      key: "onHand",
+      label: "On Hand",
+      sortable: true,
+      render: (row) => <span className="font-medium">{row.onHand}</span>,
+    },
+    { key: "reorderPoint", label: "Reorder Point" },
+    { key: "parLevel", label: "Par Level" },
+    {
+      key: "avgDailyUse",
+      label: "Avg Daily Use",
+      render: (row) => <span>{row.avgDailyUse}/day</span>,
+    },
+    {
+      key: "daysOfStockLeft",
+      label: "Days of Stock Left",
+      sortable: true,
+      render: (row) => (
+        <span className={row.daysOfStockLeft <= 2 ? "text-red-600 font-semibold" : row.daysOfStockLeft <= 5 ? "text-amber-600 font-medium" : ""}>
+          {row.daysOfStockLeft} days
+        </span>
+      ),
+    },
+    {
+      key: "onOrder",
+      label: "On Order",
+      render: (row) => row.onOrder > 0 ? (
+        <Badge className="bg-green-100 text-green-700">{row.onOrder}</Badge>
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      ),
+    },
+    { key: "supplier", label: "Supplier" },
+    {
+      key: "leadTimeDays",
+      label: "Lead Time",
+      render: (row) => <span>{row.leadTimeDays} days</span>,
+    },
+    {
+      key: "suggestedReorderQty",
+      label: "Suggested Reorder",
+      render: (row) => <span className="font-medium">{row.suggestedReorderQty}</span>,
+    },
+    {
+      key: "severity",
+      label: "Severity",
+      sortable: true,
+      render: (row) => (
+        <Badge className={severityStyles[row.severity]}>{row.severity}</Badge>
       ),
     },
   ];
@@ -50,47 +86,44 @@ const LowStockItems = () => {
       label: "Category",
       value: "all",
       options: [
-        { value: "Medications", label: "Medications" },
-        { value: "Surgical Supplies", label: "Surgical Supplies" },
-        { value: "Lab Consumables", label: "Lab Consumables" },
-        { value: "PPE", label: "PPE" },
-        { value: "IV Supplies", label: "IV Supplies" },
-        { value: "Wound Care", label: "Wound Care" },
+        { value: "Drug", label: "Drug" },
+        { value: "Consumable", label: "Consumable" },
+        { value: "Device", label: "Device" },
       ],
     },
     {
-      key: "status",
-      label: "Status",
+      key: "severity",
+      label: "Severity",
       value: "all",
       options: [
-        { value: "Low", label: "Low" },
         { value: "Critical", label: "Critical" },
+        { value: "Low", label: "Low" },
+        { value: "Normal", label: "Normal" },
       ],
     },
   ];
 
-  const rowActions: RowAction<InventoryItemRecord>[] = [
-    { label: "View Item", onClick: (row) => navigate(`/inventory/item/${row.id}`) },
-    { label: "Create Purchase Requisition", onClick: () => {} },
-    { label: "Update Stock", onClick: () => {} },
+  const rowActions: RowAction<LowStockRecord>[] = [
+    { label: "View Item", onClick: (row) => console.log("View", row.itemName) },
+    { label: "Create Purchase Requisition", onClick: (row) => console.log("Create PR for", row.itemName) },
+    { label: "Update Stock", onClick: (row) => console.log("Update stock", row.itemName) },
   ];
 
   return (
     <ListPageLayout
-      title="Low Stock Items"
+      title="Low Stock"
       count={lowStockItems.length}
-      subtitle="Below reorder threshold"
-      breadcrumbs={["Overview", "Low Stock Items"]}
-      data={lowStockItems}
+      subtitle="Inventory items below reorder point • Default sort: Days of Stock Left ASC"
+      breadcrumbs={["Overview", "Low Stock"]}
       columns={columns}
+      data={lowStockItems}
       filters={filters}
       rowActions={rowActions}
-      emptyMessage="No items are currently low on stock."
-      searchPlaceholder="Search by Item ID or Name..."
-      onRowClick={(row) => navigate(`/inventory/item/${row.id}`)}
-      getRowId={(row) => row.id}
+      emptyMessage="No low stock items."
+      searchPlaceholder="Search by item name, category, supplier..."
+      getRowId={(row) => row.itemName}
     />
   );
 };
 
-export default LowStockItems;
+export default LowStock;

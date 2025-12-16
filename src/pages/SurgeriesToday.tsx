@@ -1,43 +1,44 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
-import { surgeriesToday, SurgeryRecord } from "@/data/overview.mock";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { surgeries, SurgeryRecord } from "@/data/overview.mock";
+
+const statusStyles: Record<SurgeryRecord["status"], string> = {
+  "Scheduled": "bg-gray-100 text-gray-700",
+  "In-Progress": "bg-amber-100 text-amber-700",
+  "Completed": "bg-green-100 text-green-700",
+  "Canceled": "bg-red-100 text-red-700",
+};
 
 const SurgeriesToday = () => {
   const navigate = useNavigate();
 
-  const statusStyles: Record<string, string> = {
-    Scheduled: "badge-info",
-    "In Progress": "badge-warning",
-    Completed: "badge-success",
-    Cancelled: "badge-error",
-  };
-
-  const priorityStyles: Record<string, string> = {
-    Emergency: "badge-error",
-    Urgent: "badge-warning",
-    Elective: "badge-info",
-  };
-
   const columns: Column<SurgeryRecord>[] = [
-    { key: "id", label: "Case ID", sortable: true },
-    { key: "patientName", label: "Patient", sortable: true },
-    { key: "procedure", label: "Procedure", sortable: true },
+    { key: "caseId", label: "Case ID", sortable: true },
+    { key: "patient", label: "Patient", sortable: true },
+    { key: "ageSex", label: "Age/Sex" },
+    { key: "procedure", label: "Procedure" },
     { key: "surgeon", label: "Surgeon", sortable: true },
-    { key: "orRoom", label: "OR Room", sortable: true },
-    { key: "anesthesia", label: "Anesthesia" },
-    {
-      key: "scheduledStart",
-      label: "Scheduled Start",
-      sortable: true,
-      render: (row) => format(new Date(row.scheduledStart), "HH:mm"),
-    },
+    { key: "orRoom", label: "OR Room" },
+    { key: "startTime", label: "Start Time", sortable: true },
+    { key: "estimatedDuration", label: "Est. Duration" },
     {
       key: "status",
       label: "Status",
+      sortable: true,
       render: (row) => (
         <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+      ),
+    },
+    { key: "anesthesiaType", label: "Anesthesia Type" },
+    { key: "asaClass", label: "ASA Class" },
+    {
+      key: "postOpBedReserved",
+      label: "Post-op Bed Reserved",
+      render: (row) => row.postOpBedReserved ? (
+        <Badge className="bg-green-100 text-green-700">Yes</Badge>
+      ) : (
+        <Badge className="bg-amber-100 text-amber-700">No</Badge>
       ),
     },
   ];
@@ -49,43 +50,51 @@ const SurgeriesToday = () => {
       value: "all",
       options: [
         { value: "Scheduled", label: "Scheduled" },
-        { value: "In Progress", label: "In Progress" },
+        { value: "In-Progress", label: "In-Progress" },
         { value: "Completed", label: "Completed" },
-        { value: "Cancelled", label: "Cancelled" },
+        { value: "Canceled", label: "Canceled" },
       ],
     },
     {
-      key: "priority",
-      label: "Priority",
+      key: "orRoom",
+      label: "OR Room",
       value: "all",
       options: [
-        { value: "Emergency", label: "Emergency" },
-        { value: "Urgent", label: "Urgent" },
-        { value: "Elective", label: "Elective" },
+        { value: "OR-1", label: "OR-1" },
+        { value: "OR-2", label: "OR-2" },
+        { value: "OR-3", label: "OR-3" },
+        { value: "OR-4", label: "OR-4" },
+        { value: "OR-5", label: "OR-5" },
       ],
     },
   ];
 
   const rowActions: RowAction<SurgeryRecord>[] = [
-    { label: "View Case", onClick: (row) => navigate(`/or/case/${row.id}`) },
-    { label: "Start/Update Status", onClick: () => {} },
-    { label: "Print Checklist", onClick: () => {} },
+    { label: "View Case Details", onClick: (row) => console.log("View case", row.caseId) },
+    { label: "Patient Chart", onClick: (row) => navigate(`/patient-insights/${row.patient.replace(/\s+/g, "-").toLowerCase()}`) },
+    { label: "Update Status", onClick: (row) => console.log("Update status", row.caseId) },
   ];
+
+  // Sort to pin In-Progress at top
+  const sortedSurgeries = [...surgeries].sort((a, b) => {
+    if (a.status === "In-Progress" && b.status !== "In-Progress") return -1;
+    if (a.status !== "In-Progress" && b.status === "In-Progress") return 1;
+    return 0;
+  });
 
   return (
     <ListPageLayout
-      title="Surgeries Today"
-      count={surgeriesToday.length}
-      subtitle="Operating room schedule for today"
-      breadcrumbs={["Overview", "Surgeries Today"]}
-      data={surgeriesToday}
+      title="Surgeries"
+      count={surgeries.length}
+      subtitle="Operating room schedule for today • Default sort: Start Time ASC (In-Progress pinned)"
+      breadcrumbs={["Overview", "Surgeries"]}
       columns={columns}
+      data={sortedSurgeries}
       filters={filters}
       rowActions={rowActions}
-      emptyMessage="No surgeries scheduled today."
-      searchPlaceholder="Search by Case ID or Patient Name..."
-      onRowClick={(row) => navigate(`/or/case/${row.id}`)}
-      getRowId={(row) => row.id}
+      emptyMessage="No surgeries scheduled for today."
+      searchPlaceholder="Search by Case ID, patient, procedure, surgeon..."
+      getRowId={(row) => row.caseId}
     />
   );
 };

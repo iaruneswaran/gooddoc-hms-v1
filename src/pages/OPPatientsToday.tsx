@@ -1,35 +1,59 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
-import { opPatients, PatientRecord } from "@/data/overview.mock";
-import { format } from "date-fns";
+import { opPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
+
+const statusStyles: Record<OPPatientRecord["status"], string> = {
+  "Scheduled": "bg-gray-100 text-gray-700",
+  "Pending Check-in": "bg-amber-100 text-amber-700",
+  "Checked-in": "bg-blue-100 text-blue-700",
+  "With Doctor": "bg-indigo-100 text-indigo-700",
+  "Awaiting Billing": "bg-purple-100 text-purple-700",
+  "Completed": "bg-green-100 text-green-700",
+  "No-show": "bg-red-100 text-red-700",
+  "Canceled": "bg-gray-100 text-gray-500",
+};
 
 const OPPatientsToday = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const visitStatusFilter = searchParams.get("visitStatus");
 
-  const columns: Column<PatientRecord>[] = [
-    { key: "id", label: "Patient ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "age", label: "Age", sortable: true },
+  let data = opPatients;
+  let displayCount = opPatients.length;
+
+  if (visitStatusFilter === "Completed") {
+    data = opCompleted;
+    displayCount = opCompleted.length;
+  } else if (visitStatusFilter === "Pending") {
+    data = opCheckedIn;
+    displayCount = opCheckedIn.length;
+  } else if (visitStatusFilter === "In_Queue") {
+    data = opPendingCheckIn;
+    displayCount = opPendingCheckIn.length;
+  }
+
+  const columns: Column<OPPatientRecord>[] = [
+    { key: "mrn", label: "MRN", sortable: true },
+    { key: "patient", label: "Patient", sortable: true },
+    { key: "ageSex", label: "Age/Sex" },
+    { key: "visitId", label: "Visit ID" },
+    { key: "appointmentTime", label: "Appointment Time", sortable: true },
     { key: "department", label: "Department", sortable: true },
-    { key: "assignedDoctor", label: "Assigned Doctor", sortable: true },
+    { key: "provider", label: "Provider", sortable: true },
+    { key: "visitReason", label: "Visit Reason" },
     {
       key: "status",
       label: "Status",
+      sortable: true,
       render: (row) => (
-        <Badge className="badge-info">OP</Badge>
+        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
       ),
     },
-    {
-      key: "visitDate",
-      label: "Visit Date/Time",
-      sortable: true,
-      render: (row) =>
-        row.visitDate
-          ? format(new Date(row.visitDate), "dd MMM yyyy, hh:mm a")
-          : "-",
-    },
-    { key: "roomBed", label: "Room/Bed" },
+    { key: "checkInTime", label: "Check-in Time", render: (row) => row.checkInTime || "—" },
+    { key: "waitingTime", label: "Waiting Time", render: (row) => row.waitingTime || "—" },
+    { key: "tokenQueueNo", label: "Token/Queue No.", render: (row) => row.tokenQueueNo || "—" },
+    { key: "insurancePlan", label: "Insurance Plan", render: (row) => row.insurancePlan || "—" },
   ];
 
   const filters: Filter[] = [
@@ -42,49 +66,48 @@ const OPPatientsToday = () => {
         { value: "Orthopedics", label: "Orthopedics" },
         { value: "Neurology", label: "Neurology" },
         { value: "General Medicine", label: "General Medicine" },
-        { value: "Pediatrics", label: "Pediatrics" },
       ],
     },
     {
-      key: "doctor",
-      label: "Doctor",
+      key: "status",
+      label: "Status",
       value: "all",
       options: [
-        { value: "Dr. Meera Nair", label: "Dr. Meera Nair" },
-        { value: "Dr. Rajesh Kumar", label: "Dr. Rajesh Kumar" },
-        { value: "Dr. Anita Singh", label: "Dr. Anita Singh" },
+        { value: "Scheduled", label: "Scheduled" },
+        { value: "Checked-in", label: "Checked-in" },
+        { value: "With Doctor", label: "With Doctor" },
+        { value: "Completed", label: "Completed" },
       ],
     },
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "Consultation Completed", count: 282 },
-    { paramKey: "visitStatus", paramValue: "Pending", displayLabel: "Check in completed", count: 54 },
-    { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Pending to check in", count: 56 },
+    { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "OP Completed", count: opCompleted.length },
+    { paramKey: "visitStatus", paramValue: "Pending", displayLabel: "Check in completed", count: opCheckedIn.length },
+    { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Pending to check in", count: opPendingCheckIn.length },
   ];
 
-  const rowActions: RowAction<PatientRecord>[] = [
-    { label: "View Profile", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
-    { label: "Print OP Ticket", onClick: (row) => console.log("Print ticket", row.id) },
-    { label: "Assign/Change Doctor", onClick: (row) => console.log("Assign doctor", row.id) },
+  const rowActions: RowAction<OPPatientRecord>[] = [
+    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
+    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360`) },
+    { label: "Book Follow-up", onClick: (row) => navigate(`/book-appointment?patientId=${row.mrn}`) },
   ];
 
   return (
     <ListPageLayout
       title="OP Patients"
-      count={opPatients.length}
-      subtitle="Out-patient visits registered today"
+      count={displayCount}
+      subtitle="Outpatient visits for today • Default sort: Appointment Time ASC"
       breadcrumbs={["Overview", "OP Patients"]}
       columns={columns}
-      data={opPatients}
+      data={data}
       filters={filters}
       rowActions={rowActions}
       urlParamFilters={urlParamFilters}
-      emptyMessage="No OP visits today."
-      emptyCta={{ label: "View all patients", route: "/patients" }}
-      searchPlaceholder="Search by patient name or ID..."
-      getRowId={(row) => row.id}
-      onRowClick={(row) => navigate(`/patient-insights/${row.id}`)}
+      emptyMessage="No OP patients for today."
+      searchPlaceholder="Search by MRN, name, Visit ID..."
+      getRowId={(row) => row.mrn}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
     />
   );
 };

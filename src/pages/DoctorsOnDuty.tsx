@@ -1,94 +1,82 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
-import { doctorsOnDuty, DoctorRecord } from "@/data/overview.mock";
+import { doctorsOnDuty, DoctorOnDutyRecord } from "@/data/overview.mock";
 
-const statusStyles: Record<string, string> = {
-  Available: "badge-success",
-  "In Consultation": "badge-info",
-  "In Surgery": "badge-warning",
-  "On Break": "bg-[hsl(var(--gd-neutral-200))] text-[hsl(var(--gd-neutral-700))]",
+const roleStyles: Record<DoctorOnDutyRecord["role"], string> = {
+  "Onsite": "bg-green-100 text-green-700",
+  "On-call": "bg-blue-100 text-blue-700",
+  "In OPD": "bg-purple-100 text-purple-700",
+  "In OT": "bg-red-100 text-red-700",
+  "In Ward Rounds": "bg-amber-100 text-amber-700",
 };
 
 const DoctorsOnDuty = () => {
   const navigate = useNavigate();
 
-  const columns: Column<DoctorRecord>[] = [
-    { key: "id", label: "Doctor ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "specialization", label: "Specialization", sortable: true },
-    { key: "department", label: "Department", sortable: true },
+  const columns: Column<DoctorOnDutyRecord>[] = [
+    { key: "doctorName", label: "Doctor Name", sortable: true },
+    { key: "specialty", label: "Specialty", sortable: true },
     {
-      key: "status",
-      label: "Status",
-      render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
-      ),
-    },
-    {
-      key: "queue",
-      label: "Queue",
+      key: "role",
+      label: "Role",
       sortable: true,
       render: (row) => (
-        <span title="Patients waiting">{row.queue}</span>
+        <Badge className={roleStyles[row.role]}>{row.role}</Badge>
       ),
     },
-    {
-      key: "avgTime",
-      label: "Avg Time",
-      sortable: true,
-      render: (row) => (
-        <span title="Average time per consultation">{row.avgTime} min</span>
-      ),
-    },
-    { key: "seenToday", label: "Seen Today", sortable: true },
+    { key: "shiftStart", label: "Shift Start" },
+    { key: "shiftEnd", label: "Shift End" },
+    { key: "currentLocation", label: "Current Location" },
+    { key: "contactPager", label: "Contact/Pager" },
   ];
 
   const filters: Filter[] = [
     {
-      key: "status",
-      label: "Status",
-      value: "all",
-      options: [
-        { value: "Available", label: "Available" },
-        { value: "In Consultation", label: "In Consultation" },
-        { value: "In Surgery", label: "In Surgery" },
-        { value: "On Break", label: "On Break" },
-      ],
-    },
-    {
-      key: "department",
-      label: "Department",
+      key: "specialty",
+      label: "Specialty",
       value: "all",
       options: [
         { value: "Cardiology", label: "Cardiology" },
         { value: "Orthopedics", label: "Orthopedics" },
         { value: "Neurology", label: "Neurology" },
+        { value: "General Medicine", label: "General Medicine" },
+        { value: "Pediatrics", label: "Pediatrics" },
+      ],
+    },
+    {
+      key: "role",
+      label: "Role",
+      value: "all",
+      options: [
+        { value: "Onsite", label: "Onsite" },
+        { value: "On-call", label: "On-call" },
+        { value: "In OPD", label: "In OPD" },
+        { value: "In OT", label: "In OT" },
+        { value: "In Ward Rounds", label: "In Ward Rounds" },
       ],
     },
   ];
 
-  const rowActions: RowAction<DoctorRecord>[] = [
-    { label: "Open Queue", onClick: (row) => console.log("Open queue", row.id) },
-    { label: "Mark Available", onClick: (row) => console.log("Mark available", row.id) },
-    { label: "Mark On Break", onClick: (row) => console.log("Mark on break", row.id) },
-    { label: "View Schedule", onClick: (row) => navigate(`/doctors/${row.id}/schedule`) },
+  const rowActions: RowAction<DoctorOnDutyRecord>[] = [
+    { label: "View Schedule", onClick: (row) => navigate(`/doctors/${row.doctorName.replace(/\s+/g, "-").toLowerCase()}/schedule`) },
+    { label: "View Calendar", onClick: (row) => navigate(`/doctors/${row.doctorName.replace(/\s+/g, "-").toLowerCase()}/calendar`) },
+    { label: "Contact", onClick: (row) => console.log("Contact", row.contactPager) },
   ];
 
   return (
     <ListPageLayout
       title="Doctors on Duty"
       count={doctorsOnDuty.length}
-      subtitle="Active shift only"
+      subtitle="Active physicians on current shift • Default sort: Specialty ASC"
       breadcrumbs={["Overview", "Doctors on Duty"]}
       columns={columns}
       data={doctorsOnDuty}
       filters={filters}
       rowActions={rowActions}
-      emptyMessage="No doctors on the current shift."
-      searchPlaceholder="Search by doctor name or ID..."
-      getRowId={(row) => row.id}
-      onRowClick={(row) => navigate(`/doctors/${row.id}`)}
+      emptyMessage="No doctors currently on duty."
+      searchPlaceholder="Search by name, specialty..."
+      getRowId={(row) => row.doctorName}
     />
   );
 };

@@ -1,41 +1,90 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
-import { checkInPatients, PatientRecord } from "@/data/overview.mock";
-import { format } from "date-fns";
+import { bedsAvailability, icuBeds, wardBeds, roomBeds, BedRecord } from "@/data/overview.mock";
 
-const statusStyles = {
-  OP: "badge-info",
-  IP: "bg-[hsl(var(--gd-primary-100))] text-[hsl(var(--gd-primary-700))]",
-  ER: "badge-error",
+const statusStyles: Record<BedRecord["status"], string> = {
+  "Available": "bg-green-100 text-green-700",
+  "Cleaning": "bg-amber-100 text-amber-700",
+  "Reserved": "bg-blue-100 text-blue-700",
+  "Blocked": "bg-red-100 text-red-700",
 };
 
-const CheckInPatients = () => {
-  const navigate = useNavigate();
+const bedTypeStyles: Record<BedRecord["bedType"], string> = {
+  "ICU": "bg-red-100 text-red-700",
+  "HDU": "bg-orange-100 text-orange-700",
+  "Ward": "bg-blue-100 text-blue-700",
+  "Private": "bg-purple-100 text-purple-700",
+  "Isolation": "bg-yellow-100 text-yellow-700",
+};
 
-  const columns: Column<PatientRecord>[] = [
-    { key: "id", label: "Patient ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "age", label: "Age", sortable: true },
-    { key: "department", label: "Department", sortable: true },
-    { key: "assignedDoctor", label: "Assigned Doctor", sortable: true },
+const BedsAvailability = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const bedType = searchParams.get("bedType");
+
+  let data = bedsAvailability;
+  let displayCount = bedsAvailability.length;
+  let pageTitle = "Beds Availability";
+
+  if (bedType === "icu") {
+    data = icuBeds;
+    displayCount = icuBeds.length;
+    pageTitle = "ICU Beds";
+  } else if (bedType === "ward") {
+    data = wardBeds;
+    displayCount = wardBeds.length;
+    pageTitle = "Ward Beds";
+  } else if (bedType === "rooms") {
+    data = roomBeds;
+    displayCount = roomBeds.length;
+    pageTitle = "Private/Isolation Rooms";
+  }
+
+  const columns: Column<BedRecord>[] = [
+    { key: "ward", label: "Ward", sortable: true },
+    { key: "room", label: "Room", sortable: true },
+    { key: "bed", label: "Bed", sortable: true },
+    {
+      key: "bedType",
+      label: "Bed Type",
+      sortable: true,
+      render: (row) => (
+        <Badge className={bedTypeStyles[row.bedType]}>{row.bedType}</Badge>
+      ),
+    },
     {
       key: "status",
       label: "Status",
+      sortable: true,
       render: (row) => (
         <Badge className={statusStyles[row.status]}>{row.status}</Badge>
       ),
     },
     {
-      key: "checkInDate",
-      label: "Check-in Date/Time",
-      sortable: true,
-      render: (row) =>
-        row.checkInDate
-          ? format(new Date(row.checkInDate), "dd MMM yyyy, hh:mm a")
-          : "-",
+      key: "lastDischargedAt",
+      label: "Last Discharged At",
+      render: (row) => row.lastDischargedAt || "—",
     },
-    { key: "roomBed", label: "Room/Bed" },
+    {
+      key: "cleaningETA",
+      label: "Cleaning ETA",
+      render: (row) => row.cleaningETA || "—",
+    },
+    {
+      key: "isolationCapability",
+      label: "Isolation Capable",
+      render: (row) => row.isolationCapability ? (
+        <Badge className="bg-green-100 text-green-700">Yes</Badge>
+      ) : (
+        <span className="text-muted-foreground">No</span>
+      ),
+    },
+    {
+      key: "reservedFor",
+      label: "Reserved For",
+      render: (row) => row.reservedFor || "—",
+    },
   ];
 
   const filters: Filter[] = [
@@ -44,52 +93,54 @@ const CheckInPatients = () => {
       label: "Status",
       value: "all",
       options: [
-        { value: "OP", label: "OP" },
-        { value: "IP", label: "IP" },
-        { value: "ER", label: "ER" },
+        { value: "Available", label: "Available" },
+        { value: "Cleaning", label: "Cleaning" },
+        { value: "Reserved", label: "Reserved" },
+        { value: "Blocked", label: "Blocked" },
       ],
     },
     {
-      key: "department",
-      label: "Department",
+      key: "bedType",
+      label: "Bed Type",
       value: "all",
       options: [
-        { value: "Cardiology", label: "Cardiology" },
-        { value: "Orthopedics", label: "Orthopedics" },
-        { value: "Emergency", label: "Emergency" },
+        { value: "ICU", label: "ICU" },
+        { value: "HDU", label: "HDU" },
+        { value: "Ward", label: "Ward" },
+        { value: "Private", label: "Private" },
+        { value: "Isolation", label: "Isolation" },
       ],
     },
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU", count: 25 },
-    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward", count: 21 },
-    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms", count: 3 },
+    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU Beds", count: icuBeds.length },
+    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward/HDU Beds", count: wardBeds.length },
+    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Private/Isolation", count: roomBeds.length },
   ];
 
-  const rowActions: RowAction<PatientRecord>[] = [
-    { label: "View Profile", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
-    { label: "Update Status", onClick: (row) => console.log("Update status", row.id) },
-    { label: "Assign/Change Doctor", onClick: (row) => console.log("Assign", row.id) },
+  const rowActions: RowAction<BedRecord>[] = [
+    { label: "Reserve Bed", onClick: (row) => console.log("Reserve", row.ward, row.room, row.bed) },
+    { label: "Mark Cleaning", onClick: (row) => console.log("Mark Cleaning", row.ward, row.room, row.bed) },
+    { label: "Block Bed", onClick: (row) => console.log("Block", row.ward, row.room, row.bed) },
   ];
 
   return (
     <ListPageLayout
-      title="Check In"
-      count={checkInPatients.length}
-      subtitle="All patient check-ins today (OP, IP, ER)"
-      breadcrumbs={["Overview", "Check In"]}
+      title={pageTitle}
+      count={displayCount}
+      subtitle="Bed inventory and availability • Default sort: Status (Available first)"
+      breadcrumbs={["Overview", pageTitle]}
       columns={columns}
-      data={checkInPatients}
+      data={data}
       filters={filters}
       rowActions={rowActions}
       urlParamFilters={urlParamFilters}
-      emptyMessage="No check-ins today yet."
-      searchPlaceholder="Search by patient name or ID..."
-      getRowId={(row) => row.id}
-      onRowClick={(row) => navigate(`/patient-insights/${row.id}`)}
+      emptyMessage="No beds found."
+      searchPlaceholder="Search by ward, room, bed..."
+      getRowId={(row) => `${row.ward}-${row.room}-${row.bed}`}
     />
   );
 };
 
-export default CheckInPatients;
+export default BedsAvailability;
