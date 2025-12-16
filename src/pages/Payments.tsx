@@ -322,7 +322,8 @@ const Payments = () => {
 
           {/* Header with KPIs */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-lg font-semibold text-foreground mb-2">Payments</h1>
               <span className="text-sm text-muted-foreground">
                 Active Visit: <span className="font-medium text-foreground">VST-205431</span>
               </span>
