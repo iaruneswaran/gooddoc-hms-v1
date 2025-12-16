@@ -198,7 +198,7 @@ const Overview = () => {
       subMetrics: [
         { label: "Visit Completed", value: 282, filterParam: "visitStatus=Completed" },
         { label: "Check in completed", value: 54, filterParam: "visitStatus=Pending" },
-        { label: "Pending to check in", value: 56, filterParam: "visitStatus=In_Queue" },
+        { label: "Check In Pending", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
     },
     {
