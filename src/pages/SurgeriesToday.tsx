@@ -14,7 +14,7 @@ const SurgeriesToday = () => {
   const navigate = useNavigate();
 
   const columns: Column<SurgeryRecord>[] = [
-    { key: "caseId", label: "Case ID", sortable: true, render: (row) => <span>GDID {row.caseId.replace(/\D/g, '').padStart(3, '0')}</span> },
+    { key: "caseId", label: "Case ID", sortable: true, render: (row) => <span>GDID {row.caseId.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
     { key: "patient", label: "Patient", sortable: true },
     { key: "ageSex", label: "Age/Sex" },
     { key: "procedure", label: "Procedure" },
