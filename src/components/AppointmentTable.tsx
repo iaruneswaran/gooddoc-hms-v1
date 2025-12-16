@@ -509,9 +509,9 @@ export function AppointmentTable({
     return apt.department || "—";
   };
 
-  // Column headers based on appointment type
-  const doctorColumnLabel = isDiagnosticsCategory ? "Referring Doctor" : "Consulting Doctor";
-  const deptColumnLabel = isDiagnosticsCategory ? "Performing Dept" : "Department";
+  // Column headers - simplified
+  const doctorColumnLabel = "Doctor";
+  const deptColumnLabel = "Department";
 
   const gridClasses = isOutpatientCare 
     ? "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_1fr_1.2fr] gap-4 px-4 w-full"
