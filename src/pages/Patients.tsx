@@ -236,11 +236,6 @@ export default function Patients() {
           </Card>
 
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 border-b border-border pb-0">
-              <div className="px-4 py-3 text-sm font-medium text-primary border-b-2 border-primary">
-                All Patients
-              </div>
-            </div>
             <div className="flex items-center gap-3">
               <Select value={genderFilter} onValueChange={setGenderFilter}>
                 <SelectTrigger className="w-[140px] h-9">
@@ -275,15 +270,15 @@ export default function Patients() {
                   ))}
                 </SelectContent>
               </Select>
-              <div className="relative w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                <Input
-                  placeholder="Search by name, ID, email..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-9"
-                />
-              </div>
+            </div>
+            <div className="relative w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <Input
+                placeholder="Search by name, ID, email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-9"
+              />
             </div>
           </div>
 
