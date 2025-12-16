@@ -244,7 +244,7 @@ export default function Patients() {
             </div>
           </Card>
 
-          <div className="flex items-center justify-end mb-6">
+          <div className="flex items-center justify-start mb-6">
             <div className="flex items-center gap-3">
               <Select value={genderFilter} onValueChange={setGenderFilter}>
                 <SelectTrigger className="w-[140px] h-9">
