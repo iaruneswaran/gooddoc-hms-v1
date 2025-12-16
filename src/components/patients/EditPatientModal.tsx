@@ -27,7 +27,7 @@ interface Patient {
   address: string;
   bloodGroup: string;
   registeredDate: string;
-  status: "Active" | "Inactive";
+  status: "IP" | "OP";
   // Extended fields
   title?: string;
   dob?: string;
