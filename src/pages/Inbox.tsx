@@ -304,7 +304,6 @@ export default function Inbox() {
                     <SelectItem value="all">All Services</SelectItem>
                     <SelectItem value="Consultation">Consultation</SelectItem>
                     <SelectItem value="Laboratory">Laboratory</SelectItem>
-                    <SelectItem value="Radiology">Radiology</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
