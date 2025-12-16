@@ -196,7 +196,7 @@ const Overview = () => {
       iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "OP Completed", value: 282, filterParam: "visitStatus=Completed" },
+        { label: "Visit Completed", value: 282, filterParam: "visitStatus=Completed" },
         { label: "Check in completed", value: 54, filterParam: "visitStatus=Pending" },
         { label: "Pending to check in", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
