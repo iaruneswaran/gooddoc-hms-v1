@@ -215,9 +215,9 @@ const Overview = () => {
       ],
     },
     {
-      title: "Beds Availablity",
+      title: "Beds Availability",
       count: 67,
-      icon: UserCheck,
+      icon: BedDouble,
       route: "/patients/check-in?date=today",
       iconColorClass: iconColors.patients,
       isPrimary: true,
@@ -228,25 +228,27 @@ const Overview = () => {
       ],
     },
     {
-      title: "Discharged",
-      count: 45,
-      icon: LogOut,
-      route: "/patients/discharged?date=today",
-      iconColorClass: iconColors.patients,
+      title: "Doctors on Duty",
+      count: 89,
+      icon: Stethoscope,
+      route: "/doctors/on-duty?shift=current",
+      iconColorClass: iconColors.doctors,
       isPrimary: true,
       subMetrics: [
-        { label: "Pending", value: 11, filterParam: "dischargeStatus=Pending" },
+        { label: "OP Doctors", value: 42, filterParam: "type=op" },
+        { label: "IP Doctors", value: 31, filterParam: "type=ip" },
+        { label: "Other Doctors", value: 16, filterParam: "type=other" },
       ],
     },
   ];
 
   const standardCards: MetricCardProps[] = [
     {
-      title: "Doctors on Duty",
-      count: 89,
-      icon: Stethoscope,
-      route: "/doctors/on-duty?shift=current",
-      iconColorClass: iconColors.doctors,
+      title: "Discharged",
+      count: 45,
+      icon: LogOut,
+      route: "/patients/discharged?date=today",
+      iconColorClass: iconColors.patients,
     },
     {
       title: "Appointment request received",
