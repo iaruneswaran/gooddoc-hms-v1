@@ -3,10 +3,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2 } from "lucide-react";
-import { Patient, PrescriptionItem } from "@/types/patient360";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Plus, Trash2, Check, ChevronsUpDown } from "lucide-react";
+import { Patient, PrescriptionItem, Prescription } from "@/types/patient360";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface PrescriptionsStepProps {
   patient: Patient;
@@ -14,7 +16,56 @@ interface PrescriptionsStepProps {
   onNext: (prescription?: Prescription) => void;
 }
 
-import { Prescription } from "@/types/patient360";
+const MEDICATIONS = [
+  "Paracetamol", "Ibuprofen", "Amoxicillin", "Azithromycin", "Ciprofloxacin",
+  "Metformin", "Amlodipine", "Atorvastatin", "Omeprazole", "Pantoprazole",
+  "Cetirizine", "Montelukast", "Salbutamol", "Levothyroxine", "Aspirin",
+  "Metoprolol", "Losartan", "Lisinopril", "Gabapentin", "Prednisone",
+  "Clopidogrel", "Warfarin", "Diclofenac", "Naproxen", "Tramadol"
+];
+
+function MedicationCombobox({ value, onSelect }: { value: string; onSelect: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between h-10 font-normal"
+        >
+          {value || "Search medication..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[280px] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Search medication..." />
+          <CommandList>
+            <CommandEmpty>No medication found.</CommandEmpty>
+            <CommandGroup>
+              {MEDICATIONS.map((med) => (
+                <CommandItem
+                  key={med}
+                  value={med}
+                  onSelect={() => {
+                    onSelect(med);
+                    setOpen(false);
+                  }}
+                >
+                  <Check className={cn("mr-2 h-4 w-4", value === med ? "opacity-100" : "opacity-0")} />
+                  {med}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStepProps) {
   const { toast } = useToast();
@@ -86,31 +137,10 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
                 className="grid grid-cols-12 gap-3"
               >
                 <div className="col-span-3">
-                  <Select
-                    value={med.name}
-                    onValueChange={(value) => updateMedication(med.id!, "name", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Medicine Name" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Paracetamol">Paracetamol</SelectItem>
-                      <SelectItem value="Ibuprofen">Ibuprofen</SelectItem>
-                      <SelectItem value="Amoxicillin">Amoxicillin</SelectItem>
-                      <SelectItem value="Azithromycin">Azithromycin</SelectItem>
-                      <SelectItem value="Ciprofloxacin">Ciprofloxacin</SelectItem>
-                      <SelectItem value="Metformin">Metformin</SelectItem>
-                      <SelectItem value="Amlodipine">Amlodipine</SelectItem>
-                      <SelectItem value="Atorvastatin">Atorvastatin</SelectItem>
-                      <SelectItem value="Omeprazole">Omeprazole</SelectItem>
-                      <SelectItem value="Pantoprazole">Pantoprazole</SelectItem>
-                      <SelectItem value="Cetirizine">Cetirizine</SelectItem>
-                      <SelectItem value="Montelukast">Montelukast</SelectItem>
-                      <SelectItem value="Salbutamol">Salbutamol</SelectItem>
-                      <SelectItem value="Levothyroxine">Levothyroxine</SelectItem>
-                      <SelectItem value="Aspirin">Aspirin</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <MedicationCombobox
+                    value={med.name || ""}
+                    onSelect={(value) => updateMedication(med.id!, "name", value)}
+                  />
                 </div>
                 <div className="col-span-2">
                   <Select
