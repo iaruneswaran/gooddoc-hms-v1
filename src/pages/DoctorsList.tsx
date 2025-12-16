@@ -381,7 +381,7 @@ export default function DoctorsList() {
             </div>
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <div className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 border-b border-border bg-muted/30">
+              <div className="grid grid-cols-[1.5fr_1.5fr_1.2fr_1fr_1fr_0.7fr_0.5fr] gap-4 px-4 py-4 border-b border-border bg-muted/30">
                 <div className="text-xs font-medium text-muted-foreground">Doctor</div>
                 <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
                 <div className="text-xs font-medium text-muted-foreground">Availability</div>
@@ -392,7 +392,7 @@ export default function DoctorsList() {
               </div>
 
               {filteredDoctors.map((doctor) => (
-                <div key={doctor.id} className="grid grid-cols-[240px_1fr_200px_180px_150px_120px_80px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
+                <div key={doctor.id} className="grid grid-cols-[1.5fr_1.5fr_1.2fr_1fr_1fr_0.7fr_0.5fr] gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={doctor.avatar} />
