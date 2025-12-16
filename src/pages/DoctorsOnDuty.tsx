@@ -9,6 +9,17 @@ const roleStyles: Record<DoctorOnDutyRecord["role"], string> = {
   "In OPD": "bg-purple-100 text-purple-700",
   "In OT": "bg-red-100 text-red-700",
   "In Ward Rounds": "bg-amber-100 text-amber-700",
+  "In Procedure": "bg-orange-100 text-orange-700",
+  "Break": "bg-gray-100 text-gray-700",
+  "Remote": "bg-indigo-100 text-indigo-700",
+};
+
+const statusStyles: Record<NonNullable<DoctorOnDutyRecord["currentStatus"]>, string> = {
+  "Available": "bg-green-100 text-green-700",
+  "With Patient": "bg-blue-100 text-blue-700",
+  "In Procedure": "bg-amber-100 text-amber-700",
+  "On Break": "bg-gray-100 text-gray-700",
+  "In Meeting": "bg-purple-100 text-purple-700",
 };
 
 const DoctorsOnDuty = () => {
@@ -21,39 +32,118 @@ const DoctorsOnDuty = () => {
   let pageTitle = "Doctors on Duty";
   let pageSubtitle = "Active physicians on current shift • Default sort: Specialty ASC";
 
+  // Define columns based on doctor type
+  const baseColumns: Column<DoctorOnDutyRecord>[] = [
+    { key: "doctorName", label: "Doctor Name", sortable: true },
+    { key: "specialty", label: "Specialty", sortable: true },
+  ];
+
+  let specificColumns: Column<DoctorOnDutyRecord>[] = [];
+
   if (doctorType === "op") {
     data = opDoctors;
     displayCount = opDoctors.length;
     pageTitle = "OP Doctors";
-    pageSubtitle = "Outpatient doctors on duty • Default sort: Specialty ASC";
+    pageSubtitle = "Doctors currently scheduled/on duty for OPD clinics • Default sort: Specialty ASC";
+    
+    specificColumns = [
+      { key: "department", label: "Department/Clinic", sortable: true },
+      { key: "opdRoom", label: "OPD Room", render: (row) => row.opdRoom || "—" },
+      {
+        key: "role",
+        label: "Role",
+        sortable: true,
+        render: (row) => <Badge className={roleStyles[row.role]}>{row.role}</Badge>,
+      },
+      { key: "shiftStart", label: "Shift Start" },
+      { key: "shiftEnd", label: "Shift End" },
+      {
+        key: "currentStatus",
+        label: "Current Status",
+        render: (row) => row.currentStatus ? (
+          <Badge className={statusStyles[row.currentStatus]}>{row.currentStatus}</Badge>
+        ) : <span>—</span>,
+      },
+      { key: "queueLength", label: "Queue Length", sortable: true, render: (row) => row.queueLength ?? "—" },
+      { key: "nextAppointmentAt", label: "Next Appointment At", render: (row) => row.nextAppointmentAt || "—" },
+      { key: "slotsAvailable", label: "Slots Available", render: (row) => row.slotsAvailable ?? "—" },
+      { key: "avgConsultTime", label: "Avg Consult (mins)", render: (row) => row.avgConsultTime ? `${row.avgConsultTime} min` : "—" },
+      { key: "contactPager", label: "Contact/Pager" },
+    ];
   } else if (doctorType === "ip") {
     data = ipDoctors;
     displayCount = ipDoctors.length;
     pageTitle = "IP Doctors";
-    pageSubtitle = "Inpatient doctors on duty • Default sort: Specialty ASC";
+    pageSubtitle = "Doctors covering inpatient units/ICU/wards • Default sort: Primary Units (ICU first)";
+    
+    specificColumns = [
+      {
+        key: "role",
+        label: "Role",
+        sortable: true,
+        render: (row) => <Badge className={roleStyles[row.role]}>{row.role}</Badge>,
+      },
+      { key: "primaryUnits", label: "Primary Units/Wards", render: (row) => row.primaryUnits || "—" },
+      { key: "currentLocation", label: "Current Location" },
+      { key: "shiftStart", label: "Shift Start" },
+      { key: "shiftEnd", label: "Shift End" },
+      {
+        key: "onCallStatus",
+        label: "On-call",
+        render: (row) => row.onCallStatus ? (
+          <Badge className="bg-amber-100 text-amber-700">Yes</Badge>
+        ) : <span className="text-muted-foreground">No</span>,
+      },
+      { key: "ipCensus", label: "IP Census", sortable: true, render: (row) => row.ipCensus ?? "—" },
+      { key: "roundsStartTime", label: "Rounds Start Time", render: (row) => row.roundsStartTime || "—" },
+      { key: "nextTask", label: "Next Task", render: (row) => row.nextTask || "—" },
+      { key: "contactPager", label: "Contact/Pager" },
+    ];
   } else if (doctorType === "other") {
     data = otherDoctors;
     displayCount = otherDoctors.length;
     pageTitle = "Other Doctors";
-    pageSubtitle = "Other doctors on duty (ER, OR, On-call) • Default sort: Specialty ASC";
+    pageSubtitle = "Doctors on duty (Radiology, Pathology, Telemedicine, Admin, etc.) • Default sort: Specialty ASC";
+    
+    specificColumns = [
+      { key: "context", label: "Context/Assignment", render: (row) => row.context || "—" },
+      { key: "currentLocation", label: "Location" },
+      {
+        key: "role",
+        label: "Role",
+        sortable: true,
+        render: (row) => <Badge className={roleStyles[row.role]}>{row.role}</Badge>,
+      },
+      { key: "shiftStart", label: "Shift Start" },
+      { key: "shiftEnd", label: "Shift End" },
+      {
+        key: "currentStatus",
+        label: "Current Status",
+        render: (row) => row.currentStatus ? (
+          <Badge className={statusStyles[row.currentStatus]}>{row.currentStatus}</Badge>
+        ) : <span>—</span>,
+      },
+      { key: "casesToday", label: "Cases/Tasks Today", render: (row) => row.casesToday ?? "—" },
+      { key: "contactPager", label: "Contact/Pager" },
+      { key: "notes", label: "Notes", render: (row) => row.notes || "—" },
+    ];
+  } else {
+    // Default view - all doctors
+    specificColumns = [
+      {
+        key: "role",
+        label: "Role",
+        sortable: true,
+        render: (row) => <Badge className={roleStyles[row.role]}>{row.role}</Badge>,
+      },
+      { key: "shiftStart", label: "Shift Start" },
+      { key: "shiftEnd", label: "Shift End" },
+      { key: "currentLocation", label: "Current Location" },
+      { key: "contactPager", label: "Contact/Pager" },
+    ];
   }
 
-  const columns: Column<DoctorOnDutyRecord>[] = [
-    { key: "doctorName", label: "Doctor Name", sortable: true },
-    { key: "specialty", label: "Specialty", sortable: true },
-    {
-      key: "role",
-      label: "Role",
-      sortable: true,
-      render: (row) => (
-        <Badge className={roleStyles[row.role]}>{row.role}</Badge>
-      ),
-    },
-    { key: "shiftStart", label: "Shift Start" },
-    { key: "shiftEnd", label: "Shift End" },
-    { key: "currentLocation", label: "Current Location" },
-    { key: "contactPager", label: "Contact/Pager" },
-  ];
+  const columns = [...baseColumns, ...specificColumns];
 
   const filters: Filter[] = [
     {
@@ -78,6 +168,8 @@ const DoctorsOnDuty = () => {
         { value: "In OPD", label: "In OPD" },
         { value: "In OT", label: "In OT" },
         { value: "In Ward Rounds", label: "In Ward Rounds" },
+        { value: "In Procedure", label: "In Procedure" },
+        { value: "Remote", label: "Remote" },
       ],
     },
   ];
@@ -106,8 +198,8 @@ const DoctorsOnDuty = () => {
       rowActions={rowActions}
       urlParamFilters={urlParamFilters}
       emptyMessage="No doctors currently on duty."
-      searchPlaceholder="Search by name, specialty..."
-      getRowId={(row) => row.doctorName}
+      searchPlaceholder="Search by name, specialty, department..."
+      getRowId={(row) => row.doctorName + row.contactPager}
     />
   );
 };
