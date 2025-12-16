@@ -317,7 +317,7 @@ const Overview = () => {
                   <CalendarClock className="w-4 h-4" />
                   <span>{format(today, "EEEE, MMMM d, yyyy")}</span>
                 </div>
-                <Button onClick={() => navigate("/new-appointment")} size="sm">
+                <Button onClick={() => navigate("/new-appointment")} className="h-9">
                   <Plus className="w-4 h-4 mr-1" />
                   New Appointment
                 </Button>
