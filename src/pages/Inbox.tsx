@@ -273,7 +273,7 @@ export default function Inbox() {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Inbox</h1>
+              <h1 className="text-lg font-semibold text-foreground">Requests</h1>
               <CalendarWidget />
             </div>
           </Card>
