@@ -35,7 +35,7 @@ const PATIENTS = [
     address: "Chennai",
     bloodGroup: "O+",
     registeredDate: "14-Dec-2025",
-    status: "Active" as const,
+    status: "IP" as const,
   },
   {
     id: "P-0002",
@@ -47,7 +47,7 @@ const PATIENTS = [
     address: "Delhi",
     bloodGroup: "B+",
     registeredDate: "12-Dec-2025",
-    status: "Active" as const,
+    status: "OP" as const,
   },
   {
     id: "P-0003",
@@ -59,7 +59,7 @@ const PATIENTS = [
     address: "Bengaluru",
     bloodGroup: "A+",
     registeredDate: "10-Dec-2025",
-    status: "Inactive" as const,
+    status: "OP" as const,
   },
   {
     id: "P-0004",
@@ -71,7 +71,7 @@ const PATIENTS = [
     address: "Ahmedabad",
     bloodGroup: "AB+",
     registeredDate: "09-Dec-2025",
-    status: "Active" as const,
+    status: "IP" as const,
   },
   {
     id: "P-0005",
@@ -83,7 +83,7 @@ const PATIENTS = [
     address: "Kochi",
     bloodGroup: "O−",
     registeredDate: "08-Dec-2025",
-    status: "Active" as const,
+    status: "OP" as const,
   },
   {
     id: "P-0006",
@@ -95,7 +95,7 @@ const PATIENTS = [
     address: "Jaipur",
     bloodGroup: "B−",
     registeredDate: "07-Dec-2025",
-    status: "Active" as const,
+    status: "OP" as const,
   },
   {
     id: "P-0007",
@@ -107,7 +107,7 @@ const PATIENTS = [
     address: "Chennai",
     bloodGroup: "A−",
     registeredDate: "06-Dec-2025",
-    status: "Active" as const,
+    status: "IP" as const,
   },
   {
     id: "P-0008",
@@ -119,7 +119,7 @@ const PATIENTS = [
     address: "Kolkata",
     bloodGroup: "O+",
     registeredDate: "05-Dec-2025",
-    status: "Inactive" as const,
+    status: "OP" as const,
   },
   {
     id: "P-0009",
@@ -131,7 +131,7 @@ const PATIENTS = [
     address: "Pune",
     bloodGroup: "B+",
     registeredDate: "04-Dec-2025",
-    status: "Active" as const,
+    status: "IP" as const,
   },
   {
     id: "P-0010",
@@ -143,7 +143,7 @@ const PATIENTS = [
     address: "Hyderabad",
     bloodGroup: "A+",
     registeredDate: "03-Dec-2025",
-    status: "Active" as const,
+    status: "OP" as const,
   },
 ];
 
@@ -312,8 +312,8 @@ export default function Patients() {
                 <div className="text-sm text-foreground truncate">{patient.registeredDate}</div>
                 <div>
                   <Badge
-                    variant={patient.status === "Active" ? "default" : "secondary"}
-                    className={patient.status === "Active" ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-muted text-muted-foreground"}
+                    variant={patient.status === "IP" ? "default" : "secondary"}
+                    className={patient.status === "IP" ? "bg-blue-100 text-blue-700 hover:bg-blue-100" : "bg-green-100 text-green-700 hover:bg-green-100"}
                   >
                     {patient.status}
                   </Badge>
