@@ -243,17 +243,23 @@ export default function Inbox() {
           </div>
         </div>
 
-        {/* Appointment Summary Row - Collapsible */}
-        {appointment.purpose && isExpanded && (
-          <div className="px-4 pb-4 pt-0">
-            <div className="border-t border-border pt-4">
-              <div className="space-y-1">
-                <div className="text-[12px] font-medium text-muted-foreground">Appointment Summary</div>
-                <div className="text-sm text-foreground">{appointment.purpose}</div>
+        {/* Appointment Summary Row - Collapsible with Animation */}
+        <div 
+          className={`overflow-hidden transition-all duration-300 ease-out ${
+            isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          {appointment.purpose && (
+            <div className="px-4 pb-4 pt-0">
+              <div className="border-t border-border pt-4">
+                <div className="space-y-1">
+                  <div className="text-[12px] font-medium text-muted-foreground">Appointment Summary</div>
+                  <div className="text-sm text-foreground">{appointment.purpose}</div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   };
