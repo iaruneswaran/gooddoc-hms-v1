@@ -1,5 +1,8 @@
-import { Bell, User } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Bell, User, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 type BreadcrumbItem = string | { label: string; onClick: () => void };
 
@@ -8,6 +11,15 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      navigate(`/patients?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="relative h-16 border-b border-border bg-card flex items-center px-4">
       {/* Breadcrumbs - Left */}
@@ -39,6 +51,20 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
 
       {/* Spacer */}
       <div className="flex-1" />
+
+      {/* Global Search - Center */}
+      <div className="absolute left-1/2 -translate-x-1/2 w-[400px]">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search patients..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
+            className="pl-10 h-9 bg-muted/30 border-border"
+          />
+        </div>
+      </div>
 
       {/* Icons - Right */}
       <div className="flex items-center gap-2">
