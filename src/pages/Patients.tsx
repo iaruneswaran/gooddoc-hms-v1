@@ -5,9 +5,8 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, MoreVertical, Pencil, Eye, CalendarPlus, User } from "lucide-react";
+import { Download, MoreVertical, Pencil, Eye, CalendarPlus, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -245,7 +244,7 @@ export default function Patients() {
             </div>
           </Card>
 
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-end mb-6">
             <div className="flex items-center gap-3">
               <Select value={genderFilter} onValueChange={setGenderFilter}>
                 <SelectTrigger className="w-[140px] h-9">
@@ -280,15 +279,6 @@ export default function Patients() {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              <Input
-                placeholder="Search by name, ID, email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9"
-              />
             </div>
           </div>
 
