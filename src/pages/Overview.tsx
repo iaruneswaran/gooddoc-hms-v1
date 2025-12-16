@@ -26,6 +26,7 @@ interface SubMetric {
   label: string;
   value: number | string;
   filterParam?: string;
+  route?: string; // Direct route for navigation instead of filter
 }
 
 interface MetricCardProps {
@@ -63,16 +64,19 @@ const PrimaryMetricCard = ({
     navigate(route);
   };
   
-  const handleSubMetricClick = (e: React.MouseEvent, filterParam?: string) => {
+  const handleSubMetricClick = (e: React.MouseEvent, metric: SubMetric) => {
     e.stopPropagation();
     e.preventDefault();
-    if (filterParam) {
+    if (metric.route) {
+      // Direct navigation to route
+      navigate(metric.route);
+    } else if (metric.filterParam) {
       // Build proper URL with filter
       const baseRoute = route.split('?')[0];
       const existingParams = route.includes('?') ? route.split('?')[1] : '';
       const newUrl = existingParams 
-        ? `${baseRoute}?${existingParams}&${filterParam}`
-        : `${baseRoute}?${filterParam}`;
+        ? `${baseRoute}?${existingParams}&${metric.filterParam}`
+        : `${baseRoute}?${metric.filterParam}`;
       navigate(newUrl);
     }
   };
@@ -124,15 +128,15 @@ const PrimaryMetricCard = ({
             key={idx}
             role="button"
             tabIndex={0}
-            onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
+            onClick={(e) => handleSubMetricClick(e, metric)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric); }}
             className={`
               flex flex-col py-1.5 px-2 text-center rounded-md
               ${idx > 0 ? 'border-l border-border' : ''}
-              ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
+              ${metric.filterParam || metric.route ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
               transition-colors
             `}
-            title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
+            title={metric.filterParam ? `Filter: ${metric.label}` : metric.route ? `Open ${metric.label}` : undefined}
           >
             <span className="text-muted-foreground text-[11px] leading-tight">{metric.label}</span>
             <span className="font-semibold text-foreground mt-0.5">{metric.value}</span>
@@ -211,7 +215,7 @@ const Overview = () => {
       subMetrics: [
         { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
         { label: "Emergency Case", value: 8, filterParam: "erCase=true" },
-        { label: "Transfers", value: 10, filterParam: "transfer=true" },
+        { label: "Transfers", value: 10, route: "/patients/transfers" },
       ],
     },
     {

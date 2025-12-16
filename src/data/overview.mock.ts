@@ -87,11 +87,57 @@ export interface ERCaseRecord {
 export interface DoctorOnDutyRecord {
   doctorName: string;
   specialty: string;
-  role: "Onsite" | "On-call" | "In OPD" | "In OT" | "In Ward Rounds";
+  role: "Onsite" | "On-call" | "In OPD" | "In OT" | "In Ward Rounds" | "In Procedure" | "Break" | "Remote";
   shiftStart: string;
   shiftEnd: string;
   currentLocation: string;
   contactPager: string;
+  // Extended fields for detailed views
+  department?: string;
+  opdRoom?: string;
+  currentStatus?: "Available" | "With Patient" | "In Procedure" | "On Break" | "In Meeting";
+  queueLength?: number;
+  nextAppointmentAt?: string;
+  slotsAvailable?: number;
+  avgConsultTime?: number;
+  primaryUnits?: string;
+  onCallStatus?: boolean;
+  ipCensus?: number;
+  roundsStartTime?: string;
+  nextTask?: string;
+  context?: string;
+  casesToday?: number;
+  notes?: string;
+  dutyContext: "OP" | "IP" | "Other";
+}
+
+export interface TransferRecord {
+  transferId: string;
+  mrn: string;
+  patient: string;
+  ageSex: string;
+  priority: "Routine" | "Urgent" | "Stat";
+  transferType: "Intra-ward" | "Inter-ward" | "To ICU" | "To HDU" | "Room Change" | "Bed Swap" | "Inter-facility";
+  fromWard: string;
+  fromRoom: string;
+  fromBed: string;
+  fromBedClass: "ICU" | "HDU" | "Ward" | "Private" | "Isolation";
+  toWard: string;
+  toRoom: string;
+  toBed: string;
+  toBedClass: "ICU" | "HDU" | "Ward" | "Private" | "Isolation";
+  reason: string;
+  requestingClinician: string;
+  approver?: string;
+  status: "Requested" | "Approved" | "Bed Reserved" | "In Transit" | "Completed" | "Canceled";
+  requestedAt: string;
+  approvedAt?: string;
+  transferStartAt?: string;
+  arrivedAt?: string;
+  equipmentNeeded?: string;
+  isolationRequired: boolean;
+  transportTeam?: string;
+  notesBlockers?: string;
 }
 
 export interface AppointmentRequestRecord {
@@ -438,14 +484,47 @@ function generateDoctorOnDuty(index: number): DoctorOnDutyRecord {
   const shiftEnd = new Date(shiftStart);
   shiftEnd.setHours(shiftStart.getHours() + 12);
 
+  const roles: DoctorOnDutyRecord["role"][] = ["Onsite", "On-call", "In OPD", "In OT", "In Ward Rounds", "In Procedure", "Break", "Remote"];
+  const role = roles[index % roles.length];
+  const locations = ["OPD", "ER", "Ward", "OR", "ICU", "HDU", "Radiology", "Lab"];
+  const currentLocation = locations[index % locations.length];
+  
+  // Determine duty context based on role and location
+  let dutyContext: "OP" | "IP" | "Other" = "Other";
+  if (role === "In OPD" || currentLocation === "OPD") {
+    dutyContext = "OP";
+  } else if (role === "In Ward Rounds" || ["Ward", "ICU", "HDU"].includes(currentLocation)) {
+    dutyContext = "IP";
+  }
+
+  const opdRooms = ["OPD-101", "OPD-102", "OPD-103", "OPD-201", "OPD-202"];
+  const primaryUnits = ["ICU", "HDU", "Ward-A", "Ward-B", "Ward-C"];
+  const contexts = ["Radiology Reading", "Pathology/Lab", "Telemedicine", "Admin", "Education/Academic", "Research"];
+
   return {
     doctorName: doctors[index % doctors.length],
     specialty: departments[index % departments.length],
-    role: (["Onsite", "On-call", "In OPD", "In OT", "In Ward Rounds"] as const)[index % 5],
+    role,
     shiftStart: formatTime(shiftStart),
     shiftEnd: formatTime(shiftEnd),
-    currentLocation: (["OPD", "ER", "Ward", "OR"] as const)[index % 4],
+    currentLocation,
     contactPager: `Ext. ${1000 + index}`,
+    department: departments[index % departments.length],
+    opdRoom: dutyContext === "OP" ? opdRooms[index % opdRooms.length] : undefined,
+    currentStatus: (["Available", "With Patient", "In Procedure", "On Break", "In Meeting"] as const)[index % 5],
+    queueLength: dutyContext === "OP" ? Math.floor(Math.random() * 12) : undefined,
+    nextAppointmentAt: dutyContext === "OP" ? formatTime(subMinutes(now, -Math.floor(Math.random() * 60))) : undefined,
+    slotsAvailable: dutyContext === "OP" ? Math.floor(Math.random() * 8) : undefined,
+    avgConsultTime: dutyContext === "OP" ? 15 + Math.floor(Math.random() * 15) : undefined,
+    primaryUnits: dutyContext === "IP" ? primaryUnits.slice(0, 1 + (index % 3)).join(", ") : undefined,
+    onCallStatus: index % 4 === 0,
+    ipCensus: dutyContext === "IP" ? 5 + Math.floor(Math.random() * 15) : undefined,
+    roundsStartTime: dutyContext === "IP" ? "08:00" : undefined,
+    nextTask: dutyContext === "IP" ? (["Procedure", "Consult", "Discharge", "Rounds"] as const)[index % 4] : undefined,
+    context: dutyContext === "Other" ? contexts[index % contexts.length] : undefined,
+    casesToday: dutyContext === "Other" ? Math.floor(Math.random() * 20) : undefined,
+    notes: index % 5 === 0 ? "Available for consults" : undefined,
+    dutyContext,
   };
 }
 
@@ -453,9 +532,59 @@ function generateDoctorOnDuty(index: number): DoctorOnDutyRecord {
 export const doctorsOnDuty: DoctorOnDutyRecord[] = Array.from({ length: 89 }, (_, i) => generateDoctorOnDuty(i));
 
 // Sub-filtered by doctor type
-export const opDoctors = doctorsOnDuty.filter(d => d.role === "In OPD" || d.currentLocation === "OPD");
-export const ipDoctors = doctorsOnDuty.filter(d => d.role === "In Ward Rounds" || d.currentLocation === "Ward");
-export const otherDoctors = doctorsOnDuty.filter(d => !["In OPD", "In Ward Rounds"].includes(d.role) && !["OPD", "Ward"].includes(d.currentLocation));
+export const opDoctors = doctorsOnDuty.filter(d => d.dutyContext === "OP");
+export const ipDoctors = doctorsOnDuty.filter(d => d.dutyContext === "IP");
+export const otherDoctors = doctorsOnDuty.filter(d => d.dutyContext === "Other");
+
+// ============== TRANSFERS ==============
+
+function generateTransfer(index: number): TransferRecord {
+  const requestedDate = subHours(now, Math.floor(Math.random() * 12));
+  const statuses: TransferRecord["status"][] = ["Requested", "Approved", "Bed Reserved", "In Transit", "Completed", "Canceled"];
+  const status = statuses[index % statuses.length];
+  const priorities: TransferRecord["priority"][] = ["Routine", "Routine", "Urgent", "Stat"];
+  const transferTypes: TransferRecord["transferType"][] = ["Intra-ward", "Inter-ward", "To ICU", "To HDU", "Room Change", "Bed Swap", "Inter-facility"];
+  const bedClasses: TransferRecord["fromBedClass"][] = ["Ward", "Private", "HDU", "ICU", "Isolation"];
+  const reasons = ["Stepdown care", "Condition deterioration", "ICU bed needed", "Isolation required", "Patient request", "Bed optimization", "Post-op recovery"];
+  const equipment = ["Ventilator", "Monitor", "O₂ Tank", "IV Pump", "Wheelchair", "Stretcher"];
+
+  const fromBedClass = bedClasses[index % bedClasses.length];
+  const toBedClass = bedClasses[(index + 2) % bedClasses.length];
+  const fromWard = fromBedClass === "ICU" ? "ICU" : fromBedClass === "HDU" ? "HDU" : `Ward-${["A", "B", "C"][index % 3]}`;
+  const toWard = toBedClass === "ICU" ? "ICU" : toBedClass === "HDU" ? "HDU" : `Ward-${["A", "B", "C"][(index + 1) % 3]}`;
+
+  return {
+    transferId: `TRF${today.replace(/-/g, "")}${String(index).padStart(3, "0")}`,
+    mrn: generateMRN(7000 + index),
+    patient: generateName(index + 700),
+    ageSex: generateAgeSex(index),
+    priority: priorities[index % priorities.length],
+    transferType: transferTypes[index % transferTypes.length],
+    fromWard,
+    fromRoom: `${100 + Math.floor(index / 4)}`,
+    fromBed: `${(index % 4) + 1}`,
+    fromBedClass,
+    toWard,
+    toRoom: `${200 + Math.floor(index / 4)}`,
+    toBed: `${((index + 1) % 4) + 1}`,
+    toBedClass,
+    reason: reasons[index % reasons.length],
+    requestingClinician: doctors[index % doctors.length],
+    approver: ["Approved", "Bed Reserved", "In Transit", "Completed"].includes(status) ? doctors[(index + 1) % doctors.length] : undefined,
+    status,
+    requestedAt: formatDateTime(requestedDate),
+    approvedAt: ["Approved", "Bed Reserved", "In Transit", "Completed"].includes(status) ? formatDateTime(subMinutes(requestedDate, -15)) : undefined,
+    transferStartAt: ["In Transit", "Completed"].includes(status) ? formatDateTime(subMinutes(requestedDate, -30)) : undefined,
+    arrivedAt: status === "Completed" ? formatDateTime(subMinutes(requestedDate, -45)) : undefined,
+    equipmentNeeded: index % 3 === 0 ? equipment.slice(0, 1 + (index % 3)).join(", ") : undefined,
+    isolationRequired: index % 7 === 0,
+    transportTeam: ["In Transit", "Completed"].includes(status) ? `Porter ${1000 + index}` : undefined,
+    notesBlockers: index % 5 === 0 ? "Awaiting escort clearance" : undefined,
+  };
+}
+
+// 10 Transfers (matching Overview card count)
+export const transfers: TransferRecord[] = Array.from({ length: 10 }, (_, i) => generateTransfer(i));
 
 // ============== APPOINTMENT REQUESTS ==============
 
