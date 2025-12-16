@@ -214,7 +214,7 @@ const Overview = () => {
       ],
     },
     {
-      title: "Bed Availability",
+      title: "Beds Availablity",
       count: 67,
       icon: UserCheck,
       route: "/patients/check-in?date=today",
