@@ -1,34 +1,95 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
-import { scheduledToday, PatientRecord } from "@/data/overview.mock";
+import { appointmentRequests, AppointmentRequestRecord } from "@/data/overview.mock";
 
-const ScheduledToday = () => {
+const urgencyStyles: Record<AppointmentRequestRecord["urgency"], string> = {
+  "Low": "bg-green-100 text-green-700",
+  "Med": "bg-amber-100 text-amber-700",
+  "High": "bg-red-100 text-red-700",
+};
+
+const statusStyles: Record<AppointmentRequestRecord["status"], string> = {
+  "New": "bg-blue-100 text-blue-700",
+  "Pending": "bg-amber-100 text-amber-700",
+  "Scheduled": "bg-green-100 text-green-700",
+  "Rejected": "bg-red-100 text-red-700",
+};
+
+const sourceStyles: Record<AppointmentRequestRecord["source"], string> = {
+  "Call": "bg-purple-100 text-purple-700",
+  "Portal": "bg-blue-100 text-blue-700",
+  "Walk-in": "bg-green-100 text-green-700",
+  "Referral": "bg-amber-100 text-amber-700",
+};
+
+const AppointmentRequests = () => {
   const navigate = useNavigate();
 
-  const columns: Column<PatientRecord>[] = [
-    { key: "id", label: "Patient ID", sortable: true },
-    { key: "name", label: "Patient Name", sortable: true },
-    { key: "age", label: "Age", sortable: true },
+  const columns: Column<AppointmentRequestRecord>[] = [
+    { key: "requestId", label: "Request ID", sortable: true },
+    { key: "patient", label: "Patient", sortable: true },
+    { key: "contact", label: "Contact" },
+    { key: "preferredDateTime", label: "Preferred Date/Time", sortable: true },
     { key: "department", label: "Department", sortable: true },
-    { key: "assignedDoctor", label: "Assigned Doctor", sortable: true },
+    { key: "preferredProvider", label: "Preferred Provider", render: (row) => row.preferredProvider || "Any" },
+    { key: "reason", label: "Reason" },
     {
-      key: "status",
-      label: "Status",
+      key: "urgency",
+      label: "Urgency",
+      sortable: true,
       render: (row) => (
-        <Badge className="badge-info">{row.status}</Badge>
+        <Badge className={urgencyStyles[row.urgency]}>{row.urgency}</Badge>
       ),
     },
     {
-      key: "appointmentTime",
-      label: "Appointment Time",
-      sortable: true,
-      render: (row) => row.appointmentTime || "-",
+      key: "source",
+      label: "Source",
+      render: (row) => (
+        <Badge className={sourceStyles[row.source]}>{row.source}</Badge>
+      ),
     },
-    { key: "roomBed", label: "Room/Bed" },
+    {
+      key: "insuranceVerified",
+      label: "Insurance Verified",
+      render: (row) => row.insuranceVerified ? (
+        <Badge className="bg-green-100 text-green-700">Yes</Badge>
+      ) : (
+        <Badge className="bg-amber-100 text-amber-700">No</Badge>
+      ),
+    },
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+      render: (row) => (
+        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+      ),
+    },
   ];
 
   const filters: Filter[] = [
+    {
+      key: "status",
+      label: "Status",
+      value: "all",
+      options: [
+        { value: "New", label: "New" },
+        { value: "Pending", label: "Pending" },
+        { value: "Scheduled", label: "Scheduled" },
+        { value: "Rejected", label: "Rejected" },
+      ],
+    },
+    {
+      key: "urgency",
+      label: "Urgency",
+      value: "all",
+      options: [
+        { value: "Low", label: "Low" },
+        { value: "Med", label: "Medium" },
+        { value: "High", label: "High" },
+      ],
+    },
     {
       key: "department",
       label: "Department",
@@ -40,40 +101,30 @@ const ScheduledToday = () => {
         { value: "General Medicine", label: "General Medicine" },
       ],
     },
-    {
-      key: "doctor",
-      label: "Doctor",
-      value: "all",
-      options: [
-        { value: "Dr. Meera Nair", label: "Dr. Meera Nair" },
-        { value: "Dr. Rajesh Kumar", label: "Dr. Rajesh Kumar" },
-        { value: "Dr. Anita Singh", label: "Dr. Anita Singh" },
-      ],
-    },
   ];
 
-  const rowActions: RowAction<PatientRecord>[] = [
-    { label: "View Appointment", onClick: (row) => navigate(`/patient-insights/${row.id}`) },
-    { label: "Check-in Patient", onClick: (row) => console.log("Check-in", row.id) },
-    { label: "Reschedule", onClick: (row) => console.log("Reschedule", row.id) },
+  const rowActions: RowAction<AppointmentRequestRecord>[] = [
+    { label: "Schedule Now", onClick: (row) => navigate(`/book-appointment?requestId=${row.requestId}`) },
+    { label: "Contact Patient", onClick: (row) => console.log("Contact", row.contact) },
+    { label: "Reject", onClick: (row) => console.log("Reject", row.requestId) },
   ];
 
   return (
     <ListPageLayout
-      title="Scheduled Today"
-      count={scheduledToday.length}
-      subtitle="All appointments for today"
-      breadcrumbs={["Overview", "Scheduled Today"]}
+      title="Appointment Requests"
+      count={appointmentRequests.length}
+      subtitle="Pending appointment requests • Default sort: Created At DESC"
+      breadcrumbs={["Overview", "Appointment Requests"]}
       columns={columns}
-      data={scheduledToday}
+      data={appointmentRequests}
       filters={filters}
       rowActions={rowActions}
-      emptyMessage="No appointments scheduled today."
-      searchPlaceholder="Search by patient name or ID..."
-      getRowId={(row) => row.id}
-      onRowClick={(row) => navigate(`/patient-insights/${row.id}`)}
+      emptyMessage="No appointment requests pending."
+      searchPlaceholder="Search by Request ID, patient name..."
+      getRowId={(row) => row.requestId}
+      onRowClick={(row) => navigate(`/book-appointment?requestId=${row.requestId}`)}
     />
   );
 };
 
-export default ScheduledToday;
+export default AppointmentRequests;

@@ -1,113 +1,129 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
-import { emergencyCases, ERCaseRecord } from "@/data/overview.mock";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { emergencyCases, ERCaseRecord } from "@/data/overview.mock";
+
+const triageStyles: Record<number, string> = {
+  1: "bg-red-600 text-white",
+  2: "bg-orange-500 text-white",
+  3: "bg-yellow-400 text-yellow-900",
+  4: "bg-green-500 text-white",
+  5: "bg-blue-500 text-white",
+};
+
+const triageLabels: Record<number, string> = {
+  1: "Red - Resuscitation",
+  2: "Orange - Emergent",
+  3: "Yellow - Urgent",
+  4: "Green - Less Urgent",
+  5: "Blue - Non-Urgent",
+};
+
+const dispositionStyles: Record<ERCaseRecord["disposition"], string> = {
+  "Pending": "bg-gray-100 text-gray-700",
+  "Admit": "bg-blue-100 text-blue-700",
+  "Discharge": "bg-green-100 text-green-700",
+  "Transfer": "bg-amber-100 text-amber-700",
+};
+
+const modeOfArrivalStyles: Record<ERCaseRecord["modeOfArrival"], string> = {
+  "Ambulance": "bg-red-100 text-red-700",
+  "Walk-in": "bg-green-100 text-green-700",
+  "Transfer": "bg-blue-100 text-blue-700",
+};
 
 const EmergencyCases = () => {
   const navigate = useNavigate();
 
-  const triageStyles: Record<number, string> = {
-    1: "bg-red-600 text-white",
-    2: "bg-orange-500 text-white",
-    3: "bg-yellow-500 text-black",
-    4: "bg-green-500 text-white",
-    5: "bg-blue-500 text-white",
-  };
-
-  const triageLabels: Record<number, string> = {
-    1: "Level 1 - Resuscitation",
-    2: "Level 2 - Emergent",
-    3: "Level 3 - Urgent",
-    4: "Level 4 - Less Urgent",
-    5: "Level 5 - Non-Urgent",
-  };
-
-  const statusStyles: Record<string, string> = {
-    Waiting: "badge-warning",
-    Treating: "badge-info",
-    Admitted: "badge-success",
-    Transferred: "badge-info",
-    Discharged: "badge-success",
-  };
-
   const columns: Column<ERCaseRecord>[] = [
-    { key: "id", label: "Case ID", sortable: true },
-    { key: "patientName", label: "Patient", sortable: true },
+    { key: "mrn", label: "MRN", sortable: true },
+    { key: "patient", label: "Patient", sortable: true },
+    { key: "ageSex", label: "Age/Sex" },
     {
       key: "triageLevel",
       label: "Triage Level",
       sortable: true,
       render: (row) => (
         <Badge className={triageStyles[row.triageLevel]}>
-          Level {row.triageLevel}
+          {triageLabels[row.triageLevel]}
         </Badge>
       ),
     },
+    { key: "arrivalTime", label: "Arrival Time", sortable: true },
     {
-      key: "arrivalTime",
-      label: "Arrival Time",
-      sortable: true,
-      render: (row) => format(new Date(row.arrivalTime), "HH:mm"),
-    },
-    { key: "assignedPhysician", label: "Assigned Physician", sortable: true },
-    {
-      key: "status",
-      label: "Status",
+      key: "modeOfArrival",
+      label: "Mode of Arrival",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={modeOfArrivalStyles[row.modeOfArrival]}>{row.modeOfArrival}</Badge>
       ),
     },
-    { key: "erAreaBed", label: "ER Area/Bed" },
+    { key: "erZoneArea", label: "ER Zone/Area" },
+    { key: "bedChair", label: "Bed/Chair" },
+    { key: "attending", label: "Attending" },
+    { key: "chiefComplaint", label: "Chief Complaint" },
+    { key: "timeSinceArrival", label: "Time Since Arrival" },
+    {
+      key: "disposition",
+      label: "Disposition",
+      sortable: true,
+      render: (row) => (
+        <Badge className={dispositionStyles[row.disposition]}>{row.disposition}</Badge>
+      ),
+    },
   ];
 
   const filters: Filter[] = [
     {
       key: "triageLevel",
-      label: "Triage",
+      label: "Triage Level",
       value: "all",
       options: [
-        { value: "1", label: "Level 1" },
-        { value: "2", label: "Level 2" },
-        { value: "3", label: "Level 3" },
-        { value: "4", label: "Level 4" },
-        { value: "5", label: "Level 5" },
+        { value: "1", label: "Red - Resuscitation" },
+        { value: "2", label: "Orange - Emergent" },
+        { value: "3", label: "Yellow - Urgent" },
+        { value: "4", label: "Green - Less Urgent" },
+        { value: "5", label: "Blue - Non-Urgent" },
       ],
     },
     {
-      key: "status",
-      label: "Status",
+      key: "disposition",
+      label: "Disposition",
       value: "all",
       options: [
-        { value: "Waiting", label: "Waiting" },
-        { value: "Treating", label: "Treating" },
-        { value: "Admitted", label: "Admitted" },
-        { value: "Transferred", label: "Transferred" },
-        { value: "Discharged", label: "Discharged" },
+        { value: "Pending", label: "Pending" },
+        { value: "Admit", label: "Admit" },
+        { value: "Discharge", label: "Discharge" },
+        { value: "Transfer", label: "Transfer" },
       ],
     },
   ];
 
   const rowActions: RowAction<ERCaseRecord>[] = [
-    { label: "Open ER Case", onClick: (row) => navigate(`/er/case/${row.id}`) },
-    { label: "Update Triage/Status", onClick: () => {} },
-    { label: "Assign Physician", onClick: () => {} },
+    { label: "Open Case", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
+    { label: "Update Triage", onClick: (row) => console.log("Update triage", row.mrn) },
+    { label: "Assign Physician", onClick: (row) => console.log("Assign", row.mrn) },
   ];
+
+  // Sort by triage level (highest acuity first), then arrival time
+  const sortedCases = [...emergencyCases].sort((a, b) => {
+    if (a.triageLevel !== b.triageLevel) return a.triageLevel - b.triageLevel;
+    return new Date(a.arrivalTime).getTime() - new Date(b.arrivalTime).getTime();
+  });
 
   return (
     <ListPageLayout
       title="Emergency Cases"
       count={emergencyCases.length}
-      subtitle="ER arrivals and active cases"
+      subtitle="Active ER cases • Default sort: Triage Level (highest acuity first)"
       breadcrumbs={["Overview", "Emergency Cases"]}
-      data={emergencyCases}
       columns={columns}
+      data={sortedCases}
       filters={filters}
       rowActions={rowActions}
-      emptyMessage="No ER cases today."
-      searchPlaceholder="Search by Case ID or Patient Name..."
-      onRowClick={(row) => navigate(`/er/case/${row.id}`)}
-      getRowId={(row) => row.id}
+      emptyMessage="No active emergency cases."
+      searchPlaceholder="Search by MRN, patient name, chief complaint..."
+      getRowId={(row) => row.mrn}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
     />
   );
 };
