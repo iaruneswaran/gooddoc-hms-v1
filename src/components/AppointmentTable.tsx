@@ -427,6 +427,7 @@ export function AppointmentTable({
   
   // Determine if this is a diagnostics view
   const isDiagnosticsCategory = category === "diagnostics";
+  const isOutpatientCare = category === "outpatient-care";
   const appointmentType: AppointmentType = categoryToType(category);
   
   const appointments = allAppointments.filter(apt => {
@@ -512,7 +513,9 @@ export function AppointmentTable({
   const doctorColumnLabel = isDiagnosticsCategory ? "Referring Doctor" : "Consulting Doctor";
   const deptColumnLabel = isDiagnosticsCategory ? "Performing Dept" : "Department";
 
-  const gridClasses = "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_1fr_1.2fr] gap-4 px-4 w-full";
+  const gridClasses = isOutpatientCare 
+    ? "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_1fr_1.2fr] gap-4 px-4 w-full"
+    : "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-4 w-full";
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
@@ -523,7 +526,9 @@ export function AppointmentTable({
         <div className="text-xs font-medium text-muted-foreground text-left">{doctorColumnLabel}</div>
         <div className="text-xs font-medium text-muted-foreground text-left">{deptColumnLabel}</div>
         <div className="text-xs font-medium text-muted-foreground text-left">Service Type</div>
-        <div className="text-xs font-medium text-muted-foreground text-left">Token & Time</div>
+        {isOutpatientCare && (
+          <div className="text-xs font-medium text-muted-foreground text-left">Token & Time</div>
+        )}
         <div className="text-xs font-medium text-muted-foreground text-left">Action</div>
       </div>
 
@@ -581,19 +586,21 @@ export function AppointmentTable({
                 {appointment.serviceType}
               </div>
 
-              {/* Token & Time */}
-              <div className="flex items-center gap-2 whitespace-nowrap">
-                <Badge 
-                  className={
-                    tokenGeneratedIds.has(appointment.id) || checkedInIds.has(appointment.id)
-                      ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                      : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
-                  }
-                >
-                  {tokenGeneratedIds.has(appointment.id) ? appointment.token : "Pending"}
-                </Badge>
-                <span className="text-sm text-foreground">{appointment.time}</span>
-              </div>
+              {/* Token & Time - Only for Outpatient */}
+              {isOutpatientCare && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  <Badge 
+                    className={
+                      tokenGeneratedIds.has(appointment.id) || checkedInIds.has(appointment.id)
+                        ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                        : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+                    }
+                  >
+                    {tokenGeneratedIds.has(appointment.id) ? appointment.token : "Pending"}
+                  </Badge>
+                  <span className="text-sm text-foreground">{appointment.time}</span>
+                </div>
+              )}
 
               {/* Action */}
               <div className="flex justify-start gap-2" onClick={(e) => e.stopPropagation()}>
@@ -604,14 +611,16 @@ export function AppointmentTable({
                 >
                   Patient Insight
                 </Button>
-                <Button
-                  onClick={() => handleCheckInClick(appointment.id)}
-                  variant="outline"
-                  size="sm"
-                  disabled={checkedInIds.has(appointment.id)}
-                >
-                  {checkedInIds.has(appointment.id) ? "Checked In" : "Check In"}
-                </Button>
+                {isOutpatientCare && (
+                  <Button
+                    onClick={() => handleCheckInClick(appointment.id)}
+                    variant="outline"
+                    size="sm"
+                    disabled={checkedInIds.has(appointment.id)}
+                  >
+                    {checkedInIds.has(appointment.id) ? "Checked In" : "Check In"}
+                  </Button>
+                )}
               </div>
             </div>
 
