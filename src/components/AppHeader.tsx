@@ -9,7 +9,7 @@ interface AppHeaderProps {
 
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   return (
-    <header className="relative h-16 border-b border-border bg-card flex items-center px-4">
+    <header className="relative h-20 border-b border-border bg-card flex items-center px-4">
       {/* Breadcrumbs - Left */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {breadcrumbs.map((crumb, index) => {
