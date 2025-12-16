@@ -119,7 +119,6 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
                         <p className="text-xs text-muted-foreground">{test.type}</p>
                       </div>
                     </div>
-                    <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
                   </div>
                 );
               })}
@@ -158,23 +157,16 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
           </div>
 
           {selectedTestObjects.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {selectedTestObjects.map((test) => (
-                <div key={test.code} className="flex justify-between items-center">
+                <div key={test.code} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                   <span className="text-sm text-foreground">{test.name}</span>
-                  <span className="text-sm font-medium text-foreground">₹{test.price}</span>
                 </div>
               ))}
-
-              <div className="pt-3 border-t border-border">
-                <div className="flex justify-between text-base font-semibold">
-                  <span className="text-foreground">Total</span>
-                  <span className="text-foreground">₹{subtotal.toLocaleString()}</span>
-                </div>
-              </div>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No tests selected</p>
+            <p className="text-sm text-muted-foreground">Select tests from the list</p>
           )}
         </Card>
       </div>
