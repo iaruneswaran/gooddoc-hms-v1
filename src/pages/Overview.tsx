@@ -70,7 +70,6 @@ const PrimaryMetricCard = ({
     e.stopPropagation();
     e.preventDefault();
     if (filterParam) {
-      // Build proper URL with filter
       const baseRoute = route.split('?')[0];
       const existingParams = route.includes('?') ? route.split('?')[1] : '';
       const newUrl = existingParams 
@@ -95,55 +94,50 @@ const PrimaryMetricCard = ({
             hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
             active:scale-[0.98]
             focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
-            h-[160px] flex flex-col
+            flex flex-col
           "
         >
           {/* Top section - Main metric */}
-          <div className="flex-1 p-3 pb-2 flex flex-col">
-            <div className="flex items-start justify-between mb-1">
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
-                  <Icon className={`w-4 h-4 ${iconColorClass}`} />
+          <div className="p-4 pb-3 flex flex-col gap-3">
+            {/* Header row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm">
+                  <Icon className={`w-5 h-5 ${iconColorClass}`} />
                 </div>
-                <p className="text-sm font-semibold text-foreground">
-                  {title}
-                </p>
+                <span className="text-sm font-semibold text-foreground">{title}</span>
               </div>
               <ChevronRight 
                 aria-hidden="true"
                 className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
               />
             </div>
-            <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
+            {/* Count */}
+            <p className="text-3xl font-bold text-foreground tracking-tight">
               {count.toLocaleString()}
             </p>
           </div>
           
           {/* Divider */}
-          <div className="h-px bg-[#E5E7EB]" />
+          <div className="h-px bg-border" />
           
-          {/* Bottom section - Sub-metrics with dividers */}
-          <div className="px-3 py-2.5 flex items-center text-xs">
+          {/* Bottom section - Sub-metrics as vertical list */}
+          <div className="p-3 space-y-1.5">
             {subMetrics.map((metric, idx) => (
-              <div key={idx} className="flex items-center">
-                {idx > 0 && (
-                  <div className="w-px h-4 bg-[#E5E7EB] mx-3" />
-                )}
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
-                  className={`
-                    flex items-center gap-1.5 px-2 py-1 rounded-md
-                    ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
-                    transition-colors
-                  `}
-                  title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
-                >
-                  <span className="text-muted-foreground">{metric.label}:</span>
-                  <span className="font-semibold text-foreground">{metric.value}</span>
-                </span>
+              <div
+                key={idx}
+                role="button"
+                tabIndex={0}
+                onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
+                className={`
+                  flex items-center justify-between py-1 px-2 rounded-md text-xs
+                  ${metric.filterParam ? 'hover:bg-primary/10 cursor-pointer' : 'cursor-default'}
+                  transition-colors
+                `}
+              >
+                <span className="text-muted-foreground">{metric.label}</span>
+                <span className="font-semibold text-foreground tabular-nums">{metric.value}</span>
               </div>
             ))}
           </div>
