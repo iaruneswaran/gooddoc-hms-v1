@@ -515,7 +515,7 @@ export function AppointmentTable({
 
   const gridClasses = isOutpatientCare 
     ? "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_1fr_1.2fr] gap-4 px-4 w-full"
-    : "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-4 w-full";
+    : "grid grid-cols-[1.5fr_1.5fr_1.2fr_1.2fr_1fr_0.8fr] gap-4 px-4 w-full";
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
