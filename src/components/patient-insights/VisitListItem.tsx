@@ -34,7 +34,7 @@ export function VisitListItem({ visit, isSelected, onClick }: VisitListItemProps
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left p-4 rounded-lg border transition-all hover:shadow-sm bg-background ${
+      className={`w-full text-left p-4 rounded-lg border transition-all hover:shadow-sm bg-card ${
         isSelected
           ? "border-primary shadow-sm"
           : "border-border hover:border-primary/50"
