@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -152,13 +152,23 @@ type Patient = typeof PATIENTS[number];
 
 export default function Patients() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState(PATIENTS);
   const [genderFilter, setGenderFilter] = useState("all");
   const [bloodGroupFilter, setBloodGroupFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+
+  // Sync search query with URL parameter
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || "";
+    if (urlSearch !== searchQuery) {
+      setSearchQuery(urlSearch);
+    }
+  }, [searchParams]);
 
   // Get unique filter options
   const filterOptions = useMemo(() => {
