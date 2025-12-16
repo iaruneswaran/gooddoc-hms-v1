@@ -122,29 +122,25 @@ const PrimaryMetricCard = ({
           {/* Divider */}
           <div className="h-px bg-[#E5E7EB]" />
           
-          {/* Bottom section - Sub-metrics with dividers */}
-          <div className="px-3 py-2.5 flex items-center text-xs">
+          {/* Bottom section - Sub-metrics grid */}
+          <div className="px-3 py-2.5 grid grid-cols-3 gap-2 text-xs">
             {subMetrics.map((metric, idx) => (
-              <div key={idx} className="flex items-center">
-                {idx > 0 && (
-                  <div className="w-px h-4 bg-[#E5E7EB] mx-3" />
-                )}
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
-                  className={`
-                    flex items-center gap-1.5 px-2 py-1 rounded-md
-                    ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
-                    transition-colors
-                  `}
-                  title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
-                >
-                  <span className="text-muted-foreground">{metric.label}:</span>
-                  <span className="font-semibold text-foreground">{metric.value}</span>
-                </span>
-              </div>
+              <span
+                key={idx}
+                role="button"
+                tabIndex={0}
+                onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
+                className={`
+                  flex flex-col py-1
+                  ${metric.filterParam ? 'hover:text-primary cursor-pointer' : 'cursor-default'}
+                  transition-colors
+                `}
+                title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
+              >
+                <span className="text-muted-foreground truncate text-[11px]">{metric.label}</span>
+                <span className="font-semibold text-foreground">{metric.value}</span>
+              </span>
             ))}
           </div>
         </div>
