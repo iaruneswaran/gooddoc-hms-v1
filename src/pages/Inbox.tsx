@@ -71,10 +71,10 @@ const mockAppointments: PendingAppointment[] = [
     patientGDID: "556789",
     patientAge: 52,
     patientGender: "F",
-    purpose: "MRI scan requested for persistent lower back pain. Patient has tried conservative treatment for 3 months with limited improvement. Need to rule out disc herniation.",
-    serviceType: "Radiology",
+    purpose: "Blood work requested for persistent fatigue and weakness. Patient has tried conservative treatment for 3 months with limited improvement. Need comprehensive metabolic panel.",
+    serviceType: "Laboratory",
     referringDoctor: null, // Self-requested
-    performingDepartment: { id: "DEPT-RAD", name: "Radiology Dept" },
+    performingDepartment: { id: "DEPT-LAB", name: "Laboratory Dept" },
     requestedDateTime: "17 Jan 2025, 2:00 PM",
     phone: "+91 98765 43211",
     email: "9876543211@gooddoc.app",
