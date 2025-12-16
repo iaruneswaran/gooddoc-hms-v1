@@ -278,48 +278,16 @@ export function PrescriptionsStep({ patient, onBack, onNext }: PrescriptionsStep
           </div>
 
           {completedMedications.length > 0 ? (
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-foreground mb-3">Medications ({completedMedications.length})</p>
+            <div className="space-y-2">
               {completedMedications.map((med) => (
-                <div key={med.id} className="pb-3 border-b border-border last:border-0">
-                  <h4 className="text-sm font-medium text-foreground mb-1">{med.name}</h4>
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Strength:</span>
-                      <span className="text-foreground">{med.strength}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Dosage:</span>
-                      <span className="text-foreground">{med.dosage}</span>
-                    </div>
-                    {med.timing && (
-                      <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">Timing:</span>
-                        <span className="text-foreground">{med.timing}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Frequency:</span>
-                      <span className="text-foreground">{med.frequency}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Duration:</span>
-                      <span className="text-foreground">{med.durationDays} Days</span>
-                    </div>
-                    {med.notes && (
-                      <div className="mt-2 pt-2 border-t border-border">
-                        <p className="text-xs text-muted-foreground">Notes:</p>
-                        <p className="text-xs text-foreground">{med.notes}</p>
-                      </div>
-                    )}
-                  </div>
+                <div key={med.id} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  <span className="text-sm text-foreground">{med.name}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">No medications added yet</p>
-            </div>
+            <p className="text-sm text-muted-foreground">Select medications from the list</p>
           )}
         </Card>
       </div>
