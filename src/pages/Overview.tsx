@@ -19,11 +19,6 @@ import {
   PackageOpen,
   ChevronRight
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface SubMetric {
   label: string;
@@ -81,75 +76,68 @@ const PrimaryMetricCard = ({
   };
   
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleCardClick}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleCardClick(); }}
-          aria-label={`Open ${title} list (${count})`}
-          className="
-            group w-full text-left rounded-xl border border-border bg-card overflow-hidden
-            transition-all duration-200 ease-out cursor-pointer
-            hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
-            active:scale-[0.98]
-            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
-            h-[160px] flex flex-col
-          "
-        >
-          {/* Top section - Main metric */}
-          <div className="flex-1 p-3 pb-2 flex flex-col">
-            <div className="flex items-start justify-between mb-1">
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
-                  <Icon className={`w-4 h-4 ${iconColorClass}`} />
-                </div>
-                <p className="text-sm font-semibold text-foreground">
-                  {title}
-                </p>
-              </div>
-              <ChevronRight 
-                aria-hidden="true"
-                className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
-              />
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleCardClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleCardClick(); }}
+      aria-label={`Open ${title} list (${count})`}
+      className="
+        group w-full text-left rounded-xl border border-border bg-card overflow-hidden
+        transition-all duration-200 ease-out cursor-pointer
+        hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+        active:scale-[0.98]
+        focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
+        h-[180px] flex flex-col
+      "
+    >
+      {/* Top section - Main metric */}
+      <div className="flex-1 p-3 pb-2 flex flex-col">
+        <div className="flex items-start justify-between mb-1">
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
+              <Icon className={`w-4 h-4 ${iconColorClass}`} />
             </div>
-            <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
-              {count.toLocaleString()}
+            <p className="text-sm font-semibold text-foreground">
+              {title}
             </p>
           </div>
-          
-          {/* Divider */}
-          <div className="h-px bg-[#E5E7EB]" />
-          
-          {/* Bottom section - Sub-metrics grid */}
-          <div className="px-3 py-2.5 grid grid-cols-3 text-xs">
-            {subMetrics.map((metric, idx) => (
-              <span
-                key={idx}
-                role="button"
-                tabIndex={0}
-                onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
-                className={`
-                  flex flex-col py-1 px-2 text-center
-                  ${idx > 0 ? 'border-l border-border' : ''}
-                  ${metric.filterParam ? 'hover:text-primary cursor-pointer' : 'cursor-default'}
-                  transition-colors
-                `}
-                title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
-              >
-                <span className="text-muted-foreground text-[11px] leading-tight">{metric.label}</span>
-                <span className="font-semibold text-foreground mt-0.5">{metric.value}</span>
-              </span>
-            ))}
-          </div>
+          <ChevronRight 
+            aria-hidden="true"
+            className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
+          />
         </div>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">
-        <p>View list</p>
-      </TooltipContent>
-    </Tooltip>
+        <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
+          {count.toLocaleString()}
+        </p>
+      </div>
+      
+      {/* Divider */}
+      <div className="h-px bg-border" />
+      
+      {/* Bottom section - Sub-metrics grid */}
+      <div className="px-2 py-3 grid grid-cols-3 text-xs">
+        {subMetrics.map((metric, idx) => (
+          <span
+            key={idx}
+            role="button"
+            tabIndex={0}
+            onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
+            className={`
+              flex flex-col py-1.5 px-2 text-center rounded-md
+              ${idx > 0 ? 'border-l border-border' : ''}
+              ${metric.filterParam ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
+              transition-colors
+            `}
+            title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
+          >
+            <span className="text-muted-foreground text-[11px] leading-tight">{metric.label}</span>
+            <span className="font-semibold text-foreground mt-0.5">{metric.value}</span>
+          </span>
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -163,41 +151,34 @@ const StandardMetricCard = ({
   const navigate = useNavigate();
   
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <button
-          onClick={() => navigate(route)}
-          aria-label={`Open ${title} list (${count})`}
-          className="
-            group w-full text-left rounded-xl border border-border bg-card
-            transition-all duration-200 ease-out
-            hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
-            active:scale-[0.98]
-            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-            h-[90px] px-4 flex items-center gap-3
-          "
-        >
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
-            <Icon className={`w-5 h-5 ${iconColorClass}`} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-2xl font-bold text-foreground tracking-tight">
-              {count.toLocaleString()}
-            </p>
-            <p className="text-xs font-medium text-muted-foreground truncate">
-              {title}
-            </p>
-          </div>
-          <ChevronRight 
-            aria-hidden="true"
-            className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" 
-          />
-        </button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">
-        <p>View list</p>
-      </TooltipContent>
-    </Tooltip>
+    <button
+      onClick={() => navigate(route)}
+      aria-label={`Open ${title} list (${count})`}
+      className="
+        group w-full text-left rounded-xl border border-border bg-card
+        transition-all duration-200 ease-out
+        hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+        active:scale-[0.98]
+        focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+        h-[90px] px-4 flex items-center gap-3
+      "
+    >
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
+        <Icon className={`w-5 h-5 ${iconColorClass}`} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-2xl font-bold text-foreground tracking-tight">
+          {count.toLocaleString()}
+        </p>
+        <p className="text-xs font-medium text-muted-foreground truncate">
+          {title}
+        </p>
+      </div>
+      <ChevronRight 
+        aria-hidden="true"
+        className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" 
+      />
+    </button>
   );
 };
 
