@@ -326,6 +326,12 @@ export const newAdmissions: IPPatientRecord[] = Array.from({ length: 19 }, (_, i
 // Sub-filtered: ER Cases today
 export const erCasesToday: IPPatientRecord[] = Array.from({ length: 8 }, (_, i) => generateIPPatient(i, true, true));
 
+// Sub-filtered: Transfer patients
+export const transferPatients: IPPatientRecord[] = Array.from({ length: 10 }, (_, i) => ({
+  ...generateIPPatient(i + 100, false, false),
+  source: "Transfer" as const,
+}));
+
 // ============== BEDS AVAILABILITY ==============
 
 function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRecord {
@@ -445,6 +451,11 @@ function generateDoctorOnDuty(index: number): DoctorOnDutyRecord {
 
 // 89 Doctors on Duty
 export const doctorsOnDuty: DoctorOnDutyRecord[] = Array.from({ length: 89 }, (_, i) => generateDoctorOnDuty(i));
+
+// Sub-filtered by doctor type
+export const opDoctors = doctorsOnDuty.filter(d => d.role === "In OPD" || d.currentLocation === "OPD");
+export const ipDoctors = doctorsOnDuty.filter(d => d.role === "In Ward Rounds" || d.currentLocation === "Ward");
+export const otherDoctors = doctorsOnDuty.filter(d => !["In OPD", "In Ward Rounds"].includes(d.role) && !["OPD", "Ward"].includes(d.currentLocation));
 
 // ============== APPOINTMENT REQUESTS ==============
 

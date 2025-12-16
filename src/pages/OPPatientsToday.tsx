@@ -81,9 +81,9 @@ const OPPatientsToday = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "OP Completed", count: opCompleted.length },
+    { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "Visit Completed", count: opCompleted.length },
     { paramKey: "visitStatus", paramValue: "Pending", displayLabel: "Check in completed", count: opCheckedIn.length },
-    { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Pending to check in", count: opPendingCheckIn.length },
+    { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Check In Pending", count: opPendingCheckIn.length },
   ];
 
   const rowActions: RowAction<OPPatientRecord>[] = [

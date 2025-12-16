@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
-import { ipPatients, newAdmissions, erCasesToday, IPPatientRecord } from "@/data/overview.mock";
+import { ipPatients, newAdmissions, erCasesToday, transferPatients, IPPatientRecord } from "@/data/overview.mock";
 
 const bedClassStyles: Record<IPPatientRecord["bedClass"], string> = {
   "ICU": "bg-red-100 text-red-700",
@@ -15,19 +15,28 @@ const IPPatients = () => {
   const [searchParams] = useSearchParams();
   const admittedToday = searchParams.get("admittedToday");
   const erCase = searchParams.get("erCase");
+  const transfer = searchParams.get("transfer");
 
   let data = ipPatients;
   let displayCount = ipPatients.length;
   let pageTitle = "IP Patients";
+  let pageSubtitle = "Inpatient records • Default sort: Admit Date/Time DESC";
 
   if (admittedToday === "true") {
     data = newAdmissions;
     displayCount = newAdmissions.length;
     pageTitle = "New Admissions";
+    pageSubtitle = "Patients admitted today • Default sort: Admit Date/Time DESC";
   } else if (erCase === "true") {
     data = erCasesToday;
     displayCount = erCasesToday.length;
-    pageTitle = "ER Cases Today";
+    pageTitle = "Emergency Case";
+    pageSubtitle = "ER cases admitted today • Default sort: Admit Date/Time DESC";
+  } else if (transfer === "true") {
+    data = transferPatients;
+    displayCount = transferPatients.length;
+    pageTitle = "Transfers";
+    pageSubtitle = "Patient transfers today • Default sort: Transfer Date/Time DESC";
   }
 
   const columns: Column<IPPatientRecord>[] = [
@@ -90,7 +99,8 @@ const IPPatients = () => {
 
   const urlParamFilters: UrlParamFilter[] = [
     { paramKey: "admittedToday", paramValue: "true", displayLabel: "New Admissions", count: newAdmissions.length },
-    { paramKey: "erCase", paramValue: "true", displayLabel: "ER case today", count: erCasesToday.length },
+    { paramKey: "erCase", paramValue: "true", displayLabel: "Emergency Case", count: erCasesToday.length },
+    { paramKey: "transfer", paramValue: "true", displayLabel: "Transfers", count: transferPatients.length },
   ];
 
   const rowActions: RowAction<IPPatientRecord>[] = [
@@ -104,7 +114,7 @@ const IPPatients = () => {
     <ListPageLayout
       title={pageTitle}
       count={displayCount}
-      subtitle="Inpatient records • Default sort: Admit Date/Time DESC"
+      subtitle={pageSubtitle}
       breadcrumbs={["Overview", pageTitle]}
       columns={columns}
       data={data}
