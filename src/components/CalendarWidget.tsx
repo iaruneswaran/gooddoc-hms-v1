@@ -63,7 +63,7 @@ export function CalendarWidget() {
             key={index}
             onClick={() => handleDayClick(day.date)}
             className={cn(
-              "flex flex-col items-center justify-center w-9 h-12 rounded-lg transition-all",
+              "flex flex-col items-center justify-center w-10 h-20 rounded-lg transition-all",
               isSameDay(day.date, selectedDate)
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-muted"
