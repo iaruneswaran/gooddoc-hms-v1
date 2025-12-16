@@ -352,9 +352,9 @@ export default function Inbox() {
               </div>
             </TabsContent>
 
-            <TabsContent value="scheduled" className="w-full">
+            <TabsContent value="scheduled" className="w-full px-4">
               <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
-                <div className="grid grid-cols-[1.2fr_1fr_1fr_1fr_0.8fr] gap-4 px-4 py-3 border-b border-border bg-muted/30">
+                <div className="grid grid-cols-[1.5fr_1.2fr_1.2fr_1.2fr_0.8fr] gap-4 px-4 py-3 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Service</div>
                   <div className="text-xs font-medium text-muted-foreground">Provider</div>
@@ -367,7 +367,7 @@ export default function Inbox() {
                   { id: "SCH-003", patient: "Amit Patel", gdid: "667890", service: "Consultation", provider: "Dr. Rajesh Kumar", datetime: "14 Jan 2025, 2:30 PM", status: "Completed" },
                   { id: "SCH-004", patient: "Priya Sharma", gdid: "556789", service: "MRI Scan", provider: "Radiology Dept", datetime: "13 Jan 2025, 11:00 AM", status: "Completed" },
                 ].map((apt) => (
-                  <div key={apt.id} className="grid grid-cols-[1.2fr_1fr_1fr_1fr_0.8fr] gap-4 px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/20">
+                  <div key={apt.id} className="grid grid-cols-[1.5fr_1.2fr_1.2fr_1.2fr_0.8fr] gap-4 px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/20">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>
                       <p className="text-xs text-muted-foreground">GDID-{apt.gdid}</p>
