@@ -194,24 +194,14 @@ export default function Inbox() {
             </div>
           </div>
 
-          {/* Provider - Context-aware */}
-          <div className="min-w-0">
-            <div className="text-[10px] text-muted-foreground mb-0.5">
-              {isDiag ? "Referring Doctor" : "Consulting Doctor"}
-            </div>
-            <div className="text-sm text-foreground truncate">
-              {getProviderDisplay(appointment)}
-            </div>
+          {/* Provider */}
+          <div className="text-sm text-foreground min-w-0 truncate">
+            {getProviderDisplay(appointment)}
           </div>
 
-          {/* Department - Context-aware */}
-          <div className="min-w-0">
-            <div className="text-[10px] text-muted-foreground mb-0.5">
-              {isDiag ? "Performing Dept" : "Department"}
-            </div>
-            <div className="text-sm text-foreground truncate">
-              {getDeptDisplay(appointment)}
-            </div>
+          {/* Department */}
+          <div className="text-sm text-foreground min-w-0 truncate">
+            {getDeptDisplay(appointment)}
           </div>
 
           {/* Service Type */}
