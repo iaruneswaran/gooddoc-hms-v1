@@ -85,7 +85,7 @@ export default function OutpatientAppointments() {
     navigate(`/patients/${appointment.gdid}/360`);
   };
 
-  const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";
+  const gridClasses = "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_0.7fr_1fr_0.7fr] gap-4 px-4 py-4 w-full";
 
   const renderAppointmentCard = (appointment: Appointment) => {
     const isExpanded = expandedRows.has(appointment.id);

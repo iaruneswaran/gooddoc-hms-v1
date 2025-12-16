@@ -512,7 +512,7 @@ export function AppointmentTable({
   const doctorColumnLabel = isDiagnosticsCategory ? "Referring Doctor" : "Consulting Doctor";
   const deptColumnLabel = isDiagnosticsCategory ? "Performing Dept" : "Department";
 
-  const gridClasses = "grid grid-cols-appointments gap-4 px-4 box-border";
+  const gridClasses = "grid grid-cols-[1.5fr_1.5fr_1fr_1fr_0.8fr_1fr_1.2fr] gap-4 px-4 w-full";
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
