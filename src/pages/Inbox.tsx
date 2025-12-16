@@ -131,7 +131,7 @@ export default function Inbox() {
           ? `External: ${appointment.referringDoctor.name}`
           : appointment.referringDoctor.name;
       }
-      return "Self";
+      return "—";
     }
     return appointment.consultingDoctor?.name || "—";
   };
