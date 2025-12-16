@@ -283,7 +283,7 @@ export default function Patients() {
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
-            <div className="grid grid-cols-[80px_1fr_50px_70px_1fr_1fr_100px_90px_110px_80px_60px] gap-3 px-4 py-3 border-b border-border bg-muted/30 box-border">
+            <div className="grid grid-cols-[0.8fr_1.2fr_0.4fr_0.6fr_1fr_1.2fr_0.8fr_0.6fr_0.8fr_0.6fr_0.4fr] gap-4 px-4 py-3 border-b border-border bg-muted/30 w-full">
               <div className="text-xs font-medium text-muted-foreground">Patient ID</div>
               <div className="text-xs font-medium text-muted-foreground">Full Name</div>
               <div className="text-xs font-medium text-muted-foreground">Age</div>
@@ -299,7 +299,7 @@ export default function Patients() {
             {filteredPatients.map((patient) => (
               <div
                 key={patient.id}
-                className="grid grid-cols-[80px_1fr_50px_70px_1fr_1fr_100px_90px_110px_80px_60px] gap-3 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 box-border"
+                className="grid grid-cols-[0.8fr_1.2fr_0.4fr_0.6fr_1fr_1.2fr_0.8fr_0.6fr_0.8fr_0.6fr_0.4fr] gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 w-full"
               >
                 <div className="text-sm font-medium text-foreground truncate">{patient.id}</div>
                 <div className="text-sm text-foreground truncate">{patient.name}</div>
