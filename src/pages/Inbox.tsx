@@ -356,9 +356,14 @@ export default function Inbox() {
                   { id: "SCH-003", patient: "Amit Patel", gdid: "667890", service: "Consultation", provider: "Dr. Rajesh Kumar", datetime: "14 Jan 2025, 2:30 PM", status: "Completed" },
                 ].map((apt) => (
                   <div key={apt.id} className="grid grid-cols-[2fr_1.5fr_1.5fr_1.5fr_1fr] gap-4 px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/20">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>
-                      <p className="text-xs text-muted-foreground">GDID-{apt.gdid}</p>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>
+                        <p className="text-xs text-muted-foreground">GDID-{apt.gdid}</p>
+                      </div>
                     </div>
                     <div className="text-sm text-foreground truncate">{apt.service}</div>
                     <div className="text-sm text-foreground truncate">{apt.provider}</div>
