@@ -130,7 +130,7 @@ export function PatientHeader({ patient, vitals }: PatientHeaderProps) {
         </div>
 
         {/* Chief Complaint + AI Summary Card */}
-        <Card className="w-full p-4 bg-muted/30 border-border">
+        <Card className="w-full p-4 bg-card border-border">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Chief Complaint */}
             <div className="flex-1">
