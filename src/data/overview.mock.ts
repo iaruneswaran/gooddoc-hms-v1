@@ -1,407 +1,618 @@
-// Mock data for Overview list pages
+// Mock data for Overview list pages - Hospital Operations Dashboard
 
-export interface PatientRecord {
-  id: string;
-  name: string;
-  age: number;
-  gender: string;
+import { format, subDays, subHours, subMinutes, addDays } from "date-fns";
+
+// ============== TYPE DEFINITIONS ==============
+
+export interface OPPatientRecord {
+  mrn: string;
+  patient: string;
+  ageSex: string;
+  contact: string;
+  visitId: string;
+  appointmentTime: string;
   department: string;
-  assignedDoctor: string;
-  status: "OP" | "IP" | "ER";
-  visitStatus?: "Waiting" | "In_Consultation" | "Completed";
-  admitDate: string;
-  visitDate?: string;
-  checkInDate?: string;
-  dischargeDate?: string;
-  dischargeStatus?: "Completed" | "Pending Clearance";
-  roomBed?: string;
-  appointmentTime?: string;
-  arrivalTime?: string;
-  hasAppointment?: boolean;
-  isIcu?: boolean;
-  lengthOfStay?: number;
+  provider: string;
+  visitReason: string;
+  status: "Scheduled" | "Pending Check-in" | "Checked-in" | "With Doctor" | "Awaiting Billing" | "Completed" | "No-show" | "Canceled";
+  checkInTime?: string;
+  waitingTime?: string;
+  tokenQueueNo?: string;
+  insurancePlan?: string;
+  billingStatus?: "Paid" | "Pending" | "Partially Paid";
+  prescriptions?: number;
+  labsOrdered?: number;
+  radiologyOrdered?: number;
+  completionTime?: string;
+  followUpDate?: string;
+  triageDone?: boolean;
+  paymentStatus?: string;
+  reminderStatus?: "Not Sent" | "Sent" | "Confirmed";
+  insuranceVerified?: boolean;
+  noShowRisk?: "Low" | "Med" | "High";
 }
 
-export interface DoctorRecord {
-  id: string;
-  name: string;
-  specialization: string;
-  department: string;
-  status: "Available" | "In Consultation" | "In Surgery" | "On Break";
-  queue: number;
-  avgTime: number;
-  seenToday: number;
+export interface IPPatientRecord {
+  mrn: string;
+  patient: string;
+  ageSex: string;
+  admitDateTime: string;
+  ward: string;
+  room: string;
+  bed: string;
+  bedClass: "ICU" | "HDU" | "Private" | "Ward";
+  attendingDoctor: string;
+  primaryDiagnosis: string;
+  lengthOfStay: number;
+  isolation?: string;
+  source?: "ER" | "OPD" | "Transfer";
+  admittingDiagnosis?: string;
+  admittingDoctor?: string;
+  dischargeDateTime?: string;
+  dischargeType?: "Home" | "Transfer" | "AMA" | "Expired";
+  billingStatus?: "Paid" | "Pending" | "Partially Paid";
+  dischargeSummary?: "Ready" | "Not Ready";
+  followUpAppointment?: string;
+  plannedDischargeDateTime?: string;
+  blockingTasks?: string[];
 }
 
-export interface LabOrderRecord {
-  id: string;
-  patientId: string;
-  patientName: string;
-  testName: string;
-  priority: "STAT" | "High" | "Normal";
-  orderingDoctor: string;
-  collectedTime?: string;
-  createdTime: string;
-  resultStatus: "Pending" | "Processing" | "Completed";
-  eta?: string;
-}
-
-export interface SurgeryRecord {
-  id: string;
-  patientId: string;
-  patientName: string;
-  procedure: string;
-  surgeon: string;
-  orRoom: string;
-  anesthesia: string;
-  scheduledStart: string;
-  status: "Scheduled" | "In Progress" | "Completed" | "Cancelled";
-  priority: "Emergency" | "Urgent" | "Elective";
+export interface BedRecord {
+  ward: string;
+  room: string;
+  bed: string;
+  bedType: "ICU" | "HDU" | "Ward" | "Private" | "Isolation";
+  status: "Available" | "Cleaning" | "Reserved" | "Blocked";
+  lastDischargedAt?: string;
+  cleaningETA?: string;
+  isolationCapability: boolean;
+  reservedFor?: string;
 }
 
 export interface ERCaseRecord {
-  id: string;
-  patientId: string;
-  patientName: string;
+  mrn: string;
+  patient: string;
+  ageSex: string;
   triageLevel: 1 | 2 | 3 | 4 | 5;
   arrivalTime: string;
-  assignedPhysician: string;
-  status: "Waiting" | "Treating" | "Admitted" | "Transferred" | "Discharged";
-  erAreaBed: string;
+  modeOfArrival: "Ambulance" | "Walk-in" | "Transfer";
+  erZoneArea: string;
+  bedChair: string;
+  attending: string;
+  chiefComplaint: string;
+  timeSinceArrival: string;
+  disposition: "Pending" | "Admit" | "Discharge" | "Transfer";
 }
 
-export interface PharmacyOrderRecord {
-  id: string;
-  patientId: string;
-  patientName: string;
+export interface DoctorOnDutyRecord {
+  doctorName: string;
+  specialty: string;
+  role: "Onsite" | "On-call" | "In OPD" | "In OT" | "In Ward Rounds";
+  shiftStart: string;
+  shiftEnd: string;
+  currentLocation: string;
+  contactPager: string;
+}
+
+export interface AppointmentRequestRecord {
+  requestId: string;
+  patient: string;
+  contact: string;
+  preferredDateTime: string;
+  department: string;
+  preferredProvider?: string;
+  reason: string;
+  urgency: "Low" | "Med" | "High";
+  source: "Call" | "Portal" | "Walk-in" | "Referral";
+  insuranceVerified: boolean;
+  status: "New" | "Pending" | "Scheduled" | "Rejected";
+  createdAt: string;
+}
+
+export interface LabOrderRecord {
+  orderId: string;
+  patient: string;
+  ageSex: string;
+  location: string;
+  tests: string;
+  priority: "Routine" | "Stat";
+  status: "Ordered" | "Collected" | "In-Process" | "Completed" | "Verified";
+  specimenType: string;
+  collectedAt?: string;
+  resultETA?: string;
+  criticalResult: boolean;
+  orderTime: string;
+}
+
+export interface SurgeryRecord {
+  caseId: string;
+  patient: string;
+  ageSex: string;
+  procedure: string;
+  surgeon: string;
+  orRoom: string;
+  startTime: string;
+  estimatedDuration: string;
+  status: "Scheduled" | "In-Progress" | "Completed" | "Canceled";
+  anesthesiaType: string;
+  asaClass: string;
+  postOpBedReserved: boolean;
+}
+
+export interface MedicineOrderRecord {
+  orderId: string;
+  patient: string;
+  location: string;
   prescriber: string;
-  itemsCount: number;
-  priority: "STAT" | "Normal";
-  queueStatus: "Pending" | "Partially Dispensed" | "Dispensed";
-  createdTime: string;
+  medications: string;
+  route: "PO" | "IV" | "IM" | "SC" | "Topical";
+  priority: "Routine" | "Stat";
+  status: "Pending" | "Verifying" | "Verified" | "Dispensed" | "Administered" | "Canceled";
+  allergiesFlag: boolean;
+  interactionsFlag: boolean;
+  dispensedAt?: string;
+  orderTime: string;
 }
 
 export interface RadiologyOrderRecord {
-  id: string;
-  patientId: string;
-  patientName: string;
-  modality: "X-ray" | "CT" | "MRI" | "US";
-  priority: "STAT" | "Urgent" | "Routine";
+  orderId: string;
+  patient: string;
+  location: string;
+  modality: "X-ray" | "CT" | "MRI" | "US" | "Fluoro" | "Mammo";
+  exam: string;
+  priority: "Routine" | "Stat";
+  status: "Ordered" | "Scheduled" | "In-Progress" | "Completed" | "Finalized";
   scheduledTime: string;
-  status: "Waiting" | "In Progress" | "Completed";
-  room: string;
+  imagingLocation: string;
+  contrast: boolean;
+  pregnancySafetyFlags?: string;
+  orderTime: string;
 }
 
-export interface InventoryItemRecord {
-  id: string;
+export interface LowStockRecord {
   itemName: string;
-  category: string;
-  currentStock: number;
-  reorderLevel: number;
-  unit: string;
+  category: "Drug" | "Consumable" | "Device";
+  onHand: number;
+  reorderPoint: number;
+  parLevel: number;
+  avgDailyUse: number;
+  daysOfStockLeft: number;
+  onOrder: number;
   supplier: string;
-  lastRefilled: string;
-  status: "OK" | "Low" | "Critical";
+  leadTimeDays: number;
+  suggestedReorderQty: number;
+  severity: "Normal" | "Low" | "Critical";
 }
 
-// Generate realistic mock patients
-const departments = ["Cardiology", "Orthopedics", "Neurology", "General Medicine", "Pediatrics", "Oncology", "ENT", "Dermatology"];
-const doctors = ["Dr. Meera Nair", "Dr. Rajesh Kumar", "Dr. Anita Singh", "Dr. Sunil Reddy", "Dr. Prakash Shah", "Dr. Priya Menon"];
-const firstNames = ["Amit", "Priya", "Rahul", "Sneha", "Vikram", "Anjali", "Karthik", "Divya", "Suresh", "Lakshmi"];
-const lastNames = ["Sharma", "Patel", "Reddy", "Kumar", "Singh", "Nair", "Menon", "Rao", "Gupta", "Joshi"];
+// ============== HELPER FUNCTIONS ==============
 
-function generatePatient(index: number, overrides: Partial<PatientRecord> = {}): PatientRecord {
-  const firstName = firstNames[index % firstNames.length];
-  const lastName = lastNames[Math.floor(index / firstNames.length) % lastNames.length];
-  const today = new Date().toISOString().split("T")[0];
-  const hour = 8 + Math.floor(Math.random() * 10);
-  const minute = Math.floor(Math.random() * 60);
-  const timeStr = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+const firstNames = ["Amit", "Priya", "Rahul", "Sneha", "Vikram", "Anjali", "Karthik", "Divya", "Suresh", "Lakshmi", "Rajan", "Meena", "Arjun", "Kavitha", "Sanjay"];
+const lastNames = ["Sharma", "Patel", "Reddy", "Kumar", "Singh", "Nair", "Menon", "Rao", "Gupta", "Joshi", "Iyer", "Bhat", "Verma", "Mishra", "Das"];
+const departments = ["Cardiology", "Orthopedics", "Neurology", "General Medicine", "Pediatrics", "Oncology", "ENT", "Dermatology", "Gastroenterology", "Pulmonology"];
+const doctors = ["Dr. Meera Nair", "Dr. Rajesh Kumar", "Dr. Anita Singh", "Dr. Sunil Reddy", "Dr. Prakash Shah", "Dr. Priya Menon", "Dr. Arun Bhat", "Dr. Sunita Rao"];
+const insurancePlans = ["Aetna PPO", "BlueCross", "United Healthcare", "Cigna", "Medicare", "Self-Pay", "Star Health", "HDFC Ergo"];
+const visitReasons = ["Annual checkup", "Follow-up", "Chest pain", "Headache", "Joint pain", "Fever", "Cough", "Skin rash", "Diabetes review", "BP monitoring"];
+const diagnoses = ["Hypertension", "Type 2 Diabetes", "COPD", "Coronary Artery Disease", "Osteoarthritis", "Pneumonia", "Appendicitis", "Cholecystitis", "Fracture", "Anemia"];
+const chiefComplaints = ["Chest pain", "Shortness of breath", "Abdominal pain", "Trauma", "Altered consciousness", "Severe headache", "High fever", "Allergic reaction"];
+const specimenTypes = ["Blood", "Urine", "Stool", "Swab", "CSF", "Sputum"];
+const testPanels = ["CBC", "BMP", "CMP", "Lipid Panel", "LFT", "TFT", "Coagulation", "Cardiac Markers", "Urinalysis"];
+const procedures = ["Appendectomy", "Knee Replacement", "Cardiac Bypass", "Cholecystectomy", "Hip Replacement", "Hernia Repair", "Cataract Surgery", "Spinal Fusion", "CABG", "Laparoscopy"];
+const medicationNames = ["Metformin 500mg", "Amlodipine 5mg", "Lisinopril 10mg", "Omeprazole 20mg", "Atorvastatin 20mg", "Aspirin 81mg"];
+const radiologyExams = ["Chest X-ray", "CT Abdomen", "MRI Brain", "US Abdomen", "CT Chest", "MRI Spine", "X-ray Knee", "CT Head"];
+
+function randomFrom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generateName(index: number): string {
+  return `${firstNames[index % firstNames.length]} ${lastNames[Math.floor(index / firstNames.length) % lastNames.length]}`;
+}
+
+function generateMRN(index: number): string {
+  return `MRN${String(100000 + index).padStart(7, "0")}`;
+}
+
+function generateAgeSex(index: number): string {
+  const age = 18 + Math.floor(Math.random() * 65);
+  const sex = index % 2 === 0 ? "M" : "F";
+  return `${age}/${sex}`;
+}
+
+function generatePhone(): string {
+  return `+91 ${9}${Math.floor(Math.random() * 1000000000).toString().padStart(9, "0")}`;
+}
+
+function formatDateTime(date: Date): string {
+  return format(date, "dd-MMM-yyyy HH:mm");
+}
+
+function formatTime(date: Date): string {
+  return format(date, "HH:mm");
+}
+
+// ============== OP PATIENTS ==============
+
+const now = new Date();
+const today = format(now, "yyyy-MM-dd");
+
+function generateOPPatient(index: number, statusOverride?: OPPatientRecord["status"]): OPPatientRecord {
+  const statuses: OPPatientRecord["status"][] = ["Scheduled", "Pending Check-in", "Checked-in", "With Doctor", "Awaiting Billing", "Completed", "No-show", "Canceled"];
+  const status = statusOverride || statuses[index % statuses.length];
+  const appointmentHour = 8 + Math.floor(index / 50);
+  const appointmentDate = new Date(now);
+  appointmentDate.setHours(appointmentHour, (index * 7) % 60, 0, 0);
   
+  const checkInDate = status !== "Scheduled" && status !== "No-show" && status !== "Canceled" 
+    ? subMinutes(appointmentDate, Math.floor(Math.random() * 15)) 
+    : undefined;
+  
+  const waitingMins = status === "Checked-in" || status === "With Doctor" 
+    ? Math.floor(Math.random() * 45) + 5 
+    : undefined;
+
   return {
-    id: `GD${String(10000 + index).padStart(6, "0")}`,
-    name: `${firstName} ${lastName}`,
-    age: 18 + Math.floor(Math.random() * 60),
-    gender: Math.random() > 0.5 ? "Male" : "Female",
+    mrn: generateMRN(index),
+    patient: generateName(index),
+    ageSex: generateAgeSex(index),
+    contact: generatePhone(),
+    visitId: `V${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    appointmentTime: formatDateTime(appointmentDate),
     department: departments[index % departments.length],
-    assignedDoctor: doctors[index % doctors.length],
-    status: "OP",
-    admitDate: today,
-    visitDate: `${today}T${timeStr}`,
-    roomBed: "-",
-    ...overrides,
-  };
-}
-
-function generateDoctor(index: number, overrides: Partial<DoctorRecord> = {}): DoctorRecord {
-  const specializations = ["Cardiologist", "Orthopedic Surgeon", "Neurologist", "General Physician", "Pediatrician", "Oncologist"];
-  
-  return {
-    id: `DOC${String(1000 + index).padStart(4, "0")}`,
-    name: doctors[index % doctors.length],
-    specialization: specializations[index % specializations.length],
-    department: departments[index % departments.length],
-    status: "Available",
-    queue: Math.floor(Math.random() * 8),
-    avgTime: 10 + Math.floor(Math.random() * 15),
-    seenToday: Math.floor(Math.random() * 25),
-    ...overrides,
-  };
-}
-
-// Generate 847 OP Patients with visit statuses
-const visitStatuses: Array<"Waiting" | "In_Consultation" | "Completed"> = ["Waiting", "In_Consultation", "Completed"];
-export const opPatients: PatientRecord[] = Array.from({ length: 847 }, (_, i) =>
-  generatePatient(i, { 
-    status: "OP",
-    visitStatus: visitStatuses[i % 3]
-  })
-);
-
-// Sub-data counts for OP Patients
-export const opSubData = {
-  completed: opPatients.filter(p => p.visitStatus === "Completed").length,
-  inConsultation: opPatients.filter(p => p.visitStatus === "In_Consultation").length,
-  waiting: opPatients.filter(p => p.visitStatus === "Waiting").length,
-};
-
-// Generate 234 IP Patients
-export const ipPatients: PatientRecord[] = Array.from({ length: 234 }, (_, i) => {
-  const isIcu = i < 45; // 45 ICU patients
-  const admitDaysAgo = Math.floor(Math.random() * 14);
-  return generatePatient(i, {
-    status: "IP",
-    roomBed: isIcu ? `ICU-${i + 1}` : `${["A", "B", "C", "D"][i % 4]}${100 + Math.floor(i / 4)}-${(i % 4) + 1}`,
-    admitDate: new Date(Date.now() - admitDaysAgo * 24 * 60 * 60 * 1000).toISOString(),
-    isIcu,
-    lengthOfStay: admitDaysAgo,
-  });
-});
-
-// Sub-data counts for IP Patients
-const today = new Date().toISOString().split("T")[0];
-export const ipSubData = {
-  admittedToday: ipPatients.filter(p => p.admitDate.startsWith(today)).length || 28,
-  icuOccupied: ipPatients.filter(p => p.isIcu).length,
-  avgLos: Math.round(ipPatients.reduce((sum, p) => sum + (p.lengthOfStay || 0), 0) / ipPatients.length * 10) / 10 || 4.2,
-};
-
-// Generate 67 Check-in patients
-export const checkInPatients: PatientRecord[] = Array.from({ length: 67 }, (_, i) => {
-  const statuses: Array<"OP" | "IP" | "ER"> = ["OP", "OP", "OP", "IP", "ER"];
-  const status = statuses[i % statuses.length];
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 7 + Math.floor(i / 7);
-  const minute = (i * 9) % 60;
-  
-  return generatePatient(i, {
+    provider: doctors[index % doctors.length],
+    visitReason: visitReasons[index % visitReasons.length],
     status,
-    checkInDate: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    roomBed: status === "IP" ? `${["A", "B", "C"][i % 3]}${100 + i}-1` : status === "ER" ? `ER-${i + 1}` : "-",
-  });
-});
-
-// Sub-data counts for Check-in
-export const checkInSubData = {
-  op: checkInPatients.filter(p => p.status === "OP").length,
-  ip: checkInPatients.filter(p => p.status === "IP").length,
-  er: checkInPatients.filter(p => p.status === "ER").length,
-};
-
-// Generate 45 Discharged patients
-export const dischargedPatients: PatientRecord[] = Array.from({ length: 45 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 8 + Math.floor(i / 5);
-  const minute = (i * 12) % 60;
-  const dischargeStatuses: Array<"Completed" | "Pending Clearance"> = ["Completed", "Completed", "Completed", "Pending Clearance"];
-  
-  return generatePatient(i, {
-    status: "IP",
-    dischargeDate: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    dischargeStatus: dischargeStatuses[i % dischargeStatuses.length],
-    roomBed: `${["A", "B", "C", "D"][i % 4]}${100 + i}-${(i % 4) + 1}`,
-    lengthOfStay: 2 + Math.floor(Math.random() * 10),
-  });
-});
-
-// Sub-data counts for Discharged
-export const dischargedSubData = {
-  completed: dischargedPatients.filter(p => p.dischargeStatus === "Completed").length,
-  pendingClearance: dischargedPatients.filter(p => p.dischargeStatus === "Pending Clearance").length,
-  avgLos: Math.round(dischargedPatients.reduce((sum, p) => sum + (p.lengthOfStay || 0), 0) / dischargedPatients.length * 10) / 10 || 5.3,
-};
-
-// Generate 89 Doctors on Duty
-const doctorStatuses: Array<"Available" | "In Consultation" | "In Surgery" | "On Break"> = [
-  "Available", "Available", "In Consultation", "In Consultation", "In Consultation", "On Break", "In Surgery"
-];
-
-export const doctorsOnDuty: DoctorRecord[] = Array.from({ length: 89 }, (_, i) =>
-  generateDoctor(i, { status: doctorStatuses[i % doctorStatuses.length] })
-);
-
-// Generate 342 Scheduled appointments
-export const scheduledToday: PatientRecord[] = Array.from({ length: 342 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 8 + Math.floor(i / 40);
-  const minute = (i * 3) % 60;
-  
-  return generatePatient(i, {
-    status: "OP",
-    appointmentTime: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    hasAppointment: true,
-  });
-});
-
-// Generate 156 Lab Reports Pending
-const testNames = ["Complete Blood Count", "Lipid Panel", "Liver Function Test", "Kidney Function Test", "Thyroid Panel", "HbA1c", "Urinalysis", "Cardiac Markers"];
-const priorities: Array<"STAT" | "High" | "Normal"> = ["STAT", "High", "Normal", "Normal", "Normal"];
-
-export const labReportsPending: LabOrderRecord[] = Array.from({ length: 156 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 7 + Math.floor(i / 20);
-  const minute = (i * 7) % 60;
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
-  
-  return {
-    id: `LAB${String(5000 + i).padStart(6, "0")}`,
-    patientId: `GD${String(10000 + i).padStart(6, "0")}`,
-    patientName: `${firstName} ${lastName}`,
-    testName: testNames[i % testNames.length],
-    priority: priorities[i % priorities.length],
-    orderingDoctor: doctors[i % doctors.length],
-    collectedTime: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    createdTime: `${todayStr}T${String(hour - 1).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    resultStatus: i % 3 === 0 ? "Processing" : "Pending",
-    eta: `${String(hour + 2).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+    checkInTime: checkInDate ? formatDateTime(checkInDate) : undefined,
+    waitingTime: waitingMins ? `${waitingMins} min` : undefined,
+    tokenQueueNo: status !== "Scheduled" && status !== "No-show" && status !== "Canceled" ? `T${String(index + 1).padStart(3, "0")}` : undefined,
+    insurancePlan: insurancePlans[index % insurancePlans.length],
+    billingStatus: status === "Completed" ? (["Paid", "Pending", "Partially Paid"] as const)[index % 3] : undefined,
+    prescriptions: status === "Completed" ? Math.floor(Math.random() * 5) : undefined,
+    labsOrdered: status === "Completed" ? Math.floor(Math.random() * 3) : undefined,
+    radiologyOrdered: status === "Completed" ? Math.floor(Math.random() * 2) : undefined,
+    completionTime: status === "Completed" ? formatDateTime(subMinutes(now, Math.floor(Math.random() * 120))) : undefined,
+    followUpDate: status === "Completed" && Math.random() > 0.5 ? format(addDays(now, 7 + Math.floor(Math.random() * 21)), "dd-MMM-yyyy") : undefined,
+    triageDone: status !== "Scheduled" && status !== "No-show" && status !== "Canceled" ? Math.random() > 0.2 : undefined,
+    paymentStatus: status === "Checked-in" ? (Math.random() > 0.3 ? "Collected" : "Pending") : undefined,
+    reminderStatus: status === "Scheduled" ? (["Not Sent", "Sent", "Confirmed"] as const)[index % 3] : undefined,
+    insuranceVerified: Math.random() > 0.2,
+    noShowRisk: status === "Scheduled" ? (["Low", "Med", "High"] as const)[index % 3] : undefined,
   };
-});
+}
 
-// Generate 24 Surgeries Today
-const procedures = ["Appendectomy", "Knee Replacement", "Cardiac Bypass", "Cholecystectomy", "Hip Replacement", "Hernia Repair", "Cataract Surgery", "Spinal Fusion"];
-const orRooms = ["OR-1", "OR-2", "OR-3", "OR-4", "OR-5"];
-const anesthesiaTypes = ["General", "Spinal", "Local", "Epidural"];
-const surgeryStatuses: Array<"Scheduled" | "In Progress" | "Completed" | "Cancelled"> = ["Scheduled", "In Progress", "Completed", "Scheduled"];
-const surgeryPriorities: Array<"Emergency" | "Urgent" | "Elective"> = ["Elective", "Elective", "Urgent", "Emergency"];
+// 847 OP Patients with various statuses
+export const opPatients: OPPatientRecord[] = Array.from({ length: 847 }, (_, i) => generateOPPatient(i));
 
-export const surgeriesToday: SurgeryRecord[] = Array.from({ length: 24 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 7 + Math.floor(i / 3);
-  const minute = (i * 20) % 60;
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
+// Filtered sublists
+export const opCompleted = opPatients.filter(p => p.status === "Completed");
+export const opCheckedIn = opPatients.filter(p => ["Checked-in", "With Doctor", "Awaiting Billing"].includes(p.status));
+export const opPendingCheckIn = opPatients.filter(p => p.status === "Scheduled" || p.status === "Pending Check-in");
+
+// ============== IP PATIENTS ==============
+
+function generateIPPatient(index: number, isNewAdmission = false, isERCase = false): IPPatientRecord {
+  const admitDaysAgo = isNewAdmission ? 0 : Math.floor(Math.random() * 14) + 1;
+  const admitDate = subDays(now, admitDaysAgo);
+  admitDate.setHours(8 + Math.floor(Math.random() * 10), Math.floor(Math.random() * 60), 0, 0);
   
+  const bedClasses: IPPatientRecord["bedClass"][] = ["ICU", "HDU", "Private", "Ward"];
+  const bedClass = bedClasses[index % bedClasses.length];
+  const wardMap = { ICU: "ICU", HDU: "HDU", Private: "Private Wing", Ward: `Ward-${["A", "B", "C", "D"][index % 4]}` };
+
   return {
-    id: `SURG${String(100 + i).padStart(4, "0")}`,
-    patientId: `GD${String(20000 + i).padStart(6, "0")}`,
-    patientName: `${firstName} ${lastName}`,
-    procedure: procedures[i % procedures.length],
-    surgeon: doctors[i % doctors.length],
-    orRoom: orRooms[i % orRooms.length],
-    anesthesia: anesthesiaTypes[i % anesthesiaTypes.length],
-    scheduledStart: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    status: surgeryStatuses[i % surgeryStatuses.length],
-    priority: surgeryPriorities[i % surgeryPriorities.length],
+    mrn: generateMRN(5000 + index),
+    patient: generateName(index + 100),
+    ageSex: generateAgeSex(index),
+    admitDateTime: formatDateTime(admitDate),
+    ward: wardMap[bedClass],
+    room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
+    bed: `${(index % 4) + 1}`,
+    bedClass,
+    attendingDoctor: doctors[index % doctors.length],
+    primaryDiagnosis: diagnoses[index % diagnoses.length],
+    lengthOfStay: admitDaysAgo,
+    isolation: index % 10 === 0 ? "Contact" : undefined,
+    source: isERCase ? "ER" : isNewAdmission ? (["ER", "OPD", "Transfer"] as const)[index % 3] : undefined,
+    admittingDiagnosis: diagnoses[(index + 3) % diagnoses.length],
+    admittingDoctor: doctors[(index + 2) % doctors.length],
   };
-});
+}
 
-// Generate 15 Emergency Cases
-const triageLevels: Array<1 | 2 | 3 | 4 | 5> = [1, 2, 2, 3, 3, 3, 4, 4, 5];
-const erStatuses: Array<"Waiting" | "Treating" | "Admitted" | "Transferred" | "Discharged"> = ["Waiting", "Treating", "Treating", "Admitted", "Discharged"];
-const erAreas = ["ER-Trauma", "ER-Acute", "ER-Minor", "ER-Resus", "ER-Obs"];
+// 234 IP Patients
+export const ipPatients: IPPatientRecord[] = Array.from({ length: 234 }, (_, i) => generateIPPatient(i));
 
-export const emergencyCases: ERCaseRecord[] = Array.from({ length: 15 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 6 + Math.floor(i / 2);
-  const minute = (i * 15) % 60;
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
+// Sub-filtered: New Admissions (admitted today)
+export const newAdmissions: IPPatientRecord[] = Array.from({ length: 19 }, (_, i) => generateIPPatient(i, true));
+
+// Sub-filtered: ER Cases today
+export const erCasesToday: IPPatientRecord[] = Array.from({ length: 8 }, (_, i) => generateIPPatient(i, true, true));
+
+// ============== BEDS AVAILABILITY ==============
+
+function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRecord {
+  const bedTypes: BedRecord["bedType"][] = ["ICU", "HDU", "Ward", "Private", "Isolation"];
+  const bedType = typeOverride || bedTypes[index % bedTypes.length];
+  const statuses: BedRecord["status"][] = ["Available", "Available", "Available", "Cleaning", "Reserved", "Blocked"];
+  const status = statuses[index % statuses.length];
+  const wardMap = { ICU: "ICU", HDU: "HDU", Ward: `Ward-${["A", "B", "C"][index % 3]}`, Private: "Private Wing", Isolation: "Isolation" };
+
+  return {
+    ward: wardMap[bedType],
+    room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
+    bed: `${(index % 4) + 1}`,
+    bedType,
+    status,
+    lastDischargedAt: status === "Cleaning" ? formatDateTime(subHours(now, 1)) : undefined,
+    cleaningETA: status === "Cleaning" ? formatTime(subMinutes(now, -30)) : undefined,
+    isolationCapability: bedType === "Isolation" || Math.random() > 0.7,
+    reservedFor: status === "Reserved" ? generateName(index + 500) : undefined,
+  };
+}
+
+// 67 Available beds across types
+export const bedsAvailability: BedRecord[] = Array.from({ length: 67 }, (_, i) => generateBed(i));
+
+// Sub-filtered by bed type
+export const icuBeds = bedsAvailability.filter(b => b.bedType === "ICU");
+export const wardBeds = bedsAvailability.filter(b => ["Ward", "HDU"].includes(b.bedType));
+export const roomBeds = bedsAvailability.filter(b => ["Private", "Isolation"].includes(b.bedType));
+
+// ============== DISCHARGED PATIENTS ==============
+
+function generateDischargedPatient(index: number, isPending = false): IPPatientRecord {
+  const dischargeDate = isPending ? addDays(now, 0) : now;
+  dischargeDate.setHours(8 + Math.floor(index / 5), (index * 12) % 60, 0, 0);
+  const admitDate = subDays(dischargeDate, 2 + Math.floor(Math.random() * 10));
   
+  const bedClasses: IPPatientRecord["bedClass"][] = ["ICU", "HDU", "Private", "Ward"];
+  const bedClass = bedClasses[index % bedClasses.length];
+  const wardMap = { ICU: "ICU", HDU: "HDU", Private: "Private Wing", Ward: `Ward-${["A", "B", "C", "D"][index % 4]}` };
+
+  const blockingTasksOptions = ["Billing", "Meds", "Transport", "Paperwork", "Clearance"];
+
   return {
-    id: `ER${String(200 + i).padStart(4, "0")}`,
-    patientId: `GD${String(30000 + i).padStart(6, "0")}`,
-    patientName: `${firstName} ${lastName}`,
-    triageLevel: triageLevels[i % triageLevels.length],
-    arrivalTime: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    assignedPhysician: doctors[i % doctors.length],
-    status: erStatuses[i % erStatuses.length],
-    erAreaBed: `${erAreas[i % erAreas.length]}-${i + 1}`,
+    mrn: generateMRN(8000 + index),
+    patient: generateName(index + 200),
+    ageSex: generateAgeSex(index),
+    admitDateTime: formatDateTime(admitDate),
+    ward: wardMap[bedClass],
+    room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
+    bed: `${(index % 4) + 1}`,
+    bedClass,
+    attendingDoctor: doctors[index % doctors.length],
+    primaryDiagnosis: diagnoses[index % diagnoses.length],
+    lengthOfStay: Math.floor((dischargeDate.getTime() - admitDate.getTime()) / (1000 * 60 * 60 * 24)),
+    dischargeDateTime: isPending ? undefined : formatDateTime(dischargeDate),
+    dischargeType: isPending ? undefined : (["Home", "Transfer", "AMA", "Expired"] as const)[index % 4],
+    billingStatus: (["Paid", "Pending", "Partially Paid"] as const)[index % 3],
+    dischargeSummary: isPending ? "Not Ready" : (["Ready", "Not Ready"] as const)[index % 2],
+    followUpAppointment: !isPending && Math.random() > 0.4 ? formatDateTime(addDays(now, 7 + Math.floor(Math.random() * 14))) : undefined,
+    plannedDischargeDateTime: isPending ? formatDateTime(dischargeDate) : undefined,
+    blockingTasks: isPending ? blockingTasksOptions.slice(0, 1 + Math.floor(Math.random() * 3)) : undefined,
   };
-});
+}
 
-// Generate 89 Pharmacy Pending Orders
-const rxPriorities: Array<"STAT" | "Normal"> = ["STAT", "Normal", "Normal", "Normal"];
-const rxStatuses: Array<"Pending" | "Partially Dispensed" | "Dispensed"> = ["Pending", "Pending", "Partially Dispensed"];
+// 45 Discharged today
+export const dischargedPatients: IPPatientRecord[] = Array.from({ length: 45 }, (_, i) => generateDischargedPatient(i));
 
-export const pharmacyPending: PharmacyOrderRecord[] = Array.from({ length: 89 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 8 + Math.floor(i / 10);
-  const minute = (i * 6) % 60;
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
-  
+// 11 Pending discharge
+export const dischargePending: IPPatientRecord[] = Array.from({ length: 11 }, (_, i) => generateDischargedPatient(i, true));
+
+// ============== ER CASES ==============
+
+function generateERCase(index: number): ERCaseRecord {
+  const arrivalDate = subHours(now, Math.floor(Math.random() * 12));
+  const triageLevels: ERCaseRecord["triageLevel"][] = [1, 2, 2, 3, 3, 3, 4, 4, 5];
+  const triageLevel = triageLevels[index % triageLevels.length];
+  const minsAgo = Math.floor((now.getTime() - arrivalDate.getTime()) / (1000 * 60));
+
   return {
-    id: `RX${String(3000 + i).padStart(6, "0")}`,
-    patientId: `GD${String(10000 + i).padStart(6, "0")}`,
-    patientName: `${firstName} ${lastName}`,
-    prescriber: doctors[i % doctors.length],
-    itemsCount: 1 + Math.floor(Math.random() * 6),
-    priority: rxPriorities[i % rxPriorities.length],
-    queueStatus: rxStatuses[i % rxStatuses.length],
-    createdTime: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+    mrn: generateMRN(9000 + index),
+    patient: generateName(index + 300),
+    ageSex: generateAgeSex(index),
+    triageLevel,
+    arrivalTime: formatDateTime(arrivalDate),
+    modeOfArrival: (["Ambulance", "Walk-in", "Transfer"] as const)[index % 3],
+    erZoneArea: (["Trauma", "Acute", "Minor", "Resus", "Obs"] as const)[index % 5],
+    bedChair: `ER-${index + 1}`,
+    attending: doctors[index % doctors.length],
+    chiefComplaint: chiefComplaints[index % chiefComplaints.length],
+    timeSinceArrival: `${Math.floor(minsAgo / 60)}h ${minsAgo % 60}m`,
+    disposition: (["Pending", "Admit", "Discharge", "Transfer"] as const)[index % 4],
   };
-});
+}
 
-// Generate 34 Radiology Queue
-const modalities: Array<"X-ray" | "CT" | "MRI" | "US"> = ["X-ray", "X-ray", "CT", "MRI", "US"];
-const radiologyPriorities: Array<"STAT" | "Urgent" | "Routine"> = ["STAT", "Urgent", "Routine", "Routine"];
-const radiologyStatuses: Array<"Waiting" | "In Progress" | "Completed"> = ["Waiting", "Waiting", "In Progress"];
-const radiologyRooms = ["RAD-1", "RAD-2", "CT-1", "MRI-1", "US-1", "US-2"];
+// 15 Emergency Cases (active)
+export const emergencyCases: ERCaseRecord[] = Array.from({ length: 15 }, (_, i) => generateERCase(i));
 
-export const radiologyQueue: RadiologyOrderRecord[] = Array.from({ length: 34 }, (_, i) => {
-  const todayStr = new Date().toISOString().split("T")[0];
-  const hour = 8 + Math.floor(i / 4);
-  const minute = (i * 15) % 60;
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
-  
+// ============== DOCTORS ON DUTY ==============
+
+function generateDoctorOnDuty(index: number): DoctorOnDutyRecord {
+  const shiftStart = new Date(now);
+  shiftStart.setHours(index % 2 === 0 ? 8 : 20, 0, 0, 0);
+  const shiftEnd = new Date(shiftStart);
+  shiftEnd.setHours(shiftStart.getHours() + 12);
+
   return {
-    id: `RAD${String(4000 + i).padStart(6, "0")}`,
-    patientId: `GD${String(10000 + i).padStart(6, "0")}`,
-    patientName: `${firstName} ${lastName}`,
-    modality: modalities[i % modalities.length],
-    priority: radiologyPriorities[i % radiologyPriorities.length],
-    scheduledTime: `${todayStr}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-    status: radiologyStatuses[i % radiologyStatuses.length],
-    room: radiologyRooms[i % radiologyRooms.length],
+    doctorName: doctors[index % doctors.length],
+    specialty: departments[index % departments.length],
+    role: (["Onsite", "On-call", "In OPD", "In OT", "In Ward Rounds"] as const)[index % 5],
+    shiftStart: formatTime(shiftStart),
+    shiftEnd: formatTime(shiftEnd),
+    currentLocation: (["OPD", "ER", "Ward", "OR"] as const)[index % 4],
+    contactPager: `Ext. ${1000 + index}`,
   };
-});
+}
 
-// Generate 34 Low Stock Items
-const itemCategories = ["Medications", "Surgical Supplies", "Lab Consumables", "PPE", "IV Supplies", "Wound Care"];
-const suppliers = ["MedSupply Co.", "PharmaCare Ltd.", "HealthStock Inc.", "MedEquip Solutions", "Hospital Supplies Ltd."];
-const itemNames = [
+// 89 Doctors on Duty
+export const doctorsOnDuty: DoctorOnDutyRecord[] = Array.from({ length: 89 }, (_, i) => generateDoctorOnDuty(i));
+
+// ============== APPOINTMENT REQUESTS ==============
+
+function generateAppointmentRequest(index: number): AppointmentRequestRecord {
+  const createdDate = subHours(now, Math.floor(Math.random() * 8));
+  const preferredDate = addDays(now, 1 + Math.floor(Math.random() * 7));
+  preferredDate.setHours(9 + Math.floor(Math.random() * 8), 0, 0, 0);
+
+  return {
+    requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    patient: generateName(index + 400),
+    contact: generatePhone(),
+    preferredDateTime: formatDateTime(preferredDate),
+    department: departments[index % departments.length],
+    preferredProvider: Math.random() > 0.3 ? doctors[index % doctors.length] : undefined,
+    reason: visitReasons[index % visitReasons.length],
+    urgency: (["Low", "Med", "High"] as const)[index % 3],
+    source: (["Call", "Portal", "Walk-in", "Referral"] as const)[index % 4],
+    insuranceVerified: Math.random() > 0.3,
+    status: (["New", "Pending", "Scheduled", "Rejected"] as const)[index % 4],
+    createdAt: formatDateTime(createdDate),
+  };
+}
+
+// 342 Appointment Requests
+export const appointmentRequests: AppointmentRequestRecord[] = Array.from({ length: 342 }, (_, i) => generateAppointmentRequest(i));
+
+// ============== LAB ORDERS ==============
+
+function generateLabOrder(index: number): LabOrderRecord {
+  const orderDate = subHours(now, Math.floor(Math.random() * 8));
+  const isIP = index % 3 === 0;
+
+  return {
+    orderId: `LAB${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    patient: generateName(index + 500),
+    ageSex: generateAgeSex(index),
+    location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
+    tests: testPanels[index % testPanels.length],
+    priority: index % 5 === 0 ? "Stat" : "Routine",
+    status: (["Ordered", "Collected", "In-Process", "Completed", "Verified"] as const)[index % 5],
+    specimenType: specimenTypes[index % specimenTypes.length],
+    collectedAt: index % 5 !== 0 ? formatDateTime(subMinutes(now, 30 + Math.floor(Math.random() * 60))) : undefined,
+    resultETA: index % 5 < 3 ? formatTime(subMinutes(now, -60)) : undefined,
+    criticalResult: index % 20 === 0,
+    orderTime: formatDateTime(orderDate),
+  };
+}
+
+// 156 Lab Orders
+export const labOrders: LabOrderRecord[] = Array.from({ length: 156 }, (_, i) => generateLabOrder(i));
+
+// ============== SURGERIES ==============
+
+function generateSurgery(index: number): SurgeryRecord {
+  const startDate = new Date(now);
+  startDate.setHours(7 + Math.floor(index / 3), (index * 20) % 60, 0, 0);
+
+  return {
+    caseId: `SURG${today.replace(/-/g, "")}${String(index).padStart(3, "0")}`,
+    patient: generateName(index + 600),
+    ageSex: generateAgeSex(index),
+    procedure: procedures[index % procedures.length],
+    surgeon: doctors[index % doctors.length],
+    orRoom: `OR-${(index % 5) + 1}`,
+    startTime: formatDateTime(startDate),
+    estimatedDuration: `${1 + Math.floor(Math.random() * 4)}h ${Math.floor(Math.random() * 4) * 15}m`,
+    status: (["Scheduled", "In-Progress", "Completed", "Canceled"] as const)[index % 4],
+    anesthesiaType: (["General", "Spinal", "Local", "Epidural"] as const)[index % 4],
+    asaClass: `ASA ${(index % 4) + 1}`,
+    postOpBedReserved: Math.random() > 0.2,
+  };
+}
+
+// 24 Surgeries
+export const surgeries: SurgeryRecord[] = Array.from({ length: 24 }, (_, i) => generateSurgery(i));
+
+// ============== MEDICINE ORDERS ==============
+
+function generateMedicineOrder(index: number): MedicineOrderRecord {
+  const orderDate = subHours(now, Math.floor(Math.random() * 6));
+  const isIP = index % 2 === 0;
+
+  return {
+    orderId: `RX${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    patient: generateName(index + 700),
+    location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
+    prescriber: doctors[index % doctors.length],
+    medications: medicationNames.slice(0, 1 + Math.floor(Math.random() * 3)).join(", "),
+    route: (["PO", "IV", "IM", "SC", "Topical"] as const)[index % 5],
+    priority: index % 8 === 0 ? "Stat" : "Routine",
+    status: (["Pending", "Verifying", "Verified", "Dispensed", "Administered", "Canceled"] as const)[index % 6],
+    allergiesFlag: index % 15 === 0,
+    interactionsFlag: index % 25 === 0,
+    dispensedAt: index % 6 >= 3 ? formatDateTime(subMinutes(now, Math.floor(Math.random() * 60))) : undefined,
+    orderTime: formatDateTime(orderDate),
+  };
+}
+
+// 89 Medicine Orders
+export const medicineOrders: MedicineOrderRecord[] = Array.from({ length: 89 }, (_, i) => generateMedicineOrder(i));
+
+// ============== RADIOLOGY ORDERS ==============
+
+function generateRadiologyOrder(index: number): RadiologyOrderRecord {
+  const scheduledDate = new Date(now);
+  scheduledDate.setHours(8 + Math.floor(index / 4), (index * 15) % 60, 0, 0);
+  const orderDate = subHours(scheduledDate, 1 + Math.floor(Math.random() * 4));
+  const isIP = index % 3 === 0;
+
+  return {
+    orderId: `RAD${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    patient: generateName(index + 800),
+    location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
+    modality: (["X-ray", "CT", "MRI", "US", "Fluoro", "Mammo"] as const)[index % 6],
+    exam: radiologyExams[index % radiologyExams.length],
+    priority: index % 6 === 0 ? "Stat" : "Routine",
+    status: (["Ordered", "Scheduled", "In-Progress", "Completed", "Finalized"] as const)[index % 5],
+    scheduledTime: formatDateTime(scheduledDate),
+    imagingLocation: `RAD-${(index % 4) + 1}`,
+    contrast: index % 4 === 0,
+    pregnancySafetyFlags: index % 10 === 0 ? "Verify pregnancy status" : undefined,
+    orderTime: formatDateTime(orderDate),
+  };
+}
+
+// 34 Radiology Orders
+export const radiologyOrders: RadiologyOrderRecord[] = Array.from({ length: 34 }, (_, i) => generateRadiologyOrder(i));
+
+// ============== LOW STOCK ==============
+
+const inventoryItems = [
   "Paracetamol 500mg", "Amoxicillin 250mg", "Surgical Gloves (L)", "Syringes 5ml",
   "N95 Masks", "IV Cannula 20G", "Gauze Pads 4x4", "Alcohol Swabs",
   "Bandages 3in", "Normal Saline 500ml", "Dextrose 5%", "Suture Kit",
-  "Blood Collection Tubes", "Catheter 16F", "Oxygen Masks", "Hand Sanitizer 500ml"
+  "Blood Collection Tubes", "Catheter 16F", "Oxygen Masks", "Hand Sanitizer 500ml",
+  "Insulin Syringes", "ECG Electrodes", "Pulse Oximeter Probes", "BP Cuffs",
+  "Nebulizer Masks", "Sterile Drapes", "Surgical Blades", "Tourniquet",
+  "Urinary Bags", "NG Tubes", "Tracheostomy Tubes", "Endotracheal Tubes",
+  "Central Line Kits", "Arterial Line Kits", "PICC Line Kits", "Chest Tubes",
+  "Wound Vac Canisters", "Ostomy Bags"
 ];
 
-export const lowStockItems: InventoryItemRecord[] = Array.from({ length: 34 }, (_, i) => {
-  const reorderLevel = 50 + Math.floor(Math.random() * 100);
-  const currentStock = Math.floor(reorderLevel * (0.2 + Math.random() * 0.8));
-  const isCritical = currentStock < reorderLevel * 0.3;
-  
+const suppliers = ["MedSupply Co.", "PharmaCare Ltd.", "HealthStock Inc.", "MedEquip Solutions", "Hospital Supplies Ltd."];
+
+function generateLowStockItem(index: number): LowStockRecord {
+  const reorderPoint = 50 + Math.floor(Math.random() * 100);
+  const parLevel = reorderPoint * 2;
+  const avgDailyUse = 5 + Math.floor(Math.random() * 20);
+  const onHand = Math.floor(reorderPoint * (0.1 + Math.random() * 0.9));
+  const daysOfStockLeft = Math.round((onHand / avgDailyUse) * 10) / 10;
+
   return {
-    id: `INV${String(6000 + i).padStart(6, "0")}`,
-    itemName: itemNames[i % itemNames.length],
-    category: itemCategories[i % itemCategories.length],
-    currentStock,
-    reorderLevel,
-    unit: i % 3 === 0 ? "boxes" : i % 3 === 1 ? "pcs" : "packs",
-    supplier: suppliers[i % suppliers.length],
-    lastRefilled: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    status: isCritical ? "Critical" : "Low",
+    itemName: inventoryItems[index % inventoryItems.length],
+    category: (["Drug", "Consumable", "Device"] as const)[index % 3],
+    onHand,
+    reorderPoint,
+    parLevel,
+    avgDailyUse,
+    daysOfStockLeft,
+    onOrder: Math.random() > 0.6 ? Math.floor(Math.random() * parLevel) : 0,
+    supplier: suppliers[index % suppliers.length],
+    leadTimeDays: 2 + Math.floor(Math.random() * 7),
+    suggestedReorderQty: parLevel - onHand,
+    severity: daysOfStockLeft <= 2 || onHand === 0 ? "Critical" : daysOfStockLeft <= 5 ? "Low" : "Normal",
   };
-});
+}
+
+// 34 Low Stock Items
+export const lowStockItems: LowStockRecord[] = Array.from({ length: 34 }, (_, i) => generateLowStockItem(i))
+  .sort((a, b) => a.daysOfStockLeft - b.daysOfStockLeft);
