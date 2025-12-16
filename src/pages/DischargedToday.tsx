@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
+import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { dischargedPatients, dischargePending, IPPatientRecord } from "@/data/overview.mock";
 
@@ -103,9 +103,7 @@ const DischargedToday = () => {
     },
   ];
 
-  const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "dischargeStatus", paramValue: "Pending", displayLabel: "Discharge Pending", count: dischargePending.length },
-  ];
+  // No sub-filters for Discharged - it's now a simple card
 
   const rowActions: RowAction<IPPatientRecord>[] = [
     { label: "View Summary", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
@@ -125,7 +123,6 @@ const DischargedToday = () => {
       data={data}
       filters={filters}
       rowActions={rowActions}
-      urlParamFilters={urlParamFilters}
       emptyMessage="No discharged patients for today."
       searchPlaceholder="Search by MRN, name, ward..."
       getRowId={(row) => row.mrn}

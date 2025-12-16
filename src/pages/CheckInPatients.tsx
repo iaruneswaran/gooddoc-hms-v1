@@ -114,9 +114,9 @@ const BedsAvailability = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU Beds", count: icuBeds.length },
-    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward/HDU Beds", count: wardBeds.length },
-    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Private/Isolation", count: roomBeds.length },
+    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU", count: icuBeds.length },
+    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward", count: wardBeds.length },
+    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms", count: roomBeds.length },
   ];
 
   const rowActions: RowAction<BedRecord>[] = [
