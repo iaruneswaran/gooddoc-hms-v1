@@ -93,17 +93,6 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="name-asc">Name A–Z</SelectItem>
-            <SelectItem value="department">Department</SelectItem>
-            <SelectItem value="availability">Next availability</SelectItem>
-            <SelectItem value="recent">Recently added</SelectItem>
-          </SelectContent>
-        </Select>
         </div>
 
         {/* Search Bar */}
