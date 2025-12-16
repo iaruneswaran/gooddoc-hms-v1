@@ -57,21 +57,24 @@ export function CalendarWidget() {
         <ChevronLeft className="h-4 w-4" />
       </Button>
       
-      <div className="flex gap-1.5 items-center">
+      <div className="flex gap-2 h-10 items-center">
         {weekDays.map((day, index) => (
-          <button
-            key={index}
-            onClick={() => handleDayClick(day.date)}
-            className={cn(
-              "flex flex-row items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap",
-              isSameDay(day.date, selectedDate)
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground"
-            )}
-          >
-            <span className="text-xs opacity-70">{day.dayLetter}</span>
-            <span>{day.dayNumber}</span>
-          </button>
+          <div key={index} className="flex flex-col items-center gap-0.5">
+            <span className="text-xs text-muted-foreground font-medium leading-none">
+              {day.dayLetter}
+            </span>
+            <button
+              onClick={() => handleDayClick(day.date)}
+              className={cn(
+                "w-8 h-6 rounded flex items-center justify-center text-sm font-medium transition-colors",
+                isSameDay(day.date, selectedDate)
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-secondary"
+              )}
+            >
+              {day.dayNumber}
+            </button>
+          </div>
         ))}
       </div>
       
