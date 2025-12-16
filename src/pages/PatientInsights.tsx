@@ -219,7 +219,6 @@ const PatientInsights = () => {
                 
                 <div className="flex gap-2">
                   <Button 
-                    variant="outline" 
                     size="sm"
                     onClick={() => navigate("/book-appointment", { 
                       state: { fromPatientInsights: true, patientId } 
