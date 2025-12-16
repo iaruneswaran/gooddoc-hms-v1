@@ -168,6 +168,19 @@ export default function DiagnosticsWorklist() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [approvedByFilter, setApprovedByFilter] = useState("all");
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  const toggleRowExpansion = (id: string) => {
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   // Get unique departments and approvers for filter options
   const filterOptions = useMemo(() => {
@@ -296,7 +309,10 @@ export default function DiagnosticsWorklist() {
             {filteredOrders.map((order) => (
               <div key={order.id} className="border-b border-border last:border-b-0">
                 {/* Main Row */}
-                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors">
+                <div 
+                  className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors cursor-pointer"
+                  onClick={() => toggleRowExpansion(order.id)}
+                >
                   {/* Patient Info */}
                   <div>
                     <div className="text-sm font-medium text-foreground">
@@ -341,7 +357,7 @@ export default function DiagnosticsWorklist() {
                   </div>
 
                   {/* Action */}
-                  <div className="flex justify-center">
+                  <div className="flex justify-center" onClick={(e) => e.stopPropagation()}>
                     <Link to={`/diagnostics/${order.type === "laboratory" ? "lab" : order.type}/${order.id}`}>
                       <Button variant="default" size="sm">
                         Enter Results
@@ -350,31 +366,33 @@ export default function DiagnosticsWorklist() {
                   </div>
                 </div>
 
-                {/* Departments & Tests Row */}
-                <div className="px-4 pb-4 pt-0">
-                  <div className="border-t border-border pt-4">
-                    <div className="flex items-start gap-6 text-sm">
-                      <div className="flex items-center gap-3">
-                        <span className="text-muted-foreground font-medium">Departments</span>
-                        <div className="flex gap-2">
-                          {order.departments.map((dept, idx) => (
-                            <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary font-normal">
-                              {dept.name}
-                            </Badge>
-                          ))}
+                {/* Departments & Tests Row - Collapsible */}
+                {expandedRows.has(order.id) && (
+                  <div className="px-4 pb-4 pt-0">
+                    <div className="border-t border-border pt-4">
+                      <div className="flex items-start gap-6 text-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="text-muted-foreground font-medium">Departments</span>
+                          <div className="flex gap-2">
+                            {order.departments.map((dept, idx) => (
+                              <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary font-normal">
+                                {dept.name}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-muted-foreground">All Tests ({getTotalTests(order.departments)})</span>
-                        <div className="flex gap-4 text-foreground">
-                          {order.departments.flatMap(dept => dept.tests).map((test, idx) => (
-                            <span key={idx}>{test}</span>
-                          ))}
+                        <div className="flex items-center gap-3">
+                          <span className="text-muted-foreground">All Tests ({getTotalTests(order.departments)})</span>
+                          <div className="flex gap-4 text-foreground">
+                            {order.departments.flatMap(dept => dept.tests).map((test, idx) => (
+                              <span key={idx}>{test}</span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
