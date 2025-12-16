@@ -29,7 +29,7 @@ const MedicineOrdersToday = () => {
   const navigate = useNavigate();
 
   const columns: Column<MedicineOrderRecord>[] = [
-    { key: "orderId", label: "Order ID", sortable: true },
+    { key: "orderId", label: "Order ID", sortable: true, render: (row) => <span>GDID {row.orderId.replace(/\D/g, '').padStart(3, '0')}</span> },
     { key: "patient", label: "Patient", sortable: true },
     { key: "location", label: "Location" },
     { key: "prescriber", label: "Prescriber" },
