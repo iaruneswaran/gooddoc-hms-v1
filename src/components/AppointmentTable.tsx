@@ -411,6 +411,19 @@ export function AppointmentTable({
   const [activeTokenCard, setActiveTokenCard] = useState<string | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingAppointmentId, setPendingAppointmentId] = useState<string | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  const toggleRowExpansion = (id: string) => {
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
   
   // Determine if this is a diagnostics view
   const isDiagnosticsCategory = category === "diagnostics";
@@ -522,7 +535,10 @@ export function AppointmentTable({
         appointments.map((appointment) => (
           <div key={appointment.id} className="border-b border-border last:border-b-0">
             {/* Main Row */}
-            <div className={`${gridClasses} py-4 items-center hover:bg-muted/20 transition-colors`}>
+            <div 
+              className={`${gridClasses} py-4 items-center hover:bg-muted/20 transition-colors cursor-pointer`}
+              onClick={() => toggleRowExpansion(appointment.id)}
+            >
               {/* Patient Info */}
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -580,7 +596,7 @@ export function AppointmentTable({
               </div>
 
               {/* Action */}
-              <div className="flex justify-start gap-2">
+              <div className="flex justify-start gap-2" onClick={(e) => e.stopPropagation()}>
                 <Button
                   onClick={() => navigate(`/patient-insights/${appointment.patient.id.replace('GDID - ', '')}`)}
                   variant="default"
@@ -599,8 +615,8 @@ export function AppointmentTable({
               </div>
             </div>
 
-            {/* Appointment Summary Row */}
-            {appointment.summary && (
+            {/* Appointment Summary Row - Collapsible */}
+            {appointment.summary && expandedRows.has(appointment.id) && (
               <div className="px-4 pb-4 pt-0">
                 <div className="border-t border-border pt-4">
                   <div className="space-y-1">

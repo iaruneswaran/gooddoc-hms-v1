@@ -30,6 +30,19 @@ export default function OutpatientAppointments() {
   const [providerFilter, setProviderFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [vitalsFilter, setVitalsFilter] = useState("all");
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  const toggleRowExpansion = (id: string) => {
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   // Get unique doctors and departments for filter options
   const filterOptions = useMemo(() => {
@@ -75,10 +88,15 @@ export default function OutpatientAppointments() {
   const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(120px,1fr)_minmax(120px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(120px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";
 
   const renderAppointmentCard = (appointment: Appointment) => {
+    const isExpanded = expandedRows.has(appointment.id);
+    
     return (
       <div key={appointment.id} className="border-b border-border last:border-b-0">
         {/* Main Row */}
-        <div className={`${gridClasses} items-center hover:bg-muted/20 transition-colors`}>
+        <div 
+          className={`${gridClasses} items-center hover:bg-muted/20 transition-colors cursor-pointer`}
+          onClick={() => toggleRowExpansion(appointment.id)}
+        >
           {/* Patient Info */}
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -140,7 +158,7 @@ export default function OutpatientAppointments() {
           </div>
 
           {/* Action - Patient 360 */}
-          <div className="flex justify-start">
+          <div className="flex justify-start" onClick={(e) => e.stopPropagation()}>
             <Button
               variant="default"
               size="sm"
@@ -151,8 +169,8 @@ export default function OutpatientAppointments() {
           </div>
         </div>
 
-        {/* Appointment Summary Row */}
-        {appointment.chiefComplaint && (
+        {/* Appointment Summary Row - Collapsible */}
+        {appointment.chiefComplaint && isExpanded && (
           <div className="px-4 pb-4 pt-0">
             <div className="border-t border-border pt-4">
               <div className="space-y-1">
