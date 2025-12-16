@@ -352,8 +352,8 @@ export default function Inbox() {
               </div>
             </TabsContent>
 
-            <TabsContent value="scheduled">
-              <div className="bg-card rounded-lg border border-border overflow-hidden">
+            <TabsContent value="scheduled" className="w-full">
+              <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
                 <div className="grid grid-cols-[1.2fr_1fr_1fr_1fr_0.8fr] gap-4 px-4 py-3 border-b border-border bg-muted/30">
                   <div className="text-xs font-medium text-muted-foreground">Patient</div>
                   <div className="text-xs font-medium text-muted-foreground">Service</div>
