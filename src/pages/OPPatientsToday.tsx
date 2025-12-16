@@ -53,7 +53,6 @@ const OPPatientsToday = () => {
     { key: "checkInTime", label: "Check-in Time", render: (row) => row.checkInTime || "—" },
     { key: "waitingTime", label: "Waiting Time", render: (row) => row.waitingTime || "—" },
     { key: "tokenQueueNo", label: "Token/Queue No.", render: (row) => row.tokenQueueNo || "—" },
-    { key: "insurancePlan", label: "Insurance Plan", render: (row) => row.insurancePlan || "—" },
   ];
 
   const filters: Filter[] = [
