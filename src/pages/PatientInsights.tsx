@@ -126,6 +126,7 @@ const PatientInsights = () => {
       status: "Active",
       location: "Inpatient Wing A",
       doctor: "Dr. Karthik Reddy – General Medicine",
+      emergencyContact: "+91 98765 12345",
       items: [
         {
           type: "IPD Admission",
