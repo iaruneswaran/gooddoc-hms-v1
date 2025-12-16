@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Phone } from "lucide-react";
 import { format } from "date-fns";
 
 export interface Visit {
@@ -10,6 +11,7 @@ export interface Visit {
   location: string;
   doctor?: string;
   items?: any[];
+  emergencyContact?: string;
 }
 
 interface VisitListItemProps {
@@ -27,13 +29,15 @@ export function VisitListItem({ visit, isSelected, onClick }: VisitListItemProps
     Cancelled: "bg-red-100 text-red-800",
   };
 
+  const isActive = visit.status === "Active";
+
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left p-4 rounded-lg border transition-all hover:shadow-sm ${
+      className={`w-full text-left p-4 rounded-lg border transition-all hover:shadow-sm bg-background ${
         isSelected
           ? "border-primary shadow-sm"
-          : "border-border bg-background hover:border-primary/50"
+          : "border-border hover:border-primary/50"
       }`}
     >
       <div className="flex items-start justify-between mb-2">
@@ -57,6 +61,12 @@ export function VisitListItem({ visit, isSelected, onClick }: VisitListItemProps
         <p className="text-xs text-muted-foreground">
           <span className="font-medium">Location:</span> {visit.location}
         </p>
+        {isActive && visit.emergencyContact && (
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
+            <Phone className="w-3 h-3" />
+            <span className="font-medium">Emergency:</span> {visit.emergencyContact}
+          </p>
+        )}
       </div>
     </button>
   );
