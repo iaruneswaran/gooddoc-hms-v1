@@ -36,7 +36,7 @@ const EmergencyCases = () => {
   const navigate = useNavigate();
 
   const columns: Column<ERCaseRecord>[] = [
-    { key: "mrn", label: "ID", sortable: true, render: (row) => <span>GDID {row.mrn.replace(/\D/g, '').padStart(3, '0')}</span> },
+    { key: "mrn", label: "ID", sortable: true, render: (row) => <span>GDID {row.mrn.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
     { key: "patient", label: "Patient", sortable: true },
     { key: "ageSex", label: "Age/Sex" },
     {
