@@ -354,9 +354,34 @@ export default function Inbox() {
 
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
-                <div className="text-center py-12 text-muted-foreground text-sm">
-                  No items
+                <div className="grid grid-cols-[1.2fr_1fr_1fr_1fr_0.8fr] gap-4 px-4 py-3 border-b border-border bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground">Patient</div>
+                  <div className="text-xs font-medium text-muted-foreground">Service</div>
+                  <div className="text-xs font-medium text-muted-foreground">Provider</div>
+                  <div className="text-xs font-medium text-muted-foreground">Date & Time</div>
+                  <div className="text-xs font-medium text-muted-foreground">Status</div>
                 </div>
+                {[
+                  { id: "SCH-001", patient: "Sarah Johnson", gdid: "445821", service: "Consultation", provider: "Dr. Meera Nair", datetime: "15 Jan 2025, 10:00 AM", status: "Upcoming" },
+                  { id: "SCH-002", patient: "Michael Chen", gdid: "332109", service: "Lab - CBC Panel", provider: "Laboratory Dept", datetime: "16 Jan 2025, 8:00 AM", status: "Upcoming" },
+                  { id: "SCH-003", patient: "Amit Patel", gdid: "667890", service: "Consultation", provider: "Dr. Rajesh Kumar", datetime: "14 Jan 2025, 2:30 PM", status: "Completed" },
+                  { id: "SCH-004", patient: "Priya Sharma", gdid: "556789", service: "MRI Scan", provider: "Radiology Dept", datetime: "13 Jan 2025, 11:00 AM", status: "Completed" },
+                ].map((apt) => (
+                  <div key={apt.id} className="grid grid-cols-[1.2fr_1fr_1fr_1fr_0.8fr] gap-4 px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/20">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>
+                      <p className="text-xs text-muted-foreground">GDID-{apt.gdid}</p>
+                    </div>
+                    <div className="text-sm text-foreground truncate">{apt.service}</div>
+                    <div className="text-sm text-foreground truncate">{apt.provider}</div>
+                    <div className="text-sm text-foreground truncate">{apt.datetime}</div>
+                    <div>
+                      <Badge variant={apt.status === "Upcoming" ? "default" : "secondary"} className="text-xs">
+                        {apt.status}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>
