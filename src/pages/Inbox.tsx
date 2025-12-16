@@ -154,7 +154,7 @@ export default function Inbox() {
     return isDiagnosticsType(appointment.serviceType) ? "Performing Dept" : "Department";
   };
 
-  const gridClasses = "grid grid-cols-[minmax(200px,1.5fr)_minmax(180px,1.5fr)_minmax(140px,1fr)_minmax(140px,1fr)_minmax(100px,1fr)_minmax(90px,0.8fr)_minmax(150px,1fr)_minmax(100px,0.8fr)] gap-4 p-4";
+  const gridClasses = "grid grid-cols-[1.5fr_1.5fr_1.2fr_1.2fr_0.8fr_0.6fr_1fr_0.6fr] gap-4 px-4 py-4 w-full";
 
   const renderAppointmentCard = (appointment: PendingAppointment) => {
     const isDiag = isDiagnosticsType(appointment.serviceType);
