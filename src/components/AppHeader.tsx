@@ -52,16 +52,16 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Global Search - Center */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-[400px]">
+      {/* Global Search - Center - High Priority */}
+      <div className="absolute left-1/2 -translate-x-1/2 w-[500px]">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
           <Input
-            placeholder="Search patients..."
+            placeholder="Search patients by name, ID, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-10 h-9 bg-muted/30 border-border"
+            className="pl-12 h-11 bg-background border-2 border-primary/30 rounded-xl shadow-sm text-base placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>
       </div>
