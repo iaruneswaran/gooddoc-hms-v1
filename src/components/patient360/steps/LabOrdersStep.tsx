@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Patient } from "@/types/patient360";
-import { labPackages, labTests } from "@/data/patient360.mock";
-import { useToast } from "@/hooks/use-toast";
+import { labTests } from "@/data/patient360.mock";
 import { cn } from "@/lib/utils";
-import { Search, Check, Minus } from "lucide-react";
+import { Search } from "lucide-react";
 import { format } from "date-fns";
-import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
+import { LabOrder } from "@/types/patient360";
 
 interface LabOrdersStepProps {
   patient: Patient;
@@ -17,31 +16,36 @@ interface LabOrdersStepProps {
   onNext: (order?: LabOrder) => void;
 }
 
-import { LabOrder } from "@/types/patient360";
+// Combined list of all tests (lab + radiology)
+const allTests = [
+  { code: "CBC", name: "Complete Blood Count (CBC)", price: 350, type: "Lab" },
+  { code: "LFT", name: "Liver Function Test (LFT)", price: 650, type: "Lab" },
+  { code: "KFT", name: "Kidney Function Test (KFT)", price: 550, type: "Lab" },
+  { code: "LIPID", name: "Lipid Profile", price: 450, type: "Lab" },
+  { code: "HBA1C", name: "HbA1c (Glycated Hemoglobin)", price: 400, type: "Lab" },
+  { code: "FBS", name: "Fasting Blood Sugar", price: 150, type: "Lab" },
+  { code: "THYROID", name: "Thyroid Profile (T3, T4, TSH)", price: 550, type: "Lab" },
+  { code: "URIC", name: "Uric Acid", price: 200, type: "Lab" },
+  { code: "VITD", name: "Vitamin D", price: 850, type: "Lab" },
+  { code: "VITB12", name: "Vitamin B12", price: 650, type: "Lab" },
+  { code: "CRP", name: "C-Reactive Protein (CRP)", price: 450, type: "Lab" },
+  { code: "ESR", name: "ESR (Erythrocyte Sedimentation Rate)", price: 150, type: "Lab" },
+  { code: "ECG", name: "ECG (Electrocardiogram)", price: 300, type: "Radiology" },
+  { code: "ECHO", name: "2D Echocardiography", price: 1800, type: "Radiology" },
+  { code: "XRAY", name: "Chest X-Ray", price: 350, type: "Radiology" },
+  { code: "USG", name: "Ultrasound Abdomen", price: 800, type: "Radiology" },
+  { code: "MRI", name: "MRI Brain", price: 6500, type: "Radiology" },
+  { code: "CT", name: "CT Scan Chest", price: 4500, type: "Radiology" },
+];
 
 export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
-  const { toast } = useToast();
-  const [appointmentType, setAppointmentType] = useState<"Laboratory" | "Radiology">("Laboratory");
-  const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
-  const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 7, 5));
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTests = labTests.filter((test) => {
-    if (appointmentType === "Laboratory") {
-      return test.type === "Lab";
-    } else {
-      return test.type === "Radiology";
-    }
-  });
-
-  const togglePackage = (code: string) => {
-    setSelectedPackages((prev) =>
-      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]
-    );
-  };
+  const filteredTests = allTests.filter(test =>
+    test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    test.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const toggleTest = (code: string) => {
     setSelectedTests((prev) =>
@@ -49,43 +53,22 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
     );
   };
 
-  const selectedPackageObjects = labPackages.filter((pkg) =>
-    selectedPackages.includes(pkg.code)
-  );
-  const selectedTestObjects = filteredTests.filter((test) =>
+  const selectedTestObjects = allTests.filter((test) =>
     selectedTests.includes(test.code)
   );
 
-  const subtotal =
-    selectedPackageObjects.reduce((sum, pkg) => sum + pkg.price, 0) +
-    selectedTestObjects.reduce((sum, test) => sum + test.price, 0);
-  const cgst = subtotal * 0.09;
-  const sgst = subtotal * 0.09;
-  const net = subtotal + cgst + sgst;
-
-
-  const filteredPackages = labPackages.filter(pkg => 
-    pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    pkg.includes.join(", ").toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const filteredTestsList = filteredTests.filter(test =>
-    test.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const subtotal = selectedTestObjects.reduce((sum, test) => sum + test.price, 0);
 
   const handleSaveAndContinue = () => {
     const order: LabOrder = {
       id: Date.now().toString(),
       patientId: patient.id,
       mode: "In-Clinic",
-      type: appointmentType,
-      tests: [
-        ...selectedPackageObjects.map(pkg => ({ code: pkg.code, name: pkg.name, price: pkg.price })),
-        ...selectedTestObjects.map(test => ({ code: test.code, name: test.name, price: test.price }))
-      ],
-      scheduledAt: selectedTime ? `${format(selectedDate, "yyyy-MM-dd")}T${selectedTime}:00` : new Date().toISOString(),
+      type: "Laboratory",
+      tests: selectedTestObjects.map(test => ({ code: test.code, name: test.name, price: test.price })),
+      scheduledAt: new Date().toISOString(),
       status: "Pending",
-      totals: { subtotal, cgst, sgst, net, currency: "INR" }
+      totals: { subtotal, cgst: 0, sgst: 0, net: subtotal, currency: "INR" }
     };
     onNext(order);
   };
@@ -98,163 +81,60 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
     <div className="grid grid-cols-3 gap-6">
       <div className="col-span-2 space-y-6">
         <Card className="p-6">
-          <div className="space-y-6">
-            {/* Appointment Type and Lab Tests */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-foreground mb-3 block">
-                  Appointment Type
-                </label>
-                <Tabs value={appointmentType} onValueChange={(v) => setAppointmentType(v as any)}>
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="Laboratory">Laboratory</TabsTrigger>
-                    <TabsTrigger value="Radiology">Radiology</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-
-              {appointmentType === "Laboratory" && (
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-3 block">
-                    Lab Tests
-                  </label>
-                  <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                      <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                </div>
-              )}
-            </div>
-
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-foreground">Recommended Tests</h3>
+            
             {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search lab tests..."
+                placeholder="Search tests..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>
 
-            {/* Health Packages / Individual Tests */}
-            {appointmentType === "Laboratory" && (
-              <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-                <TabsContent value="health-packages" className="space-y-3 mt-0">
-                  {filteredPackages.map((pkg) => {
-                    const isSelected = selectedPackages.includes(pkg.code);
-                    return (
-                      <Card
-                        key={pkg.code}
-                        className={cn(
-                          "p-4 cursor-pointer transition-all hover:border-primary",
-                          isSelected && "border-primary bg-primary/5"
-                        )}
-                        onClick={() => togglePackage(pkg.code)}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="text-sm font-semibold text-primary mb-1">{pkg.name}</h4>
-                            <p className="text-xs text-muted-foreground mb-2">
-                              Includes: {pkg.includes.join(", ")}
-                            </p>
-                            <p className="text-sm font-semibold text-foreground">₹{pkg.price.toLocaleString()}</p>
-                          </div>
-                          <div className={cn(
-                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
-                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                          )}>
-                            {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                          </div>
-                        </div>
-                      </Card>
-                    );
-                  })}
-                </TabsContent>
-
-                <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 mt-0">
-                  {filteredTestsList.map((test) => {
-                    const isSelected = selectedTests.includes(test.code);
-                    return (
-                      <Card
-                        key={test.code}
-                        className={cn(
-                          "p-4 cursor-pointer transition-all hover:border-primary",
-                          isSelected && "border-primary bg-primary/5"
-                        )}
-                        onClick={() => toggleTest(test.code)}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
-                          <div className={cn(
-                            "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                          )}>
-                            {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                          </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground mb-2">{test.type}</p>
-                        <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
-                      </Card>
-                    );
-                  })}
-                </TabsContent>
-              </Tabs>
-            )}
-
-            {/* Radiology Tests */}
-            {appointmentType === "Radiology" && (
-              <div className="grid grid-cols-2 gap-3">
-                {filteredTestsList.map((test) => {
-                  const isSelected = selectedTests.includes(test.code);
-                  return (
-                    <Card
-                      key={test.code}
-                      className={cn(
-                        "p-4 cursor-pointer transition-all hover:border-primary",
-                        isSelected && "border-primary bg-primary/5"
-                      )}
-                      onClick={() => toggleTest(test.code)}
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
-                        <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                          isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                        )}>
-                          {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                        </div>
+            {/* Tests List */}
+            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+              {filteredTests.map((test) => {
+                const isSelected = selectedTests.includes(test.code);
+                return (
+                  <div
+                    key={test.code}
+                    className={cn(
+                      "flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all hover:border-primary",
+                      isSelected ? "border-primary bg-primary/5" : "border-border"
+                    )}
+                    onClick={() => toggleTest(test.code)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        checked={isSelected}
+                        onCheckedChange={() => toggleTest(test.code)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{test.name}</p>
+                        <p className="text-xs text-muted-foreground">{test.type}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-2">{test.type}</p>
-                      <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Date & Time */}
-            {(selectedPackages.length > 0 || selectedTests.length > 0) && (
-              <DiagnosticsSlotPicker
-                selectedDate={selectedDate}
-                selectedTime={selectedTime}
-                onDateSelect={setSelectedDate}
-                onTimeSelect={setSelectedTime}
-                label={appointmentType === "Laboratory" ? "Laboratory Date & Time" : "Radiology Date & Time"}
-                locationName={appointmentType === "Laboratory" ? "Main Lab" : "Radiology Center"}
-              />
-            )}
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">₹{test.price}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
             <Button variant="ghost" onClick={onBack}>
               Back
             </Button>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={handleSkip}>Skip, Fill later</Button>
-              <Button onClick={handleSaveAndContinue}>Save & Continue</Button>
+              <Button variant="outline" onClick={handleSkip}>Skip</Button>
+              <Button onClick={handleSaveAndContinue} disabled={selectedTests.length === 0}>
+                Save & Continue
+              </Button>
             </div>
           </div>
         </Card>
@@ -262,7 +142,7 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
 
       <div>
         <Card className="p-6 sticky top-24">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Appointment Summary</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-4">Order Summary</h3>
           
           <div className="space-y-3 mb-4 pb-4 border-b border-border">
             <div>
@@ -275,59 +155,26 @@ export function LabOrdersStep({ patient, onBack, onNext }: LabOrdersStepProps) {
                 )} | {patient.sex}
               </p>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">{appointmentType}</p>
-            </div>
-            {selectedTime && (
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">When</p>
-                <p className="text-sm text-foreground">
-                  {format(selectedDate, "dd/MM/yyyy")} {selectedTime} | {appointmentType}
-                </p>
-              </div>
-            )}
           </div>
 
-          {(selectedPackageObjects.length > 0 || selectedTestObjects.length > 0) && (
+          {selectedTestObjects.length > 0 ? (
             <div className="space-y-3">
-              {selectedPackageObjects.map((pkg, index) => (
-                <div key={pkg.code} className="pb-3">
-                  <div className="flex justify-between items-start mb-1">
-                    <h4 className="text-sm font-medium text-foreground">{pkg.name}</h4>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Package</span>
-                    <span className="text-sm font-semibold text-foreground">₹{pkg.price.toLocaleString()}</span>
-                  </div>
-                </div>
-              ))}
-              {selectedTestObjects.map((test, index) => (
-                <div key={test.code} className="pb-3">
-                  <div className="flex justify-between items-start mb-1">
-                    <h4 className="text-sm font-medium text-foreground">{test.name}</h4>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Test</span>
-                    <span className="text-sm font-semibold text-foreground">₹{test.price}</span>
-                  </div>
+              {selectedTestObjects.map((test) => (
+                <div key={test.code} className="flex justify-between items-center">
+                  <span className="text-sm text-foreground">{test.name}</span>
+                  <span className="text-sm font-medium text-foreground">₹{test.price}</span>
                 </div>
               ))}
 
-              <div className="pt-3 space-y-2 border-t border-border">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-foreground">Global Discount</span>
-                  <span className="text-xs text-muted-foreground">0</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span className="text-foreground">{subtotal.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-base font-semibold pt-2 border-t border-border">
-                  <span className="text-foreground">Net Payable</span>
-                  <span className="text-foreground">{Math.round(net).toLocaleString()}</span>
+              <div className="pt-3 border-t border-border">
+                <div className="flex justify-between text-base font-semibold">
+                  <span className="text-foreground">Total</span>
+                  <span className="text-foreground">₹{subtotal.toLocaleString()}</span>
                 </div>
               </div>
             </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No tests selected</p>
           )}
         </Card>
       </div>
