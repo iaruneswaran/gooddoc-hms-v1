@@ -3,6 +3,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { 
   Users,
@@ -17,7 +18,8 @@ import {
   Pill,
   ScanLine,
   PackageOpen,
-  ChevronRight
+  ChevronRight,
+  Plus
 } from "lucide-react";
 
 interface SubMetric {
@@ -183,6 +185,8 @@ const StandardMetricCard = ({
 };
 
 const Overview = () => {
+  const navigate = useNavigate();
+  
   const primaryCards: MetricCardProps[] = [
     {
       title: "OP Patients",
@@ -308,9 +312,15 @@ const Overview = () => {
           <Card className="p-5 mb-6">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CalendarClock className="w-4 h-4" />
-                <span>{format(today, "EEEE, MMMM d, yyyy")}</span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CalendarClock className="w-4 h-4" />
+                  <span>{format(today, "EEEE, MMMM d, yyyy")}</span>
+                </div>
+                <Button onClick={() => navigate("/new-appointment")} size="sm">
+                  <Plus className="w-4 h-4 mr-1" />
+                  New Appointment
+                </Button>
               </div>
             </div>
           </Card>
