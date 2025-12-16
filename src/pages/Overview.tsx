@@ -123,7 +123,7 @@ const PrimaryMetricCard = ({
           <div className="h-px bg-[#E5E7EB]" />
           
           {/* Bottom section - Sub-metrics grid */}
-          <div className="px-3 py-2.5 grid grid-cols-3 gap-2 text-xs">
+          <div className="px-3 py-2.5 grid grid-cols-3 text-xs">
             {subMetrics.map((metric, idx) => (
               <span
                 key={idx}
@@ -132,14 +132,15 @@ const PrimaryMetricCard = ({
                 onClick={(e) => handleSubMetricClick(e, metric.filterParam)}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric.filterParam); }}
                 className={`
-                  flex flex-col py-1
+                  flex flex-col py-1 px-2 text-center
+                  ${idx > 0 ? 'border-l border-border' : ''}
                   ${metric.filterParam ? 'hover:text-primary cursor-pointer' : 'cursor-default'}
                   transition-colors
                 `}
                 title={metric.filterParam ? `Filter: ${metric.label}` : undefined}
               >
-                <span className="text-muted-foreground truncate text-[11px]">{metric.label}</span>
-                <span className="font-semibold text-foreground">{metric.value}</span>
+                <span className="text-muted-foreground text-[11px] leading-tight">{metric.label}</span>
+                <span className="font-semibold text-foreground mt-0.5">{metric.value}</span>
               </span>
             ))}
           </div>
