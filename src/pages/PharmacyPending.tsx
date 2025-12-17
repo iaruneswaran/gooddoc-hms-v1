@@ -58,13 +58,6 @@ const MedicineOrdersToday = () => {
     { key: "prescriber", label: "Prescriber" },
     { key: "medications", label: "Medications" },
     {
-      key: "route",
-      label: "Route",
-      render: (row) => (
-        <Badge className={routeStyles[row.route]}>{row.route}</Badge>
-      ),
-    },
-    {
       key: "status",
       label: "Status",
       sortable: true,
@@ -117,18 +110,6 @@ const MedicineOrdersToday = () => {
         { value: "Verified", label: "Verified" },
         { value: "Dispensed", label: "Dispensed" },
         { value: "Administered", label: "Administered" },
-      ],
-    },
-    {
-      key: "route",
-      label: "Route",
-      value: "all",
-      options: [
-        { value: "PO", label: "PO (Oral)" },
-        { value: "IV", label: "IV" },
-        { value: "IM", label: "IM" },
-        { value: "SC", label: "SC" },
-        { value: "Topical", label: "Topical" },
       ],
     },
   ];
