@@ -301,7 +301,7 @@ function generateOPPatient(index: number, statusOverride?: OPPatientRecord["stat
     patient: generateName(index),
     ageSex: generateAgeSex(index),
     contact: generatePhone(),
-    visitId: `V${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    visitId: `V${format(appointmentDate, "ddMMyy")}-${String(index).padStart(3, "0")}`,
     appointmentTime: formatDateTime(appointmentDate),
     department: departments[index % departments.length],
     provider: doctors[index % doctors.length],
