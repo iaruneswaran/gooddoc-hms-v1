@@ -77,7 +77,20 @@ const OPPatientsToday = () => {
         <Badge className={statusStyles[row.status]}>{row.status}</Badge>
       ),
     },
-    { key: "checkInTime", label: "Check-in Time", render: (row) => row.checkInTime || "—" },
+    { 
+      key: "checkInTime", 
+      label: "Check-in Time", 
+      render: (row) => {
+        if (!row.checkInTime) return "—";
+        const [date, time] = row.checkInTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
     { key: "tokenQueueNo", label: "Token/Queue No.", render: (row) => row.tokenQueueNo || "—" },
   ];
 
