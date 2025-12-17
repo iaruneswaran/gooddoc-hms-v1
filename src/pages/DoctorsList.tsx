@@ -393,7 +393,10 @@ export default function DoctorsList() {
 
               {filteredDoctors.map((doctor) => (
                 <div key={doctor.id} className="grid grid-cols-[2fr_2fr_1.5fr_1.2fr_1.2fr_0.8fr_0.6fr] gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 w-full">
-                  <div className="flex items-center gap-3">
+                  <div 
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => navigate(`/doctors/${doctor.id}`)}
+                  >
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={doctor.avatar} />
                       <AvatarFallback className="bg-primary/10 text-primary">
@@ -401,7 +404,7 @@ export default function DoctorsList() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div className="text-sm font-medium text-foreground">{doctor.displayName}</div>
+                      <div className="text-sm font-medium text-foreground hover:text-primary hover:underline">{doctor.displayName}</div>
                       <div className="text-xs text-muted-foreground">{doctor.degrees}</div>
                     </div>
                   </div>

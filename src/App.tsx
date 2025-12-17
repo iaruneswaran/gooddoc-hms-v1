@@ -16,6 +16,7 @@ import PatientTimeline from "./pages/PatientTimeline";
 import Payments from "./pages/Payments";
 import Discharge from "./pages/Discharge";
 import DoctorsList from "./pages/DoctorsList";
+import DoctorDetail from "./pages/DoctorDetail";
 import DoctorForm from "./pages/DoctorForm";
 import DoctorSchedulePage from "./pages/DoctorSchedulePage";
 import DoctorCalendarPage from "./pages/DoctorCalendarPage";
@@ -47,6 +48,7 @@ import RadiologyQueue from "./pages/RadiologyQueue";
 import LowStockItems from "./pages/LowStockItems";
 import PatientSearch from "./pages/PatientSearch";
 import TransfersList from "./pages/TransfersList";
+import DepartmentDetail from "./pages/DepartmentDetail";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -70,7 +72,7 @@ const App = () => (
             <Route path="/patient-insights/:patientId/discharge" element={<Discharge />} />
             <Route path="/doctors" element={<DoctorsList />} />
             <Route path="/doctors/new" element={<DoctorForm />} />
-            <Route path="/doctors/:id" element={<DoctorsList />} />
+            <Route path="/doctors/:id" element={<DoctorDetail />} />
             <Route path="/doctors/:id/edit" element={<DoctorForm />} />
             <Route path="/doctors/:id/schedule" element={<DoctorSchedulePage />} />
             <Route path="/doctors/:id/calendar" element={<DoctorCalendarPage />} />
@@ -102,6 +104,7 @@ const App = () => (
             <Route path="/radiology/queue" element={<RadiologyQueue />} />
             <Route path="/inventory/low-stock" element={<LowStockItems />} />
             <Route path="/patients/transfers" element={<TransfersList />} />
+            <Route path="/departments/:departmentId" element={<DepartmentDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
