@@ -13,7 +13,7 @@ const PatientTimeline = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const visitId = location.state?.visitId || "VST-205431";
+  const visitId = location.state?.visitId || "V25-004";
 
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const timelineRef = useRef<{ scrollToDate: (date: string) => void }>(null);

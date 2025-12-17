@@ -20,7 +20,7 @@ const Discharge = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { patientId } = useParams();
-  const visitId = location.state?.visitId || "VST-205431";
+  const visitId = location.state?.visitId || "V25-004";
   const [currentStep, setCurrentStep] = useState(1);
   
   const fromSearch = searchParams.get("from") === "search";
