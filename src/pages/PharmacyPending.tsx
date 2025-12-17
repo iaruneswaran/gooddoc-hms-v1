@@ -38,7 +38,23 @@ const MedicineOrdersToday = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.orderId} />
     },
     { key: "visitId", label: "Visit ID" },
-    { key: "location", label: "Location" },
+    { 
+      key: "location", 
+      label: "Location",
+      render: (row) => {
+        if (!row.location) return "—";
+        const parts = row.location.split('/');
+        if (parts.length === 2) {
+          return (
+            <div className="flex flex-col">
+              <span>{parts[0]}</span>
+              <span className="text-muted-foreground text-xs">{parts[1]}</span>
+            </div>
+          );
+        }
+        return <span>{row.location}</span>;
+      }
+    },
     { key: "prescriber", label: "Prescriber" },
     { key: "medications", label: "Medications" },
     {
@@ -46,14 +62,6 @@ const MedicineOrdersToday = () => {
       label: "Route",
       render: (row) => (
         <Badge className={routeStyles[row.route]}>{row.route}</Badge>
-      ),
-    },
-    {
-      key: "priority",
-      label: "Priority",
-      sortable: true,
-      render: (row) => (
-        <Badge className={priorityStyles[row.priority]}>{row.priority}</Badge>
       ),
     },
     {
@@ -82,19 +90,23 @@ const MedicineOrdersToday = () => {
         <span className="text-muted-foreground">No</span>
       ),
     },
-    { key: "dispensedAt", label: "Dispensed At", render: (row) => row.dispensedAt || "—" },
+    { 
+      key: "dispensedAt", 
+      label: "Dispensed At", 
+      render: (row) => {
+        if (!row.dispensedAt) return "—";
+        const [date, time] = row.dispensedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
   ];
 
   const filters: Filter[] = [
-    {
-      key: "priority",
-      label: "Priority",
-      value: "all",
-      options: [
-        { value: "Stat", label: "Stat" },
-        { value: "Routine", label: "Routine" },
-      ],
-    },
     {
       key: "status",
       label: "Status",
