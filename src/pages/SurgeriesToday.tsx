@@ -61,15 +61,6 @@ const SurgeriesToday = () => {
       ),
     },
     { key: "anesthesiaType", label: "Anesthesia Type" },
-    {
-      key: "postOpBedReserved",
-      label: "Post-op Bed Reserved",
-      render: (row) => row.postOpBedReserved ? (
-        <Badge className="bg-green-100 text-green-700">Yes</Badge>
-      ) : (
-        <Badge className="bg-amber-100 text-amber-700">No</Badge>
-      ),
-    },
   ];
 
   const filters: Filter[] = [
