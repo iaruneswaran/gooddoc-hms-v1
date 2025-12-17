@@ -38,7 +38,7 @@ const PATIENTS = [
     status: "IP" as const,
   },
   {
-    id: "P-0002",
+    id: "GDID-002",
     name: "Rahul Verma",
     age: 45,
     gender: "Male",
@@ -50,7 +50,7 @@ const PATIENTS = [
     status: "OP" as const,
   },
   {
-    id: "P-0003",
+    id: "GDID-003",
     name: "Sana Ali",
     age: 29,
     gender: "Female",
@@ -62,7 +62,7 @@ const PATIENTS = [
     status: "OP" as const,
   },
   {
-    id: "P-0004",
+    id: "GDID-004",
     name: "Arjun Patel",
     age: 52,
     gender: "Male",
@@ -74,7 +74,7 @@ const PATIENTS = [
     status: "IP" as const,
   },
   {
-    id: "P-0005",
+    id: "GDID-005",
     name: "Meera Nair",
     age: 41,
     gender: "Female",
@@ -86,7 +86,7 @@ const PATIENTS = [
     status: "OP" as const,
   },
   {
-    id: "P-0006",
+    id: "GDID-006",
     name: "Vikram Singh",
     age: 36,
     gender: "Male",
@@ -98,7 +98,7 @@ const PATIENTS = [
     status: "OP" as const,
   },
   {
-    id: "P-0007",
+    id: "GDID-007",
     name: "Priya Iyer",
     age: 27,
     gender: "Female",
@@ -110,7 +110,7 @@ const PATIENTS = [
     status: "IP" as const,
   },
   {
-    id: "P-0008",
+    id: "GDID-008",
     name: "Mohit Agarwal",
     age: 60,
     gender: "Male",
@@ -122,7 +122,7 @@ const PATIENTS = [
     status: "OP" as const,
   },
   {
-    id: "P-0009",
+    id: "GDID-009",
     name: "Neha Kulkarni",
     age: 33,
     gender: "Female",
@@ -134,7 +134,7 @@ const PATIENTS = [
     status: "IP" as const,
   },
   {
-    id: "P-0010",
+    id: "GDID-010",
     name: "Ramesh Rao",
     age: 48,
     gender: "Male",
