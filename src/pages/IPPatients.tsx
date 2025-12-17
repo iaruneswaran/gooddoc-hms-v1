@@ -54,8 +54,8 @@ const IPPatients = () => {
       width: "100px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small font-medium">{row.room}</span>
-          <span className="text-caption text-muted-foreground">{row.ward} • {row.bed}</span>
+          <span className="text-sm font-medium">{row.room}</span>
+          <span className="text-sm text-muted-foreground">{row.ward} • {row.bed}</span>
         </div>
       ),
     },
@@ -66,8 +66,8 @@ const IPPatients = () => {
       width: "180px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small font-medium">{row.attendingDoctor}</span>
-          <span className="text-caption text-muted-foreground">{row.primaryDiagnosis}</span>
+          <span className="text-sm font-medium">{row.attendingDoctor}</span>
+          <span className="text-sm text-muted-foreground">{row.primaryDiagnosis}</span>
         </div>
       ),
     },
@@ -78,11 +78,11 @@ const IPPatients = () => {
       width: "120px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small font-medium">{row.lengthOfStay} {row.lengthOfStay === 1 ? 'day' : 'days'}</span>
+          <span className="text-sm font-medium">{row.lengthOfStay} {row.lengthOfStay === 1 ? 'day' : 'days'}</span>
           {row.isolation ? (
-            <Badge className="bg-yellow-100 text-yellow-700 w-fit text-xs">{row.isolation}</Badge>
+            <Badge className="bg-yellow-100 text-yellow-700 w-fit text-sm">{row.isolation}</Badge>
           ) : (
-            <span className="text-caption text-muted-foreground">—</span>
+            <span className="text-sm text-muted-foreground">—</span>
           )}
         </div>
       ),
