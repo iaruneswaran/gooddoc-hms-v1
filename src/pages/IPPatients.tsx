@@ -102,10 +102,10 @@ const IPPatients = () => {
   ];
 
   const rowActions: RowAction<IPPatientRecord>[] = [
-    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
-    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360`) },
+    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`) },
+    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360?from=ip-patients`) },
     { label: "Transfer Bed", onClick: (row) => console.log("Transfer", row.mrn) },
-    { label: "Start Discharge", onClick: (row) => navigate(`/patient-insights/${row.mrn}/discharge`) },
+    { label: "Start Discharge", onClick: (row) => navigate(`/patient-insights/${row.mrn}/discharge?from=ip-patients`) },
   ];
 
   return (
@@ -122,7 +122,7 @@ const IPPatients = () => {
       emptyMessage="No IP patients found."
       searchPlaceholder="Search by MRN, name, ward, bed..."
       getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
     />
   );
 };

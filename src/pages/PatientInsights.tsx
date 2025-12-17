@@ -19,6 +19,21 @@ const PatientInsights = () => {
   const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
 
+  // Mapping for breadcrumb navigation based on source page
+  const breadcrumbConfig: Record<string, { label: string; path: string }> = {
+    "patients": { label: "Patients", path: "/patients" },
+    "appointments": { label: "Appointments", path: "/" },
+    "op-patients": { label: "OP Patients", path: "/patients/op" },
+    "ip-patients": { label: "IP Patients", path: "/patients/ip" },
+    "discharged": { label: "Discharged", path: "/discharged" },
+    "emergency": { label: "Emergency Cases", path: "/emergency" },
+    "surgeries": { label: "Surgeries", path: "/surgeries" },
+    "pharmacy": { label: "Medicine Orders", path: "/pharmacy" },
+    "transfers": { label: "Transfers", path: "/transfers" },
+  };
+
+  const currentBreadcrumb = breadcrumbConfig[fromPage || ""] || { label: "Appointments", path: "/" };
+
   // Mock patient data
   const patient = {
     name: "Harish Kalyan",
@@ -180,8 +195,8 @@ const PatientInsights = () => {
       <PageContent className="flex flex-col overflow-hidden">
         <AppHeader breadcrumbs={[
           { 
-            label: fromPage === "patients" ? "Patients" : "Appointments", 
-            onClick: () => navigate(fromPage === "patients" ? "/patients" : "/") 
+            label: currentBreadcrumb.label, 
+            onClick: () => navigate(currentBreadcrumb.path) 
           }, 
           "Patient Insight"
         ]} />
@@ -191,11 +206,11 @@ const PatientInsights = () => {
           <div className="px-6 py-6">
             {/* Back Button */}
             <button
-              onClick={() => navigate(fromPage === "patients" ? "/patients" : "/")}
+              onClick={() => navigate(currentBreadcrumb.path)}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">{fromPage === "patients" ? "Patients" : "Appointments"}</span>
+              <span className="font-semibold">{currentBreadcrumb.label}</span>
             </button>
 
             {/* Header Content */}

@@ -115,7 +115,7 @@ const DischargedToday = () => {
   // No sub-filters for Discharged - it's now a simple card
 
   const rowActions: RowAction<IPPatientRecord>[] = [
-    { label: "View Summary", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
+    { label: "View Summary", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=discharged`) },
     { label: "Print Discharge Summary", onClick: (row) => console.log("Print", row.mrn) },
     { label: "Export to PDF", onClick: (row) => console.log("Export", row.mrn) },
   ];
@@ -135,7 +135,7 @@ const DischargedToday = () => {
       emptyMessage="No discharged patients for today."
       searchPlaceholder="Search by MRN, name, ward..."
       getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=discharged`)}
     />
   );
 };

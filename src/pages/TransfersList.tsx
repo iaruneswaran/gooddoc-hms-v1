@@ -255,6 +255,7 @@ const TransfersList = () => {
       emptyMessage="No transfer records for today."
       searchPlaceholder="Search by Transfer ID, MRN, patient name..."
       getRowId={(row) => row.transferId}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=transfers`)}
     />
   );
 };
