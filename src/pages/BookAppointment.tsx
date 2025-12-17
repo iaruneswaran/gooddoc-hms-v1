@@ -500,7 +500,7 @@ const BookAppointment = () => {
           <div className="max-w-[1600px] mx-auto">
             {/* Appointment Type Buttons - Hide in single-appointment mode */}
             {!isSingleAppointmentMode && (
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="flex gap-3">{appointmentTypes.map((type) => {
                   const Icon = type.icon;
                   const isSelected = selectedTypes.includes(type.value);
