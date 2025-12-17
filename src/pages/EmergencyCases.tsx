@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { emergencyCases, ERCaseRecord } from "@/data/overview.mock";
 
 const triageStyles: Record<number, string> = {
@@ -36,9 +37,12 @@ const EmergencyCases = () => {
   const navigate = useNavigate();
 
   const columns: Column<ERCaseRecord>[] = [
-    { key: "mrn", label: "ID", sortable: true, render: (row) => <span>GDID {row.mrn.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
+    },
     {
       key: "triageLevel",
       label: "Triage Level",

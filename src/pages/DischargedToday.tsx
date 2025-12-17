@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { dischargedPatients, dischargePending, IPPatientRecord } from "@/data/overview.mock";
 
 const dischargeTypeStyles: Record<string, string> = {
@@ -32,9 +33,12 @@ const DischargedToday = () => {
   }
 
   const dischargedColumns: Column<IPPatientRecord>[] = [
-    { key: "mrn", label: "ID", sortable: true, render: (row) => <span>GDID {row.mrn.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
+    },
     { key: "ward", label: "Ward" },
     { key: "room", label: "Room" },
     { key: "bed", label: "Bed" },
@@ -67,9 +71,12 @@ const DischargedToday = () => {
   ];
 
   const pendingColumns: Column<IPPatientRecord>[] = [
-    { key: "mrn", label: "MRN", sortable: true },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
+    },
     { key: "ward", label: "Ward" },
     { key: "room", label: "Room" },
     { key: "bed", label: "Bed" },
