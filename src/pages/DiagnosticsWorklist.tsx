@@ -295,7 +295,7 @@ export default function DiagnosticsWorklist() {
           {/* Orders Table */}
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             {/* Table Header */}
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 border-b border-border bg-muted/30">
+            <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 border-b border-border bg-muted/30">
               <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
               <div className="text-xs font-medium text-muted-foreground">Workorder ID</div>
               <div className="text-xs font-medium text-muted-foreground">Order</div>
@@ -310,7 +310,7 @@ export default function DiagnosticsWorklist() {
               <div key={order.id} className="border-b border-border last:border-b-0">
                 {/* Main Row */}
                 <div 
-                  className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors cursor-pointer"
+                  className="grid grid-cols-[1.4fr_1fr_1fr_1fr_1fr_1fr_1fr_120px] gap-4 p-4 items-center hover:bg-muted/20 transition-colors cursor-pointer"
                   onClick={() => toggleRowExpansion(order.id)}
                 >
                   {/* Patient Info */}
