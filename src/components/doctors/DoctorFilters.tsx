@@ -33,9 +33,9 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
-        <SelectTrigger className="w-[130px] h-9">
+        <SelectTrigger className="w-[120px] h-8 text-xs">
           <SelectValue placeholder="Department" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -47,7 +47,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Specialty: ${val}`)}>
-        <SelectTrigger className="w-[130px] h-9">
+        <SelectTrigger className="w-[120px] h-8 text-xs">
           <SelectValue placeholder="Specialty" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -58,7 +58,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Availability: ${val}`)}>
-        <SelectTrigger className="w-[120px] h-9">
+        <SelectTrigger className="w-[110px] h-8 text-xs">
           <SelectValue placeholder="Availability" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -69,7 +69,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Status: ${val}`)}>
-        <SelectTrigger className="w-[110px] h-9">
+        <SelectTrigger className="w-[100px] h-8 text-xs">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">

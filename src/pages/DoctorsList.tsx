@@ -426,26 +426,24 @@ export default function DoctorsList() {
 
           {/* Tabs with Filters */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-            <div className="flex items-end justify-between">
+            <div className="flex items-center justify-between">
               <TabsList className="bg-transparent rounded-none h-auto p-0 gap-6 border-b border-border">
                 <TabsTrigger 
                   value="doctors" 
-                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
                 >
                   Doctors
                 </TabsTrigger>
                 <TabsTrigger 
                   value="departments"
-                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 pr-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-2 pr-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
                 >
                   Departments
                 </TabsTrigger>
               </TabsList>
               
               {activeTab === "doctors" && (
-                <div className="flex items-center gap-3 pb-3">
-                  <DoctorFilters search={search} onSearchChange={setSearch} />
-                </div>
+                <DoctorFilters search={search} onSearchChange={setSearch} />
               )}
             </div>
 
