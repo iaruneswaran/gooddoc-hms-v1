@@ -468,33 +468,35 @@ const BookAppointment = () => {
         
         <main className="p-6 pb-32">
           <div className="flex items-center justify-between h-10 mb-12">
-            <button
-              onClick={() => {
-                if (fromSearch && patientSearchQuery) {
-                  navigate(`/patients/search?q=${patientSearchQuery}`);
-                } else if (fromPatients) {
-                  navigate("/patients");
-                } else if (isSingleAppointmentMode) {
-                  navigate("/inbox");
-                } else if (fromPatientInsights) {
-                  navigate(`/patient-insights/${patientId}`);
-                } else {
-                  navigate("/registration");
-                }
-              }}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="font-semibold">
-                {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
-              </span>
-            </button>
+            <div className="w-[130px]">
+              <button
+                onClick={() => {
+                  if (fromSearch && patientSearchQuery) {
+                    navigate(`/patients/search?q=${patientSearchQuery}`);
+                  } else if (fromPatients) {
+                    navigate("/patients");
+                  } else if (isSingleAppointmentMode) {
+                    navigate("/inbox");
+                  } else if (fromPatientInsights) {
+                    navigate(`/patient-insights/${patientId}`);
+                  } else {
+                    navigate("/registration");
+                  }
+                }}
+                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="font-semibold">
+                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
+                </span>
+              </button>
+            </div>
 
             {!isSingleAppointmentMode && (
               <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
             )}
             
-            <div className="w-[120px]" />
+            <div className="w-[130px]" />
           </div>
 
           <div className="max-w-[1600px] mx-auto">
