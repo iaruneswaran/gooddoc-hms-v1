@@ -149,6 +149,7 @@ export interface AppointmentRequestRecord {
   requestId: string;
   patient: string;
   contact: string;
+  email: string;
   preferredDateTime: string;
   department: string;
   preferredProvider?: string;
@@ -607,10 +608,13 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const preferredDate = addDays(now, 1 + Math.floor(Math.random() * 7));
   preferredDate.setHours(9 + Math.floor(Math.random() * 8), 0, 0, 0);
 
+  const patientName = generateName(index + 400);
+  const emailName = patientName.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z.]/g, '');
   return {
     requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
-    patient: generateName(index + 400),
+    patient: patientName,
     contact: generatePhone(),
+    email: `${emailName}@email.com`,
     preferredDateTime: formatDateTime(preferredDate),
     department: departments[index % departments.length],
     preferredProvider: Math.random() > 0.3 ? doctors[index % doctors.length] : undefined,
