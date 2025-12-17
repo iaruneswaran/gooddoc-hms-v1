@@ -39,35 +39,53 @@ const IPPatients = () => {
       key: "patient", 
       label: "Patient Info", 
       sortable: true,
-      width: "220px",
+      width: "200px",
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
-    { key: "visitId", label: "Visit ID" },
-    { key: "admitDateTime", label: "Admit Date/Time", sortable: true },
-    { key: "ward", label: "Ward", sortable: true },
-    { key: "room", label: "Room" },
-    { key: "bed", label: "Bed" },
+    { 
+      key: "admitDateTime", 
+      label: "Admission Date & Time", 
+      sortable: true,
+      width: "140px",
+    },
     {
-      key: "bedClass",
-      label: "Bed Class",
+      key: "room",
+      label: "Room & Bed",
+      width: "100px",
       render: (row) => (
-        <Badge className={bedClassStyles[row.bedClass]}>{row.bedClass}</Badge>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-small font-medium">{row.room}</span>
+          <span className="text-caption text-muted-foreground">{row.ward} • {row.bed}</span>
+        </div>
       ),
     },
-    { key: "attendingDoctor", label: "Attending Doctor", sortable: true },
-    { key: "primaryDiagnosis", label: "Primary Diagnosis" },
     {
-      key: "lengthOfStay",
-      label: "LOS (days)",
+      key: "attendingDoctor",
+      label: "Doctor & Diagnosis",
       sortable: true,
-      render: (row) => <span>{row.lengthOfStay} days</span>,
+      width: "180px",
+      render: (row) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-small font-medium">{row.attendingDoctor}</span>
+          <span className="text-caption text-muted-foreground">{row.primaryDiagnosis}</span>
+        </div>
+      ),
     },
     {
-      key: "isolation",
-      label: "Isolation",
-      render: (row) => row.isolation ? (
-        <Badge className="bg-yellow-100 text-yellow-700">{row.isolation}</Badge>
-      ) : <span>—</span>,
+      key: "lengthOfStay",
+      label: "Stay & Isolation",
+      sortable: true,
+      width: "120px",
+      render: (row) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-small font-medium">{row.lengthOfStay} {row.lengthOfStay === 1 ? 'day' : 'days'}</span>
+          {row.isolation ? (
+            <Badge className="bg-yellow-100 text-yellow-700 w-fit text-xs">{row.isolation}</Badge>
+          ) : (
+            <span className="text-caption text-muted-foreground">—</span>
+          )}
+        </div>
+      ),
     },
   ];
 
