@@ -33,7 +33,7 @@ const AppointmentRequests = () => {
       label: "Patient Info", 
       sortable: true,
       width: "220px",
-      render: (row) => <PatientCell name={row.patient} gdid={row.requestId} />
+      render: (row) => <PatientCell name={row.patient} gdid={row.requestId} ageSex={row.ageSex} />
     },
     { 
       key: "contact", 
