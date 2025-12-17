@@ -101,6 +101,30 @@ const DEPARTMENTS_DATA: Record<string, {
   },
 };
 
+// ID alias mapping to handle various formats
+const DEPARTMENT_ID_ALIASES: Record<string, string> = {
+  cardio: "cardiology",
+  ortho: "orthopedics",
+  neuro: "neurology",
+  general: "general-medicine",
+  "general medicine": "general-medicine",
+  generalmedicine: "general-medicine",
+  endo: "endocrinology",
+  peds: "pediatrics",
+  pedia: "pediatrics",
+};
+
+function resolveDepartmentId(id: string | undefined): string | undefined {
+  if (!id) return undefined;
+  const normalized = id.toLowerCase().replace(/\s+/g, '-');
+  if (DEPARTMENTS_DATA[normalized]) return normalized;
+  if (DEPARTMENT_ID_ALIASES[normalized]) return DEPARTMENT_ID_ALIASES[normalized];
+  // Try partial match
+  const keys = Object.keys(DEPARTMENTS_DATA);
+  const match = keys.find(k => k.includes(normalized) || normalized.includes(k));
+  return match || undefined;
+}
+
 // Mock doctors for department
 const mockDepartmentDoctors = [
   { id: "DOC-001", name: "Dr. Priya Sharma", degrees: "MBBS, MD, DM", specialty: "Interventional Cardiology", avatar: null, availability: "Today 10:30 AM", languages: ["English", "Hindi"], nextSlot: "2025-12-17T10:30:00" },
@@ -158,7 +182,8 @@ export default function DepartmentDetail() {
   const [patientStatusFilter, setPatientStatusFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
 
-  const department = departmentId ? DEPARTMENTS_DATA[departmentId] : null;
+  const resolvedId = resolveDepartmentId(departmentId);
+  const department = resolvedId ? DEPARTMENTS_DATA[resolvedId] : null;
 
   if (!department) {
     return (
