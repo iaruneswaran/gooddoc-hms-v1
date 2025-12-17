@@ -148,6 +148,7 @@ export interface TransferRecord {
 export interface AppointmentRequestRecord {
   requestId: string;
   patient: string;
+  ageSex: string;
   contact: string;
   email: string;
   preferredDateTime: string;
@@ -610,9 +611,11 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
 
   const patientName = generateName(index + 400);
   const emailName = patientName.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z.]/g, '');
+  const ageSex = generateAgeSex(index + 400);
   return {
     requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: patientName,
+    ageSex,
     contact: generatePhone(),
     email: `${emailName}@email.com`,
     preferredDateTime: formatDateTime(preferredDate),
