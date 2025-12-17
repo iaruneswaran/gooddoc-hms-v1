@@ -46,17 +46,16 @@ const IPPatients = () => {
       key: "admitDateTime", 
       label: "Admission Date & Time", 
       sortable: true,
-      width: "160px",
-      render: (row) => <span className="text-small">{row.admitDateTime}</span>,
+      width: "140px",
     },
     {
       key: "room",
       label: "Room & Bed",
-      width: "120px",
+      width: "100px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small">{row.room}</span>
-          <span className="text-small text-muted-foreground">{row.ward} • {row.bed}</span>
+          <span className="text-small font-medium">{row.room}</span>
+          <span className="text-caption text-muted-foreground">{row.ward} • {row.bed}</span>
         </div>
       ),
     },
@@ -64,11 +63,11 @@ const IPPatients = () => {
       key: "attendingDoctor",
       label: "Doctor & Diagnosis",
       sortable: true,
-      width: "200px",
+      width: "180px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small">{row.attendingDoctor}</span>
-          <span className="text-small text-muted-foreground">{row.primaryDiagnosis}</span>
+          <span className="text-small font-medium">{row.attendingDoctor}</span>
+          <span className="text-caption text-muted-foreground">{row.primaryDiagnosis}</span>
         </div>
       ),
     },
@@ -79,11 +78,11 @@ const IPPatients = () => {
       width: "120px",
       render: (row) => (
         <div className="flex flex-col gap-0.5">
-          <span className="text-small">{row.lengthOfStay} {row.lengthOfStay === 1 ? 'day' : 'days'}</span>
+          <span className="text-small font-medium">{row.lengthOfStay} {row.lengthOfStay === 1 ? 'day' : 'days'}</span>
           {row.isolation ? (
-            <Badge className="bg-yellow-100 text-yellow-700 w-fit text-small">{row.isolation}</Badge>
+            <Badge className="bg-yellow-100 text-yellow-700 w-fit text-xs">{row.isolation}</Badge>
           ) : (
-            <span className="text-small text-muted-foreground">—</span>
+            <span className="text-caption text-muted-foreground">—</span>
           )}
         </div>
       ),
