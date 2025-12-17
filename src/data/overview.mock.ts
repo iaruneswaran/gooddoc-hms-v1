@@ -214,6 +214,7 @@ export interface MedicineOrderRecord {
 export interface RadiologyOrderRecord {
   orderId: string;
   patient: string;
+  ageSex: string;
   visitId: string;
   location: string;
   modality: "X-ray" | "CT" | "MRI" | "US" | "Fluoro" | "Mammo";
@@ -724,6 +725,7 @@ function generateRadiologyOrder(index: number): RadiologyOrderRecord {
   return {
     orderId: `RAD${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 800),
+    ageSex: generateAgeSex(index + 800),
     visitId: formatVisitId(25, 400 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     modality: (["X-ray", "CT", "MRI", "US", "Fluoro", "Mammo"] as const)[index % 6],
