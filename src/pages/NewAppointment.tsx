@@ -69,10 +69,10 @@ const NewAppointment = () => {
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Book Appointment"] : ["Appointments", "Search"]} />
         
         <main className="p-6">
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center justify-between h-10 mb-12">
             <button
               onClick={handleBack}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">{fromSearch ? "Search Results" : "Appointment List"}</span>
@@ -80,7 +80,7 @@ const NewAppointment = () => {
 
             <BookingSteps currentStep="search" />
             
-            <div className="w-[180px]" />
+            <div className="w-[120px]" />
           </div>
 
           <div className="max-w-4xl mx-auto space-y-6">
