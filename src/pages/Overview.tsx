@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { CalendarWidget } from "@/components/CalendarWidget";
 import { 
   Users,
   BedDouble, 
@@ -305,8 +305,6 @@ const Overview = () => {
     },
   ];
 
-  const today = new Date();
-
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
@@ -320,10 +318,7 @@ const Overview = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CalendarClock className="w-4 h-4" />
-                  <span>{format(today, "EEEE, MMMM d, yyyy")}</span>
-                </div>
+                <CalendarWidget />
                 <Button onClick={() => navigate("/new-appointment")} className="h-9">
                   <Plus className="w-4 h-4 mr-1" />
                   New Appointment
