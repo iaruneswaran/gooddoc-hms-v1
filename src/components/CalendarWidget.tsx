@@ -23,7 +23,7 @@ export function CalendarWidget() {
     return {
       dayLetter: format(date, "EEEEE"), // Single letter day
       date: date,
-      dayNumber: format(date, "d"),
+      dayNumber: format(date, "dd"),
     };
   });
 
