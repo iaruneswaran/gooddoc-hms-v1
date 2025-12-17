@@ -102,8 +102,8 @@ const DoctorsOnDuty = () => {
   } else if (doctorType === "other") {
     data = otherDoctors;
     displayCount = otherDoctors.length;
-    pageTitle = "Other Doctors";
-    pageSubtitle = "Doctors on duty (Radiology, Pathology, Telemedicine, Admin, etc.) • Default sort: Specialty ASC";
+    pageTitle = "Emergency Doctors";
+    pageSubtitle = "Emergency doctors on duty • Default sort: Specialty ASC";
     
     specificColumns = [
       { key: "context", label: "Context/Assignment", render: (row) => row.context || "—" },
@@ -177,7 +177,7 @@ const DoctorsOnDuty = () => {
   const urlParamFilters: UrlParamFilter[] = [
     { paramKey: "type", paramValue: "op", displayLabel: "OP Doctors", count: opDoctors.length },
     { paramKey: "type", paramValue: "ip", displayLabel: "IP Doctors", count: ipDoctors.length },
-    { paramKey: "type", paramValue: "other", displayLabel: "Other Doctors", count: otherDoctors.length },
+    { paramKey: "type", paramValue: "other", displayLabel: "Emergency Doctors", count: otherDoctors.length },
   ];
 
   const rowActions: RowAction<DoctorOnDutyRecord>[] = [

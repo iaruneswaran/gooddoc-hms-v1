@@ -241,7 +241,7 @@ const Overview = () => {
       subMetrics: [
         { label: "OP Doctors", value: 42, filterParam: "type=op" },
         { label: "IP Doctors", value: 31, filterParam: "type=ip" },
-        { label: "Other Doctors", value: 16, filterParam: "type=other" },
+        { label: "Emergency Doctors", value: 16, filterParam: "type=other" },
       ],
     },
   ];
