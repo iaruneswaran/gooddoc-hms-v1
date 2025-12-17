@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Search } from "lucide-react";
+import { X } from "lucide-react";
 
 interface DoctorFiltersProps {
   search: string;
@@ -34,73 +33,55 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
   };
 
   return (
-    <div className="space-y-4 mb-6">
-      {/* Filter Controls and Search */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-3">
-        <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Department" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="cardiology">Cardiology</SelectItem>
-            <SelectItem value="endocrinology">Endocrinology</SelectItem>
-            <SelectItem value="orthopedics">Orthopedics</SelectItem>
-            <SelectItem value="neurology">Neurology</SelectItem>
-          </SelectContent>
-        </Select>
+    <div className="flex items-center gap-3">
+      <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
+        <SelectTrigger className="w-[130px] h-9">
+          <SelectValue placeholder="Department" />
+        </SelectTrigger>
+        <SelectContent className="bg-popover z-50">
+          <SelectItem value="cardiology">Cardiology</SelectItem>
+          <SelectItem value="endocrinology">Endocrinology</SelectItem>
+          <SelectItem value="orthopedics">Orthopedics</SelectItem>
+          <SelectItem value="neurology">Neurology</SelectItem>
+        </SelectContent>
+      </Select>
 
-        <Select onValueChange={(val) => addFilter(`Specialty: ${val}`)}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Specialty" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="interventional">Interventional Cardiology</SelectItem>
-            <SelectItem value="diabetes">Diabetes & Metabolism</SelectItem>
-            <SelectItem value="joint">Joint Replacement</SelectItem>
-          </SelectContent>
-        </Select>
+      <Select onValueChange={(val) => addFilter(`Specialty: ${val}`)}>
+        <SelectTrigger className="w-[130px] h-9">
+          <SelectValue placeholder="Specialty" />
+        </SelectTrigger>
+        <SelectContent className="bg-popover z-50">
+          <SelectItem value="interventional">Interventional Cardiology</SelectItem>
+          <SelectItem value="diabetes">Diabetes & Metabolism</SelectItem>
+          <SelectItem value="joint">Joint Replacement</SelectItem>
+        </SelectContent>
+      </Select>
 
-        <Select onValueChange={(val) => addFilter(`Availability: ${val}`)}>
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Availability" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="today">Today</SelectItem>
-            <SelectItem value="next-3-days">Next 3 days</SelectItem>
-            <SelectItem value="on-leave">On leave</SelectItem>
-          </SelectContent>
-        </Select>
+      <Select onValueChange={(val) => addFilter(`Availability: ${val}`)}>
+        <SelectTrigger className="w-[120px] h-9">
+          <SelectValue placeholder="Availability" />
+        </SelectTrigger>
+        <SelectContent className="bg-popover z-50">
+          <SelectItem value="today">Today</SelectItem>
+          <SelectItem value="next-3-days">Next 3 days</SelectItem>
+          <SelectItem value="on-leave">On leave</SelectItem>
+        </SelectContent>
+      </Select>
 
-        <Select onValueChange={(val) => addFilter(`Status: ${val}`)}>
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-          </SelectContent>
-        </Select>
+      <Select onValueChange={(val) => addFilter(`Status: ${val}`)}>
+        <SelectTrigger className="w-[110px] h-9">
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent className="bg-popover z-50">
+          <SelectItem value="active">Active</SelectItem>
+          <SelectItem value="inactive">Inactive</SelectItem>
+          <SelectItem value="pending">Pending</SelectItem>
+        </SelectContent>
+      </Select>
 
-
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search name, department, specialty, location"
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {/* Applied Filters */}
+      {/* Applied Filters as badges */}
       {filters.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
+        <>
           {filters.map((filter, i) => (
             <Badge key={i} variant="secondary" className="gap-1 pr-1">
               {filter}
@@ -120,9 +101,9 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
             onClick={clearAllFilters}
             className="h-7 text-xs"
           >
-            Clear all
+            Clear
           </Button>
-        </div>
+        </>
       )}
     </div>
   );
