@@ -45,17 +45,21 @@ const EmergencyCases = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "visitId", label: "Visit ID" },
-    {
-      key: "triageLevel",
-      label: "Triage Level",
+    { 
+      key: "arrivalTime", 
+      label: "Arrival Time", 
       sortable: true,
-      render: (row) => (
-        <Badge className={triageStyles[row.triageLevel]}>
-          {triageLabels[row.triageLevel]}
-        </Badge>
-      ),
+      render: (row) => {
+        if (!row.arrivalTime) return "—";
+        const [date, time] = row.arrivalTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
     },
-    { key: "arrivalTime", label: "Arrival Time", sortable: true },
     {
       key: "modeOfArrival",
       label: "Mode of Arrival",
@@ -63,8 +67,16 @@ const EmergencyCases = () => {
         <Badge className={modeOfArrivalStyles[row.modeOfArrival]}>{row.modeOfArrival}</Badge>
       ),
     },
-    { key: "erZoneArea", label: "ER Zone/Area" },
-    { key: "bedChair", label: "Bed/Chair" },
+    { 
+      key: "erZoneArea", 
+      label: "ER Zone/Bed",
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.erZoneArea}</span>
+          <span className="text-muted-foreground text-xs">{row.bedChair}</span>
+        </div>
+      )
+    },
     { key: "attending", label: "Attending" },
     { key: "chiefComplaint", label: "Chief Complaint" },
     { key: "timeSinceArrival", label: "Time Since Arrival" },
