@@ -70,17 +70,19 @@ const NewAppointment = () => {
         
         <main className="p-6">
           <div className="flex items-center justify-between h-10 mb-12">
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="font-semibold">{fromSearch ? "Search Results" : "Overview"}</span>
-            </button>
+            <div className="w-[130px]">
+              <button
+                onClick={handleBack}
+                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="font-semibold">{fromSearch ? "Search Results" : "Overview"}</span>
+              </button>
+            </div>
 
             <BookingSteps currentStep="search" />
             
-            <div className="w-0" />
+            <div className="w-[130px]" />
           </div>
 
           <div className="max-w-4xl mx-auto space-y-6">

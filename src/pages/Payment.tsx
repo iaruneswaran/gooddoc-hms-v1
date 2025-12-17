@@ -108,19 +108,21 @@ const Payment = () => {
         
         <main className="p-6">
           <div className="flex items-center justify-between h-10 mb-12">
-            <button
-              onClick={() => navigate("/book-appointment", { 
-                state: { fromPatientInsights, patientId } 
-              })}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="font-semibold">Appointment</span>
-            </button>
+            <div className="w-[130px]">
+              <button
+                onClick={() => navigate("/book-appointment", { 
+                  state: { fromPatientInsights, patientId } 
+                })}
+                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="font-semibold">Appointment</span>
+              </button>
+            </div>
 
             <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
             
-            <div className="w-0" />
+            <div className="w-[130px]" />
           </div>
 
           <div className="max-w-[1600px] mx-auto">
