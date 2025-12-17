@@ -197,6 +197,7 @@ export interface SurgeryRecord {
 export interface MedicineOrderRecord {
   orderId: string;
   patient: string;
+  ageSex: string;
   visitId: string;
   location: string;
   prescriber: string;
@@ -694,6 +695,7 @@ function generateMedicineOrder(index: number): MedicineOrderRecord {
   return {
     orderId: `RX${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 700),
+    ageSex: generateAgeSex(index + 700),
     visitId: formatVisitId(25, 300 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     prescriber: doctors[index % doctors.length],
