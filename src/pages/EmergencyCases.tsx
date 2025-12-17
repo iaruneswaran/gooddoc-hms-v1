@@ -41,6 +41,7 @@ const EmergencyCases = () => {
       key: "patient", 
       label: "Patient Info", 
       sortable: true,
+      width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     {

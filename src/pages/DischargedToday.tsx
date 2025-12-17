@@ -37,6 +37,7 @@ const DischargedToday = () => {
       key: "patient", 
       label: "Patient Info", 
       sortable: true,
+      width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "ward", label: "Ward" },
@@ -75,6 +76,7 @@ const DischargedToday = () => {
       key: "patient", 
       label: "Patient Info", 
       sortable: true,
+      width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "ward", label: "Ward" },
