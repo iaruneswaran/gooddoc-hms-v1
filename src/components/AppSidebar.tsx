@@ -1,4 +1,4 @@
-import { LayoutDashboard, CalendarCheck, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, CalendarCheck, Calendar, Stethoscope, Activity, Users, UserCog, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -13,6 +13,7 @@ const menuItems = [
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
   { icon: UserCog, label: "Doctors", href: "/doctors" },
+  { icon: Building2, label: "Departments", href: "/departments" },
   { icon: Users, label: "Patients", href: "/patients" },
   { icon: Tag, label: "Pricing Catalog", href: "/pricing-catalog" },
   { icon: Pill, label: "Pharmacy", href: "/pharmacy" },

@@ -49,6 +49,7 @@ import LowStockItems from "./pages/LowStockItems";
 import PatientSearch from "./pages/PatientSearch";
 import TransfersList from "./pages/TransfersList";
 import DepartmentDetail from "./pages/DepartmentDetail";
+import DepartmentsList from "./pages/DepartmentsList";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -104,6 +105,7 @@ const App = () => (
             <Route path="/radiology/queue" element={<RadiologyQueue />} />
             <Route path="/inventory/low-stock" element={<LowStockItems />} />
             <Route path="/patients/transfers" element={<TransfersList />} />
+            <Route path="/departments" element={<DepartmentsList />} />
             <Route path="/departments/:departmentId" element={<DepartmentDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
