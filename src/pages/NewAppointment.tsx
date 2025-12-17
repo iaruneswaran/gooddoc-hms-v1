@@ -69,7 +69,7 @@ const NewAppointment = () => {
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Book Appointment"] : ["Appointments", "Search"]} />
         
         <main className="p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-12">
             <button
               onClick={handleBack}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
