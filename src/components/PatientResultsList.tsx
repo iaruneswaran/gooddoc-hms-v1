@@ -1,4 +1,4 @@
-import { User, ChevronRight } from "lucide-react";
+import { User, UserRound, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Patient {
@@ -32,8 +32,16 @@ export function PatientResultsList({ patients, onBookAppointment }: PatientResul
             className="px-6 py-4 flex items-center justify-between hover:bg-muted/20 transition-colors"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-5 h-5 text-primary" />
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                patient.gender.toLowerCase().startsWith('f') 
+                  ? 'bg-pink-500' 
+                  : 'bg-primary'
+              }`}>
+                {patient.gender.toLowerCase().startsWith('f') ? (
+                  <UserRound className="w-5 h-5 text-primary-foreground" />
+                ) : (
+                  <User className="w-5 h-5 text-primary-foreground" />
+                )}
               </div>
               <div>
                 <div className="font-medium text-foreground">{patient.name}</div>

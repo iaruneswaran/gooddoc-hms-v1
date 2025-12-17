@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CalendarWidget } from "@/components/CalendarWidget";
-import { User, Phone, Mail, Search } from "lucide-react";
+import { User, UserRound, Phone, Mail, Search } from "lucide-react";
 import { mockAppointments } from "@/data/patient360.mock";
 import { Appointment } from "@/types/patient360";
 import {
@@ -99,8 +99,16 @@ export default function OutpatientAppointments() {
         >
           {/* Patient Info */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-primary" />
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+              appointment.sex?.toLowerCase().startsWith('f') 
+                ? 'bg-pink-500' 
+                : 'bg-primary'
+            }`}>
+              {appointment.sex?.toLowerCase().startsWith('f') ? (
+                <UserRound className="w-5 h-5 text-primary-foreground" />
+              ) : (
+                <User className="w-5 h-5 text-primary-foreground" />
+              )}
             </div>
             <div className="min-w-0">
               <div className="text-sm font-medium text-foreground truncate">
