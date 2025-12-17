@@ -216,7 +216,17 @@ export default function Inbox() {
           </div>
 
           {/* Department */}
-          <div className="text-sm text-foreground min-w-0 truncate">
+          <div 
+            className="text-sm text-foreground min-w-0 truncate hover:text-primary hover:underline cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              const dept = isDiag ? appointment.performingDepartment : appointment.department;
+              if (dept) {
+                const deptId = dept.id.toLowerCase().replace('dept-', '').replace(/\s+/g, '-');
+                navigate(`/departments/${deptId}`);
+              }
+            }}
+          >
             {getDeptDisplay(appointment)}
           </div>
 

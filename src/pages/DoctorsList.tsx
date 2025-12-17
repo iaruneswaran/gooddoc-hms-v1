@@ -410,7 +410,16 @@ export default function DoctorsList() {
                   </div>
 
                   <div>
-                    <div className="text-sm font-medium text-foreground">{doctor.department}</div>
+                    <div 
+                      className="text-sm font-medium text-foreground hover:text-primary hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const deptId = Object.entries(DEPARTMENT_MAP).find(([, name]) => name === doctor.department)?.[0] || doctor.department.toLowerCase().replace(/\s+/g, '-');
+                        navigate(`/departments/${deptId}`);
+                      }}
+                    >
+                      {doctor.department}
+                    </div>
                     <div className="text-xs text-muted-foreground">{doctor.specialty}</div>
                   </div>
 
