@@ -482,7 +482,7 @@ const BookAppointment = () => {
                   navigate("/registration");
                 }
               }}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">
@@ -498,12 +498,6 @@ const BookAppointment = () => {
           </div>
 
           <div className="max-w-[1600px] mx-auto">
-            {isSingleAppointmentMode ? (
-              <h2 className="text-lg font-semibold text-primary mb-4">Schedule Appointment</h2>
-            ) : (
-              <h2 className="text-lg font-semibold text-primary mb-4">Book Appointments</h2>
-            )}
-            
             {/* Appointment Type Buttons - Hide in single-appointment mode */}
             {!isSingleAppointmentMode && (
               <div className="mb-8">
