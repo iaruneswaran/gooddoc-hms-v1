@@ -112,7 +112,7 @@ const Payment = () => {
               onClick={() => navigate("/book-appointment", { 
                 state: { fromPatientInsights, patientId } 
               })}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">Appointment</span>
@@ -120,11 +120,10 @@ const Payment = () => {
 
             <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
             
-            <div className="w-[120px]" />
+            <div className="w-0" />
           </div>
 
           <div className="max-w-[1600px] mx-auto">
-            <h2 className="text-lg font-semibold text-primary mb-6">Payment</h2>
             
             <div className="flex flex-col lg:flex-row gap-6">
               <div className="flex-1 space-y-4">
