@@ -1,4 +1,4 @@
-import { LayoutDashboard, CalendarCheck, Calendar, Stethoscope, Activity, Users, BriefcaseMedical, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, CalendarCheck, Stethoscope, Activity, Users, BriefcaseMedical, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -9,7 +9,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/" },
   { icon: CalendarCheck, label: "Schedule Request", href: "/inbox", badge: 12 },
-  { icon: Calendar, label: "Appointments", href: "/appointments" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
   { icon: BriefcaseMedical, label: "Doctors", href: "/doctors" },
