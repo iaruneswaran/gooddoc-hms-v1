@@ -44,15 +44,11 @@ const IPPatients = () => {
     },
     { key: "visitId", label: "Visit ID" },
     { key: "admitDateTime", label: "Admit Date/Time", sortable: true },
-    { key: "ward", label: "Ward", sortable: true },
-    { key: "room", label: "Room" },
-    { key: "bed", label: "Bed" },
-    {
-      key: "bedClass",
-      label: "Bed Class",
-      render: (row) => (
-        <Badge className={bedClassStyles[row.bedClass]}>{row.bedClass}</Badge>
-      ),
+    { 
+      key: "ward", 
+      label: "Ward/Bed", 
+      sortable: true,
+      render: (row) => <span>{row.ward} {row.bed}</span>
     },
     { key: "attendingDoctor", label: "Attending Doctor", sortable: true },
     { key: "primaryDiagnosis", label: "Primary Diagnosis" },
