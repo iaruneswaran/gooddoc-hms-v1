@@ -208,19 +208,8 @@ export function ListPageLayout<T>({
 
           {/* Controls */}
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3 flex-1">
-              {/* Search */}
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder={searchPlaceholder}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Filters */}
+            {/* Filters - Left Side */}
+            <div className="flex items-center gap-3">
               {filters.map((filter) => (
                 <Select
                   key={filter.key}
@@ -244,22 +233,15 @@ export function ListPageLayout<T>({
               ))}
             </div>
 
-            {/* View Toggle & Sort */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant={viewMode === "table" ? "secondary" : "ghost"}
-                size="icon"
-                onClick={() => setViewMode("table")}
-              >
-                <TableIcon className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === "compact" ? "secondary" : "ghost"}
-                size="icon"
-                onClick={() => setViewMode("compact")}
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </Button>
+            {/* Search - Right Side */}
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder={searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
           </div>
 
