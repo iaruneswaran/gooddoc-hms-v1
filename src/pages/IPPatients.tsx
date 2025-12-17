@@ -20,18 +20,15 @@ const IPPatients = () => {
   let data = ipPatients;
   let displayCount = ipPatients.length;
   let pageTitle = "IP Patients";
-  let pageSubtitle = "Inpatient records • Default sort: Admit Date/Time DESC";
 
   if (admittedToday === "true") {
     data = newAdmissions;
     displayCount = newAdmissions.length;
     pageTitle = "New Admissions";
-    pageSubtitle = "Patients admitted today • Default sort: Admit Date/Time DESC";
   } else if (erCase === "true") {
     data = erCasesToday;
     displayCount = erCasesToday.length;
     pageTitle = "Emergency Case";
-    pageSubtitle = "ER cases admitted today • Default sort: Admit Date/Time DESC";
   }
 
   const columns: Column<IPPatientRecord>[] = [
@@ -127,7 +124,6 @@ const IPPatients = () => {
     <ListPageLayout
       title={pageTitle}
       count={displayCount}
-      subtitle={pageSubtitle}
       breadcrumbs={["Overview", pageTitle]}
       columns={columns}
       data={data}

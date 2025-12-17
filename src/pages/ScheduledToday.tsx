@@ -150,7 +150,6 @@ const AppointmentRequests = () => {
     <ListPageLayout
       title="Appointment Requests"
       count={appointmentRequests.length}
-      subtitle="Pending appointment requests • Default sort: Created At DESC"
       breadcrumbs={["Overview", "Appointment Requests"]}
       columns={columns}
       data={appointmentRequests}

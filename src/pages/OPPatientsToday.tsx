@@ -135,7 +135,6 @@ const OPPatientsToday = () => {
     <ListPageLayout
       title="OP Patients"
       count={displayCount}
-      subtitle="Outpatient visits for today • Default sort: Appointment Time ASC"
       breadcrumbs={["Overview", "OP Patients"]}
       columns={columns}
       data={data}

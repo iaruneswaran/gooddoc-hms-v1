@@ -247,7 +247,6 @@ const TransfersList = () => {
     <ListPageLayout
       title="Transfers"
       count={transfers.length}
-      subtitle="Patient transfer records for today • Default sort: Status priority, then Stat first"
       breadcrumbs={["Overview", "Transfers"]}
       columns={columns}
       data={sortedTransfers}

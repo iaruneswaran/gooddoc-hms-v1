@@ -113,7 +113,6 @@ const LowStock = () => {
     <ListPageLayout
       title="Low Stock"
       count={lowStockItems.length}
-      subtitle="Inventory items below reorder point • Default sort: Days of Stock Left ASC"
       breadcrumbs={["Overview", "Low Stock"]}
       columns={columns}
       data={lowStockItems}

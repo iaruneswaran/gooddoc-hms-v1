@@ -106,7 +106,6 @@ const SurgeriesToday = () => {
     <ListPageLayout
       title="Surgeries"
       count={surgeries.length}
-      subtitle="Operating room schedule for today • Default sort: Start Time ASC (In-Progress pinned)"
       breadcrumbs={["Overview", "Surgeries"]}
       columns={columns}
       data={sortedSurgeries}
