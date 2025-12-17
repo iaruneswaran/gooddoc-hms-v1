@@ -4,11 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { labOrders, LabOrderRecord } from "@/data/overview.mock";
 
-const priorityStyles: Record<LabOrderRecord["priority"], string> = {
-  "Routine": "bg-gray-100 text-gray-700",
-  "Stat": "bg-red-100 text-red-700",
-};
-
 const statusStyles: Record<LabOrderRecord["status"], string> = {
   "Ordered": "bg-gray-100 text-gray-700",
   "Collected": "bg-blue-100 text-blue-700",
@@ -32,14 +27,6 @@ const LabOrdersToday = () => {
     { key: "location", label: "Location" },
     { key: "tests", label: "Tests" },
     {
-      key: "priority",
-      label: "Priority",
-      sortable: true,
-      render: (row) => (
-        <Badge className={priorityStyles[row.priority]}>{row.priority}</Badge>
-      ),
-    },
-    {
       key: "status",
       label: "Status",
       sortable: true,
@@ -62,15 +49,6 @@ const LabOrdersToday = () => {
   ];
 
   const filters: Filter[] = [
-    {
-      key: "priority",
-      label: "Priority",
-      value: "all",
-      options: [
-        { value: "Stat", label: "Stat" },
-        { value: "Routine", label: "Routine" },
-      ],
-    },
     {
       key: "status",
       label: "Status",
