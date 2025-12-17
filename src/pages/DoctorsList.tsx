@@ -424,26 +424,32 @@ export default function DoctorsList() {
             </div>
           </Card>
 
-          {/* Tabs */}
+          {/* Tabs with Filters */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 gap-6">
-              <TabsTrigger 
-                value="doctors" 
-                className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
-              >
-                Doctors
-              </TabsTrigger>
-              <TabsTrigger 
-                value="departments"
-                className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
-              >
-                Departments
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-end justify-between border-b border-border">
+              <TabsList className="bg-transparent rounded-none h-auto p-0 gap-6">
+                <TabsTrigger 
+                  value="doctors" 
+                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+                >
+                  Doctors
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="departments"
+                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+                >
+                  Departments
+                </TabsTrigger>
+              </TabsList>
+              
+              {activeTab === "doctors" && (
+                <div className="flex items-center gap-3 pb-3">
+                  <DoctorFilters search={search} onSearchChange={setSearch} />
+                </div>
+              )}
+            </div>
 
             <TabsContent value="doctors" className="mt-6">
-              {/* Filters with Search */}
-              <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
           {loading ? (
