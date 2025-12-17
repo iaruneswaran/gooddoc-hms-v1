@@ -36,9 +36,31 @@ const AppointmentRequests = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.requestId} />
     },
     { key: "contact", label: "Contact" },
-    { key: "preferredDateTime", label: "Preferred Date/Time", sortable: true },
-    { key: "department", label: "Department", sortable: true },
-    { key: "preferredProvider", label: "Preferred Provider", render: (row) => row.preferredProvider || "Any" },
+    { 
+      key: "preferredDateTime", 
+      label: "Preferred Date/Time", 
+      sortable: true,
+      render: (row) => {
+        if (!row.preferredDateTime) return "—";
+        const [date, time] = row.preferredDateTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
+    { 
+      key: "preferredProvider", 
+      label: "Preferred Provider", 
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.preferredProvider || "Any"}</span>
+          <span className="text-muted-foreground text-xs">{row.department}</span>
+        </div>
+      )
+    },
     { key: "reason", label: "Reason" },
     {
       key: "urgency",
