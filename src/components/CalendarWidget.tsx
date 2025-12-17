@@ -63,7 +63,7 @@ export function CalendarWidget() {
             key={index}
             onClick={() => handleDayClick(day.date)}
             className={cn(
-              "flex flex-col items-center gap-0.5 px-2 py-1 rounded-md transition-all",
+              "flex flex-col items-center gap-0.5 w-9 py-1 rounded-md transition-all",
               isSameDay(day.date, selectedDate)
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "hover:bg-background text-foreground"
