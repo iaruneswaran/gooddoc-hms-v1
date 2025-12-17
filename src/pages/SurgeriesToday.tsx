@@ -76,7 +76,7 @@ const SurgeriesToday = () => {
 
   const rowActions: RowAction<SurgeryRecord>[] = [
     { label: "View Case Details", onClick: (row) => console.log("View case", row.caseId) },
-    { label: "Patient Chart", onClick: (row) => navigate(`/patient-insights/${row.patient.replace(/\s+/g, "-").toLowerCase()}`) },
+    { label: "Patient Chart", onClick: (row) => navigate(`/patient-insights/${row.caseId}?from=surgeries`) },
     { label: "Update Status", onClick: (row) => console.log("Update status", row.caseId) },
   ];
 
@@ -100,6 +100,7 @@ const SurgeriesToday = () => {
       emptyMessage="No surgeries scheduled for today."
       searchPlaceholder="Search by Case ID, patient, procedure, surgeon..."
       getRowId={(row) => row.caseId}
+      onRowClick={(row) => navigate(`/patient-insights/${row.caseId}?from=surgeries`)}
     />
   );
 };

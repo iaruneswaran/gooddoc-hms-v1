@@ -92,8 +92,8 @@ const OPPatientsToday = () => {
   ];
 
   const rowActions: RowAction<OPPatientRecord>[] = [
-    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
-    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360`) },
+    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
+    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360?from=op-patients`) },
     { label: "Book Follow-up", onClick: (row) => navigate(`/book-appointment?patientId=${row.mrn}`) },
   ];
 
@@ -111,7 +111,7 @@ const OPPatientsToday = () => {
       emptyMessage="No OP patients for today."
       searchPlaceholder="Search by MRN, name, Visit ID..."
       getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`)}
     />
   );
 };

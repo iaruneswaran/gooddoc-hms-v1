@@ -104,7 +104,7 @@ const EmergencyCases = () => {
   ];
 
   const rowActions: RowAction<ERCaseRecord>[] = [
-    { label: "Open Case", onClick: (row) => navigate(`/patient-insights/${row.mrn}`) },
+    { label: "Open Case", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=emergency`) },
     { label: "Update Triage", onClick: (row) => console.log("Update triage", row.mrn) },
     { label: "Assign Physician", onClick: (row) => console.log("Assign", row.mrn) },
   ];
@@ -128,7 +128,7 @@ const EmergencyCases = () => {
       emptyMessage="No active emergency cases."
       searchPlaceholder="Search by MRN, patient name, chief complaint..."
       getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}`)}
+      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=emergency`)}
     />
   );
 };

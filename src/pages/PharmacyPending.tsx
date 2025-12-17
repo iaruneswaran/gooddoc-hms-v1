@@ -146,6 +146,7 @@ const MedicineOrdersToday = () => {
       emptyMessage="No medicine orders for today."
       searchPlaceholder="Search by Order ID, patient name, medication..."
       getRowId={(row) => row.orderId}
+      onRowClick={(row) => navigate(`/patient-insights/${row.orderId}?from=pharmacy`)}
     />
   );
 };
