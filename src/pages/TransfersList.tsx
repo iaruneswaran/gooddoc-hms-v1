@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { transfers, TransferRecord } from "@/data/overview.mock";
 
 const priorityStyles: Record<TransferRecord["priority"], string> = {
@@ -66,19 +67,11 @@ const TransfersList = () => {
 
   const columns: Column<TransferRecord>[] = [
     { 
-      key: "transferId", 
-      label: "Transfer ID", 
+      key: "patient", 
+      label: "Patient Info", 
       sortable: true,
-      render: (row) => <span className="font-mono text-xs">GDID {row.transferId.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span>
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
-    { 
-      key: "mrn", 
-      label: "MRN", 
-      sortable: true,
-      render: (row) => <span className="font-mono text-xs">{row.mrn.slice(-6)}</span>
-    },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
     {
       key: "priority",
       label: "Priority",

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { appointmentRequests, AppointmentRequestRecord } from "@/data/overview.mock";
 
 const urgencyStyles: Record<AppointmentRequestRecord["urgency"], string> = {
@@ -27,8 +28,12 @@ const AppointmentRequests = () => {
   const navigate = useNavigate();
 
   const columns: Column<AppointmentRequestRecord>[] = [
-    { key: "requestId", label: "ID", sortable: true, render: (row) => <span>GDID {row.requestId.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
-    { key: "patient", label: "Patient", sortable: true },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.requestId} />
+    },
     { key: "contact", label: "Contact" },
     { key: "preferredDateTime", label: "Preferred Date/Time", sortable: true },
     { key: "department", label: "Department", sortable: true },

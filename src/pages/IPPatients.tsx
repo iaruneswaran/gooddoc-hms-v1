@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { ipPatients, newAdmissions, erCasesToday, IPPatientRecord } from "@/data/overview.mock";
 
 const bedClassStyles: Record<IPPatientRecord["bedClass"], string> = {
@@ -34,9 +35,12 @@ const IPPatients = () => {
   }
 
   const columns: Column<IPPatientRecord>[] = [
-    { key: "mrn", label: "ID", sortable: true, render: (row) => <span>GDID {row.mrn.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
+    },
     { key: "admitDateTime", label: "Admit Date/Time", sortable: true },
     { key: "ward", label: "Ward", sortable: true },
     { key: "room", label: "Room" },

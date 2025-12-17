@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { PatientCell } from "@/components/overview/PatientCell";
 import { labOrders, LabOrderRecord } from "@/data/overview.mock";
 
 const priorityStyles: Record<LabOrderRecord["priority"], string> = {
@@ -20,9 +21,12 @@ const LabOrdersToday = () => {
   const navigate = useNavigate();
 
   const columns: Column<LabOrderRecord>[] = [
-    { key: "orderId", label: "Order ID", sortable: true, render: (row) => <span>GDID {row.orderId.replace(/\D/g, '').slice(-3).padStart(3, '0')}</span> },
-    { key: "patient", label: "Patient", sortable: true },
-    { key: "ageSex", label: "Age/Sex" },
+    { 
+      key: "patient", 
+      label: "Patient Info", 
+      sortable: true,
+      render: (row) => <PatientCell name={row.patient} gdid={row.orderId} ageSex={row.ageSex} />
+    },
     { key: "location", label: "Location" },
     { key: "tests", label: "Tests" },
     {
