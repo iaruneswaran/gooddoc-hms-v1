@@ -7,9 +7,9 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Overview", href: "/overview" },
+  { icon: LayoutDashboard, label: "Overview", href: "/" },
   { icon: CalendarCheck, label: "Schedule Request", href: "/inbox", badge: 12 },
-  { icon: Calendar, label: "Appointments", href: "/" },
+  { icon: Calendar, label: "Appointments", href: "/appointments" },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
   { icon: BriefcaseMedical, label: "Doctors", href: "/doctors" },
