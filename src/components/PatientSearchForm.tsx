@@ -47,11 +47,11 @@ export function PatientSearchForm({ onSearch }: PatientSearchFormProps) {
 
   return (
     <div className="bg-card rounded-lg border border-border p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-primary">Search Patient</h2>
-      
-      <div className="space-y-4">
-        <div>
-          <Label className="text-sm text-foreground mb-3 block">Search by</Label>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-primary">Search Patient</h2>
+        
+        <div className="flex items-center gap-4">
+          <Label className="text-sm text-muted-foreground">Search by</Label>
           <RadioGroup value={searchType} onValueChange={setSearchType} className="flex gap-6">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="mobile" id="mobile" />
@@ -73,6 +73,9 @@ export function PatientSearchForm({ onSearch }: PatientSearchFormProps) {
             </div>
           </RadioGroup>
         </div>
+      </div>
+      
+      <div className="space-y-4">
 
         <div className="flex gap-4">
           <div className="flex-1">
