@@ -25,8 +25,31 @@ const SurgeriesToday = () => {
     { key: "visitId", label: "Visit ID" },
     { key: "procedure", label: "Procedure" },
     { key: "surgeon", label: "Surgeon", sortable: true },
-    { key: "orRoom", label: "OR Room" },
-    { key: "startTime", label: "Start Time", sortable: true },
+    { 
+      key: "orRoom", 
+      label: "Room/Bed",
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.orRoom}</span>
+          <span className="text-muted-foreground text-xs">Bed 1</span>
+        </div>
+      )
+    },
+    { 
+      key: "startTime", 
+      label: "Start Time", 
+      sortable: true,
+      render: (row) => {
+        if (!row.startTime) return "—";
+        const [date, time] = row.startTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
     { key: "estimatedDuration", label: "Est. Duration" },
     {
       key: "status",
@@ -38,7 +61,6 @@ const SurgeriesToday = () => {
       ),
     },
     { key: "anesthesiaType", label: "Anesthesia Type" },
-    { key: "asaClass", label: "ASA Class" },
     {
       key: "postOpBedReserved",
       label: "Post-op Bed Reserved",
