@@ -73,7 +73,6 @@ const LabOrdersToday = () => {
     <ListPageLayout
       title="Lab Orders Today"
       count={labOrders.length}
-      subtitle="Laboratory orders for today • Default sort: Priority (Stat first)"
       breadcrumbs={["Overview", "Lab Orders Today"]}
       columns={columns}
       data={labOrders}

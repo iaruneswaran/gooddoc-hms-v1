@@ -148,7 +148,6 @@ const DischargedToday = () => {
     <ListPageLayout
       title={pageTitle}
       count={displayCount}
-      subtitle="Discharge records for today • Default sort: Discharge Date/Time DESC"
       breadcrumbs={["Overview", pageTitle]}
       columns={displayColumns}
       data={data}

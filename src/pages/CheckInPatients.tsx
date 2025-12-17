@@ -129,7 +129,6 @@ const BedsAvailability = () => {
     <ListPageLayout
       title={pageTitle}
       count={displayCount}
-      subtitle="Bed inventory and availability • Default sort: Status (Available first)"
       breadcrumbs={["Overview", pageTitle]}
       columns={columns}
       data={data}

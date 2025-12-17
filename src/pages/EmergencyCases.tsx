@@ -132,7 +132,6 @@ const EmergencyCases = () => {
     <ListPageLayout
       title="Emergency Cases"
       count={emergencyCases.length}
-      subtitle="Active ER cases • Default sort: Triage Level (highest acuity first)"
       breadcrumbs={["Overview", "Emergency Cases"]}
       columns={columns}
       data={sortedCases}

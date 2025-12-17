@@ -30,7 +30,6 @@ const DoctorsOnDuty = () => {
   let data = doctorsOnDuty;
   let displayCount = doctorsOnDuty.length;
   let pageTitle = "Doctors on Duty";
-  let pageSubtitle = "Active physicians on current shift • Default sort: Specialty ASC";
 
   // Define columns based on doctor type
   const baseColumns: Column<DoctorOnDutyRecord>[] = [
@@ -44,7 +43,6 @@ const DoctorsOnDuty = () => {
     data = opDoctors;
     displayCount = opDoctors.length;
     pageTitle = "OP Doctors";
-    pageSubtitle = "Doctors currently scheduled/on duty for OPD clinics • Default sort: Specialty ASC";
     
     specificColumns = [
       { key: "department", label: "Department/Clinic", sortable: true },
@@ -74,7 +72,6 @@ const DoctorsOnDuty = () => {
     data = ipDoctors;
     displayCount = ipDoctors.length;
     pageTitle = "IP Doctors";
-    pageSubtitle = "Doctors covering inpatient units/ICU/wards • Default sort: Primary Units (ICU first)";
     
     specificColumns = [
       {
@@ -103,7 +100,6 @@ const DoctorsOnDuty = () => {
     data = otherDoctors;
     displayCount = otherDoctors.length;
     pageTitle = "Emergency Doctors";
-    pageSubtitle = "Emergency doctors on duty • Default sort: Specialty ASC";
     
     specificColumns = [
       { key: "context", label: "Context/Assignment", render: (row) => row.context || "—" },
@@ -190,7 +186,6 @@ const DoctorsOnDuty = () => {
     <ListPageLayout
       title={pageTitle}
       count={displayCount}
-      subtitle={pageSubtitle}
       breadcrumbs={["Overview", pageTitle]}
       columns={columns}
       data={data}

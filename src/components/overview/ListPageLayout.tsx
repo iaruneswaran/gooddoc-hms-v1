@@ -74,7 +74,7 @@ export interface UrlParamFilter {
 interface ListPageLayoutProps<T> {
   title: string;
   count: number;
-  subtitle: string;
+  subtitle?: string;
   breadcrumbs: string[];
   columns: Column<T>[];
   data: T[];
