@@ -115,15 +115,13 @@ const Registration = () => {
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-primary">Patient Registration</h2>
-              <span className="text-sm font-medium text-primary">#{gdid}</span>
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Patient Information */}
               <div className="bg-card rounded-lg border border-border p-6 space-y-6">
-                <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-semibold text-foreground">Patient Information</h3>
+                  <span className="text-sm font-medium text-primary">#{gdid}</span>
+                </div>
                 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
