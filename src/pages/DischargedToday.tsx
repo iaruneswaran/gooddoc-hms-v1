@@ -41,10 +41,31 @@ const DischargedToday = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "visitId", label: "Visit ID" },
-    { key: "ward", label: "Ward" },
-    { key: "room", label: "Room" },
-    { key: "bed", label: "Bed" },
-    { key: "dischargeDateTime", label: "Discharge Date/Time", sortable: true, render: (row) => row.dischargeDateTime || "—" },
+    { 
+      key: "ward", 
+      label: "Ward/Bed",
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.ward}</span>
+          <span className="text-muted-foreground text-xs">{row.bed}</span>
+        </div>
+      )
+    },
+    { 
+      key: "dischargeDateTime", 
+      label: "Discharge Date/Time", 
+      sortable: true, 
+      render: (row) => {
+        if (!row.dischargeDateTime) return "—";
+        const [date, time] = row.dischargeDateTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
     {
       key: "dischargeType",
       label: "Discharge Type",
@@ -69,7 +90,6 @@ const DischargedToday = () => {
         <Badge className="bg-amber-100 text-amber-700">Not Ready</Badge>
       ),
     },
-    { key: "followUpAppointment", label: "Follow-up", render: (row) => row.followUpAppointment || "—" },
   ];
 
   const pendingColumns: Column<IPPatientRecord>[] = [
