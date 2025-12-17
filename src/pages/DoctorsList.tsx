@@ -426,8 +426,8 @@ export default function DoctorsList() {
 
           {/* Tabs with Filters */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-            <div className="flex items-end justify-between border-b border-border">
-              <TabsList className="bg-transparent rounded-none h-auto p-0 gap-6">
+            <div className="flex items-end justify-between">
+              <TabsList className="bg-transparent rounded-none h-auto p-0 gap-6 border-b border-border">
                 <TabsTrigger 
                   value="doctors" 
                   className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
@@ -436,7 +436,7 @@ export default function DoctorsList() {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="departments"
-                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 pr-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
                 >
                   Departments
                 </TabsTrigger>
