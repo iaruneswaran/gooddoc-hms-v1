@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle } from "lucide-react";
+import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,12 +30,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { DoctorFilters } from "@/components/doctors/DoctorFilters";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctorAvailability } from "@/hooks/useDoctorAvailability";
 import { format, parseISO, addDays } from "date-fns";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface DoctorRow {
   id: string;
@@ -73,6 +74,7 @@ const DEPARTMENT_MAP: Record<string, string> = {
   orthopedics: "Orthopedics",
   neurology: "Neurology",
   general: "General Medicine",
+  pediatrics: "Pediatrics",
 };
 
 const SPECIALTY_MAP: Record<string, string> = {
@@ -81,6 +83,70 @@ const SPECIALTY_MAP: Record<string, string> = {
   joint: "Joint Replacement",
   spine: "Spine Surgery",
 };
+
+// Departments data for the Departments tab
+const DEPARTMENTS = [
+  {
+    id: "cardiology",
+    name: "Cardiology",
+    description: "Heart and cardiovascular system disorders",
+    headDoctor: "Dr. Priya Sharma",
+    doctorsCount: 8,
+    outpatientCount: 145,
+    inpatientCount: 23,
+    avgWaitTime: "18 min",
+  },
+  {
+    id: "orthopedics",
+    name: "Orthopedics",
+    description: "Musculoskeletal system including bones and joints",
+    headDoctor: "Dr. Aisha Khan",
+    doctorsCount: 6,
+    outpatientCount: 98,
+    inpatientCount: 15,
+    avgWaitTime: "22 min",
+  },
+  {
+    id: "neurology",
+    name: "Neurology",
+    description: "Brain, spinal cord, and nervous system disorders",
+    headDoctor: "Dr. Meera Reddy",
+    doctorsCount: 5,
+    outpatientCount: 67,
+    inpatientCount: 8,
+    avgWaitTime: "25 min",
+  },
+  {
+    id: "general-medicine",
+    name: "General Medicine",
+    description: "Primary care and general health issues",
+    headDoctor: "Dr. Vikram Singh",
+    doctorsCount: 12,
+    outpatientCount: 234,
+    inpatientCount: 45,
+    avgWaitTime: "15 min",
+  },
+  {
+    id: "endocrinology",
+    name: "Endocrinology",
+    description: "Hormonal disorders including diabetes and thyroid",
+    headDoctor: "Dr. Rahul Mehta",
+    doctorsCount: 4,
+    outpatientCount: 89,
+    inpatientCount: 5,
+    avgWaitTime: "20 min",
+  },
+  {
+    id: "pediatrics",
+    name: "Pediatrics",
+    description: "Medical care for infants, children, and adolescents",
+    headDoctor: "Dr. Kavitha Menon",
+    doctorsCount: 7,
+    outpatientCount: 156,
+    inpatientCount: 18,
+    avgWaitTime: "12 min",
+  },
+];
 
 export default function DoctorsList() {
   const navigate = useNavigate();
@@ -332,6 +398,8 @@ export default function DoctorsList() {
     }
   };
 
+  const [activeTab, setActiveTab] = useState("doctors");
+
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AppSidebar />
@@ -356,8 +424,16 @@ export default function DoctorsList() {
             </div>
           </Card>
 
-          {/* Filters with Search */}
-          <DoctorFilters search={search} onSearchChange={setSearch} />
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+            <TabsList>
+              <TabsTrigger value="doctors">Doctors</TabsTrigger>
+              <TabsTrigger value="departments">Departments</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="doctors" className="mt-6">
+              {/* Filters with Search */}
+              <DoctorFilters search={search} onSearchChange={setSearch} />
 
           {/* Table */}
           {loading ? (
@@ -496,6 +572,63 @@ export default function DoctorsList() {
               ))}
             </div>
           )}
+            </TabsContent>
+
+            <TabsContent value="departments" className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {DEPARTMENTS.map((dept) => (
+                  <Card 
+                    key={dept.id}
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => navigate(`/departments/${dept.id}`)}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="text-base font-semibold text-foreground">{dept.name}</h3>
+                          <p className="text-sm text-muted-foreground mt-1">{dept.description}</p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                      </div>
+                      
+                      <p className="text-xs text-muted-foreground mb-4">Head: {dept.headDoctor}</p>
+                      
+                      <div className="grid grid-cols-4 gap-2 pt-4 border-t border-border">
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <Users className="w-3 h-3 text-muted-foreground" />
+                          </div>
+                          <div className="text-lg font-semibold text-foreground">{dept.doctorsCount}</div>
+                          <div className="text-xs text-muted-foreground">Doctors</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <UserCheck className="w-3 h-3 text-muted-foreground" />
+                          </div>
+                          <div className="text-lg font-semibold text-foreground">{dept.outpatientCount}</div>
+                          <div className="text-xs text-muted-foreground">OP</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <UserCheck className="w-3 h-3 text-muted-foreground" />
+                          </div>
+                          <div className="text-lg font-semibold text-foreground">{dept.inpatientCount}</div>
+                          <div className="text-xs text-muted-foreground">IP</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <Clock className="w-3 h-3 text-muted-foreground" />
+                          </div>
+                          <div className="text-lg font-semibold text-foreground">{dept.avgWaitTime.replace(' min', '')}</div>
+                          <div className="text-xs text-muted-foreground">Wait</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </main>
       </PageContent>
 
