@@ -12,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { generateVisitIdWithSequence } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -110,7 +109,7 @@ export default function RecordVitals() {
       if (patient) {
         setSelectedPatient({
           ...patient,
-          visitId: visitId || generateVisitIdWithSequence(new Date(), Math.floor(Math.random() * 999) + 1),
+          visitId: visitId || `VST-${Math.floor(100000 + Math.random() * 900000)}`,
         });
       }
     }
@@ -269,7 +268,7 @@ export default function RecordVitals() {
                             onSelect={() => {
                               setSelectedPatient({
                                 ...patient,
-                                visitId: generateVisitIdWithSequence(new Date(), Math.floor(Math.random() * 999) + 1),
+                                visitId: `VST-${Math.floor(100000 + Math.random() * 900000)}`,
                               });
                               setOpen(false);
                             }}

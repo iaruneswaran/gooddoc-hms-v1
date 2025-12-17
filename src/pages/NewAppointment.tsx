@@ -8,7 +8,6 @@ import { BookingSteps } from "@/components/BookingSteps";
 import { PatientSearchForm } from "@/components/PatientSearchForm";
 import { PatientResultsList } from "@/components/PatientResultsList";
 import { Button } from "@/components/ui/button";
-import { generateVisitIdWithSequence } from "@/lib/utils";
 
 // Mock data
 const mockPatients = [
@@ -52,8 +51,8 @@ const NewAppointment = () => {
 
   const handleBookAppointment = (patientId: string) => {
     const patient = mockPatients.find(p => p.id === patientId);
-    // Generate visit ID in format VDDMMYY-XXX
-    const visitId = generateVisitIdWithSequence(new Date(), Math.floor(Math.random() * 999) + 1);
+    // Generate visit ID for new appointments (not from patient insights)
+    const visitId = `VST-${Math.floor(100000 + Math.random() * 900000)}`;
     navigate("/book-appointment", { state: { patient, visitId, fromSearch, patientSearchQuery } });
   };
 

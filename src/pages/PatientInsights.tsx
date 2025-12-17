@@ -60,7 +60,7 @@ const PatientInsights = () => {
   const visits: Visit[] = [
     {
       id: "visit-1",
-      visitId: "V050825-001",
+      visitId: "VST-102345",
       datetime: new Date(2025, 7, 5, 17, 30), // Aug 05, 2025, 5:30 PM
       type: "Consultation",
       status: "Completed",
@@ -71,7 +71,7 @@ const PatientInsights = () => {
           type: "Consultation",
           datetime: "05 Aug 2025 | 05:30 PM",
           doctor: "Dr. Meera Nair – Cardiology",
-          visitId: "V050825-001",
+          visitId: "VST-102345",
           provider: "Dr. Sarah Khan",
           department: "Internal Medicine",
           opdClinic: "OPD Clinic 3",
@@ -87,7 +87,7 @@ const PatientInsights = () => {
     },
     {
       id: "visit-2",
-      visitId: "V050825-002",
+      visitId: "VST-102346",
       datetime: new Date(2025, 7, 5, 14, 15), // Aug 05, 2025, 2:15 PM
       type: "Laboratory",
       status: "Completed",
@@ -98,7 +98,7 @@ const PatientInsights = () => {
           type: "Laboratory",
           datetime: "05 Aug 2025 | 02:15 PM",
           doctor: "Dr. Ravi Menon – Pathology",
-          visitId: "V050825-002",
+          visitId: "VST-102346",
           provider: "Central Diagnostic Lab",
           department: "Laboratory Services",
           testsOrdered: [
@@ -111,7 +111,7 @@ const PatientInsights = () => {
     },
     {
       id: "visit-3",
-      visitId: "V050825-003",
+      visitId: "VST-102912",
       datetime: new Date(2025, 7, 5, 15, 0), // Aug 05, 2025, 3:00 PM
       type: "Radiology",
       status: "Completed",
@@ -122,7 +122,7 @@ const PatientInsights = () => {
           type: "Radiology",
           datetime: "05 Aug 2025 | 03:00 PM",
           doctor: "Dr. Anjali Verma – Radiology",
-          visitId: "V050825-003",
+          visitId: "VST-102912",
           provider: "Imaging Suite 2",
           department: "Radiology",
           investigations: [
@@ -135,7 +135,7 @@ const PatientInsights = () => {
     },
     {
       id: "visit-4",
-      visitId: "V070825-001",
+      visitId: "VST-205431",
       datetime: new Date(2025, 7, 7, 11, 0), // Aug 07, 2025, 11:00 AM
       type: "IPD Admission",
       status: "Active",
@@ -147,7 +147,7 @@ const PatientInsights = () => {
           type: "IPD Admission",
           datetime: "07 Aug 2025 | 11:00 AM",
           doctor: "Dr. Karthik Reddy – General Medicine",
-          admissionId: "V070825-001",
+          admissionId: "VST-205431",
           admittingDiagnosis: "Acute Gastroenteritis",
           roomType: "Private Room – 204",
           provider: "Inpatient Wing A",
@@ -158,7 +158,7 @@ const PatientInsights = () => {
           type: "Laboratory",
           datetime: "07 Aug 2025 | 01:00 PM",
           doctor: "Dr. Ravi Menon – Pathology",
-          visitId: "V070825-001",
+          visitId: "VST-205431",
           provider: "Central Diagnostic Lab",
           department: "Laboratory Services",
           testsOrdered: [
@@ -171,7 +171,7 @@ const PatientInsights = () => {
           type: "Radiology",
           datetime: "07 Aug 2025 | 02:30 PM",
           doctor: "Dr. Anjali Verma – Radiology",
-          visitId: "V070825-001",
+          visitId: "VST-205431",
           provider: "Imaging Suite 2",
           department: "Radiology",
           investigations: [

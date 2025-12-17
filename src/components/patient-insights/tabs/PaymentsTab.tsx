@@ -11,7 +11,7 @@ const allTransactions = [
   {
     id: "INV-2025-001",
     date: "05 Aug 2025",
-    visitId: "V050825-001",
+    visitId: "VST-102345",
     type: "Bill Payment",
     service: "Consultation",
     method: "Card",
@@ -21,7 +21,7 @@ const allTransactions = [
   {
     id: "INV-2025-002",
     date: "05 Aug 2025",
-    visitId: "V050825-002",
+    visitId: "VST-102346",
     type: "Bill Payment",
     service: "Laboratory",
     method: "UPI",
@@ -31,7 +31,7 @@ const allTransactions = [
   {
     id: "INV-2025-003",
     date: "05 Aug 2025",
-    visitId: "V050825-003",
+    visitId: "VST-102912",
     type: "Bill Payment",
     service: "Radiology",
     method: "Cash",
@@ -41,7 +41,7 @@ const allTransactions = [
   {
     id: "INV-2025-004",
     date: "07 Aug 2025",
-    visitId: "V070825-001",
+    visitId: "VST-205431",
     type: "Bill Payment",
     service: "IPD Admission",
     method: "Card",
@@ -51,7 +51,7 @@ const allTransactions = [
   {
     id: "INV-2025-005",
     date: "07 Aug 2025",
-    visitId: "V070825-002",
+    visitId: "VST-308972",
     type: "Bill Payment",
     service: "Day-Care",
     method: "Insurance",

@@ -325,7 +325,7 @@ const Payments = () => {
             <div>
               <h1 className="text-lg font-semibold text-foreground mb-2">Payments</h1>
               <span className="text-sm text-muted-foreground">
-                Active Visit: <span className="font-medium text-foreground">V070825-001</span>
+                Active Visit: <span className="font-medium text-foreground">VST-205431</span>
               </span>
             </div>
             <div className="flex gap-3">
