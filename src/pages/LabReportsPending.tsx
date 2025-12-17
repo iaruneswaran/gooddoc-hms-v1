@@ -28,6 +28,7 @@ const LabOrdersToday = () => {
       width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.orderId} ageSex={row.ageSex} />
     },
+    { key: "visitId", label: "Visit ID" },
     { key: "location", label: "Location" },
     { key: "tests", label: "Tests" },
     {
