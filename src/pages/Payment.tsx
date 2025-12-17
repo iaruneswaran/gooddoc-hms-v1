@@ -107,17 +107,21 @@ const Payment = () => {
         <AppHeader breadcrumbs={["Appointments", "Payment"]} />
         
         <main className="p-6">
-          <button
-            onClick={() => navigate("/book-appointment", { 
-              state: { fromPatientInsights, patientId } 
-            })}
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">Appointment</span>
-          </button>
+          <div className="flex items-center justify-between h-10 mb-12">
+            <button
+              onClick={() => navigate("/book-appointment", { 
+                state: { fromPatientInsights, patientId } 
+              })}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span className="font-semibold">Appointment</span>
+            </button>
 
-          <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
+            <BookingSteps currentStep="payment" hideSteps={fromPatientInsights ? ["search", "registration"] : []} />
+            
+            <div className="w-[120px]" />
+          </div>
 
           <div className="max-w-[1600px] mx-auto">
             <h2 className="text-lg font-semibold text-primary mb-6">Payment</h2>

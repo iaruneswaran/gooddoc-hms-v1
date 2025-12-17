@@ -467,31 +467,35 @@ const BookAppointment = () => {
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"] : (fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"])} />
         
         <main className="p-6 pb-32">
-          <button
-            onClick={() => {
-              if (fromSearch && patientSearchQuery) {
-                navigate(`/patients/search?q=${patientSearchQuery}`);
-              } else if (fromPatients) {
-                navigate("/patients");
-              } else if (isSingleAppointmentMode) {
-                navigate("/inbox");
-              } else if (fromPatientInsights) {
-                navigate(`/patient-insights/${patientId}`);
-              } else {
-                navigate("/registration");
-              }
-            }}
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">
-              {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
-            </span>
-          </button>
+          <div className="flex items-center justify-between h-10 mb-12">
+            <button
+              onClick={() => {
+                if (fromSearch && patientSearchQuery) {
+                  navigate(`/patients/search?q=${patientSearchQuery}`);
+                } else if (fromPatients) {
+                  navigate("/patients");
+                } else if (isSingleAppointmentMode) {
+                  navigate("/inbox");
+                } else if (fromPatientInsights) {
+                  navigate(`/patient-insights/${patientId}`);
+                } else {
+                  navigate("/registration");
+                }
+              }}
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span className="font-semibold">
+                {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
+              </span>
+            </button>
 
-          {!isSingleAppointmentMode && (
-            <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
-          )}
+            {!isSingleAppointmentMode && (
+              <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
+            )}
+            
+            <div className="w-[120px]" />
+          </div>
 
           <div className="max-w-[1600px] mx-auto">
             {isSingleAppointmentMode ? (
