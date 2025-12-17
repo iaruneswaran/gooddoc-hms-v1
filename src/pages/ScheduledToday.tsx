@@ -35,7 +35,16 @@ const AppointmentRequests = () => {
       width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.requestId} />
     },
-    { key: "contact", label: "Contact" },
+    { 
+      key: "contact", 
+      label: "Contact",
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.contact}</span>
+          <span className="text-muted-foreground text-xs">{row.email}</span>
+        </div>
+      )
+    },
     { 
       key: "preferredDateTime", 
       label: "Preferred Date/Time", 
