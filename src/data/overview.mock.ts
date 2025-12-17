@@ -1,6 +1,7 @@
 // Mock data for Overview list pages - Hospital Operations Dashboard
 
 import { format, subDays, subHours, subMinutes, addDays } from "date-fns";
+import { formatVisitId } from "@/utils/visitId";
 
 // ============== TYPE DEFINITIONS ==============
 
@@ -36,6 +37,7 @@ export interface IPPatientRecord {
   mrn: string;
   patient: string;
   ageSex: string;
+  visitId: string;
   admitDateTime: string;
   ward: string;
   room: string;
@@ -73,6 +75,7 @@ export interface ERCaseRecord {
   mrn: string;
   patient: string;
   ageSex: string;
+  visitId: string;
   triageLevel: 1 | 2 | 3 | 4 | 5;
   arrivalTime: string;
   modeOfArrival: "Ambulance" | "Walk-in" | "Transfer";
@@ -116,6 +119,7 @@ export interface TransferRecord {
   mrn: string;
   patient: string;
   ageSex: string;
+  visitId: string;
   priority: "Routine" | "Urgent" | "Stat";
   transferType: "Intra-ward" | "Inter-ward" | "To ICU" | "To HDU" | "Room Change" | "Bed Swap" | "Inter-facility";
   fromWard: string;
@@ -159,6 +163,7 @@ export interface LabOrderRecord {
   orderId: string;
   patient: string;
   ageSex: string;
+  visitId: string;
   location: string;
   tests: string;
   priority: "Routine" | "Stat";
@@ -174,6 +179,7 @@ export interface SurgeryRecord {
   caseId: string;
   patient: string;
   ageSex: string;
+  visitId: string;
   procedure: string;
   surgeon: string;
   orRoom: string;
@@ -188,6 +194,7 @@ export interface SurgeryRecord {
 export interface MedicineOrderRecord {
   orderId: string;
   patient: string;
+  visitId: string;
   location: string;
   prescriber: string;
   medications: string;
@@ -203,6 +210,7 @@ export interface MedicineOrderRecord {
 export interface RadiologyOrderRecord {
   orderId: string;
   patient: string;
+  visitId: string;
   location: string;
   modality: "X-ray" | "CT" | "MRI" | "US" | "Fluoro" | "Mammo";
   exam: string;
@@ -301,7 +309,7 @@ function generateOPPatient(index: number, statusOverride?: OPPatientRecord["stat
     patient: generateName(index),
     ageSex: generateAgeSex(index),
     contact: generatePhone(),
-    visitId: `V${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    visitId: formatVisitId(25, index + 1),
     appointmentTime: formatDateTime(appointmentDate),
     department: departments[index % departments.length],
     provider: doctors[index % doctors.length],
@@ -348,6 +356,7 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
     mrn: generateMRN(5000 + index),
     patient: generateName(index + 100),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 500 + index),
     admitDateTime: formatDateTime(admitDate),
     ward: wardMap[bedClass],
     room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
@@ -425,6 +434,7 @@ function generateDischargedPatient(index: number, isPending = false): IPPatientR
     mrn: generateMRN(8000 + index),
     patient: generateName(index + 200),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 800 + index),
     admitDateTime: formatDateTime(admitDate),
     ward: wardMap[bedClass],
     room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
@@ -461,6 +471,7 @@ function generateERCase(index: number): ERCaseRecord {
     mrn: generateMRN(9000 + index),
     patient: generateName(index + 300),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 900 + index),
     triageLevel,
     arrivalTime: formatDateTime(arrivalDate),
     modeOfArrival: (["Ambulance", "Walk-in", "Transfer"] as const)[index % 3],
@@ -558,6 +569,7 @@ function generateTransfer(index: number): TransferRecord {
     mrn: generateMRN(7000 + index),
     patient: generateName(index + 700),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 700 + index),
     priority: priorities[index % priorities.length],
     transferType: transferTypes[index % transferTypes.length],
     fromWard,
@@ -622,6 +634,7 @@ function generateLabOrder(index: number): LabOrderRecord {
     orderId: `LAB${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 500),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 100 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     tests: testPanels[index % testPanels.length],
     priority: index % 5 === 0 ? "Stat" : "Routine",
@@ -647,6 +660,7 @@ function generateSurgery(index: number): SurgeryRecord {
     caseId: `SURG${today.replace(/-/g, "")}${String(index).padStart(3, "0")}`,
     patient: generateName(index + 600),
     ageSex: generateAgeSex(index),
+    visitId: formatVisitId(25, 200 + index),
     procedure: procedures[index % procedures.length],
     surgeon: doctors[index % doctors.length],
     orRoom: `OR-${(index % 5) + 1}`,
@@ -671,6 +685,7 @@ function generateMedicineOrder(index: number): MedicineOrderRecord {
   return {
     orderId: `RX${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 700),
+    visitId: formatVisitId(25, 300 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     prescriber: doctors[index % doctors.length],
     medications: medicationNames.slice(0, 1 + Math.floor(Math.random() * 3)).join(", "),
@@ -698,6 +713,7 @@ function generateRadiologyOrder(index: number): RadiologyOrderRecord {
   return {
     orderId: `RAD${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 800),
+    visitId: formatVisitId(25, 400 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     modality: (["X-ray", "CT", "MRI", "US", "Fluoro", "Mammo"] as const)[index % 6],
     exam: radiologyExams[index % radiologyExams.length],

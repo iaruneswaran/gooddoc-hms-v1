@@ -42,6 +42,7 @@ const IPPatients = () => {
       width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
+    { key: "visitId", label: "Visit ID" },
     { key: "admitDateTime", label: "Admit Date/Time", sortable: true },
     { key: "ward", label: "Ward", sortable: true },
     { key: "room", label: "Room" },

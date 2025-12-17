@@ -37,6 +37,7 @@ const RadiologyOrdersToday = () => {
       width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.orderId} />
     },
+    { key: "visitId", label: "Visit ID" },
     { key: "location", label: "Location" },
     {
       key: "modality",

@@ -22,6 +22,7 @@ const SurgeriesToday = () => {
       width: "220px",
       render: (row) => <PatientCell name={row.patient} gdid={row.caseId} ageSex={row.ageSex} />
     },
+    { key: "visitId", label: "Visit ID" },
     { key: "procedure", label: "Procedure" },
     { key: "surgeon", label: "Surgeon", sortable: true },
     { key: "orRoom", label: "OR Room" },
