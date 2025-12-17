@@ -181,7 +181,15 @@ export default function Inbox() {
               )}
             </div>
             <div className="min-w-0">
-              <div className="text-sm font-medium text-foreground truncate">
+              <div 
+                className="text-sm font-medium text-foreground truncate cursor-pointer hover:text-primary hover:underline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/patient-insights/${appointment.patientGDID}?from=inbox`);
+                }}
+                role="button"
+                tabIndex={0}
+              >
                 {appointment.patientName}
               </div>
               <div className="text-xs text-muted-foreground truncate">
@@ -377,7 +385,14 @@ export default function Inbox() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>
+                        <p 
+                          className="text-sm font-medium text-foreground truncate cursor-pointer hover:text-primary hover:underline"
+                          onClick={() => navigate(`/patient-insights/${apt.gdid}?from=inbox`)}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          {apt.patient}
+                        </p>
                         <p className="text-xs text-muted-foreground">GDID-{apt.gdid}</p>
                       </div>
                     </div>

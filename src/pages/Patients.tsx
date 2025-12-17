@@ -302,7 +302,15 @@ export default function Patients() {
                 className="grid grid-cols-[0.8fr_1.2fr_0.4fr_0.6fr_1fr_1.2fr_0.8fr_0.6fr_0.8fr_0.6fr_0.4fr] gap-4 px-4 py-4 items-center hover:bg-muted/20 transition-colors border-b border-border last:border-b-0 w-full"
               >
                 <div className="text-sm font-medium text-foreground truncate">{patient.id}</div>
-                <div className="text-sm text-foreground truncate">{patient.name}</div>
+                <div 
+                  className="text-sm text-foreground truncate cursor-pointer hover:text-primary hover:underline"
+                  onClick={() => handlePatientInsight(patient)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handlePatientInsight(patient)}
+                >
+                  {patient.name}
+                </div>
                 <div className="text-sm text-foreground">{patient.age}</div>
                 <div className="text-sm text-foreground truncate">{patient.gender}</div>
                 <div className="text-sm text-foreground truncate">{patient.phone}</div>

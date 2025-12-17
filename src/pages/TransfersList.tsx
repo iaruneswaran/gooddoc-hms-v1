@@ -71,7 +71,7 @@ const TransfersList = () => {
       label: "Patient Info", 
       sortable: true,
       width: "220px",
-      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
+      render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} patientId={row.mrn} fromPage="transfers" />
     },
     { key: "visitId", label: "Visit ID" },
     {
