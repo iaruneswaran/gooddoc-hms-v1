@@ -100,18 +100,16 @@ const Registration = () => {
         <AppHeader breadcrumbs={["Appointments", "Registration"]} />
         
         <main className="p-6">
-          <div className="flex items-center justify-between h-10 mb-12">
+          <div className="flex items-center justify-center h-10 mb-12 relative">
             <button
               onClick={() => navigate("/new-appointment")}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+              className="absolute left-0 flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">Search</span>
             </button>
 
             <BookingSteps currentStep="registration" />
-            
-            <div className="w-[120px]" />
           </div>
 
           <div className="max-w-5xl mx-auto">

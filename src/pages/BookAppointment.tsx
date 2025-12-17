@@ -467,7 +467,7 @@ const BookAppointment = () => {
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"] : (fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"])} />
         
         <main className="p-6 pb-32">
-          <div className="flex items-center justify-between h-10 mb-12">
+          <div className="flex items-center justify-center h-10 mb-12 relative">
             <button
               onClick={() => {
                 if (fromSearch && patientSearchQuery) {
@@ -482,7 +482,7 @@ const BookAppointment = () => {
                   navigate("/registration");
                 }
               }}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+              className="absolute left-0 flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">
@@ -493,8 +493,6 @@ const BookAppointment = () => {
             {!isSingleAppointmentMode && (
               <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
             )}
-            
-            <div className="w-[120px]" />
           </div>
 
           <div className="max-w-[1600px] mx-auto">
