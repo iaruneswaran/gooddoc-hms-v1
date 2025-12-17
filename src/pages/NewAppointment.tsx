@@ -72,7 +72,7 @@ const NewAppointment = () => {
           <div className="flex items-center justify-between h-10 mb-12">
             <button
               onClick={handleBack}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-[120px]"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="font-semibold">{fromSearch ? "Search Results" : "Overview"}</span>
@@ -80,7 +80,7 @@ const NewAppointment = () => {
 
             <BookingSteps currentStep="search" />
             
-            <div className="w-[120px]" />
+            <div className="w-0" />
           </div>
 
           <div className="max-w-4xl mx-auto space-y-6">
