@@ -43,12 +43,30 @@ const IPPatients = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "visitId", label: "Visit ID" },
-    { key: "admitDateTime", label: "Admit Date/Time", sortable: true },
+    { 
+      key: "admitDateTime", 
+      label: "Admit Date/Time", 
+      sortable: true,
+      render: (row) => {
+        const [date, time] = row.admitDateTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-caption">{time}</span>
+          </div>
+        );
+      }
+    },
     { 
       key: "ward", 
       label: "Ward/Bed", 
       sortable: true,
-      render: (row) => <span>{row.ward} {row.bed}</span>
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.ward}</span>
+          <span className="text-muted-foreground text-caption">Bed {row.bed}</span>
+        </div>
+      )
     },
     { key: "attendingDoctor", label: "Attending Doctor", sortable: true },
     { key: "primaryDiagnosis", label: "Primary Diagnosis" },
@@ -58,12 +76,12 @@ const IPPatients = () => {
       sortable: true,
       render: (row) => <span>{row.lengthOfStay} days</span>,
     },
-    {
-      key: "isolation",
-      label: "Isolation",
-      render: (row) => row.isolation ? (
-        <Badge className="bg-yellow-100 text-yellow-700">{row.isolation}</Badge>
-      ) : <span>—</span>,
+    { 
+      key: "emergencyContact", 
+      label: "Emergency Contact",
+      render: (row) => row.emergencyContact ? (
+        <span>{row.emergencyContact}</span>
+      ) : <span className="text-muted-foreground">—</span>,
     },
   ];
 

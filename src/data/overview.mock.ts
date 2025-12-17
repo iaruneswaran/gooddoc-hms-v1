@@ -46,6 +46,7 @@ export interface IPPatientRecord {
   attendingDoctor: string;
   primaryDiagnosis: string;
   lengthOfStay: number;
+  emergencyContact?: string;
   isolation?: string;
   source?: "ER" | "OPD" | "Transfer";
   admittingDiagnosis?: string;
@@ -365,6 +366,7 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
     attendingDoctor: doctors[index % doctors.length],
     primaryDiagnosis: diagnoses[index % diagnoses.length],
     lengthOfStay: admitDaysAgo,
+    emergencyContact: generatePhone(),
     isolation: index % 10 === 0 ? "Contact" : undefined,
     source: isERCase ? "ER" : isNewAdmission ? (["ER", "OPD", "Transfer"] as const)[index % 3] : undefined,
     admittingDiagnosis: diagnoses[(index + 3) % diagnoses.length],
