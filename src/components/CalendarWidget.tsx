@@ -93,7 +93,7 @@ export function CalendarWidget() {
 
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[100px] gap-1 justify-between">
+          <Button variant="outline" className="w-[150px] gap-1 justify-between">
             <span className="font-medium">{format(selectedDate, "MMM yyyy").toUpperCase()}</span>
             <ChevronDown className="w-3.5 h-3.5 opacity-60" />
           </Button>
