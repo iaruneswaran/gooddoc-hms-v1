@@ -52,7 +52,7 @@ const IPPatients = () => {
         return (
           <div className="flex flex-col">
             <span>{date}</span>
-            <span className="text-muted-foreground text-caption">{time}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
           </div>
         );
       }
@@ -64,7 +64,7 @@ const IPPatients = () => {
       render: (row) => (
         <div className="flex flex-col">
           <span>{row.ward}</span>
-          <span className="text-muted-foreground text-caption">Bed {row.bed}</span>
+          <span className="text-muted-foreground text-xs">Bed {row.bed}</span>
         </div>
       )
     },
