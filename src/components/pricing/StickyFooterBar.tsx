@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/pricingEngine';
 import { useFeatureFlags } from '@/contexts/FeatureFlagsContext';
 import { AppointmentTotals } from '@/types/pricing';
+import { useSidebarContext } from '@/contexts/SidebarContext';
 
 interface StickyFooterBarProps {
   totals: AppointmentTotals;
@@ -12,6 +13,7 @@ interface StickyFooterBarProps {
 
 export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: StickyFooterBarProps) {
   const { flags } = useFeatureFlags();
+  const { isCollapsed } = useSidebarContext();
 
   if (!flags.globalDiscount_stickyBar) {
     return null;
@@ -25,7 +27,10 @@ export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: Sticky
       : 0;
 
   return (
-    <div className="fixed bottom-0 left-[196px] right-0 bg-background border-t border-border shadow-lg z-40">
+    <div 
+      className="fixed bottom-0 right-0 bg-background border-t border-border shadow-lg z-40 transition-all duration-300"
+      style={{ left: isCollapsed ? '60px' : '220px' }}
+    >
       <div className="max-w-[1600px] mx-auto px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
