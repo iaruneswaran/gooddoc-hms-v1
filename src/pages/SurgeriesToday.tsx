@@ -32,6 +32,7 @@ const SurgeriesToday = () => {
       key: "status",
       label: "Status",
       sortable: true,
+      width: "110px",
       render: (row) => (
         <Badge className={statusStyles[row.status]}>{row.status}</Badge>
       ),
