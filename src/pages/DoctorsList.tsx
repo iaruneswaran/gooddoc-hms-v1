@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock } from "lucide-react";
+import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock, Stethoscope } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -589,56 +589,66 @@ export default function DoctorsList() {
             </TabsContent>
 
             <TabsContent value="departments" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {DEPARTMENTS.map((dept) => (
-                  <Card 
+                  <div
                     key={dept.id}
-                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    role="button"
+                    tabIndex={0}
                     onClick={() => navigate(`/departments/${dept.id}`)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/departments/${dept.id}`); }}
+                    className="
+                      group w-full text-left rounded-xl border border-border bg-card overflow-hidden
+                      transition-all duration-200 ease-out cursor-pointer
+                      hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+                      active:scale-[0.98]
+                      focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
+                      flex flex-col
+                    "
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="text-base font-semibold text-foreground">{dept.name}</h3>
-                          <p className="text-sm text-muted-foreground mt-1">{dept.description}</p>
+                    {/* Top section - Department info */}
+                    <div className="flex-1 p-4 pb-3">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
+                            <Stethoscope className="w-4 h-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">{dept.name}</p>
+                          </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                        <ChevronRight 
+                          aria-hidden="true"
+                          className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
+                        />
                       </div>
-                      
-                      <p className="text-xs text-muted-foreground mb-4">Head: {dept.headDoctor}</p>
-                      
-                      <div className="grid grid-cols-4 gap-2 pt-4 border-t border-border">
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <Users className="w-3 h-3 text-muted-foreground" />
-                          </div>
-                          <div className="text-lg font-semibold text-foreground">{dept.doctorsCount}</div>
-                          <div className="text-xs text-muted-foreground">Doctors</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <UserCheck className="w-3 h-3 text-muted-foreground" />
-                          </div>
-                          <div className="text-lg font-semibold text-foreground">{dept.outpatientCount}</div>
-                          <div className="text-xs text-muted-foreground">OP</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <UserCheck className="w-3 h-3 text-muted-foreground" />
-                          </div>
-                          <div className="text-lg font-semibold text-foreground">{dept.inpatientCount}</div>
-                          <div className="text-xs text-muted-foreground">IP</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <Clock className="w-3 h-3 text-muted-foreground" />
-                          </div>
-                          <div className="text-lg font-semibold text-foreground">{dept.avgWaitTime.replace(' min', '')}</div>
-                          <div className="text-xs text-muted-foreground">Wait</div>
-                        </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{dept.description}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Head: {dept.headDoctor}</p>
+                    </div>
+                    
+                    {/* Divider */}
+                    <div className="h-px bg-border" />
+                    
+                    {/* Bottom section - Sub-metrics grid */}
+                    <div className="px-2 py-3 grid grid-cols-4 text-xs">
+                      <div className="flex flex-col py-1.5 px-2 text-center">
+                        <span className="text-muted-foreground text-[11px] leading-tight">Doctors</span>
+                        <span className="font-semibold text-foreground mt-0.5">{dept.doctorsCount}</span>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
+                        <span className="text-muted-foreground text-[11px] leading-tight">OP</span>
+                        <span className="font-semibold text-foreground mt-0.5">{dept.outpatientCount}</span>
+                      </div>
+                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
+                        <span className="text-muted-foreground text-[11px] leading-tight">IP</span>
+                        <span className="font-semibold text-foreground mt-0.5">{dept.inpatientCount}</span>
+                      </div>
+                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
+                        <span className="text-muted-foreground text-[11px] leading-tight">Wait</span>
+                        <span className="font-semibold text-foreground mt-0.5">{dept.avgWaitTime.replace(' min', '')}</span>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </TabsContent>
