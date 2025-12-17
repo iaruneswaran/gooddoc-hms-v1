@@ -8,6 +8,7 @@ import { BookingSteps } from "@/components/BookingSteps";
 import { PatientSearchForm } from "@/components/PatientSearchForm";
 import { PatientResultsList } from "@/components/PatientResultsList";
 import { Button } from "@/components/ui/button";
+import { generateVisitId } from "@/utils/visitId";
 
 // Mock data
 const mockPatients = [
@@ -52,7 +53,7 @@ const NewAppointment = () => {
   const handleBookAppointment = (patientId: string) => {
     const patient = mockPatients.find(p => p.id === patientId);
     // Generate visit ID for new appointments (not from patient insights)
-    const visitId = `VST-${Math.floor(100000 + Math.random() * 900000)}`;
+    const visitId = generateVisitId();
     navigate("/book-appointment", { state: { patient, visitId, fromSearch, patientSearchQuery } });
   };
 
