@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -8,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
+import { X, Search } from "lucide-react";
 
 interface DoctorFiltersProps {
   search: string;
@@ -33,9 +34,9 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
-        <SelectTrigger className="w-[120px] h-8 text-xs">
+        <SelectTrigger className="w-[120px] h-9 text-xs">
           <SelectValue placeholder="Department" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -47,7 +48,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Specialty: ${val}`)}>
-        <SelectTrigger className="w-[120px] h-8 text-xs">
+        <SelectTrigger className="w-[120px] h-9 text-xs">
           <SelectValue placeholder="Specialty" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -58,7 +59,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Availability: ${val}`)}>
-        <SelectTrigger className="w-[110px] h-8 text-xs">
+        <SelectTrigger className="w-[110px] h-9 text-xs">
           <SelectValue placeholder="Availability" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -69,7 +70,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       <Select onValueChange={(val) => addFilter(`Status: ${val}`)}>
-        <SelectTrigger className="w-[100px] h-8 text-xs">
+        <SelectTrigger className="w-[100px] h-9 text-xs">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent className="bg-popover z-50">
@@ -83,7 +84,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       {filters.length > 0 && (
         <>
           {filters.map((filter, i) => (
-            <Badge key={i} variant="secondary" className="gap-1 pr-1">
+            <Badge key={i} variant="secondary" className="gap-1 pr-1 h-9 px-3">
               {filter}
               <Button
                 variant="ghost"
@@ -99,12 +100,24 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
             variant="ghost"
             size="sm"
             onClick={clearAllFilters}
-            className="h-7 text-xs"
+            className="h-9 text-xs"
           >
             Clear
           </Button>
         </>
       )}
+
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Search doctors..."
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="h-9 w-[200px] pl-9 text-sm"
+        />
+      </div>
     </div>
   );
 }
