@@ -100,7 +100,7 @@ const Registration = () => {
         <AppHeader breadcrumbs={["Appointments", "Registration"]} />
         
         <main className="p-6">
-          <div className="flex items-center justify-between mb-12 pb-4 border-b border-border">
+          <div className="flex items-center justify-between mb-12">
             <button
               onClick={() => navigate("/new-appointment")}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
