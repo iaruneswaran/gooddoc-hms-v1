@@ -43,9 +43,31 @@ const OPPatientsToday = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} />
     },
     { key: "visitId", label: "Visit ID" },
-    { key: "appointmentTime", label: "Appointment Time", sortable: true },
-    { key: "department", label: "Department", sortable: true },
-    { key: "provider", label: "Provider", sortable: true },
+    { 
+      key: "appointmentTime", 
+      label: "Appointment Time", 
+      sortable: true,
+      render: (row) => {
+        const [date, time] = row.appointmentTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
+    { 
+      key: "provider", 
+      label: "Provider", 
+      sortable: true,
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.provider}</span>
+          <span className="text-muted-foreground text-xs">{row.department}</span>
+        </div>
+      )
+    },
     { key: "visitReason", label: "Visit Reason" },
     {
       key: "status",
@@ -56,7 +78,6 @@ const OPPatientsToday = () => {
       ),
     },
     { key: "checkInTime", label: "Check-in Time", render: (row) => row.checkInTime || "—" },
-    { key: "waitingTime", label: "Waiting Time", render: (row) => row.waitingTime || "—" },
     { key: "tokenQueueNo", label: "Token/Queue No.", render: (row) => row.tokenQueueNo || "—" },
   ];
 
