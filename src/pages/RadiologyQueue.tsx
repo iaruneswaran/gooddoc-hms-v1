@@ -38,7 +38,23 @@ const RadiologyOrdersToday = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.orderId} ageSex={row.ageSex} />
     },
     { key: "visitId", label: "Visit ID" },
-    { key: "location", label: "Location" },
+    { 
+      key: "location", 
+      label: "Location",
+      render: (row) => {
+        if (!row.location) return "—";
+        const parts = row.location.split('/');
+        if (parts.length === 2) {
+          return (
+            <div className="flex flex-col">
+              <span>{parts[0]}</span>
+              <span className="text-muted-foreground text-xs">{parts[1]}</span>
+            </div>
+          );
+        }
+        return <span>{row.location}</span>;
+      }
+    },
     {
       key: "modality",
       label: "Modality",
@@ -49,14 +65,6 @@ const RadiologyOrdersToday = () => {
     },
     { key: "exam", label: "Exam" },
     {
-      key: "priority",
-      label: "Priority",
-      sortable: true,
-      render: (row) => (
-        <Badge className={priorityStyles[row.priority]}>{row.priority}</Badge>
-      ),
-    },
-    {
       key: "status",
       label: "Status",
       sortable: true,
@@ -64,7 +72,21 @@ const RadiologyOrdersToday = () => {
         <Badge className={statusStyles[row.status]}>{row.status}</Badge>
       ),
     },
-    { key: "scheduledTime", label: "Scheduled Time", sortable: true },
+    { 
+      key: "scheduledTime", 
+      label: "Scheduled Time", 
+      sortable: true,
+      render: (row) => {
+        if (!row.scheduledTime) return "—";
+        const [date, time] = row.scheduledTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{date}</span>
+            <span className="text-muted-foreground text-xs">{time}</span>
+          </div>
+        );
+      }
+    },
     { key: "imagingLocation", label: "Imaging Location" },
     {
       key: "contrast",
@@ -75,27 +97,9 @@ const RadiologyOrdersToday = () => {
         <span className="text-muted-foreground">No</span>
       ),
     },
-    {
-      key: "pregnancySafetyFlags",
-      label: "Safety Flags",
-      render: (row) => row.pregnancySafetyFlags ? (
-        <Badge className="bg-red-100 text-red-700">{row.pregnancySafetyFlags}</Badge>
-      ) : (
-        <span>—</span>
-      ),
-    },
   ];
 
   const filters: Filter[] = [
-    {
-      key: "priority",
-      label: "Priority",
-      value: "all",
-      options: [
-        { value: "Stat", label: "Stat" },
-        { value: "Routine", label: "Routine" },
-      ],
-    },
     {
       key: "status",
       label: "Status",
