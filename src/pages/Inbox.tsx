@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { User, Search, Phone, Mail } from "lucide-react";
+import { User, UserRound, Search, Phone, Mail } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -169,8 +169,16 @@ export default function Inbox() {
         >
           {/* Patient Info */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-primary" />
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+              appointment.patientGender.toLowerCase().startsWith('f') 
+                ? 'bg-pink-500' 
+                : 'bg-primary'
+            }`}>
+              {appointment.patientGender.toLowerCase().startsWith('f') ? (
+                <UserRound className="w-5 h-5 text-primary-foreground" />
+              ) : (
+                <User className="w-5 h-5 text-primary-foreground" />
+              )}
             </div>
             <div className="min-w-0">
               <div className="text-sm font-medium text-foreground truncate">
@@ -351,14 +359,22 @@ export default function Inbox() {
                   <div className="text-xs font-medium text-muted-foreground">Status</div>
                 </div>
                 {[
-                  { id: "SCH-001", patient: "Sarah Johnson", gdid: "445821", service: "Consultation", provider: "Dr. Meera Nair", datetime: "15 Jan 2025, 10:00 AM", status: "Upcoming" },
-                  { id: "SCH-002", patient: "Michael Chen", gdid: "332109", service: "Lab - CBC Panel", provider: "Laboratory Dept", datetime: "16 Jan 2025, 8:00 AM", status: "Upcoming" },
-                  { id: "SCH-003", patient: "Amit Patel", gdid: "667890", service: "Consultation", provider: "Dr. Rajesh Kumar", datetime: "14 Jan 2025, 2:30 PM", status: "Completed" },
+                  { id: "SCH-001", patient: "Sarah Johnson", gdid: "445821", gender: "F", service: "Consultation", provider: "Dr. Meera Nair", datetime: "15 Jan 2025, 10:00 AM", status: "Upcoming" },
+                  { id: "SCH-002", patient: "Michael Chen", gdid: "332109", gender: "M", service: "Lab - CBC Panel", provider: "Laboratory Dept", datetime: "16 Jan 2025, 8:00 AM", status: "Upcoming" },
+                  { id: "SCH-003", patient: "Amit Patel", gdid: "667890", gender: "M", service: "Consultation", provider: "Dr. Rajesh Kumar", datetime: "14 Jan 2025, 2:30 PM", status: "Completed" },
                 ].map((apt) => (
                   <div key={apt.id} className="grid grid-cols-[2fr_1.5fr_1.5fr_1.5fr_1fr] gap-4 px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/20">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-primary" />
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        apt.gender.toLowerCase().startsWith('f') 
+                          ? 'bg-pink-500' 
+                          : 'bg-primary'
+                      }`}>
+                        {apt.gender.toLowerCase().startsWith('f') ? (
+                          <UserRound className="w-5 h-5 text-primary-foreground" />
+                        ) : (
+                          <User className="w-5 h-5 text-primary-foreground" />
+                        )}
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-foreground truncate">{apt.patient}</p>

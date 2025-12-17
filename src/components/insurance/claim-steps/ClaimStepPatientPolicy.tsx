@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Plus, Search, User } from "lucide-react";
+import { Plus, Search, User, UserRound } from "lucide-react";
 import { useState } from "react";
 
 interface ClaimStepPatientPolicyProps {
@@ -93,8 +93,16 @@ export function ClaimStepPatientPolicy({ data, onChange, errors }: ClaimStepPati
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-accent transition-colors text-left"
                           onClick={() => handleSelectPatient(patient)}
                         >
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                            <User className="h-5 w-5 text-primary" />
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            patient.gender.toLowerCase().startsWith('f') 
+                              ? 'bg-pink-500' 
+                              : 'bg-primary'
+                          }`}>
+                            {patient.gender.toLowerCase().startsWith('f') ? (
+                              <UserRound className="h-5 w-5 text-primary-foreground" />
+                            ) : (
+                              <User className="h-5 w-5 text-primary-foreground" />
+                            )}
                           </div>
                           <div className="flex-1">
                             <div className="font-medium">{patient.name}</div>
