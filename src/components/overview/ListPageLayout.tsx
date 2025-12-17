@@ -48,6 +48,7 @@ export interface Column<T> {
   label: string;
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
+  width?: string;
 }
 
 export interface Filter {
@@ -320,6 +321,7 @@ export function ListPageLayout<T>({
                         <TableHead
                           key={String(col.key)}
                           className={col.sortable ? "cursor-pointer select-none" : ""}
+                          style={col.width ? { width: col.width, minWidth: col.width } : undefined}
                           onClick={() => col.sortable && handleSort(String(col.key))}
                         >
                           <div className="flex items-center gap-1">
@@ -347,7 +349,7 @@ export function ListPageLayout<T>({
                         }}
                       >
                         {columns.map((col) => (
-                          <TableCell key={String(col.key)}>
+                          <TableCell key={String(col.key)} style={col.width ? { width: col.width, minWidth: col.width } : undefined}>
                             {col.render
                               ? col.render(row)
                               : String((row as any)[col.key] ?? "-")}
