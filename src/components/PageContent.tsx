@@ -14,7 +14,7 @@ export function PageContent({ children, className }: PageContentProps) {
     <div 
       className={cn(
         "flex-1 transition-all duration-300",
-        isCollapsed ? "ml-[68px]" : "ml-[240px]",
+        isCollapsed ? "ml-[60px]" : "ml-[220px]",
         className
       )}
     >
