@@ -83,15 +83,6 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select onValueChange={(val) => addFilter(`Mode: ${val}`)}>
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Mode" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="in-person">In-person</SelectItem>
-            <SelectItem value="telemedicine">Telemedicine</SelectItem>
-          </SelectContent>
-        </Select>
 
         </div>
 

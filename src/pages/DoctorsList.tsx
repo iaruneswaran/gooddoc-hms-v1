@@ -426,9 +426,19 @@ export default function DoctorsList() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-            <TabsList>
-              <TabsTrigger value="doctors">Doctors</TabsTrigger>
-              <TabsTrigger value="departments">Departments</TabsTrigger>
+            <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 gap-6">
+              <TabsTrigger 
+                value="doctors" 
+                className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+              >
+                Doctors
+              </TabsTrigger>
+              <TabsTrigger 
+                value="departments"
+                className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-3 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
+              >
+                Departments
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="doctors" className="mt-6">
