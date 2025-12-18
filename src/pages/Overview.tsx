@@ -240,7 +240,6 @@ const Overview = () => {
       subMetrics: [
         { label: "ICU", value: 25, filterParam: "bedType=icu" },
         { label: "Ward", value: 21, filterParam: "bedType=ward" },
-        { label: "Rooms", value: "03", filterParam: "bedType=rooms" },
       ],
     },
     {
