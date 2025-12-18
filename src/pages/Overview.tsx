@@ -258,6 +258,7 @@ const Overview = () => {
       isPrimary: true,
       subMetrics: [
         { label: "Outstanding Bills", value: "₹8.4L/12", route: "/reports/revenue?type=outstanding" },
+        { label: "Advance Collected", value: "₹5.7L/12", route: "/reports/advance-payments" },
       ],
     },
   ];
