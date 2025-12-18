@@ -1,16 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EventCard } from "./EventCard";
 import { TimelineEvent } from "@/types/timeline";
 import { format, parseISO, isSameDay } from "date-fns";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 
 interface TimelineViewProps {
   events: TimelineEvent[];
@@ -28,7 +22,6 @@ export function TimelineView({
   onFilterChange 
 }: TimelineViewProps) {
   const [visibleDayStart, setVisibleDayStart] = useState(0);
-  const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const DAYS_TO_SHOW = 7;
 
@@ -138,7 +131,6 @@ export function TimelineView({
                               time={event.time}
                               dept={event.dept}
                               status={event.status}
-                              onClick={() => setSelectedEvent(event)}
                             />
                           ))}
                           {showMore && (
@@ -169,40 +161,6 @@ export function TimelineView({
         </div>
       </div>
 
-      {/* Event Details Drawer */}
-      <Sheet open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
-        <SheetContent>
-          {selectedEvent && (
-            <>
-              <SheetHeader>
-                <SheetTitle>{selectedEvent.title}</SheetTitle>
-              </SheetHeader>
-              <div className="mt-6 space-y-4">
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Type</div>
-                  <div className="text-sm text-foreground mt-1">{selectedEvent.type}</div>
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Date & Time</div>
-                  <div className="text-sm text-foreground mt-1">
-                    {format(parseISO(selectedEvent.date), "MMM d, yyyy")} at {selectedEvent.time}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Department</div>
-                  <div className="text-sm text-foreground mt-1">{selectedEvent.dept}</div>
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Status</div>
-                  <div className="mt-1">
-                    <Badge>{selectedEvent.status}</Badge>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </SheetContent>
-      </Sheet>
     </div>
   );
 }
