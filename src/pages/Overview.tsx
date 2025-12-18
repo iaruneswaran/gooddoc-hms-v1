@@ -117,7 +117,14 @@ const PrimaryMetricCard = ({
           />
         </div>
         <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
-          {displayCount || count.toLocaleString()}
+          {displayCount ? (
+            <>
+              {displayCount.split('/')[0]}
+              {displayCount.includes('/') && (
+                <span className="text-sm font-medium text-muted-foreground">/{displayCount.split('/').slice(1).join('/')}</span>
+              )}
+            </>
+          ) : count.toLocaleString()}
         </p>
       </div>
       
