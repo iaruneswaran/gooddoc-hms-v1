@@ -166,8 +166,26 @@ const DoctorsOnDuty = () => {
     };
     
     specificColumns = [
-      { key: "shiftStart", label: "Shift Start" },
-      { key: "shiftEnd", label: "Shift End" },
+      { 
+        key: "shiftStart", 
+        label: "Shift Start",
+        render: () => (
+          <div className="flex flex-col">
+            <span className="font-medium">08:00</span>
+            <span className="text-xs text-muted-foreground">18-Dec-2025</span>
+          </div>
+        )
+      },
+      { 
+        key: "shiftEnd", 
+        label: "Shift End",
+        render: () => (
+          <div className="flex flex-col">
+            <span className="font-medium">20:00</span>
+            <span className="text-xs text-muted-foreground">18-Dec-2025</span>
+          </div>
+        )
+      },
       { key: "currentLocation", label: "Current Location" },
       { 
         key: "contact", 
