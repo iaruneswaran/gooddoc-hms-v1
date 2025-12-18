@@ -130,135 +130,117 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
   const completedAppointments = mockAppointments.filter(apt => apt.status === "Completed");
   const upcomingAppointments = mockAppointments.filter(apt => apt.status !== "Completed");
 
-  const renderAppointmentRow = (appointment: typeof mockAppointments[0]) => (
-    <div
-      key={appointment.id}
-      className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-3 border-b border-border hover:bg-muted/50 transition-colors items-center"
-    >
-      {/* Patient Info */}
-      <div className="flex items-center gap-3 min-w-0">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-          appointment.gender === "M" ? "bg-blue-100" : "bg-pink-100"
-        }`}>
-          {appointment.gender === "M" ? (
-            <User className="w-4 h-4 text-blue-600" />
-          ) : (
-            <UserRound className="w-4 h-4 text-pink-600" />
-          )}
-        </div>
-        <div className="min-w-0">
-          <p className="text-small font-medium text-foreground truncate">{appointment.patientName}</p>
-          <p className="text-caption text-muted-foreground">
-            GDID - {appointment.gdid} • {appointment.age} | {appointment.gender}
-          </p>
-        </div>
+  const renderAppointmentTable = (appointments: typeof mockAppointments, title: string) => (
+    <div className="mb-6">
+      <div className="px-6 py-3">
+        <h3 className="text-label font-semibold text-foreground">
+          {title} ({appointments.length})
+        </h3>
       </div>
-
-      {/* Visit ID */}
-      <div className="min-w-0">
-        <p className="text-small font-mono text-foreground">{appointment.visitId}</p>
-        <p className="text-caption text-muted-foreground">
-          {appointment.checkInTime}
-        </p>
-        <p className="text-caption text-muted-foreground">
-          {appointment.checkInDate}
-        </p>
-      </div>
-
-      {/* Doctor & Department */}
-      <div className="min-w-0">
-        <p className="text-small text-foreground truncate">{appointment.doctor}</p>
-        <p className="text-caption text-muted-foreground">{appointment.department}</p>
-      </div>
-
-      {/* Status */}
-      <div>
-        <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
-          {appointment.status}
-        </Badge>
-      </div>
-
-      {/* Token/Queue No. */}
-      <div className="min-w-0">
-        {appointment.token ? (
-          <>
-            <p className="text-caption text-muted-foreground">{appointment.tokenTime}</p>
-            <p className="text-caption text-muted-foreground">{appointment.tokenDate}</p>
-            <p className="text-small font-mono font-medium text-foreground">{appointment.token}</p>
-          </>
-        ) : (
-          <span className="text-caption text-muted-foreground">—</span>
-        )}
-      </div>
-
-      {/* Actions */}
-      <div className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Patient 360</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      
+      <div className="border rounded-lg overflow-hidden mx-6">
+        <table className="w-full">
+          <thead className="bg-muted/50">
+            <tr>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Patient</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Doctor</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Token/Queue No.</th>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-background">
+            {appointments.length > 0 ? (
+              appointments.map((appointment) => (
+                <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
+                  {/* Patient Info */}
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        appointment.gender === "M" ? "bg-blue-100" : "bg-pink-100"
+                      }`}>
+                        {appointment.gender === "M" ? (
+                          <User className="w-4 h-4 text-blue-600" />
+                        ) : (
+                          <UserRound className="w-4 h-4 text-pink-600" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{appointment.patientName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          GDID - {appointment.gdid} • {appointment.age} | {appointment.gender}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  {/* Visit ID */}
+                  <td className="p-4">
+                    <p className="text-sm font-mono text-foreground">{appointment.visitId}</p>
+                    <p className="text-xs text-muted-foreground">{appointment.checkInTime}</p>
+                    <p className="text-xs text-muted-foreground">{appointment.checkInDate}</p>
+                  </td>
+                  
+                  {/* Doctor & Department */}
+                  <td className="p-4">
+                    <p className="text-sm text-foreground">{appointment.doctor}</p>
+                    <p className="text-xs text-muted-foreground">{appointment.department}</p>
+                  </td>
+                  
+                  {/* Status */}
+                  <td className="p-4">
+                    <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
+                      {appointment.status}
+                    </Badge>
+                  </td>
+                  
+                  {/* Token/Queue No. */}
+                  <td className="p-4">
+                    {appointment.token ? (
+                      <div>
+                        <p className="text-xs text-muted-foreground">{appointment.tokenTime}</p>
+                        <p className="text-xs text-muted-foreground">{appointment.tokenDate}</p>
+                        <p className="text-sm font-mono font-medium text-foreground">{appointment.token}</p>
+                      </div>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">—</span>
+                    )}
+                  </td>
+                  
+                  {/* Actions */}
+                  <td className="p-4">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem>Patient 360</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="p-8 text-center">
+                  <p className="text-sm text-muted-foreground">No {title.toLowerCase()} appointments</p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 
   return (
-    <div className="h-full overflow-auto">
-      {/* Upcoming Appointments */}
-      <div className="mb-6">
-        <div className="px-4 py-3 bg-muted/30 border-b border-border">
-          <h3 className="text-label font-semibold text-foreground">
-            Upcoming ({upcomingAppointments.length})
-          </h3>
-        </div>
-        
-        {/* Table Header */}
-        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
-          <span className="text-label text-muted-foreground">Patient</span>
-          <span className="text-label text-muted-foreground">Visit ID</span>
-          <span className="text-label text-muted-foreground">Doctor</span>
-          <span className="text-label text-muted-foreground">Status</span>
-          <span className="text-label text-muted-foreground">Token/Queue No.</span>
-          <span className="text-label text-muted-foreground text-right">Actions</span>
-        </div>
-
-        {/* Upcoming Rows */}
-        {upcomingAppointments.length > 0 ? (
-          upcomingAppointments.map(renderAppointmentRow)
-        ) : (
-          <div className="px-4 py-8 text-center">
-            <p className="text-small text-muted-foreground">No upcoming appointments</p>
-          </div>
-        )}
-      </div>
-
-      {/* Completed Appointments */}
-      <div>
-        <div className="px-4 py-3 bg-muted/30 border-b border-border">
-          <h3 className="text-label font-semibold text-foreground">
-            Completed ({completedAppointments.length})
-          </h3>
-        </div>
-        
-        {/* Table Header */}
-        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
-          <span className="text-label text-muted-foreground">Patient</span>
-          <span className="text-label text-muted-foreground">Visit ID</span>
-          <span className="text-label text-muted-foreground">Doctor</span>
-          <span className="text-label text-muted-foreground">Status</span>
-          <span className="text-label text-muted-foreground">Token/Queue No.</span>
-          <span className="text-label text-muted-foreground text-right">Actions</span>
-        </div>
-
-        {/* Completed Rows */}
-        {completedAppointments.map(renderAppointmentRow)}
-      </div>
+    <div className="h-full overflow-auto py-4">
+      {renderAppointmentTable(upcomingAppointments, "Upcoming")}
+      {renderAppointmentTable(completedAppointments, "Completed")}
     </div>
   );
 }
