@@ -46,12 +46,6 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               Appointments
             </TabsTrigger>
             <TabsTrigger
-              value="timeline"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Timeline
-            </TabsTrigger>
-            <TabsTrigger
               value="invoices"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
@@ -80,6 +74,12 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
               Patient Details
+            </TabsTrigger>
+            <TabsTrigger
+              value="timeline"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Timeline
             </TabsTrigger>
           </TabsList>
         </div>
