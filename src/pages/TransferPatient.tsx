@@ -5,10 +5,8 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { TransferStepper } from "@/components/transfer/TransferStepper";
-import { TransferTimeline } from "@/components/transfer/TransferTimeline";
 import { TransferDetailsStep } from "@/components/transfer/steps/TransferDetailsStep";
 import { DestinationBedStep } from "@/components/transfer/steps/DestinationBedStep";
 import { TransferRequest, Bed, TransferTimelineEvent } from "@/types/transfer";
@@ -219,40 +217,25 @@ const TransferPatient = () => {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 flex overflow-hidden min-h-0">
-          {/* Left Panel - Step Content */}
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="max-w-3xl">
-              {currentStep === 1 && (
-                <TransferDetailsStep
-                  data={transferData}
-                  onChange={handleDataChange}
-                  currentTariff={patient.currentTariff}
-                />
-              )}
-              
-              {currentStep === 2 && (
-                <DestinationBedStep
-                  selectedBed={selectedBed}
-                  onSelectBed={handleSelectBed}
-                  onHoldBed={handleHoldBed}
-                  patientGender={patient.gender}
-                  patientAgeGroup="adult"
-                />
-              )}
-            </div>
-          </div>
-
-          {/* Right Rail - Timeline */}
-          <div className="w-80 border-l border-border bg-muted/30 flex-shrink-0 overflow-y-auto">
-            <Card className="m-4 border-0 shadow-none bg-transparent">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold">Transfer Timeline</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <TransferTimeline events={transferData.timeline || []} />
-              </CardContent>
-            </Card>
+        <main className="flex-1 overflow-y-auto p-6 min-h-0">
+          <div className="max-w-3xl">
+            {currentStep === 1 && (
+              <TransferDetailsStep
+                data={transferData}
+                onChange={handleDataChange}
+                currentTariff={patient.currentTariff}
+              />
+            )}
+            
+            {currentStep === 2 && (
+              <DestinationBedStep
+                selectedBed={selectedBed}
+                onSelectBed={handleSelectBed}
+                onHoldBed={handleHoldBed}
+                patientGender={patient.gender}
+                patientAgeGroup="adult"
+              />
+            )}
           </div>
         </main>
 
