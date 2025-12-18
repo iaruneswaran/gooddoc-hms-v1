@@ -3,7 +3,15 @@ import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { format } from "date-fns";
 import { useSearchParams } from "react-router-dom";
-
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { FlaskConical, Scan, User, MapPin, Clock, FileText, AlertTriangle } from "lucide-react";
 interface DiagnosticsOrder {
   id: string;
   patientId: string;
@@ -91,6 +99,8 @@ const diagnosticsOrders: DiagnosticsOrder[] = [
 export default function DiagnosticsList() {
   const [searchParams] = useSearchParams();
   const typeFilter = searchParams.get("type");
+  const [selectedOrder, setSelectedOrder] = useState<DiagnosticsOrder | null>(null);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   
   // Filter data based on URL param
   const filteredData = typeFilter 
@@ -193,22 +203,244 @@ export default function DiagnosticsList() {
   ];
 
   const rowActions: RowAction<DiagnosticsOrder>[] = [
+    { 
+      label: "View Summary", 
+      onClick: (row) => {
+        setSelectedOrder(row);
+        setSummaryOpen(true);
+      }
+    },
     { label: "View Details", onClick: (row) => console.log("View details", row.id) },
     { label: "Patient Insight", onClick: (row) => console.log("Patient insight", row.patientId) },
   ];
 
+  const renderLabSummary = (order: DiagnosticsOrder) => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Order ID</p>
+          <p className="text-sm font-medium">{order.id}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Visit ID</p>
+          <p className="text-sm font-medium">{order.visitId}</p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <User className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Patient</p>
+          <p className="text-sm font-medium">{order.patientName}</p>
+          <p className="text-xs text-muted-foreground">GDID - {order.gdid} • {order.ageSex}</p>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <MapPin className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Location</p>
+          <p className="text-sm font-medium">{order.location}{order.bed ? ` - ${order.bed}` : ""}</p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <FlaskConical className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Test Ordered</p>
+          <p className="text-sm font-medium">{order.tests}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Specimen Type</p>
+          <p className="text-sm font-medium">{order.specimenType || "—"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Status</p>
+          <Badge className={statusStyles[order.status] || "bg-gray-100 text-gray-700"}>
+            {order.status}
+          </Badge>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <FileText className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Ordered By</p>
+          <p className="text-sm font-medium">{order.orderedDoctor}</p>
+          <p className="text-xs text-muted-foreground">{order.department}</p>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Collected At</p>
+          <p className="text-sm font-medium">
+            {order.collectedAt ? format(order.collectedAt, "HH:mm, dd-MMM-yyyy") : "—"}
+          </p>
+        </div>
+      </div>
+
+      {order.resultEta && (
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Result ETA</p>
+          <p className="text-sm font-medium">{order.resultEta}</p>
+        </div>
+      )}
+
+      {order.criticalResult && (
+        <div className="flex items-center gap-2 p-2 bg-destructive/10 rounded-md">
+          <AlertTriangle className="w-4 h-4 text-destructive" />
+          <span className="text-sm text-destructive font-medium">Critical Result Flagged</span>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderRadiologySummary = (order: DiagnosticsOrder) => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Order ID</p>
+          <p className="text-sm font-medium">{order.id}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Visit ID</p>
+          <p className="text-sm font-medium">{order.visitId}</p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <User className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Patient</p>
+          <p className="text-sm font-medium">{order.patientName}</p>
+          <p className="text-xs text-muted-foreground">GDID - {order.gdid} • {order.ageSex}</p>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <MapPin className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Location</p>
+          <p className="text-sm font-medium">{order.location}{order.bed ? ` - ${order.bed}` : ""}</p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <Scan className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Imaging Study</p>
+          <p className="text-sm font-medium">{order.tests}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Modality</p>
+          <p className="text-sm font-medium">{order.modality || "—"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Status</p>
+          <Badge className={statusStyles[order.status] || "bg-gray-100 text-gray-700"}>
+            {order.status}
+          </Badge>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Imaging Location</p>
+          <p className="text-sm font-medium">{order.imagingLocation || "—"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Contrast Required</p>
+          <p className="text-sm font-medium">{order.contrast ? "Yes" : "No"}</p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-start gap-3">
+        <FileText className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Ordered By</p>
+          <p className="text-sm font-medium">{order.orderedDoctor}</p>
+          <p className="text-xs text-muted-foreground">{order.department}</p>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Scheduled At</p>
+          <p className="text-sm font-medium">
+            {order.scheduledAt ? format(order.scheduledAt, "HH:mm, dd-MMM-yyyy") : "—"}
+          </p>
+        </div>
+      </div>
+
+      {order.criticalResult && (
+        <div className="flex items-center gap-2 p-2 bg-destructive/10 rounded-md">
+          <AlertTriangle className="w-4 h-4 text-destructive" />
+          <span className="text-sm text-destructive font-medium">Critical Result Flagged</span>
+        </div>
+      )}
+    </div>
+  );
+
   return (
-    <ListPageLayout
-      title={title}
-      count={filteredData.length}
-      columns={columns}
-      data={filteredData}
-      filters={filters}
-      rowActions={rowActions}
-      searchPlaceholder="Search by patient name, visit ID, test..."
-      breadcrumbs={["Overview", title]}
-      emptyMessage="No diagnostics orders found"
-      getRowId={(row) => row.id}
-    />
+    <>
+      <ListPageLayout
+        title={title}
+        count={filteredData.length}
+        columns={columns}
+        data={filteredData}
+        filters={filters}
+        rowActions={rowActions}
+        searchPlaceholder="Search by patient name, visit ID, test..."
+        breadcrumbs={["Overview", title]}
+        emptyMessage="No diagnostics orders found"
+        getRowId={(row) => row.id}
+      />
+
+      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {selectedOrder?.type === "Laboratory" ? (
+                <>
+                  <FlaskConical className="w-5 h-5" />
+                  Lab Order Summary
+                </>
+              ) : (
+                <>
+                  <Scan className="w-5 h-5" />
+                  Radiology Order Summary
+                </>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedOrder && (
+            selectedOrder.type === "Laboratory" 
+              ? renderLabSummary(selectedOrder)
+              : renderRadiologySummary(selectedOrder)
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
