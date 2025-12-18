@@ -222,27 +222,6 @@ const TransferPatient = () => {
               <span className="font-semibold">Patient Insight</span>
             </button>
 
-            {/* Header Actions */}
-            <div className="flex items-center justify-end">
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Current Location</p>
-                  <p className="font-medium">
-                    {patient.currentLocation.unitName} • {patient.currentLocation.bedName}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleSaveDraft}>
-                    <Save className="w-4 h-4 mr-1" />
-                    Save Draft
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={handleCancel}>
-                    <X className="w-4 h-4 mr-1" />
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Stepper */}
