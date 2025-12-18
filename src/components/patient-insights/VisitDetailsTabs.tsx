@@ -80,7 +80,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
         {/* Tab Content */}
         <div className="flex-1 overflow-y-auto">
           <TabsContent value="appointments" className="mt-0">
-            <AppointmentsTab selectedVisit={selectedVisit} />
+            <AppointmentsTab selectedVisit={selectedVisit} patient={patient} />
           </TabsContent>
 
           <TabsContent value="invoices" className="mt-0">
