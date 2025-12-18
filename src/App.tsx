@@ -50,6 +50,7 @@ import PatientSearch from "./pages/PatientSearch";
 import TransfersList from "./pages/TransfersList";
 import DepartmentDetail from "./pages/DepartmentDetail";
 import DepartmentsList from "./pages/DepartmentsList";
+import BillsList from "./pages/BillsList";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -107,6 +108,7 @@ const App = () => (
             <Route path="/patients/transfers" element={<TransfersList />} />
             <Route path="/departments" element={<DepartmentsList />} />
             <Route path="/departments/:departmentId" element={<DepartmentDetail />} />
+            <Route path="/reports/revenue" element={<BillsList />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
