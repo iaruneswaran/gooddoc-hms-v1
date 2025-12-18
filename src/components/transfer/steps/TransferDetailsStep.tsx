@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,16 +10,18 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { TransferRequest, TransferType, TransferReason } from "@/types/transfer";
-import { transferTypeLabels, reasonLabels } from "@/data/transfer.mock";
+import { TransferRequest, TransferType, TransferReason, BedLocation, Bed } from "@/types/transfer";
+import { transferTypeLabels, reasonLabels, mockUnits, mockBeds } from "@/data/transfer.mock";
 
 interface TransferDetailsStepProps {
   data: Partial<TransferRequest>;
   onChange: (data: Partial<TransferRequest>) => void;
   currentTariff: number;
+  fromLocation: BedLocation;
+  onSelectBed: (bed: Bed) => void;
 }
 
-export function TransferDetailsStep({ data, onChange, currentTariff }: TransferDetailsStepProps) {
+export function TransferDetailsStep({ data, onChange, currentTariff, fromLocation, onSelectBed }: TransferDetailsStepProps) {
   // Auto-fill ordering clinician
   useEffect(() => {
     if (!data.orderingClinician) {
@@ -27,10 +29,120 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
     }
   }, []);
 
-  
+  // Get available units for destination
+  const availableUnits = useMemo(() => {
+    return mockUnits.filter(unit => unit.availableBeds > 0);
+  }, []);
+
+  // Get available beds for selected unit
+  const availableBeds = useMemo(() => {
+    if (!data.toLocation?.unitId) return [];
+    return mockBeds.filter(
+      bed => bed.unitId === data.toLocation?.unitId && bed.status === 'available'
+    );
+  }, [data.toLocation?.unitId]);
+
+  const handleUnitChange = (unitId: string) => {
+    const unit = mockUnits.find(u => u.id === unitId);
+    if (unit) {
+      onChange({
+        toLocation: {
+          unitId: unit.id,
+          unitName: unit.name,
+          roomId: "",
+          roomName: "",
+          bedId: "",
+          bedName: "",
+        },
+        costDelta: undefined,
+      });
+    }
+  };
+
+  const handleBedChange = (bedId: string) => {
+    const bed = mockBeds.find(b => b.id === bedId);
+    if (bed) {
+      onChange({
+        toLocation: {
+          unitId: bed.unitId,
+          unitName: bed.unitName,
+          roomId: bed.roomId,
+          roomName: bed.roomName,
+          bedId: bed.id,
+          bedName: bed.bedName,
+        },
+        costDelta: bed.tariff - currentTariff,
+      });
+      onSelectBed(bed);
+    }
+  };
 
   return (
     <div className="space-y-6">
+      {/* From & To Location */}
+      <div className="grid grid-cols-2 gap-6">
+        {/* From Location (Read-only) */}
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-muted-foreground" />
+            From Location
+          </Label>
+          <div className="h-10 px-3 py-2 rounded-md border border-border bg-muted/50 flex items-center text-sm text-foreground">
+            {fromLocation.unitName} • {fromLocation.roomName} • {fromLocation.bedName}
+          </div>
+          <p className="text-xs text-muted-foreground">Patient's current location</p>
+        </div>
+
+        {/* To Location */}
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-primary" />
+            To Location
+          </Label>
+          <div className="grid grid-cols-2 gap-2">
+            {/* Ward Select */}
+            <Select
+              value={data.toLocation?.unitId || ""}
+              onValueChange={handleUnitChange}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Ward" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableUnits.map((unit) => (
+                  <SelectItem key={unit.id} value={unit.id}>
+                    {unit.name} ({unit.availableBeds} available)
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Bed Select */}
+            <Select
+              value={data.toLocation?.bedId || ""}
+              onValueChange={handleBedChange}
+              disabled={!data.toLocation?.unitId}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Bed" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableBeds.map((bed) => (
+                  <SelectItem key={bed.id} value={bed.id}>
+                    {bed.bedName} • {bed.roomName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          {data.toLocation?.bedId && (
+            <p className="text-xs text-muted-foreground">
+              {data.toLocation.unitName} • {data.toLocation.roomName} • {data.toLocation.bedName}
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* Transfer Type & Reason - Side by Side */}
       <div className="grid grid-cols-2 gap-4">
         {/* Transfer Type */}
@@ -156,7 +268,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
         />
         <p className="text-xs text-muted-foreground">Auto-filled from current user</p>
       </div>
-
 
       {/* Cost Delta Estimate */}
       {data.costDelta !== undefined && data.costDelta !== 0 && (

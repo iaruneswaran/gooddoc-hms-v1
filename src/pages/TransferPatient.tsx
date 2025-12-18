@@ -7,7 +7,6 @@ import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { TransferDetailsStep } from "@/components/transfer/steps/TransferDetailsStep";
-import { DestinationBedStep } from "@/components/transfer/steps/DestinationBedStep";
 import { TransferRequest, Bed, TransferTimelineEvent } from "@/types/transfer";
 
 const TransferPatient = () => {
@@ -17,7 +16,6 @@ const TransferPatient = () => {
   const fromPage = searchParams.get("from");
   const { toast } = useToast();
 
-  const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedBed, setSelectedBed] = useState<Bed | undefined>();
 
@@ -70,7 +68,6 @@ const TransferPatient = () => {
   // Auto-save draft
   useEffect(() => {
     const timer = setTimeout(() => {
-      // In real app, save to backend
       console.log("Auto-saving draft...", transferData);
     }, 2000);
     return () => clearTimeout(timer);
@@ -82,53 +79,9 @@ const TransferPatient = () => {
 
   const handleSelectBed = (bed: Bed) => {
     setSelectedBed(bed);
-    handleDataChange({
-      toLocation: {
-        unitId: bed.unitId,
-        unitName: bed.unitName,
-        roomId: bed.roomId,
-        roomName: bed.roomName,
-        bedId: bed.id,
-        bedName: bed.bedName,
-      },
-      costDelta: bed.tariff - patient.currentTariff,
-    });
     toast({
       title: `Bed ${bed.bedName} selected`,
       description: `${bed.unitName} • ${bed.roomName}`,
-    });
-  };
-
-  const handleHoldBed = (bed: Bed) => {
-    // In real app, call API to hold bed
-    const newEvent: TransferTimelineEvent = {
-      id: `event-${Date.now()}`,
-      type: "hold",
-      timestamp: new Date(),
-      actor: "Current User",
-      description: `Bed ${bed.bedName} held for 15 minutes`,
-    };
-    handleDataChange({
-      timeline: [...(transferData.timeline || []), newEvent],
-    });
-  };
-
-  const handleNext = () => {
-    if (currentStep === 1) {
-      setCurrentStep(2);
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const handleSaveDraft = () => {
-    toast({
-      title: "Draft saved",
-      description: "Transfer request saved as draft",
     });
   };
 
@@ -145,7 +98,7 @@ const TransferPatient = () => {
       description: `Transfer ID: ${transferId}`,
     });
     
-    // Navigate to success or back to patient insights
+    // Navigate back to patient insights
     navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ""}`);
   };
 
@@ -154,14 +107,7 @@ const TransferPatient = () => {
   };
 
   const canProceed = () => {
-    switch (currentStep) {
-      case 1:
-        return transferData.transferType && transferData.reason;
-      case 2:
-        return !!selectedBed;
-      default:
-        return true;
-    }
+    return transferData.transferType && transferData.reason && !!selectedBed;
   };
 
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
@@ -225,51 +171,32 @@ const TransferPatient = () => {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6 min-h-0">
-          <div className="max-w-5xl mx-auto">
-            {currentStep === 1 && (
-              <TransferDetailsStep
-                data={transferData}
-                onChange={handleDataChange}
-                currentTariff={patient.currentTariff}
-              />
-            )}
-            
-            {currentStep === 2 && (
-              <DestinationBedStep
-                selectedBed={selectedBed}
-                onSelectBed={handleSelectBed}
-                onHoldBed={handleHoldBed}
-                patientGender={patient.gender}
-                patientAgeGroup="adult"
-              />
-            )}
+          <div className="max-w-3xl mx-auto">
+            <TransferDetailsStep
+              data={transferData}
+              onChange={handleDataChange}
+              currentTariff={patient.currentTariff}
+              fromLocation={patient.currentLocation}
+              onSelectBed={handleSelectBed}
+            />
           </div>
         </main>
 
         {/* Footer Navigation */}
         <div className="border-t border-border bg-background px-6 py-4 flex-shrink-0">
-          <div className="flex justify-between max-w-5xl mx-auto">
+          <div className="flex justify-between max-w-3xl mx-auto">
             <Button
               variant="outline"
-              onClick={currentStep === 1 ? handleCancel : handleBack}
+              onClick={handleCancel}
             >
-              {currentStep === 1 ? "Cancel" : "Back"}
+              Cancel
             </Button>
-            {currentStep === 1 ? (
-              <Button
-                onClick={handleNext}
-                disabled={!canProceed()}
-              >
-                Continue
-              </Button>
-            ) : (
-              <Button
-                onClick={handleConfirm}
-                disabled={!canProceed() || isSubmitting}
-              >
-                {isSubmitting ? "Confirming..." : "Confirm Transfer"}
-              </Button>
-            )}
+            <Button
+              onClick={handleConfirm}
+              disabled={!canProceed() || isSubmitting}
+            >
+              {isSubmitting ? "Confirming..." : "Confirm Transfer"}
+            </Button>
           </div>
         </div>
       </PageContent>
