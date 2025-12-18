@@ -114,7 +114,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
   const renderAppointmentTable = (appointmentList: Appointment[], title: string) => (
     <div className="mb-6">
       <div className="px-6 py-3">
-        <h3 className="text-sm font-semibold text-foreground">
+        <h3 className="text-label font-semibold text-foreground">
           {title} ({appointmentList.length})
         </h3>
       </div>
