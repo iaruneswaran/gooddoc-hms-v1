@@ -96,15 +96,10 @@ export default function DiagnosticsList() {
     {
       key: "visitId",
       label: "Visit ID",
-      render: (row) => <span className="font-medium text-small">{row.visitId}</span>,
-    },
-    {
-      key: "location",
-      label: "Location",
       render: (row) => (
         <div className="flex flex-col">
-          <span className="text-small">{row.location}</span>
-          {row.bed && <span className="text-caption text-muted-foreground">{row.bed}</span>}
+          <span className="font-medium text-small">{row.visitId}</span>
+          <span className="text-caption text-muted-foreground">{row.location}{row.bed ? `/${row.bed}` : ""}</span>
         </div>
       ),
     },
@@ -112,19 +107,13 @@ export default function DiagnosticsList() {
       key: "tests",
       label: "Tests/Exam",
       render: (row) => (
-        <div className="flex flex-col">
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className={row.type === "Laboratory" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-purple-50 text-purple-700 border-purple-200"}>
+            {row.type === "Laboratory" ? "Lab" : "Rad"}
+          </Badge>
           <span className="text-small">{row.tests}</span>
-          <span className="text-caption text-muted-foreground">{row.type === "Laboratory" ? row.specimenType : row.modality}</span>
+          {row.criticalResult && <span className="text-red-600 text-xs font-medium">CRIT</span>}
         </div>
-      ),
-    },
-    {
-      key: "type",
-      label: "Type",
-      render: (row) => (
-        <Badge variant="outline" className={row.type === "Laboratory" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-purple-50 text-purple-700 border-purple-200"}>
-          {row.type === "Laboratory" ? "Lab" : "Rad"}
-        </Badge>
       ),
     },
     {
@@ -138,7 +127,7 @@ export default function DiagnosticsList() {
     },
     {
       key: "collectedAt",
-      label: "Collected/Scheduled",
+      label: "Time",
       render: (row) => {
         const dateTime = row.type === "Laboratory" ? row.collectedAt : row.scheduledAt;
         if (!dateTime) return <span className="text-muted-foreground">—</span>;
@@ -149,22 +138,6 @@ export default function DiagnosticsList() {
           </div>
         );
       },
-    },
-    {
-      key: "resultEta",
-      label: "Result ETA",
-      render: (row) => (
-        <span className="text-small">{row.resultEta || "—"}</span>
-      ),
-    },
-    {
-      key: "critical",
-      label: "Critical",
-      render: (row) => (
-        <span className={`text-small font-medium ${row.criticalResult ? "text-red-600" : "text-muted-foreground"}`}>
-          {row.criticalResult ? "Yes" : "No"}
-        </span>
-      ),
     },
   ];
 
