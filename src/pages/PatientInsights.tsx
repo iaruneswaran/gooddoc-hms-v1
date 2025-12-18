@@ -226,13 +226,22 @@ const PatientInsights = () => {
                 <div className="flex gap-2">
                   <Button 
                     size="sm"
-                    onClick={() => navigate("/book-appointment", { 
-                      state: { fromPatientInsights: true, patientId } 
-                    })}
+                    onClick={() => {
+                      // TODO: Navigate to services page
+                    }}
                   >
-                    Book Appointment
+                    Services
                   </Button>
                   <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      // TODO: Navigate to transfer page
+                    }}
+                  >
+                    Transfer
+                  </Button>
+                  <Button
                     variant="outline" 
                     size="sm"
                     onClick={() => navigate(`/patient-insights/${patientId}/timeline`, {
