@@ -404,7 +404,7 @@ function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRec
   const bedType = typeOverride || bedTypes[index % bedTypes.length];
   const statuses: BedRecord["status"][] = ["Available", "Available", "Available", "Cleaning", "Reserved", "Blocked"];
   const status = statuses[index % statuses.length];
-  const wardMap = { ICU: "ICU", HDU: "HDU", Ward: `Ward ${(index % 3) + 1}`, Private: "Private", Isolation: "Isolation" };
+  const wardMap = { ICU: "ICU", HDU: "HDU", Ward: `Ward-${["A", "B", "C"][index % 3]}`, Private: "Private Wing", Isolation: "Isolation" };
 
   return {
     ward: wardMap[bedType],
