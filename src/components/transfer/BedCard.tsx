@@ -11,6 +11,7 @@ interface BedCardProps {
   isSelected?: boolean;
   onSelect?: (bed: Bed) => void;
   onHold?: (bed: Bed) => void;
+  onCancel?: () => void;
   compact?: boolean;
 }
 
@@ -32,7 +33,7 @@ const statusStyles: Record<string, { bg: string; text: string; label: string }> 
   out_of_service: { bg: "bg-gray-100", text: "text-gray-700", label: "Out of Service" },
 };
 
-export function BedCard({ bed, isSelected, onSelect, onHold, compact }: BedCardProps) {
+export function BedCard({ bed, isSelected, onSelect, onHold, onCancel, compact }: BedCardProps) {
   const statusStyle = statusStyles[bed.status] || statusStyles.available;
   const isAvailable = bed.status === "available";
 
@@ -124,7 +125,28 @@ export function BedCard({ bed, isSelected, onSelect, onHold, compact }: BedCardP
         )}
       </div>
 
-      {isAvailable && (
+      {isSelected ? (
+        <div className="flex gap-2 mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCancel?.();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+            disabled
+          >
+            Selected
+          </Button>
+        </div>
+      ) : isAvailable && (
         <div className="flex gap-2 mt-4">
           <Button
             variant="outline"
