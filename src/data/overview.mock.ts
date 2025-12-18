@@ -90,6 +90,7 @@ export interface ERCaseRecord {
 
 export interface DoctorOnDutyRecord {
   doctorName: string;
+  degrees: string;
   specialty: string;
   role: "Onsite" | "On-call" | "In OPD" | "In OT" | "In Ward Rounds" | "In Procedure" | "Break" | "Remote";
   shiftStart: string;
@@ -517,9 +518,20 @@ function generateDoctorOnDuty(index: number): DoctorOnDutyRecord {
   const opdRooms = ["OPD-101", "OPD-102", "OPD-103", "OPD-201", "OPD-202"];
   const primaryUnits = ["ICU", "HDU", "Ward-A", "Ward-B", "Ward-C"];
   const contexts = ["Radiology Reading", "Pathology/Lab", "Telemedicine", "Admin", "Education/Academic", "Research"];
+  const degreesList = [
+    "MBBS, MD", 
+    "MBBS, MS", 
+    "MBBS, MD, DM", 
+    "MBBS, MS, MCh", 
+    "MBBS, DNB", 
+    "MBBS, MD, FRCP",
+    "MBBS, MS, FRCS",
+    "MBBS, MD, PhD"
+  ];
 
   return {
     doctorName: doctors[index % doctors.length],
+    degrees: degreesList[index % degreesList.length],
     specialty: departments[index % departments.length],
     role,
     shiftStart: formatTime(shiftStart),
