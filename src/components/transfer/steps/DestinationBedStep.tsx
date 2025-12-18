@@ -164,80 +164,98 @@ export function DestinationBedStep({
         </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-          {filteredBeds.map((bed) => (
-            <Sheet key={bed.id}>
-              <SheetTrigger asChild>
-                <div onClick={() => setDetailBed(bed)}>
-                  <BedCard
-                    bed={bed}
-                    isSelected={selectedBed?.id === bed.id}
-                    onSelect={onSelectBed}
-                    onHold={handleHoldBed}
-                  />
-                </div>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Bed Details</SheetTitle>
-                </SheetHeader>
-                {detailBed && (
-                  <div className="mt-6 space-y-6">
-                    <div>
-                      <h3 className="text-2xl font-bold">{detailBed.bedName}</h3>
-                      <p className="text-muted-foreground">
-                        {detailBed.unitName} • {detailBed.roomName}
-                      </p>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Features</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {detailBed.features.map((feature) => (
-                          <Badge key={feature} variant="secondary">
-                            {featureLabels[feature]}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Restrictions</h4>
-                      <div className="text-sm space-y-1">
-                        <p>Gender: {detailBed.genderRestriction === 'any' ? 'Any' : detailBed.genderRestriction}</p>
-                        <p>Age Group: {detailBed.ageGroup === 'any' ? 'Any' : detailBed.ageGroup}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Tariff</h4>
-                      <p className="text-2xl font-bold">₹{detailBed.tariff.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">/day</span></p>
-                    </div>
-
-                    {detailBed.status === 'available' && (
-                      <div className="flex gap-2 pt-4">
-                        <Button
-                          variant="outline"
-                          className="flex-1"
-                          onClick={() => handleHoldBed(detailBed)}
-                        >
-                          Hold for 15m
-                        </Button>
-                        <Button
-                          className="flex-1"
-                          onClick={() => {
-                            onSelectBed(detailBed);
-                            setDetailBed(null);
-                          }}
-                        >
-                          Select Bed
-                        </Button>
-                      </div>
-                    )}
+          {filteredBeds.map((bed) => {
+            const isSelected = selectedBed?.id === bed.id;
+            
+            // If this bed is selected, don't wrap in Sheet
+            if (isSelected) {
+              return (
+                <BedCard
+                  key={bed.id}
+                  bed={bed}
+                  isSelected={true}
+                  onSelect={onSelectBed}
+                  onHold={handleHoldBed}
+                  onCancel={() => onSelectBed(undefined as any)}
+                />
+              );
+            }
+            
+            return (
+              <Sheet key={bed.id}>
+                <SheetTrigger asChild>
+                  <div onClick={() => setDetailBed(bed)}>
+                    <BedCard
+                      bed={bed}
+                      isSelected={false}
+                      onSelect={onSelectBed}
+                      onHold={handleHoldBed}
+                    />
                   </div>
-                )}
-              </SheetContent>
-            </Sheet>
-          ))}
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Bed Details</SheetTitle>
+                  </SheetHeader>
+                  {detailBed && (
+                    <div className="mt-6 space-y-6">
+                      <div>
+                        <h3 className="text-2xl font-bold">{detailBed.bedName}</h3>
+                        <p className="text-muted-foreground">
+                          {detailBed.unitName} • {detailBed.roomName}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h4 className="font-medium">Features</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {detailBed.features.map((feature) => (
+                            <Badge key={feature} variant="secondary">
+                              {featureLabels[feature]}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h4 className="font-medium">Restrictions</h4>
+                        <div className="text-sm space-y-1">
+                          <p>Gender: {detailBed.genderRestriction === 'any' ? 'Any' : detailBed.genderRestriction}</p>
+                          <p>Age Group: {detailBed.ageGroup === 'any' ? 'Any' : detailBed.ageGroup}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h4 className="font-medium">Tariff</h4>
+                        <p className="text-2xl font-bold">₹{detailBed.tariff.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">/day</span></p>
+                      </div>
+
+                      {detailBed.status === 'available' && (
+                        <div className="flex gap-2 pt-4">
+                          <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => handleHoldBed(detailBed)}
+                          >
+                            Hold for 15m
+                          </Button>
+                          <Button
+                            className="flex-1"
+                            onClick={() => {
+                              onSelectBed(detailBed);
+                              setDetailBed(null);
+                            }}
+                          >
+                            Select Bed
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </SheetContent>
+              </Sheet>
+            );
+          })}
         </div>
       )}
     </div>
