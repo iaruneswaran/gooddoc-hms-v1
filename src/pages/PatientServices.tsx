@@ -72,9 +72,6 @@ const PatientServices = () => {
               <span className="font-semibold">Patient Insight</span>
             </button>
             
-            <div className="flex items-center justify-between">
-              <h1 className="text-h3 font-semibold">Add Services</h1>
-            </div>
           </div>
         </div>
         
