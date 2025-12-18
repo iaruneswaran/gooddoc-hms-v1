@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PatientChip } from "@/components/patient-insights/PatientChip";
+import { Card, CardContent } from "@/components/ui/card";
 import { useServicesCart } from "@/hooks/useServicesCart";
 import { searchServices } from "@/data/services.mock";
 import { ServiceCategory } from "@/types/booking/ipAdmission";
@@ -44,13 +43,6 @@ const PatientServices = () => {
     );
   };
 
-  // Mock patient data
-  const patient = {
-    name: "Harish Kalyan",
-    gdid: "001",
-    age: 44,
-    gender: "Male",
-  };
 
   const handleGenerateBill = () => {
     // TODO: Navigate to billing or generate invoice
@@ -81,15 +73,7 @@ const PatientServices = () => {
             </button>
             
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <h1 className="text-h3 font-semibold">Add Services</h1>
-                <PatientChip
-                  name={patient.name}
-                  gdid={patient.gdid}
-                  age={patient.age}
-                  gender={patient.gender}
-                />
-              </div>
+              <h1 className="text-h3 font-semibold">Add Services</h1>
             </div>
           </div>
         </div>
@@ -162,7 +146,7 @@ const PatientServices = () => {
           </div>
           
           {/* Right Side - Cart Summary */}
-          <div className="w-[360px] flex flex-col bg-muted/30">
+          <div className="w-[420px] flex flex-col bg-muted/30">
             <div className="p-4 border-b">
               <h3 className="text-label font-semibold">Order Summary</h3>
               <p className="text-caption text-muted-foreground">{cart.length} item(s) added</p>
