@@ -44,7 +44,7 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
 
   if (!onClick) {
     return (
-      <div className="flex items-center gap-3 px-4 py-2 rounded-lg">
+      <div className="flex items-center gap-3 pr-4 py-2 rounded-lg">
         {content}
       </div>
     );
@@ -53,7 +53,7 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent/50 transition-colors group"
+      className="flex items-center gap-3 pr-4 py-2 rounded-lg hover:bg-accent/50 transition-colors group"
       title="View profile details"
     >
       {content}
