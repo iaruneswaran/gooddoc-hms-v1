@@ -19,7 +19,8 @@ import {
   ScanLine,
   PackageOpen,
   ChevronRight,
-  Plus
+  Plus,
+  IndianRupee
 } from "lucide-react";
 
 interface SubMetric {
@@ -122,7 +123,7 @@ const PrimaryMetricCard = ({
       <div className="h-px bg-border" />
       
       {/* Bottom section - Sub-metrics grid */}
-      <div className="px-2 py-3 grid grid-cols-3 text-xs">
+      <div className={`px-2 py-3 grid ${subMetrics.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} text-xs`}>
         {subMetrics.map((metric, idx) => (
           <span
             key={idx}
@@ -232,21 +233,27 @@ const Overview = () => {
       ],
     },
     {
-      title: "Doctors on Duty",
-      count: 89,
-      icon: Stethoscope,
-      route: "/doctors/on-duty?shift=current",
-      iconColorClass: iconColors.doctors,
+      title: "Revenue",
+      count: 24.4,
+      icon: IndianRupee,
+      route: "/reports/revenue",
+      iconColorClass: "text-green-600",
       isPrimary: true,
       subMetrics: [
-        { label: "OP Doctors", value: 42, filterParam: "type=op" },
-        { label: "IP Doctors", value: 31, filterParam: "type=ip" },
-        { label: "Emergency Doctors", value: 16, filterParam: "type=other" },
+        { label: "24 Bills", value: "₹24.4L", filterParam: "type=collected" },
+        { label: "12 Bills Outstanding", value: "₹8.4L", filterParam: "type=outstanding" },
       ],
     },
   ];
 
   const standardCards: MetricCardProps[] = [
+    {
+      title: "Doctors on Duty",
+      count: 89,
+      icon: Stethoscope,
+      route: "/doctors/on-duty?shift=current",
+      iconColorClass: iconColors.doctors,
+    },
     {
       title: "Discharged",
       count: 45,
