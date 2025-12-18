@@ -173,9 +173,9 @@ const IPPatients = () => {
           {selectedPatient && (
             <div className="space-y-4">
               {/* Patient Header */}
-              <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                     getGender(selectedPatient.ageSex) === "male" ? "bg-blue-100" : "bg-pink-100"
                   }`}>
                     {getGender(selectedPatient.ageSex) === "male" ? (
@@ -191,7 +191,7 @@ const IPPatients = () => {
                     </p>
                   </div>
                 </div>
-                <Badge className="bg-green-100 text-green-700 border-green-200 flex-shrink-0">
+                <Badge className="bg-green-100 text-green-700 border-green-200">
                   Admitted
                 </Badge>
               </div>
