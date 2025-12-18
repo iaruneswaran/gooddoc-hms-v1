@@ -201,8 +201,8 @@ const PatientInsights = () => {
         ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-6">
+        <div className="bg-muted/30 border-b border-border flex-shrink-0">
+          <div className="px-6 py-4">
             {/* Back Button */}
             <button
               onClick={() => navigate(currentBreadcrumb.path)}
