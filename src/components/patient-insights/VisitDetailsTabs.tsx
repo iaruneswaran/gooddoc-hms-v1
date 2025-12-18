@@ -37,32 +37,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
         <div className="sticky top-0 bg-background z-10 border-b border-border">
-        <TabsList className="h-auto bg-transparent p-0 gap-6 rounded-none justify-start border-0 px-8 pt-3">
-            <TabsTrigger
-              value="invoices"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-semibold data-[state=active]:text-primary border-b-0"
-            >
-              Bills
-            </TabsTrigger>
-            <TabsTrigger
-              value="advance"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-semibold data-[state=active]:text-primary border-b-0"
-            >
-              Advance
-            </TabsTrigger>
-            <TabsTrigger
-              value="insurance"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-semibold data-[state=active]:text-primary border-b-0"
-            >
-              Insurance
-            </TabsTrigger>
-            <TabsTrigger
-              value="payments"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-semibold data-[state=active]:text-primary border-b-0"
-            >
-              History
-            </TabsTrigger>
-            <div className="flex-1" />
+          <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-8 pt-3">
             <TabsTrigger
               value="appointments"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
@@ -70,10 +45,28 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               Appointments
             </TabsTrigger>
             <TabsTrigger
+              value="invoices"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Bills Summary
+            </TabsTrigger>
+            <TabsTrigger
+              value="payments"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Payment History
+            </TabsTrigger>
+            <TabsTrigger
               value="documents"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
               Documents
+            </TabsTrigger>
+            <TabsTrigger
+              value="insurance"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Insurance
             </TabsTrigger>
             <TabsTrigger
               value="patient-details"
@@ -92,13 +85,6 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
 
           <TabsContent value="invoices" className="mt-0">
             <InvoicesTab selectedVisit={selectedVisit} />
-          </TabsContent>
-
-          <TabsContent value="advance" className="mt-0">
-            <div className="p-8">
-              <h3 className="text-h3 font-semibold mb-4">Advance Collection</h3>
-              <p className="text-muted-foreground">Advance payment collection and management will be displayed here.</p>
-            </div>
           </TabsContent>
 
           <TabsContent value="payments" className="mt-0">

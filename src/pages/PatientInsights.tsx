@@ -15,7 +15,7 @@ const PatientInsights = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
-  const [activeTab, setActiveTab] = useState("invoices");
+  const [activeTab, setActiveTab] = useState("appointments");
 
   // Mapping for breadcrumb navigation based on source page
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
@@ -255,6 +255,13 @@ const PatientInsights = () => {
                     })}
                   >
                     Discharge
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                  >
+                    Payments
                   </Button>
                 </div>
               </div>
