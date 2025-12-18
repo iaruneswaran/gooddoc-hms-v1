@@ -51,7 +51,6 @@ const TransferPatient = () => {
       bedName: "WA-102-1",
     },
     currentTariff: 3500,
-    alerts: ["O+ Blood Group"],
     admissionStatus: "Admitted",
   };
 
@@ -258,17 +257,6 @@ const TransferPatient = () => {
                 </div>
               </div>
             </div>
-
-            {/* Alerts */}
-            {patient.alerts.length > 0 && (
-              <div className="flex gap-2 mt-3">
-                {patient.alerts.map((alert, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {alert}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Stepper */}
