@@ -226,12 +226,7 @@ const TransferPatient = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-bold text-foreground">{patient.name}</h1>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">
-                      {patient.admissionStatus}
-                    </Badge>
-                  </div>
+                  <h1 className="text-xl font-bold text-foreground">{patient.name}</h1>
                 </div>
               </div>
               
