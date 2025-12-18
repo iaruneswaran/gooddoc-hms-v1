@@ -119,9 +119,7 @@ export default function DiagnosticsList() {
       key: "type",
       label: "Type",
       render: (row) => (
-        <Badge variant="outline" className={row.type === "Laboratory" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-purple-50 text-purple-700 border-purple-200"}>
-          {row.type === "Laboratory" ? "Lab" : "Rad"}
-        </Badge>
+        <span className="text-sm">{row.type}</span>
       ),
     },
     {
