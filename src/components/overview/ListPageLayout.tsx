@@ -177,7 +177,7 @@ export function ListPageLayout<T>({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => navigate("/overview")}
+                  onClick={() => navigate("/")}
                   className="h-9 w-9"
                   aria-label="Back to Overview"
                 >
