@@ -80,8 +80,8 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </div>
 
       {/* Patient Information */}
-      <Card className="p-6">
-        <h3 className="text-base font-semibold text-foreground mb-4">Patient Information</h3>
+      <Card className="p-6 bg-card border border-border rounded-xl shadow-sm">
+        <h3 className="text-[14px] font-semibold text-foreground mb-4">Patient Information</h3>
         <div className="space-y-4">
           {!isEditing ? (
             // View Mode
@@ -251,8 +251,8 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </Card>
 
       {/* Address Details */}
-      <Card className="p-6">
-        <h3 className="text-base font-semibold text-foreground mb-4">Address Details</h3>
+      <Card className="p-6 bg-card border border-border rounded-xl shadow-sm">
+        <h3 className="text-[14px] font-semibold text-foreground mb-4">Address Details</h3>
         <div className="space-y-4">
           {!isEditing ? (
             // View Mode

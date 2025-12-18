@@ -47,8 +47,8 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
     <div className="p-6 space-y-6">
       {/* Claims Table */}
       <div>
-        <h3 className="text-lg font-semibold text-primary mb-4">Insurance Claims</h3>
-        <div className="border rounded-lg overflow-hidden">
+        <h3 className="text-[14px] font-semibold text-foreground mb-4">Insurance Claims</h3>
+        <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
           <table className="w-full">
             <thead className="bg-muted/50">
               <tr>
