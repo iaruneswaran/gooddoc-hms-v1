@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, MapPin } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -10,8 +9,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { TransferRequest, TransferType, TransferReason, BedLocation, Bed } from "@/types/transfer";
-import { transferTypeLabels, reasonLabels, mockUnits, mockBeds } from "@/data/transfer.mock";
+import { TransferRequest, TransferReason, BedLocation, Bed } from "@/types/transfer";
+import { reasonLabels, mockUnits, mockBeds } from "@/data/transfer.mock";
 
 interface TransferDetailsStepProps {
   data: Partial<TransferRequest>;
@@ -143,24 +142,24 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
         </div>
       </div>
 
-      {/* Transfer Type & Reason - Side by Side */}
+      {/* Ordering Clinician & Reason - Side by Side */}
       <div className="grid grid-cols-2 gap-4">
-        {/* Transfer Type */}
+        {/* Ordering Clinician */}
         <div className="space-y-2">
-          <Label htmlFor="transferType">Transfer Type</Label>
+          <Label htmlFor="orderingClinician">Ordering Clinician</Label>
           <Select
-            value={data.transferType}
-            onValueChange={(value) => onChange({ transferType: value as TransferType })}
+            value={data.orderingClinician || ""}
+            onValueChange={(value) => onChange({ orderingClinician: value })}
           >
-            <SelectTrigger id="transferType">
-              <SelectValue placeholder="Select transfer type" />
+            <SelectTrigger id="orderingClinician">
+              <SelectValue placeholder="Select clinician" />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(transferTypeLabels).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
+              <SelectItem value="Dr. Meera Nair">Dr. Meera Nair</SelectItem>
+              <SelectItem value="Dr. Arun Sharma">Dr. Arun Sharma</SelectItem>
+              <SelectItem value="Dr. Priya Patel">Dr. Priya Patel</SelectItem>
+              <SelectItem value="Dr. Rajesh Kumar">Dr. Rajesh Kumar</SelectItem>
+              <SelectItem value="Dr. Sunita Reddy">Dr. Sunita Reddy</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -258,16 +257,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
         />
       </div>
 
-      {/* Ordering Clinician */}
-      <div className="space-y-2">
-        <Label htmlFor="orderingClinician">Ordering Clinician</Label>
-        <Input
-          id="orderingClinician"
-          value={data.orderingClinician || ""}
-          onChange={(e) => onChange({ orderingClinician: e.target.value })}
-        />
-        <p className="text-xs text-muted-foreground">Auto-filled from current user</p>
-      </div>
 
       {/* Cost Delta Estimate */}
       {data.costDelta !== undefined && data.costDelta !== 0 && (
