@@ -19,6 +19,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ArrowLeft, Search, Download, Printer, MoreVertical, User, UserRound, FileText, Eye } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { Badge } from "@/components/ui/badge";
@@ -355,102 +363,102 @@ const AdvancePayments = () => {
 
           {/* Table */}
           <Card>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30">
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Patient</th>
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Receipt No.</th>
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Date & Time</th>
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Reason</th>
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Method</th>
-                    <th className="text-right p-3 text-label font-semibold text-muted-foreground">Amount</th>
-                    <th className="text-right p-3 text-label font-semibold text-muted-foreground">Used</th>
-                    <th className="text-right p-3 text-label font-semibold text-muted-foreground">Balance</th>
-                    <th className="text-left p-3 text-label font-semibold text-muted-foreground">Status</th>
-                    <th className="text-right p-3 text-label font-semibold text-muted-foreground w-[60px]">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.map((payment) => (
-                    <tr key={payment.id} className="border-b border-border hover:bg-muted/20 transition-colors">
-                      <td className="p-3">
-                        <div className="flex items-center gap-2">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getGenderBg(payment.ageSex)}`}>
-                            {getGenderIcon(payment.ageSex)}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-small font-medium text-foreground truncate">{payment.patientName}</p>
-                            <p className="text-caption text-muted-foreground">
-                              GDID - {payment.patientId.replace("P", "").padStart(3, "0")} • {payment.ageSex}
-                            </p>
-                          </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Receipt No.</TableHead>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Reason</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="text-right">Used</TableHead>
+                  <TableHead className="text-right">Balance</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="w-[60px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredData.map((payment) => (
+                  <TableRow key={payment.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getGenderBg(payment.ageSex)}`}>
+                          {getGenderIcon(payment.ageSex)}
                         </div>
-                      </td>
-                      <td className="p-3">
-                        <p className="text-small font-medium text-foreground">{payment.receiptNo}</p>
-                        <p className="text-caption text-muted-foreground">{payment.collectedBy}</p>
-                      </td>
-                      <td className="p-3">
-                        <p className="text-small text-foreground">{payment.time}</p>
-                        <p className="text-caption text-muted-foreground">{payment.date}</p>
-                      </td>
-                      <td className="p-3">
-                        <p className="text-small text-foreground max-w-[200px] truncate" title={payment.reason}>
-                          {payment.reason}
-                        </p>
-                      </td>
-                      <td className="p-3">
-                        <p className="text-small text-foreground">{payment.paymentMethod}</p>
-                      </td>
-                      <td className="p-3 text-right">
-                        <p className="text-small font-medium text-foreground">{formatINR(payment.amount)}</p>
-                      </td>
-                      <td className="p-3 text-right">
-                        <p className="text-small text-muted-foreground">
-                          {payment.usedAmount > 0 ? formatINR(payment.usedAmount) : "—"}
-                        </p>
-                      </td>
-                      <td className="p-3 text-right">
-                        <p className="text-small font-medium text-green-600">
-                          {formatINR(payment.amount - payment.usedAmount)}
-                        </p>
-                      </td>
-                      <td className="p-3">
-                        <Badge className={`${statusStyles[payment.status]} text-xs`}>
-                          {payment.status}
-                        </Badge>
-                      </td>
-                      <td className="p-3 text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => navigate(`/patient-insights/${payment.patientId}`)}>
-                              <Eye className="w-4 h-4 mr-2" />
-                              Patient Insight
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <FileText className="w-4 h-4 mr-2" />
-                              View Receipt
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Printer className="w-4 h-4 mr-2" />
-                              Print Receipt
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="p-3 border-t border-border text-sm text-muted-foreground">
-              Showing {filteredData.length} of {advancePaymentsData.length} results
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">{payment.patientName}</p>
+                          <p className="text-xs text-muted-foreground">
+                            GDID - {payment.patientId.replace("P", "").padStart(3, "0")} • {payment.ageSex}
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-sm font-medium text-foreground">{payment.receiptNo}</p>
+                      <p className="text-xs text-muted-foreground">{payment.collectedBy}</p>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-sm text-foreground">{payment.time}</p>
+                      <p className="text-xs text-muted-foreground">{payment.date}</p>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-sm text-foreground max-w-[200px] truncate" title={payment.reason}>
+                        {payment.reason}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-sm text-foreground">{payment.paymentMethod}</p>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <p className="text-sm font-medium text-foreground">{formatINR(payment.amount)}</p>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <p className="text-sm text-muted-foreground">
+                        {payment.usedAmount > 0 ? formatINR(payment.usedAmount) : "—"}
+                      </p>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <p className="text-sm font-medium text-green-600">
+                        {formatINR(payment.amount - payment.usedAmount)}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={`${statusStyles[payment.status]} text-xs`}>
+                        {payment.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => navigate(`/patient-insights/${payment.patientId}`)}>
+                            <Eye className="w-4 h-4 mr-2" />
+                            Patient Insight
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <FileText className="w-4 h-4 mr-2" />
+                            View Receipt
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Printer className="w-4 h-4 mr-2" />
+                            Print Receipt
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div className="flex items-center justify-between px-4 py-3 border-t">
+              <p className="text-sm text-muted-foreground">
+                Showing {filteredData.length} of {advancePaymentsData.length} results
+              </p>
             </div>
           </Card>
         </main>
