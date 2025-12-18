@@ -173,7 +173,7 @@ const IPPatients = () => {
           {selectedPatient && (
             <div className="space-y-4">
               {/* Patient Header */}
-              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
+              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                     getGender(selectedPatient.ageSex) === "male" ? "bg-blue-100" : "bg-pink-100"
