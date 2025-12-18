@@ -36,8 +36,8 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
-        <div className="sticky top-0 bg-background z-10 border-b border-border">
-          <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-8 pt-3">
+        <div className="sticky top-0 bg-white z-10 border-b border-border">
+          <TabsList className="h-auto bg-white p-0 gap-8 rounded-none justify-start border-0 px-8 pt-3">
             <TabsTrigger
               value="appointments"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
@@ -78,7 +78,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
         </div>
 
         {/* Tab Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-white">
           <TabsContent value="appointments" className="mt-0">
             <AppointmentsTab selectedVisit={selectedVisit} patient={patient} />
           </TabsContent>
