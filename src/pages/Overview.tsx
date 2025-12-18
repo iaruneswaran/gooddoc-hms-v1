@@ -20,7 +20,8 @@ import {
   PackageOpen,
   ChevronRight,
   Plus,
-  IndianRupee
+  IndianRupee,
+  Hospital
 } from "lucide-react";
 
 interface SubMetric {
@@ -218,7 +219,7 @@ const Overview = () => {
     {
       title: "IP Patients",
       count: 234,
-      icon: BedDouble,
+      icon: Hospital,
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
       isPrimary: true,
