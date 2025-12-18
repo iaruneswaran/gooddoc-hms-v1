@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { dischargedPatients, dischargePending, IPPatientRecord } from "@/data/overview.mock";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // Generate billing amounts based on mrn for variety
 const getBillingAmount = (mrn: string) => {
@@ -17,10 +24,25 @@ const getPaymentMode = (mrn: string) => {
   return modes[numericPart % modes.length];
 };
 
+const getDischargeType = (index: number) => {
+  const types = ["Home", "Transfer", "AMA", "Expired", "Home"];
+  return types[index % types.length];
+};
+
+const getDiagnosis = (index: number) => {
+  const diagnoses = [
+    "Hypertension", "Type 2 Diabetes", "COPD", "Coronary Artery Disease",
+    "Osteoarthritis", "Pneumonia", "Appendicitis", "Cholecystitis", "Fracture", "Anemia"
+  ];
+  return diagnoses[index % diagnoses.length];
+};
+
 const DischargedToday = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const dischargeStatus = searchParams.get("dischargeStatus");
+  const [selectedPatient, setSelectedPatient] = useState<IPPatientRecord | null>(null);
+  const [showSummary, setShowSummary] = useState(false);
 
   let data = dischargedPatients;
   let displayCount = dischargedPatients.length;
@@ -155,30 +177,154 @@ const DischargedToday = () => {
     },
   ];
 
-  // No sub-filters for Discharged - it's now a simple card
-
   const rowActions: RowAction<IPPatientRecord>[] = [
-    { label: "View Summary", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=discharged`) },
-    { label: "Print Discharge Summary", onClick: (row) => console.log("Print", row.mrn) },
-    { label: "Export to PDF", onClick: (row) => console.log("Export", row.mrn) },
+    { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=discharged`) },
+    { 
+      label: "View Summary", 
+      onClick: (row) => {
+        setSelectedPatient(row);
+        setShowSummary(true);
+      }
+    },
   ];
 
   const displayColumns = dischargeStatus === "Pending" ? pendingColumns : dischargedColumns;
 
+  const getPatientIndex = (mrn: string) => {
+    const numericPart = parseInt(mrn.replace(/\D/g, '')) || 0;
+    return numericPart;
+  };
+
   return (
-    <ListPageLayout
-      title={pageTitle}
-      count={displayCount}
-      breadcrumbs={["Overview", pageTitle]}
-      columns={displayColumns}
-      data={data}
-      filters={filters}
-      rowActions={rowActions}
-      emptyMessage="No discharged patients for today."
-      searchPlaceholder="Search by MRN, name, ward..."
-      getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=discharged`)}
-    />
+    <>
+      <ListPageLayout
+        title={pageTitle}
+        count={displayCount}
+        breadcrumbs={["Overview", pageTitle]}
+        columns={displayColumns}
+        data={data}
+        filters={filters}
+        rowActions={rowActions}
+        emptyMessage="No discharged patients for today."
+        searchPlaceholder="Search by MRN, name, ward..."
+        getRowId={(row) => row.mrn}
+        onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=discharged`)}
+      />
+
+      <Dialog open={showSummary} onOpenChange={setShowSummary}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Discharge Summary</DialogTitle>
+          </DialogHeader>
+          {selectedPatient && (
+            <div className="space-y-6">
+              {/* Patient Info */}
+              <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
+                <div>
+                  <p className="text-xs text-muted-foreground">Patient Name</p>
+                  <p className="font-medium">{selectedPatient.patient}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">GDID</p>
+                  <p className="font-medium">GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Age / Gender</p>
+                  <p className="font-medium">{selectedPatient.ageSex}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Visit ID</p>
+                  <p className="font-medium">{selectedPatient.visitId}</p>
+                </div>
+              </div>
+
+              {/* Admission & Discharge Details */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <h4 className="font-medium text-sm">Admission Details</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Admit Date/Time</p>
+                      <p className="text-sm">{selectedPatient.admitDateTime}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Ward / Bed</p>
+                      <p className="text-sm">{selectedPatient.ward} / {selectedPatient.bed}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Attending Doctor</p>
+                      <p className="text-sm">{selectedPatient.attendingDoctor}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="font-medium text-sm">Discharge Details</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Discharge Date/Time</p>
+                      <p className="text-sm">{selectedPatient.dischargeDateTime}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Discharge Type</p>
+                      <p className="text-sm">{getDischargeType(getPatientIndex(selectedPatient.mrn))}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Length of Stay</p>
+                      <p className="text-sm">{selectedPatient.lengthOfStay} days</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Clinical Information */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm">Clinical Information</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Primary Diagnosis</p>
+                    <p className="text-sm">{getDiagnosis(getPatientIndex(selectedPatient.mrn))}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Condition at Discharge</p>
+                    <p className="text-sm">Stable</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Discharge Instructions</p>
+                  <p className="text-sm text-muted-foreground">
+                    Continue prescribed medications. Follow up with attending physician in 7 days. 
+                    Report immediately if symptoms worsen.
+                  </p>
+                </div>
+              </div>
+
+              {/* Billing Summary */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm">Billing Summary</h4>
+                <div className="grid grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Total Amount</p>
+                    <p className="font-medium">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Paid</p>
+                    <p className="font-medium text-green-600">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Balance</p>
+                    <p className="font-medium">₹0</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Payment Mode</p>
+                    <p className="font-medium">{getPaymentMode(selectedPatient.mrn)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
