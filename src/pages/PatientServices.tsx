@@ -78,7 +78,7 @@ const PatientServices = () => {
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden p-6 gap-6">
           {/* Left Side - Services List */}
-          <div className="flex-1 flex flex-col border-r overflow-hidden">
+          <div className="flex-1 flex flex-col border rounded-lg overflow-hidden">
             {/* Search & Filters */}
             <div className="p-4 space-y-3 border-b flex-shrink-0">
               <div className="relative">
