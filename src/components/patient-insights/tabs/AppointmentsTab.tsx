@@ -1,166 +1,264 @@
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
-import { format, parseISO } from "date-fns";
+import { User, UserRound, MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface AppointmentsTabProps {
   selectedVisit: Visit | null;
 }
 
-// Mock timeline events data
-const mockTimelineEvents = [
+// Mock appointments data
+const mockAppointments = [
   {
-    id: "e1",
-    date: "2025-11-01",
-    time: "09:32",
-    type: "Admission",
-    title: "ER → Ward 3B",
-    dept: "Admission",
+    id: "apt-1",
+    patientName: "Anjali Sharma",
+    gdid: "005",
+    age: 22,
+    gender: "F",
+    visitId: "V25-006",
+    checkInDate: "18-Dec-2025",
+    checkInTime: "08:35",
+    doctor: "Dr. Priya Menon",
+    department: "Oncology",
     status: "Completed",
+    tokenTime: "08:26",
+    tokenDate: "18-Dec-2025",
+    token: "T006",
   },
   {
-    id: "e2",
-    date: "2025-11-02",
-    time: "08:10",
-    type: "Laboratory",
-    title: "CBC + CMP",
-    dept: "Lab",
+    id: "apt-2",
+    patientName: "Kavitha Sharma",
+    gdid: "013",
+    age: 57,
+    gender: "F",
+    visitId: "V25-014",
+    checkInDate: "18-Dec-2025",
+    checkInTime: "08:31",
+    doctor: "Dr. Priya Menon",
+    department: "General Medicine",
     status: "Completed",
+    tokenTime: "08:18",
+    tokenDate: "18-Dec-2025",
+    token: "T014",
   },
   {
-    id: "e3",
-    date: "2025-11-02",
-    time: "14:15",
-    type: "Medication",
-    title: "Ceftriaxone 1 g IV",
-    dept: "Pharmacy",
+    id: "apt-3",
+    patientName: "Karthik Patel",
+    gdid: "021",
+    age: 73,
+    gender: "M",
+    visitId: "V25-022",
+    checkInDate: "18-Dec-2025",
+    checkInTime: "08:27",
+    doctor: "Dr. Priya Menon",
+    department: "Orthopedics",
     status: "Completed",
+    tokenTime: "08:26",
+    tokenDate: "18-Dec-2025",
+    token: "T022",
   },
   {
-    id: "e4",
-    date: "2025-11-03",
-    time: "10:00",
-    type: "Radiology",
-    title: "Chest X‑ray",
-    dept: "Radiology",
+    id: "apt-4",
+    patientName: "Sanjay Patel",
+    gdid: "029",
+    age: 38,
+    gender: "M",
+    visitId: "V25-030",
+    checkInDate: "18-Dec-2025",
+    checkInTime: "08:23",
+    doctor: "Dr. Priya Menon",
+    department: "Pulmonology",
     status: "Completed",
+    tokenTime: "08:20",
+    tokenDate: "18-Dec-2025",
+    token: "T030",
   },
   {
-    id: "e5",
-    date: "2025-11-04",
-    time: "16:00",
-    type: "Observation",
-    title: "Discharge planning meeting",
-    dept: "Ward 3B",
-    status: "Completed",
+    id: "apt-5",
+    patientName: "Ravi Kumar",
+    gdid: "035",
+    age: 45,
+    gender: "M",
+    visitId: "V25-036",
+    checkInDate: "19-Dec-2025",
+    checkInTime: "09:00",
+    doctor: "Dr. Meera Nair",
+    department: "Cardiology",
+    status: "Scheduled",
+    tokenTime: "",
+    tokenDate: "",
+    token: "",
+  },
+  {
+    id: "apt-6",
+    patientName: "Priya Krishnan",
+    gdid: "041",
+    age: 32,
+    gender: "F",
+    visitId: "V25-042",
+    checkInDate: "19-Dec-2025",
+    checkInTime: "10:30",
+    doctor: "Dr. Ravi Menon",
+    department: "Dermatology",
+    status: "Scheduled",
+    tokenTime: "",
+    tokenDate: "",
+    token: "",
   },
 ];
 
-// Helper function to group events by date
-function groupEventsByDate(events: typeof mockTimelineEvents): Record<string, typeof mockTimelineEvents> {
-  const grouped: Record<string, typeof mockTimelineEvents> = {};
-  
-  events.forEach(event => {
-    if (!grouped[event.date]) {
-      grouped[event.date] = [];
-    }
-    grouped[event.date].push(event);
-  });
-
-  return grouped;
-}
-
-// Helper function to get badge color based on event type
-function getEventTypeColor(type: string): string {
-  switch (type.toLowerCase()) {
-    case "admission":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    case "laboratory":
-      return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
-    case "medication":
+function getStatusBadgeVariant(status: string) {
+  switch (status.toLowerCase()) {
+    case "completed":
       return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "radiology":
-      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-    case "observation":
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "scheduled":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "checked-in":
+      return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
     default:
       return "bg-muted text-muted-foreground";
   }
 }
 
 export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
-  if (!selectedVisit) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          Select a visit to view appointment details.
+  const completedAppointments = mockAppointments.filter(apt => apt.status === "Completed");
+  const upcomingAppointments = mockAppointments.filter(apt => apt.status !== "Completed");
+
+  const renderAppointmentRow = (appointment: typeof mockAppointments[0]) => (
+    <div
+      key={appointment.id}
+      className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-3 border-b border-border hover:bg-muted/50 transition-colors items-center"
+    >
+      {/* Patient Info */}
+      <div className="flex items-center gap-3 min-w-0">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+          appointment.gender === "M" ? "bg-blue-100" : "bg-pink-100"
+        }`}>
+          {appointment.gender === "M" ? (
+            <User className="w-4 h-4 text-blue-600" />
+          ) : (
+            <UserRound className="w-4 h-4 text-pink-600" />
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-small font-medium text-foreground truncate">{appointment.patientName}</p>
+          <p className="text-caption text-muted-foreground">
+            GDID - {appointment.gdid} • {appointment.age} | {appointment.gender}
+          </p>
+        </div>
+      </div>
+
+      {/* Visit ID */}
+      <div className="min-w-0">
+        <p className="text-small font-mono text-foreground">{appointment.visitId}</p>
+        <p className="text-caption text-muted-foreground">
+          {appointment.checkInTime}
+        </p>
+        <p className="text-caption text-muted-foreground">
+          {appointment.checkInDate}
         </p>
       </div>
-    );
-  }
 
-  // Filter events to only show past dates (completed)
-  const today = new Date();
-  const pastEvents = mockTimelineEvents.filter(event => {
-    const eventDate = parseISO(event.date);
-    return eventDate <= today && event.status === "Completed";
-  });
-
-  const eventsByDate = groupEventsByDate(pastEvents);
-  const sortedDates = Object.keys(eventsByDate).sort();
-
-  if (sortedDates.length === 0) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          No appointment details available for this visit.
-        </p>
+      {/* Doctor & Department */}
+      <div className="min-w-0">
+        <p className="text-small text-foreground truncate">{appointment.doctor}</p>
+        <p className="text-caption text-muted-foreground">{appointment.department}</p>
       </div>
-    );
-  }
+
+      {/* Status */}
+      <div>
+        <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
+          {appointment.status}
+        </Badge>
+      </div>
+
+      {/* Token/Queue No. */}
+      <div className="min-w-0">
+        {appointment.token ? (
+          <>
+            <p className="text-caption text-muted-foreground">{appointment.tokenTime}</p>
+            <p className="text-caption text-muted-foreground">{appointment.tokenDate}</p>
+            <p className="text-small font-mono font-medium text-foreground">{appointment.token}</p>
+          </>
+        ) : (
+          <span className="text-caption text-muted-foreground">—</span>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem>Patient 360</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="p-6 space-y-6">
-      {sortedDates.map((date) => {
-        const events = eventsByDate[date];
-        const dateObj = parseISO(date);
+    <div className="h-full overflow-auto">
+      {/* Completed Appointments */}
+      <div className="mb-6">
+        <div className="px-4 py-3 bg-muted/30 border-b border-border">
+          <h3 className="text-label font-semibold text-foreground">
+            Completed ({completedAppointments.length})
+          </h3>
+        </div>
         
-        return (
-          <div key={date}>
-            {/* Date Header */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-sm font-semibold text-foreground">
-                {format(dateObj, "EEE")}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {format(dateObj, "MMM d")}
-              </div>
-            </div>
+        {/* Table Header */}
+        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
+          <span className="text-label text-muted-foreground">Patient</span>
+          <span className="text-label text-muted-foreground">Visit ID</span>
+          <span className="text-label text-muted-foreground">Doctor</span>
+          <span className="text-label text-muted-foreground">Status</span>
+          <span className="text-label text-muted-foreground">Token/Queue No.</span>
+          <span className="text-label text-muted-foreground text-right">Actions</span>
+        </div>
 
-            {/* Events for this date */}
-            <div className="space-y-3 pl-6 border-l-2 border-border">
-              {events.map((event) => (
-                <Card key={event.id} className="p-4 ml-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="text-sm font-medium text-foreground">{event.title}</h4>
-                        <Badge className={getEventTypeColor(event.type)} variant="secondary">
-                          {event.type}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>{event.time}</span>
-                        <span>{event.dept}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+        {/* Completed Rows */}
+        {completedAppointments.map(renderAppointmentRow)}
+      </div>
+
+      {/* Upcoming Appointments */}
+      <div>
+        <div className="px-4 py-3 bg-muted/30 border-b border-border">
+          <h3 className="text-label font-semibold text-foreground">
+            Upcoming ({upcomingAppointments.length})
+          </h3>
+        </div>
+        
+        {/* Table Header */}
+        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
+          <span className="text-label text-muted-foreground">Patient</span>
+          <span className="text-label text-muted-foreground">Visit ID</span>
+          <span className="text-label text-muted-foreground">Doctor</span>
+          <span className="text-label text-muted-foreground">Status</span>
+          <span className="text-label text-muted-foreground">Token/Queue No.</span>
+          <span className="text-label text-muted-foreground text-right">Actions</span>
+        </div>
+
+        {/* Upcoming Rows */}
+        {upcomingAppointments.length > 0 ? (
+          upcomingAppointments.map(renderAppointmentRow)
+        ) : (
+          <div className="px-4 py-8 text-center">
+            <p className="text-small text-muted-foreground">No upcoming appointments</p>
           </div>
-        );
-      })}
+        )}
+      </div>
     </div>
   );
 }
