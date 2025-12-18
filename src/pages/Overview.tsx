@@ -240,12 +240,12 @@ const Overview = () => {
       count: 56,
       displayCount: "56/Orders",
       icon: FlaskConical,
-      route: "/lab/pending?status=pending",
+      route: "/diagnostics?type=all",
       iconColorClass: iconColors.labs,
       isPrimary: true,
       subMetrics: [
-        { label: "Laboratory", value: 26, route: "/lab/pending?status=pending" },
-        { label: "Radiology", value: 30, route: "/radiology/queue?status=queued" },
+        { label: "Laboratory", value: 26, route: "/diagnostics?type=laboratory" },
+        { label: "Radiology", value: 30, route: "/diagnostics?type=radiology" },
       ],
     },
     {
