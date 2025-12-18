@@ -225,7 +225,7 @@ const Overview = () => {
     {
       title: "IP Patients",
       count: 234,
-      displayCount: "234 | ICU 34 | WARD 200",
+      displayCount: "234/ICU 34/WARD 200",
       icon: Hospital,
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
