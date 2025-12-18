@@ -123,7 +123,7 @@ const BillsList = () => {
       key: "paymentMode",
       label: "Mode",
       render: (row) => (
-        <Badge className={paymentModeStyles[row.paymentMode]}>{row.paymentMode}</Badge>
+        <span className="text-sm text-muted-foreground">{row.paymentMode}</span>
       ),
     },
     {
