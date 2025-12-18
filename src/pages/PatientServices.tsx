@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Search, Plus, Trash2, Receipt } from "lucide-react";
+import { ChevronLeft, Search, Plus, Trash2, Receipt, User } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -29,6 +29,14 @@ const PatientServices = () => {
   const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
+
+  // Mock patient data
+  const patient = {
+    name: "Harish Kalyan",
+    gdid: "001",
+    age: 44,
+    gender: "Male",
+  };
   
   const results = useMemo(() => 
     searchServices(debouncedSearch, selectedCategories),
@@ -62,7 +70,7 @@ const PatientServices = () => {
         <AppHeader breadcrumbs={["Patient Insight", "Services"]} />
         
         {/* Header */}
-        <div className="h-[80px] bg-background border-b border-border flex-shrink-0 flex items-center px-6">
+        <div className="h-[80px] bg-background border-b border-border flex-shrink-0 flex items-center justify-between px-6">
           <button
             onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
@@ -70,6 +78,19 @@ const PatientServices = () => {
             <ChevronLeft className="h-4 w-4" />
             <span className="font-semibold">Patient Insight</span>
           </button>
+
+          {/* Patient Info */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+              <User className="h-4 w-4 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">{patient.name}</p>
+              <p className="text-xs text-muted-foreground">
+                GDID - {patient.gdid} • {patient.age} | {patient.gender.charAt(0)}
+              </p>
+            </div>
+          </div>
         </div>
         
         {/* Main Content */}
