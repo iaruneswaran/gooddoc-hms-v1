@@ -27,16 +27,17 @@ const BillsList = () => {
 
   let data = billsData;
   let displayCount = billsData.length;
+  const isOutstandingView = typeFilter === "outstanding";
 
   if (typeFilter === "collected") {
     data = paidBills;
     displayCount = paidBills.length;
-  } else if (typeFilter === "partial") {
+  } else if (typeFilter === "partial" || typeFilter === "outstanding") {
     data = partialBills;
     displayCount = partialBills.length;
   }
 
-  const columns: Column<BillRecord>[] = [
+  const baseColumns: Column<BillRecord>[] = [
     { 
       key: "patientName", 
       label: "Patient", 
@@ -89,6 +90,9 @@ const BillsList = () => {
         </div>
       )
     },
+  ];
+
+  const additionalColumns: Column<BillRecord>[] = isOutstandingView ? [] : [
     { 
       key: "paidAmount", 
       label: "Paid", 
@@ -114,15 +118,18 @@ const BillsList = () => {
         <span className="text-sm text-muted-foreground">{row.paymentMode}</span>
       ),
     },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
-      ),
-    },
   ];
+
+  const statusColumn: Column<BillRecord> = {
+    key: "status",
+    label: "Status",
+    sortable: true,
+    render: (row) => (
+      <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+    ),
+  };
+
+  const columns: Column<BillRecord>[] = [...baseColumns, ...additionalColumns, statusColumn];
 
   const filters: Filter[] = [
     {
@@ -163,7 +170,7 @@ const BillsList = () => {
 
   const urlParamFilters: UrlParamFilter[] = [
     { paramKey: "type", paramValue: "collected", displayLabel: "Paid Bills", count: paidBills.length },
-    { paramKey: "type", paramValue: "partial", displayLabel: "Partial", count: partialBills.length },
+    { paramKey: "type", paramValue: "outstanding", displayLabel: "Outstanding", count: partialBills.length },
   ];
 
   const rowActions: RowAction<BillRecord>[] = [
