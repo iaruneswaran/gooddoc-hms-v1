@@ -222,14 +222,8 @@ const TransferPatient = () => {
               <span className="font-semibold">Patient Insight</span>
             </button>
 
-            {/* Patient Snapshot Header */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">{patient.name}</h1>
-                </div>
-              </div>
-              
+            {/* Header Actions */}
+            <div className="flex items-center justify-end">
               <div className="flex items-center gap-3">
                 <div className="text-right">
                   <p className="text-xs text-muted-foreground">Current Location</p>
