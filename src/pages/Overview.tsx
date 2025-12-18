@@ -232,7 +232,7 @@ const Overview = () => {
       isPrimary: true,
       subMetrics: [
         { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
-        { label: "Discharged", value: 45, filterParam: "status=discharged" },
+        { label: "Emergency Case", value: 8, filterParam: "erCase=true" },
       ],
     },
     {
