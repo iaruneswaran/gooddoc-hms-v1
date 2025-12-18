@@ -1,27 +1,21 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Save, X } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { TransferStepper } from "@/components/transfer/TransferStepper";
 import { TransferTimeline } from "@/components/transfer/TransferTimeline";
 import { TransferDetailsStep } from "@/components/transfer/steps/TransferDetailsStep";
 import { DestinationBedStep } from "@/components/transfer/steps/DestinationBedStep";
-import { PreTransferChecklistStep } from "@/components/transfer/steps/PreTransferChecklistStep";
-import { ReviewConfirmStep } from "@/components/transfer/steps/ReviewConfirmStep";
-import { TransferRequest, Bed, TransferTimelineEvent, ChecklistItem } from "@/types/transfer";
-import { getDefaultChecklist } from "@/data/transfer.mock";
+import { TransferRequest, Bed, TransferTimelineEvent } from "@/types/transfer";
 
 const steps = [
   { id: 1, title: "Transfer Details", description: "Type, priority & schedule" },
   { id: 2, title: "Choose Destination", description: "Select available bed" },
-  { id: 3, title: "Pre-Transfer Checklist", description: "Clinical & operational" },
-  { id: 4, title: "Review & Confirm", description: "Final verification" },
 ];
 
 const TransferPatient = () => {
@@ -71,20 +65,15 @@ const TransferPatient = () => {
     timeline: [],
   });
 
-  // Update checklist when transfer type or priority changes
+  // Update insurance requirement when transfer type changes
   useEffect(() => {
-    if (transferData.transferType && transferData.priority) {
-      const defaultChecklist = getDefaultChecklist(
-        transferData.transferType,
-        transferData.priority
-      );
+    if (transferData.transferType) {
       setTransferData((prev) => ({
         ...prev,
-        checklist: defaultChecklist,
         insurancePreAuthRequired: transferData.transferType === "ward_to_icu",
       }));
     }
-  }, [transferData.transferType, transferData.priority]);
+  }, [transferData.transferType]);
 
   // Auto-save draft
   useEffect(() => {
@@ -97,10 +86,6 @@ const TransferPatient = () => {
 
   const handleDataChange = (updates: Partial<TransferRequest>) => {
     setTransferData((prev) => ({ ...prev, ...updates }));
-  };
-
-  const handleChecklistChange = (checklist: ChecklistItem[]) => {
-    setTransferData((prev) => ({ ...prev, checklist }));
   };
 
   const handleSelectBed = (bed: Bed) => {
@@ -137,8 +122,8 @@ const TransferPatient = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
+    if (currentStep === 1) {
+      setCurrentStep(2);
     }
   };
 
@@ -182,9 +167,6 @@ const TransferPatient = () => {
         return transferData.transferType && transferData.priority && transferData.reason;
       case 2:
         return !!selectedBed;
-      case 3:
-        const requiredItems = transferData.checklist?.filter((item) => item.required) || [];
-        return requiredItems.every((item) => item.checked);
       default:
         return true;
     }
@@ -256,25 +238,6 @@ const TransferPatient = () => {
                   patientAgeGroup="adult"
                 />
               )}
-              
-              {currentStep === 3 && (
-                <PreTransferChecklistStep
-                  checklist={transferData.checklist || []}
-                  onChecklistChange={handleChecklistChange}
-                  priority={transferData.priority || "routine"}
-                />
-              )}
-              
-              {currentStep === 4 && (
-                <ReviewConfirmStep
-                  data={transferData}
-                  selectedBed={selectedBed}
-                  currentTariff={patient.currentTariff}
-                  onConfirm={handleConfirm}
-                  onSaveDraft={handleSaveDraft}
-                  isSubmitting={isSubmitting}
-                />
-              )}
             </div>
           </div>
 
@@ -292,25 +255,31 @@ const TransferPatient = () => {
         </main>
 
         {/* Footer Navigation */}
-        {currentStep < 4 && (
-          <div className="border-t border-border bg-background px-6 py-4 flex-shrink-0">
-            <div className="flex justify-between max-w-3xl">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                disabled={currentStep === 1}
-              >
-                Back
-              </Button>
+        <div className="border-t border-border bg-background px-6 py-4 flex-shrink-0">
+          <div className="flex justify-between max-w-3xl">
+            <Button
+              variant="outline"
+              onClick={currentStep === 1 ? handleCancel : handleBack}
+            >
+              {currentStep === 1 ? "Cancel" : "Back"}
+            </Button>
+            {currentStep === 1 ? (
               <Button
                 onClick={handleNext}
                 disabled={!canProceed()}
               >
-                {currentStep === 3 ? "Review Transfer" : "Continue"}
+                Continue
               </Button>
-            </div>
+            ) : (
+              <Button
+                onClick={handleConfirm}
+                disabled={!canProceed() || isSubmitting}
+              >
+                {isSubmitting ? "Confirming..." : "Confirm Transfer"}
+              </Button>
+            )}
           </div>
-        )}
+        </div>
       </PageContent>
     </div>
   );
