@@ -3,7 +3,6 @@ export interface BillRecord {
   patientName: string;
   patientId: string;
   ageSex: string;
-  visitId: string;
   billDate: string;
   services: string;
   amount: number;
@@ -12,7 +11,7 @@ export interface BillRecord {
   paidAmount: number;
   balance: number;
   paymentMode: "Cash" | "Card" | "UPI" | "Insurance" | "Mixed";
-  status: "Paid" | "Partial" | "Outstanding" | "Overdue";
+  status: "Paid" | "Partial";
   department: string;
   doctor: string;
   invoiceNo: string;
@@ -23,8 +22,7 @@ export const billsData: BillRecord[] = [
     billId: "BL001",
     patientName: "Ravi Kumar",
     patientId: "GD035",
-    ageSex: "45 | M",
-    visitId: "V25-036",
+    ageSex: "45/M",
     billDate: "18-Dec-2025 10:30",
     services: "Consultation, ECG, Blood Tests",
     amount: 4500,
@@ -42,8 +40,7 @@ export const billsData: BillRecord[] = [
     billId: "BL002",
     patientName: "Priya Krishnan",
     patientId: "GD041",
-    ageSex: "32 | F",
-    visitId: "V25-042",
+    ageSex: "32/F",
     billDate: "18-Dec-2025 11:15",
     services: "Consultation, Skin Biopsy",
     amount: 6200,
@@ -61,8 +58,7 @@ export const billsData: BillRecord[] = [
     billId: "BL003",
     patientName: "Anjali Sharma",
     patientId: "GD005",
-    ageSex: "22 | F",
-    visitId: "V25-006",
+    ageSex: "22/F",
     billDate: "18-Dec-2025 09:00",
     services: "Chemotherapy Session, Lab Tests",
     amount: 45000,
@@ -80,17 +76,16 @@ export const billsData: BillRecord[] = [
     billId: "BL004",
     patientName: "Karthik Patel",
     patientId: "GD021",
-    ageSex: "73 | M",
-    visitId: "V25-022",
+    ageSex: "73/M",
     billDate: "17-Dec-2025 14:30",
     services: "X-Ray, Physiotherapy",
     amount: 3200,
     discount: 0,
     netAmount: 3200,
-    paidAmount: 0,
-    balance: 3200,
+    paidAmount: 3200,
+    balance: 0,
     paymentMode: "Cash",
-    status: "Outstanding",
+    status: "Paid",
     department: "Orthopedics",
     doctor: "Dr. Arun Kumar",
     invoiceNo: "INV-2025-001220",
@@ -99,8 +94,7 @@ export const billsData: BillRecord[] = [
     billId: "BL005",
     patientName: "Sanjay Patel",
     patientId: "GD029",
-    ageSex: "38 | M",
-    visitId: "V25-030",
+    ageSex: "38/M",
     billDate: "18-Dec-2025 08:45",
     services: "Pulmonary Function Test, Consultation",
     amount: 2800,
@@ -118,17 +112,16 @@ export const billsData: BillRecord[] = [
     billId: "BL006",
     patientName: "Kavitha Sharma",
     patientId: "GD013",
-    ageSex: "57 | F",
-    visitId: "V25-014",
+    ageSex: "57/F",
     billDate: "16-Dec-2025 11:00",
     services: "General Checkup, Blood Tests",
     amount: 1800,
     discount: 0,
     netAmount: 1800,
-    paidAmount: 0,
-    balance: 1800,
+    paidAmount: 1800,
+    balance: 0,
     paymentMode: "UPI",
-    status: "Overdue",
+    status: "Paid",
     department: "General Medicine",
     doctor: "Dr. Priya Menon",
     invoiceNo: "INV-2025-001198",
@@ -137,8 +130,7 @@ export const billsData: BillRecord[] = [
     billId: "BL007",
     patientName: "Harish Kalyan",
     patientId: "GD001",
-    ageSex: "35 | M",
-    visitId: "V25-002",
+    ageSex: "35/M",
     billDate: "18-Dec-2025 12:00",
     services: "MRI Scan, Neurology Consultation",
     amount: 12500,
@@ -156,8 +148,7 @@ export const billsData: BillRecord[] = [
     billId: "BL008",
     patientName: "Meena Devi",
     patientId: "GD048",
-    ageSex: "62 | F",
-    visitId: "V25-049",
+    ageSex: "62/F",
     billDate: "17-Dec-2025 16:00",
     services: "Echo, Stress Test, Consultation",
     amount: 8500,
@@ -175,8 +166,7 @@ export const billsData: BillRecord[] = [
     billId: "BL009",
     patientName: "Vijay Raghavan",
     patientId: "GD052",
-    ageSex: "44 | M",
-    visitId: "V25-053",
+    ageSex: "44/M",
     billDate: "18-Dec-2025 15:30",
     services: "Dental Extraction, Medications",
     amount: 3500,
@@ -194,17 +184,16 @@ export const billsData: BillRecord[] = [
     billId: "BL010",
     patientName: "Sunita Rao",
     patientId: "GD067",
-    ageSex: "29 | F",
-    visitId: "V25-068",
+    ageSex: "29/F",
     billDate: "15-Dec-2025 10:00",
     services: "Ultrasound, OB-GYN Consultation",
     amount: 2200,
     discount: 200,
     netAmount: 2000,
-    paidAmount: 0,
-    balance: 2000,
+    paidAmount: 2000,
+    balance: 0,
     paymentMode: "Cash",
-    status: "Overdue",
+    status: "Paid",
     department: "OB-GYN",
     doctor: "Dr. Anita Desai",
     invoiceNo: "INV-2025-001180",
@@ -213,8 +202,7 @@ export const billsData: BillRecord[] = [
     billId: "BL011",
     patientName: "Ramesh Gupta",
     patientId: "GD075",
-    ageSex: "55 | M",
-    visitId: "V25-076",
+    ageSex: "55/M",
     billDate: "18-Dec-2025 09:30",
     services: "Dialysis Session",
     amount: 5500,
@@ -232,8 +220,7 @@ export const billsData: BillRecord[] = [
     billId: "BL012",
     patientName: "Lakshmi Iyer",
     patientId: "GD082",
-    ageSex: "68 | F",
-    visitId: "V25-083",
+    ageSex: "68/F",
     billDate: "18-Dec-2025 14:00",
     services: "Eye Examination, Cataract Assessment",
     amount: 1500,
@@ -251,7 +238,7 @@ export const billsData: BillRecord[] = [
 
 // Filter helpers
 export const paidBills = billsData.filter(b => b.status === "Paid");
-export const outstandingBills = billsData.filter(b => b.status === "Outstanding" || b.status === "Partial" || b.status === "Overdue");
+export const partialBills = billsData.filter(b => b.status === "Partial");
 
 // Summary calculations
 export const totalBilled = billsData.reduce((sum, b) => sum + b.netAmount, 0);
