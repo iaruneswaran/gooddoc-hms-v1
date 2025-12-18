@@ -119,7 +119,7 @@ const BillsList = () => {
       key: "paymentMode",
       label: "Mode",
       render: (row) => (
-        <span className="text-sm text-muted-foreground">{row.paymentMode}</span>
+        <span className="text-sm text-muted-foreground">{row.status === "Unpaid" ? "—" : row.paymentMode}</span>
       ),
     },
     {
