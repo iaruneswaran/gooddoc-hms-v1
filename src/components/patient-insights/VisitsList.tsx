@@ -1,13 +1,6 @@
 import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { VisitListItem, Visit } from "./VisitListItem";
 
 interface VisitsListProps {
@@ -18,19 +11,16 @@ interface VisitsListProps {
 
 export function VisitsList({ visits, selectedVisitId, onVisitSelect }: VisitsListProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
 
   const filteredVisits = useMemo(() => {
     return visits.filter((visit) => {
-      const matchesSearch =
+      return (
         visit.visitId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        visit.doctor?.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesType = typeFilter === "all" || visit.type === typeFilter;
-
-      return matchesSearch && matchesType;
+        visit.doctor?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     });
-  }, [visits, searchQuery, typeFilter]);
+  }, [visits, searchQuery]);
+
 
   return (
     <div className="h-full flex flex-col">
@@ -49,20 +39,6 @@ export function VisitsList({ visits, selectedVisitId, onVisitSelect }: VisitsLis
           />
         </div>
 
-        {/* Filter */}
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="All" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="Consultation">Consultation</SelectItem>
-            <SelectItem value="Day-Care Admission">Day-care</SelectItem>
-            <SelectItem value="IPD Admission">IPD</SelectItem>
-            <SelectItem value="Laboratory">Lab</SelectItem>
-            <SelectItem value="Radiology">Radiology</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Visits List */}
