@@ -33,6 +33,7 @@ interface SubMetric {
 interface MetricCardProps {
   title: string;
   count: number;
+  displayCount?: string;
   icon: React.ElementType;
   route: string;
   iconColorClass: string;
@@ -53,7 +54,8 @@ const iconColors = {
 
 const PrimaryMetricCard = ({ 
   title, 
-  count, 
+  count,
+  displayCount,
   icon: Icon, 
   route, 
   iconColorClass,
@@ -115,7 +117,7 @@ const PrimaryMetricCard = ({
           />
         </div>
         <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
-          {count.toLocaleString()}
+          {displayCount || count.toLocaleString()}
         </p>
       </div>
       
@@ -123,7 +125,7 @@ const PrimaryMetricCard = ({
       <div className="h-px bg-border" />
       
       {/* Bottom section - Sub-metrics grid */}
-      <div className={`px-2 py-3 grid ${subMetrics.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} text-xs`}>
+      <div className={`px-2 py-3 grid ${subMetrics.length === 1 ? 'grid-cols-1' : subMetrics.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} text-xs`}>
         {subMetrics.map((metric, idx) => (
           <span
             key={idx}
@@ -234,14 +236,14 @@ const Overview = () => {
     },
     {
       title: "Revenue",
-      count: 24.4,
+      count: 24,
+      displayCount: "24.4L/24 Bills Paid",
       icon: IndianRupee,
       route: "/reports/revenue",
       iconColorClass: "text-green-600",
       isPrimary: true,
       subMetrics: [
-        { label: "24 Bills", value: "₹24.4L", filterParam: "type=collected" },
-        { label: "12 Bills Outstanding", value: "₹8.4L", filterParam: "type=outstanding" },
+        { label: "Outstanding Bills", value: "₹8.4L/12", filterParam: "type=outstanding" },
       ],
     },
   ];
