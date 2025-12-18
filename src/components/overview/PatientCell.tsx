@@ -12,8 +12,10 @@ interface PatientCellProps {
 export function PatientCell({ name, gdid, ageSex, patientId, fromPage }: PatientCellProps) {
   const navigate = useNavigate();
   
-  // Parse ageSex to extract age and gender (if provided)
-  const [age, sex] = ageSex?.split("/") || [];
+  // Parse ageSex to extract age and gender (if provided) - handles both "/" and " | " formats
+  const ageSexParts = ageSex?.split(/[\/|]/).map(s => s.trim()) || [];
+  const age = ageSexParts[0];
+  const sex = ageSexParts[1];
   const isFemale = sex?.toLowerCase().startsWith("f");
 
   // Format GDID - extract last 3 digits
