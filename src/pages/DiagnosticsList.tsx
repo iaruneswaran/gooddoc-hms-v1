@@ -2,6 +2,7 @@ import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { format } from "date-fns";
+import { useSearchParams } from "react-router-dom";
 
 interface DiagnosticsOrder {
   id: string;
@@ -88,6 +89,17 @@ const diagnosticsOrders: DiagnosticsOrder[] = [
 ];
 
 export default function DiagnosticsList() {
+  const [searchParams] = useSearchParams();
+  const typeFilter = searchParams.get("type");
+  
+  // Filter data based on URL param
+  const filteredData = typeFilter 
+    ? diagnosticsOrders.filter(order => order.type === typeFilter)
+    : diagnosticsOrders;
+  
+  // Dynamic title based on filter
+  const title = typeFilter || "Diagnostics";
+
   const columns: Column<DiagnosticsOrder>[] = [
     {
       key: "patient",
@@ -187,14 +199,14 @@ export default function DiagnosticsList() {
 
   return (
     <ListPageLayout
-      title="Diagnostics"
-      count={diagnosticsOrders.length}
+      title={title}
+      count={filteredData.length}
       columns={columns}
-      data={diagnosticsOrders}
+      data={filteredData}
       filters={filters}
       rowActions={rowActions}
       searchPlaceholder="Search by patient name, visit ID, test..."
-      breadcrumbs={["Overview", "Diagnostics"]}
+      breadcrumbs={["Overview", title]}
       emptyMessage="No diagnostics orders found"
       getRowId={(row) => row.id}
     />
