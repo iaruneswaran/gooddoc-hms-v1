@@ -97,7 +97,7 @@ const OPPatientsToday = () => {
     },
     { 
       key: "provider", 
-      label: "Provider", 
+      label: "Doctor",
       sortable: true,
       render: (row) => (
         <div className="flex flex-col">
