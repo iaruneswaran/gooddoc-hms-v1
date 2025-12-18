@@ -64,12 +64,30 @@ const BedsAvailability = () => {
     {
       key: "lastDischargedAt",
       label: "Last Discharged At",
-      render: (row) => row.lastDischargedAt || "—",
+      render: (row) => {
+        if (!row.lastDischargedAt) return "—";
+        const [date, time] = row.lastDischargedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      },
     },
     {
       key: "cleaningETA",
       label: "Cleaning ETA",
-      render: (row) => row.cleaningETA || "—",
+      render: (row) => {
+        if (!row.cleaningETA) return "—";
+        const [date, time] = row.cleaningETA.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      },
     },
     {
       key: "isolationCapability",

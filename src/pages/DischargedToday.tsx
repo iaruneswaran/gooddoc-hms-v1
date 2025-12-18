@@ -104,7 +104,21 @@ const DischargedToday = () => {
     { key: "ward", label: "Ward" },
     { key: "room", label: "Room" },
     { key: "bed", label: "Bed" },
-    { key: "plannedDischargeDateTime", label: "Planned Discharge", sortable: true, render: (row) => row.plannedDischargeDateTime || "—" },
+    { 
+      key: "plannedDischargeDateTime", 
+      label: "Planned Discharge", 
+      sortable: true, 
+      render: (row) => {
+        if (!row.plannedDischargeDateTime) return "—";
+        const [date, time] = row.plannedDischargeDateTime.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
     {
       key: "blockingTasks",
       label: "Blocking Tasks",
