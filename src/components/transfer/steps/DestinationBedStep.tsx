@@ -1,15 +1,12 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, BedDouble, AlertCircle } from "lucide-react";
+import { Search, BedDouble } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { Bed, BedFeature, Unit } from "@/types/transfer";
+import { Bed } from "@/types/transfer";
 import { BedCard } from "../BedCard";
 import { mockBeds, mockUnits, featureLabels } from "@/data/transfer.mock";
 import { useToast } from "@/hooks/use-toast";
@@ -22,8 +19,6 @@ interface DestinationBedStepProps {
   patientAgeGroup: 'pediatric' | 'adult';
 }
 
-const allFeatures: BedFeature[] = ['icu_capable', 'isolation', 'oxygen', 'ventilator', 'negative_pressure', 'cardiac_monitor', 'telemetry'];
-
 export function DestinationBedStep({ 
   selectedBed, 
   onSelectBed, 
@@ -35,8 +30,6 @@ export function DestinationBedStep({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("available");
-  const [selectedFeatures, setSelectedFeatures] = useState<BedFeature[]>([]);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [detailBed, setDetailBed] = useState<Bed | null>(null);
 
   const filteredBeds = useMemo(() => {
@@ -61,12 +54,6 @@ export function DestinationBedStep({
         return false;
       }
 
-      // Features filter
-      if (selectedFeatures.length > 0) {
-        const hasAllFeatures = selectedFeatures.every(f => bed.features.includes(f));
-        if (!hasAllFeatures) return false;
-      }
-
       // Gender compatibility
       if (bed.genderRestriction !== 'any') {
         const patientGenderLower = patientGender.toLowerCase();
@@ -80,7 +67,7 @@ export function DestinationBedStep({
 
       return true;
     });
-  }, [searchQuery, selectedUnit, selectedStatus, selectedFeatures, patientGender, patientAgeGroup]);
+  }, [searchQuery, selectedUnit, selectedStatus, patientGender, patientAgeGroup]);
 
   const bedsByUnit = useMemo(() => {
     const grouped: Record<string, Bed[]> = {};
@@ -92,14 +79,6 @@ export function DestinationBedStep({
     });
     return grouped;
   }, [filteredBeds]);
-
-  const handleFeatureToggle = (feature: BedFeature) => {
-    setSelectedFeatures((prev) =>
-      prev.includes(feature)
-        ? prev.filter((f) => f !== feature)
-        : [...prev, feature]
-    );
-  };
 
   const handleHoldBed = (bed: Bed) => {
     onHoldBed(bed);
@@ -113,211 +92,172 @@ export function DestinationBedStep({
   const totalFiltered = filteredBeds.length;
 
   return (
-    <div className="flex gap-6 h-full">
-      {/* Left Panel - Filters */}
-      <div className="w-64 flex-shrink-0 space-y-4">
-        <div className="space-y-2">
-          <Label>Search</Label>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search beds..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Unit / Ward</Label>
-          <Select value={selectedUnit} onValueChange={setSelectedUnit}>
-            <SelectTrigger>
-              <SelectValue placeholder="All units" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Units</SelectItem>
-              {mockUnits.map((unit) => (
-                <SelectItem key={unit.id} value={unit.id}>
-                  {unit.name} ({unit.availableBeds}/{unit.totalBeds})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Availability</Label>
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="available">Available</SelectItem>
-              <SelectItem value="occupied">Occupied</SelectItem>
-              <SelectItem value="cleaning">Cleaning</SelectItem>
-              <SelectItem value="hold">On Hold</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Features</Label>
-          <div className="space-y-2">
-            {allFeatures.map((feature) => (
-              <label key={feature} className="flex items-center gap-2 cursor-pointer">
-                <Checkbox
-                  checked={selectedFeatures.includes(feature)}
-                  onCheckedChange={() => handleFeatureToggle(feature)}
-                />
-                <span className="text-sm">{featureLabels[feature]}</span>
-              </label>
+    <div className="space-y-4">
+      {/* Toolbar - Filters and Search */}
+      <div className="flex items-center gap-3">
+        <Select value={selectedUnit} onValueChange={setSelectedUnit}>
+          <SelectTrigger className="w-[180px] h-9">
+            <SelectValue placeholder="All Units" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Units</SelectItem>
+            {mockUnits.map((unit) => (
+              <SelectItem key={unit.id} value={unit.id}>
+                {unit.name} ({unit.availableBeds}/{unit.totalBeds})
+              </SelectItem>
             ))}
-          </div>
-        </div>
+          </SelectContent>
+        </Select>
 
-        {selectedFeatures.length > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setSelectedFeatures([])}
-            className="w-full"
-          >
-            Clear filters
-          </Button>
-        )}
+        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <SelectTrigger className="w-[150px] h-9">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="available">Available</SelectItem>
+            <SelectItem value="occupied">Occupied</SelectItem>
+            <SelectItem value="cleaning">Cleaning</SelectItem>
+            <SelectItem value="hold">On Hold</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search beds..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 h-9"
+          />
+        </div>
       </div>
 
-      {/* Main Panel - Bed Grid */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-              {availableCount} Available
-            </Badge>
-            <span className="text-sm text-muted-foreground">
-              of {totalFiltered} beds shown
-            </span>
+      {/* Results count */}
+      <div className="flex items-center gap-2">
+        <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
+          {availableCount} Available
+        </Badge>
+        <span className="text-sm text-muted-foreground">
+          of {totalFiltered} beds shown
+        </span>
+      </div>
+
+      {/* Bed Grid */}
+      {filteredBeds.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <BedDouble className="w-12 h-12 text-muted-foreground/50 mb-4" />
+          <h3 className="font-medium text-foreground mb-1">No beds found</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Try adjusting your filters or expand your search
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => {
+              setSelectedUnit("all");
+              setSelectedStatus("all");
+            }}>
+              Clear all filters
+            </Button>
+            <Button variant="outline" size="sm">
+              Join Waitlist
+            </Button>
           </div>
         </div>
-
-        {filteredBeds.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <BedDouble className="w-12 h-12 text-muted-foreground/50 mb-4" />
-            <h3 className="font-medium text-foreground mb-1">No beds found</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Try adjusting your filters or expand your search
-            </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => {
-                setSelectedUnit("all");
-                setSelectedStatus("all");
-                setSelectedFeatures([]);
-              }}>
-                Clear all filters
-              </Button>
-              <Button variant="outline" size="sm">
-                Join Waitlist
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <ScrollArea className="h-[calc(100vh-400px)]">
-            <div className="space-y-6 pr-4">
-              {Object.entries(bedsByUnit).map(([unitId, beds]) => {
-                const unit = mockUnits.find(u => u.id === unitId);
-                return (
-                  <div key={unitId}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <h3 className="font-semibold text-foreground">{unit?.name || unitId}</h3>
-                      <Badge variant="outline" className="text-xs">
-                        {beds.filter(b => b.status === 'available').length}/{beds.length}
-                      </Badge>
-                    </div>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                      {beds.map((bed) => (
-                        <Sheet key={bed.id}>
-                          <SheetTrigger asChild>
-                            <div onClick={() => setDetailBed(bed)}>
-                              <BedCard
-                                bed={bed}
-                                isSelected={selectedBed?.id === bed.id}
-                                onSelect={onSelectBed}
-                                onHold={handleHoldBed}
-                              />
-                            </div>
-                          </SheetTrigger>
-                          <SheetContent>
-                            <SheetHeader>
-                              <SheetTitle>Bed Details</SheetTitle>
-                            </SheetHeader>
-                            {detailBed && (
-                              <div className="mt-6 space-y-6">
-                                <div>
-                                  <h3 className="text-2xl font-bold">{detailBed.bedName}</h3>
-                                  <p className="text-muted-foreground">
-                                    {detailBed.unitName} • {detailBed.roomName}
-                                  </p>
-                                </div>
-
-                                <div className="space-y-3">
-                                  <h4 className="font-medium">Features</h4>
-                                  <div className="flex flex-wrap gap-2">
-                                    {detailBed.features.map((feature) => (
-                                      <Badge key={feature} variant="secondary">
-                                        {featureLabels[feature]}
-                                      </Badge>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                  <h4 className="font-medium">Restrictions</h4>
-                                  <div className="text-sm space-y-1">
-                                    <p>Gender: {detailBed.genderRestriction === 'any' ? 'Any' : detailBed.genderRestriction}</p>
-                                    <p>Age Group: {detailBed.ageGroup === 'any' ? 'Any' : detailBed.ageGroup}</p>
-                                  </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                  <h4 className="font-medium">Tariff</h4>
-                                  <p className="text-2xl font-bold">₹{detailBed.tariff.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">/day</span></p>
-                                </div>
-
-                                {detailBed.status === 'available' && (
-                                  <div className="flex gap-2 pt-4">
-                                    <Button
-                                      variant="outline"
-                                      className="flex-1"
-                                      onClick={() => handleHoldBed(detailBed)}
-                                    >
-                                      Hold for 15m
-                                    </Button>
-                                    <Button
-                                      className="flex-1"
-                                      onClick={() => {
-                                        onSelectBed(detailBed);
-                                        setDetailBed(null);
-                                      }}
-                                    >
-                                      Select Bed
-                                    </Button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </SheetContent>
-                        </Sheet>
-                      ))}
-                    </div>
+      ) : (
+        <ScrollArea className="h-[calc(100vh-450px)]">
+          <div className="space-y-6 pr-4">
+            {Object.entries(bedsByUnit).map(([unitId, beds]) => {
+              const unit = mockUnits.find(u => u.id === unitId);
+              return (
+                <div key={unitId}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <h3 className="font-semibold text-foreground">{unit?.name || unitId}</h3>
+                    <Badge variant="outline" className="text-xs">
+                      {beds.filter(b => b.status === 'available').length}/{beds.length}
+                    </Badge>
                   </div>
-                );
-              })}
-            </div>
-          </ScrollArea>
-        )}
-      </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                    {beds.map((bed) => (
+                      <Sheet key={bed.id}>
+                        <SheetTrigger asChild>
+                          <div onClick={() => setDetailBed(bed)}>
+                            <BedCard
+                              bed={bed}
+                              isSelected={selectedBed?.id === bed.id}
+                              onSelect={onSelectBed}
+                              onHold={handleHoldBed}
+                            />
+                          </div>
+                        </SheetTrigger>
+                        <SheetContent>
+                          <SheetHeader>
+                            <SheetTitle>Bed Details</SheetTitle>
+                          </SheetHeader>
+                          {detailBed && (
+                            <div className="mt-6 space-y-6">
+                              <div>
+                                <h3 className="text-2xl font-bold">{detailBed.bedName}</h3>
+                                <p className="text-muted-foreground">
+                                  {detailBed.unitName} • {detailBed.roomName}
+                                </p>
+                              </div>
+
+                              <div className="space-y-3">
+                                <h4 className="font-medium">Features</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {detailBed.features.map((feature) => (
+                                    <Badge key={feature} variant="secondary">
+                                      {featureLabels[feature]}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="space-y-3">
+                                <h4 className="font-medium">Restrictions</h4>
+                                <div className="text-sm space-y-1">
+                                  <p>Gender: {detailBed.genderRestriction === 'any' ? 'Any' : detailBed.genderRestriction}</p>
+                                  <p>Age Group: {detailBed.ageGroup === 'any' ? 'Any' : detailBed.ageGroup}</p>
+                                </div>
+                              </div>
+
+                              <div className="space-y-3">
+                                <h4 className="font-medium">Tariff</h4>
+                                <p className="text-2xl font-bold">₹{detailBed.tariff.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">/day</span></p>
+                              </div>
+
+                              {detailBed.status === 'available' && (
+                                <div className="flex gap-2 pt-4">
+                                  <Button
+                                    variant="outline"
+                                    className="flex-1"
+                                    onClick={() => handleHoldBed(detailBed)}
+                                  >
+                                    Hold for 15m
+                                  </Button>
+                                  <Button
+                                    className="flex-1"
+                                    onClick={() => {
+                                      onSelectBed(detailBed);
+                                      setDetailBed(null);
+                                    }}
+                                  >
+                                    Select Bed
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </SheetContent>
+                      </Sheet>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollArea>
+      )}
     </div>
   );
 }
