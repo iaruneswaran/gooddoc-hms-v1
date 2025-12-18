@@ -151,17 +151,42 @@ const DoctorsOnDuty = () => {
     ];
   } else {
     // Default view - all doctors
+    const getAppointmentCount = (index: number) => {
+      const counts = [8, 12, 5, 15, 9, 6, 11, 4, 10, 7, 13, 8, 6, 14, 9, 5, 11, 8, 12, 7, 10, 6, 9, 14, 8];
+      return counts[index % counts.length];
+    };
+    
+    const getContactNumber = (index: number) => {
+      const phones = [
+        "+91 98765 43210", "+91 98765 43211", "+91 98765 43212", "+91 98765 43213",
+        "+91 98765 43214", "+91 98765 43215", "+91 98765 43216", "+91 98765 43217",
+        "+91 98765 43218", "+91 98765 43219", "+91 98765 43220", "+91 98765 43221",
+      ];
+      return phones[index % phones.length];
+    };
+    
     specificColumns = [
-      {
-        key: "role",
-        label: "Role",
-        sortable: true,
-        render: (row) => <Badge className={roleStyles[row.role]}>{row.role}</Badge>,
-      },
       { key: "shiftStart", label: "Shift Start" },
       { key: "shiftEnd", label: "Shift End" },
       { key: "currentLocation", label: "Current Location" },
-      { key: "contactPager", label: "Contact/Pager" },
+      { 
+        key: "contact", 
+        label: "Contact",
+        render: (row) => {
+          const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
+          return <span className="text-sm">{getContactNumber(index)}</span>;
+        }
+      },
+      { 
+        key: "appointments", 
+        label: "Appointments",
+        sortable: true,
+        render: (row) => {
+          const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
+          const count = getAppointmentCount(index);
+          return <span className="font-medium text-primary">{count}</span>;
+        }
+      },
     ];
   }
 
