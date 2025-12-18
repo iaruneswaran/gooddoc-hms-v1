@@ -90,7 +90,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-primary">Visit Transactions</h2>
+        <h2 className="text-[14px] font-semibold text-foreground">Visit Transactions</h2>
         <Button variant="outline" size="sm" className="gap-2">
           <Download className="h-4 w-4" />
           Download statement
