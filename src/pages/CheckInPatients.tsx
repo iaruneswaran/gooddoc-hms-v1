@@ -3,13 +3,6 @@ import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { bedsAvailability, icuBeds, wardBeds, roomBeds, BedRecord } from "@/data/overview.mock";
 
-const statusStyles: Record<BedRecord["status"], string> = {
-  "Available": "bg-green-100 text-green-700",
-  "Cleaning": "bg-amber-100 text-amber-700",
-  "Reserved": "bg-blue-100 text-blue-700",
-  "Blocked": "bg-red-100 text-red-700",
-};
-
 const bedTypeStyles: Record<BedRecord["bedType"], string> = {
   "ICU": "bg-red-100 text-red-700",
   "HDU": "bg-orange-100 text-orange-700",
@@ -23,31 +16,40 @@ const BedsAvailability = () => {
   const [searchParams] = useSearchParams();
   const bedType = searchParams.get("bedType");
 
-  let data = bedsAvailability;
-  let displayCount = bedsAvailability.length;
-  let pageTitle = "Beds Availability";
+  // Filter to show only Available beds
+  let data = bedsAvailability.filter(bed => bed.status === "Available");
+  let displayCount = data.length;
+  let pageTitle = "Available Beds";
 
   if (bedType === "icu") {
-    data = icuBeds;
-    displayCount = icuBeds.length;
+    data = icuBeds.filter(bed => bed.status === "Available");
+    displayCount = data.length;
     pageTitle = "ICU Beds";
   } else if (bedType === "ward") {
-    data = wardBeds;
-    displayCount = wardBeds.length;
+    data = wardBeds.filter(bed => bed.status === "Available");
+    displayCount = data.length;
     pageTitle = "Ward Beds";
   } else if (bedType === "rooms") {
-    data = roomBeds;
-    displayCount = roomBeds.length;
+    data = roomBeds.filter(bed => bed.status === "Available");
+    displayCount = data.length;
     pageTitle = "Private/Isolation Rooms";
   }
 
   const columns: Column<BedRecord>[] = [
-    { key: "ward", label: "Ward", sortable: true },
-    { key: "room", label: "Room", sortable: true },
-    { key: "bed", label: "Bed", sortable: true },
+    { 
+      key: "ward", 
+      label: "Ward/Bed", 
+      sortable: true,
+      render: (row) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{row.ward}</span>
+          <span className="text-muted-foreground text-xs">Bed {row.bed}</span>
+        </div>
+      ),
+    },
     {
       key: "bedType",
-      label: "Bed Type",
+      label: "Type",
       sortable: true,
       render: (row) => (
         <Badge className={bedTypeStyles[row.bedType]}>{row.bedType}</Badge>
@@ -57,37 +59,9 @@ const BedsAvailability = () => {
       key: "status",
       label: "Status",
       sortable: true,
-      render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+      render: () => (
+        <Badge className="bg-green-100 text-green-700">Available</Badge>
       ),
-    },
-    {
-      key: "lastDischargedAt",
-      label: "Last Discharged At",
-      render: (row) => {
-        if (!row.lastDischargedAt) return "—";
-        const [date, time] = row.lastDischargedAt.split(' ');
-        return (
-          <div className="flex flex-col">
-            <span>{time}</span>
-            <span className="text-muted-foreground text-xs">{date}</span>
-          </div>
-        );
-      },
-    },
-    {
-      key: "cleaningETA",
-      label: "Cleaning ETA",
-      render: (row) => {
-        if (!row.cleaningETA) return "—";
-        const [date, time] = row.cleaningETA.split(' ');
-        return (
-          <div className="flex flex-col">
-            <span>{time}</span>
-            <span className="text-muted-foreground text-xs">{date}</span>
-          </div>
-        );
-      },
     },
     {
       key: "isolationCapability",
@@ -98,25 +72,9 @@ const BedsAvailability = () => {
         <span className="text-muted-foreground">No</span>
       ),
     },
-    {
-      key: "reservedFor",
-      label: "Reserved For",
-      render: (row) => row.reservedFor || "—",
-    },
   ];
 
   const filters: Filter[] = [
-    {
-      key: "status",
-      label: "Status",
-      value: "all",
-      options: [
-        { value: "Available", label: "Available" },
-        { value: "Cleaning", label: "Cleaning" },
-        { value: "Reserved", label: "Reserved" },
-        { value: "Blocked", label: "Blocked" },
-      ],
-    },
     {
       key: "bedType",
       label: "Bed Type",
@@ -132,15 +90,13 @@ const BedsAvailability = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU", count: icuBeds.length },
-    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward", count: wardBeds.length },
-    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms", count: roomBeds.length },
+    { paramKey: "bedType", paramValue: "icu", displayLabel: "ICU", count: icuBeds.filter(b => b.status === "Available").length },
+    { paramKey: "bedType", paramValue: "ward", displayLabel: "Ward", count: wardBeds.filter(b => b.status === "Available").length },
+    { paramKey: "bedType", paramValue: "rooms", displayLabel: "Rooms", count: roomBeds.filter(b => b.status === "Available").length },
   ];
 
   const rowActions: RowAction<BedRecord>[] = [
-    { label: "Reserve Bed", onClick: (row) => console.log("Reserve", row.ward, row.room, row.bed) },
-    { label: "Mark Cleaning", onClick: (row) => console.log("Mark Cleaning", row.ward, row.room, row.bed) },
-    { label: "Block Bed", onClick: (row) => console.log("Block", row.ward, row.room, row.bed) },
+    { label: "Reserve Bed", onClick: (row) => console.log("Reserve", row.ward, row.bed) },
   ];
 
   return (
@@ -153,8 +109,8 @@ const BedsAvailability = () => {
       filters={filters}
       rowActions={rowActions}
       urlParamFilters={urlParamFilters}
-      emptyMessage="No beds found."
-      searchPlaceholder="Search by ward, room, bed..."
+      emptyMessage="No available beds found."
+      searchPlaceholder="Search by ward, bed..."
       getRowId={(row) => `${row.ward}-${row.room}-${row.bed}`}
     />
   );
