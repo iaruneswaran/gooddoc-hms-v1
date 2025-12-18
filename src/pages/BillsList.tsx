@@ -3,15 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
-import { billsData, paidBills, outstandingBills, BillRecord } from "@/data/bills.mock";
+import { billsData, paidBills, partialBills, BillRecord } from "@/data/bills.mock";
 
 const formatCurrency = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
 const statusStyles: Record<BillRecord["status"], string> = {
   "Paid": "bg-green-100 text-green-700",
   "Partial": "bg-amber-100 text-amber-700",
-  "Outstanding": "bg-orange-100 text-orange-700",
-  "Overdue": "bg-red-100 text-red-700",
 };
 
 const paymentModeStyles: Record<BillRecord["paymentMode"], string> = {
@@ -33,9 +31,9 @@ const BillsList = () => {
   if (typeFilter === "collected") {
     data = paidBills;
     displayCount = paidBills.length;
-  } else if (typeFilter === "outstanding") {
-    data = outstandingBills;
-    displayCount = outstandingBills.length;
+  } else if (typeFilter === "partial") {
+    data = partialBills;
+    displayCount = partialBills.length;
   }
 
   const columns: Column<BillRecord>[] = [
@@ -50,10 +48,7 @@ const BillsList = () => {
       key: "invoiceNo", 
       label: "Invoice No.",
       render: (row) => (
-        <div className="flex flex-col">
-          <span className="font-medium">{row.invoiceNo}</span>
-          <span className="text-muted-foreground text-xs">{row.visitId}</span>
-        </div>
+        <span className="font-medium">{row.invoiceNo}</span>
       )
     },
     { 
@@ -70,14 +65,7 @@ const BillsList = () => {
         );
       }
     },
-    { 
-      key: "services", 
-      label: "Services",
-      render: (row) => (
-        <span className="text-sm line-clamp-2" title={row.services}>{row.services}</span>
-      )
-    },
-    { 
+    {
       key: "doctor", 
       label: "Doctor", 
       sortable: true,
@@ -157,8 +145,6 @@ const BillsList = () => {
       options: [
         { value: "Paid", label: "Paid" },
         { value: "Partial", label: "Partial" },
-        { value: "Outstanding", label: "Outstanding" },
-        { value: "Overdue", label: "Overdue" },
       ],
     },
     {
@@ -177,7 +163,7 @@ const BillsList = () => {
 
   const urlParamFilters: UrlParamFilter[] = [
     { paramKey: "type", paramValue: "collected", displayLabel: "Paid Bills", count: paidBills.length },
-    { paramKey: "type", paramValue: "outstanding", displayLabel: "Outstanding", count: outstandingBills.length },
+    { paramKey: "type", paramValue: "partial", displayLabel: "Partial", count: partialBills.length },
   ];
 
   const rowActions: RowAction<BillRecord>[] = [
