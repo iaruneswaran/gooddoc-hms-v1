@@ -186,7 +186,7 @@ const DoctorsOnDuty = () => {
           </div>
         )
       },
-      { key: "currentLocation", label: "Current Location" },
+      { key: "currentLocation", label: "Location" },
       { 
         key: "contact", 
         label: "Contact",
@@ -202,7 +202,7 @@ const DoctorsOnDuty = () => {
         render: (row) => {
           const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
           const count = getAppointmentCount(index);
-          return <span className="font-medium text-primary">{count}</span>;
+          return <Badge className="bg-primary/10 text-primary">{count}</Badge>;
         }
       },
     ];
