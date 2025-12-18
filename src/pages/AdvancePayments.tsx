@@ -298,7 +298,7 @@ const AdvancePayments = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => navigate("/overview")}
+                  onClick={() => navigate("/")}
                   className="h-9 w-9"
                 >
                   <ArrowLeft className="h-5 w-5" />
