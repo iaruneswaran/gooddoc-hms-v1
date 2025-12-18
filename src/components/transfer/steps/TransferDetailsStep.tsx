@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Info } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -28,7 +27,7 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
     }
   }, []);
 
-  const showPreAuthWarning = data.transferType === 'ward_to_icu' || data.insurancePreAuthRequired;
+  
 
   return (
     <div className="space-y-6">
@@ -159,26 +158,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
         <p className="text-xs text-muted-foreground">Auto-filled from current user</p>
       </div>
 
-      {/* Insurance Pre-Auth Warning */}
-      {showPreAuthWarning && (
-        <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-lg border border-amber-200">
-          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="font-medium text-amber-800">Insurance Pre-Authorization Required</p>
-            <p className="text-sm text-amber-700 mt-1">
-              ICU/Private transfers may require insurance pre-authorization. Current tariff: ₹{currentTariff.toLocaleString()}/day
-            </p>
-            <div className="flex items-center gap-2 mt-3">
-              <Badge variant="secondary" className="bg-amber-100 text-amber-700">
-                {data.insurancePreAuthStatus === 'approved' ? 'Approved' : 'Pending'}
-              </Badge>
-              <Button variant="link" size="sm" className="text-amber-700 p-0 h-auto">
-                Request Pre-Auth
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Cost Delta Estimate */}
       {data.costDelta !== undefined && data.costDelta !== 0 && (
