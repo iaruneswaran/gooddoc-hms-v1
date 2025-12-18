@@ -284,29 +284,35 @@ const AdvancePayments = () => {
         <AppHeader breadcrumbs={["Overview", "Advance Payments"]} />
         <main className="p-6">
           {/* Header */}
-          <Card className="flex items-center gap-4 px-4 py-3 mb-6">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/overview")}
-              className="h-9 w-9"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-3 flex-1">
-              <h1 className="text-h3 font-bold text-foreground">Advance Payments</h1>
-              <span className="bg-muted text-foreground text-sm font-semibold px-2.5 py-0.5 rounded-md">
-                {advancePaymentsData.length}
-              </span>
+          <Card className="p-6 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate("/overview")}
+                  className="h-9 w-9"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-h3 font-semibold text-foreground">Advance Payments</h1>
+                  <Badge variant="secondary" className="text-lg px-3 py-1">
+                    {advancePaymentsData.length}
+                  </Badge>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export CSV
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Printer className="w-4 h-4" />
+                  Print List
+                </Button>
+              </div>
             </div>
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              Export CSV
-            </Button>
-            <Button variant="outline" size="sm">
-              <Printer className="w-4 h-4 mr-2" />
-              Print List
-            </Button>
           </Card>
 
           {/* Filters */}
