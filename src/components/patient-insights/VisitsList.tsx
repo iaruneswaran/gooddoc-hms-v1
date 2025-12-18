@@ -25,7 +25,6 @@ export function VisitsList({ visits, selectedVisitId, onVisitSelect }: VisitsLis
   return (
     <div className="h-full flex flex-col">
       <div className="px-8 py-4 border-b border-border bg-background sticky top-0 z-10">
-        <h2 className="text-base font-semibold text-foreground mb-4">Visits</h2>
         
         {/* Search */}
         <div className="relative mb-3">
