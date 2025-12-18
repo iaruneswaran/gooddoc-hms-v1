@@ -302,13 +302,16 @@ function generateOPPatient(index: number, statusOverride?: OPPatientRecord["stat
   const appointmentDate = new Date(now);
   appointmentDate.setHours(appointmentHour, (index * 7) % 60, 0, 0);
   
-  const checkInDate = status !== "Scheduled" && status !== "No-show" && status !== "Canceled" 
+  const checkInDate = status !== "Scheduled" && status !== "Pending Check-in" && status !== "No-show" && status !== "Canceled" 
     ? subMinutes(appointmentDate, Math.floor(Math.random() * 15)) 
     : undefined;
   
   const waitingMins = status === "Checked-in" || status === "With Doctor" 
     ? Math.floor(Math.random() * 45) + 5 
     : undefined;
+
+  // Token only assigned after check-in (not for Scheduled, Pending Check-in, No-show, Canceled)
+  const hasToken = status !== "Scheduled" && status !== "Pending Check-in" && status !== "No-show" && status !== "Canceled";
 
   return {
     mrn: generateMRN(index),
@@ -323,7 +326,7 @@ function generateOPPatient(index: number, statusOverride?: OPPatientRecord["stat
     status,
     checkInTime: checkInDate ? formatDateTime(checkInDate) : undefined,
     waitingTime: waitingMins ? `${waitingMins} min` : undefined,
-    tokenQueueNo: status !== "Scheduled" && status !== "No-show" && status !== "Canceled" ? `T${String(index + 1).padStart(3, "0")}` : undefined,
+    tokenQueueNo: hasToken ? `T${String(index + 1).padStart(3, "0")}` : undefined,
     insurancePlan: insurancePlans[index % insurancePlans.length],
     billingStatus: status === "Completed" ? (["Paid", "Pending", "Partially Paid"] as const)[index % 3] : undefined,
     prescriptions: status === "Completed" ? Math.floor(Math.random() * 5) : undefined,
