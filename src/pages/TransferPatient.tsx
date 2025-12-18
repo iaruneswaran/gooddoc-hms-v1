@@ -162,7 +162,7 @@ const TransferPatient = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return transferData.transferType && transferData.priority && transferData.reason;
+        return transferData.transferType && transferData.reason;
       case 2:
         return !!selectedBed;
       default:

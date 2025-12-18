@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, AlertTriangle, Info } from "lucide-react";
+import { CalendarIcon, Info } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,20 +11,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { TransferRequest, TransferType, TransferPriority, TransferReason } from "@/types/transfer";
-import { transferTypeLabels, priorityLabels, reasonLabels } from "@/data/transfer.mock";
+import { TransferRequest, TransferType, TransferReason } from "@/types/transfer";
+import { transferTypeLabels, reasonLabels } from "@/data/transfer.mock";
 
 interface TransferDetailsStepProps {
   data: Partial<TransferRequest>;
   onChange: (data: Partial<TransferRequest>) => void;
   currentTariff: number;
 }
-
-const priorityColors: Record<TransferPriority, string> = {
-  stat: "bg-red-100 text-red-700 border-red-200",
-  urgent: "bg-amber-100 text-amber-700 border-amber-200",
-  routine: "bg-blue-100 text-blue-700 border-blue-200",
-};
 
 export function TransferDetailsStep({ data, onChange, currentTariff }: TransferDetailsStepProps) {
   // Auto-fill ordering clinician
@@ -61,36 +55,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
         </p>
       </div>
 
-      {/* Priority */}
-      <div className="space-y-3">
-        <Label>Priority</Label>
-        <RadioGroup
-          value={data.priority}
-          onValueChange={(value) => onChange({ priority: value as TransferPriority })}
-          className="flex gap-3"
-        >
-          {(Object.keys(priorityLabels) as TransferPriority[]).map((priority) => (
-            <label
-              key={priority}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all",
-                data.priority === priority
-                  ? priorityColors[priority]
-                  : "border-border hover:border-muted-foreground/30"
-              )}
-            >
-              <RadioGroupItem value={priority} className="sr-only" />
-              <span className="font-medium text-sm">{priorityLabels[priority]}</span>
-            </label>
-          ))}
-        </RadioGroup>
-        {data.priority === 'stat' && (
-          <div className="flex items-start gap-2 p-3 bg-red-50 rounded-lg text-red-700 text-sm">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-            <p>STAT transfers may bypass some checklist items but require documentation.</p>
-          </div>
-        )}
-      </div>
 
       {/* Reason */}
       <div className="space-y-2">
