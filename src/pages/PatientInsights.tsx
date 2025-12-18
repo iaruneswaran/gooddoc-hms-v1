@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
-import { VisitsList } from "@/components/patient-insights/VisitsList";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
 import { Visit } from "@/components/patient-insights/VisitListItem";
 
@@ -280,26 +279,14 @@ const PatientInsights = () => {
           </div>
         </div>
 
-        {/* Two-Pane Layout with Independent Scrolling */}
-        <main className="flex-1 flex overflow-hidden min-h-0">
-          {/* Left: Visits List (32% width) */}
-          <div className="w-[32%] border-r border-border flex flex-col overflow-hidden">
-            <VisitsList
-              visits={sortedVisits}
-              selectedVisitId={selectedVisitId}
-              onVisitSelect={setSelectedVisitId}
-            />
-          </div>
-
-          {/* Right: Details Tabs (68% width) */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <VisitDetailsTabs
-              selectedVisit={selectedVisit}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              patient={patient}
-            />
-          </div>
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col overflow-hidden min-h-0">
+          <VisitDetailsTabs
+            selectedVisit={selectedVisit}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            patient={patient}
+          />
         </main>
       </PageContent>
     </div>
