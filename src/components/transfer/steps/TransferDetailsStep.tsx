@@ -78,7 +78,7 @@ export function TransferDetailsStep({ data, onChange, fromLocation, onSelectBed 
             <MapPin className="h-4 w-4 text-muted-foreground" />
             From Location
           </Label>
-          <div className="h-10 px-3 py-2 rounded-md border border-border bg-muted/50 flex items-center text-sm text-foreground">
+          <div className="h-9 px-3 py-2 rounded-md border border-border bg-muted/50 flex items-center text-sm text-foreground">
             {fromLocation.unitName} • {fromLocation.roomName} • {fromLocation.bedName}
           </div>
           <p className="text-xs text-muted-foreground">Patient's current location</p>
