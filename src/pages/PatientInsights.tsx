@@ -10,6 +10,7 @@ import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
 import { Visit } from "@/components/patient-insights/VisitListItem";
+import { ServicesDialog } from "@/components/patient-insights/ServicesDialog";
 
 const PatientInsights = () => {
   const { patientId } = useParams();
@@ -17,6 +18,7 @@ const PatientInsights = () => {
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
+  const [servicesDialogOpen, setServicesDialogOpen] = useState(false);
 
   // Mapping for breadcrumb navigation based on source page
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
@@ -226,9 +228,7 @@ const PatientInsights = () => {
                 <div className="flex gap-2">
                   <Button 
                     size="sm"
-                    onClick={() => {
-                      // TODO: Navigate to services page
-                    }}
+                    onClick={() => setServicesDialogOpen(true)}
                   >
                     Services
                   </Button>
@@ -289,6 +289,14 @@ const PatientInsights = () => {
             patient={patient}
           />
         </main>
+
+        {/* Services Dialog */}
+        <ServicesDialog
+          open={servicesDialogOpen}
+          onOpenChange={setServicesDialogOpen}
+          patientName={patient.name}
+          patientId={patientId || ""}
+        />
       </PageContent>
     </div>
   );
