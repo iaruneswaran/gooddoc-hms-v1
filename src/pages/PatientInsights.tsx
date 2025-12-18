@@ -5,12 +5,10 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
 import { Visit } from "@/components/patient-insights/VisitListItem";
-import { ServicesDialog } from "@/components/patient-insights/ServicesDialog";
 
 const PatientInsights = () => {
   const { patientId } = useParams();
@@ -18,7 +16,6 @@ const PatientInsights = () => {
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
-  const [servicesDialogOpen, setServicesDialogOpen] = useState(false);
 
   // Mapping for breadcrumb navigation based on source page
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
@@ -228,7 +225,7 @@ const PatientInsights = () => {
                 <div className="flex gap-2">
                   <Button 
                     size="sm"
-                    onClick={() => setServicesDialogOpen(true)}
+                    onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                   >
                     Services
                   </Button>
@@ -289,14 +286,6 @@ const PatientInsights = () => {
             patient={patient}
           />
         </main>
-
-        {/* Services Dialog */}
-        <ServicesDialog
-          open={servicesDialogOpen}
-          onOpenChange={setServicesDialogOpen}
-          patientName={patient.name}
-          patientId={patientId || ""}
-        />
       </PageContent>
     </div>
   );
