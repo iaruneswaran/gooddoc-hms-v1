@@ -116,16 +116,6 @@ export default function DiagnosticsList() {
       ),
     },
     {
-      key: "tests",
-      label: "Tests/Exam",
-      render: (row) => (
-        <div className="flex flex-col">
-          <span className="text-sm">{row.tests}</span>
-          <span className="text-xs text-muted-foreground">{row.type === "Laboratory" ? row.specimenType : row.modality}</span>
-        </div>
-      ),
-    },
-    {
       key: "type",
       label: "Type",
       render: (row) => (
@@ -156,22 +146,6 @@ export default function DiagnosticsList() {
           </div>
         );
       },
-    },
-    {
-      key: "resultEta",
-      label: "Result ETA",
-      render: (row) => (
-        <span className="text-sm">{row.resultEta || "—"}</span>
-      ),
-    },
-    {
-      key: "critical",
-      label: "Critical",
-      render: (row) => (
-        <span className={`text-sm font-medium ${row.criticalResult ? "text-red-600" : "text-muted-foreground"}`}>
-          {row.criticalResult ? "Yes" : "No"}
-        </span>
-      ),
     },
   ];
 
