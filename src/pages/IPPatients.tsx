@@ -186,14 +186,16 @@ const IPPatients = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-base">{selectedPatient.patient}</p>
-                    <p className="text-muted-foreground text-sm">
-                      GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-muted-foreground text-sm">
+                        GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}
+                      </p>
+                      <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">
+                        Admitted
+                      </Badge>
+                    </div>
                   </div>
                 </div>
-                <Badge className="bg-green-100 text-green-700 border-green-200">
-                  Admitted
-                </Badge>
               </div>
 
               {/* Info Grid Row 1 */}
