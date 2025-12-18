@@ -61,6 +61,7 @@ export interface Filter {
 export interface RowAction<T> {
   label: string;
   onClick: (row: T) => void;
+  hidden?: (row: T) => boolean;
 }
 
 // URL param to filter label mapping
@@ -346,14 +347,16 @@ export function ListPageLayout<T>({
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                {rowActions.map((action) => (
-                                  <DropdownMenuItem
-                                    key={action.label}
-                                    onClick={() => action.onClick(row)}
-                                  >
-                                    {action.label}
-                                  </DropdownMenuItem>
-                                ))}
+                                {rowActions
+                                  .filter((action) => !action.hidden || !action.hidden(row))
+                                  .map((action) => (
+                                    <DropdownMenuItem
+                                      key={action.label}
+                                      onClick={() => action.onClick(row)}
+                                    >
+                                      {action.label}
+                                    </DropdownMenuItem>
+                                  ))}
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>

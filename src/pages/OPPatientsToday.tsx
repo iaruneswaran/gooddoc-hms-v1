@@ -160,7 +160,7 @@ const OPPatientsToday = () => {
 
   const rowActions: RowAction<OPPatientRecord>[] = [
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
-    { label: "Check In", onClick: (row) => handleCheckIn(row) },
+    { label: "Check In", onClick: (row) => handleCheckIn(row), hidden: (row) => row.status !== "Pending Check-in" },
     { label: "View Summary", onClick: (row) => handleViewSummary(row) },
   ];
 
