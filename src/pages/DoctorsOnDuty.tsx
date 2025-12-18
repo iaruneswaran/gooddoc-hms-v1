@@ -202,11 +202,7 @@ const DoctorsOnDuty = () => {
         render: (row) => {
           const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
           const count = getAppointmentCount(index);
-          return (
-            <Badge variant="secondary" className="bg-primary/10 text-primary font-medium px-2 py-1">
-              {count} Today
-            </Badge>
-          );
+          return <span className="font-medium text-primary">{count}</span>;
         }
       },
     ];
