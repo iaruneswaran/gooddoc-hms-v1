@@ -42,15 +42,15 @@ const BedsAvailability = () => {
   }
 
   const columns: Column<BedRecord>[] = [
-    { key: "ward", label: "Ward", sortable: true },
-    { key: "room", label: "Room", sortable: true },
-    { key: "bed", label: "Bed", sortable: true },
-    {
-      key: "bedType",
-      label: "Bed Type",
+    { 
+      key: "ward", 
+      label: "Ward/Bed", 
       sortable: true,
       render: (row) => (
-        <Badge className={bedTypeStyles[row.bedType]}>{row.bedType}</Badge>
+        <div className="flex flex-col">
+          <span>{row.ward}</span>
+          <span className="text-muted-foreground text-xs">Bed {row.bed}</span>
+        </div>
       ),
     },
     {
@@ -80,13 +80,7 @@ const BedsAvailability = () => {
       label: "Cleaning ETA",
       render: (row) => {
         if (!row.cleaningETA) return "—";
-        const [date, time] = row.cleaningETA.split(' ');
-        return (
-          <div className="flex flex-col">
-            <span>{time}</span>
-            <span className="text-muted-foreground text-xs">{date}</span>
-          </div>
-        );
+        return <span>{row.cleaningETA}</span>;
       },
     },
     {
@@ -105,6 +99,9 @@ const BedsAvailability = () => {
     },
   ];
 
+  // Extract unique wards from data
+  const uniqueWards = [...new Set(data.map(b => b.ward))].sort();
+
   const filters: Filter[] = [
     {
       key: "status",
@@ -118,16 +115,10 @@ const BedsAvailability = () => {
       ],
     },
     {
-      key: "bedType",
-      label: "Bed Type",
+      key: "ward",
+      label: "Ward",
       value: "all",
-      options: [
-        { value: "ICU", label: "ICU" },
-        { value: "HDU", label: "HDU" },
-        { value: "Ward", label: "Ward" },
-        { value: "Private", label: "Private" },
-        { value: "Isolation", label: "Isolation" },
-      ],
+      options: uniqueWards.map(ward => ({ value: ward, label: ward })),
     },
   ];
 
