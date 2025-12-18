@@ -232,7 +232,7 @@ const Overview = () => {
       isPrimary: true,
       subMetrics: [
         { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
-        { label: "Emergency Case", value: 8, filterParam: "erCase=true" },
+        { label: "Discharged", value: 45, route: "/patients/discharged?date=today" },
       ],
     },
     {
@@ -270,13 +270,6 @@ const Overview = () => {
       icon: Stethoscope,
       route: "/doctors/on-duty?shift=current",
       iconColorClass: iconColors.doctors,
-    },
-    {
-      title: "Discharged",
-      count: 45,
-      icon: LogOut,
-      route: "/patients/discharged?date=today",
-      iconColorClass: iconColors.patients,
     },
     {
       title: "Appointment request received",
