@@ -53,6 +53,7 @@ import DepartmentDetail from "./pages/DepartmentDetail";
 import DepartmentsList from "./pages/DepartmentsList";
 import BillsList from "./pages/BillsList";
 import BedCharges from "./pages/BedCharges";
+import TransferPatient from "./pages/TransferPatient";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -75,6 +76,7 @@ const App = () => (
             <Route path="/patient-insights/:patientId/services" element={<PatientServices />} />
             <Route path="/patient-insights/:patientId/payments" element={<Payments />} />
             <Route path="/patient-insights/:patientId/discharge" element={<Discharge />} />
+            <Route path="/patient-insights/:patientId/transfer" element={<TransferPatient />} />
             <Route path="/doctors" element={<DoctorsList />} />
             <Route path="/doctors/new" element={<DoctorForm />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
