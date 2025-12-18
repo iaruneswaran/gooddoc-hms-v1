@@ -84,7 +84,7 @@ const IPPatients = () => {
     },
     {
       key: "lengthOfStay",
-      label: "LOS (days)",
+      label: "Days",
       sortable: true,
       render: (row) => <span>{row.lengthOfStay} days</span>,
     },
