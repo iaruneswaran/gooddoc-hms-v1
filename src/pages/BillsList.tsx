@@ -3,14 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
-import { billsData, paidBills, partialBills, outstandingBills, BillRecord } from "@/data/bills.mock";
+import { billsData, paidBills, partialBills, BillRecord } from "@/data/bills.mock";
 
 const formatCurrency = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
 const statusStyles: Record<BillRecord["status"], string> = {
   "Paid": "bg-green-100 text-green-700",
   "Partial": "bg-amber-100 text-amber-700",
-  "Outstanding": "bg-red-100 text-red-700",
 };
 
 const paymentModeStyles: Record<BillRecord["paymentMode"], string> = {
@@ -35,9 +34,6 @@ const BillsList = () => {
   } else if (typeFilter === "partial") {
     data = partialBills;
     displayCount = partialBills.length;
-  } else if (typeFilter === "outstanding") {
-    data = outstandingBills;
-    displayCount = outstandingBills.length;
   }
 
   const columns: Column<BillRecord>[] = [
@@ -149,7 +145,6 @@ const BillsList = () => {
       options: [
         { value: "Paid", label: "Paid" },
         { value: "Partial", label: "Partial" },
-        { value: "Outstanding", label: "Outstanding" },
       ],
     },
     {
@@ -167,7 +162,6 @@ const BillsList = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "type", paramValue: "outstanding", displayLabel: "Outstanding", count: outstandingBills.length },
     { paramKey: "type", paramValue: "collected", displayLabel: "Paid Bills", count: paidBills.length },
     { paramKey: "type", paramValue: "partial", displayLabel: "Partial", count: partialBills.length },
   ];
