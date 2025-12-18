@@ -369,7 +369,6 @@ const AdvancePayments = () => {
                   <TableHead>Patient</TableHead>
                   <TableHead>Receipt No.</TableHead>
                   <TableHead>Date & Time</TableHead>
-                  <TableHead>Reason</TableHead>
                   <TableHead>Method</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
                   <TableHead className="text-right">Used</TableHead>
@@ -401,11 +400,6 @@ const AdvancePayments = () => {
                     <TableCell>
                       <p className="text-sm text-foreground">{payment.time}</p>
                       <p className="text-xs text-muted-foreground">{payment.date}</p>
-                    </TableCell>
-                    <TableCell>
-                      <p className="text-sm text-foreground max-w-[200px] truncate" title={payment.reason}>
-                        {payment.reason}
-                      </p>
                     </TableCell>
                     <TableCell>
                       <p className="text-sm text-foreground">{payment.paymentMethod}</p>
