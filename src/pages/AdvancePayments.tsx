@@ -284,7 +284,7 @@ const AdvancePayments = () => {
         <AppHeader breadcrumbs={["Overview", "Advance Payments"]} />
         <main className="p-6">
           {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
+          <Card className="flex items-center gap-4 px-4 py-3 mb-6">
             <Button
               variant="ghost"
               size="icon"
@@ -293,11 +293,11 @@ const AdvancePayments = () => {
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-h3 font-bold text-foreground">Advance Payments</h1>
-                <span className="text-muted-foreground">{advancePaymentsData.length}</span>
-              </div>
+            <div className="flex items-center gap-3 flex-1">
+              <h1 className="text-h3 font-bold text-foreground">Advance Payments</h1>
+              <span className="bg-muted text-foreground text-sm font-semibold px-2.5 py-0.5 rounded-md">
+                {advancePaymentsData.length}
+              </span>
             </div>
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
@@ -307,23 +307,7 @@ const AdvancePayments = () => {
               <Printer className="w-4 h-4 mr-2" />
               Print List
             </Button>
-          </div>
-
-          {/* KPI Summary */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <Card className="p-4">
-              <p className="text-xs text-muted-foreground mb-1">Total Advance Collected</p>
-              <p className="text-xl font-bold text-foreground">{formatINR(totalAdvance)}</p>
-            </Card>
-            <Card className="p-4">
-              <p className="text-xs text-muted-foreground mb-1">Amount Used</p>
-              <p className="text-xl font-bold text-amber-600">{formatINR(totalUsed)}</p>
-            </Card>
-            <Card className="p-4">
-              <p className="text-xs text-muted-foreground mb-1">Available Balance</p>
-              <p className="text-xl font-bold text-green-600">{formatINR(totalAvailable)}</p>
-            </Card>
-          </div>
+          </Card>
 
           {/* Filters */}
           <div className="flex items-center justify-between mb-4">
