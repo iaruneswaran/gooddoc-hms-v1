@@ -107,7 +107,7 @@ const TransferPatient = () => {
   };
 
   const canProceed = () => {
-    return transferData.transferType && transferData.reason && !!selectedBed;
+    return transferData.reason && transferData.orderingClinician && !!selectedBed;
   };
 
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
