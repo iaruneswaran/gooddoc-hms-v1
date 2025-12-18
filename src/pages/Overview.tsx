@@ -122,7 +122,7 @@ const PrimaryMetricCard = ({
             displayCount.includes('|') ? (
               <>
                 {displayCount.split('|')[0].trim()}
-                <span className="text-sm font-medium text-muted-foreground"> | {displayCount.split('|').slice(1).map(s => s.trim()).join(' | ')}</span>
+                <span className="text-[14px] font-medium text-muted-foreground"> | {displayCount.split('|').slice(1).map(s => s.trim()).join(' | ')}</span>
               </>
             ) : (
               <>
