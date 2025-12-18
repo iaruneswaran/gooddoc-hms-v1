@@ -1,21 +1,22 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
-import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { ipPatients, newAdmissions, erCasesToday, IPPatientRecord } from "@/data/overview.mock";
-
-const bedClassStyles: Record<IPPatientRecord["bedClass"], string> = {
-  "ICU": "bg-red-100 text-red-700",
-  "HDU": "bg-orange-100 text-orange-700",
-  "Private": "bg-purple-100 text-purple-700",
-  "Ward": "bg-blue-100 text-blue-700",
-};
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const IPPatients = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const admittedToday = searchParams.get("admittedToday");
   const erCase = searchParams.get("erCase");
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<IPPatientRecord | null>(null);
 
   let data = ipPatients;
   let displayCount = ipPatients.length;
@@ -30,6 +31,11 @@ const IPPatients = () => {
     displayCount = erCasesToday.length;
     pageTitle = "Emergency Case";
   }
+
+  const handleViewSummary = (row: IPPatientRecord) => {
+    setSelectedPatient(row);
+    setSummaryOpen(true);
+  };
 
   const columns: Column<IPPatientRecord>[] = [
     { 
@@ -65,8 +71,17 @@ const IPPatients = () => {
         </div>
       )
     },
-    { key: "attendingDoctor", label: "Attending Doctor", sortable: true },
-    { key: "primaryDiagnosis", label: "Primary Diagnosis" },
+    { 
+      key: "attendingDoctor", 
+      label: "Attending Doctor", 
+      sortable: true,
+      render: (row) => (
+        <div className="flex flex-col">
+          <span>{row.attendingDoctor}</span>
+          <span className="text-muted-foreground text-xs">{row.primaryDiagnosis}</span>
+        </div>
+      )
+    },
     {
       key: "lengthOfStay",
       label: "LOS (days)",
@@ -114,27 +129,94 @@ const IPPatients = () => {
   ];
 
   const rowActions: RowAction<IPPatientRecord>[] = [
-    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`) },
-    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360?from=ip-patients`) },
-    { label: "Transfer Bed", onClick: (row) => console.log("Transfer", row.mrn) },
-    { label: "Start Discharge", onClick: (row) => navigate(`/patient-insights/${row.mrn}/discharge?from=ip-patients`) },
+    { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`) },
+    { label: "View Summary", onClick: (row) => handleViewSummary(row) },
   ];
 
   return (
-    <ListPageLayout
-      title={pageTitle}
-      count={displayCount}
-      breadcrumbs={["Overview", pageTitle]}
-      columns={columns}
-      data={data}
-      filters={filters}
-      rowActions={rowActions}
-      urlParamFilters={urlParamFilters}
-      emptyMessage="No IP patients found."
-      searchPlaceholder="Search by MRN, name, ward, bed..."
-      getRowId={(row) => row.mrn}
-      onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
-    />
+    <>
+      <ListPageLayout
+        title={pageTitle}
+        count={displayCount}
+        breadcrumbs={["Overview", pageTitle]}
+        columns={columns}
+        data={data}
+        filters={filters}
+        rowActions={rowActions}
+        urlParamFilters={urlParamFilters}
+        emptyMessage="No IP patients found."
+        searchPlaceholder="Search by MRN, name, ward, bed..."
+        getRowId={(row) => row.mrn}
+        onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
+      />
+
+      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Admission Summary</DialogTitle>
+          </DialogHeader>
+          {selectedPatient && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 pb-4 border-b">
+                <div>
+                  <h3 className="font-semibold text-lg">{selectedPatient.patient}</h3>
+                  <p className="text-muted-foreground text-sm">
+                    GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Visit ID</p>
+                    <p className="font-medium">{selectedPatient.visitId}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Admit Date/Time</p>
+                    <p className="font-medium">{selectedPatient.admitDateTime}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Ward/Bed</p>
+                    <p className="font-medium">{selectedPatient.ward} - Bed {selectedPatient.bed}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Bed Class</p>
+                    <p className="font-medium">{selectedPatient.bedClass}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Attending Doctor</p>
+                    <p className="font-medium">{selectedPatient.attendingDoctor}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Primary Diagnosis</p>
+                    <p className="font-medium">{selectedPatient.primaryDiagnosis}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Length of Stay</p>
+                    <p className="font-medium">{selectedPatient.lengthOfStay} days</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Emergency Contact</p>
+                    <p className="font-medium">{selectedPatient.emergencyContact || "Not provided"}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t">
+                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
+                <p className="text-sm text-muted-foreground">
+                  Patient admitted for {selectedPatient.primaryDiagnosis}. Currently in {selectedPatient.ward} under the care of {selectedPatient.attendingDoctor}.
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
