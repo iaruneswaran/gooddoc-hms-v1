@@ -151,9 +151,10 @@ const DoctorsOnDuty = () => {
     ];
   } else {
     // Default view - all doctors
-    const getAppointmentCount = (index: number) => {
-      const counts = [8, 12, 5, 15, 9, 6, 11, 4, 10, 7, 13, 8, 6, 14, 9, 5, 11, 8, 12, 7, 10, 6, 9, 14, 8];
-      return counts[index % counts.length];
+    const getAppointmentData = (index: number) => {
+      const totals = [10, 15, 8, 18, 12, 9, 14, 7, 13, 10, 16, 11, 9, 17, 12, 8, 14, 10, 15, 9, 13, 8, 12, 18, 10];
+      const completed = [5, 8, 3, 10, 6, 4, 7, 2, 6, 4, 9, 5, 3, 9, 6, 3, 8, 5, 8, 4, 7, 3, 5, 10, 5];
+      return { total: totals[index % totals.length], completed: completed[index % completed.length] };
     };
     
     const getContactNumber = (index: number) => {
@@ -201,8 +202,12 @@ const DoctorsOnDuty = () => {
         sortable: true,
         render: (row) => {
           const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
-          const count = getAppointmentCount(index);
-          return <Badge className="bg-primary/10 text-primary">{count}</Badge>;
+          const { total, completed } = getAppointmentData(index);
+          return (
+            <Badge className="bg-primary/10 text-primary">
+              {completed}/{total} Completed
+            </Badge>
+          );
         }
       },
     ];
