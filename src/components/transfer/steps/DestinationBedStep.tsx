@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Bed } from "@/types/transfer";
 import { BedCard } from "../BedCard";
-import { mockBeds, mockUnits } from "@/data/transfer.mock";
+import { mockBeds, mockUnits, featureLabels } from "@/data/transfer.mock";
 import { useToast } from "@/hooks/use-toast";
 
 interface DestinationBedStepProps {
@@ -28,6 +29,7 @@ export function DestinationBedStep({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("available");
+  const [detailBed, setDetailBed] = useState<Bed | null>(null);
 
   const filteredBeds = useMemo(() => {
     return mockBeds.filter((bed) => {
@@ -163,13 +165,78 @@ export function DestinationBedStep({
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {filteredBeds.map((bed) => (
-            <BedCard
-              key={bed.id}
-              bed={bed}
-              isSelected={selectedBed?.id === bed.id}
-              onSelect={onSelectBed}
-              onHold={handleHoldBed}
-            />
+            <Sheet key={bed.id}>
+              <SheetTrigger asChild>
+                <div onClick={() => setDetailBed(bed)}>
+                  <BedCard
+                    bed={bed}
+                    isSelected={selectedBed?.id === bed.id}
+                    onSelect={onSelectBed}
+                    onHold={handleHoldBed}
+                  />
+                </div>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Bed Details</SheetTitle>
+                </SheetHeader>
+                {detailBed && (
+                  <div className="mt-6 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold">{detailBed.bedName}</h3>
+                      <p className="text-muted-foreground">
+                        {detailBed.unitName} • {detailBed.roomName}
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h4 className="font-medium">Features</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {detailBed.features.map((feature) => (
+                          <Badge key={feature} variant="secondary">
+                            {featureLabels[feature]}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h4 className="font-medium">Restrictions</h4>
+                      <div className="text-sm space-y-1">
+                        <p>Gender: {detailBed.genderRestriction === 'any' ? 'Any' : detailBed.genderRestriction}</p>
+                        <p>Age Group: {detailBed.ageGroup === 'any' ? 'Any' : detailBed.ageGroup}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h4 className="font-medium">Tariff</h4>
+                      <p className="text-2xl font-bold">₹{detailBed.tariff.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">/day</span></p>
+                    </div>
+
+                    {detailBed.status === 'available' && (
+                      <div className="flex gap-2 pt-4">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => handleHoldBed(detailBed)}
+                        >
+                          Hold for 15m
+                        </Button>
+                        <Button
+                          className="flex-1"
+                          onClick={() => {
+                            onSelectBed(detailBed);
+                            setDetailBed(null);
+                          }}
+                        >
+                          Select Bed
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </SheetContent>
+            </Sheet>
           ))}
         </div>
       )}

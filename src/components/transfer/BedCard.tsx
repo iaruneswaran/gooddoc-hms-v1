@@ -124,7 +124,7 @@ export function BedCard({ bed, isSelected, onSelect, onHold, compact }: BedCardP
         )}
       </div>
 
-      {isAvailable && !isSelected && (
+      {isAvailable && (
         <div className="flex gap-2 mt-4">
           <Button
             variant="outline"
@@ -141,14 +141,6 @@ export function BedCard({ bed, isSelected, onSelect, onHold, compact }: BedCardP
           >
             Select Bed
           </Button>
-        </div>
-      )}
-
-      {isSelected && (
-        <div className="mt-4">
-          <Badge className="w-full justify-center py-2 bg-primary text-primary-foreground">
-            Selected
-          </Badge>
         </div>
       )}
     </div>
