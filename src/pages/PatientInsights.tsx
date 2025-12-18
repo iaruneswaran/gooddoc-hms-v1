@@ -236,6 +236,15 @@ const PatientInsights = () => {
                   >
                     Transfer
                   </Button>
+                  <Button
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/timeline`, {
+                      state: { visitId: selectedVisit?.visitId }
+                    })}
+                  >
+                    Timeline
+                  </Button>
                   <Button 
                     variant="outline" 
                     size="sm"
