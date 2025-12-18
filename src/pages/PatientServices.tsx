@@ -143,7 +143,7 @@ const PatientServices = () => {
           </div>
           
           {/* Right Side - Cart Summary */}
-          <div className="w-[420px] flex flex-col bg-muted/30">
+          <div className="w-[420px] flex flex-col border rounded-lg overflow-hidden bg-muted/30">
             <div className="p-4 border-b">
               <h3 className="text-label font-semibold">Order Summary</h3>
               <p className="text-caption text-muted-foreground">{cart.length} item(s) added</p>
