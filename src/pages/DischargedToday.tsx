@@ -4,17 +4,17 @@ import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { dischargedPatients, dischargePending, IPPatientRecord } from "@/data/overview.mock";
 
-const dischargeTypeStyles: Record<string, string> = {
-  "Home": "bg-green-100 text-green-700",
-  "Transfer": "bg-blue-100 text-blue-700",
-  "AMA": "bg-amber-100 text-amber-700",
-  "Expired": "bg-gray-100 text-gray-700",
+// Generate billing amounts based on mrn for variety
+const getBillingAmount = (mrn: string) => {
+  const amounts = [12500, 45000, 78000, 23400, 56700, 34500, 89000, 15600, 67800, 41200];
+  const numericPart = parseInt(mrn.replace(/\D/g, '')) || 0;
+  return amounts[numericPart % amounts.length];
 };
 
-const billingStatusStyles: Record<string, string> = {
-  "Paid": "bg-green-100 text-green-700",
-  "Pending": "bg-amber-100 text-amber-700",
-  "Partially Paid": "bg-blue-100 text-blue-700",
+const getPaymentMode = (mrn: string) => {
+  const modes = ["Cash", "Card", "UPI", "Insurance", "NEFT"];
+  const numericPart = parseInt(mrn.replace(/\D/g, '')) || 0;
+  return modes[numericPart % modes.length];
 };
 
 const DischargedToday = () => {
@@ -67,28 +67,35 @@ const DischargedToday = () => {
       }
     },
     {
-      key: "dischargeType",
-      label: "Discharge Type",
-      render: (row) => row.dischargeType ? (
-        <Badge className={dischargeTypeStyles[row.dischargeType]}>{row.dischargeType}</Badge>
-      ) : <span>—</span>,
-    },
-    { key: "primaryDiagnosis", label: "Primary Diagnosis" },
-    {
-      key: "billingStatus",
-      label: "Billing Status",
-      render: (row) => row.billingStatus ? (
-        <Badge className={billingStatusStyles[row.billingStatus]}>{row.billingStatus}</Badge>
-      ) : <span>—</span>,
+      key: "amount",
+      label: "Amount",
+      render: (row) => {
+        const amount = getBillingAmount(row.mrn);
+        return <span>₹{amount.toLocaleString('en-IN')}</span>;
+      },
     },
     {
-      key: "dischargeSummary",
-      label: "Discharge Summary",
-      render: (row) => row.dischargeSummary === "Ready" ? (
-        <Badge className="bg-green-100 text-green-700">Ready</Badge>
-      ) : (
-        <Badge className="bg-amber-100 text-amber-700">Not Ready</Badge>
-      ),
+      key: "paid",
+      label: "Paid",
+      render: (row) => {
+        const amount = getBillingAmount(row.mrn);
+        return <span>₹{amount.toLocaleString('en-IN')}</span>;
+      },
+    },
+    {
+      key: "balance",
+      label: "Balance",
+      render: () => <span>₹0</span>,
+    },
+    {
+      key: "mode",
+      label: "Mode",
+      render: (row) => <span>{getPaymentMode(row.mrn)}</span>,
+    },
+    {
+      key: "status",
+      label: "Status",
+      render: () => <Badge className="bg-green-100 text-green-700">Settled</Badge>,
     },
   ];
 
