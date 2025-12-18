@@ -214,24 +214,26 @@ const PatientInsights = () => {
             </button>
 
             {/* Header Content */}
-            <div className="flex items-center justify-between gap-6">
-              {/* Left: Patient Chip and Buttons */}
+            <div className="flex items-start justify-between gap-6">
+              {/* Left: Patient Chip */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-3">
-                  <PatientChip
-                    name={patient.name}
-                    gdid={patient.gdid}
-                    age={patient.age}
-                    gender={patient.gender}
-                  />
-                  {selectedVisit && (
-                    <div className="flex items-center gap-2 px-3 h-9 bg-muted rounded-md">
-                      <span className="text-xs text-muted-foreground">Active Visit:</span>
-                      <Badge variant="secondary" className="font-mono">{selectedVisit.visitId}</Badge>
-                    </div>
-                  )}
-                </div>
-                
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                />
+                {selectedVisit && (
+                  <div className="flex items-center gap-2 px-3 h-9 bg-muted rounded-md">
+                    <span className="text-xs text-muted-foreground">Active Visit:</span>
+                    <Badge variant="secondary" className="font-mono">{selectedVisit.visitId}</Badge>
+                  </div>
+                )}
+              </div>
+
+              {/* Right: Action Buttons + KPIs */}
+              <div className="flex flex-col items-end gap-3">
+                {/* Action Buttons */}
                 <div className="flex gap-2">
                   <Button 
                     size="sm"
@@ -267,14 +269,14 @@ const PatientInsights = () => {
                     Payments
                   </Button>
                 </div>
-              </div>
 
-              {/* Right: KPIs */}
-              <div className="flex gap-3">
-                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
-                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
-                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
-                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+                {/* KPIs */}
+                <div className="flex gap-3">
+                  <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
+                  <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
+                  <KpiTile label="Bills Amount" amount={patient.billsAmount} />
+                  <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+                </div>
               </div>
             </div>
           </div>
