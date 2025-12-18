@@ -169,14 +169,8 @@ export function DestinationBedStep({
             {Object.entries(bedsByUnit).map(([unitId, beds]) => {
               const unit = mockUnits.find(u => u.id === unitId);
               return (
-                <div key={unitId}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <h3 className="font-semibold text-foreground">{unit?.name || unitId}</h3>
-                    <Badge variant="outline" className="text-xs">
-                      {beds.filter(b => b.status === 'available').length}/{beds.length}
-                    </Badge>
-                  </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+              <div key={unitId}>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                     {beds.map((bed) => (
                       <Sheet key={bed.id}>
                         <SheetTrigger asChild>
