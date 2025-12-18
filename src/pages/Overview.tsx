@@ -307,6 +307,13 @@ const Overview = () => {
       iconColorClass: iconColors.pharmacy,
     },
     {
+      title: "Beds Availability",
+      count: 67,
+      icon: BedDouble,
+      route: "/patients/check-in?date=today",
+      iconColorClass: iconColors.patients,
+    },
+    {
       title: "Low Stock",
       count: 34,
       icon: PackageOpen,
