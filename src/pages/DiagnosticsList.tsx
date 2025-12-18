@@ -144,8 +144,8 @@ export default function DiagnosticsList() {
       ),
     },
     {
-      key: "collectedAt",
-      label: "Collected/Scheduled",
+      key: "orderedTime",
+      label: "Ordered Time",
       render: (row) => {
         const dateTime = row.type === "Laboratory" ? row.collectedAt : row.scheduledAt;
         if (!dateTime) return <span className="text-muted-foreground">—</span>;
