@@ -76,7 +76,8 @@ const PatientServices = () => {
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 flex overflow-hidden p-6 gap-6">
+        <div className="flex-1 flex overflow-hidden p-6 gap-6 justify-center">
+          <div className="flex gap-6 max-w-6xl w-full">
           {/* Left Side - Services List */}
           <div className="flex-1 flex flex-col border-r overflow-hidden">
             {/* Search & Filters */}
@@ -231,6 +232,7 @@ const PatientServices = () => {
                 Generate Bill
               </Button>
             </div>
+          </div>
           </div>
         </div>
       </PageContent>
