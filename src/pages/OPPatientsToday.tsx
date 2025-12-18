@@ -13,15 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Phone } from "lucide-react";
 
-const statusStyles: Record<OPPatientRecord["status"], string> = {
-  "Scheduled": "bg-gray-100 text-gray-700",
+const statusStyles: Record<string, string> = {
   "Pending Check-in": "bg-amber-100 text-amber-700",
   "Checked-in": "bg-blue-100 text-blue-700",
-  "With Doctor": "bg-indigo-100 text-indigo-700",
-  "Awaiting Billing": "bg-purple-100 text-purple-700",
   "Completed": "bg-green-100 text-green-700",
-  "No-show": "bg-red-100 text-red-700",
-  "Canceled": "bg-gray-100 text-gray-500",
 };
 
 const OPPatientsToday = () => {
@@ -32,18 +27,21 @@ const OPPatientsToday = () => {
   const [selectedPatient, setSelectedPatient] = useState<OPPatientRecord | null>(null);
   const [showSummary, setShowSummary] = useState(false);
 
-  let data = opPatientsData;
-  let displayCount = opPatientsData.length;
+  const allowedStatuses = ["Pending Check-in", "Checked-in", "Completed"];
+  const filteredByStatus = opPatientsData.filter(p => allowedStatuses.includes(p.status));
+
+  let data = filteredByStatus;
+  let displayCount = filteredByStatus.length;
 
   if (visitStatusFilter === "Completed") {
-    data = opCompleted;
-    displayCount = opCompleted.length;
+    data = opCompleted.filter(p => allowedStatuses.includes(p.status));
+    displayCount = data.length;
   } else if (visitStatusFilter === "Pending") {
-    data = opCheckedIn;
-    displayCount = opCheckedIn.length;
+    data = opCheckedIn.filter(p => allowedStatuses.includes(p.status));
+    displayCount = data.length;
   } else if (visitStatusFilter === "In_Queue") {
-    data = opPendingCheckIn;
-    displayCount = opPendingCheckIn.length;
+    data = opPendingCheckIn.filter(p => allowedStatuses.includes(p.status));
+    displayCount = data.length;
   }
 
   const generateToken = () => {
