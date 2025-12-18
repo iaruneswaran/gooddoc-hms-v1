@@ -31,48 +31,47 @@ export function TransferDetailsStep({ data, onChange, currentTariff }: TransferD
 
   return (
     <div className="space-y-6">
-      {/* Transfer Type */}
-      <div className="space-y-2">
-        <Label htmlFor="transferType">Transfer Type</Label>
-        <Select
-          value={data.transferType}
-          onValueChange={(value) => onChange({ transferType: value as TransferType })}
-        >
-          <SelectTrigger id="transferType">
-            <SelectValue placeholder="Select transfer type" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(transferTypeLabels).map(([value, label]) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-xs text-muted-foreground">
-          Choose the type of bed transfer required
-        </p>
-      </div>
+      {/* Transfer Type & Reason - Side by Side */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* Transfer Type */}
+        <div className="space-y-2">
+          <Label htmlFor="transferType">Transfer Type</Label>
+          <Select
+            value={data.transferType}
+            onValueChange={(value) => onChange({ transferType: value as TransferType })}
+          >
+            <SelectTrigger id="transferType">
+              <SelectValue placeholder="Select transfer type" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(transferTypeLabels).map(([value, label]) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-
-      {/* Reason */}
-      <div className="space-y-2">
-        <Label htmlFor="reason">Reason for Transfer</Label>
-        <Select
-          value={data.reason}
-          onValueChange={(value) => onChange({ reason: value as TransferReason })}
-        >
-          <SelectTrigger id="reason">
-            <SelectValue placeholder="Select reason" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(reasonLabels).map(([value, label]) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Reason */}
+        <div className="space-y-2">
+          <Label htmlFor="reason">Reason for Transfer</Label>
+          <Select
+            value={data.reason}
+            onValueChange={(value) => onChange({ reason: value as TransferReason })}
+          >
+            <SelectTrigger id="reason">
+              <SelectValue placeholder="Select reason" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(reasonLabels).map(([value, label]) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Schedule */}
