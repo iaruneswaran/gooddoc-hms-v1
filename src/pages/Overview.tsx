@@ -225,6 +225,7 @@ const Overview = () => {
       subMetrics: [
         { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
         { label: "Emergency Case", value: 8, filterParam: "erCase=true" },
+        { label: "Bed Charges", value: "View", route: "/settings/bed-charges" },
       ],
     },
     {
