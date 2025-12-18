@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
-import { opPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
+import { opPatients as initialOpPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
+import { toast } from "sonner";
 
 const statusStyles: Record<OPPatientRecord["status"], string> = {
   "Scheduled": "bg-gray-100 text-gray-700",
@@ -19,9 +21,10 @@ const OPPatientsToday = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const visitStatusFilter = searchParams.get("visitStatus");
+  const [opPatientsData, setOpPatientsData] = useState<OPPatientRecord[]>(initialOpPatients);
 
-  let data = opPatients;
-  let displayCount = opPatients.length;
+  let data = opPatientsData;
+  let displayCount = opPatientsData.length;
 
   if (visitStatusFilter === "Completed") {
     data = opCompleted;
@@ -33,6 +36,27 @@ const OPPatientsToday = () => {
     data = opPendingCheckIn;
     displayCount = opPendingCheckIn.length;
   }
+
+  const generateToken = () => {
+    const tokenNum = Math.floor(Math.random() * 900) + 100;
+    return `T${tokenNum}`;
+  };
+
+  const handleCheckIn = (row: OPPatientRecord) => {
+    const now = new Date();
+    const checkInTime = `${now.getDate().toString().padStart(2, '0')}-${now.toLocaleString('en-US', { month: 'short' })}-${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const token = generateToken();
+
+    setOpPatientsData(prev => prev.map(patient => 
+      patient.mrn === row.mrn 
+        ? { ...patient, status: "Checked-in" as const, checkInTime, tokenQueueNo: token }
+        : patient
+    ));
+
+    toast.success(`Patient checked in successfully`, {
+      description: `Token: ${token} assigned to ${row.patient}`,
+    });
+  };
 
   const columns: Column<OPPatientRecord>[] = [
     { 
@@ -68,7 +92,6 @@ const OPPatientsToday = () => {
         </div>
       )
     },
-    { key: "visitReason", label: "Visit Reason" },
     {
       key: "status",
       label: "Status",
@@ -127,7 +150,7 @@ const OPPatientsToday = () => {
 
   const rowActions: RowAction<OPPatientRecord>[] = [
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
-    { label: "Check In", onClick: (row) => navigate(`/check-in?patientId=${row.mrn}`) },
+    { label: "Check In", onClick: (row) => handleCheckIn(row) },
   ];
 
   return (
