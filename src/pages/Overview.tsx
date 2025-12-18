@@ -244,8 +244,8 @@ const Overview = () => {
       iconColorClass: iconColors.labs,
       isPrimary: true,
       subMetrics: [
-        { label: "Laboratory", value: 26, route: "/lab/pending?status=pending" },
-        { label: "Radiology", value: 30, route: "/radiology/queue?status=queued" },
+        { label: "Laboratory", value: 26, route: "/diagnostics/orders?type=Laboratory" },
+        { label: "Radiology", value: 30, route: "/diagnostics/orders?type=Radiology" },
       ],
     },
     {
