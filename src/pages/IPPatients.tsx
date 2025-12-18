@@ -171,7 +171,7 @@ const IPPatients = () => {
             <DialogTitle>Admission Summary</DialogTitle>
           </DialogHeader>
           {selectedPatient && (
-            <div className="space-y-4">
+            <div className="space-y-5">
               {/* Patient Header */}
               <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-3">
@@ -196,52 +196,55 @@ const IPPatients = () => {
                 </Badge>
               </div>
 
-              {/* Info Grid Row 1 */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="flex items-start gap-2">
-                  <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Visit ID</p>
-                    <p className="text-sm font-medium">{selectedPatient.visitId}</p>
+              {/* Info Grids */}
+              <div className="space-y-4">
+                {/* Info Grid Row 1 */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="flex items-start gap-2">
+                    <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Visit ID</p>
+                      <p className="text-sm font-medium">{selectedPatient.visitId}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Length of Stay</p>
+                      <p className="text-sm font-medium">{selectedPatient.lengthOfStay} days</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Doctor</p>
+                      <p className="text-sm font-medium">{selectedPatient.attendingDoctor}</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Length of Stay</p>
-                    <p className="text-sm font-medium">{selectedPatient.lengthOfStay} days</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Doctor</p>
-                    <p className="text-sm font-medium">{selectedPatient.attendingDoctor}</p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Info Grid Row 2 */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="flex items-start gap-2">
-                  <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Admit Date/Time</p>
-                    <p className="text-sm font-medium">{selectedPatient.admitDateTime}</p>
+                {/* Info Grid Row 2 */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Admit Date/Time</p>
+                      <p className="text-sm font-medium">{selectedPatient.admitDateTime}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <BedDouble className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Ward/Bed</p>
-                    <p className="text-sm font-medium">{selectedPatient.ward} - Bed {selectedPatient.bed}</p>
+                  <div className="flex items-start gap-2">
+                    <BedDouble className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Ward/Bed</p>
+                      <p className="text-sm font-medium">{selectedPatient.ward} - Bed {selectedPatient.bed}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Bed Class</p>
-                    <p className="text-sm font-medium">{selectedPatient.bedClass}</p>
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Bed Class</p>
+                      <p className="text-sm font-medium">{selectedPatient.bedClass}</p>
+                    </div>
                   </div>
                 </div>
               </div>
