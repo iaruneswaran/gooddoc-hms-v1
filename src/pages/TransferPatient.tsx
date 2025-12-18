@@ -207,7 +207,7 @@ const TransferPatient = () => {
           </div>
 
           {/* Stepper */}
-          <div className="flex justify-center pb-4">
+          <div className="px-6 pb-4">
             <TransferStepper
               steps={steps}
               currentStep={currentStep}
