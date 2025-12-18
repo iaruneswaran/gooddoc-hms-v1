@@ -246,11 +246,11 @@ const Overview = () => {
       count: 24,
       displayCount: "24.4L/24 Bills Paid",
       icon: IndianRupee,
-      route: "/reports/revenue",
+      route: "/reports/revenue?type=paid",
       iconColorClass: "text-green-600",
       isPrimary: true,
       subMetrics: [
-        { label: "Outstanding Bills", value: "₹8.4L/12", filterParam: "type=outstanding" },
+        { label: "Outstanding Bills", value: "₹8.4L/12", route: "/reports/revenue?type=outstanding" },
       ],
     },
   ];

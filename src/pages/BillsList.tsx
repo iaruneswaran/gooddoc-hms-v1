@@ -3,13 +3,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
-import { billsData, paidBills, partialBills, BillRecord } from "@/data/bills.mock";
+import { billsData, paidBills, partialBills, outstandingBills, BillRecord } from "@/data/bills.mock";
 
 const formatCurrency = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
 const statusStyles: Record<BillRecord["status"], string> = {
   "Paid": "bg-green-100 text-green-700",
   "Partial": "bg-amber-100 text-amber-700",
+  "Unpaid": "bg-red-100 text-red-700",
 };
 
 const paymentModeStyles: Record<BillRecord["paymentMode"], string> = {
@@ -27,13 +28,20 @@ const BillsList = () => {
 
   let data = billsData;
   let displayCount = billsData.length;
+  let pageTitle = "Bills & Revenue";
 
-  if (typeFilter === "collected") {
+  if (typeFilter === "paid") {
     data = paidBills;
     displayCount = paidBills.length;
+    pageTitle = "Paid Bills";
+  } else if (typeFilter === "outstanding") {
+    data = outstandingBills;
+    displayCount = outstandingBills.length;
+    pageTitle = "Outstanding Bills";
   } else if (typeFilter === "partial") {
     data = partialBills;
     displayCount = partialBills.length;
+    pageTitle = "Partial Bills";
   }
 
   const columns: Column<BillRecord>[] = [
@@ -145,6 +153,7 @@ const BillsList = () => {
       options: [
         { value: "Paid", label: "Paid" },
         { value: "Partial", label: "Partial" },
+        { value: "Unpaid", label: "Unpaid" },
       ],
     },
     {
@@ -162,8 +171,8 @@ const BillsList = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "type", paramValue: "collected", displayLabel: "Paid Bills", count: paidBills.length },
-    { paramKey: "type", paramValue: "partial", displayLabel: "Partial", count: partialBills.length },
+    { paramKey: "type", paramValue: "paid", displayLabel: "Paid Bills", count: paidBills.length },
+    { paramKey: "type", paramValue: "outstanding", displayLabel: "Outstanding", count: outstandingBills.length },
   ];
 
   const rowActions: RowAction<BillRecord>[] = [
@@ -175,7 +184,7 @@ const BillsList = () => {
 
   return (
     <ListPageLayout
-      title="Bills & Revenue"
+      title={pageTitle}
       count={displayCount}
       breadcrumbs={["Overview", "Bills & Revenue"]}
       columns={columns}

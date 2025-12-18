@@ -11,7 +11,7 @@ export interface BillRecord {
   paidAmount: number;
   balance: number;
   paymentMode: "Cash" | "Card" | "UPI" | "Insurance" | "Mixed";
-  status: "Paid" | "Partial";
+  status: "Paid" | "Partial" | "Unpaid";
   department: string;
   doctor: string;
   invoiceNo: string;
@@ -236,11 +236,88 @@ export const billsData: BillRecord[] = [
   },
 ];
 
+// Add unpaid bills for outstanding list
+export const unpaidBills: BillRecord[] = [
+  {
+    billId: "BL013",
+    patientName: "Arun Krishnamurthy",
+    patientId: "GD090",
+    ageSex: "48/M",
+    billDate: "17-Dec-2025 09:00",
+    services: "CT Scan, Consultation",
+    amount: 15000,
+    discount: 0,
+    netAmount: 15000,
+    paidAmount: 0,
+    balance: 15000,
+    paymentMode: "Cash",
+    status: "Unpaid",
+    department: "Radiology",
+    doctor: "Dr. Vinod Kumar",
+    invoiceNo: "INV-2025-001250",
+  },
+  {
+    billId: "BL014",
+    patientName: "Deepika Nair",
+    patientId: "GD095",
+    ageSex: "36/F",
+    billDate: "16-Dec-2025 14:00",
+    services: "Surgery Consultation, Pre-op Tests",
+    amount: 8500,
+    discount: 500,
+    netAmount: 8000,
+    paidAmount: 0,
+    balance: 8000,
+    paymentMode: "Insurance",
+    status: "Unpaid",
+    department: "General Surgery",
+    doctor: "Dr. Ashok Reddy",
+    invoiceNo: "INV-2025-001251",
+  },
+  {
+    billId: "BL015",
+    patientName: "Mohammed Ismail",
+    patientId: "GD102",
+    ageSex: "52/M",
+    billDate: "15-Dec-2025 11:30",
+    services: "Cardiac Catheterization",
+    amount: 75000,
+    discount: 5000,
+    netAmount: 70000,
+    paidAmount: 0,
+    balance: 70000,
+    paymentMode: "Insurance",
+    status: "Unpaid",
+    department: "Cardiology",
+    doctor: "Dr. Meera Nair",
+    invoiceNo: "INV-2025-001252",
+  },
+  {
+    billId: "BL016",
+    patientName: "Lakshmi Venkatesh",
+    patientId: "GD108",
+    ageSex: "65/F",
+    billDate: "14-Dec-2025 10:00",
+    services: "Endoscopy, Biopsy",
+    amount: 12000,
+    discount: 0,
+    netAmount: 12000,
+    paidAmount: 0,
+    balance: 12000,
+    paymentMode: "Cash",
+    status: "Unpaid",
+    department: "Gastroenterology",
+    doctor: "Dr. Sunil Sharma",
+    invoiceNo: "INV-2025-001253",
+  },
+];
+
 // Filter helpers
 export const paidBills = billsData.filter(b => b.status === "Paid");
 export const partialBills = billsData.filter(b => b.status === "Partial");
+export const outstandingBills = [...billsData.filter(b => b.status === "Partial"), ...unpaidBills];
 
 // Summary calculations
 export const totalBilled = billsData.reduce((sum, b) => sum + b.netAmount, 0);
 export const totalCollected = billsData.reduce((sum, b) => sum + b.paidAmount, 0);
-export const totalOutstanding = billsData.reduce((sum, b) => sum + b.balance, 0);
+export const totalOutstanding = outstandingBills.reduce((sum, b) => sum + b.balance, 0);
