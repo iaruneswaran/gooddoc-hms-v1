@@ -182,7 +182,7 @@ const OPPatientsToday = () => {
       />
 
       <Dialog open={showSummary} onOpenChange={setShowSummary}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">Appointment Summary</DialogTitle>
           </DialogHeader>
@@ -198,11 +198,11 @@ const OPPatientsToday = () => {
                   <p className="font-semibold text-foreground">{selectedPatient.patient}</p>
                   <p className="text-sm text-muted-foreground">GDID - {selectedPatient.mrn.slice(-3)} • {selectedPatient.ageSex}</p>
                 </div>
-                <Badge className={`ml-auto ${statusStyles[selectedPatient.status]}`}>{selectedPatient.status}</Badge>
+                <Badge className={`ml-auto ${statusStyles[selectedPatient.status] || "bg-gray-100 text-gray-700"}`}>{selectedPatient.status}</Badge>
               </div>
 
               {/* Visit Details */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-2">
                     <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
@@ -219,30 +219,14 @@ const OPPatientsToday = () => {
                       <p className="text-sm font-medium">{selectedPatient.appointmentTime}</p>
                     </div>
                   </div>
+                </div>
 
+                <div className="space-y-3">
                   <div className="flex items-start gap-2">
                     <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="text-xs text-muted-foreground">Check-in Time</p>
                       <p className="text-sm font-medium">{selectedPatient.checkInTime || "Not checked in"}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Provider</p>
-                      <p className="text-sm font-medium">{selectedPatient.provider}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Department</p>
-                      <p className="text-sm font-medium">{selectedPatient.department}</p>
                     </div>
                   </div>
 
@@ -254,18 +238,30 @@ const OPPatientsToday = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Doctor</p>
+                      <p className="text-sm font-medium">{selectedPatient.provider}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Department</p>
+                      <p className="text-sm font-medium">{selectedPatient.department}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Visit Reason */}
-              <div className="p-3 bg-muted/30 rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1">Visit Reason</p>
-                <p className="text-sm">{selectedPatient.visitReason || "General consultation"}</p>
-              </div>
-
-              {/* Additional Notes */}
+              {/* Clinical Information */}
               <div className="p-3 border rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1">Notes</p>
-                <p className="text-sm text-muted-foreground italic">No additional notes for this appointment.</p>
+                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
+                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
               </div>
             </div>
           )}
