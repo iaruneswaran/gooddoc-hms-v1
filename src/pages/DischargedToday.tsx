@@ -79,7 +79,7 @@ const DischargedToday = () => {
       label: "Paid",
       render: (row) => {
         const amount = getBillingAmount(row.mrn);
-        return <span>₹{amount.toLocaleString('en-IN')}</span>;
+        return <span className="text-green-600 font-medium">₹{amount.toLocaleString('en-IN')}</span>;
       },
     },
     {
