@@ -6,15 +6,9 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { TransferStepper } from "@/components/transfer/TransferStepper";
 import { TransferDetailsStep } from "@/components/transfer/steps/TransferDetailsStep";
 import { DestinationBedStep } from "@/components/transfer/steps/DestinationBedStep";
 import { TransferRequest, Bed, TransferTimelineEvent } from "@/types/transfer";
-
-const steps = [
-  { id: 1, title: "Transfer Details", description: "Type, priority & schedule" },
-  { id: 2, title: "Choose Destination", description: "Select available bed" },
-];
 
 const TransferPatient = () => {
   const { patientId } = useParams();
@@ -202,17 +196,6 @@ const TransferPatient = () => {
               <span className="font-semibold">Patient Insight</span>
             </button>
 
-          </div>
-
-          {/* Stepper */}
-          <div className="px-6 pb-4 flex justify-center">
-            <div className="max-w-xl w-full">
-              <TransferStepper
-                steps={steps}
-                currentStep={currentStep}
-                onStepClick={(step) => step <= currentStep && setCurrentStep(step)}
-              />
-            </div>
           </div>
         </div>
 
