@@ -210,30 +210,8 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
 
   return (
     <div className="h-full overflow-auto">
-      {/* Completed Appointments */}
-      <div className="mb-6">
-        <div className="px-4 py-3 bg-muted/30 border-b border-border">
-          <h3 className="text-label font-semibold text-foreground">
-            Completed ({completedAppointments.length})
-          </h3>
-        </div>
-        
-        {/* Table Header */}
-        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
-          <span className="text-label text-muted-foreground">Patient</span>
-          <span className="text-label text-muted-foreground">Visit ID</span>
-          <span className="text-label text-muted-foreground">Doctor</span>
-          <span className="text-label text-muted-foreground">Status</span>
-          <span className="text-label text-muted-foreground">Token/Queue No.</span>
-          <span className="text-label text-muted-foreground text-right">Actions</span>
-        </div>
-
-        {/* Completed Rows */}
-        {completedAppointments.map(renderAppointmentRow)}
-      </div>
-
       {/* Upcoming Appointments */}
-      <div>
+      <div className="mb-6">
         <div className="px-4 py-3 bg-muted/30 border-b border-border">
           <h3 className="text-label font-semibold text-foreground">
             Upcoming ({upcomingAppointments.length})
@@ -258,6 +236,28 @@ export function AppointmentsTab({ selectedVisit }: AppointmentsTabProps) {
             <p className="text-small text-muted-foreground">No upcoming appointments</p>
           </div>
         )}
+      </div>
+
+      {/* Completed Appointments */}
+      <div>
+        <div className="px-4 py-3 bg-muted/30 border-b border-border">
+          <h3 className="text-label font-semibold text-foreground">
+            Completed ({completedAppointments.length})
+          </h3>
+        </div>
+        
+        {/* Table Header */}
+        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_100px] gap-4 px-4 py-2 border-b border-border bg-muted/20">
+          <span className="text-label text-muted-foreground">Patient</span>
+          <span className="text-label text-muted-foreground">Visit ID</span>
+          <span className="text-label text-muted-foreground">Doctor</span>
+          <span className="text-label text-muted-foreground">Status</span>
+          <span className="text-label text-muted-foreground">Token/Queue No.</span>
+          <span className="text-label text-muted-foreground text-right">Actions</span>
+        </div>
+
+        {/* Completed Rows */}
+        {completedAppointments.map(renderAppointmentRow)}
       </div>
     </div>
   );
