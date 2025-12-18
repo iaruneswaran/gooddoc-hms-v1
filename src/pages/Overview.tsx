@@ -231,6 +231,7 @@ const Overview = () => {
     {
       title: "Beds Availability",
       count: 67,
+      displayCount: "67/100 Available",
       icon: BedDouble,
       route: "/patients/check-in?date=today",
       iconColorClass: iconColors.patients,
