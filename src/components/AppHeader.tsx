@@ -21,7 +21,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   };
 
   return (
-    <header className="relative h-16 border-b border-border bg-card flex items-center px-4">
+    <header className="relative h-14 border-b border-border bg-card flex items-center px-4">
       {/* Breadcrumbs - Left */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {breadcrumbs.map((crumb, index) => {
@@ -61,7 +61,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-12 h-11 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="pl-12 h-10 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>
       </div>
