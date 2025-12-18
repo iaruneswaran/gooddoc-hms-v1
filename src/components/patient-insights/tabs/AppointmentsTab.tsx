@@ -119,7 +119,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
         </h3>
       </div>
       
-      <div className="bg-card border border-border rounded-xl overflow-hidden mx-6 shadow-sm">
+      <div className="border rounded-lg overflow-hidden mx-6">
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>

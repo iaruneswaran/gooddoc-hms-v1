@@ -101,7 +101,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+      <div className="border rounded-lg overflow-hidden">
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
