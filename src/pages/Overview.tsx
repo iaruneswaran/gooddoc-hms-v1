@@ -226,7 +226,6 @@ const Overview = () => {
       subMetrics: [
         { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
         { label: "Emergency Case", value: 8, filterParam: "erCase=true" },
-        { label: "Bed Charges", value: "View", route: "/settings/bed-charges" },
       ],
     },
     {
@@ -319,6 +318,14 @@ const Overview = () => {
       icon: PackageOpen,
       route: "/inventory/low-stock",
       iconColorClass: iconColors.inventory,
+    },
+    {
+      title: "Bed Charges",
+      count: 15,
+      displayCount: "View Master",
+      icon: BedDouble,
+      route: "/settings/bed-charges",
+      iconColorClass: iconColors.patients,
     },
   ];
 
