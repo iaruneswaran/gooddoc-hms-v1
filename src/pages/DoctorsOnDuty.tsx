@@ -1,7 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { doctorsOnDuty, opDoctors, ipDoctors, otherDoctors, DoctorOnDutyRecord } from "@/data/overview.mock";
+import { Stethoscope } from "lucide-react";
 
 const roleStyles: Record<DoctorOnDutyRecord["role"], string> = {
   "Onsite": "bg-green-100 text-green-700",
@@ -22,6 +24,24 @@ const statusStyles: Record<NonNullable<DoctorOnDutyRecord["currentStatus"]>, str
   "In Meeting": "bg-purple-100 text-purple-700",
 };
 
+const DoctorCell = ({ name, degrees }: { name: string; degrees: string }) => {
+  const initials = name.replace("Dr. ", "").split(" ").map(n => n[0]).join("");
+  
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar className="h-9 w-9 bg-primary/10">
+        <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
+          {initials}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex flex-col min-w-0">
+        <span className="font-medium text-foreground truncate">{name}</span>
+        <span className="text-xs text-muted-foreground truncate">{degrees}</span>
+      </div>
+    </div>
+  );
+};
+
 const DoctorsOnDuty = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -33,7 +53,13 @@ const DoctorsOnDuty = () => {
 
   // Define columns based on doctor type
   const baseColumns: Column<DoctorOnDutyRecord>[] = [
-    { key: "doctorName", label: "Doctor Name", sortable: true },
+    { 
+      key: "doctorName", 
+      label: "Doctor", 
+      sortable: true,
+      width: "220px",
+      render: (row) => <DoctorCell name={row.doctorName} degrees={row.degrees} />
+    },
     { key: "specialty", label: "Specialty", sortable: true },
   ];
 
