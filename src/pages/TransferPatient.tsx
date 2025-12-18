@@ -218,7 +218,7 @@ const TransferPatient = () => {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6 min-h-0">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto">
             {currentStep === 1 && (
               <TransferDetailsStep
                 data={transferData}
@@ -241,7 +241,7 @@ const TransferPatient = () => {
 
         {/* Footer Navigation */}
         <div className="border-t border-border bg-background px-6 py-4 flex-shrink-0">
-          <div className="flex justify-between max-w-3xl">
+          <div className="flex justify-between max-w-3xl mx-auto">
             <Button
               variant="outline"
               onClick={currentStep === 1 ? handleCancel : handleBack}
