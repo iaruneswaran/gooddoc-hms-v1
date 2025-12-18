@@ -63,7 +63,7 @@ const PatientServices = () => {
         
         {/* Header */}
         <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-4">
+          <div className="p-6">
             <button
               onClick={handleBack}
               className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-3"
