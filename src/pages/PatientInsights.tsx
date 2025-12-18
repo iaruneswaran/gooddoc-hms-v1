@@ -215,7 +215,7 @@ const PatientInsights = () => {
             {/* Header Content */}
             <div className="flex items-center justify-between gap-6">
               {/* Left: Patient Chip and Buttons */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div className="flex items-center gap-3">
                   <PatientChip
                     name={patient.name}
