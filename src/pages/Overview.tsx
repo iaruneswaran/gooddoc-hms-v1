@@ -122,7 +122,7 @@ const PrimaryMetricCard = ({
             displayCount.includes('|') ? (
               <>
                 {displayCount.split('|')[0].trim()}
-                <span className="text-[14px] font-medium text-muted-foreground"> | {displayCount.split('|').slice(1).map(s => s.trim()).join(' | ')}</span>
+                <span className="text-[14px] font-medium text-muted-foreground">{displayCount.split('|').slice(1).join('|')}</span>
               </>
             ) : (
               <>
@@ -225,7 +225,7 @@ const Overview = () => {
     {
       title: "IP Patients",
       count: 234,
-      displayCount: "234/ICU 34 / Ward 200",
+      displayCount: "234| - ICU 34 - Ward 200",
       icon: Hospital,
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
