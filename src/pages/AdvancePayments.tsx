@@ -275,14 +275,14 @@ const AdvancePayments = () => {
   const getGenderIcon = (ageSex: string) => {
     const gender = ageSex.split("|")[1]?.trim();
     if (gender === "F") {
-      return <UserRound className="w-4 h-4 text-pink-600" />;
+      return <UserRound className="w-5 h-5 text-primary-foreground" />;
     }
-    return <User className="w-4 h-4 text-blue-600" />;
+    return <User className="w-5 h-5 text-primary-foreground" />;
   };
 
   const getGenderBg = (ageSex: string) => {
     const gender = ageSex.split("|")[1]?.trim();
-    return gender === "F" ? "bg-pink-100" : "bg-blue-100";
+    return gender === "F" ? "bg-pink-500" : "bg-primary";
   };
 
   return (
@@ -381,8 +381,8 @@ const AdvancePayments = () => {
                 {filteredData.map((payment) => (
                   <TableRow key={payment.id}>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getGenderBg(payment.ageSex)}`}>
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${getGenderBg(payment.ageSex)}`}>
                           {getGenderIcon(payment.ageSex)}
                         </div>
                         <div className="min-w-0">
