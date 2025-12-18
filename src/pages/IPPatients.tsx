@@ -9,6 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { BedDouble } from "lucide-react";
 
 const IPPatients = () => {
   const navigate = useNavigate();
@@ -162,62 +164,69 @@ const IPPatients = () => {
       <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Admission Summary</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <BedDouble className="w-5 h-5" />
+              Admission Summary
+            </DialogTitle>
           </DialogHeader>
           {selectedPatient && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 pb-4 border-b">
+            <div className="space-y-3">
+              <div className="grid grid-cols-4 gap-4">
                 <div>
-                  <h3 className="font-semibold text-lg">{selectedPatient.patient}</h3>
-                  <p className="text-muted-foreground text-sm">
-                    GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}
-                  </p>
+                  <p className="text-xs text-muted-foreground">Visit ID</p>
+                  <p className="text-sm font-medium">{selectedPatient.visitId}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Admit Date/Time</p>
+                  <p className="text-sm font-medium">{selectedPatient.admitDateTime}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Length of Stay</p>
+                  <p className="text-sm font-medium">{selectedPatient.lengthOfStay} days</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Bed Class</p>
+                  <p className="text-sm font-medium">{selectedPatient.bedClass}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Visit ID</p>
-                    <p className="font-medium">{selectedPatient.visitId}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Admit Date/Time</p>
-                    <p className="font-medium">{selectedPatient.admitDateTime}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Ward/Bed</p>
-                    <p className="font-medium">{selectedPatient.ward} - Bed {selectedPatient.bed}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Bed Class</p>
-                    <p className="font-medium">{selectedPatient.bedClass}</p>
-                  </div>
-                </div>
+              <Separator />
 
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Attending Doctor</p>
-                    <p className="font-medium">{selectedPatient.attendingDoctor}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Primary Diagnosis</p>
-                    <p className="font-medium">{selectedPatient.primaryDiagnosis}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Length of Stay</p>
-                    <p className="font-medium">{selectedPatient.lengthOfStay} days</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Emergency Contact</p>
-                    <p className="font-medium">{selectedPatient.emergencyContact || "Not provided"}</p>
-                  </div>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="col-span-2">
+                  <p className="text-xs text-muted-foreground">Patient</p>
+                  <p className="text-sm font-medium">{selectedPatient.patient}</p>
+                  <p className="text-xs text-muted-foreground">GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-muted-foreground">Attending Doctor</p>
+                  <p className="text-sm font-medium">{selectedPatient.attendingDoctor}</p>
+                  <p className="text-xs text-muted-foreground">{selectedPatient.primaryDiagnosis}</p>
                 </div>
               </div>
 
-              <div className="pt-4 border-t">
-                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
-                <p className="text-sm text-muted-foreground">
+              <Separator />
+
+              <div className="grid grid-cols-4 gap-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Ward</p>
+                  <p className="text-sm font-medium">{selectedPatient.ward}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Bed</p>
+                  <p className="text-sm font-medium">Bed {selectedPatient.bed}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-muted-foreground">Emergency Contact</p>
+                  <p className="text-sm font-medium">{selectedPatient.emergencyContact || "Not provided"}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <p className="text-xs text-muted-foreground">Clinical Information</p>
+                <p className="text-sm text-muted-foreground mt-1">
                   Patient admitted for {selectedPatient.primaryDiagnosis}. Currently in {selectedPatient.ward} under the care of {selectedPatient.attendingDoctor}.
                 </p>
               </div>
