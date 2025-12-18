@@ -207,12 +207,14 @@ const TransferPatient = () => {
           </div>
 
           {/* Stepper */}
-          <div className="px-6 pb-4">
-            <TransferStepper
-              steps={steps}
-              currentStep={currentStep}
-              onStepClick={(step) => step <= currentStep && setCurrentStep(step)}
-            />
+          <div className="px-6 pb-4 flex justify-center">
+            <div className="max-w-xl w-full">
+              <TransferStepper
+                steps={steps}
+                currentStep={currentStep}
+                onStepClick={(step) => step <= currentStep && setCurrentStep(step)}
+              />
+            </div>
           </div>
         </div>
 
