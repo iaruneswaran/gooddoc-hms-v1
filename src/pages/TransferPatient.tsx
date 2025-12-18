@@ -232,9 +232,6 @@ const TransferPatient = () => {
                       {patient.admissionStatus}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    GDID-{patient.gdid} • {patient.age} | {patient.gender} • MRN: {patient.mrn}
-                  </p>
                 </div>
               </div>
               
