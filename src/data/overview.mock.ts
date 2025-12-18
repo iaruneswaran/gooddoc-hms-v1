@@ -345,7 +345,7 @@ export const opPatients: OPPatientRecord[] = Array.from({ length: 847 }, (_, i) 
 // Filtered sublists
 export const opCompleted = opPatients.filter(p => p.status === "Completed");
 export const opCheckedIn = opPatients.filter(p => ["Checked-in", "With Doctor", "Awaiting Billing"].includes(p.status));
-export const opPendingCheckIn = opPatients.filter(p => p.status === "Scheduled" || p.status === "Pending Check-in");
+export const opPendingCheckIn = opPatients.filter(p => p.status === "Pending Check-in" || p.status === "Checked-in");
 
 // ============== IP PATIENTS ==============
 

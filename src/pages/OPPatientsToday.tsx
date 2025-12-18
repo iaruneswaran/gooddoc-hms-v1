@@ -148,17 +148,14 @@ const OPPatientsToday = () => {
       label: "Status",
       value: "all",
       options: [
-        { value: "Scheduled", label: "Scheduled" },
+        { value: "Pending Check-in", label: "Pending Check-in" },
         { value: "Checked-in", label: "Checked-in" },
-        { value: "With Doctor", label: "With Doctor" },
-        { value: "Completed", label: "Completed" },
       ],
     },
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
     { paramKey: "visitStatus", paramValue: "Completed", displayLabel: "Visit Completed", count: opCompleted.length },
-    { paramKey: "visitStatus", paramValue: "Pending", displayLabel: "Check in completed", count: opCheckedIn.length },
     { paramKey: "visitStatus", paramValue: "In_Queue", displayLabel: "Check In Pending", count: opPendingCheckIn.length },
   ];
 
