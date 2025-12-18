@@ -1,5 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -164,20 +163,12 @@ const mockOrders: DiagnosticOrder[] = [
 ];
 
 export default function DiagnosticsWorklist() {
-  const [searchParams] = useSearchParams();
-  const tabFromUrl = searchParams.get("tab");
-  const [selectedTab, setSelectedTab] = useState(tabFromUrl || "all");
+  const [selectedTab, setSelectedTab] = useState("laboratory");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [approvedByFilter, setApprovedByFilter] = useState("all");
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    if (tabFromUrl) {
-      setSelectedTab(tabFromUrl);
-    }
-  }, [tabFromUrl]);
 
   const toggleRowExpansion = (id: string) => {
     setExpandedRows(prev => {
@@ -208,8 +199,7 @@ export default function DiagnosticsWorklist() {
   };
 
   const filteredOrders = mockOrders.filter(order => {
-    const matchesTab = selectedTab === "all" ||
-                       (selectedTab === "laboratory" && order.type === "laboratory") ||
+    const matchesTab = (selectedTab === "laboratory" && order.type === "laboratory") ||
                        (selectedTab === "radiology" && order.type === "radiology");
     const matchesSearch = searchQuery === "" || 
                          order.patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -247,9 +237,6 @@ export default function DiagnosticsWorklist() {
           <div className="flex items-center justify-between mb-6">
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
               <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start">
-                <TabsTrigger value="all" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                  All
-                </TabsTrigger>
                 <TabsTrigger value="laboratory" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                   Laboratory
                 </TabsTrigger>
