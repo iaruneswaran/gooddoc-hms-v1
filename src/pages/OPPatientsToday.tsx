@@ -150,6 +150,7 @@ const OPPatientsToday = () => {
       options: [
         { value: "Pending Check-in", label: "Pending Check-in" },
         { value: "Checked-in", label: "Checked-in" },
+        { value: "Completed", label: "Completed" },
       ],
     },
   ];
