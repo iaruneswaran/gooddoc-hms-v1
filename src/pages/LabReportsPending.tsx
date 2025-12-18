@@ -35,7 +35,20 @@ const LabOrdersToday = () => {
       ),
     },
     { key: "specimenType", label: "Specimen Type" },
-    { key: "collectedAt", label: "Collected At", render: (row) => row.collectedAt || "—" },
+    { 
+      key: "collectedAt", 
+      label: "Collected At", 
+      render: (row) => {
+        if (!row.collectedAt) return "—";
+        const [date, time] = row.collectedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
     { key: "resultETA", label: "Result ETA", render: (row) => row.resultETA || "—" },
     {
       key: "criticalResult",

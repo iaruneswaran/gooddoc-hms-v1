@@ -143,10 +143,63 @@ const TransfersList = () => {
       sortable: true,
       render: (row) => <Badge className={statusStyles[row.status]}>{row.status}</Badge>,
     },
-    { key: "requestedAt", label: "Requested At", sortable: true },
-    { key: "approvedAt", label: "Approved At", render: (row) => row.approvedAt || "—" },
-    { key: "transferStartAt", label: "Transfer Start", render: (row) => row.transferStartAt || "—" },
-    { key: "arrivedAt", label: "Arrived At", render: (row) => row.arrivedAt || "—" },
+    { 
+      key: "requestedAt", 
+      label: "Requested At", 
+      sortable: true,
+      render: (row) => {
+        if (!row.requestedAt) return "—";
+        const [date, time] = row.requestedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
+    { 
+      key: "approvedAt", 
+      label: "Approved At", 
+      render: (row) => {
+        if (!row.approvedAt) return "—";
+        const [date, time] = row.approvedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
+    { 
+      key: "transferStartAt", 
+      label: "Transfer Start", 
+      render: (row) => {
+        if (!row.transferStartAt) return "—";
+        const [date, time] = row.transferStartAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
+    { 
+      key: "arrivedAt", 
+      label: "Arrived At", 
+      render: (row) => {
+        if (!row.arrivedAt) return "—";
+        const [date, time] = row.arrivedAt.split(' ');
+        return (
+          <div className="flex flex-col">
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
+          </div>
+        );
+      }
+    },
     { key: "equipmentNeeded", label: "Equipment Needed", render: (row) => row.equipmentNeeded || "—" },
     {
       key: "isolationRequired",
