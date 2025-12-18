@@ -166,7 +166,7 @@ const IPPatients = () => {
       />
 
       <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Admission Summary</DialogTitle>
           </DialogHeader>
