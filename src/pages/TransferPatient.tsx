@@ -212,7 +212,7 @@ const TransferPatient = () => {
         
         {/* Fixed Header */}
         <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-4">
+          <div className="p-6">
             {/* Back Button */}
             <button
               onClick={handleCancel}
