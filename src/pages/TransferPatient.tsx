@@ -185,18 +185,15 @@ const TransferPatient = () => {
         ]} />
         
         {/* Fixed Header */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="p-6">
-            {/* Back Button */}
-            <button
-              onClick={handleCancel}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">Patient Insight</span>
-            </button>
-
-          </div>
+        <div className="h-[80px] bg-background border-b border-border flex-shrink-0 flex items-center px-6">
+          {/* Back Button */}
+          <button
+            onClick={handleCancel}
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="font-semibold">Patient Insight</span>
+          </button>
         </div>
 
         {/* Main Content */}
