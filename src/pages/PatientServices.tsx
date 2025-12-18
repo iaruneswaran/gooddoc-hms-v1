@@ -114,14 +114,14 @@ const PatientServices = () => {
                   {results.map((service) => (
                     <div key={service.id} className="flex items-center justify-between px-4 py-3 hover:bg-muted/50">
                       <div className="flex-1 min-w-0">
-                        <p className="text-small font-medium truncate">{service.name}</p>
+                        <p className="text-sm font-medium truncate">{service.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <Badge variant="secondary" className="text-caption">{service.category}</Badge>
-                          <span className="text-caption text-muted-foreground">{service.code}</span>
+                          <Badge variant="secondary" className="text-xs">{service.category}</Badge>
+                          <span className="text-xs text-muted-foreground">{service.code}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-small font-semibold">{formatPrice(service.price)}</span>
+                        <span className="text-sm font-semibold">{formatPrice(service.price)}</span>
                         <Button
                           size="sm"
                           variant="outline"
@@ -142,15 +142,15 @@ const PatientServices = () => {
           {/* Right Side - Cart Summary */}
           <div className="w-[420px] flex flex-col border rounded-lg overflow-hidden bg-muted/30">
             <div className="p-4 border-b">
-              <h3 className="text-label font-semibold">Order Summary</h3>
-              <p className="text-caption text-muted-foreground">{cart.length} item(s) added</p>
+              <h3 className="text-sm font-semibold">Order Summary</h3>
+              <p className="text-xs text-muted-foreground">{cart.length} item(s) added</p>
             </div>
             
             <ScrollArea className="flex-1">
               {cart.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                   <Receipt className="w-10 h-10 text-muted-foreground/50 mb-2" />
-                  <p className="text-small text-muted-foreground">No services added yet</p>
+                  <p className="text-sm text-muted-foreground">No services added yet</p>
                 </div>
               ) : (
                 <div className="p-4 space-y-3">
@@ -159,8 +159,8 @@ const PatientServices = () => {
                       <CardContent className="p-3">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
-                            <p className="text-small font-medium truncate">{item.name}</p>
-                            <p className="text-caption text-muted-foreground">{item.code}</p>
+                            <p className="text-sm font-medium truncate">{item.name}</p>
+                            <p className="text-xs text-muted-foreground">{item.code}</p>
                           </div>
                           <Button
                             size="icon"
@@ -182,7 +182,7 @@ const PatientServices = () => {
                             >
                               -
                             </Button>
-                            <span className="text-small w-6 text-center">{item.qty}</span>
+                            <span className="text-sm w-6 text-center">{item.qty}</span>
                             <Button
                               size="icon"
                               variant="outline"
@@ -192,7 +192,7 @@ const PatientServices = () => {
                               +
                             </Button>
                           </div>
-                          <span className="text-small font-semibold">
+                          <span className="text-sm font-semibold">
                             {formatPrice(item.unitPrice * item.qty)}
                           </span>
                         </div>
@@ -206,15 +206,15 @@ const PatientServices = () => {
             {/* Totals & Generate Bill */}
             <div className="p-4 border-t bg-background">
               <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-small">
+                <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>{formatPrice(totals.subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-small">
+                <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
                   <span>{formatPrice(totals.taxTotal)}</span>
                 </div>
-                <div className="flex justify-between text-label font-semibold pt-2 border-t">
+                <div className="flex justify-between text-sm font-semibold pt-2 border-t">
                   <span>Total</span>
                   <span>{formatPrice(totals.netPayable)}</span>
                 </div>
