@@ -51,8 +51,8 @@ const OPPatientsToday = () => {
         const [date, time] = row.appointmentTime.split(' ');
         return (
           <div className="flex flex-col">
-            <span>{date}</span>
-            <span className="text-muted-foreground text-xs">{time}</span>
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
           </div>
         );
       }
@@ -85,8 +85,8 @@ const OPPatientsToday = () => {
         const [date, time] = row.checkInTime.split(' ');
         return (
           <div className="flex flex-col">
-            <span>{date}</span>
-            <span className="text-muted-foreground text-xs">{time}</span>
+            <span>{time}</span>
+            <span className="text-muted-foreground text-xs">{date}</span>
           </div>
         );
       }
