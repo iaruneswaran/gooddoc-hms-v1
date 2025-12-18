@@ -1,14 +1,8 @@
 import { useEffect, useMemo } from "react";
-import { format } from "date-fns";
-import { CalendarIcon, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
 import { TransferRequest, TransferReason, BedLocation, Bed } from "@/types/transfer";
 import { reasonLabels, mockUnits, mockBeds } from "@/data/transfer.mock";
 
@@ -20,7 +14,7 @@ interface TransferDetailsStepProps {
   onSelectBed: (bed: Bed) => void;
 }
 
-export function TransferDetailsStep({ data, onChange, currentTariff, fromLocation, onSelectBed }: TransferDetailsStepProps) {
+export function TransferDetailsStep({ data, onChange, fromLocation, onSelectBed }: TransferDetailsStepProps) {
   // Auto-fill ordering clinician
   useEffect(() => {
     if (!data.orderingClinician) {
@@ -53,7 +47,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
           bedId: "",
           bedName: "",
         },
-        costDelta: undefined,
       });
     }
   };
@@ -70,7 +63,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
           bedId: bed.id,
           bedName: bed.bedName,
         },
-        costDelta: bed.tariff - currentTariff,
       });
       onSelectBed(bed);
     }
@@ -185,66 +177,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
         </div>
       </div>
 
-      {/* Schedule */}
-      <div className="space-y-3">
-        <Label>Schedule</Label>
-        <RadioGroup
-          value={data.scheduleType}
-          onValueChange={(value) => onChange({ scheduleType: value as 'now' | 'later' })}
-          className="flex gap-3"
-        >
-          <label
-            className={cn(
-              "flex-1 flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all",
-              data.scheduleType === 'now'
-                ? "border-primary bg-primary/5"
-                : "border-border hover:border-muted-foreground/30"
-            )}
-          >
-            <RadioGroupItem value="now" className="sr-only" />
-            <span className="font-medium text-sm">Transfer Now</span>
-          </label>
-          <label
-            className={cn(
-              "flex-1 flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all",
-              data.scheduleType === 'later'
-                ? "border-primary bg-primary/5"
-                : "border-border hover:border-muted-foreground/30"
-            )}
-          >
-            <RadioGroupItem value="later" className="sr-only" />
-            <span className="font-medium text-sm">Schedule Later</span>
-          </label>
-        </RadioGroup>
-
-        {data.scheduleType === 'later' && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !data.scheduledAt && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {data.scheduledAt ? format(data.scheduledAt, "PPP p") : "Pick date and time"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={data.scheduledAt}
-                onSelect={(date) => date && onChange({ scheduledAt: date })}
-                disabled={(date) => date < new Date()}
-                initialFocus
-                className="pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-
       {/* Notes */}
       <div className="space-y-2">
         <Label htmlFor="notes">Additional Notes</Label>
@@ -256,23 +188,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
           rows={3}
         />
       </div>
-
-
-      {/* Cost Delta Estimate */}
-      {data.costDelta !== undefined && data.costDelta !== 0 && (
-        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-          <div>
-            <p className="text-sm font-medium">Estimated Daily Cost Change</p>
-            <p className="text-xs text-muted-foreground">Based on destination selection</p>
-          </div>
-          <p className={cn(
-            "text-lg font-semibold",
-            data.costDelta > 0 ? "text-red-600" : "text-green-600"
-          )}>
-            {data.costDelta > 0 ? "+" : ""}₹{data.costDelta.toLocaleString()}
-          </p>
-        </div>
-      )}
     </div>
   );
 }
