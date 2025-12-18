@@ -119,12 +119,19 @@ const PrimaryMetricCard = ({
         </div>
         <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
           {displayCount ? (
-            <>
-              {displayCount.split('/')[0]}
-              {displayCount.includes('/') && (
-                <span className="text-sm font-medium text-muted-foreground">/{displayCount.split('/').slice(1).join('/')}</span>
-              )}
-            </>
+            displayCount.includes('|') ? (
+              <>
+                {displayCount.split('|')[0].trim()}
+                <span className="text-sm font-medium text-muted-foreground"> | {displayCount.split('|').slice(1).map(s => s.trim()).join(' | ')}</span>
+              </>
+            ) : (
+              <>
+                {displayCount.split('/')[0]}
+                {displayCount.includes('/') && (
+                  <span className="text-sm font-medium text-muted-foreground">/{displayCount.split('/').slice(1).join('/')}</span>
+                )}
+              </>
+            )
           ) : count.toLocaleString()}
         </p>
       </div>
@@ -218,6 +225,7 @@ const Overview = () => {
     {
       title: "IP Patients",
       count: 234,
+      displayCount: "234 | ICU 34 | WARD 200",
       icon: Hospital,
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
