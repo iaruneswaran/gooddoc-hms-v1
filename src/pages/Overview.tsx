@@ -240,7 +240,7 @@ const Overview = () => {
       count: 56,
       displayCount: "56/Orders",
       icon: FlaskConical,
-      route: "/diagnostics",
+      route: "/lab/pending?status=pending",
       iconColorClass: iconColors.labs,
       isPrimary: true,
       subMetrics: [
