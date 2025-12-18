@@ -236,16 +236,16 @@ const Overview = () => {
       ],
     },
     {
-      title: "Diagnostics",
-      count: 56,
-      displayCount: "56|/Orders",
-      icon: FlaskConical,
-      route: "/diagnostics",
-      iconColorClass: iconColors.labs,
+      title: "Beds Availability",
+      count: 67,
+      displayCount: "67/100 Available",
+      icon: BedDouble,
+      route: "/patients/check-in?date=today",
+      iconColorClass: iconColors.patients,
       isPrimary: true,
       subMetrics: [
-        { label: "Laboratory", value: 26, filterParam: "type=lab" },
-        { label: "Radiology", value: 30, filterParam: "type=radiology" },
+        { label: "ICU", value: 25, filterParam: "bedType=icu" },
+        { label: "Ward", value: 21, filterParam: "bedType=ward" },
       ],
     },
     {
@@ -286,6 +286,13 @@ const Overview = () => {
       iconColorClass: iconColors.doctors,
     },
     {
+      title: "Lab orders today",
+      count: 156,
+      icon: FlaskConical,
+      route: "/lab/pending?status=pending",
+      iconColorClass: iconColors.labs,
+    },
+    {
       title: "Surgeries",
       count: 24,
       icon: Scissors,
@@ -305,6 +312,13 @@ const Overview = () => {
       icon: Pill,
       route: "/pharmacy/pending?status=pending",
       iconColorClass: iconColors.pharmacy,
+    },
+    {
+      title: "Radiology orders today",
+      count: 34,
+      icon: ScanLine,
+      route: "/radiology/queue?status=queued",
+      iconColorClass: iconColors.labs,
     },
     {
       title: "Low Stock",
