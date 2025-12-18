@@ -212,14 +212,14 @@ const DischargedToday = () => {
       />
 
       <Dialog open={showSummary} onOpenChange={setShowSummary}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>Discharge Summary</DialogTitle>
           </DialogHeader>
           {selectedPatient && (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Patient Info */}
-              <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
+              <div className="grid grid-cols-4 gap-4 p-3 bg-muted/50 rounded-lg">
                 <div>
                   <p className="text-xs text-muted-foreground">Patient Name</p>
                   <p className="font-medium">{selectedPatient.patient}</p>
@@ -238,86 +238,82 @@ const DischargedToday = () => {
                 </div>
               </div>
 
-              {/* Admission & Discharge Details */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-3">
+              {/* Admission, Discharge & Clinical in one row */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
                   <h4 className="font-medium text-sm">Admission Details</h4>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Admit Date/Time</p>
-                      <p className="text-sm">{selectedPatient.admitDateTime}</p>
+                  <div className="grid grid-cols-1 gap-1">
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Admit Date/Time</span>
+                      <span className="text-sm">{selectedPatient.admitDateTime}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Ward / Bed</p>
-                      <p className="text-sm">{selectedPatient.ward} / {selectedPatient.bed}</p>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Ward / Bed</span>
+                      <span className="text-sm">{selectedPatient.ward} / {selectedPatient.bed}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Attending Doctor</p>
-                      <p className="text-sm">{selectedPatient.attendingDoctor}</p>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Attending Doctor</span>
+                      <span className="text-sm">{selectedPatient.attendingDoctor}</span>
                     </div>
                   </div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <h4 className="font-medium text-sm">Discharge Details</h4>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Discharge Date/Time</p>
-                      <p className="text-sm">{selectedPatient.dischargeDateTime}</p>
+                  <div className="grid grid-cols-1 gap-1">
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Discharge Date/Time</span>
+                      <span className="text-sm">{selectedPatient.dischargeDateTime}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Discharge Type</p>
-                      <p className="text-sm">{getDischargeType(getPatientIndex(selectedPatient.mrn))}</p>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Discharge Type</span>
+                      <span className="text-sm">{getDischargeType(getPatientIndex(selectedPatient.mrn))}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Length of Stay</p>
-                      <p className="text-sm">{selectedPatient.lengthOfStay} days</p>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Length of Stay</span>
+                      <span className="text-sm">{selectedPatient.lengthOfStay} days</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Clinical Information</h4>
+                  <div className="grid grid-cols-1 gap-1">
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Primary Diagnosis</span>
+                      <span className="text-sm">{getDiagnosis(getPatientIndex(selectedPatient.mrn))}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-muted-foreground">Condition</span>
+                      <span className="text-sm">Stable</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Clinical Information */}
-              <div className="space-y-3">
-                <h4 className="font-medium text-sm">Clinical Information</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Primary Diagnosis</p>
-                    <p className="text-sm">{getDiagnosis(getPatientIndex(selectedPatient.mrn))}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Condition at Discharge</p>
-                    <p className="text-sm">Stable</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Discharge Instructions</p>
-                  <p className="text-sm text-muted-foreground">
-                    Continue prescribed medications. Follow up with attending physician in 7 days. 
-                    Report immediately if symptoms worsen.
-                  </p>
-                </div>
+              {/* Discharge Instructions */}
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Discharge Instructions</p>
+                <p className="text-sm text-muted-foreground">
+                  Continue prescribed medications. Follow up with attending physician in 7 days. Report immediately if symptoms worsen.
+                </p>
               </div>
 
               {/* Billing Summary */}
-              <div className="space-y-3">
-                <h4 className="font-medium text-sm">Billing Summary</h4>
-                <div className="grid grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Total Amount</p>
-                    <p className="font-medium">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Paid</p>
-                    <p className="font-medium text-green-600">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Balance</p>
-                    <p className="font-medium">₹0</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Payment Mode</p>
-                    <p className="font-medium">{getPaymentMode(selectedPatient.mrn)}</p>
-                  </div>
+              <div className="grid grid-cols-4 gap-4 p-3 bg-muted/50 rounded-lg">
+                <div>
+                  <p className="text-xs text-muted-foreground">Total Amount</p>
+                  <p className="font-medium">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Paid</p>
+                  <p className="font-medium text-green-600">₹{getBillingAmount(selectedPatient.mrn).toLocaleString('en-IN')}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Balance</p>
+                  <p className="font-medium">₹0</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Payment Mode</p>
+                  <p className="font-medium">{getPaymentMode(selectedPatient.mrn)}</p>
                 </div>
               </div>
             </div>
