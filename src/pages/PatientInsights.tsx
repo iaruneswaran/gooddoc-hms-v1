@@ -223,12 +223,6 @@ const PatientInsights = () => {
                     age={patient.age}
                     gender={patient.gender}
                   />
-                  {selectedVisit && (
-                    <div className="flex items-center gap-2 px-3 h-9 bg-muted rounded-md">
-                      <span className="text-xs text-muted-foreground">Active Visit:</span>
-                      <Badge variant="secondary" className="font-mono">{selectedVisit.visitId}</Badge>
-                    </div>
-                  )}
                 </div>
                 
                 <div className="flex gap-2">
