@@ -55,6 +55,7 @@ import BillsList from "./pages/BillsList";
 import BedCharges from "./pages/BedCharges";
 import TransferPatient from "./pages/TransferPatient";
 import AdvancePayments from "./pages/AdvancePayments";
+import DiagnosticsList from "./pages/DiagnosticsList";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -105,6 +106,7 @@ const App = () => (
             <Route path="/patients/discharged" element={<DischargedToday />} />
             <Route path="/doctors/on-duty" element={<DoctorsOnDuty />} />
             <Route path="/schedule/today" element={<ScheduledToday />} />
+            <Route path="/diagnostics/orders" element={<DiagnosticsList />} />
             <Route path="/lab/pending" element={<LabReportsPending />} />
             <Route path="/or/surgeries" element={<SurgeriesToday />} />
             <Route path="/er/cases" element={<EmergencyCases />} />
