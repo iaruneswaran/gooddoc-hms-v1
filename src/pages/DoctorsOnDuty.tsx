@@ -246,9 +246,7 @@ const DoctorsOnDuty = () => {
   ];
 
   const rowActions: RowAction<DoctorOnDutyRecord>[] = [
-    { label: "View Schedule", onClick: (row) => navigate(`/doctors/${row.doctorName.replace(/\s+/g, "-").toLowerCase()}/schedule`) },
-    { label: "View Calendar", onClick: (row) => navigate(`/doctors/${row.doctorName.replace(/\s+/g, "-").toLowerCase()}/calendar`) },
-    { label: "Contact", onClick: (row) => console.log("Contact", row.contactPager) },
+    { label: "View Doctor", onClick: (row) => navigate(`/doctors/${row.doctorName.replace("Dr. ", "").replace(/\s+/g, "-").toLowerCase()}`) },
   ];
 
   return (
