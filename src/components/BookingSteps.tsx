@@ -1,4 +1,4 @@
-import { Search, UserPlus, Calendar, CreditCard } from "lucide-react";
+import { Search, UserPlus, Calendar, CreditCard, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Step {
@@ -39,15 +39,20 @@ export function BookingSteps({ currentStep, hideSteps = [] }: BookingStepsProps)
                 isActive && "bg-primary/10 border border-primary"
               )}
             >
-              {/* Icon */}
-              <Icon
-                className={cn(
-                  "w-4 h-4 transition-colors",
-                  isActive && "text-primary",
-                  isPast && "text-primary",
-                  !isActive && !isPast && "text-muted-foreground"
-                )}
-              />
+              {/* Icon - show checkmark for completed steps */}
+              {isPast ? (
+                <Check
+                  className="w-4 h-4 text-primary"
+                />
+              ) : (
+                <Icon
+                  className={cn(
+                    "w-4 h-4 transition-colors",
+                    isActive && "text-primary",
+                    !isActive && "text-muted-foreground"
+                  )}
+                />
+              )}
               {/* Label */}
               <span
                 className={cn(
