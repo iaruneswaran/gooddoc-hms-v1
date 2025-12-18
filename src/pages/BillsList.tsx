@@ -3,13 +3,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
-import { billsData, paidBills, partialBills, BillRecord } from "@/data/bills.mock";
+import { billsData, partialBills, unpaidBills, outstandingBills, BillRecord } from "@/data/bills.mock";
 
 const formatCurrency = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
 const statusStyles: Record<BillRecord["status"], string> = {
   "Paid": "bg-green-100 text-green-700",
   "Partial": "bg-amber-100 text-amber-700",
+  "Unpaid": "bg-red-100 text-red-700",
 };
 
 const paymentModeStyles: Record<BillRecord["paymentMode"], string> = {
@@ -18,6 +19,7 @@ const paymentModeStyles: Record<BillRecord["paymentMode"], string> = {
   "UPI": "bg-purple-100 text-purple-700",
   "Insurance": "bg-teal-100 text-teal-700",
   "Mixed": "bg-indigo-100 text-indigo-700",
+  "—": "bg-gray-50 text-gray-500",
 };
 
 const BillsList = () => {
@@ -25,15 +27,18 @@ const BillsList = () => {
   const [searchParams] = useSearchParams();
   const typeFilter = searchParams.get("type");
 
-  let data = billsData;
-  let displayCount = billsData.length;
+  let data = outstandingBills;
+  let displayCount = outstandingBills.length;
 
-  if (typeFilter === "collected") {
-    data = paidBills;
-    displayCount = paidBills.length;
-  } else if (typeFilter === "partial") {
+  if (typeFilter === "partial") {
     data = partialBills;
     displayCount = partialBills.length;
+  } else if (typeFilter === "outstanding") {
+    data = outstandingBills;
+    displayCount = outstandingBills.length;
+  } else if (typeFilter === "unpaid") {
+    data = unpaidBills;
+    displayCount = unpaidBills.length;
   }
 
   const columns: Column<BillRecord>[] = [
@@ -143,8 +148,8 @@ const BillsList = () => {
       label: "Status",
       value: "all",
       options: [
-        { value: "Paid", label: "Paid" },
         { value: "Partial", label: "Partial" },
+        { value: "Unpaid", label: "Unpaid" },
       ],
     },
     {
@@ -162,8 +167,9 @@ const BillsList = () => {
   ];
 
   const urlParamFilters: UrlParamFilter[] = [
-    { paramKey: "type", paramValue: "collected", displayLabel: "Paid Bills", count: paidBills.length },
+    { paramKey: "type", paramValue: "outstanding", displayLabel: "Outstanding", count: outstandingBills.length },
     { paramKey: "type", paramValue: "partial", displayLabel: "Partial", count: partialBills.length },
+    { paramKey: "type", paramValue: "unpaid", displayLabel: "Unpaid", count: unpaidBills.length },
   ];
 
   const rowActions: RowAction<BillRecord>[] = [
