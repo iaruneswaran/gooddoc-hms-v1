@@ -232,9 +232,7 @@ const PatientInsights = () => {
                   <Button 
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      // TODO: Navigate to transfer page
-                    }}
+                    onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
                   >
                     Transfer
                   </Button>
