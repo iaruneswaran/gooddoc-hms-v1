@@ -126,9 +126,8 @@ const OPPatientsToday = () => {
   ];
 
   const rowActions: RowAction<OPPatientRecord>[] = [
-    { label: "View Chart", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
-    { label: "Patient 360", onClick: (row) => navigate(`/patients/${row.mrn}/360?from=op-patients`) },
-    { label: "Book Follow-up", onClick: (row) => navigate(`/book-appointment?patientId=${row.mrn}`) },
+    { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
+    { label: "Check In", onClick: (row) => navigate(`/check-in?patientId=${row.mrn}`) },
   ];
 
   return (
