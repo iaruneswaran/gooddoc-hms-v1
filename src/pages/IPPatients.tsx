@@ -97,6 +97,9 @@ const IPPatients = () => {
     },
   ];
 
+  // Extract unique doctors from data
+  const uniqueDoctors = [...new Set(data.map(p => p.attendingDoctor))].sort();
+
   const filters: Filter[] = [
     {
       key: "ward",
@@ -120,6 +123,12 @@ const IPPatients = () => {
         { value: "Private", label: "Private" },
         { value: "Ward", label: "Ward" },
       ],
+    },
+    {
+      key: "attendingDoctor",
+      label: "Doctor",
+      value: "all",
+      options: uniqueDoctors.map(doctor => ({ value: doctor, label: doctor })),
     },
   ];
 
