@@ -173,7 +173,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
 
       {/* Past Appointments Section */}
       <div className="mb-6">
-        <div className="px-6 pt-6">
+        <div className="px-6">
           <h3 className="text-[14px] font-semibold text-foreground">
             Appointments
           </h3>
