@@ -276,8 +276,8 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Street, Apartment</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.address}</p>
+                    <Label className="text-xs text-muted-foreground">City</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.city}</p>
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">Pin code</Label>
@@ -287,18 +287,13 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">City</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.city}</p>
-                  </div>
-                  <div>
                     <Label className="text-xs text-muted-foreground">State</Label>
                     <p className="text-sm text-foreground mt-1">{patient.state}</p>
                   </div>
-                </div>
-
-                <div>
-                  <Label className="text-xs text-muted-foreground">Country</Label>
-                  <p className="text-sm text-foreground mt-1">{patient.country}</p>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Country</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.country}</p>
+                  </div>
                 </div>
               </>
             ) : (
@@ -306,10 +301,10 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm text-foreground">Street, Apartment</Label>
+                    <Label className="text-sm text-foreground">City</Label>
                     <Input 
-                      defaultValue={patient.address}
-                      placeholder="Anna Nagar"
+                      defaultValue={patient.city}
+                      placeholder="Chennai"
                       className="mt-2"
                     />
                   </div>
@@ -325,14 +320,6 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm text-foreground">City</Label>
-                    <Input 
-                      defaultValue={patient.city}
-                      placeholder="Chennai"
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
                     <Label className="text-sm text-foreground">State</Label>
                     <Input 
                       defaultValue={patient.state}
@@ -340,15 +327,14 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                       className="mt-2"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <Label className="text-sm text-foreground">Country</Label>
-                  <Input 
-                    defaultValue={patient.country}
-                    placeholder="India"
-                    className="mt-2"
-                  />
+                  <div>
+                    <Label className="text-sm text-foreground">Country</Label>
+                    <Input 
+                      defaultValue={patient.country}
+                      placeholder="India"
+                      className="mt-2"
+                    />
+                  </div>
                 </div>
               </>
             )}
