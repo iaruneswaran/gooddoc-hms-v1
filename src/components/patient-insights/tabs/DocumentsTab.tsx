@@ -101,9 +101,9 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
       </div>
 
       {/* Table */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
         <table className="w-full">
-          <thead className="bg-muted/50">
+          <thead className="bg-muted/30">
             <tr>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Name</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
@@ -113,7 +113,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-background">
+          <tbody className="bg-white dark:bg-card">
             {visitDocuments.map((doc) => (
               <tr key={doc.id} className="border-t">
                 <td className="p-4 text-sm">

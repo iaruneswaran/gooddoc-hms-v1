@@ -48,9 +48,9 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
       {/* Claims Table */}
       <div>
         <h3 className="text-lg font-semibold text-primary mb-4">Insurance Claims</h3>
-        <div className="border rounded-lg overflow-hidden">
+        <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
           <table className="w-full">
-            <thead className="bg-muted/50">
+            <thead className="bg-muted/30">
               <tr>
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Claim No</th>
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
@@ -61,7 +61,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-background">
+            <tbody className="bg-white dark:bg-card">
               {mockClaims.map((claim) => (
                 <tr key={claim.id} className="border-t">
                   <td className="p-4 text-sm">{claim.id}</td>

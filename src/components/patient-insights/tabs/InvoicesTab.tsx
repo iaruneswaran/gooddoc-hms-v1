@@ -54,9 +54,9 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
       <div className="flex items-center justify-between">
         <h3 className="text-[14px] font-semibold text-foreground">Payable Bills</h3>
       </div>
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
         <table className="w-full">
-          <thead className="bg-muted/50">
+          <thead className="bg-muted/30">
             <tr>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Bill No</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
@@ -68,7 +68,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-background">
+          <tbody className="bg-white dark:bg-card">
             {mockInvoices.map((invoice) => (
               <tr key={invoice.id} className="border-t hover:bg-muted/20 transition-colors">
                 <td className="p-4 text-sm font-medium">{invoice.id}</td>
