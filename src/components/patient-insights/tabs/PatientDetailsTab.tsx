@@ -60,10 +60,19 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       <div className="mb-6">
         <div className="px-6 pt-3 pb-4 flex items-center justify-between">
           <h3 className="text-[14px] font-semibold text-foreground">Patient Information</h3>
-          {!isEditing && (
+          {!isEditing ? (
             <Button onClick={handleEdit} variant="outline" size="sm">
               Edit Information
             </Button>
+          ) : (
+            <div className="flex gap-2">
+              <Button onClick={handleCancel} variant="outline" size="sm">
+                Cancel
+              </Button>
+              <Button onClick={handleSave} size="sm">
+                Save
+              </Button>
+            </div>
           )}
         </div>
         
@@ -130,16 +139,6 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
             ) : (
               // Edit Mode
               <>
-                <div className="flex justify-end mb-4">
-                  <div className="flex gap-2">
-                    <Button onClick={handleCancel} variant="outline" size="sm">
-                      Cancel
-                    </Button>
-                    <Button onClick={handleSave} size="sm">
-                      Save
-                    </Button>
-                  </div>
-                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm text-foreground">Title</Label>
