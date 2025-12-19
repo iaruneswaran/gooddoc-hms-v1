@@ -102,6 +102,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
         <table className="w-full">
           <thead className="bg-muted/30">
             <tr>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Type</th>
@@ -115,6 +116,9 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
           <tbody className="bg-white dark:bg-card">
             {visitTransactions.map((transaction) => (
               <tr key={transaction.id} className="border-t">
+                <td className="p-4">
+                  <p className="text-sm font-mono font-medium text-foreground">{transaction.visitId}</p>
+                </td>
                 <td className="p-4 text-sm">{transaction.id}</td>
                 <td className="p-4 text-sm">{transaction.date}</td>
                 <td className="p-4 text-sm">{transaction.type}</td>
