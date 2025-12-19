@@ -1,16 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { appointmentRequests, AppointmentRequestRecord } from "@/data/overview.mock";
-
-const visitTypeStyles: Record<AppointmentRequestRecord["visitType"], string> = {
-  "OP": "bg-blue-100 text-blue-700",
-  "IP": "bg-purple-100 text-purple-700",
-  "Emergency": "bg-red-100 text-red-700",
-  "Follow-up": "bg-green-100 text-green-700",
-};
 
 const AppointmentRequests = () => {
   const navigate = useNavigate();
@@ -60,9 +52,7 @@ const AppointmentRequests = () => {
       key: "visitType",
       label: "Visit Type",
       sortable: true,
-      render: (row) => (
-        <Badge className={visitTypeStyles[row.visitType]}>{row.visitType}</Badge>
-      ),
+      render: (row) => <span>{row.visitType}</span>,
     },
     {
       key: "actions",
