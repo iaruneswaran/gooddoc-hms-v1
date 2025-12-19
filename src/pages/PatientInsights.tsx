@@ -250,50 +250,50 @@ const PatientInsightsContent = () => {
               </div>
             </div>
 
-            {/* Middle Row: Patient Chip and Buttons */}
-            <div className="flex items-center gap-2">
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-              />
-              
-              <div className="flex gap-2">
-                <Button 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
-                >
-                  Services
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
-                >
-                  Transfer
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
-                    state: { visitId: selectedVisit?.visitId }
-                  })}
-                >
-                  Discharge
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                >
-                  Payments
-                </Button>
+            {/* Middle Row: Patient Chip, Buttons, and Visit Selector */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                />
+                
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
+                  >
+                    Services
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
+                  >
+                    Transfer
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
+                      state: { visitId: selectedVisit?.visitId }
+                    })}
+                  >
+                    Discharge
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                  >
+                    Payments
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            {/* Bottom Row: Visit Selector */}
-            <div className="mt-4 pt-4 border-t border-border">
+              {/* Visit Selector */}
               <VisitSelector />
             </div>
           </div>
