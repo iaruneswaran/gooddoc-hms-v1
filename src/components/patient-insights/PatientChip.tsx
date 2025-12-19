@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, UserRound } from "lucide-react";
+import { ArrowLeft, User, UserRound } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface PatientChipProps {
   name: string;
@@ -7,9 +8,12 @@ interface PatientChipProps {
   age: number;
   gender: string;
   onClick?: () => void;
+  showBackButton?: boolean;
+  backPath?: string;
 }
 
-export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipProps) {
+export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, backPath }: PatientChipProps) {
+  const navigate = useNavigate();
   const isMale = gender.toLowerCase().startsWith("m");
   const isFemale = gender.toLowerCase().startsWith("f");
 
@@ -20,8 +24,25 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
       ? "bg-primary" 
       : "bg-muted";
 
+  const handleBack = () => {
+    if (backPath) {
+      navigate(backPath);
+    } else {
+      navigate(-1);
+    }
+  };
+
   const content = (
     <>
+      {showBackButton && (
+        <button
+          onClick={handleBack}
+          className="p-1 rounded-md hover:bg-accent/50 transition-colors mr-1"
+          title="Go back"
+        >
+          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+        </button>
+      )}
       <Avatar className="h-12 w-12">
         <AvatarFallback className={`${avatarBgClass} text-primary-foreground`}>
           {isFemale ? (
