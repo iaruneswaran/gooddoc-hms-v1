@@ -1,27 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { appointmentRequests, AppointmentRequestRecord } from "@/data/overview.mock";
 
-const urgencyStyles: Record<AppointmentRequestRecord["urgency"], string> = {
-  "Low": "bg-green-100 text-green-700",
-  "Med": "bg-amber-100 text-amber-700",
-  "High": "bg-red-100 text-red-700",
-};
-
-const statusStyles: Record<AppointmentRequestRecord["status"], string> = {
-  "New": "bg-blue-100 text-blue-700",
-  "Pending": "bg-amber-100 text-amber-700",
-  "Scheduled": "bg-green-100 text-green-700",
-  "Rejected": "bg-red-100 text-red-700",
-};
-
-const sourceStyles: Record<AppointmentRequestRecord["source"], string> = {
-  "Call": "bg-purple-100 text-purple-700",
-  "Portal": "bg-blue-100 text-blue-700",
-  "Walk-in": "bg-green-100 text-green-700",
-  "Referral": "bg-amber-100 text-amber-700",
+const visitTypeStyles: Record<AppointmentRequestRecord["visitType"], string> = {
+  "OP": "bg-blue-100 text-blue-700",
+  "IP": "bg-purple-100 text-purple-700",
+  "Emergency": "bg-red-100 text-red-700",
+  "Follow-up": "bg-green-100 text-green-700",
 };
 
 const AppointmentRequests = () => {
@@ -46,85 +34,64 @@ const AppointmentRequests = () => {
       )
     },
     { 
-      key: "preferredDateTime", 
-      label: "Preferred Date/Time", 
+      key: "preferredDate", 
+      label: "Preferred Date", 
       sortable: true,
-      render: (row) => {
-        if (!row.preferredDateTime) return "—";
-        const [date, time] = row.preferredDateTime.split(' ');
-        return (
-          <div className="flex flex-col">
-            <span>{time}</span>
-            <span className="text-muted-foreground text-xs">{date}</span>
-          </div>
-        );
-      }
+      render: (row) => <span>{row.preferredDate}</span>
+    },
+    { 
+      key: "preferredTime", 
+      label: "Preferred Time", 
+      sortable: true,
+      render: (row) => <span>{row.preferredTime}</span>
     },
     { 
       key: "preferredProvider", 
-      label: "Preferred Provider", 
-      render: (row) => (
-        <div className="flex flex-col">
-          <span>{row.preferredProvider || "Any"}</span>
-          <span className="text-muted-foreground text-xs">{row.department}</span>
-        </div>
-      )
+      label: "Doctor", 
+      render: (row) => <span>{row.preferredProvider || "Any"}</span>
+    },
+    { 
+      key: "department", 
+      label: "Department", 
+      render: (row) => <span>{row.department}</span>
     },
     { key: "reason", label: "Reason" },
     {
-      key: "urgency",
-      label: "Urgency",
+      key: "visitType",
+      label: "Visit Type",
       sortable: true,
       render: (row) => (
-        <Badge className={urgencyStyles[row.urgency]}>{row.urgency}</Badge>
+        <Badge className={visitTypeStyles[row.visitType]}>{row.visitType}</Badge>
       ),
     },
     {
-      key: "source",
-      label: "Source",
+      key: "actions",
+      label: "",
+      width: "140px",
       render: (row) => (
-        <Badge className={sourceStyles[row.source]}>{row.source}</Badge>
-      ),
-    },
-    {
-      key: "insuranceVerified",
-      label: "Insurance Verified",
-      render: (row) => row.insuranceVerified ? (
-        <Badge className="bg-green-100 text-green-700">Yes</Badge>
-      ) : (
-        <Badge className="bg-amber-100 text-amber-700">No</Badge>
-      ),
-    },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Button 
+          size="sm" 
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/book-appointment?requestId=${row.requestId}`);
+          }}
+        >
+          Schedule Now
+        </Button>
       ),
     },
   ];
 
   const filters: Filter[] = [
     {
-      key: "status",
-      label: "Status",
+      key: "visitType",
+      label: "Visit Type",
       value: "all",
       options: [
-        { value: "New", label: "New" },
-        { value: "Pending", label: "Pending" },
-        { value: "Scheduled", label: "Scheduled" },
-        { value: "Rejected", label: "Rejected" },
-      ],
-    },
-    {
-      key: "urgency",
-      label: "Urgency",
-      value: "all",
-      options: [
-        { value: "Low", label: "Low" },
-        { value: "Med", label: "Medium" },
-        { value: "High", label: "High" },
+        { value: "OP", label: "OP" },
+        { value: "IP", label: "IP" },
+        { value: "Emergency", label: "Emergency" },
+        { value: "Follow-up", label: "Follow-up" },
       ],
     },
     {
