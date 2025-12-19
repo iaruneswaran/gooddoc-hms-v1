@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User, UserRound } from "lucide-react";
 
 interface PatientChipProps {
@@ -12,22 +13,24 @@ export function PatientChip({ name, gdid, age, gender, onClick }: PatientChipPro
   const isMale = gender.toLowerCase().startsWith("m");
   const isFemale = gender.toLowerCase().startsWith("f");
 
-  // Gender-based icon color
-  const iconColorClass = isFemale
-    ? "text-pink-500" 
+  // Gender-based styling
+  const avatarBgClass = isFemale 
+    ? "bg-pink-500" 
     : isMale 
-      ? "text-primary" 
-      : "text-muted-foreground";
+      ? "bg-primary" 
+      : "bg-muted";
 
   const content = (
     <>
-      <div className={`${iconColorClass}`}>
-        {isFemale ? (
-          <UserRound className="h-8 w-8" />
-        ) : (
-          <User className="h-8 w-8" />
-        )}
-      </div>
+      <Avatar className="h-12 w-12">
+        <AvatarFallback className={`${avatarBgClass} text-primary-foreground`}>
+          {isFemale ? (
+            <UserRound className="h-6 w-6" />
+          ) : (
+            <User className="h-6 w-6" />
+          )}
+        </AvatarFallback>
+      </Avatar>
       <div className="text-left">
         <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
           {name}
