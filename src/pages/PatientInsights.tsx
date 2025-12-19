@@ -241,9 +241,7 @@ const PatientInsightsContent = () => {
                 />
                 <Avatar className="h-10 w-10">
                   <AvatarImage src="" alt={patient.name} />
-                  <AvatarFallback className="bg-muted text-muted-foreground text-sm font-medium">
-                    {patient.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                  </AvatarFallback>
+                  <AvatarFallback className="bg-muted" />
                 </Avatar>
                 <PatientChip
                   name={patient.name}
