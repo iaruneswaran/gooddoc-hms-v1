@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -232,13 +233,25 @@ const PatientInsightsContent = () => {
           <div className="px-6 py-6">
             {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between mb-4">
-              {/* Patient Info */}
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-              />
+              {/* Patient Info with Back Arrow and Avatar */}
+              <div className="flex items-center gap-3">
+                <ArrowLeft 
+                  className="h-5 w-5 text-muted-foreground cursor-pointer" 
+                  onClick={() => navigate(fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments')}
+                />
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src="" alt={patient.name} />
+                  <AvatarFallback className="bg-muted text-muted-foreground text-sm font-medium">
+                    {patient.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                />
+              </div>
 
               {/* Right: KPIs */}
               <div className="flex gap-3">
