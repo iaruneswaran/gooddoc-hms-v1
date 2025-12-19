@@ -231,14 +231,23 @@ const PatientInsightsContent = () => {
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
             {/* Top Row: Patient Info + KPIs */}
-            <div className="flex items-start justify-between mb-4">
-              {/* Patient Info */}
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-              />
+            <div className="flex items-center justify-between mb-4">
+              {/* Back Button + Patient Info */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate(currentBreadcrumb.path)}
+                  className="flex items-center justify-center h-10 w-10 rounded-full hover:bg-accent transition-colors"
+                  title={`Back to ${currentBreadcrumb.label}`}
+                >
+                  <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+                </button>
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                />
+              </div>
 
               {/* Right: KPIs */}
               <div className="flex gap-3">
