@@ -58,7 +58,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
     <div className="py-4">
       {/* Patient Information Section */}
       <div className="mb-6">
-        <div className="px-6 py-3 flex items-center justify-between">
+        <div className="px-6 pt-3 pb-4 flex items-center justify-between">
           <h3 className="text-[14px] font-semibold text-foreground">Patient Information</h3>
           {!isEditing && (
             <Button onClick={handleEdit} variant="outline" size="sm">
