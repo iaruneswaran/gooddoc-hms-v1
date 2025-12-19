@@ -239,14 +239,6 @@ const PatientInsightsContent = () => {
               <span className="font-semibold">{currentBreadcrumb.label}</span>
             </button>
 
-            {/* KPIs Row */}
-            <div className="flex gap-3 mb-4">
-              <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
-              <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
-              <KpiTile label="Bills Amount" amount={patient.billsAmount} />
-              <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
-            </div>
-
             {/* Header Content */}
             <div className="flex items-center justify-between gap-6">
               {/* Left: Patient Chip and Buttons */}
@@ -291,7 +283,17 @@ const PatientInsightsContent = () => {
                 </div>
               </div>
 
-              {/* Right: Visit Selector */}
+              {/* Right: KPIs */}
+              <div className="flex gap-3">
+                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
+                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
+                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
+                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+              </div>
+            </div>
+
+            {/* Visit Selector Row */}
+            <div className="mt-4 pt-4 border-t border-border">
               <VisitSelector />
             </div>
           </div>
