@@ -80,7 +80,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </div>
 
       {/* Patient Information */}
-      <Card className="p-6">
+      <Card className="p-4">
         <h3 className="text-base font-semibold text-foreground mb-4">Patient Information</h3>
         <div className="space-y-4">
           {!isEditing ? (
@@ -251,7 +251,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </Card>
 
       {/* Address Details */}
-      <Card className="p-6">
+      <Card className="p-4">
         <h3 className="text-base font-semibold text-foreground mb-4">Address Details</h3>
         <div className="space-y-4">
           {!isEditing ? (
