@@ -58,8 +58,13 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
     <div className="py-4">
       {/* Patient Information Section */}
       <div className="mb-6">
-        <div className="px-6 py-3">
+        <div className="px-6 py-3 flex items-center justify-between">
           <h3 className="text-[14px] font-semibold text-foreground">Patient Information</h3>
+          {!isEditing && (
+            <Button onClick={handleEdit} variant="outline" size="sm">
+              Edit Information
+            </Button>
+          )}
         </div>
         
         <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
@@ -72,14 +77,9 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <Label className="text-xs text-muted-foreground">Title</Label>
                     <p className="text-sm text-foreground mt-1">{patient.title}</p>
                   </div>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <Label className="text-xs text-muted-foreground">ID</Label>
-                      <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
-                    </div>
-                    <Button onClick={handleEdit} variant="outline" size="sm">
-                      Edit
-                    </Button>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">ID</Label>
+                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
                   </div>
                 </div>
 
