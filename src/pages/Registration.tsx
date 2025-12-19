@@ -304,17 +304,17 @@ const Registration = () => {
               <div className="bg-card rounded-lg border border-border p-6 space-y-6">
                 <h3 className="text-base font-semibold text-foreground">Address Details</h3>
                 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="street">Street, Apartment</Label>
+                    <Label htmlFor="city">City</Label>
                     <Input
-                      id="street"
-                      placeholder="Anna Nagar"
-                      {...register("street")}
-                      className={errors.street ? "border-destructive" : ""}
+                      id="city"
+                      placeholder="Chennai"
+                      {...register("city")}
+                      className={errors.city ? "border-destructive" : ""}
                     />
-                    {errors.street && (
-                      <p className="text-xs text-destructive">{errors.street.message}</p>
+                    {errors.city && (
+                      <p className="text-xs text-destructive">{errors.city.message}</p>
                     )}
                   </div>
 
@@ -329,19 +329,6 @@ const Registration = () => {
                     />
                     {errors.pinCode && (
                       <p className="text-xs text-destructive">{errors.pinCode.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
-                    <Input
-                      id="city"
-                      placeholder="Chennai"
-                      {...register("city")}
-                      className={errors.city ? "border-destructive" : ""}
-                    />
-                    {errors.city && (
-                      <p className="text-xs text-destructive">{errors.city.message}</p>
                     )}
                   </div>
                 </div>

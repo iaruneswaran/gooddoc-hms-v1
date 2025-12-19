@@ -242,16 +242,12 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Street, Apartment</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.address.street || "—"}</p>
-                  </div>
-                  <div>
                     <Label className="text-xs text-muted-foreground">City</Label>
                     <p className="text-sm text-foreground mt-1">{patient.address.city || "—"}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">Country</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.address.country || "—"}</p>
+                    <Label className="text-xs text-muted-foreground">State</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.address.state || "—"}</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -260,8 +256,8 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
                     <p className="text-sm text-foreground mt-1">{patient.address.pincode || "—"}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">State</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.address.state || "—"}</p>
+                    <Label className="text-xs text-muted-foreground">Country</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.address.country || "—"}</p>
                   </div>
                 </div>
               </div>
@@ -270,10 +266,10 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm text-foreground">Street, Apartment</Label>
+                    <Label className="text-sm text-foreground">City</Label>
                     <Input 
-                      defaultValue={patient.address.street}
-                      placeholder="Anna Nagar"
+                      defaultValue={patient.address.city}
+                      placeholder="Chennai"
                       className="mt-2"
                     />
                   </div>
@@ -289,14 +285,6 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm text-foreground">City</Label>
-                    <Input 
-                      defaultValue={patient.address.city}
-                      placeholder="Chennai"
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
                     <Label className="text-sm text-foreground">State</Label>
                     <Input 
                       defaultValue={patient.address.state}
@@ -304,15 +292,14 @@ export function PatientDetailsPanel({ patient, vitals }: PatientDetailsPanelProp
                       className="mt-2"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <Label className="text-sm text-foreground">Country</Label>
-                  <Input 
-                    defaultValue={patient.address.country}
-                    placeholder="India"
-                    className="mt-2"
-                  />
+                  <div>
+                    <Label className="text-sm text-foreground">Country</Label>
+                    <Input 
+                      defaultValue={patient.address.country}
+                      placeholder="India"
+                      className="mt-2"
+                    />
+                  </div>
                 </div>
               </div>
             )}
