@@ -238,6 +238,8 @@ const PatientInsightsContent = () => {
                 gdid={patient.gdid}
                 age={patient.age}
                 gender={patient.gender}
+                showBackButton
+                backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
               />
 
               {/* Right: KPIs */}
