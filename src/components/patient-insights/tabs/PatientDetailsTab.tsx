@@ -63,11 +63,8 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
         </div>
         
         <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
-          {/* Header with GDID and Edit Button inside card */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-sm font-medium text-foreground">
-              #GDID - {patient.gdid}
-            </div>
+          {/* Edit Button */}
+          <div className="flex justify-end mb-4">
             {!isEditing && (
               <Button onClick={handleEdit} variant="outline" size="sm">
                 Edit
@@ -95,47 +92,53 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <p className="text-sm text-foreground mt-1">{patient.title}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">First Name</Label>
-                    <p className="text-sm text-foreground mt-1">{firstName}</p>
+                    <Label className="text-xs text-muted-foreground">ID</Label>
+                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">First Name</Label>
+                    <p className="text-sm text-foreground mt-1">{firstName}</p>
+                  </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">Surname</Label>
                     <p className="text-sm text-foreground mt-1">{surname}</p>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Gender</Label>
                     <p className="text-sm text-foreground mt-1">{patient.gender}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Date of Birth</Label>
                     <p className="text-sm text-foreground mt-1">{patient.dob}</p>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Age</Label>
                     <p className="text-sm text-foreground mt-1">{patient.age}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.mobile}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Mobile Number</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.mobile}</p>
-                  </div>
-                  <div>
                     <Label className="text-xs text-muted-foreground">Email</Label>
                     <p className="text-sm text-foreground mt-1">{patient.email}</p>
                   </div>
-                </div>
-
-                <div>
-                  <Label className="text-xs text-muted-foreground">Blood Group</Label>
-                  <p className="text-sm text-foreground mt-1">{patient.bloodGroup}</p>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Blood Group</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.bloodGroup}</p>
+                  </div>
                 </div>
               </>
             ) : (
