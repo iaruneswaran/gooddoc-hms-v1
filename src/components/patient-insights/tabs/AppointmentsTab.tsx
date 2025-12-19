@@ -108,111 +108,104 @@ function getStatusBadgeVariant(status: string) {
 
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
   const appointments = getPatientAppointments(patient.gdid);
-  const completedAppointments = appointments.filter(apt => apt.status === "Completed");
-  const upcomingAppointments = appointments.filter(apt => apt.status === "Scheduled" || apt.status === "Checked-in");
-
-  const renderAppointmentTable = (appointmentList: Appointment[], title: string) => (
-    <div className="mb-6">
-      <div className="px-6 py-3">
-        <h3 className="text-[14px] font-semibold text-foreground">
-          {title}
-        </h3>
-      </div>
-      
-      <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card">
-        <table className="w-full">
-          <thead className="bg-muted/30">
-            <tr>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Doctor</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Token</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-card">
-            {appointmentList.length > 0 ? (
-              appointmentList.map((appointment) => (
-                <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
-                  {/* Visit ID */}
-                  <td className="p-4">
-                    <p className="text-sm font-mono font-medium text-foreground">{appointment.visitId}</p>
-                  </td>
-                  
-                  {/* Date & Time */}
-                  <td className="p-4">
-                    <p className="text-sm text-foreground">{appointment.time}</p>
-                    <p className="text-xs text-muted-foreground">{appointment.date}</p>
-                  </td>
-                  
-                  {/* Doctor & Department */}
-                  <td className="p-4">
-                    <p className="text-sm text-foreground">{appointment.doctor}</p>
-                    <p className="text-xs text-muted-foreground">{appointment.department}</p>
-                  </td>
-                  
-                  {/* Reason */}
-                  <td className="p-4">
-                    <p className="text-sm text-muted-foreground">{appointment.reason || "—"}</p>
-                  </td>
-                  
-                  {/* Status */}
-                  <td className="p-4">
-                    <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
-                      {appointment.status}
-                    </Badge>
-                  </td>
-                  
-                  {/* Token */}
-                  <td className="p-4">
-                    {appointment.token ? (
-                      <div>
-                        <p className="text-sm font-mono font-medium text-foreground">{appointment.token}</p>
-                        <p className="text-xs text-muted-foreground">{appointment.tokenTime}</p>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">—</span>
-                    )}
-                  </td>
-                  
-                  {/* Actions */}
-                  <td className="p-4">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>View Notes</DropdownMenuItem>
-                        {appointment.status === "Scheduled" && (
-                          <DropdownMenuItem>Check In</DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="p-8 text-center">
-                  <p className="text-sm text-muted-foreground">No {title.toLowerCase()} appointments</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
 
   return (
     <div className="h-full overflow-auto py-4">
-      {renderAppointmentTable(upcomingAppointments, "Upcoming")}
-      {renderAppointmentTable(completedAppointments, "Completed")}
+      <div className="mb-6">
+        <div className="px-6 py-3">
+          <h3 className="text-[14px] font-semibold text-foreground">
+            Appointments
+          </h3>
+        </div>
+        
+        <div className="border rounded-lg overflow-hidden mx-6 mt-4 bg-white dark:bg-card">
+          <table className="w-full">
+            <thead className="bg-muted/30">
+              <tr>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Doctor</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Token</th>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white dark:bg-card">
+              {appointments.length > 0 ? (
+                appointments.map((appointment) => (
+                  <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
+                    {/* Visit ID */}
+                    <td className="p-4">
+                      <p className="text-sm font-mono font-medium text-foreground">{appointment.visitId}</p>
+                    </td>
+                    
+                    {/* Date & Time */}
+                    <td className="p-4">
+                      <p className="text-sm text-foreground">{appointment.time}</p>
+                      <p className="text-xs text-muted-foreground">{appointment.date}</p>
+                    </td>
+                    
+                    {/* Doctor & Department */}
+                    <td className="p-4">
+                      <p className="text-sm text-foreground">{appointment.doctor}</p>
+                      <p className="text-xs text-muted-foreground">{appointment.department}</p>
+                    </td>
+                    
+                    {/* Reason */}
+                    <td className="p-4">
+                      <p className="text-sm text-muted-foreground">{appointment.reason || "—"}</p>
+                    </td>
+                    
+                    {/* Status */}
+                    <td className="p-4">
+                      <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
+                        {appointment.status}
+                      </Badge>
+                    </td>
+                    
+                    {/* Token */}
+                    <td className="p-4">
+                      {appointment.token ? (
+                        <div>
+                          <p className="text-sm font-mono font-medium text-foreground">{appointment.token}</p>
+                          <p className="text-xs text-muted-foreground">{appointment.tokenTime}</p>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    
+                    {/* Actions */}
+                    <td className="p-4">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>View Details</DropdownMenuItem>
+                          <DropdownMenuItem>View Notes</DropdownMenuItem>
+                          {appointment.status === "Scheduled" && (
+                            <DropdownMenuItem>Check In</DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center">
+                    <p className="text-sm text-muted-foreground">No appointments</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
