@@ -97,6 +97,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
         <table className="w-full">
           <thead className="bg-muted/30">
             <tr>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Bill No</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
@@ -110,6 +111,9 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
           <tbody className="bg-white dark:bg-card">
             {visitInvoices.map((invoice) => (
               <tr key={invoice.id} className="border-t hover:bg-muted/20 transition-colors">
+                <td className="p-4">
+                  <p className="text-sm font-mono font-medium text-foreground">{invoice.visitId}</p>
+                </td>
                 <td className="p-4 text-sm font-medium">{invoice.id}</td>
                 <td className="p-4 text-sm">{invoice.date}</td>
                 <td className="p-4 text-sm">{invoice.service}</td>

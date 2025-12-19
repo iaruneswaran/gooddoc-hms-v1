@@ -107,6 +107,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="text-xs font-medium">Visit ID</TableHead>
               <TableHead className="text-xs font-medium">Date & Time</TableHead>
               <TableHead className="text-xs font-medium">From</TableHead>
               <TableHead className="text-xs font-medium">To</TableHead>
@@ -118,6 +119,9 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
           <TableBody>
             {visitTransfers.map((transfer) => (
               <TableRow key={transfer.id} className="hover:bg-muted/30">
+                <TableCell className="py-3">
+                  <p className="text-sm font-mono font-medium text-foreground">{transfer.visitId}</p>
+                </TableCell>
                 <TableCell className="py-3">
                   <div className="text-sm font-medium text-foreground">
                     {format(new Date(transfer.transferDate), "dd MMM yyyy")}

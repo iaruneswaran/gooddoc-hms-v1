@@ -105,6 +105,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
         <table className="w-full">
           <thead className="bg-muted/30">
             <tr>
+              <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Name</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
@@ -116,6 +117,9 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
           <tbody className="bg-white dark:bg-card">
             {visitDocuments.map((doc) => (
               <tr key={doc.id} className="border-t">
+                <td className="p-4">
+                  <p className="text-sm font-mono font-medium text-foreground">{doc.visitId}</p>
+                </td>
                 <td className="p-4 text-sm">
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 text-red-500" />

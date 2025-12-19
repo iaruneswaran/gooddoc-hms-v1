@@ -79,6 +79,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
+                <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Claim No</th>
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
                 <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
@@ -91,6 +92,9 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
             <tbody className="bg-white dark:bg-card">
               {visitClaims.map((claim) => (
                 <tr key={claim.id} className="border-t">
+                  <td className="p-4">
+                    <p className="text-sm font-mono font-medium text-foreground">{claim.visitId}</p>
+                  </td>
                   <td className="p-4 text-sm">{claim.id}</td>
                   <td className="p-4 text-sm">{claim.date}</td>
                   <td className="p-4 text-sm">{claim.service}</td>
