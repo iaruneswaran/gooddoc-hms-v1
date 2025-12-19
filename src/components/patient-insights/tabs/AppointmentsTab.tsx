@@ -110,9 +110,9 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
   const appointments = getPatientAppointments(patient.gdid);
 
   return (
-    <div className="h-full overflow-auto py-4">
+    <div className="h-full overflow-auto">
       <div className="mb-6">
-        <div className="px-6 py-3">
+        <div className="px-6 pt-6">
           <h3 className="text-[14px] font-semibold text-foreground">
             Appointments
           </h3>
@@ -122,13 +122,13 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Doctor</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Token</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Visit ID</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date & Time</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Reason</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
@@ -136,36 +136,36 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 appointments.map((appointment) => (
                   <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
                     {/* Visit ID */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <p className="text-sm font-mono font-medium text-foreground">{appointment.visitId}</p>
                     </td>
                     
                     {/* Date & Time */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <p className="text-sm text-foreground">{appointment.time}</p>
                       <p className="text-xs text-muted-foreground">{appointment.date}</p>
                     </td>
                     
                     {/* Doctor & Department */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <p className="text-sm text-foreground">{appointment.doctor}</p>
                       <p className="text-xs text-muted-foreground">{appointment.department}</p>
                     </td>
                     
                     {/* Reason */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <p className="text-sm text-muted-foreground">{appointment.reason || "—"}</p>
                     </td>
                     
                     {/* Status */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
                         {appointment.status}
                       </Badge>
                     </td>
                     
                     {/* Token */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       {appointment.token ? (
                         <div>
                           <p className="text-sm font-mono font-medium text-foreground">{appointment.token}</p>
@@ -177,7 +177,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                     </td>
                     
                     {/* Actions */}
-                    <td className="p-4">
+                    <td className="px-4 py-3">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8">
