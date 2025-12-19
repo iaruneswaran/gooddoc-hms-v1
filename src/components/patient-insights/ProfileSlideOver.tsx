@@ -155,8 +155,8 @@ export function ProfileSlideOver({ isOpen, onClose, patient, onEdit }: ProfileSl
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Street, Apartment</Label>
-                  <p className="text-sm font-medium text-foreground mt-1">{patient.address}</p>
+                  <Label className="text-xs text-muted-foreground">City</Label>
+                  <p className="text-sm font-medium text-foreground mt-1">{patient.city}</p>
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Pin code</Label>
@@ -170,14 +170,9 @@ export function ProfileSlideOver({ isOpen, onClose, patient, onEdit }: ProfileSl
                   <p className="text-sm font-medium text-foreground mt-1">{patient.state}</p>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">City</Label>
-                  <p className="text-sm font-medium text-foreground mt-1">{patient.city}</p>
+                  <Label className="text-xs text-muted-foreground">Country</Label>
+                  <p className="text-sm font-medium text-foreground mt-1">{patient.country}</p>
                 </div>
-              </div>
-
-              <div>
-                <Label className="text-xs text-muted-foreground">Country</Label>
-                <p className="text-sm font-medium text-foreground mt-1">{patient.country}</p>
               </div>
             </div>
           </Card>

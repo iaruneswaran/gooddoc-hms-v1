@@ -230,11 +230,11 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm text-foreground">Street, Apartment</Label>
+                  <Label className="text-sm text-foreground">City</Label>
                   <Input
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    placeholder="Anna Nagar"
+                    value={formData.city || ""}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    placeholder="Chennai"
                     className="mt-2"
                   />
                 </div>
@@ -251,15 +251,6 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm text-foreground">City</Label>
-                  <Input
-                    value={formData.city || ""}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    placeholder="Chennai"
-                    className="mt-2"
-                  />
-                </div>
-                <div>
                   <Label className="text-sm text-foreground">State</Label>
                   <Input
                     value={formData.state || ""}
@@ -268,16 +259,15 @@ export function EditPatientModal({ open, onOpenChange, patient, onSave }: EditPa
                     className="mt-2"
                   />
                 </div>
-              </div>
-
-              <div>
-                <Label className="text-sm text-foreground">Country</Label>
-                <Input
-                  value={formData.country || "India"}
-                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  placeholder="India"
-                  className="mt-2"
-                />
+                <div>
+                  <Label className="text-sm text-foreground">Country</Label>
+                  <Input
+                    value={formData.country || "India"}
+                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                    placeholder="India"
+                    className="mt-2"
+                  />
+                </div>
               </div>
             </div>
           </Card>
