@@ -96,9 +96,6 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
     <div className="px-6 py-4">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-foreground">Transfer History</h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Complete patient transfer and movement records
-        </p>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
