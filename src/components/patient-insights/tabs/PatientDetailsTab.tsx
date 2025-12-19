@@ -87,52 +87,52 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <p className="text-sm text-foreground mt-1">{patient.title}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">ID</Label>
-                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
+                    <Label className="text-xs text-muted-foreground">First Name</Label>
+                    <p className="text-sm text-foreground mt-1">{firstName}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">First Name</Label>
-                    <p className="text-sm text-foreground mt-1">{firstName}</p>
-                  </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">Surname</Label>
                     <p className="text-sm text-foreground mt-1">{surname}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Gender</Label>
                     <p className="text-sm text-foreground mt-1">{patient.gender}</p>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Date of Birth</Label>
                     <p className="text-sm text-foreground mt-1">{patient.dob}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Age</Label>
                     <p className="text-sm text-foreground mt-1">{patient.age}</p>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Mobile Number</Label>
                     <p className="text-sm text-foreground mt-1">{patient.mobile}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Email</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.email}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Email</Label>
-                    <p className="text-sm text-foreground mt-1">{patient.email}</p>
-                  </div>
-                  <div>
                     <Label className="text-xs text-muted-foreground">Blood Group</Label>
                     <p className="text-sm text-foreground mt-1">{patient.bloodGroup}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">ID</Label>
+                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
                   </div>
                 </div>
               </>
@@ -228,23 +228,34 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                   </div>
                 </div>
 
-                <div>
-                  <Label className="text-sm text-foreground">Blood Group</Label>
-                  <Select defaultValue={patient.bloodGroup}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A+">A+</SelectItem>
-                      <SelectItem value="A−">A−</SelectItem>
-                      <SelectItem value="B+">B+</SelectItem>
-                      <SelectItem value="B−">B−</SelectItem>
-                      <SelectItem value="AB+">AB+</SelectItem>
-                      <SelectItem value="AB−">AB−</SelectItem>
-                      <SelectItem value="O+">O+</SelectItem>
-                      <SelectItem value="O−">O−</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm text-foreground">Blood Group</Label>
+                    <Select defaultValue={patient.bloodGroup}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="A+">A+</SelectItem>
+                        <SelectItem value="A−">A−</SelectItem>
+                        <SelectItem value="B+">B+</SelectItem>
+                        <SelectItem value="B−">B−</SelectItem>
+                        <SelectItem value="AB+">AB+</SelectItem>
+                        <SelectItem value="AB−">AB−</SelectItem>
+                        <SelectItem value="O+">O+</SelectItem>
+                        <SelectItem value="O−">O−</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-sm text-muted-foreground">ID</Label>
+                    <Input 
+                      value={`GDID - ${patient.gdid}`}
+                      disabled
+                      className="mt-2 bg-muted"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">ID cannot be edited</p>
+                  </div>
                 </div>
               </>
             )}
