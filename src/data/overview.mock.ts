@@ -152,10 +152,12 @@ export interface AppointmentRequestRecord {
   ageSex: string;
   contact: string;
   email: string;
-  preferredDateTime: string;
+  preferredDate: string;
+  preferredTime: string;
   department: string;
   preferredProvider?: string;
   reason: string;
+  visitType: "OP" | "IP" | "Emergency" | "Follow-up";
   urgency: "Low" | "Med" | "High";
   source: "Call" | "Portal" | "Walk-in" | "Referral";
   insuranceVerified: boolean;
@@ -629,16 +631,19 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const patientName = generateName(index + 400);
   const emailName = patientName.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z.]/g, '');
   const ageSex = generateAgeSex(index + 400);
+  const visitTypes = ["OP", "IP", "Emergency", "Follow-up"] as const;
   return {
     requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: patientName,
     ageSex,
     contact: generatePhone(),
     email: `${emailName}@email.com`,
-    preferredDateTime: formatDateTime(preferredDate),
+    preferredDate: format(preferredDate, "dd MMM yyyy"),
+    preferredTime: format(preferredDate, "hh:mm a"),
     department: departments[index % departments.length],
     preferredProvider: Math.random() > 0.3 ? doctors[index % doctors.length] : undefined,
     reason: visitReasons[index % visitReasons.length],
+    visitType: visitTypes[index % visitTypes.length],
     urgency: (["Low", "Med", "High"] as const)[index % 3],
     source: (["Call", "Portal", "Walk-in", "Referral"] as const)[index % 4],
     insuranceVerified: Math.random() > 0.3,
