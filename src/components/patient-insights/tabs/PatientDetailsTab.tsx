@@ -63,25 +63,6 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
         </div>
         
         <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
-          {/* Edit Button */}
-          <div className="flex justify-end mb-4">
-            {!isEditing && (
-              <Button onClick={handleEdit} variant="outline" size="sm">
-                Edit
-              </Button>
-            )}
-            {isEditing && (
-              <div className="flex gap-2">
-                <Button onClick={handleCancel} variant="outline" size="sm">
-                  Cancel
-                </Button>
-                <Button onClick={handleSave} size="sm">
-                  Save
-                </Button>
-              </div>
-            )}
-          </div>
-
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
@@ -91,9 +72,14 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <Label className="text-xs text-muted-foreground">Title</Label>
                     <p className="text-sm text-foreground mt-1">{patient.title}</p>
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">ID</Label>
-                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">ID</Label>
+                      <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
+                    </div>
+                    <Button onClick={handleEdit} variant="outline" size="sm">
+                      Edit
+                    </Button>
                   </div>
                 </div>
 
@@ -144,6 +130,16 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
             ) : (
               // Edit Mode
               <>
+                <div className="flex justify-end mb-4">
+                  <div className="flex gap-2">
+                    <Button onClick={handleCancel} variant="outline" size="sm">
+                      Cancel
+                    </Button>
+                    <Button onClick={handleSave} size="sm">
+                      Save
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm text-foreground">Title</Label>
