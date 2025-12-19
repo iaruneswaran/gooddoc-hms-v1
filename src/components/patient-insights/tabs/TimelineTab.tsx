@@ -93,7 +93,7 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
   };
 
   return (
-    <div className="px-6 py-4">
+    <div className="px-6 pt-6 pb-4">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-foreground">Transfer History</h3>
       </div>
