@@ -108,9 +108,70 @@ function getStatusBadgeVariant(status: string) {
 
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
   const appointments = getPatientAppointments(patient.gdid);
+  const activeAppointment = appointments.find(apt => apt.status === "Scheduled");
+  const pastAppointments = appointments.filter(apt => apt.status !== "Scheduled");
 
   return (
     <div className="h-full overflow-auto">
+      {/* Active Appointment Section */}
+      {activeAppointment && (
+        <div className="mb-6">
+          <div className="px-6 pt-6">
+            <h3 className="text-[14px] font-semibold text-foreground">
+              Active Appointment
+            </h3>
+          </div>
+          
+          <div className="border rounded-lg overflow-hidden mx-6 mt-4 bg-white dark:bg-card">
+            <table className="w-full">
+              <thead className="bg-muted/30">
+                <tr>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Visit ID</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Department</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Reason</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
+                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-card">
+                <tr className="border-t hover:bg-muted/20 transition-colors">
+                  <td className="px-4 py-3">
+                    <p className="text-sm font-mono font-medium text-foreground">{activeAppointment.visitId}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-foreground">{activeAppointment.time}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-foreground">{activeAppointment.date}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-foreground">{activeAppointment.doctor}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-foreground">{activeAppointment.department}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-muted-foreground">{activeAppointment.reason || "—"}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge className={getStatusBadgeVariant(activeAppointment.status)} variant="secondary">
+                      {activeAppointment.status}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm text-muted-foreground">—</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Past Appointments Section */}
       <div className="mb-6">
         <div className="px-6 pt-6">
           <h3 className="text-[14px] font-semibold text-foreground">
@@ -132,8 +193,8 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
-              {appointments.length > 0 ? (
-                appointments.map((appointment) => (
+              {pastAppointments.length > 0 ? (
+                pastAppointments.map((appointment) => (
                   <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
                     {/* Visit ID */}
                     <td className="px-4 py-3">
