@@ -8,13 +8,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { Visit } from "../VisitListItem";
 
 interface TimelineTabProps {
-  patientId?: string;
+  selectedVisit?: Visit | null;
 }
 
 interface TransferHistoryItem {
   id: string;
+  visitId: string;
   transferDate: string;
   transferTime: string;
   fromLocation: string;
@@ -26,58 +28,51 @@ interface TransferHistoryItem {
   status: "Completed" | "In Progress" | "Cancelled";
 }
 
-export function TimelineTab({ patientId }: TimelineTabProps) {
-  // Mock transfer history data
-  const transferHistory: TransferHistoryItem[] = [
-    {
-      id: "t1",
-      transferDate: "2025-11-01",
-      transferTime: "09:32",
-      fromLocation: "Emergency Room",
-      fromBed: "ER-05",
-      toLocation: "Ward 3B",
-      toBed: "3B-102",
-      reason: "Admission for observation",
-      authorizedBy: "Dr. Priya Sharma",
-      status: "Completed",
-    },
-    {
-      id: "t2",
-      transferDate: "2025-11-03",
-      transferTime: "14:00",
-      fromLocation: "Ward 3B",
-      fromBed: "3B-102",
-      toLocation: "ICU",
-      toBed: "ICU-08",
-      reason: "Critical condition - respiratory distress",
-      authorizedBy: "Dr. Rajesh Kumar",
-      status: "Completed",
-    },
-    {
-      id: "t3",
-      transferDate: "2025-11-05",
-      transferTime: "10:30",
-      fromLocation: "ICU",
-      fromBed: "ICU-08",
-      toLocation: "Ward 2A",
-      toBed: "2A-215",
-      reason: "Condition stabilized",
-      authorizedBy: "Dr. Priya Sharma",
-      status: "Completed",
-    },
-    {
-      id: "t4",
-      transferDate: "2025-11-07",
-      transferTime: "11:00",
-      fromLocation: "Ward 2A",
-      fromBed: "2A-215",
-      toLocation: "Discharge",
-      toBed: "-",
-      reason: "Recovery complete",
-      authorizedBy: "Dr. Anjali Mehta",
-      status: "Completed",
-    },
-  ];
+// Mock transfer history data with visitId
+const allTransferHistory: TransferHistoryItem[] = [
+  {
+    id: "t1",
+    visitId: "V25-004",
+    transferDate: "2025-08-07",
+    transferTime: "11:00",
+    fromLocation: "Emergency Room",
+    fromBed: "ER-05",
+    toLocation: "Ward 3B",
+    toBed: "3B-102",
+    reason: "Admission for observation",
+    authorizedBy: "Dr. Karthik Reddy",
+    status: "Completed",
+  },
+  {
+    id: "t2",
+    visitId: "V25-004",
+    transferDate: "2025-08-08",
+    transferTime: "14:00",
+    fromLocation: "Ward 3B",
+    fromBed: "3B-102",
+    toLocation: "Private Room",
+    toBed: "PR-204",
+    reason: "Patient requested private room",
+    authorizedBy: "Dr. Karthik Reddy",
+    status: "Completed",
+  },
+];
+
+export function TimelineTab({ selectedVisit }: TimelineTabProps) {
+  if (!selectedVisit) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          Select a visit to view transfer history.
+        </p>
+      </div>
+    );
+  }
+
+  // Filter transfers for selected visit
+  const visitTransfers = allTransferHistory.filter(
+    (transfer) => transfer.visitId === selectedVisit.visitId
+  );
 
   const getStatusVariant = (status: string) => {
     switch (status) {
@@ -91,6 +86,16 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
         return "outline";
     }
   };
+
+  if (visitTransfers.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          No transfer history found for this visit.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="px-6 pt-6 pb-4">
@@ -111,7 +116,7 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transferHistory.map((transfer) => (
+            {visitTransfers.map((transfer) => (
               <TableRow key={transfer.id} className="hover:bg-muted/30">
                 <TableCell className="py-3">
                   <div className="text-sm font-medium text-foreground">

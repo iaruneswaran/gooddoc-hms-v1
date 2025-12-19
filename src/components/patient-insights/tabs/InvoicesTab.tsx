@@ -10,6 +10,7 @@ interface InvoicesTabProps {
 interface Invoice {
   id: string;
   date: string;
+  visitId: string;
   service: string;
   totalAmount: number;
   partiallyPaid: number;
@@ -17,11 +18,12 @@ interface Invoice {
   status: "Paid" | "Partially Paid" | "Pending";
 }
 
-// Mock invoices data
+// Mock invoices data with visitId
 const mockInvoices: Invoice[] = [
   {
     id: "INV-2024-001",
-    date: "2024-01-15",
+    date: "05 Aug 2025",
+    visitId: "V25-001",
     service: "General Consultation",
     totalAmount: 150000,
     partiallyPaid: 50000,
@@ -30,7 +32,8 @@ const mockInvoices: Invoice[] = [
   },
   {
     id: "INV-2024-002",
-    date: "2024-01-10",
+    date: "05 Aug 2025",
+    visitId: "V25-002",
     service: "Blood Test - CBC",
     totalAmount: 80000,
     partiallyPaid: 80000,
@@ -39,16 +42,52 @@ const mockInvoices: Invoice[] = [
   },
   {
     id: "INV-2024-003",
-    date: "2024-01-05",
+    date: "05 Aug 2025",
+    visitId: "V25-003",
     service: "X-Ray Chest",
     totalAmount: 120000,
     partiallyPaid: 0,
     balance: 120000,
     status: "Pending",
   },
+  {
+    id: "INV-2024-004",
+    date: "07 Aug 2025",
+    visitId: "V25-004",
+    service: "IPD Admission - Room Charges",
+    totalAmount: 580000,
+    partiallyPaid: 200000,
+    balance: 380000,
+    status: "Partially Paid",
+  },
 ];
 
 export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
+  if (!selectedVisit) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          Select a visit to view bills.
+        </p>
+      </div>
+    );
+  }
+
+  // Filter invoices for selected visit
+  const visitInvoices = mockInvoices.filter(
+    (invoice) => invoice.visitId === selectedVisit.visitId
+  );
+
+  if (visitInvoices.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          No bills found for this visit.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
@@ -69,7 +108,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-card">
-            {mockInvoices.map((invoice) => (
+            {visitInvoices.map((invoice) => (
               <tr key={invoice.id} className="border-t hover:bg-muted/20 transition-colors">
                 <td className="p-4 text-sm font-medium">{invoice.id}</td>
                 <td className="p-4 text-sm">{invoice.date}</td>

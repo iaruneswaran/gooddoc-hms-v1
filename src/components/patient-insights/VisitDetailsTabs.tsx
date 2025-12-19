@@ -91,7 +91,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
           </TabsContent>
 
           <TabsContent value="timeline" className="mt-0 h-full">
-            <TimelineTab />
+            <TimelineTab selectedVisit={selectedVisit} />
           </TabsContent>
 
           <TabsContent value="invoices" className="mt-0">
