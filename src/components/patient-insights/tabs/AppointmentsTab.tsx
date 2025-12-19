@@ -111,14 +111,14 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
 
   return (
     <div className="h-full overflow-auto py-4">
-    <div className="mb-6">
-        <div className="px-6 pt-6">
+      <div className="mb-6">
+        <div className="px-6 py-3">
           <h3 className="text-[14px] font-semibold text-foreground">
             Appointments
           </h3>
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card">
+        <div className="border rounded-lg overflow-hidden mx-6 mt-4 bg-white dark:bg-card">
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
