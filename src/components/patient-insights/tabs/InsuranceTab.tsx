@@ -7,28 +7,40 @@ interface InsuranceTabProps {
 
 const mockClaims = [
   {
-    id: "CLM-2025-789",
-    date: "15 Jun 2025",
+    id: "CLM-2025-001",
+    date: "05 Aug 2025",
+    visitId: "V25-001",
     service: "Consultation",
     billed: "3,000",
     paid: "1,500",
     status: "Paid",
   },
   {
-    id: "CLM-2025-790",
-    date: "20 May 2025",
+    id: "CLM-2025-002",
+    date: "05 Aug 2025",
+    visitId: "V25-002",
     service: "Laboratory",
     billed: "2,000",
     paid: "650",
     status: "Paid",
   },
   {
-    id: "CLM-2025-791",
-    date: "10 Apr 2025",
-    service: "Imaging",
+    id: "CLM-2025-003",
+    date: "05 Aug 2025",
+    visitId: "V25-003",
+    service: "Radiology",
     billed: "2,200",
     paid: "1,200",
     status: "In Review",
+  },
+  {
+    id: "CLM-2025-004",
+    date: "07 Aug 2025",
+    visitId: "V25-004",
+    service: "IPD Admission",
+    billed: "58,000",
+    paid: "0",
+    status: "Pending",
   },
 ];
 
@@ -38,6 +50,21 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
       <div className="p-8 text-center">
         <p className="text-sm text-muted-foreground">
           Select a visit to view insurance information.
+        </p>
+      </div>
+    );
+  }
+
+  // Filter claims for selected visit
+  const visitClaims = mockClaims.filter(
+    (claim) => claim.visitId === selectedVisit.visitId
+  );
+
+  if (visitClaims.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          No insurance claims found for this visit.
         </p>
       </div>
     );
@@ -62,7 +89,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
-              {mockClaims.map((claim) => (
+              {visitClaims.map((claim) => (
                 <tr key={claim.id} className="border-t">
                   <td className="p-4 text-sm">{claim.id}</td>
                   <td className="p-4 text-sm">{claim.date}</td>
@@ -74,7 +101,9 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                       className={`font-medium ${
                         claim.status === "Paid"
                           ? "text-green-600"
-                          : "text-orange-600"
+                          : claim.status === "In Review"
+                          ? "text-orange-600"
+                          : "text-amber-600"
                       }`}
                     >
                       {claim.status}

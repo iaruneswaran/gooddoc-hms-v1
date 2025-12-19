@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -8,14 +8,158 @@ import { Button } from "@/components/ui/button";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { KpiTile } from "@/components/patient-insights/KpiTile";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
+import { VisitSelector } from "@/components/patient-insights/VisitSelector";
+import { VisitProvider, useVisit, VisitOption } from "@/contexts/VisitContext";
 import { Visit } from "@/components/patient-insights/VisitListItem";
 
-const PatientInsights = () => {
+// Mock visits data
+const mockVisits: Visit[] = [
+  {
+    id: "visit-1",
+    visitId: "V25-001",
+    datetime: new Date(2025, 7, 5, 17, 30),
+    type: "Consultation",
+    status: "Completed",
+    location: "OPD Clinic 3",
+    doctor: "Dr. Meera Nair – Cardiology",
+    items: [
+      {
+        type: "Consultation",
+        datetime: "05 Aug 2025 | 05:30 PM",
+        doctor: "Dr. Meera Nair – Cardiology",
+        visitId: "V25-001",
+        provider: "Dr. Sarah Khan",
+        department: "Internal Medicine",
+        opdClinic: "OPD Clinic 3",
+        prescriptions: [
+          "Azithromycin 500 mg OD × 3 days",
+          "Paracetamol 500 mg Q6h PRN",
+          "Dextromethorphan syrup 10 mL HS × 5 days",
+          "Azithromycin 500 mg OD × 3 days",
+        ],
+        findings: "Patient presents with symptoms suggestive of upper respiratory tract infection. Mild throat congestion and cough noted, with low-grade fever. No signs of respiratory distress or chest involvement. Overall condition stable.",
+      },
+    ],
+  },
+  {
+    id: "visit-2",
+    visitId: "V25-002",
+    datetime: new Date(2025, 7, 5, 14, 15),
+    type: "Laboratory",
+    status: "Completed",
+    location: "Central Diagnostic Lab",
+    doctor: "Dr. Ravi Menon – Pathology",
+    items: [
+      {
+        type: "Laboratory",
+        datetime: "05 Aug 2025 | 02:15 PM",
+        doctor: "Dr. Ravi Menon – Pathology",
+        visitId: "V25-002",
+        provider: "Central Diagnostic Lab",
+        department: "Laboratory Services",
+        testsOrdered: [
+          "Complete Blood Count (CBC)",
+          "C-Reactive Protein (CRP)",
+        ],
+        findings: "Blood samples collected for infection markers. CRP levels slightly elevated, consistent with acute infection. WBC count within acceptable range.",
+      },
+    ],
+  },
+  {
+    id: "visit-3",
+    visitId: "V25-003",
+    datetime: new Date(2025, 7, 5, 15, 0),
+    type: "Radiology",
+    status: "Completed",
+    location: "Imaging Suite 2",
+    doctor: "Dr. Anjali Verma – Radiology",
+    items: [
+      {
+        type: "Radiology",
+        datetime: "05 Aug 2025 | 03:00 PM",
+        doctor: "Dr. Anjali Verma – Radiology",
+        visitId: "V25-003",
+        provider: "Imaging Suite 2",
+        department: "Radiology",
+        investigations: [
+          "Chest X-ray (PA View)",
+          "Ultrasound Abdomen",
+        ],
+        findings: "Chest X-ray shows clear lung fields with no evidence of consolidation. Ultrasound abdomen reveals mild fatty liver changes. No structural abnormalities detected. Reports shared with referring physician for correlation.",
+      },
+    ],
+  },
+  {
+    id: "visit-4",
+    visitId: "V25-004",
+    datetime: new Date(2025, 7, 7, 11, 0),
+    type: "IPD Admission",
+    status: "Active",
+    location: "Inpatient Wing A",
+    doctor: "Dr. Karthik Reddy – General Medicine",
+    emergencyContact: "+91 98765 12345",
+    items: [
+      {
+        type: "IPD Admission",
+        datetime: "07 Aug 2025 | 11:00 AM",
+        doctor: "Dr. Karthik Reddy – General Medicine",
+        admissionId: "V25-004",
+        admittingDiagnosis: "Acute Gastroenteritis",
+        roomType: "Private Room – 204",
+        provider: "Inpatient Wing A",
+        department: "General Medicine",
+        findings: "Patient admitted for IV fluid therapy and symptomatic management. Vital signs stable; mild dehydration noted on admission. Responding well to treatment. Daily monitoring of electrolytes and hydration status advised.",
+      },
+      {
+        type: "Laboratory",
+        datetime: "07 Aug 2025 | 01:00 PM",
+        doctor: "Dr. Ravi Menon – Pathology",
+        visitId: "V25-004",
+        provider: "Central Diagnostic Lab",
+        department: "Laboratory Services",
+        testsOrdered: [
+          "Electrolyte Panel",
+          "Kidney Function Test",
+        ],
+        findings: "Electrolyte levels monitored for IV therapy adjustment. Sodium and potassium levels within normal range.",
+      },
+      {
+        type: "Radiology",
+        datetime: "07 Aug 2025 | 02:30 PM",
+        doctor: "Dr. Anjali Verma – Radiology",
+        visitId: "V25-004",
+        provider: "Imaging Suite 2",
+        department: "Radiology",
+        investigations: [
+          "Abdominal Ultrasound",
+        ],
+        findings: "Ultrasound shows no signs of acute pathology. Bowel loops appear normal with no obstruction.",
+      },
+    ],
+  },
+];
+
+// Convert Visit to VisitOption for context
+function toVisitOption(visit: Visit): VisitOption {
+  return {
+    id: visit.id,
+    visitId: visit.visitId,
+    datetime: visit.datetime,
+    doctor: visit.doctor,
+    status: visit.status,
+    type: visit.type,
+    isActive: visit.status === "Active",
+  };
+}
+
+const PatientInsightsContent = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
+  
+  const { setVisits, selectedVisit: selectedVisitOption, setIsLoading } = useVisit();
 
   // Mapping for breadcrumb navigation based on source page
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
@@ -54,137 +198,21 @@ const PatientInsights = () => {
     balanceAmount: "3,400",
   };
 
-  // Transform mock data into visits format
-  const visits: Visit[] = [
-    {
-      id: "visit-1",
-      visitId: "V25-001",
-      datetime: new Date(2025, 7, 5, 17, 30), // Aug 05, 2025, 5:30 PM
-      type: "Consultation",
-      status: "Completed",
-      location: "OPD Clinic 3",
-      doctor: "Dr. Meera Nair – Cardiology",
-      items: [
-        {
-          type: "Consultation",
-          datetime: "05 Aug 2025 | 05:30 PM",
-          doctor: "Dr. Meera Nair – Cardiology",
-          visitId: "V25-001",
-          provider: "Dr. Sarah Khan",
-          department: "Internal Medicine",
-          opdClinic: "OPD Clinic 3",
-          prescriptions: [
-            "Azithromycin 500 mg OD × 3 days",
-            "Paracetamol 500 mg Q6h PRN",
-            "Dextromethorphan syrup 10 mL HS × 5 days",
-            "Azithromycin 500 mg OD × 3 days",
-          ],
-          findings: "Patient presents with symptoms suggestive of upper respiratory tract infection. Mild throat congestion and cough noted, with low-grade fever. No signs of respiratory distress or chest involvement. Overall condition stable.",
-        },
-      ],
-    },
-    {
-      id: "visit-2",
-      visitId: "V25-002",
-      datetime: new Date(2025, 7, 5, 14, 15), // Aug 05, 2025, 2:15 PM
-      type: "Laboratory",
-      status: "Completed",
-      location: "Central Diagnostic Lab",
-      doctor: "Dr. Ravi Menon – Pathology",
-      items: [
-        {
-          type: "Laboratory",
-          datetime: "05 Aug 2025 | 02:15 PM",
-          doctor: "Dr. Ravi Menon – Pathology",
-          visitId: "V25-002",
-          provider: "Central Diagnostic Lab",
-          department: "Laboratory Services",
-          testsOrdered: [
-            "Complete Blood Count (CBC)",
-            "C-Reactive Protein (CRP)",
-          ],
-          findings: "Blood samples collected for infection markers. CRP levels slightly elevated, consistent with acute infection. WBC count within acceptable range.",
-        },
-      ],
-    },
-    {
-      id: "visit-3",
-      visitId: "V25-003",
-      datetime: new Date(2025, 7, 5, 15, 0), // Aug 05, 2025, 3:00 PM
-      type: "Radiology",
-      status: "Completed",
-      location: "Imaging Suite 2",
-      doctor: "Dr. Anjali Verma – Radiology",
-      items: [
-        {
-          type: "Radiology",
-          datetime: "05 Aug 2025 | 03:00 PM",
-          doctor: "Dr. Anjali Verma – Radiology",
-          visitId: "V25-003",
-          provider: "Imaging Suite 2",
-          department: "Radiology",
-          investigations: [
-            "Chest X-ray (PA View)",
-            "Ultrasound Abdomen",
-          ],
-          findings: "Chest X-ray shows clear lung fields with no evidence of consolidation. Ultrasound abdomen reveals mild fatty liver changes. No structural abnormalities detected. Reports shared with referring physician for correlation.",
-        },
-      ],
-    },
-    {
-      id: "visit-4",
-      visitId: "V25-004",
-      datetime: new Date(2025, 7, 7, 11, 0), // Aug 07, 2025, 11:00 AM
-      type: "IPD Admission",
-      status: "Active",
-      location: "Inpatient Wing A",
-      doctor: "Dr. Karthik Reddy – General Medicine",
-      emergencyContact: "+91 98765 12345",
-      items: [
-        {
-          type: "IPD Admission",
-          datetime: "07 Aug 2025 | 11:00 AM",
-          doctor: "Dr. Karthik Reddy – General Medicine",
-          admissionId: "V25-004",
-          admittingDiagnosis: "Acute Gastroenteritis",
-          roomType: "Private Room – 204",
-          provider: "Inpatient Wing A",
-          department: "General Medicine",
-          findings: "Patient admitted for IV fluid therapy and symptomatic management. Vital signs stable; mild dehydration noted on admission. Responding well to treatment. Daily monitoring of electrolytes and hydration status advised.",
-        },
-        {
-          type: "Laboratory",
-          datetime: "07 Aug 2025 | 01:00 PM",
-          doctor: "Dr. Ravi Menon – Pathology",
-          visitId: "V25-004",
-          provider: "Central Diagnostic Lab",
-          department: "Laboratory Services",
-          testsOrdered: [
-            "Electrolyte Panel",
-            "Kidney Function Test",
-          ],
-          findings: "Electrolyte levels monitored for IV therapy adjustment. Sodium and potassium levels within normal range.",
-        },
-        {
-          type: "Radiology",
-          datetime: "07 Aug 2025 | 02:30 PM",
-          doctor: "Dr. Anjali Verma – Radiology",
-          visitId: "V25-004",
-          provider: "Imaging Suite 2",
-          department: "Radiology",
-          investigations: [
-            "Abdominal Ultrasound",
-          ],
-          findings: "Ultrasound shows no signs of acute pathology. Bowel loops appear normal with no obstruction.",
-        },
-      ],
-    },
-  ];
+  // Load visits into context on mount
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      const visitOptions = mockVisits.map(toVisitOption);
+      setVisits(visitOptions);
+      setIsLoading(false);
+    }, 100);
+  }, [setVisits, setIsLoading]);
 
-  // Sort visits by date (latest first) and select the latest by default
-  const sortedVisits = [...visits].sort((a, b) => b.datetime.getTime() - a.datetime.getTime());
-  const [selectedVisitId, setSelectedVisitId] = useState<string>(sortedVisits[0]?.id || "");
-  const selectedVisit = sortedVisits.find((v) => v.id === selectedVisitId) || null;
+  // Find the full visit object for the selected visit
+  const selectedVisit = selectedVisitOption 
+    ? mockVisits.find(v => v.visitId === selectedVisitOption.visitId) || null
+    : null;
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -263,6 +291,11 @@ const PatientInsights = () => {
                 <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
               </div>
             </div>
+
+            {/* Visit Selector Row */}
+            <div className="mt-4 pt-4 border-t border-border">
+              <VisitSelector />
+            </div>
           </div>
         </div>
 
@@ -277,6 +310,14 @@ const PatientInsights = () => {
         </main>
       </PageContent>
     </div>
+  );
+};
+
+const PatientInsights = () => {
+  return (
+    <VisitProvider>
+      <PatientInsightsContent />
+    </VisitProvider>
   );
 };
 
