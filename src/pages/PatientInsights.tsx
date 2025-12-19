@@ -230,8 +230,18 @@ const PatientInsightsContent = () => {
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
-            {/* Top Row: KPIs on right */}
-            <div className="flex justify-end mb-4">
+            {/* Top Row: Back Button + KPIs */}
+            <div className="flex items-start justify-between mb-4">
+              {/* Back Button */}
+              <button
+                onClick={() => navigate(currentBreadcrumb.path)}
+                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                <span className="font-semibold">{currentBreadcrumb.label}</span>
+              </button>
+
+              {/* Right: KPIs */}
               <div className="flex gap-3">
                 <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
                 <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
@@ -240,19 +250,16 @@ const PatientInsightsContent = () => {
               </div>
             </div>
 
-            {/* Back Button below cards */}
-            <button
-              onClick={() => navigate(currentBreadcrumb.path)}
-              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-4"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span className="font-semibold">{currentBreadcrumb.label}</span>
-            </button>
-
-            {/* Patient Row: Buttons on left, Patient Info, Visit Selector on right */}
+            {/* Middle Row: Patient Chip, Buttons, and Visit Selector */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {/* Buttons first */}
+              <div className="flex items-center gap-2">
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                />
+                
                 <div className="flex gap-2">
                   <Button 
                     size="sm"
@@ -284,14 +291,6 @@ const PatientInsightsContent = () => {
                     Payments
                   </Button>
                 </div>
-
-                {/* Patient Chip */}
-                <PatientChip
-                  name={patient.name}
-                  gdid={patient.gdid}
-                  age={patient.age}
-                  gender={patient.gender}
-                />
               </div>
 
               {/* Visit Selector */}
