@@ -230,16 +230,15 @@ const PatientInsightsContent = () => {
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="px-6 py-6">
-            {/* Top Row: Back Button + KPIs */}
+            {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between mb-4">
-              {/* Back Button */}
-              <button
-                onClick={() => navigate(currentBreadcrumb.path)}
-                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="font-semibold">{currentBreadcrumb.label}</span>
-              </button>
+              {/* Patient Info */}
+              <PatientChip
+                name={patient.name}
+                gdid={patient.gdid}
+                age={patient.age}
+                gender={patient.gender}
+              />
 
               {/* Right: KPIs */}
               <div className="flex gap-3">
@@ -250,49 +249,41 @@ const PatientInsightsContent = () => {
               </div>
             </div>
 
-            {/* Patient Info Row */}
+            {/* Action Buttons Row */}
             <div className="flex items-center justify-between mb-3">
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-              />
+              <div className="flex gap-2">
+                <Button 
+                  size="sm"
+                  onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
+                >
+                  Services
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
+                >
+                  Transfer
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
+                    state: { visitId: selectedVisit?.visitId }
+                  })}
+                >
+                  Discharge
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                >
+                  Payments
+                </Button>
+              </div>
               {/* Visit Selector */}
               <VisitSelector />
-            </div>
-
-            {/* Action Buttons Row */}
-            <div className="flex gap-2">
-              <Button 
-                size="sm"
-                onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
-              >
-                Services
-              </Button>
-              <Button 
-                variant="outline"
-                size="sm"
-                onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
-              >
-                Transfer
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
-                  state: { visitId: selectedVisit?.visitId }
-                })}
-              >
-                Discharge
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-              >
-                Payments
-              </Button>
             </div>
           </div>
         </div>
