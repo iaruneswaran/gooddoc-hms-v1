@@ -79,7 +79,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               value="timeline"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
-              Timeline
+              Transfer History
             </TabsTrigger>
           </TabsList>
         </div>
