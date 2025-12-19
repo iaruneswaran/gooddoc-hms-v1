@@ -98,7 +98,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
       </div>
 
       {/* Table */}
-      <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
+      <div className="border rounded-lg overflow-hidden bg-white dark:bg-card mt-4">
         <table className="w-full">
           <thead className="bg-muted/30">
             <tr>
