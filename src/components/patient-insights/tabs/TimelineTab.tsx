@@ -1,75 +1,159 @@
-import { useState } from "react";
-import { TimelineView } from "@/components/timeline/TimelineView";
-import { TimelineEvent } from "@/types/timeline";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 interface TimelineTabProps {
   patientId?: string;
 }
 
-export function TimelineTab({ patientId }: TimelineTabProps) {
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+interface TransferHistoryItem {
+  id: string;
+  transferDate: string;
+  transferTime: string;
+  fromLocation: string;
+  fromBed: string;
+  toLocation: string;
+  toBed: string;
+  reason: string;
+  authorizedBy: string;
+  status: "Completed" | "In Progress" | "Cancelled";
+}
 
-  // Mock timeline events
-  const events: TimelineEvent[] = [
+export function TimelineTab({ patientId }: TimelineTabProps) {
+  // Mock transfer history data
+  const transferHistory: TransferHistoryItem[] = [
     {
-      id: "e1",
-      date: "2025-11-01",
-      time: "09:32",
-      type: "Admission",
-      title: "ER → Ward 3B",
-      dept: "Admission",
+      id: "t1",
+      transferDate: "2025-11-01",
+      transferTime: "09:32",
+      fromLocation: "Emergency Room",
+      fromBed: "ER-05",
+      toLocation: "Ward 3B",
+      toBed: "3B-102",
+      reason: "Admission for observation",
+      authorizedBy: "Dr. Priya Sharma",
       status: "Completed",
     },
     {
-      id: "e2",
-      date: "2025-11-02",
-      time: "08:10",
-      type: "Laboratory",
-      title: "CBC + CMP",
-      dept: "Lab",
+      id: "t2",
+      transferDate: "2025-11-03",
+      transferTime: "14:00",
+      fromLocation: "Ward 3B",
+      fromBed: "3B-102",
+      toLocation: "ICU",
+      toBed: "ICU-08",
+      reason: "Critical condition - respiratory distress",
+      authorizedBy: "Dr. Rajesh Kumar",
       status: "Completed",
     },
     {
-      id: "e3",
-      date: "2025-11-02",
-      time: "14:15",
-      type: "Medication",
-      title: "Ceftriaxone 1 g IV",
-      dept: "Pharmacy",
+      id: "t3",
+      transferDate: "2025-11-05",
+      transferTime: "10:30",
+      fromLocation: "ICU",
+      fromBed: "ICU-08",
+      toLocation: "Ward 2A",
+      toBed: "2A-215",
+      reason: "Condition stabilized",
+      authorizedBy: "Dr. Priya Sharma",
       status: "Completed",
     },
     {
-      id: "e4",
-      date: "2025-11-03",
-      time: "10:00",
-      type: "Radiology",
-      title: "Chest X‑ray",
-      dept: "Radiology",
+      id: "t4",
+      transferDate: "2025-11-07",
+      transferTime: "11:00",
+      fromLocation: "Ward 2A",
+      fromBed: "2A-215",
+      toLocation: "Discharge",
+      toBed: "-",
+      reason: "Recovery complete",
+      authorizedBy: "Dr. Anjali Mehta",
       status: "Completed",
-    },
-    {
-      id: "e5",
-      date: "2025-11-04",
-      time: "16:00",
-      type: "Observation",
-      title: "Discharge planning meeting",
-      dept: "Ward 3B",
-      status: "Scheduled",
     },
   ];
 
-  const startDate = "2025-11-01";
-  const endDate = new Date().toISOString().split('T')[0];
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return "default";
+      case "In Progress":
+        return "secondary";
+      case "Cancelled":
+        return "destructive";
+      default:
+        return "outline";
+    }
+  };
 
   return (
-    <div className="h-[calc(100vh-320px)]">
-      <TimelineView
-        events={events}
-        startDate={startDate}
-        endDate={endDate}
-        activeFilters={activeFilters}
-        onFilterChange={setActiveFilters}
-      />
+    <div className="px-6 py-4">
+      <div className="mb-4">
+        <h3 className="text-sm font-semibold text-foreground">Transfer History</h3>
+        <p className="text-xs text-muted-foreground mt-1">
+          Complete patient transfer and movement records
+        </p>
+      </div>
+
+      <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="text-xs font-medium">Date & Time</TableHead>
+              <TableHead className="text-xs font-medium">From</TableHead>
+              <TableHead className="text-xs font-medium">To</TableHead>
+              <TableHead className="text-xs font-medium">Reason</TableHead>
+              <TableHead className="text-xs font-medium">Authorized By</TableHead>
+              <TableHead className="text-xs font-medium">Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {transferHistory.map((transfer) => (
+              <TableRow key={transfer.id} className="hover:bg-muted/30">
+                <TableCell className="py-3">
+                  <div className="text-sm font-medium text-foreground">
+                    {format(new Date(transfer.transferDate), "dd MMM yyyy")}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {transfer.transferTime}
+                  </div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="text-sm text-foreground">{transfer.fromLocation}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Bed: {transfer.fromBed}
+                  </div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="text-sm text-foreground">{transfer.toLocation}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Bed: {transfer.toBed}
+                  </div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <p className="text-sm text-foreground max-w-[200px] truncate" title={transfer.reason}>
+                    {transfer.reason}
+                  </p>
+                </TableCell>
+                <TableCell className="py-3">
+                  <span className="text-sm text-foreground">{transfer.authorizedBy}</span>
+                </TableCell>
+                <TableCell className="py-3">
+                  <Badge variant={getStatusVariant(transfer.status)} className="text-xs">
+                    {transfer.status}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
