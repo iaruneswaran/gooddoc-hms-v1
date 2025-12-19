@@ -119,9 +119,9 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
         </h3>
       </div>
       
-      <div className="border rounded-lg overflow-hidden mx-6 bg-background">
+      <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card">
         <table className="w-full">
-          <thead className="bg-muted/50">
+          <thead className="bg-muted/30">
             <tr>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
@@ -132,7 +132,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
               <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-background">
+          <tbody className="bg-white dark:bg-card">
             {appointmentList.length > 0 ? (
               appointmentList.map((appointment) => (
                 <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
