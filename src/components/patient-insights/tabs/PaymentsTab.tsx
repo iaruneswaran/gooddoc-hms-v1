@@ -87,7 +87,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-[14px] font-semibold text-foreground">Visit Transactions</h2>
