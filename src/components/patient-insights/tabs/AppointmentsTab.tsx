@@ -115,7 +115,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
     <div className="mb-6">
       <div className="px-6 py-3">
         <h3 className="text-[14px] font-semibold text-foreground">
-          {title} ({appointmentList.length})
+          {title}
         </h3>
       </div>
       
