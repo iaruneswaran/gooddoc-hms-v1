@@ -146,6 +146,7 @@ const AppointmentRequests = () => {
           <TableRow>
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
             <TableHead>Contact</TableHead>
+            <TableHead>Request ID</TableHead>
             <TableHead>Preferred Date</TableHead>
             <TableHead>Preferred Time</TableHead>
             <TableHead>Doctor</TableHead>
@@ -171,6 +172,7 @@ const AppointmentRequests = () => {
                   <span className="text-muted-foreground text-xs">{row.email}</span>
                 </div>
               </TableCell>
+              <TableCell className="font-medium">{row.requestId}</TableCell>
               <TableCell>{row.preferredDate}</TableCell>
               <TableCell>{row.preferredTime}</TableCell>
               <TableCell>{row.preferredProvider || "Any"}</TableCell>
