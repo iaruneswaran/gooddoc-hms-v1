@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 interface DynamicConsultationBookingFormProps {
   onRemove?: () => void;
   onUpdate: (data: DynamicConsultationData) => void;
+  initialData?: DynamicConsultationData;
 }
 
 export interface DynamicConsultationData {
@@ -45,14 +46,14 @@ const consultationTypes = [
   { id: "second_opinion", name: "Second Opinion", duration: 45 },
 ];
 
-export function DynamicConsultationBookingForm({ onRemove, onUpdate }: DynamicConsultationBookingFormProps) {
-  const [mode, setMode] = useState<ScheduleMode>("in_person");
-  const [consultationType, setConsultationType] = useState("first_visit");
-  const [department, setDepartment] = useState("");
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
-  const [clinicalInfo, setClinicalInfo] = useState("");
-  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [holdId, setHoldId] = useState<string | null>(null);
+export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData }: DynamicConsultationBookingFormProps) {
+  const [mode, setMode] = useState<ScheduleMode>(initialData?.mode || "in_person");
+  const [consultationType, setConsultationType] = useState(initialData?.type || "first_visit");
+  const [department, setDepartment] = useState(initialData?.department || "");
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(initialData?.doctorId || null);
+  const [clinicalInfo, setClinicalInfo] = useState(initialData?.clinicalInfo || "");
+  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(initialData?.selectedSlot || null);
+  const [holdId, setHoldId] = useState<string | null>(initialData?.holdId || null);
   const [doctorSummaries, setDoctorSummaries] = useState<DoctorAvailabilitySummary[]>([]);
 
   const { doctors, loading: dataLoading } = useSchedulingData();

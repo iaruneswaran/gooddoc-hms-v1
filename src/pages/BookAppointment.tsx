@@ -45,6 +45,10 @@ const BookAppointment = () => {
   const patientIdFromQuery = searchParams.get("patientId");
   const isSingleAppointmentMode = !!appointmentId && !!appointmentType;
   
+  // Get request data from navigation state (from ScheduledToday page)
+  const requestData = location.state?.requestData;
+  const isFromScheduledRequests = !!requestData;
+  
   const fromPatientInsights = location.state?.fromPatientInsights;
   const patientId = location.state?.patientId || patientIdFromQuery;
   const visitId = location.state?.visitId; // Visit ID for new appointments
@@ -70,9 +74,77 @@ const BookAppointment = () => {
     netPayable: 0,
   });
 
-  // Initialize with appointment type if in single-appointment mode
+  // Initialize with request data from ScheduledToday page
   useEffect(() => {
-    if (isSingleAppointmentMode && appointmentType) {
+    if (isFromScheduledRequests && requestData) {
+      if (requestData.type === 'outpatient') {
+        setSelectedTypes(['consultation']);
+        
+        // Map visit type to consultation type
+        const consultationTypeMap: Record<string, string> = {
+          'First Visit': 'first_visit',
+          'Follow-up': 'follow_up',
+          'Follow up': 'follow_up',
+        };
+        
+        // Map department name to ID
+        const departmentMap: Record<string, string> = {
+          'Cardiology': 'cardiology',
+          'Orthopedics': 'orthopedics',
+          'Endocrinology': 'endocrinology',
+          'Neurology': 'neurology',
+          'Pediatrics': 'pediatrics',
+          'General Medicine': 'general_medicine',
+          'ENT': 'ent',
+          'Gastroenterology': 'gastroenterology',
+        };
+        
+        setConsultationData({
+          mode: "in_person",
+          type: consultationTypeMap[requestData.visitType] || "first_visit",
+          department: departmentMap[requestData.department] || "",
+          doctorId: null,
+          doctorName: requestData.preferredDoctor || "Any available doctor",
+          clinicalInfo: "",
+          selectedSlot: null,
+          holdId: null,
+        });
+      } else if (requestData.type === 'laboratory') {
+        setSelectedTypes(['laboratory']);
+        
+        // Find the test based on testType code
+        const testCodeToTest: Record<string, { id: string; name: string; category: string; price: number }> = {
+          'CBC001': { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
+          'LIP001': { id: "2", name: "Lipid Profile", category: "Biochemistry", price: 300 },
+          'LFT001': { id: "3", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
+          'KFT001': { id: "4", name: "Kidney Function Test (KFT)", category: "Biochemistry", price: 350 },
+          'THY001': { id: "5", name: "Thyroid Profile", category: "Endocrinology", price: 450 },
+          'HBA001': { id: "6", name: "HbA1c", category: "Diabetes", price: 350 },
+          'URI001': { id: "7", name: "Urinalysis", category: "Urology", price: 150 },
+          'VIT001': { id: "8", name: "Vitamin D", category: "Biochemistry", price: 600 },
+          'VIT002': { id: "9", name: "Vitamin B12", category: "Biochemistry", price: 500 },
+          'IRO001': { id: "10", name: "Iron Studies", category: "Hematology", price: 400 },
+        };
+        
+        const selectedTest = testCodeToTest[requestData.testType];
+        
+        setLaboratoryData({
+          mode: "laboratory",
+          selectedTests: selectedTest ? [selectedTest] : [],
+          selectedPackages: [],
+          selectedRadiologyTests: [],
+          laboratoryDate: new Date(),
+          laboratoryTime: "",
+          radiologyDate: new Date(),
+          radiologyTime: "",
+        });
+      }
+    }
+  }, [isFromScheduledRequests, requestData]);
+
+  // Initialize with appointment type if in single-appointment mode (from Inbox)
+  useEffect(() => {
+    if (isSingleAppointmentMode && appointmentType && !isFromScheduledRequests) {
       const validType = appointmentType === "consultation" ? "consultation" : "laboratory";
       setSelectedTypes([validType]);
       
@@ -101,7 +173,7 @@ const BookAppointment = () => {
         });
       }
     }
-  }, [isSingleAppointmentMode, appointmentType]);
+  }, [isSingleAppointmentMode, appointmentType, isFromScheduledRequests]);
 
   // Sync line items with selected services
   useEffect(() => {
@@ -553,6 +625,7 @@ const BookAppointment = () => {
                               key="consultation"
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveConsultation}
                               onUpdate={handleConsultationUpdate}
+                              initialData={consultationData}
                             />
                           );
                         }
@@ -580,8 +653,12 @@ const BookAppointment = () => {
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted-foreground mb-1.5">Patient</p>
-                    <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">GDID - 009 • 35 | M</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {requestData?.patient || "Siva Karthikeyan"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      GDID - {requestData?.gdid || "009"} • {requestData?.ageSex || "35 | M"}
+                    </p>
                   </div>
 
                   {visitId && (
