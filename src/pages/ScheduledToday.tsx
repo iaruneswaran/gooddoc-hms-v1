@@ -57,15 +57,15 @@ interface LaboratoryRecord {
 
 const laboratoryData: LaboratoryRecord[] = [
   { id: "LAB001", orderId: "ORD001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", contact: "9876543210", email: "ravi.sharma@email.com", testType: "CBC001", orderedBy: "Dr. Rajesh Kumar", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
-  { id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", contact: "9876543211", email: "priya.menon@email.com", testType: "LIP001", orderedBy: "Dr. Meera Nair", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient" },
+  { id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", contact: "9876543211", email: "priya.menon@email.com", testType: "LIP001", orderedBy: "Priya Menon", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient" },
   { id: "LAB003", orderId: "ORD003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", contact: "9876543212", email: "anil.kapoor@email.com", testType: "LFT001", orderedBy: "Dr. Anita Singh", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:30 AM", visitType: "Home" },
-  { id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", contact: "9876543213", email: "sunita.rao@email.com", testType: "KFT001", orderedBy: "Dr. Sunil Reddy", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient" },
+  { id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", contact: "9876543213", email: "sunita.rao@email.com", testType: "KFT001", orderedBy: "Sunita Rao", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient" },
   { id: "LAB005", orderId: "ORD005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", contact: "9876543214", email: "mohan.iyer@email.com", testType: "THY001", orderedBy: "Dr. Prakash Shah", department: "Endocrinology", preferredDate: "21 Dec 2025", preferredTime: "11:30 AM", visitType: "Home" },
-  { id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", contact: "9876543215", email: "kavitha.nair@email.com", testType: "HBA001", orderedBy: "Dr. Priya Menon", department: "Diabetes", preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home" },
+  { id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", contact: "9876543215", email: "kavitha.nair@email.com", testType: "HBA001", orderedBy: "Kavitha Nair", department: "Diabetes", preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home" },
   { id: "LAB007", orderId: "ORD007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", contact: "9876543216", email: "vikram.singh@email.com", testType: "URI001", orderedBy: "Dr. Arun Bhat", department: "Urology", preferredDate: "21 Dec 2025", preferredTime: "02:30 PM", visitType: "In-patient" },
-  { id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", contact: "9876543217", email: "deepa.k@email.com", testType: "VIT001", orderedBy: "Dr. Sunita Rao", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient" },
+  { id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", contact: "9876543217", email: "deepa.k@email.com", testType: "VIT001", orderedBy: "Deepa Krishnan", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient" },
   { id: "LAB009", orderId: "ORD009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", contact: "9876543218", email: "raj.prasad@email.com", testType: "VIT002", orderedBy: "Dr. Meera Nair", department: "Biochemistry", preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", visitType: "Home" },
-  { id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", contact: "9876543219", email: "lakshmi.d@email.com", testType: "IRO001", orderedBy: "Dr. Rajesh Kumar", department: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
+  { id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", contact: "9876543219", email: "lakshmi.d@email.com", testType: "IRO001", orderedBy: "Lakshmi Devi", department: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
 ];
 
 // Mock data for Scheduled tab - combined outpatient and laboratory scheduled appointments
@@ -151,7 +151,7 @@ const AppointmentRequests = () => {
             <TableHead>Request ID</TableHead>
             <TableHead>Preferred Date</TableHead>
             <TableHead>Preferred Time</TableHead>
-            <TableHead>Doctor</TableHead>
+            <TableHead>Preferred Doctor</TableHead>
             <TableHead>Department</TableHead>
             <TableHead>Visit Type</TableHead>
             <TableHead style={{ width: "140px" }}></TableHead>
@@ -229,7 +229,6 @@ const AppointmentRequests = () => {
           <TableHead>Order ID</TableHead>
           <TableHead>Test Type</TableHead>
           <TableHead>Ordered By</TableHead>
-          <TableHead>Department</TableHead>
           <TableHead>Preferred Date</TableHead>
           <TableHead>Preferred Time</TableHead>
           <TableHead>Visit Type</TableHead>
@@ -252,7 +251,6 @@ const AppointmentRequests = () => {
             <TableCell className="font-medium">{row.orderId}</TableCell>
             <TableCell>{row.testType}</TableCell>
             <TableCell>{row.orderedBy}</TableCell>
-            <TableCell>{row.department}</TableCell>
             <TableCell>{row.preferredDate}</TableCell>
             <TableCell>{row.preferredTime}</TableCell>
             <TableCell>
