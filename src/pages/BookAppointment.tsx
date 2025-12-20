@@ -611,7 +611,7 @@ const BookAppointment = () => {
                         if (type === "laboratory" && laboratoryData) {
                           return (
                             <LaboratoryBookingForm
-                              key="laboratory"
+                              key={`laboratory-${requestData?.orderId || 'default'}`}
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
                               initialData={laboratoryData}
@@ -622,7 +622,7 @@ const BookAppointment = () => {
                         if (type === "consultation" && consultationData) {
                           return (
                             <DynamicConsultationBookingForm
-                              key="consultation"
+                              key={`consultation-${requestData?.requestId || 'default'}`}
                               onRemove={isSingleAppointmentMode ? undefined : handleRemoveConsultation}
                               onUpdate={handleConsultationUpdate}
                               initialData={consultationData}
