@@ -623,15 +623,6 @@ export const transfers: TransferRecord[] = Array.from({ length: 10 }, (_, i) => 
 
 // ============== APPOINTMENT REQUESTS ==============
 
-function generateAlphanumericId(index: number, prefix: string): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const num1 = chars[index % chars.length];
-  const num2 = chars[(index * 7) % chars.length];
-  const num3 = chars[(index * 13) % chars.length];
-  const num4 = chars[(index * 17) % chars.length];
-  return `${prefix}${num1}${num2}${num3}${num4}`;
-}
-
 function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const createdDate = subHours(now, Math.floor(Math.random() * 8));
   const preferredDate = addDays(now, 1 + Math.floor(Math.random() * 7));
@@ -642,7 +633,7 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const ageSex = generateAgeSex(index + 400);
   const visitTypes = ["OP", "IP", "Emergency", "Follow-up"] as const;
   return {
-    requestId: generateAlphanumericId(index, "OP"),
+    requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: patientName,
     ageSex,
     contact: generatePhone(),
