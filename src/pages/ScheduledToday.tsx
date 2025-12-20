@@ -233,13 +233,11 @@ const AppointmentRequests = () => {
           <TableRow>
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
             <TableHead>Contact</TableHead>
-            <TableHead>Test Name</TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead>Order ID</TableHead>
+            <TableHead>Test Type / Code</TableHead>
             <TableHead>Preferred Date</TableHead>
             <TableHead>Preferred Time</TableHead>
             <TableHead>Referred By</TableHead>
-            <TableHead>Priority</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead style={{ width: "140px" }}></TableHead>
             <TableHead style={{ width: "80px" }}>Actions</TableHead>
           </TableRow>
@@ -260,26 +258,16 @@ const AppointmentRequests = () => {
                   <span className="text-muted-foreground text-xs">{row.email}</span>
                 </div>
               </TableCell>
+              <TableCell className="font-medium">{row.requestId}</TableCell>
               <TableCell>
                 <div className="flex flex-col">
-                  <span className="font-medium">{row.testName}</span>
+                  <span>{row.testName}</span>
                   <span className="text-muted-foreground text-xs">{row.testCode}</span>
                 </div>
               </TableCell>
-              <TableCell>{row.category}</TableCell>
               <TableCell>{row.preferredDate}</TableCell>
               <TableCell>{row.preferredTime}</TableCell>
               <TableCell>{row.referredBy}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getPriorityBadgeStyle(row.priority)}>
-                  {row.priority}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getLabStatusBadgeStyle(row.status)}>
-                  {row.status}
-                </Badge>
-              </TableCell>
               <TableCell>
                 <Button 
                   size="sm" 
