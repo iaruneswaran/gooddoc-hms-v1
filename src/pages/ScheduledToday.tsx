@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
@@ -73,14 +74,30 @@ const AppointmentRequests = () => {
       label: "Department", 
       render: (row) => <span>{row.department}</span>
     },
-    {
+{
       key: "visitType",
       label: "Visit Type",
       sortable: true,
       render: (row) => (
-        <Badge className={getVisitTypeBadgeStyle(row.visitType)}>
+        <Badge variant="outline" className={getVisitTypeBadgeStyle(row.visitType)}>
           {getVisitTypeLabel(row.visitType)}
         </Badge>
+      ),
+    },
+    {
+      key: "actions",
+      label: "",
+      width: "140px",
+      render: (row) => (
+        <Button 
+          size="sm" 
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/book-appointment?requestId=${row.requestId}`);
+          }}
+        >
+          Schedule Now
+        </Button>
       ),
     },
   ];
