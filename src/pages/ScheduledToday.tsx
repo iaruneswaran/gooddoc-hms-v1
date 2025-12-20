@@ -373,16 +373,7 @@ const AppointmentRequests = () => {
                 )}
               </TableCell>
               <TableCell>{row.department}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={
-                  row.visitType === "First Visit" ? "bg-green-100 text-green-700" :
-                  row.visitType === "Follow up" ? "bg-blue-100 text-blue-700" :
-                  row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" :
-                  "bg-teal-100 text-teal-700"
-                }>
-                  {row.visitType}
-                </Badge>
-              </TableCell>
+              <TableCell>{row.visitType}</TableCell>
               <TableCell onClick={(e) => e.stopPropagation()}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
