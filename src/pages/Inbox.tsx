@@ -120,7 +120,7 @@ export default function Inbox() {
   });
 
   const handleSchedule = (appointment: PendingAppointment) => {
-    navigate(`/book-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
+    navigate(`/new-appointment?id=${appointment.id}&type=${appointment.serviceType.toLowerCase()}`);
   };
 
   // Get provider display value based on appointment type
