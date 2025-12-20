@@ -37,27 +37,31 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
       {showBackButton && (
         <button
           onClick={handleBack}
-          className="p-1 rounded-md hover:bg-accent/50 transition-colors mr-1"
+          className="flex items-center justify-center w-9 h-9 rounded-lg bg-background border border-border shadow-sm hover:bg-accent/50 hover:border-primary/30 transition-all mr-2"
           title="Go back"
         >
-          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          <ArrowLeft className="h-4 w-4 text-muted-foreground" />
         </button>
       )}
-      <Avatar className="h-12 w-12">
+      <Avatar className="h-11 w-11 border-2 border-background shadow-sm">
         <AvatarFallback className={`${avatarBgClass} text-primary-foreground`}>
           {isFemale ? (
-            <UserRound className="h-6 w-6" />
+            <UserRound className="h-5 w-5" />
           ) : (
-            <User className="h-6 w-6" />
+            <User className="h-5 w-5" />
           )}
         </AvatarFallback>
       </Avatar>
-      <div className="text-left">
-        <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+      <div className="text-left ml-1">
+        <h1 className="text-lg font-bold text-foreground leading-tight tracking-tight">
           {name}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          GDID-{gdid} • {age} | {gender[0]}
+        </h1>
+        <p className="text-xs text-muted-foreground font-medium">
+          <span className="text-foreground/70">GDID-{gdid}</span>
+          <span className="mx-1.5 text-border">•</span>
+          <span>{age}</span>
+          <span className="mx-1 text-muted-foreground/50">|</span>
+          <span>{gender[0]}</span>
         </p>
       </div>
     </>
@@ -65,7 +69,7 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
 
   if (!onClick) {
     return (
-      <div className="flex items-center gap-3 pr-4 py-2 rounded-lg">
+      <div className="flex items-center">
         {content}
       </div>
     );
