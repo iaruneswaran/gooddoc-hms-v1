@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Download, ExternalLink } from "lucide-react";
+import { ChevronLeft, Download, ExternalLink, IndianRupee, Wallet, Receipt, Calculator } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -328,11 +328,11 @@ const Payments = () => {
                 Active Visit: <span className="font-medium text-foreground">V25-004</span>
               </span>
             </div>
-            <div className="flex gap-3">
-              <KpiTile label="Outstanding Total" amount="6,600" />
-              <KpiTile label="Advance Amount" amount="3,200" />
-              <KpiTile label="Bills Amount" amount="9,800" />
-              <KpiTile label="Balance Amount" amount="3,400" />
+            <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+              <KpiTile label="Outstanding" amount="6,600" icon={IndianRupee} variant="outstanding" />
+              <KpiTile label="Advance" amount="3,200" icon={Wallet} variant="advance" />
+              <KpiTile label="Bills" amount="9,800" icon={Receipt} variant="bills" />
+              <KpiTile label="Balance" amount="3,400" icon={Calculator} variant="balance" />
             </div>
           </div>
 

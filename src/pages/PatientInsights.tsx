@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { IndianRupee, Wallet, Receipt, Calculator } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -11,7 +11,6 @@ import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs
 import { VisitSelector } from "@/components/patient-insights/VisitSelector";
 import { VisitProvider, useVisit, VisitOption } from "@/contexts/VisitContext";
 import { Visit } from "@/components/patient-insights/VisitListItem";
-
 // Mock visits data
 const mockVisits: Visit[] = [
   {
@@ -228,63 +227,96 @@ const PatientInsightsContent = () => {
         ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-6">
-            {/* Top Row: Patient Info + KPIs */}
-            <div className="flex items-start justify-between mb-4">
-              {/* Patient Info */}
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-                showBackButton
-                backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
-              />
+        <div className="bg-card border-b border-border flex-shrink-0">
+          <div className="px-6 py-5">
+            {/* Main Header Grid: Zone A (Left) + Zone B (Right) */}
+            <div className="flex items-start justify-between gap-8 mb-5">
+              
+              {/* Zone A: Patient Identity + Primary Actions */}
+              <div className="flex-1 max-w-[55%] space-y-4">
+                {/* Row 1: Patient Identity */}
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                  showBackButton
+                  backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
+                />
+                
+                {/* Row 2: Primary Action Pills */}
+                <div className="flex items-center gap-3 pl-1">
+                  <Button 
+                    size="sm"
+                    className="h-9 px-4 rounded-lg font-medium"
+                    onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
+                  >
+                    Services
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="h-9 px-4 rounded-lg font-medium"
+                    onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
+                  >
+                    Transfer
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="h-9 px-4 rounded-lg font-medium"
+                    onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
+                      state: { visitId: selectedVisit?.visitId }
+                    })}
+                  >
+                    Discharge
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="h-9 px-4 rounded-lg font-medium"
+                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                  >
+                    Payments
+                  </Button>
+                </div>
+              </div>
 
-              {/* Right: KPIs */}
-              <div className="flex gap-3">
-                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
-                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
-                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
-                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+              {/* Zone B: KPI Cards (2x2 grid) */}
+              <div className="grid grid-cols-2 gap-3">
+                <KpiTile 
+                  label="Outstanding" 
+                  amount={patient.outstandingTotal} 
+                  icon={IndianRupee}
+                  variant="outstanding"
+                  tooltipText="Total amount pending collection"
+                />
+                <KpiTile 
+                  label="Advance" 
+                  amount={patient.advanceAmount} 
+                  icon={Wallet}
+                  variant="advance"
+                  tooltipText="Advance payments received"
+                />
+                <KpiTile 
+                  label="Bills" 
+                  amount={patient.billsAmount} 
+                  icon={Receipt}
+                  variant="bills"
+                  tooltipText="Total billed amount"
+                />
+                <KpiTile 
+                  label="Balance" 
+                  amount={patient.balanceAmount} 
+                  icon={Calculator}
+                  variant="balance"
+                  tooltipText="Net balance to settle"
+                />
               </div>
             </div>
 
-            {/* Action Buttons Row */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex gap-2">
-                <Button 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
-                >
-                  Services
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
-                >
-                  Transfer
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
-                    state: { visitId: selectedVisit?.visitId }
-                  })}
-                >
-                  Discharge
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                >
-                  Payments
-                </Button>
-              </div>
-              {/* Visit Selector */}
+            {/* Zone C: Visit Selector (aligned right) */}
+            <div className="flex justify-end">
               <VisitSelector />
             </div>
           </div>

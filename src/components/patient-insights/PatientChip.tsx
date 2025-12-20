@@ -43,20 +43,20 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
           <ArrowLeft className="h-5 w-5 text-muted-foreground" />
         </button>
       )}
-      <Avatar className="h-12 w-12">
+      <Avatar className="h-10 w-10">
         <AvatarFallback className={`${avatarBgClass} text-primary-foreground`}>
           {isFemale ? (
-            <UserRound className="h-6 w-6" />
+            <UserRound className="h-5 w-5" />
           ) : (
-            <User className="h-6 w-6" />
+            <User className="h-5 w-5" />
           )}
         </AvatarFallback>
       </Avatar>
       <div className="text-left">
-        <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+        <h4 className="text-xl font-semibold text-[hsl(var(--text-strong))] tracking-tight leading-tight">
           {name}
-        </p>
-        <p className="text-xs text-muted-foreground">
+        </h4>
+        <p className="text-sm text-muted-foreground">
           GDID-{gdid} • {age} | {gender[0]}
         </p>
       </div>
