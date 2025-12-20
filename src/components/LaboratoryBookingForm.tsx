@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, Minus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -98,18 +98,36 @@ const radiologyTests: RadiologyTest[] = [
 
 export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMode = false }: LaboratoryBookingFormProps) => {
   const [mode, setMode] = useState<"laboratory" | "radiology">(initialData?.mode || "laboratory");
-  const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">("health-packages");
-  const [selectedTests, setSelectedTests] = useState<LabTest[]>(initialData?.selectedTests || [
-    { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
-    { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
-  ]);
+  const [labTestType, setLabTestType] = useState<"health-packages" | "individual-tests">(
+    initialData?.selectedTests && initialData.selectedTests.length > 0 ? "individual-tests" : "health-packages"
+  );
+  const [selectedTests, setSelectedTests] = useState<LabTest[]>(initialData?.selectedTests || []);
   const [selectedPackages, setSelectedPackages] = useState<HealthPackage[]>(initialData?.selectedPackages || []);
   const [selectedRadiologyTests, setSelectedRadiologyTests] = useState<RadiologyTest[]>(initialData?.selectedRadiologyTests || []);
-  const [laboratoryDate, setLaboratoryDate] = useState<Date>(initialData?.laboratoryDate || new Date(2025, 7, 5));
-  const [laboratoryTime, setLaboratoryTime] = useState(initialData?.laboratoryTime || "07:30");
-  const [radiologyDate, setRadiologyDate] = useState<Date>(initialData?.radiologyDate || new Date(2025, 7, 5));
-  const [radiologyTime, setRadiologyTime] = useState(initialData?.radiologyTime || "07:30");
+  const [laboratoryDate, setLaboratoryDate] = useState<Date>(initialData?.laboratoryDate || new Date());
+  const [laboratoryTime, setLaboratoryTime] = useState(initialData?.laboratoryTime || "");
+  const [radiologyDate, setRadiologyDate] = useState<Date>(initialData?.radiologyDate || new Date());
+  const [radiologyTime, setRadiologyTime] = useState(initialData?.radiologyTime || "");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Sync state with initialData when it changes (for pre-filling from request data)
+  useEffect(() => {
+    if (initialData && !isInitialized) {
+      if (initialData.mode) setMode(initialData.mode);
+      if (initialData.selectedTests && initialData.selectedTests.length > 0) {
+        setSelectedTests(initialData.selectedTests);
+        setLabTestType("individual-tests");
+      }
+      if (initialData.selectedPackages) setSelectedPackages(initialData.selectedPackages);
+      if (initialData.selectedRadiologyTests) setSelectedRadiologyTests(initialData.selectedRadiologyTests);
+      if (initialData.laboratoryDate) setLaboratoryDate(initialData.laboratoryDate);
+      if (initialData.laboratoryTime) setLaboratoryTime(initialData.laboratoryTime);
+      if (initialData.radiologyDate) setRadiologyDate(initialData.radiologyDate);
+      if (initialData.radiologyTime) setRadiologyTime(initialData.radiologyTime);
+      setIsInitialized(true);
+    }
+  }, [initialData, isInitialized]);
 
   const handleModeChange = (newMode: "laboratory" | "radiology") => {
     setMode(newMode);
