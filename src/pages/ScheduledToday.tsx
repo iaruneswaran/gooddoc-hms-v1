@@ -346,9 +346,43 @@ const AppointmentRequests = () => {
             </div>
           </Card>
 
-          {/* Controls Row with Filters, Search and Tabs */}
+          {/* Controls Row with Tabs, Filters and Search */}
           <div className="flex items-center justify-between mb-4">
-            {/* Left: Filters */}
+            {/* Left: Tabs */}
+            <div className="flex items-center border-b">
+              <button
+                onClick={() => { setActiveTab("outpatient"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "outpatient" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Outpatient
+              </button>
+              <button
+                onClick={() => { setActiveTab("laboratory"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "laboratory" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Laboratory
+              </button>
+              <button
+                onClick={() => { setActiveTab("scheduled"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "scheduled" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Scheduled
+              </button>
+            </div>
+
+            {/* Right: Filters and Search */}
             <div className="flex items-center gap-3">
               <Select value={visitTypeFilter} onValueChange={setVisitTypeFilter}>
                 <SelectTrigger className="w-[150px]">
@@ -384,40 +418,6 @@ const AppointmentRequests = () => {
                   className="pl-10"
                 />
               </div>
-            </div>
-
-            {/* Right: Tabs */}
-            <div className="flex items-center border-b">
-              <button
-                onClick={() => { setActiveTab("outpatient"); setCurrentPage(1); }}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "outpatient" 
-                    ? "border-primary text-primary" 
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Outpatient
-              </button>
-              <button
-                onClick={() => { setActiveTab("laboratory"); setCurrentPage(1); }}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "laboratory" 
-                    ? "border-primary text-primary" 
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Laboratory
-              </button>
-              <button
-                onClick={() => { setActiveTab("scheduled"); setCurrentPage(1); }}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "scheduled" 
-                    ? "border-primary text-primary" 
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Scheduled
-              </button>
             </div>
           </div>
 
