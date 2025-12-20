@@ -342,7 +342,6 @@ const AppointmentRequests = () => {
             <TableHead>Doctor / Test</TableHead>
             <TableHead>Department</TableHead>
             <TableHead>Visit Type</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead style={{ width: "80px" }}>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -382,11 +381,6 @@ const AppointmentRequests = () => {
                   "bg-teal-100 text-teal-700"
                 }>
                   {row.visitType}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getScheduledStatusBadgeStyle(row.status)}>
-                  {row.status}
                 </Badge>
               </TableCell>
               <TableCell onClick={(e) => e.stopPropagation()}>
