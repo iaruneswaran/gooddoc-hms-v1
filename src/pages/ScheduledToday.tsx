@@ -69,28 +69,34 @@ const laboratoryData: LaboratoryAppointmentRecord[] = [
   { requestId: "LABREQ010", patient: "Lakshmi Devi", ageSex: "48 / F", contact: "9876543219", email: "lakshmi.d@email.com", testName: "Iron Studies", testCode: "IRO001", category: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "03:00 PM", referredBy: "Dr. Rajesh Kumar", priority: "Routine", status: "Sample Collected", visitType: "Home" },
 ];
 
-// Mock data for Scheduled tab
-interface ScheduledRecord {
-  id: string;
-  slotTime: string;
-  slotDate: string;
+// Mock data for Scheduled tab - confirmed appointments from OP and Lab
+interface ScheduledAppointmentRecord {
+  appointmentId: string;
+  patient: string;
+  ageSex: string;
+  contact: string;
+  email: string;
+  appointmentType: "Outpatient" | "Laboratory";
+  scheduledDate: string;
+  scheduledTime: string;
   doctor: string;
   department: string;
-  duration: string;
-  maxPatients: number;
-  bookedCount: number;
-  status: "Available" | "Full" | "Blocked";
+  testCode?: string;
+  visitType: "First Visit" | "Follow up" | "In-patient" | "Home";
+  status: "Confirmed" | "Checked In" | "In Progress" | "Completed" | "No Show";
 }
 
-const scheduledData: ScheduledRecord[] = [
-  { id: "SCH001", slotTime: "09:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Meera Nair", department: "Cardiology", duration: "30 min", maxPatients: 10, bookedCount: 8, status: "Available" },
-  { id: "SCH002", slotTime: "10:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Rajesh Kumar", department: "Orthopedics", duration: "30 min", maxPatients: 8, bookedCount: 8, status: "Full" },
-  { id: "SCH003", slotTime: "11:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Anita Singh", department: "Neurology", duration: "45 min", maxPatients: 6, bookedCount: 4, status: "Available" },
-  { id: "SCH004", slotTime: "02:00 PM", slotDate: "21 Dec 2025", doctor: "Dr. Sunil Reddy", department: "General Medicine", duration: "20 min", maxPatients: 12, bookedCount: 10, status: "Available" },
-  { id: "SCH005", slotTime: "03:00 PM", slotDate: "21 Dec 2025", doctor: "Dr. Prakash Shah", department: "ENT", duration: "30 min", maxPatients: 8, bookedCount: 0, status: "Blocked" },
-  { id: "SCH006", slotTime: "09:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Priya Menon", department: "Dermatology", duration: "20 min", maxPatients: 15, bookedCount: 12, status: "Available" },
-  { id: "SCH007", slotTime: "10:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Arun Bhat", department: "Gastroenterology", duration: "30 min", maxPatients: 8, bookedCount: 5, status: "Available" },
-  { id: "SCH008", slotTime: "11:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Sunita Rao", department: "Pulmonology", duration: "30 min", maxPatients: 8, bookedCount: 8, status: "Full" },
+const scheduledData: ScheduledAppointmentRecord[] = [
+  { appointmentId: "APT001", patient: "Ravi Sharma", ageSex: "45 / M", contact: "9876543210", email: "ravi.sharma@email.com", appointmentType: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "09:00 AM", doctor: "Dr. Meera Nair", department: "Cardiology", visitType: "First Visit", status: "Confirmed" },
+  { appointmentId: "APT002", patient: "Priya Menon", ageSex: "32 / F", contact: "9876543211", email: "priya.menon@email.com", appointmentType: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "09:30 AM", doctor: "Dr. Rajesh Kumar", department: "Biochemistry", testCode: "LIP001", visitType: "Home", status: "Confirmed" },
+  { appointmentId: "APT003", patient: "Anil Kapoor", ageSex: "58 / M", contact: "9876543212", email: "anil.kapoor@email.com", appointmentType: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "10:00 AM", doctor: "Dr. Anita Singh", department: "Neurology", visitType: "Follow up", status: "Checked In" },
+  { appointmentId: "APT004", patient: "Sunita Rao", ageSex: "41 / F", contact: "9876543213", email: "sunita.rao@email.com", appointmentType: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "10:30 AM", doctor: "Dr. Sunil Reddy", department: "Biochemistry", testCode: "KFT001", visitType: "In-patient", status: "In Progress" },
+  { appointmentId: "APT005", patient: "Mohan Iyer", ageSex: "65 / M", contact: "9876543214", email: "mohan.iyer@email.com", appointmentType: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "11:00 AM", doctor: "Dr. Prakash Shah", department: "ENT", visitType: "First Visit", status: "Confirmed" },
+  { appointmentId: "APT006", patient: "Kavitha Nair", ageSex: "29 / F", contact: "9876543215", email: "kavitha.nair@email.com", appointmentType: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "11:30 AM", doctor: "Dr. Priya Menon", department: "Diabetes", testCode: "HBA001", visitType: "Home", status: "Completed" },
+  { appointmentId: "APT007", patient: "Vikram Singh", ageSex: "52 / M", contact: "9876543216", email: "vikram.singh@email.com", appointmentType: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "02:00 PM", doctor: "Dr. Arun Bhat", department: "Gastroenterology", visitType: "Follow up", status: "Confirmed" },
+  { appointmentId: "APT008", patient: "Deepa Krishnan", ageSex: "38 / F", contact: "9876543217", email: "deepa.k@email.com", appointmentType: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "02:30 PM", doctor: "Dr. Sunita Rao", department: "Biochemistry", testCode: "VIT001", visitType: "In-patient", status: "Confirmed" },
+  { appointmentId: "APT009", patient: "Rajendra Prasad", ageSex: "60 / M", contact: "9876543218", email: "raj.prasad@email.com", appointmentType: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "03:00 PM", doctor: "Dr. Meera Nair", department: "Cardiology", visitType: "Follow up", status: "No Show" },
+  { appointmentId: "APT010", patient: "Lakshmi Devi", ageSex: "48 / F", contact: "9876543219", email: "lakshmi.d@email.com", appointmentType: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "03:30 PM", doctor: "Dr. Rajesh Kumar", department: "Hematology", testCode: "IRO001", visitType: "Home", status: "Confirmed" },
 ];
 
 type TabType = "outpatient" | "laboratory" | "scheduled";
@@ -303,59 +309,104 @@ const AppointmentRequests = () => {
     );
   };
 
-  const renderScheduledTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Slot ID</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Time</TableHead>
-          <TableHead>Doctor</TableHead>
-          <TableHead>Department</TableHead>
-          <TableHead>Duration</TableHead>
-          <TableHead>Capacity</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead style={{ width: "80px" }}>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {scheduledData.map((row) => (
-          <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50">
-            <TableCell className="font-medium">{row.id}</TableCell>
-            <TableCell>{row.slotDate}</TableCell>
-            <TableCell>{row.slotTime}</TableCell>
-            <TableCell>{row.doctor}</TableCell>
-            <TableCell>{row.department}</TableCell>
-            <TableCell>{row.duration}</TableCell>
-            <TableCell>{row.bookedCount}/{row.maxPatients}</TableCell>
-            <TableCell>
-              <Badge className={
-                row.status === "Available" ? "bg-green-100 text-green-700" : 
-                row.status === "Full" ? "bg-amber-100 text-amber-700" : 
-                "bg-red-100 text-red-700"
-              }>
-                {row.status}
-              </Badge>
-            </TableCell>
-            <TableCell onClick={(e) => e.stopPropagation()}>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>Edit Slot</DropdownMenuItem>
-                  <DropdownMenuItem>View Bookings</DropdownMenuItem>
-                  <DropdownMenuItem>{row.status === "Blocked" ? "Unblock" : "Block"}</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+  const getScheduledStatusBadgeStyle = (status: string): string => {
+    switch (status) {
+      case "Confirmed": return "bg-blue-100 text-blue-700";
+      case "Checked In": return "bg-cyan-100 text-cyan-700";
+      case "In Progress": return "bg-purple-100 text-purple-700";
+      case "Completed": return "bg-green-100 text-green-700";
+      case "No Show": return "bg-red-100 text-red-700";
+      default: return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const getAppointmentTypeBadgeStyle = (type: string): string => {
+    return type === "Outpatient" ? "bg-indigo-100 text-indigo-700" : "bg-orange-100 text-orange-700";
+  };
+
+  const renderScheduledTable = () => {
+    const paginatedScheduledData = scheduledData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
+            <TableHead>Contact</TableHead>
+            <TableHead>Appointment ID</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Scheduled Date</TableHead>
+            <TableHead>Scheduled Time</TableHead>
+            <TableHead>Doctor / Test</TableHead>
+            <TableHead>Department</TableHead>
+            <TableHead>Visit Type</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead style={{ width: "80px" }}>Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
+        </TableHeader>
+        <TableBody>
+          {paginatedScheduledData.map((row) => (
+            <TableRow key={row.appointmentId} className="cursor-pointer hover:bg-muted/50">
+              <TableCell style={{ width: "220px", minWidth: "220px" }}>
+                <PatientCell name={row.patient} gdid={row.appointmentId} ageSex={row.ageSex} patientId={row.appointmentId} fromPage="scheduled" />
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-col">
+                  <span>{row.contact}</span>
+                  <span className="text-muted-foreground text-xs">{row.email}</span>
+                </div>
+              </TableCell>
+              <TableCell className="font-medium">{row.appointmentId}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className={getAppointmentTypeBadgeStyle(row.appointmentType)}>
+                  {row.appointmentType}
+                </Badge>
+              </TableCell>
+              <TableCell>{row.scheduledDate}</TableCell>
+              <TableCell>{row.scheduledTime}</TableCell>
+              <TableCell>
+                <div className="flex flex-col">
+                  <span>{row.doctor}</span>
+                  {row.testCode && <span className="text-muted-foreground text-xs">{row.testCode}</span>}
+                </div>
+              </TableCell>
+              <TableCell>{row.department}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className={
+                  row.visitType === "First Visit" ? "bg-green-100 text-green-700" :
+                  row.visitType === "Follow up" ? "bg-blue-100 text-blue-700" :
+                  row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" :
+                  "bg-teal-100 text-teal-700"
+                }>
+                  {row.visitType}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline" className={getScheduledStatusBadgeStyle(row.status)}>
+                  {row.status}
+                </Badge>
+              </TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
+                    <DropdownMenuItem>View Details</DropdownMenuItem>
+                    <DropdownMenuItem>Check In</DropdownMenuItem>
+                    <DropdownMenuItem>Reschedule</DropdownMenuItem>
+                    <DropdownMenuItem>Cancel Appointment</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
