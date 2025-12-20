@@ -244,7 +244,7 @@ const AppointmentRequests = () => {
             <TableHead>Test Type</TableHead>
             <TableHead>Preferred Date</TableHead>
             <TableHead>Preferred Time</TableHead>
-            <TableHead>Referred By</TableHead>
+            <TableHead>Ordered By</TableHead>
             <TableHead>Visit Type</TableHead>
             <TableHead style={{ width: "140px" }}></TableHead>
             <TableHead style={{ width: "80px" }}>Actions</TableHead>
