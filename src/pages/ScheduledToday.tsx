@@ -38,29 +38,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Hash, Search, Download, Printer, MoreHorizontal, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
-// Mock data for Laboratory tab
-interface LaboratoryRecord {
-  id: string;
+// Mock data for Laboratory tab - appointment-style like Outpatient
+interface LaboratoryAppointmentRecord {
+  requestId: string;
+  patient: string;
+  ageSex: string;
+  contact: string;
+  email: string;
   testName: string;
   testCode: string;
   category: string;
-  sampleType: string;
-  turnaroundTime: string;
-  price: number;
-  status: "Active" | "Inactive";
+  preferredDate: string;
+  preferredTime: string;
+  referredBy: string;
+  priority: "Routine" | "Urgent" | "STAT";
+  status: "Pending" | "Scheduled" | "Sample Collected" | "In Progress" | "Completed";
 }
 
-const laboratoryData: LaboratoryRecord[] = [
-  { id: "LAB001", testName: "Complete Blood Count (CBC)", testCode: "CBC001", category: "Hematology", sampleType: "Blood", turnaroundTime: "4 hours", price: 350, status: "Active" },
-  { id: "LAB002", testName: "Lipid Profile", testCode: "LIP001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 800, status: "Active" },
-  { id: "LAB003", testName: "Liver Function Test (LFT)", testCode: "LFT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 650, status: "Active" },
-  { id: "LAB004", testName: "Kidney Function Test (KFT)", testCode: "KFT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 550, status: "Active" },
-  { id: "LAB005", testName: "Thyroid Profile (T3, T4, TSH)", testCode: "THY001", category: "Endocrinology", sampleType: "Blood", turnaroundTime: "8 hours", price: 900, status: "Active" },
-  { id: "LAB006", testName: "HbA1c", testCode: "HBA001", category: "Diabetes", sampleType: "Blood", turnaroundTime: "4 hours", price: 450, status: "Active" },
-  { id: "LAB007", testName: "Urinalysis", testCode: "URI001", category: "Urology", sampleType: "Urine", turnaroundTime: "2 hours", price: 200, status: "Active" },
-  { id: "LAB008", testName: "Vitamin D", testCode: "VIT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "24 hours", price: 1200, status: "Active" },
-  { id: "LAB009", testName: "Vitamin B12", testCode: "VIT002", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "24 hours", price: 850, status: "Active" },
-  { id: "LAB010", testName: "Iron Studies", testCode: "IRO001", category: "Hematology", sampleType: "Blood", turnaroundTime: "6 hours", price: 700, status: "Inactive" },
+const laboratoryData: LaboratoryAppointmentRecord[] = [
+  { requestId: "LABREQ001", patient: "Ravi Sharma", ageSex: "45 / M", contact: "9876543210", email: "ravi.sharma@email.com", testName: "Complete Blood Count (CBC)", testCode: "CBC001", category: "Hematology", preferredDate: "21 Dec 2025", preferredTime: "09:00 AM", referredBy: "Dr. Meera Nair", priority: "Routine", status: "Pending" },
+  { requestId: "LABREQ002", patient: "Priya Menon", ageSex: "32 / F", contact: "9876543211", email: "priya.menon@email.com", testName: "Lipid Profile", testCode: "LIP001", category: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", referredBy: "Dr. Rajesh Kumar", priority: "Routine", status: "Scheduled" },
+  { requestId: "LABREQ003", patient: "Anil Kapoor", ageSex: "58 / M", contact: "9876543212", email: "anil.kapoor@email.com", testName: "Liver Function Test (LFT)", testCode: "LFT001", category: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", referredBy: "Dr. Anita Singh", priority: "Urgent", status: "Sample Collected" },
+  { requestId: "LABREQ004", patient: "Sunita Rao", ageSex: "41 / F", contact: "9876543213", email: "sunita.rao@email.com", testName: "Kidney Function Test (KFT)", testCode: "KFT001", category: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", referredBy: "Dr. Sunil Reddy", priority: "Routine", status: "In Progress" },
+  { requestId: "LABREQ005", patient: "Mohan Iyer", ageSex: "65 / M", contact: "9876543214", email: "mohan.iyer@email.com", testName: "Thyroid Profile (T3, T4, TSH)", testCode: "THY001", category: "Endocrinology", preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", referredBy: "Dr. Prakash Shah", priority: "STAT", status: "Pending" },
+  { requestId: "LABREQ006", patient: "Kavitha Nair", ageSex: "29 / F", contact: "9876543215", email: "kavitha.nair@email.com", testName: "HbA1c", testCode: "HBA001", category: "Diabetes", preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", referredBy: "Dr. Priya Menon", priority: "Routine", status: "Completed" },
+  { requestId: "LABREQ007", patient: "Vikram Singh", ageSex: "52 / M", contact: "9876543216", email: "vikram.singh@email.com", testName: "Urinalysis", testCode: "URI001", category: "Urology", preferredDate: "22 Dec 2025", preferredTime: "10:00 AM", referredBy: "Dr. Arun Bhat", priority: "Routine", status: "Pending" },
+  { requestId: "LABREQ008", patient: "Deepa Krishnan", ageSex: "38 / F", contact: "9876543217", email: "deepa.k@email.com", testName: "Vitamin D", testCode: "VIT001", category: "Biochemistry", preferredDate: "22 Dec 2025", preferredTime: "11:00 AM", referredBy: "Dr. Sunita Rao", priority: "Routine", status: "Scheduled" },
+  { requestId: "LABREQ009", patient: "Rajendra Prasad", ageSex: "60 / M", contact: "9876543218", email: "raj.prasad@email.com", testName: "Vitamin B12", testCode: "VIT002", category: "Biochemistry", preferredDate: "22 Dec 2025", preferredTime: "02:00 PM", referredBy: "Dr. Meera Nair", priority: "Urgent", status: "Pending" },
+  { requestId: "LABREQ010", patient: "Lakshmi Devi", ageSex: "48 / F", contact: "9876543219", email: "lakshmi.d@email.com", testName: "Iron Studies", testCode: "IRO001", category: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "03:00 PM", referredBy: "Dr. Rajesh Kumar", priority: "Routine", status: "Sample Collected" },
 ];
 
 // Mock data for Scheduled tab
@@ -201,53 +206,112 @@ const AppointmentRequests = () => {
     );
   };
 
-  const renderLaboratoryTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Test Code</TableHead>
-          <TableHead>Test Name</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Sample Type</TableHead>
-          <TableHead>Turnaround Time</TableHead>
-          <TableHead>Price (₹)</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead style={{ width: "80px" }}>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {laboratoryData.map((row) => (
-          <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50">
-            <TableCell className="font-medium">{row.testCode}</TableCell>
-            <TableCell>{row.testName}</TableCell>
-            <TableCell>{row.category}</TableCell>
-            <TableCell>{row.sampleType}</TableCell>
-            <TableCell>{row.turnaroundTime}</TableCell>
-            <TableCell>₹{row.price.toLocaleString()}</TableCell>
-            <TableCell>
-              <Badge className={row.status === "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}>
-                {row.status}
-              </Badge>
-            </TableCell>
-            <TableCell onClick={(e) => e.stopPropagation()}>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>Edit Test</DropdownMenuItem>
-                  <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>{row.status === "Active" ? "Deactivate" : "Activate"}</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+  const getPriorityBadgeStyle = (priority: string): string => {
+    switch (priority) {
+      case "STAT": return "bg-red-100 text-red-700";
+      case "Urgent": return "bg-amber-100 text-amber-700";
+      default: return "bg-blue-100 text-blue-700";
+    }
+  };
+
+  const getLabStatusBadgeStyle = (status: string): string => {
+    switch (status) {
+      case "Completed": return "bg-green-100 text-green-700";
+      case "In Progress": return "bg-blue-100 text-blue-700";
+      case "Sample Collected": return "bg-purple-100 text-purple-700";
+      case "Scheduled": return "bg-cyan-100 text-cyan-700";
+      default: return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const renderLaboratoryTable = () => {
+    const paginatedLabData = laboratoryData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
+            <TableHead>Contact</TableHead>
+            <TableHead>Test Name</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Preferred Date</TableHead>
+            <TableHead>Preferred Time</TableHead>
+            <TableHead>Referred By</TableHead>
+            <TableHead>Priority</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead style={{ width: "140px" }}></TableHead>
+            <TableHead style={{ width: "80px" }}>Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
+        </TableHeader>
+        <TableBody>
+          {paginatedLabData.map((row) => (
+            <TableRow 
+              key={row.requestId} 
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => navigate(`/laboratory/booking?requestId=${row.requestId}`)}
+            >
+              <TableCell style={{ width: "220px", minWidth: "220px" }}>
+                <PatientCell name={row.patient} gdid={row.requestId} ageSex={row.ageSex} patientId={row.requestId} fromPage="scheduled" />
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-col">
+                  <span>{row.contact}</span>
+                  <span className="text-muted-foreground text-xs">{row.email}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-col">
+                  <span className="font-medium">{row.testName}</span>
+                  <span className="text-muted-foreground text-xs">{row.testCode}</span>
+                </div>
+              </TableCell>
+              <TableCell>{row.category}</TableCell>
+              <TableCell>{row.preferredDate}</TableCell>
+              <TableCell>{row.preferredTime}</TableCell>
+              <TableCell>{row.referredBy}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className={getPriorityBadgeStyle(row.priority)}>
+                  {row.priority}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline" className={getLabStatusBadgeStyle(row.status)}>
+                  {row.status}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Button 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/laboratory/booking?requestId=${row.requestId}`);
+                  }}
+                >
+                  Schedule Now
+                </Button>
+              </TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
+                    <DropdownMenuItem>View Details</DropdownMenuItem>
+                    <DropdownMenuItem>Collect Sample</DropdownMenuItem>
+                    <DropdownMenuItem>Contact Patient</DropdownMenuItem>
+                    <DropdownMenuItem>Cancel Request</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
 
   const renderScheduledTable = () => (
     <Table>
