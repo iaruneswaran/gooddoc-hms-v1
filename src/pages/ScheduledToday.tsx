@@ -38,53 +38,67 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Hash, Search, Download, Printer, MoreHorizontal, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
-// Mock data for Laboratory tab
+// Mock data for Laboratory tab - appointment requests for lab tests
 interface LaboratoryRecord {
   id: string;
-  testName: string;
-  testCode: string;
-  category: string;
-  sampleType: string;
-  turnaroundTime: string;
-  price: number;
-  status: "Active" | "Inactive";
+  orderId: string;
+  patient: string;
+  gdid: string;
+  ageSex: string;
+  contact: string;
+  email: string;
+  testType: string;
+  orderedBy: string;
+  department: string;
+  preferredDate: string;
+  preferredTime: string;
+  visitType: "In-patient" | "Home";
 }
 
 const laboratoryData: LaboratoryRecord[] = [
-  { id: "LAB001", testName: "Complete Blood Count (CBC)", testCode: "CBC001", category: "Hematology", sampleType: "Blood", turnaroundTime: "4 hours", price: 350, status: "Active" },
-  { id: "LAB002", testName: "Lipid Profile", testCode: "LIP001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 800, status: "Active" },
-  { id: "LAB003", testName: "Liver Function Test (LFT)", testCode: "LFT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 650, status: "Active" },
-  { id: "LAB004", testName: "Kidney Function Test (KFT)", testCode: "KFT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "6 hours", price: 550, status: "Active" },
-  { id: "LAB005", testName: "Thyroid Profile (T3, T4, TSH)", testCode: "THY001", category: "Endocrinology", sampleType: "Blood", turnaroundTime: "8 hours", price: 900, status: "Active" },
-  { id: "LAB006", testName: "HbA1c", testCode: "HBA001", category: "Diabetes", sampleType: "Blood", turnaroundTime: "4 hours", price: 450, status: "Active" },
-  { id: "LAB007", testName: "Urinalysis", testCode: "URI001", category: "Urology", sampleType: "Urine", turnaroundTime: "2 hours", price: 200, status: "Active" },
-  { id: "LAB008", testName: "Vitamin D", testCode: "VIT001", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "24 hours", price: 1200, status: "Active" },
-  { id: "LAB009", testName: "Vitamin B12", testCode: "VIT002", category: "Biochemistry", sampleType: "Blood", turnaroundTime: "24 hours", price: 850, status: "Active" },
-  { id: "LAB010", testName: "Iron Studies", testCode: "IRO001", category: "Hematology", sampleType: "Blood", turnaroundTime: "6 hours", price: 700, status: "Inactive" },
+  { id: "LAB001", orderId: "ORD001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", contact: "9876543210", email: "ravi.sharma@email.com", testType: "CBC001", orderedBy: "Dr. Rajesh Kumar", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
+  { id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", contact: "9876543211", email: "priya.menon@email.com", testType: "LIP001", orderedBy: "Dr. Meera Nair", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient" },
+  { id: "LAB003", orderId: "ORD003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", contact: "9876543212", email: "anil.kapoor@email.com", testType: "LFT001", orderedBy: "Dr. Anita Singh", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:30 AM", visitType: "Home" },
+  { id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", contact: "9876543213", email: "sunita.rao@email.com", testType: "KFT001", orderedBy: "Dr. Sunil Reddy", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient" },
+  { id: "LAB005", orderId: "ORD005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", contact: "9876543214", email: "mohan.iyer@email.com", testType: "THY001", orderedBy: "Dr. Prakash Shah", department: "Endocrinology", preferredDate: "21 Dec 2025", preferredTime: "11:30 AM", visitType: "Home" },
+  { id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", contact: "9876543215", email: "kavitha.nair@email.com", testType: "HBA001", orderedBy: "Dr. Priya Menon", department: "Diabetes", preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home" },
+  { id: "LAB007", orderId: "ORD007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", contact: "9876543216", email: "vikram.singh@email.com", testType: "URI001", orderedBy: "Dr. Arun Bhat", department: "Urology", preferredDate: "21 Dec 2025", preferredTime: "02:30 PM", visitType: "In-patient" },
+  { id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", contact: "9876543217", email: "deepa.k@email.com", testType: "VIT001", orderedBy: "Dr. Sunita Rao", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient" },
+  { id: "LAB009", orderId: "ORD009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", contact: "9876543218", email: "raj.prasad@email.com", testType: "VIT002", orderedBy: "Dr. Meera Nair", department: "Biochemistry", preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", visitType: "Home" },
+  { id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", contact: "9876543219", email: "lakshmi.d@email.com", testType: "IRO001", orderedBy: "Dr. Rajesh Kumar", department: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
 ];
 
-// Mock data for Scheduled tab
-interface ScheduledRecord {
+// Mock data for Scheduled tab - combined outpatient and laboratory scheduled appointments
+interface ScheduledAppointment {
   id: string;
-  slotTime: string;
-  slotDate: string;
-  doctor: string;
+  appointmentId: string;
+  patient: string;
+  gdid: string;
+  ageSex: string;
+  contact: string;
+  email: string;
+  appointmentFor: "Outpatient" | "Laboratory";
+  scheduledDate: string;
+  scheduledTime: string;
+  doctorOrTest: string;
+  testCode?: string;
   department: string;
-  duration: string;
-  maxPatients: number;
-  bookedCount: number;
-  status: "Available" | "Full" | "Blocked";
+  visitType: string;
+  requestId?: string;
+  orderId?: string;
 }
 
-const scheduledData: ScheduledRecord[] = [
-  { id: "SCH001", slotTime: "09:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Meera Nair", department: "Cardiology", duration: "30 min", maxPatients: 10, bookedCount: 8, status: "Available" },
-  { id: "SCH002", slotTime: "10:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Rajesh Kumar", department: "Orthopedics", duration: "30 min", maxPatients: 8, bookedCount: 8, status: "Full" },
-  { id: "SCH003", slotTime: "11:00 AM", slotDate: "21 Dec 2025", doctor: "Dr. Anita Singh", department: "Neurology", duration: "45 min", maxPatients: 6, bookedCount: 4, status: "Available" },
-  { id: "SCH004", slotTime: "02:00 PM", slotDate: "21 Dec 2025", doctor: "Dr. Sunil Reddy", department: "General Medicine", duration: "20 min", maxPatients: 12, bookedCount: 10, status: "Available" },
-  { id: "SCH005", slotTime: "03:00 PM", slotDate: "21 Dec 2025", doctor: "Dr. Prakash Shah", department: "ENT", duration: "30 min", maxPatients: 8, bookedCount: 0, status: "Blocked" },
-  { id: "SCH006", slotTime: "09:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Priya Menon", department: "Dermatology", duration: "20 min", maxPatients: 15, bookedCount: 12, status: "Available" },
-  { id: "SCH007", slotTime: "10:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Arun Bhat", department: "Gastroenterology", duration: "30 min", maxPatients: 8, bookedCount: 5, status: "Available" },
-  { id: "SCH008", slotTime: "11:00 AM", slotDate: "22 Dec 2025", doctor: "Dr. Sunita Rao", department: "Pulmonology", duration: "30 min", maxPatients: 8, bookedCount: 8, status: "Full" },
+const scheduledAppointments: ScheduledAppointment[] = [
+  { id: "1", appointmentId: "APT001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", contact: "9876543210", email: "ravi.sharma@email.com", appointmentFor: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "09:00 AM", doctorOrTest: "Dr. Meera Nair", department: "Cardiology", visitType: "First Visit", requestId: "REQ001" },
+  { id: "2", appointmentId: "APT002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", contact: "9876543211", email: "priya.menon@email.com", appointmentFor: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "09:30 AM", doctorOrTest: "LIP001", testCode: "LIP001", department: "Biochemistry", visitType: "Home", orderId: "ORD001" },
+  { id: "3", appointmentId: "APT003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", contact: "9876543212", email: "anil.kapoor@email.com", appointmentFor: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "10:00 AM", doctorOrTest: "Dr. Anita Singh", department: "Neurology", visitType: "Follow up", requestId: "REQ002" },
+  { id: "4", appointmentId: "APT004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", contact: "9876543213", email: "sunita.rao@email.com", appointmentFor: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "10:30 AM", doctorOrTest: "KFT001", testCode: "KFT001", department: "Biochemistry", visitType: "In-patient", orderId: "ORD002" },
+  { id: "5", appointmentId: "APT005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", contact: "9876543214", email: "mohan.iyer@email.com", appointmentFor: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "11:00 AM", doctorOrTest: "Dr. Prakash Shah", department: "ENT", visitType: "First Visit", requestId: "REQ003" },
+  { id: "6", appointmentId: "APT006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", contact: "9876543215", email: "kavitha.nair@email.com", appointmentFor: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "11:30 AM", doctorOrTest: "HBA001", testCode: "HBA001", department: "Diabetes", visitType: "Home", orderId: "ORD003" },
+  { id: "7", appointmentId: "APT007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", contact: "9876543216", email: "vikram.singh@email.com", appointmentFor: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "02:00 PM", doctorOrTest: "Dr. Arun Bhat", department: "Gastroenterology", visitType: "Follow up", requestId: "REQ004" },
+  { id: "8", appointmentId: "APT008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", contact: "9876543217", email: "deepa.k@email.com", appointmentFor: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "02:30 PM", doctorOrTest: "VIT001", testCode: "VIT001", department: "Biochemistry", visitType: "In-patient", orderId: "ORD004" },
+  { id: "9", appointmentId: "APT009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", contact: "9876543218", email: "raj.prasad@email.com", appointmentFor: "Outpatient", scheduledDate: "21 Dec 2025", scheduledTime: "03:00 PM", doctorOrTest: "Dr. Meera Nair", department: "Cardiology", visitType: "Follow up", requestId: "REQ005" },
+  { id: "10", appointmentId: "APT010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", contact: "9876543219", email: "lakshmi.d@email.com", appointmentFor: "Laboratory", scheduledDate: "21 Dec 2025", scheduledTime: "03:30 PM", doctorOrTest: "IRO001", testCode: "IRO001", department: "Hematology", visitType: "Home", orderId: "ORD005" },
 ];
 
 type TabType = "outpatient" | "laboratory" | "scheduled";
@@ -119,7 +133,7 @@ const AppointmentRequests = () => {
     switch (activeTab) {
       case "outpatient": return appointmentRequests.length;
       case "laboratory": return laboratoryData.length;
-      case "scheduled": return scheduledData.length;
+      case "scheduled": return scheduledAppointments.length;
     }
   };
 
@@ -134,6 +148,7 @@ const AppointmentRequests = () => {
           <TableRow>
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
             <TableHead>Contact</TableHead>
+            <TableHead>Request ID</TableHead>
             <TableHead>Preferred Date</TableHead>
             <TableHead>Preferred Time</TableHead>
             <TableHead>Doctor</TableHead>
@@ -144,58 +159,62 @@ const AppointmentRequests = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((row) => (
-            <TableRow 
-              key={row.requestId} 
-              className="cursor-pointer hover:bg-muted/50"
-              onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}
-            >
-              <TableCell style={{ width: "220px", minWidth: "220px" }}>
-                <PatientCell name={row.patient} gdid={row.requestId} ageSex={row.ageSex} patientId={row.requestId} fromPage="scheduled" />
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col">
-                  <span>{row.contact}</span>
-                  <span className="text-muted-foreground text-xs">{row.email}</span>
-                </div>
-              </TableCell>
-              <TableCell>{row.preferredDate}</TableCell>
-              <TableCell>{row.preferredTime}</TableCell>
-              <TableCell>{row.preferredProvider || "Any"}</TableCell>
-              <TableCell>{row.department}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getVisitTypeBadgeStyle(row.visitType)}>
-                  {getVisitTypeLabel(row.visitType)}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Button 
-                  size="sm" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/book-appointment?requestId=${row.requestId}`);
-                  }}
-                >
-                  Schedule Now
-                </Button>
-              </TableCell>
-              <TableCell onClick={(e) => e.stopPropagation()}>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                    <DropdownMenuItem onClick={() => handleViewSummary(row)}>View Appointment Summary</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}>Schedule Now</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => console.log("Contact", row.contact)}>Contact Patient</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => console.log("Reject", row.requestId)}>Reject</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+          {paginatedData.map((row, index) => {
+            const requestId = `REQ${String(index + 1).padStart(3, '0')}`;
+            return (
+              <TableRow 
+                key={row.requestId} 
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}
+              >
+                <TableCell style={{ width: "220px", minWidth: "220px" }}>
+                  <PatientCell name={row.patient} gdid={row.requestId} ageSex={row.ageSex} patientId={row.requestId} fromPage="scheduled" />
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span>{row.contact}</span>
+                    <span className="text-muted-foreground text-xs">{row.email}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="font-medium">{requestId}</TableCell>
+                <TableCell>{row.preferredDate}</TableCell>
+                <TableCell>{row.preferredTime}</TableCell>
+                <TableCell>{row.preferredProvider || "Any"}</TableCell>
+                <TableCell>{row.department}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={getVisitTypeBadgeStyle(row.visitType)}>
+                    {getVisitTypeLabel(row.visitType)}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Button 
+                    size="sm" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/book-appointment?requestId=${row.requestId}`);
+                    }}
+                  >
+                    Schedule Now
+                  </Button>
+                </TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
+                      <DropdownMenuItem onClick={() => handleViewSummary(row)}>View Appointment Summary</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}>Schedule Now</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => console.log("Contact", row.contact)}>Contact Patient</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => console.log("Reject", row.requestId)}>Reject</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     );
@@ -205,29 +224,44 @@ const AppointmentRequests = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Test Code</TableHead>
-          <TableHead>Test Name</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Sample Type</TableHead>
-          <TableHead>Turnaround Time</TableHead>
-          <TableHead>Price (₹)</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
+          <TableHead>Contact</TableHead>
+          <TableHead>Order ID</TableHead>
+          <TableHead>Test Type</TableHead>
+          <TableHead>Ordered By</TableHead>
+          <TableHead>Department</TableHead>
+          <TableHead>Preferred Date</TableHead>
+          <TableHead>Preferred Time</TableHead>
+          <TableHead>Visit Type</TableHead>
+          <TableHead style={{ width: "140px" }}></TableHead>
           <TableHead style={{ width: "80px" }}>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {laboratoryData.map((row) => (
           <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50">
-            <TableCell className="font-medium">{row.testCode}</TableCell>
-            <TableCell>{row.testName}</TableCell>
-            <TableCell>{row.category}</TableCell>
-            <TableCell>{row.sampleType}</TableCell>
-            <TableCell>{row.turnaroundTime}</TableCell>
-            <TableCell>₹{row.price.toLocaleString()}</TableCell>
+            <TableCell style={{ width: "220px", minWidth: "220px" }}>
+              <PatientCell name={row.patient} gdid={row.gdid} ageSex={row.ageSex} patientId={row.gdid} fromPage="scheduled" />
+            </TableCell>
             <TableCell>
-              <Badge className={row.status === "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}>
-                {row.status}
+              <div className="flex flex-col">
+                <span>{row.contact}</span>
+                <span className="text-muted-foreground text-xs">{row.email}</span>
+              </div>
+            </TableCell>
+            <TableCell className="font-medium">{row.orderId}</TableCell>
+            <TableCell>{row.testType}</TableCell>
+            <TableCell>{row.orderedBy}</TableCell>
+            <TableCell>{row.department}</TableCell>
+            <TableCell>{row.preferredDate}</TableCell>
+            <TableCell>{row.preferredTime}</TableCell>
+            <TableCell>
+              <Badge variant="outline" className={row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}>
+                {row.visitType}
               </Badge>
+            </TableCell>
+            <TableCell>
+              <Button size="sm">Schedule Now</Button>
             </TableCell>
             <TableCell onClick={(e) => e.stopPropagation()}>
               <DropdownMenu>
@@ -237,9 +271,10 @@ const AppointmentRequests = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>Edit Test</DropdownMenuItem>
                   <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>{row.status === "Active" ? "Deactivate" : "Activate"}</DropdownMenuItem>
+                  <DropdownMenuItem>Schedule Now</DropdownMenuItem>
+                  <DropdownMenuItem>Contact Patient</DropdownMenuItem>
+                  <DropdownMenuItem>Cancel</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -253,34 +288,54 @@ const AppointmentRequests = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Slot ID</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Time</TableHead>
-          <TableHead>Doctor</TableHead>
+          <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
+          <TableHead>Contact</TableHead>
+          <TableHead>Appointment ID</TableHead>
+          <TableHead>Scheduled Date</TableHead>
+          <TableHead>Scheduled Time</TableHead>
+          <TableHead>Doctor / Test</TableHead>
           <TableHead>Department</TableHead>
-          <TableHead>Duration</TableHead>
-          <TableHead>Capacity</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>Visit Type</TableHead>
+          <TableHead>Appointment For</TableHead>
           <TableHead style={{ width: "80px" }}>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {scheduledData.map((row) => (
+        {scheduledAppointments.map((row) => (
           <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50">
-            <TableCell className="font-medium">{row.id}</TableCell>
-            <TableCell>{row.slotDate}</TableCell>
-            <TableCell>{row.slotTime}</TableCell>
-            <TableCell>{row.doctor}</TableCell>
-            <TableCell>{row.department}</TableCell>
-            <TableCell>{row.duration}</TableCell>
-            <TableCell>{row.bookedCount}/{row.maxPatients}</TableCell>
+            <TableCell style={{ width: "220px", minWidth: "220px" }}>
+              <PatientCell name={row.patient} gdid={row.gdid} ageSex={row.ageSex} patientId={row.gdid} fromPage="scheduled" />
+            </TableCell>
             <TableCell>
-              <Badge className={
-                row.status === "Available" ? "bg-green-100 text-green-700" : 
-                row.status === "Full" ? "bg-amber-100 text-amber-700" : 
-                "bg-red-100 text-red-700"
+              <div className="flex flex-col">
+                <span>{row.contact}</span>
+                <span className="text-muted-foreground text-xs">{row.email}</span>
+              </div>
+            </TableCell>
+            <TableCell className="font-medium">{row.appointmentId}</TableCell>
+            <TableCell>{row.scheduledDate}</TableCell>
+            <TableCell>{row.scheduledTime}</TableCell>
+            <TableCell>
+              {row.appointmentFor === "Laboratory" ? (
+                <span className="font-medium">{row.testCode}</span>
+              ) : (
+                <span>{row.doctorOrTest}</span>
+              )}
+            </TableCell>
+            <TableCell>{row.department}</TableCell>
+            <TableCell>
+              <Badge variant="outline" className={
+                row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : 
+                row.visitType === "Home" ? "bg-teal-100 text-teal-700" :
+                row.visitType === "Follow up" ? "bg-blue-100 text-blue-700" :
+                "bg-green-100 text-green-700"
               }>
-                {row.status}
+                {row.visitType}
+              </Badge>
+            </TableCell>
+            <TableCell>
+              <Badge variant="outline" className={row.appointmentFor === "Outpatient" ? "bg-amber-100 text-amber-700" : "bg-indigo-100 text-indigo-700"}>
+                {row.appointmentFor}
               </Badge>
             </TableCell>
             <TableCell onClick={(e) => e.stopPropagation()}>
@@ -291,9 +346,10 @@ const AppointmentRequests = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>Edit Slot</DropdownMenuItem>
-                  <DropdownMenuItem>View Bookings</DropdownMenuItem>
-                  <DropdownMenuItem>{row.status === "Blocked" ? "Unblock" : "Block"}</DropdownMenuItem>
+                  <DropdownMenuItem>View Details</DropdownMenuItem>
+                  <DropdownMenuItem>Reschedule</DropdownMenuItem>
+                  <DropdownMenuItem>Contact Patient</DropdownMenuItem>
+                  <DropdownMenuItem>Cancel</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -348,7 +404,7 @@ const AppointmentRequests = () => {
 
           {/* Controls Row with Filters, Search and Tabs */}
           <div className="flex items-center justify-between mb-4">
-            {/* Left: Filters */}
+            {/* Left: Filters and Search */}
             <div className="flex items-center gap-3">
               <Select value={visitTypeFilter} onValueChange={setVisitTypeFilter}>
                 <SelectTrigger className="w-[150px]">
