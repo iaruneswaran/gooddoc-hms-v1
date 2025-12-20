@@ -551,6 +551,8 @@ const BookAppointment = () => {
                     navigate("/inbox");
                   } else if (fromPatientInsights) {
                     navigate(`/patient-insights/${patientId}`);
+                  } else if (isFromScheduledRequests) {
+                    navigate("/schedule/today");
                   } else {
                     navigate("/registration");
                   }
@@ -559,12 +561,12 @@ const BookAppointment = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span className="font-semibold">
-                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : "Registration")))}
+                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : (isFromScheduledRequests ? "Appointment Requests" : "Registration"))))}
                 </span>
               </button>
             </div>
 
-            {!isSingleAppointmentMode && (
+            {!isSingleAppointmentMode && !isFromScheduledRequests && (
               <BookingSteps currentStep="appointment" hideSteps={fromPatientInsights || fromPatients || fromSearch ? ["search", "registration"] : []} />
             )}
             
@@ -572,8 +574,8 @@ const BookAppointment = () => {
           </div>
 
           <div className="max-w-[1600px] mx-auto">
-            {/* Appointment Type Buttons - Hide in single-appointment mode */}
-            {!isSingleAppointmentMode && (
+            {/* Appointment Type Buttons - Hide in single-appointment mode and scheduled requests flow */}
+            {!isSingleAppointmentMode && !isFromScheduledRequests && (
               <div className="mb-4">
                 <div className="flex gap-3">{appointmentTypes.map((type) => {
                   const Icon = type.icon;
