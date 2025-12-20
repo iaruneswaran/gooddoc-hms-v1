@@ -336,12 +336,12 @@ const AppointmentRequests = () => {
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
             <TableHead>Contact</TableHead>
             <TableHead>Appointment ID</TableHead>
-            <TableHead>Type</TableHead>
             <TableHead>Scheduled Date</TableHead>
             <TableHead>Scheduled Time</TableHead>
             <TableHead>Doctor / Test</TableHead>
             <TableHead>Department</TableHead>
             <TableHead>Visit Type</TableHead>
+            <TableHead>Appointment For</TableHead>
             <TableHead style={{ width: "80px" }}>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -358,11 +358,6 @@ const AppointmentRequests = () => {
                 </div>
               </TableCell>
               <TableCell className="font-medium">{row.appointmentId}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getAppointmentTypeBadgeStyle(row.appointmentType)}>
-                  {row.appointmentType}
-                </Badge>
-              </TableCell>
               <TableCell>{row.scheduledDate}</TableCell>
               <TableCell>{row.scheduledTime}</TableCell>
               <TableCell>
@@ -374,6 +369,11 @@ const AppointmentRequests = () => {
               </TableCell>
               <TableCell>{row.department}</TableCell>
               <TableCell>{row.visitType}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className={getAppointmentTypeBadgeStyle(row.appointmentType)}>
+                  {row.appointmentType}
+                </Badge>
+              </TableCell>
               <TableCell onClick={(e) => e.stopPropagation()}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
