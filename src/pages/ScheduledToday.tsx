@@ -165,7 +165,24 @@ const AppointmentRequests = () => {
               <TableRow 
                 key={row.requestId} 
                 className="cursor-pointer hover:bg-muted/50"
-                onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}
+                onClick={() => navigate(`/book-appointment?type=consultation`, {
+                  state: {
+                    requestData: {
+                      type: 'outpatient',
+                      requestId,
+                      patient: row.patient,
+                      gdid: row.requestId,
+                      ageSex: row.ageSex,
+                      contact: row.contact,
+                      email: row.email,
+                      preferredDate: row.preferredDate,
+                      preferredTime: row.preferredTime,
+                      preferredDoctor: row.preferredProvider,
+                      department: row.department,
+                      visitType: row.visitType,
+                    }
+                  }
+                })}
               >
                 <TableCell style={{ width: "220px", minWidth: "220px" }}>
                   <PatientCell name={row.patient} gdid={row.requestId} ageSex={row.ageSex} patientId={row.requestId} fromPage="scheduled" />
@@ -191,7 +208,24 @@ const AppointmentRequests = () => {
                     size="sm" 
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/book-appointment?requestId=${row.requestId}`);
+                      navigate(`/book-appointment?type=consultation`, {
+                        state: {
+                          requestData: {
+                            type: 'outpatient',
+                            requestId,
+                            patient: row.patient,
+                            gdid: row.requestId,
+                            ageSex: row.ageSex,
+                            contact: row.contact,
+                            email: row.email,
+                            preferredDate: row.preferredDate,
+                            preferredTime: row.preferredTime,
+                            preferredDoctor: row.preferredProvider,
+                            department: row.department,
+                            visitType: row.visitType,
+                          }
+                        }
+                      });
                     }}
                   >
                     Schedule Now
@@ -259,7 +293,32 @@ const AppointmentRequests = () => {
               </Badge>
             </TableCell>
             <TableCell>
-              <Button size="sm">Schedule Now</Button>
+              <Button 
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/book-appointment?type=laboratory`, {
+                    state: {
+                      requestData: {
+                        type: 'laboratory',
+                        orderId: row.orderId,
+                        patient: row.patient,
+                        gdid: row.gdid,
+                        ageSex: row.ageSex,
+                        contact: row.contact,
+                        email: row.email,
+                        testType: row.testType,
+                        orderedBy: row.orderedBy,
+                        preferredDate: row.preferredDate,
+                        preferredTime: row.preferredTime,
+                        visitType: row.visitType,
+                      }
+                    }
+                  });
+                }}
+              >
+                Schedule Now
+              </Button>
             </TableCell>
             <TableCell onClick={(e) => e.stopPropagation()}>
               <DropdownMenu>
