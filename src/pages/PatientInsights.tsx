@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { AlertCircle, Wallet, FileText, Scale } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -229,10 +229,10 @@ const PatientInsightsContent = () => {
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-5">
-            {/* Top Row: Patient Info + Action Buttons + KPIs */}
-            <div className="flex items-center justify-between gap-6">
-              {/* Left: Patient Info */}
+          <div className="px-6 py-6">
+            {/* Top Row: Patient Info + KPIs */}
+            <div className="flex items-start justify-between mb-4">
+              {/* Patient Info */}
               <PatientChip
                 name={patient.name}
                 gdid={patient.gdid}
@@ -241,8 +241,18 @@ const PatientInsightsContent = () => {
                 showBackButton
                 backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
               />
-              
-              {/* Center: Action Buttons */}
+
+              {/* Right: KPIs */}
+              <div className="flex gap-3">
+                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
+                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
+                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
+                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+              </div>
+            </div>
+
+            {/* Action Buttons Row */}
+            <div className="flex items-center justify-between mb-3">
               <div className="flex gap-2">
                 <Button 
                   size="sm"
@@ -274,18 +284,7 @@ const PatientInsightsContent = () => {
                   Payments
                 </Button>
               </div>
-
-              {/* Right: KPIs */}
-              <div className="flex items-center gap-2">
-                <KpiTile label="Outstanding" amount={patient.outstandingTotal} icon={AlertCircle} variant="highlight" />
-                <KpiTile label="Advance" amount={patient.advanceAmount} icon={Wallet} />
-                <KpiTile label="Bills" amount={patient.billsAmount} icon={FileText} />
-                <KpiTile label="Balance" amount={patient.balanceAmount} icon={Scale} />
-              </div>
-            </div>
-
-            {/* Bottom Row: Visit Selector */}
-            <div className="flex items-center justify-end mt-4">
+              {/* Visit Selector */}
               <VisitSelector />
             </div>
           </div>
