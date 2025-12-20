@@ -367,10 +367,11 @@ const AppointmentRequests = () => {
               <TableCell>{row.scheduledDate}</TableCell>
               <TableCell>{row.scheduledTime}</TableCell>
               <TableCell>
-                <div className="flex flex-col">
+                {row.appointmentType === "Laboratory" ? (
+                  <span>{row.testCode}</span>
+                ) : (
                   <span>{row.doctor}</span>
-                  {row.testCode && <span className="text-muted-foreground text-xs">{row.testCode}</span>}
-                </div>
+                )}
               </TableCell>
               <TableCell>{row.department}</TableCell>
               <TableCell>
