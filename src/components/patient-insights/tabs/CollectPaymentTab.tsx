@@ -298,9 +298,9 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       </div>
 
       {/* Right Panel - Payment Settlement */}
-      <div className="w-[420px] flex flex-col bg-background overflow-hidden rounded-xl shadow-lg border border-border">
+      <div className="w-[420px] flex flex-col bg-background overflow-hidden shadow-lg border border-border">
         {/* Blue Header */}
-        <div className="bg-primary px-5 py-4 rounded-t-xl">
+        <div className="bg-primary px-5 py-4">
           <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
           {selectedBill && (
             <p className="text-sm text-primary-foreground/80 mt-0.5">Invoice: {selectedBill.invoiceNo}</p>
