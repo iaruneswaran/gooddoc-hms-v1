@@ -363,7 +363,7 @@ const PatientServices = () => {
           </div>
           
           {/* Right Side - Order Summary */}
-          <div className="w-[420px] border-l border-border flex flex-col bg-card">
+          <div className="w-[420px] border-l border-border flex flex-col bg-card p-6">
             {/* Header */}
             <div className="p-4 border-b border-border bg-primary">
               <div className="flex items-center justify-between">
