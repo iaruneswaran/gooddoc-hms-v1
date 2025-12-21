@@ -1025,6 +1025,10 @@ const BookAppointment = () => {
                 netPayable: pricing.totals.netPayable + servicesTotals.netPayable,
               }}
               itemCount={pricing.lineItems.length + servicesCart.length}
+              singleConsultationMode={selectedTypes.length === 1 && selectedTypes[0] === 'consultation'}
+              onAskConfirmation={handleAskConfirmation}
+              onScheduleNow={handleSchedule}
+              isScheduleDisabled={!validateAppointmentData()}
               onGenerateInvoice={() => {
                 const { subtotal, netPayable } = pricing.totals;
                 const items = pricing.lineItems.map(item => {
