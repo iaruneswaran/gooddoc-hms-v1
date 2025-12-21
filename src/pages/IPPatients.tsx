@@ -10,7 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { User, UserRound, FileText, Clock, Stethoscope, Calendar, BedDouble, MapPin } from "lucide-react";
+import { User, UserRound, FileText, Stethoscope, Calendar, BedDouble, MapPin, IndianRupee } from "lucide-react";
+import { formatINR } from "@/utils/currency";
 
 const IPPatients = () => {
   const navigate = useNavigate();
@@ -85,10 +86,26 @@ const IPPatients = () => {
       )
     },
     {
-      key: "lengthOfStay",
-      label: "Days",
+      key: "totalPaid",
+      label: "Payment Details",
       sortable: true,
-      render: (row) => <span>{row.lengthOfStay} days</span>,
+      render: (row) => {
+        const hasPayment = (row.totalPaid ?? 0) > 0;
+        return (
+          <div className="flex flex-col">
+            {hasPayment ? (
+              <>
+                <span className="text-green-600 font-medium">{formatINR(row.totalPaid ?? 0)}</span>
+                <span className="text-muted-foreground text-xs">
+                  {row.advancePaid ? `Adv: ${formatINR(row.advancePaid)}` : "Admission paid"}
+                </span>
+              </>
+            ) : (
+              <span className="text-amber-600">No payment</span>
+            )}
+          </div>
+        );
+      },
     },
     { 
       key: "emergencyContact", 
@@ -208,10 +225,14 @@ const IPPatients = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <IndianRupee className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Length of Stay</p>
-                      <p className="text-sm font-medium">{selectedPatient.lengthOfStay} days</p>
+                      <p className="text-xs text-muted-foreground">Payment Details</p>
+                      <p className="text-sm font-medium">
+                        {(selectedPatient.totalPaid ?? 0) > 0 
+                          ? formatINR(selectedPatient.totalPaid ?? 0)
+                          : "No payment"}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
