@@ -561,7 +561,7 @@ const BookAppointment = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span className="font-semibold">
-                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : (isFromScheduledRequests ? "Appointment Requests" : "Registration"))))}
+                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : (isFromScheduledRequests ? "Appointments" : "Registration"))))}
                 </span>
               </button>
             </div>
