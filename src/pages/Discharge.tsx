@@ -165,7 +165,7 @@ const Discharge = () => {
             </div>
 
             {/* Right Column - Actions & Documents */}
-            <div className="w-[420px] space-y-6">
+            <div className="w-[418px] space-y-6">
               {/* Settlement & Payment Adjustments Combined */}
               <Card className="p-0 overflow-hidden">
                 <div className="bg-primary px-4 py-3 rounded-t-lg">
