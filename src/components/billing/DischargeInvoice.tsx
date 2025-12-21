@@ -127,7 +127,7 @@ const DischargeInvoice = ({
   };
 
   return (
-    <div className="bg-white border border-border rounded-lg overflow-hidden">
+    <div className="bg-background border border-border rounded-lg overflow-hidden">
       {/* Header */}
       <div className="flex items-start justify-between p-5 border-b border-border">
         <img src={BainesLogoFull} alt="Baines International Healthcare" className="h-9" />
