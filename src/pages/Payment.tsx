@@ -129,269 +129,315 @@ const Payment = () => {
             
             <div className="flex flex-col lg:flex-row gap-6">
               <div className="flex-1 space-y-4">
-                {/* Invoice Summary */}
-                <Card className="p-6">
-                <div className="flex justify-between items-start mb-6">
-                  <h3 className="text-base font-semibold text-foreground">Invoice Summary</h3>
-                  <div className="flex gap-4">
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1">Invoice No</p>
-                      <p className="text-sm font-medium text-foreground">IN-2025-009</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1">Date</p>
-                      <p className="text-sm font-medium text-foreground">{paymentData?.date || "05/11/2025"}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1">Patient</p>
-                      <p className="text-sm font-medium text-foreground">Siva Karthikeyan</p>
-                      <p className="text-xs text-muted-foreground mt-1">GDID - 009 • 35 | M</p>
+                {/* Invoice Header */}
+                <Card className="p-0 overflow-hidden">
+                  {/* Hospital Header */}
+                  <div className="bg-primary/5 border-b border-border px-6 py-5">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h2 className="text-xl font-bold text-foreground">GoodDoc Hospital</h2>
+                        <p className="text-sm text-muted-foreground mt-1">123 Healthcare Avenue, Medical District</p>
+                        <p className="text-sm text-muted-foreground">Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                          TAX INVOICE
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="space-y-6">
+
+                  {/* Invoice Details Row */}
+                  <div className="grid grid-cols-3 gap-6 px-6 py-4 bg-muted/30 border-b border-border">
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Invoice No.</p>
+                      <p className="text-sm font-semibold text-foreground mt-1">INV-2025-009</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Invoice Date</p>
+                      <p className="text-sm font-semibold text-foreground mt-1">{paymentData?.date || "21/12/2025"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Admission No.</p>
+                      <p className="text-sm font-semibold text-foreground mt-1">ADM-2025-0142</p>
+                    </div>
+                  </div>
+
+                  {/* Patient Details */}
+                  <div className="px-6 py-4 border-b border-border">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Patient Details</p>
+                    <div className="grid grid-cols-4 gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">Siva Karthikeyan</p>
+                        <p className="text-xs text-muted-foreground">UHID: GDID-009</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Age / Gender</p>
+                        <p className="text-sm text-foreground">35 Years / Male</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Admission Date</p>
+                        <p className="text-sm text-foreground">05/10/2025</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Discharge Date</p>
+                        <p className="text-sm text-foreground">08/10/2025</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Attending Doctor */}
+                  <div className="px-6 py-3 bg-muted/20 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Attending Physician:</p>
+                      <p className="text-sm font-medium text-foreground">Dr. Arun Kumar, MD (Cardiology)</p>
+                    </div>
+                  </div>
+
+                  {/* Bill Items */}
+                  <div className="px-6 py-4">
+                    {paymentData?.items && paymentData.items.length > 0 && (
+                      <div className="space-y-1">
+                        {/* Table Header */}
+                        <div className="grid grid-cols-12 gap-2 py-2 border-b-2 border-foreground/20 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                          <div className="col-span-1">S.No</div>
+                          <div className="col-span-5">Particulars</div>
+                          <div className="col-span-2 text-center">Qty</div>
+                          <div className="col-span-2 text-right">Rate (₹)</div>
+                          <div className="col-span-2 text-right">Amount (₹)</div>
+                        </div>
+
+                        {/* Admission Section */}
+                        <div className="py-2 border-b border-dashed border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">A. Room & Bed Charges</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">1</div>
+                            <div className="col-span-5">Deluxe Room - 3 Days @ ₹2,500/day</div>
+                            <div className="col-span-2 text-center">3</div>
+                            <div className="col-span-2 text-right">2,500.00</div>
+                            <div className="col-span-2 text-right font-medium">7,500.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">2</div>
+                            <div className="col-span-5">Nursing Charges (per day)</div>
+                            <div className="col-span-2 text-center">3</div>
+                            <div className="col-span-2 text-right">400.00</div>
+                            <div className="col-span-2 text-right font-medium">1,200.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (A)</div>
+                            <div className="col-span-2 text-right font-bold">8,700.00</div>
+                          </div>
+                        </div>
+
+                        {/* Consultation Section */}
+                        <div className="py-2 border-b border-dashed border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">B. Doctor Consultation</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">3</div>
+                            <div className="col-span-5">Cardiology Consultation - Dr. Arun Kumar</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">1,500.00</div>
+                            <div className="col-span-2 text-right font-medium">1,500.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">4</div>
+                            <div className="col-span-5">Follow-up Visit</div>
+                            <div className="col-span-2 text-center">2</div>
+                            <div className="col-span-2 text-right">500.00</div>
+                            <div className="col-span-2 text-right font-medium">1,000.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (B)</div>
+                            <div className="col-span-2 text-right font-bold">2,500.00</div>
+                          </div>
+                        </div>
+
+                        {/* Procedures Section */}
+                        <div className="py-2 border-b border-dashed border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">C. Procedures & Services</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">5</div>
+                            <div className="col-span-5">Cardiac Catheterization</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">18,000.00</div>
+                            <div className="col-span-2 text-right font-medium">18,000.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">6</div>
+                            <div className="col-span-5">ECG - 12 Lead</div>
+                            <div className="col-span-2 text-center">2</div>
+                            <div className="col-span-2 text-right">350.00</div>
+                            <div className="col-span-2 text-right font-medium">700.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">7</div>
+                            <div className="col-span-5">Echocardiography</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">2,500.00</div>
+                            <div className="col-span-2 text-right font-medium">2,500.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (C)</div>
+                            <div className="col-span-2 text-right font-bold">21,200.00</div>
+                          </div>
+                        </div>
+
+                        {/* Laboratory Section */}
+                        <div className="py-2 border-b border-dashed border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">D. Laboratory Investigations</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">8</div>
+                            <div className="col-span-5">Complete Blood Count (CBC)</div>
+                            <div className="col-span-2 text-center">2</div>
+                            <div className="col-span-2 text-right">400.00</div>
+                            <div className="col-span-2 text-right font-medium">800.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">9</div>
+                            <div className="col-span-5">Lipid Profile</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">650.00</div>
+                            <div className="col-span-2 text-right font-medium">650.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">10</div>
+                            <div className="col-span-5">Liver Function Test (LFT)</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">850.00</div>
+                            <div className="col-span-2 text-right font-medium">850.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">11</div>
+                            <div className="col-span-5">Cardiac Biomarkers (Troponin I)</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">1,200.00</div>
+                            <div className="col-span-2 text-right font-medium">1,200.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (D)</div>
+                            <div className="col-span-2 text-right font-bold">3,500.00</div>
+                          </div>
+                        </div>
+
+                        {/* Radiology Section */}
+                        <div className="py-2 border-b border-dashed border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">E. Radiology & Imaging</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">12</div>
+                            <div className="col-span-5">Chest X-Ray (PA View)</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">450.00</div>
+                            <div className="col-span-2 text-right font-medium">450.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">13</div>
+                            <div className="col-span-5">CT Coronary Angiography</div>
+                            <div className="col-span-2 text-center">1</div>
+                            <div className="col-span-2 text-right">6,500.00</div>
+                            <div className="col-span-2 text-right font-medium">6,500.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (E)</div>
+                            <div className="col-span-2 text-right font-bold">6,950.00</div>
+                          </div>
+                        </div>
+
+                        {/* Pharmacy Section */}
+                        <div className="py-2 border-b border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">F. Pharmacy & Consumables</p>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">14</div>
+                            <div className="col-span-5">Medicines & Drugs</div>
+                            <div className="col-span-2 text-center">—</div>
+                            <div className="col-span-2 text-right">—</div>
+                            <div className="col-span-2 text-right font-medium">850.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
+                            <div className="col-span-1 text-muted-foreground">15</div>
+                            <div className="col-span-5">Surgical Consumables</div>
+                            <div className="col-span-2 text-center">—</div>
+                            <div className="col-span-2 text-right">—</div>
+                            <div className="col-span-2 text-right font-medium">300.00</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (F)</div>
+                            <div className="col-span-2 text-right font-bold">1,150.00</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {(!paymentData?.items || paymentData.items.length === 0) && (
+                      <p className="text-center text-muted-foreground py-8">No invoice data available. Generate from booking appointment.</p>
+                    )}
+                  </div>
+
+                  {/* Grand Total Section */}
                   {paymentData?.items && paymentData.items.length > 0 && (
-                  <>
-                  {/* Admission */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Admission</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Service</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">05 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Admission Fee</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹5,000</TableCell>
-                          <TableCell className="w-[100px]">₹5,000</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Admission)</TableCell>
-                          <TableCell className="font-bold">₹5,000</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-
-                  {/* Services & Procedures */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Services & Procedures</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Service</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">06 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Cardiac Catheterization</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹28,000</TableCell>
-                          <TableCell className="w-[100px]">₹28,000</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-[100px]">05 Oct</TableCell>
-                          <TableCell className="w-[140px]">—</TableCell>
-                          <TableCell>Nursing Care (per day)</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹1,200</TableCell>
-                          <TableCell className="w-[100px]">₹1,200</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Services & Procedures)</TableCell>
-                          <TableCell className="font-bold">₹29,200</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-
-                  {/* Consultation */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Consultation</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Service</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">05 Oct</TableCell>
-                          <TableCell className="w-[140px]">CONS-001</TableCell>
-                          <TableCell>Cardiology Consultation</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹1,500</TableCell>
-                          <TableCell className="w-[100px]">₹1,500</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Consultation)</TableCell>
-                          <TableCell className="font-bold">₹1,500</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-
-                  {/* Laboratory */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Laboratory</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Test Name</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">07 Oct</TableCell>
-                          <TableCell className="w-[140px]">LAB-001</TableCell>
-                          <TableCell>Complete Blood Count</TableCell>
-                          <TableCell className="w-[80px]">2</TableCell>
-                          <TableCell className="w-[100px]">₹800</TableCell>
-                          <TableCell className="w-[100px]">₹1,600</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-[100px]">07 Oct</TableCell>
-                          <TableCell className="w-[140px]">LAB-002</TableCell>
-                          <TableCell>Liver Function Test</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹1,500</TableCell>
-                          <TableCell className="w-[100px]">₹1,500</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Laboratory)</TableCell>
-                          <TableCell className="font-bold">₹3,100</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-
-                  {/* Radiology */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Radiology</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Date</TableHead>
-                          <TableHead className="w-[140px]">Appointment No</TableHead>
-                          <TableHead>Test Name</TableHead>
-                          <TableHead className="w-[80px]">Qty</TableHead>
-                          <TableHead className="w-[100px]">Rate</TableHead>
-                          <TableHead className="w-[100px]">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="w-[100px]">06 Oct</TableCell>
-                          <TableCell className="w-[140px]">RADIO-001</TableCell>
-                          <TableCell>Chest X-Ray</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹1,200</TableCell>
-                          <TableCell className="w-[100px]">₹1,200</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-[100px]">06 Oct</TableCell>
-                          <TableCell className="w-[140px]">RADIO-002</TableCell>
-                          <TableCell>CT Scan Abdomen</TableCell>
-                          <TableCell className="w-[80px]">1</TableCell>
-                          <TableCell className="w-[100px]">₹4,000</TableCell>
-                          <TableCell className="w-[100px]">₹4,000</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-muted/50">
-                          <TableCell colSpan={5} className="text-right font-semibold">Subtotal (Radiology)</TableCell>
-                          <TableCell className="font-bold">₹5,200</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-
-
-                  {/* Grand Total */}
-                  <div className="mt-8">
-                    <h4 className="text-sm font-semibold mb-3 text-primary">Grand Total</h4>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Description</TableHead>
-                          <TableHead className="text-right">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>Admission</TableCell>
-                          <TableCell className="text-right">₹5,000</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Services & Procedures</TableCell>
-                          <TableCell className="text-right">₹29,200</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Consultation</TableCell>
-                          <TableCell className="text-right">₹1,500</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Laboratory</TableCell>
-                          <TableCell className="text-right">₹3,100</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Radiology</TableCell>
-                          <TableCell className="text-right">₹5,200</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-primary/10">
-                          <TableCell className="font-bold text-lg">Total</TableCell>
-                          <TableCell className="text-right font-bold text-lg">₹44,000</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-                  </>
+                    <div className="px-6 py-4 bg-muted/30 border-t border-border">
+                      <div className="space-y-2">
+                        <div className="grid grid-cols-12 gap-2 text-sm">
+                          <div className="col-span-10 text-right text-muted-foreground">Gross Total</div>
+                          <div className="col-span-2 text-right font-semibold">44,000.00</div>
+                        </div>
+                        <div className="grid grid-cols-12 gap-2 text-sm">
+                          <div className="col-span-10 text-right text-muted-foreground">Discount (0%)</div>
+                          <div className="col-span-2 text-right">0.00</div>
+                        </div>
+                        <div className="grid grid-cols-12 gap-2 text-sm border-t border-dashed border-border pt-2">
+                          <div className="col-span-10 text-right text-muted-foreground">Taxable Amount</div>
+                          <div className="col-span-2 text-right font-semibold">44,000.00</div>
+                        </div>
+                        <div className="grid grid-cols-12 gap-2 text-sm">
+                          <div className="col-span-10 text-right text-muted-foreground">CGST @ 0%</div>
+                          <div className="col-span-2 text-right">0.00</div>
+                        </div>
+                        <div className="grid grid-cols-12 gap-2 text-sm">
+                          <div className="col-span-10 text-right text-muted-foreground">SGST @ 0%</div>
+                          <div className="col-span-2 text-right">0.00</div>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-12 gap-2 mt-4 pt-3 border-t-2 border-foreground/30">
+                        <div className="col-span-10 text-right font-bold text-base">NET AMOUNT PAYABLE</div>
+                        <div className="col-span-2 text-right font-bold text-lg text-primary">₹44,000</div>
+                      </div>
+                      <div className="mt-2 text-xs text-muted-foreground text-right italic">
+                        Rupees Forty-Four Thousand Only
+                      </div>
+                    </div>
                   )}
-                  
-                  {(!paymentData?.items || paymentData.items.length === 0) && (
-                    <p className="text-center text-muted-foreground py-8">No invoice data available. Generate from booking appointment.</p>
-                  )}
+
+                  {/* Footer */}
+                  <div className="px-6 py-4 bg-muted/10 border-t border-border">
+                    <div className="grid grid-cols-2 gap-6 text-xs text-muted-foreground">
+                      <div>
+                        <p className="font-medium text-foreground mb-1">Payment Terms</p>
+                        <p>• Payment due on discharge</p>
+                        <p>• Accepted: Cash, Card, UPI, Net Banking</p>
+                        <p>• Insurance claims processed within 7 working days</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium text-foreground mb-1">For GoodDoc Hospital</p>
+                        <div className="h-10"></div>
+                        <p className="border-t border-border pt-1 inline-block">Authorized Signatory</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Action Buttons */}
+                <div className="flex gap-4">
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Download PDF
+                  </Button>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Printer className="w-4 h-4" />
+                    Print Invoice
+                  </Button>
                 </div>
-              </Card>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Download className="w-4 h-4" />
-                  Download
-                </Button>
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Printer className="w-4 h-4" />
-                  Print Invoice
-                </Button>
               </div>
-            </div>
 
               {/* Collect Payment */}
               <Card className="w-full lg:w-[420px] p-6 h-fit self-start">
