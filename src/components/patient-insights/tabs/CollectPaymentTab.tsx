@@ -138,6 +138,7 @@ const paymentMethods = [
 export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   const [selectedBill, setSelectedBill] = useState<PayableBill | null>(null);
   const [adjustDeposit, setAdjustDeposit] = useState(false);
+  const [depositAdjustAmount, setDepositAdjustAmount] = useState<string>("full");
   const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
     { id: "1", method: "cash", amount: "" },
   ]);
@@ -194,10 +195,18 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     return null;
   };
 
+  const getDepositAdjustment = () => {
+    if (!adjustDeposit || !selectedBill) return 0;
+    if (depositAdjustAmount === "full") {
+      return Math.min(patientDeposit, selectedBill.balanceAmount);
+    }
+    const customAmount = parseFloat(depositAdjustAmount) || 0;
+    return Math.min(customAmount, patientDeposit, selectedBill.balanceAmount);
+  };
+
+  const depositAdjustment = getDepositAdjustment();
   const amountToCollect = selectedBill
-    ? adjustDeposit
-      ? Math.max(0, selectedBill.balanceAmount - patientDeposit)
-      : selectedBill.balanceAmount
+    ? selectedBill.balanceAmount - depositAdjustment
     : 0;
 
   return (
@@ -349,15 +358,65 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   <span className="text-lg font-bold text-emerald-600">{formatINR(patientDeposit)}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Switch
+                  <Checkbox
                     id="adjust-deposit"
                     checked={adjustDeposit}
-                    onCheckedChange={setAdjustDeposit}
+                    onCheckedChange={(checked) => setAdjustDeposit(checked === true)}
                   />
-                  <Label htmlFor="adjust-deposit" className="text-sm text-muted-foreground cursor-pointer">
+                  <Label htmlFor="adjust-deposit" className="text-sm text-muted-foreground cursor-pointer flex-1">
                     Adjust deposit against this bill
                   </Label>
                 </div>
+                {adjustDeposit && (
+                  <div className="mt-3 pl-6">
+                    <Select
+                      value={depositAdjustAmount}
+                      onValueChange={setDepositAdjustAmount}
+                    >
+                      <SelectTrigger className="h-9 bg-background">
+                        <SelectValue placeholder="Select amount" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="full">
+                          Full Amount ({formatINR(Math.min(patientDeposit, selectedBill?.balanceAmount || 0))})
+                        </SelectItem>
+                        <SelectItem value={String(selectedBill?.balanceAmount || 0)}>
+                          Bill Balance ({formatINR(selectedBill?.balanceAmount || 0)})
+                        </SelectItem>
+                        {patientDeposit >= 1000 && (
+                          <SelectItem value="1000">{formatINR(1000)}</SelectItem>
+                        )}
+                        {patientDeposit >= 500 && (
+                          <SelectItem value="500">{formatINR(500)}</SelectItem>
+                        )}
+                        <SelectItem value="custom">Custom Amount</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {depositAdjustAmount === "custom" && (
+                      <div className="mt-2 relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
+                        <Input
+                          type="number"
+                          placeholder="Enter amount"
+                          max={Math.min(patientDeposit, selectedBill?.balanceAmount || 0)}
+                          className="pl-7 h-9"
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value) || 0;
+                            const max = Math.min(patientDeposit, selectedBill?.balanceAmount || 0);
+                            if (val <= max) {
+                              setDepositAdjustAmount(e.target.value || "0");
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
+                    {depositAdjustAmount !== "custom" && depositAdjustment > 0 && (
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Adjusting <span className="font-medium text-primary">{formatINR(depositAdjustment)}</span> from deposit
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Amount to Collect */}
