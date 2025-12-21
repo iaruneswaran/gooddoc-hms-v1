@@ -114,7 +114,7 @@ const Discharge = () => {
             </div>
           </div>
 
-          <div className="flex gap-6">
+          <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[1156px] space-y-6">
               {/* Summary Cards */}
