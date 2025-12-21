@@ -992,41 +992,47 @@ const BookAppointment = () => {
                         return null;
                       })}
 
-                      {/* Global Discount Controls */}
-                      <div className="pt-4 border-t border-border">
-                        <GlobalDiscountControls
-                          discountType={pricing.globalDiscountType}
-                          discountValue={pricing.globalDiscountValue}
-                          couponCode={pricing.couponCode}
-                          onDiscountTypeChange={pricing.setGlobalDiscountType}
-                          onDiscountValueChange={pricing.setGlobalDiscountValue}
-                          onCouponCodeChange={pricing.setCouponCode}
-                          onApplyCoupon={handleApplyCoupon}
-                          maxValue={pricing.totals.subtotal}
-                        />
-                      </div>
-
-                      {/* Total Summary with Global Discount */}
-                      <div className="pt-4 border-t border-border space-y-2 text-xs">
-                        <div className="flex justify-between">
-                          <p className="text-muted-foreground">Subtotal</p>
-                          <p className="text-foreground">{formatCurrency(pricing.totals.subtotal)}</p>
+                      {/* Global Discount Controls - Hide in scheduled requests flow */}
+                      {!isFromScheduledRequests && (
+                        <div className="pt-4 border-t border-border">
+                          <GlobalDiscountControls
+                            discountType={pricing.globalDiscountType}
+                            discountValue={pricing.globalDiscountValue}
+                            couponCode={pricing.couponCode}
+                            onDiscountTypeChange={pricing.setGlobalDiscountType}
+                            onDiscountValueChange={pricing.setGlobalDiscountValue}
+                            onCouponCodeChange={pricing.setCouponCode}
+                            onApplyCoupon={handleApplyCoupon}
+                            maxValue={pricing.totals.subtotal}
+                          />
                         </div>
-                        
-                        {/* Global Discount if applied */}
-                        {pricing.globalDiscountValue > 0 && (
-                          <div className="flex justify-between text-green-600">
-                            <p>Global Discount ({formatCurrency(pricing.globalDiscountValue)})</p>
-                            <p>-{formatCurrency(pricing.globalDiscountValue)}</p>
-                          </div>
+                      )}
+
+                      {/* Total Summary - Simplified for scheduled requests flow */}
+                      <div className="pt-4 border-t border-border space-y-2 text-xs">
+                        {!isFromScheduledRequests && (
+                          <>
+                            <div className="flex justify-between">
+                              <p className="text-muted-foreground">Subtotal</p>
+                              <p className="text-foreground">{formatCurrency(pricing.totals.subtotal)}</p>
+                            </div>
+                            
+                            {/* Global Discount if applied */}
+                            {pricing.globalDiscountValue > 0 && (
+                              <div className="flex justify-between text-green-600">
+                                <p>Global Discount ({formatCurrency(pricing.globalDiscountValue)})</p>
+                                <p>-{formatCurrency(pricing.globalDiscountValue)}</p>
+                              </div>
+                            )}
+                            {Math.abs(pricing.totals.roundOff) > 0.01 && (
+                              <div className="flex justify-between">
+                                <p className="text-muted-foreground">Round-off</p>
+                                <p className="text-foreground">{pricing.totals.roundOff >= 0 ? '+' : ''}{formatCurrency(pricing.totals.roundOff)}</p>
+                              </div>
+                            )}
+                          </>
                         )}
-                        {Math.abs(pricing.totals.roundOff) > 0.01 && (
-                          <div className="flex justify-between">
-                            <p className="text-muted-foreground">Round-off</p>
-                            <p className="text-foreground">{pricing.totals.roundOff >= 0 ? '+' : ''}{formatCurrency(pricing.totals.roundOff)}</p>
-                          </div>
-                        )}
-                        <div className="flex justify-between pt-3 border-t border-border">
+                        <div className={`flex justify-between ${!isFromScheduledRequests ? 'pt-3 border-t border-border' : ''}`}>
                           <p className="text-foreground font-semibold">Net Payable</p>
                           <p className="text-foreground font-bold">{formatCurrency(pricing.totals.netPayable + servicesTotals.netPayable)}</p>
                         </div>
