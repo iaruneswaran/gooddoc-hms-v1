@@ -193,7 +193,7 @@ const PatientAdvanceCollection = () => {
         />
         
         {/* Compact Header - Same as Services Page */}
-        <div className="h-[72px] bg-card border-b border-border flex-shrink-0 flex items-center justify-between px-6">
+        <div className="h-[72px] bg-background border-b border-border flex-shrink-0 flex items-center justify-between px-6">
           <button
             onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
