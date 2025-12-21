@@ -131,40 +131,26 @@ const TransferPatient = () => {
         ]} />
         
         {/* Fixed Header */}
-        <div className="h-[80px] bg-background border-b border-border flex-shrink-0 flex items-center justify-between px-6">
+        <div className="h-[72px] bg-background border-b border-border flex-shrink-0 flex items-center justify-between px-6">
           {/* Back Button */}
           <button
             onClick={handleCancel}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="font-semibold">Patient Insight</span>
+            <span className="font-semibold">Back to Patient</span>
           </button>
 
-          {/* Patient Info & Current Location */}
-          <div className="flex items-center gap-6">
-            {/* Current Location */}
-            <div className="flex items-center gap-2 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="text-xs text-muted-foreground">Current Location</p>
-                <p className="font-medium text-foreground">
-                  {patient.currentLocation.unitName} • {patient.currentLocation.roomName} • {patient.currentLocation.bedName}
-                </p>
-              </div>
+          {/* Patient Info */}
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-5 w-5 text-primary" />
             </div>
-
-            {/* Patient Info */}
-            <div className="flex items-center gap-2 border-l border-border pl-6">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <User className="h-4 w-4 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{patient.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  GDID - {patient.gdid} • {patient.age} | {patient.gender.charAt(0)}
-                </p>
-              </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">{patient.name}</p>
+              <p className="text-xs text-muted-foreground">
+                GDID-{patient.gdid} • {patient.age}Y / {patient.gender.charAt(0)}
+              </p>
             </div>
           </div>
         </div>
