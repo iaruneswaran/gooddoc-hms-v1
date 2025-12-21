@@ -527,23 +527,6 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
         </div>
       </div>
 
-      {/* Remarks Section */}
-      {visitClaims.some(c => c.remarks) && (
-        <div className="border rounded-lg p-4 bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800">
-          <h4 className="text-sm font-semibold text-amber-800 dark:text-amber-200 flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
-            Claim Remarks
-          </h4>
-          <div className="mt-2 space-y-2">
-            {visitClaims.filter(c => c.remarks).map(claim => (
-              <div key={claim.id} className="text-sm">
-                <span className="font-mono text-xs text-amber-700 dark:text-amber-300">{claim.claimNo}:</span>
-                <span className="ml-2 text-amber-900 dark:text-amber-100">{claim.remarks}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

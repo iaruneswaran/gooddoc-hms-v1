@@ -390,12 +390,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
     <div className="p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-[14px] font-semibold text-foreground">Visit Documents</h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Showing {visitDocuments.length} document{visitDocuments.length !== 1 ? 's' : ''} for visit {selectedVisit.visitId}
-          </p>
-        </div>
+        <h2 className="text-[14px] font-semibold text-foreground">Visit Documents</h2>
         <Button variant="outline" size="sm" className="gap-2">
           <Upload className="h-4 w-4" />
           Upload Document
