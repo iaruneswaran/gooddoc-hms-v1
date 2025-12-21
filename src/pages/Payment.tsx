@@ -440,134 +440,234 @@ const Payment = () => {
               </div>
 
               {/* Collect Payment */}
-              <Card className="w-full lg:w-[420px] p-6 h-fit self-start">
-                <h3 className="text-base font-semibold text-foreground mb-6">Collect Payment</h3>
+              <Card className="w-full lg:w-[420px] h-fit self-start overflow-hidden">
+                {/* Header */}
+                <div className="bg-primary px-5 py-4">
+                  <h3 className="text-base font-semibold text-primary-foreground">Payment Settlement</h3>
+                  <p className="text-xs text-primary-foreground/70 mt-0.5">Invoice: INV-2025-009</p>
+                </div>
                 
-                <div className="space-y-6">
-                  {/* Bill Amount */}
-                  <div className="flex justify-between items-center pb-6 border-b border-border">
-                    <p className="text-sm font-medium text-foreground">Bill Amount:</p>
-                    <p className="text-xl font-semibold text-primary">₹{billAmount.toLocaleString()}</p>
+                <div className="p-5 space-y-5">
+                  {/* Bill Summary */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">Gross Bill Amount</span>
+                      <span className="font-medium">₹44,000.00</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">Discount Applied</span>
+                      <span className="font-medium text-green-600">- ₹0.00</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm border-t border-dashed border-border pt-3">
+                      <span className="font-semibold">Net Bill Amount</span>
+                      <span className="font-bold text-lg">₹{billAmount.toLocaleString()}</span>
+                    </div>
                   </div>
 
-                  {/* Advance Amount Toggle */}
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-foreground">Advance Amount</span>
-                      <span className="text-xl font-semibold text-primary">₹{advanceAmount.toLocaleString()}</span>
+                  {/* Advance/Deposit Section */}
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <span className="text-sm font-medium">Patient Deposit</span>
+                      </div>
+                      <span className="text-sm font-semibold text-blue-600">₹{advanceAmount.toLocaleString()}</span>
                     </div>
                     
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 pt-1">
                       <Switch
                         id="use-advance"
                         checked={useAdvance}
                         onCheckedChange={setUseAdvance}
                       />
-                      <label htmlFor="use-advance" className="text-sm font-normal cursor-pointer text-foreground">
-                        Use advance amount for this bill
+                      <label htmlFor="use-advance" className="text-xs cursor-pointer text-muted-foreground">
+                        Adjust deposit against this bill
                       </label>
                     </div>
                     
                     {useAdvance && (
-                      <div className="space-y-3 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <div className="h-5 w-5 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center flex-shrink-0">
-                            <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                          <span className="font-medium text-sm text-green-700 dark:text-green-400">Advance Amount Used!</span>
+                      <div className="space-y-2 pt-2 border-t border-border">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">Deposit Used</span>
+                          <span className="font-medium text-green-600">- ₹{usedAdvance.toLocaleString()}</span>
                         </div>
-                        
-                        <p className="text-sm text-muted-foreground">
-                          Current bill (₹{billAmount.toLocaleString()}) Used from advance
-                        </p>
-                        
-                        <div className="flex justify-between items-center pt-2">
-                          <span className="text-sm font-medium text-foreground">Remaining Advance Balance</span>
-                          <span className="text-base font-semibold text-foreground">₹{remainingBalance.toLocaleString()}</span>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">Remaining Deposit</span>
+                          <span className="font-medium">₹{remainingBalance.toLocaleString()}</span>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Payable Amount */}
-                  <div className="flex justify-between items-center py-4 border-t border-b border-border">
-                    <span className="font-semibold text-foreground">Payable amount</span>
-                    <span className="text-xl font-bold text-primary">₹{payableAmount.toLocaleString()}</span>
+                  {/* Amount Payable */}
+                  <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Amount to Collect</p>
+                        <p className="text-2xl font-bold text-primary mt-1">₹{payableAmount.toLocaleString()}</p>
+                      </div>
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary text-lg">₹</span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Payer Name */}
-                  <div className="space-y-2.5">
-                    <p className="text-sm font-medium text-foreground">Payer Name</p>
-                    <input
-                      type="text"
-                      defaultValue="Fredrick John"
-                      className="w-full h-10 px-4 bg-background border border-input rounded-md text-sm"
-                    />
-                  </div>
-
-                  {/* Payment Options */}
-                  <div className="space-y-3">
-                    <p className="text-sm font-medium text-foreground">Payment Options</p>
+                  {/* Payment Collection */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold">Payment Collection</p>
+                      <span className="text-xs text-muted-foreground">Split Payment</span>
+                    </div>
                     
                     {paymentRows.map((row, index) => (
-                      <div key={row.id} className="flex items-center gap-3">
-                        <div className="flex-1">
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary">
-                              ₹
-                            </span>
+                      <div key={row.id} className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
                             <input
                               type="text"
                               value={index === 0 ? payableAmount.toLocaleString() : row.amount}
                               onChange={(e) => updatePaymentRow(row.id, 'amount', e.target.value)}
                               readOnly={index === 0}
-                              className="w-full h-10 pl-8 pr-4 text-sm font-semibold text-primary bg-background border border-input rounded-md"
+                              placeholder="0.00"
+                              className="w-full h-11 pl-7 pr-4 text-sm font-semibold bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
                           </div>
-                        </div>
-                        <Select 
-                          value={row.method} 
-                          onValueChange={(value) => updatePaymentRow(row.id, 'method', value)}
-                        >
-                          <SelectTrigger className="w-[140px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Cash">Cash</SelectItem>
-                            <SelectItem value="UPI">UPI</SelectItem>
-                            <SelectItem value="Card">Card</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {paymentRows.length > 1 && (
-                          <button
-                            onClick={() => removePaymentRow(row.id)}
-                            className="h-10 w-10 flex items-center justify-center text-primary hover:text-primary/80"
+                          <Select 
+                            value={row.method} 
+                            onValueChange={(value) => updatePaymentRow(row.id, 'method', value)}
                           >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                            <SelectTrigger className="w-[130px] h-11">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="bg-popover border border-border shadow-lg z-50">
+                              <SelectItem value="Cash">
+                                <span className="flex items-center gap-2">💵 Cash</span>
+                              </SelectItem>
+                              <SelectItem value="UPI">
+                                <span className="flex items-center gap-2">📱 UPI</span>
+                              </SelectItem>
+                              <SelectItem value="Card">
+                                <span className="flex items-center gap-2">💳 Card</span>
+                              </SelectItem>
+                              <SelectItem value="Cheque">
+                                <span className="flex items-center gap-2">📝 Cheque</span>
+                              </SelectItem>
+                              <SelectItem value="NEFT">
+                                <span className="flex items-center gap-2">🏦 NEFT/RTGS</span>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {paymentRows.length > 1 && (
+                            <button
+                              onClick={() => removePaymentRow(row.id)}
+                              className="h-11 w-11 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                        {index === 0 && row.method === "UPI" && (
+                          <input
+                            type="text"
+                            placeholder="UPI Transaction ID"
+                            className="w-full h-9 px-3 text-xs bg-muted/50 border border-input rounded-md"
+                          />
+                        )}
+                        {index === 0 && row.method === "Card" && (
+                          <input
+                            type="text"
+                            placeholder="Last 4 digits of card / Approval code"
+                            className="w-full h-9 px-3 text-xs bg-muted/50 border border-input rounded-md"
+                          />
                         )}
                       </div>
                     ))}
 
-                    <p 
-                      className="text-sm text-primary font-medium cursor-pointer"
+                    <button 
+                      className="text-sm text-primary font-medium hover:underline flex items-center gap-1"
                       onClick={addPaymentRow}
                     >
-                      Add Payment
-                    </p>
+                      <span className="text-lg leading-none">+</span> Add Split Payment
+                    </button>
+                  </div>
+
+                  {/* Payer Details */}
+                  <div className="space-y-3 pt-2 border-t border-border">
+                    <p className="text-sm font-semibold">Payer Details</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-muted-foreground">Payer Name</label>
+                        <input
+                          type="text"
+                          defaultValue="Siva Karthikeyan"
+                          className="w-full h-10 px-3 mt-1 text-sm bg-background border border-input rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">Relation</label>
+                        <Select defaultValue="self">
+                          <SelectTrigger className="h-10 mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-popover border border-border shadow-lg z-50">
+                            <SelectItem value="self">Self</SelectItem>
+                            <SelectItem value="spouse">Spouse</SelectItem>
+                            <SelectItem value="parent">Parent</SelectItem>
+                            <SelectItem value="child">Child</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Mobile Number</label>
+                      <input
+                        type="tel"
+                        defaultValue="+91 98765 43210"
+                        className="w-full h-10 px-3 mt-1 text-sm bg-background border border-input rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Receipt Options */}
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="rounded" defaultChecked />
+                      <span>Print Receipt</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="rounded" defaultChecked />
+                      <span>Send SMS</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="rounded" />
+                      <span>Email</span>
+                    </label>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-1">
-                    <Button variant="outline" className="flex-1" onClick={handlePayLater}>
+                  <div className="flex gap-3 pt-3">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1 h-12" 
+                      onClick={handlePayLater}
+                    >
                       Pay Later
                     </Button>
-                    <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handlePayNow}>
-                      Confirm Payment
+                    <Button 
+                      className="flex-1 h-12 bg-primary hover:bg-primary/90 font-semibold" 
+                      onClick={handlePayNow}
+                    >
+                      Settle Bill
                     </Button>
                   </div>
+
+                  {/* Footer Note */}
+                  <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
+                    By settling this bill, you confirm that payment has been received. 
+                    A receipt will be generated automatically.
+                  </p>
                 </div>
               </Card>
             </div>
