@@ -99,20 +99,13 @@ const Discharge = () => {
             <span className="font-semibold">{fromSearch ? "Search Results" : "Patient Insights"}</span>
           </button>
 
-          <div className="flex items-center gap-6">
-            <div>
-              <p className="text-xs text-muted-foreground">Visit ID</p>
-              <p className="text-sm font-medium text-foreground">{visitId}</p>
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <FileText className="h-5 w-5 text-primary" />
             </div>
-            <div className="h-8 w-px bg-border" />
             <div>
-              <p className="text-xs text-muted-foreground">Admission</p>
-              <p className="text-sm font-medium text-foreground">05 Oct 2025</p>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div>
-              <p className="text-xs text-muted-foreground">LOS</p>
-              <p className="text-sm font-medium text-foreground">3 days</p>
+              <p className="text-sm font-semibold text-foreground">Harish Kalyan</p>
+              <p className="text-xs text-muted-foreground">GDID-001 • 44Y / M</p>
             </div>
           </div>
         </div>
