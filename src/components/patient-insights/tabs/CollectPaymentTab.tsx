@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Download, Printer, Eye, Plus, X, Banknote, CreditCard, Smartphone, Building2 } from "lucide-react";
+import { Download, Printer, Eye, Plus, X, Banknote, CreditCard, Smartphone, Building2, IndianRupee } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 
@@ -296,167 +296,167 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       </div>
 
       {/* Right Panel - Payment Settlement */}
-      <div className="w-[420px] border-l border-border bg-background p-6 overflow-y-auto">
-        <h2 className="text-base font-semibold text-foreground mb-6">Payment Settlement</h2>
+      <div className="w-[420px] flex flex-col bg-background overflow-hidden rounded-xl shadow-lg border border-border">
+        {/* Blue Header */}
+        <div className="bg-primary px-5 py-4 rounded-t-xl">
+          <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
+          {selectedBill && (
+            <p className="text-sm text-primary-foreground/80 mt-0.5">Invoice: {selectedBill.invoiceNo}</p>
+          )}
+        </div>
 
-        {!selectedBill ? (
-          <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
-            <p className="text-sm text-muted-foreground text-center px-4">
-              Select a bill from the left to collect payment
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-5">
-            {/* Invoice Header */}
-            <div className="bg-muted/50 rounded-lg px-4 py-3">
-              <p className="text-sm text-muted-foreground">
-                Invoice: <span className="font-semibold text-foreground">{selectedBill.invoiceNo}</span>
+        <div className="flex-1 overflow-y-auto p-5">
+          {!selectedBill ? (
+            <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
+              <p className="text-sm text-muted-foreground text-center px-4">
+                Select a bill from the left to collect payment
               </p>
             </div>
-
-            {/* Bill Summary */}
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
-                <span className="text-sm font-medium text-foreground">{formatINR(selectedBill.originalAmount)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Discount Applied</span>
-                <span className="text-sm font-medium text-emerald-600">
-                  - {formatINR(selectedBill.originalAmount - selectedBill.totalAmount)}
-                </span>
-              </div>
-              <Separator className="my-2" />
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-foreground">Net Bill Amount</span>
-                <span className="text-sm font-semibold text-foreground">{formatINR(selectedBill.totalAmount)}</span>
-              </div>
-              {selectedBill.paidAmount > 0 && (
+          ) : (
+            <div className="space-y-5">
+              {/* Bill Summary */}
+              <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Already Paid</span>
-                  <span className="text-sm font-medium text-emerald-600">- {formatINR(selectedBill.paidAmount)}</span>
+                  <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
+                  <span className="text-sm font-semibold text-foreground">{formatINR(selectedBill.originalAmount)}</span>
                 </div>
-              )}
-            </div>
-
-            {/* Patient Deposit */}
-            <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-4">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-medium text-amber-900 dark:text-amber-100">Patient Deposit</span>
-                <span className="text-xl font-bold text-amber-700 dark:text-amber-300">{formatINR(patientDeposit)}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Discount Applied</span>
+                  <span className="text-sm font-medium text-emerald-600">
+                    - {formatINR(selectedBill.originalAmount - selectedBill.totalAmount)}
+                  </span>
+                </div>
+                <div className="border-t border-border my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-semibold text-foreground">Net Bill Amount</span>
+                  <span className="text-base font-bold text-foreground">{formatINR(selectedBill.totalAmount)}</span>
+                </div>
+                {selectedBill.paidAmount > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Already Paid</span>
+                    <span className="text-sm font-medium text-emerald-600">- {formatINR(selectedBill.paidAmount)}</span>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="adjust-deposit"
-                  checked={adjustDeposit}
-                  onCheckedChange={(checked) => setAdjustDeposit(checked as boolean)}
-                  className="border-amber-400 data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600"
-                />
-                <Label htmlFor="adjust-deposit" className="text-sm text-amber-800 dark:text-amber-200 cursor-pointer">
-                  Adjust deposit against this bill
-                </Label>
-              </div>
-            </div>
 
-            {/* Amount to Collect */}
-            <div className="bg-primary rounded-xl p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-primary-foreground/90">Amount to Collect</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-bold text-primary-foreground">{formatINR(amountToCollect)}</span>
+              {/* Patient Deposit */}
+              <div className="bg-muted/30 rounded-lg p-4 border border-border">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <span className="text-sm font-medium text-foreground">Patient Deposit</span>
+                  </div>
+                  <span className="text-lg font-bold text-emerald-600">{formatINR(patientDeposit)}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Switch
+                    id="adjust-deposit"
+                    checked={adjustDeposit}
+                    onCheckedChange={setAdjustDeposit}
+                  />
+                  <Label htmlFor="adjust-deposit" className="text-sm text-muted-foreground cursor-pointer">
+                    Adjust deposit against this bill
+                  </Label>
                 </div>
               </div>
-            </div>
 
-            {/* Payment Collection */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium text-foreground">Payment Collection</Label>
+              {/* Amount to Collect */}
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Amount to Collect</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-2xl font-bold text-primary">{formatINR(amountToCollect)}</span>
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <IndianRupee className="h-5 w-5 text-primary" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Collection */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-semibold text-foreground">Payment Collection</Label>
+                  <button
+                    className="text-sm text-muted-foreground hover:text-primary font-medium"
+                    onClick={addSplitPayment}
+                  >
+                    Split Payment
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {splitPayments.map((payment) => (
+                    <div key={payment.id} className="flex gap-2 items-center">
+                      <div className="flex-1 relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
+                        <Input
+                          type="number"
+                          placeholder="0.00"
+                          value={payment.amount}
+                          onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                          className="pl-7 h-11"
+                        />
+                      </div>
+                      <Select
+                        value={payment.method}
+                        onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
+                      >
+                        <SelectTrigger className="w-[130px] h-11">
+                          <div className="flex items-center gap-2">
+                            {getMethodIcon(payment.method)}
+                            <span className="text-sm">{paymentMethods.find(m => m.id === payment.method)?.label}</span>
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {paymentMethods.map((method) => (
+                            <SelectItem key={method.id} value={method.id}>
+                              <div className="flex items-center gap-2">
+                                <method.icon className="h-4 w-4" />
+                                <span>{method.label}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {splitPayments.length > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-11 w-11 text-muted-foreground hover:text-destructive"
+                          onClick={() => removeSplitPayment(payment.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
                 <button
-                  className="text-sm text-primary hover:text-primary/80 font-medium"
+                  className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1"
                   onClick={addSplitPayment}
                 >
-                  Split Payment
+                  <Plus className="h-4 w-4" />
+                  Add Split Payment
                 </button>
               </div>
 
+              {/* Payer Details */}
               <div className="space-y-3">
-                {splitPayments.map((payment) => (
-                  <div key={payment.id} className="flex gap-2 items-center">
-                    <div className="flex-1 relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        value={payment.amount}
-                        onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
-                        className="pl-7 h-10"
-                      />
-                    </div>
-                    <Select
-                      value={payment.method}
-                      onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
-                    >
-                      <SelectTrigger className="w-[140px] h-10">
-                        <div className="flex items-center gap-2">
-                          {getMethodIcon(payment.method)}
-                          <span className="text-sm">{paymentMethods.find(m => m.id === payment.method)?.label}</span>
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {paymentMethods.map((method) => (
-                          <SelectItem key={method.id} value={method.id}>
-                            <div className="flex items-center gap-2">
-                              <method.icon className="h-4 w-4" />
-                              <span>{method.label}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {splitPayments.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 text-muted-foreground hover:text-destructive"
-                        onClick={() => removeSplitPayment(payment.id)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-sm border-dashed"
-                onClick={addSplitPayment}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Split Payment
-              </Button>
-            </div>
-
-            {/* Payer Details */}
-            <div className="space-y-4">
-              <Label className="text-sm font-medium text-foreground">Payer Details</Label>
-              <div className="space-y-3">
-                <div>
-                  <Label className="text-xs text-muted-foreground mb-1.5 block">Payer Name</Label>
-                  <Input
-                    placeholder="Enter payer name"
-                    value={payerName}
-                    onChange={(e) => setPayerName(e.target.value)}
-                    className="h-10"
-                  />
-                </div>
+                <Label className="text-sm font-semibold text-foreground">Payer Details</Label>
                 <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">Payer Name</Label>
+                    <Input
+                      placeholder="Harish Kalyan"
+                      value={payerName}
+                      onChange={(e) => setPayerName(e.target.value)}
+                      className="h-11"
+                    />
+                  </div>
                   <div>
                     <Label className="text-xs text-muted-foreground mb-1.5 block">Relation</Label>
                     <Select value={payerRelation} onValueChange={setPayerRelation}>
-                      <SelectTrigger className="h-10">
+                      <SelectTrigger className="h-11">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -469,63 +469,63 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1.5 block">Mobile Number</Label>
-                    <Input
-                      placeholder="Enter mobile"
-                      value={payerMobile}
-                      onChange={(e) => setPayerMobile(e.target.value)}
-                      className="h-10"
-                    />
-                  </div>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground mb-1.5 block">Mobile Number</Label>
+                  <Input
+                    placeholder="+91 98765 43210"
+                    value={payerMobile}
+                    onChange={(e) => setPayerMobile(e.target.value)}
+                    className="h-11"
+                  />
                 </div>
               </div>
-            </div>
 
-            {/* Notification Options */}
-            <div className="flex items-center gap-6 py-2">
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="print-receipt"
-                  checked={printReceipt}
-                  onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
-                />
-                <Label htmlFor="print-receipt" className="text-sm cursor-pointer">Print Receipt</Label>
+              {/* Notification Options */}
+              <div className="flex items-center gap-5">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="print-receipt"
+                    checked={printReceipt}
+                    onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
+                  />
+                  <Label htmlFor="print-receipt" className="text-sm cursor-pointer">Print Receipt</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="send-sms"
+                    checked={sendSms}
+                    onCheckedChange={(checked) => setSendSms(checked as boolean)}
+                  />
+                  <Label htmlFor="send-sms" className="text-sm cursor-pointer">Send SMS</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="send-email"
+                    checked={sendEmail}
+                    onCheckedChange={(checked) => setSendEmail(checked as boolean)}
+                  />
+                  <Label htmlFor="send-email" className="text-sm cursor-pointer">Email</Label>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="send-sms"
-                  checked={sendSms}
-                  onCheckedChange={(checked) => setSendSms(checked as boolean)}
-                />
-                <Label htmlFor="send-sms" className="text-sm cursor-pointer">Send SMS</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="send-email"
-                  checked={sendEmail}
-                  onCheckedChange={(checked) => setSendEmail(checked as boolean)}
-                />
-                <Label htmlFor="send-email" className="text-sm cursor-pointer">Email</Label>
-              </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-2">
-              <Button variant="outline" className="flex-1 h-11">
-                Pay Later
-              </Button>
-              <Button className="flex-1 h-11">
-                Settle Bill
-              </Button>
-            </div>
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-2">
+                <Button variant="outline" className="flex-1 h-12 text-sm font-medium">
+                  Pay Later
+                </Button>
+                <Button className="flex-1 h-12 text-sm font-medium">
+                  Settle Bill
+                </Button>
+              </div>
 
-            {/* Footer Note */}
-            <p className="text-xs text-muted-foreground text-center leading-relaxed">
-              By settling this bill, you confirm that payment has been received. A receipt will be generated automatically.
-            </p>
-          </div>
-        )}
+              {/* Footer Note */}
+              <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                By settling this bill, you confirm that payment has been received. A receipt will be generated automatically.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
