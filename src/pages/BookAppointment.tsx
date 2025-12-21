@@ -614,10 +614,10 @@ const BookAppointment = () => {
                           return (
                             <LaboratoryBookingForm
                               key={`laboratory-${requestData?.orderId || 'default'}`}
-                              onRemove={isSingleAppointmentMode ? undefined : handleRemoveLaboratory}
+                              onRemove={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleRemoveLaboratory}
                               onUpdate={handleLaboratoryUpdate}
                               initialData={laboratoryData}
-                              hideMode={isSingleAppointmentMode}
+                              hideMode={isSingleAppointmentMode || isFromScheduledRequests}
                             />
                           );
                         }
