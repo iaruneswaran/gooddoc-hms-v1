@@ -205,6 +205,82 @@ const Discharge = () => {
                     )}
                   </div>
 
+                  {/* Discount Fields */}
+                  <div className="space-y-3 pt-2 border-t border-border">
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-muted-foreground">Discount Type</label>
+                      <Input placeholder="Select type" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Amount</label>
+                        <Input placeholder="₹0" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Reason</label>
+                        <Input placeholder="Enter reason" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Payment Collection with Split */}
+                  <div className="space-y-3 pt-2 border-t border-border">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-foreground">Payment Collection</p>
+                      <span className="text-xs text-primary font-medium">Split Payment</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {splitPayments.map((payment) => (
+                        <div key={payment.id} className="flex items-center gap-2">
+                          <Input
+                            placeholder="₹ 0.00"
+                            value={payment.amount}
+                            onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                            className="flex-1"
+                          />
+                          <Select
+                            value={payment.method}
+                            onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
+                          >
+                            <SelectTrigger className="w-[120px] bg-background">
+                              <SelectValue>
+                                {paymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
+                                {paymentMethods.find(m => m.value === payment.method)?.label}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent className="bg-background border border-border z-50">
+                              {paymentMethods.map((method) => (
+                                <SelectItem key={method.value} value={method.value}>
+                                  <span className="flex items-center gap-2">
+                                    <span>{method.emoji}</span>
+                                    <span>{method.label}</span>
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {splitPayments.length > 1 && (
+                            <button
+                              onClick={() => removeSplitPayment(payment.id)}
+                              className="p-2 rounded-lg transition-colors text-destructive hover:bg-destructive/10"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={addSplitPayment}
+                      className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Split Payment
+                    </button>
+                  </div>
+
                   {/* Payer Details */}
                   <div className="space-y-3 pt-2 border-t border-border">
                     <p className="text-sm font-medium text-foreground">Payer Details</p>
@@ -233,84 +309,6 @@ const Discharge = () => {
                     <div className="space-y-1.5">
                       <label className="text-xs text-muted-foreground">Mobile Number</label>
                       <Input placeholder="+91" />
-                    </div>
-                  </div>
-
-                  {/* Discount Fields */}
-                  <div className="space-y-3 pt-2 border-t border-border">
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-muted-foreground">Discount Type</label>
-                      <Input placeholder="Select type" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground">Amount</label>
-                        <Input placeholder="₹0" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground">Reason</label>
-                        <Input placeholder="Enter reason" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Payment Collection with Split */}
-                  <div className="space-y-3 pt-2 border-t border-border">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-foreground">Payment Collection</p>
-                      <button
-                        onClick={addSplitPayment}
-                        className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Add Split Payment
-                      </button>
-                    </div>
-
-                    <div className="space-y-2">
-                      {splitPayments.map((payment, index) => (
-                        <div key={payment.id} className="flex items-center gap-2">
-                          <Input
-                            placeholder="₹ 0.00"
-                            value={payment.amount}
-                            onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
-                            className="flex-1"
-                          />
-                          <Select
-                            value={payment.method}
-                            onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
-                          >
-                            <SelectTrigger className="w-[130px] bg-background">
-                              <SelectValue>
-                                {paymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
-                                {paymentMethods.find(m => m.value === payment.method)?.label}
-                              </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent className="bg-background border border-border z-50">
-                              {paymentMethods.map((method) => (
-                                <SelectItem key={method.value} value={method.value}>
-                                  <span className="flex items-center gap-2">
-                                    <span>{method.emoji}</span>
-                                    <span>{method.label}</span>
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <button
-                            onClick={() => removeSplitPayment(payment.id)}
-                            className={cn(
-                              "p-2 rounded-lg transition-colors",
-                              splitPayments.length > 1 
-                                ? "text-destructive hover:bg-destructive/10" 
-                                : "text-muted-foreground/30 cursor-not-allowed"
-                            )}
-                            disabled={splitPayments.length <= 1}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
                     </div>
                   </div>
 
