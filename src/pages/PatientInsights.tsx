@@ -167,14 +167,21 @@ const PatientInsightsContent = () => {
     "appointments": { label: "Appointments", path: "/" },
     "op-patients": { label: "OP Patients", path: "/patients/op" },
     "ip-patients": { label: "IP Patients", path: "/patients/ip" },
-    "discharged": { label: "Discharged", path: "/discharged" },
-    "emergency": { label: "Emergency Cases", path: "/emergency" },
-    "surgeries": { label: "Surgeries", path: "/surgeries" },
+    "discharged": { label: "Discharged", path: "/patients/discharged" },
+    "emergency": { label: "Emergency Cases", path: "/er/cases" },
+    "surgeries": { label: "Surgeries", path: "/or/surgeries" },
     "pharmacy": { label: "Medicine Orders", path: "/pharmacy" },
-    "transfers": { label: "Transfers", path: "/transfers" },
+    "transfers": { label: "Transfers", path: "/patients/transfers" },
+    "check-in": { label: "Check-In", path: "/patients/check-in" },
+    "overview": { label: "Overview", path: "/" },
+    "doctors-on-duty": { label: "Doctors On Duty", path: "/doctors/on-duty" },
+    "scheduled-today": { label: "Scheduled Today", path: "/schedule/today" },
+    "lab-pending": { label: "Lab Pending", path: "/lab/pending" },
+    "radiology-queue": { label: "Radiology Queue", path: "/radiology/queue" },
+    "diagnostics": { label: "Diagnostics", path: "/diagnostics" },
   };
 
-  const currentBreadcrumb = breadcrumbConfig[fromPage || ""] || { label: "Appointments", path: "/" };
+  const currentBreadcrumb = breadcrumbConfig[fromPage || ""] || { label: "Overview", path: "/" };
 
   // Mock patient data
   const patient = {
@@ -240,7 +247,7 @@ const PatientInsightsContent = () => {
                   age={patient.age}
                   gender={patient.gender}
                   showBackButton
-                  backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
+                  backPath={currentBreadcrumb.path}
                   variant="light"
                 />
                 <div className="border-l border-white/20 pl-5">
