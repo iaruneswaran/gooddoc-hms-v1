@@ -51,21 +51,21 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
           <ArrowLeft className={`h-5 w-5 ${isLight ? "" : "text-muted-foreground"}`} />
         </button>
       )}
-      <Avatar className="h-12 w-12 ring-2 ring-white/30">
+      <Avatar className="h-10 w-10">
         <AvatarFallback className={`${avatarBgClass} ${isLight ? "text-white" : "text-primary-foreground"}`}>
           {isFemale ? (
-            <UserRound className="h-6 w-6" />
+            <UserRound className="h-5 w-5" />
           ) : (
-            <User className="h-6 w-6" />
+            <User className="h-5 w-5" />
           )}
         </AvatarFallback>
       </Avatar>
       <div className="text-left">
-        <p className={`text-lg font-bold tracking-tight ${isLight ? "text-white" : "text-foreground group-hover:text-primary"} transition-colors`}>
+        <p className={`text-base font-semibold ${isLight ? "text-white" : "text-foreground group-hover:text-primary"} transition-colors`}>
           {name}
         </p>
-        <p className={`text-sm font-medium ${isLight ? "text-white/80" : "text-muted-foreground"}`}>
-          GDID-{gdid} • {age} | {gender[0]}
+        <p className={`text-xs ${isLight ? "text-white/70" : "text-muted-foreground"}`}>
+          {gdid} • {age} | {gender[0]}
         </p>
       </div>
     </>

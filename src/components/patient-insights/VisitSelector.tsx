@@ -93,7 +93,7 @@ export function VisitSelector({ variant = "default" }: VisitSelectorProps) {
       {/* Screen reader live region */}
       <div id="visit-selector-live" className="sr-only" aria-live="polite" />
       
-      <span className={`text-sm font-medium ${isLight ? "text-white/80" : "text-muted-foreground"}`}>Visit:</span>
+      <span className={`text-xs font-medium ${isLight ? "text-white/60" : "text-muted-foreground"}`}>Visit:</span>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -103,29 +103,32 @@ export function VisitSelector({ variant = "default" }: VisitSelectorProps) {
             aria-label="Select visit"
             aria-haspopup="listbox"
             className={cn(
-              "w-[320px] justify-between h-9 px-3",
-              isLight && "bg-white/15 border-white/30 text-white hover:bg-white/25 backdrop-blur-sm"
+              "w-[280px] justify-between h-8 px-3 text-xs",
+              isLight && "bg-white/10 border-0 text-white hover:bg-white/20"
             )}
           >
             {selectedVisit ? (
-              <div className="flex items-center gap-2 truncate">
+              <div className="flex items-center gap-1.5 truncate">
                 <span className="font-mono font-medium">{selectedVisit.visitId}</span>
-                <span className={isLight ? "text-white/60" : "text-muted-foreground"}>•</span>
-                <span className={`text-sm ${isLight ? "text-white/80" : "text-muted-foreground"}`}>
+                <span className={isLight ? "text-white/40" : "text-muted-foreground"}>•</span>
+                <span className={isLight ? "text-white/70" : "text-muted-foreground"}>
                   {format(selectedVisit.datetime, "dd-MMM-yyyy")}
                 </span>
-                <span className={isLight ? "text-white/60" : "text-muted-foreground"}>•</span>
+                <span className={isLight ? "text-white/40" : "text-muted-foreground"}>•</span>
                 <Badge 
                   variant="secondary" 
-                  className={cn("text-xs px-1.5 py-0", statusColors[selectedVisit.status])}
+                  className={cn(
+                    "text-[10px] px-1.5 py-0 h-4",
+                    isLight ? "bg-emerald-500/80 text-white border-0" : statusColors[selectedVisit.status]
+                  )}
                 >
                   {selectedVisit.status}
                 </Badge>
               </div>
             ) : (
-              <span className={isLight ? "text-white/60" : "text-muted-foreground"}>Select visit...</span>
+              <span className={isLight ? "text-white/50" : "text-muted-foreground"}>Select visit...</span>
             )}
-            <ChevronsUpDown className={`ml-2 h-4 w-4 shrink-0 ${isLight ? "text-white/60" : "opacity-50"}`} />
+            <ChevronsUpDown className={`ml-2 h-3.5 w-3.5 shrink-0 ${isLight ? "text-white/50" : "opacity-50"}`} />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[380px] p-0 bg-popover" align="start">

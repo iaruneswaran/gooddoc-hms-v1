@@ -14,19 +14,19 @@ export function KpiTile({
   const isLight = variant === "light";
   
   return (
-    <div className={`rounded-xl px-5 py-3 backdrop-blur-sm border min-w-[160px] ${
+    <div className={`rounded-lg px-4 py-2.5 min-w-[140px] ${
       isLight 
-        ? "border-white/25 bg-white/15" 
-        : "border-border bg-card"
+        ? "bg-white/10" 
+        : "border border-border bg-card"
     }`}>
-      <p className={`text-xs font-medium mb-1 ${isLight ? "text-white/70" : "text-muted-foreground"}`}>
+      <p className={`text-[11px] font-medium uppercase tracking-wide ${isLight ? "text-white/60" : "text-muted-foreground"}`}>
         {label}
       </p>
-      <p className={`text-xl font-bold ${isLight ? "text-white" : "text-foreground"}`}>
-        ₹{amount}
+      <p className={`text-lg font-semibold mt-0.5 ${isLight ? "text-white" : "text-foreground"}`}>
+        {amount}
       </p>
       {subtitle && (
-        <p className={`text-[11px] mt-1 ${isLight ? "text-white/60" : "text-muted-foreground"}`}>
+        <p className={`text-[10px] mt-0.5 ${isLight ? "text-white/50" : "text-muted-foreground"}`}>
           {subtitle}
         </p>
       )}

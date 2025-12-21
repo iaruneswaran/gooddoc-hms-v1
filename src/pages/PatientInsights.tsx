@@ -276,27 +276,26 @@ const PatientInsightsContent = () => {
 
             {/* Action Buttons Row */}
             <div className="flex items-center justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 <Button 
                   size="sm"
-                  variant="secondary"
-                  className="bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-sm font-medium"
+                  className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-xs font-medium"
                   onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Services
                 </Button>
                 <Button 
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
                   onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Transfer
                 </Button>
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="sm"
-                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
                   onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
                     state: { visitId: selectedVisit?.visitId }
                   })}
@@ -304,9 +303,9 @@ const PatientInsightsContent = () => {
                   Discharge
                 </Button>
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="sm"
-                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
                   onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
                 >
                   Payments
