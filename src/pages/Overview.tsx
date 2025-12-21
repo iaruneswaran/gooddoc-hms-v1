@@ -326,14 +326,6 @@ const Overview = () => {
       route: "/inventory/low-stock",
       iconColorClass: iconColors.inventory,
     },
-    {
-      title: "Bed Charges",
-      count: 15,
-      displayCount: "View Master",
-      icon: BedDouble,
-      route: "/settings/bed-charges",
-      iconColorClass: iconColors.patients,
-    },
   ];
 
   return (
