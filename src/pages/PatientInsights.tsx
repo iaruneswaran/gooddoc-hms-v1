@@ -192,9 +192,9 @@ const PatientInsightsContent = () => {
     state: "Tamil Nadu",
     city: "Chennai",
     country: "India",
-    outstandingTotal: "6,600",
+    billAmount: "9,800",
     advanceAmount: "3,200",
-    billsAmount: "9,800",
+    collectedAmount: "6,400",
     balanceAmount: "3,400",
   };
 
@@ -247,10 +247,35 @@ const PatientInsightsContent = () => {
 
               {/* Right: KPIs */}
               <div className="flex gap-3">
-                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} variant="light" />
-                <KpiTile label="Advance Amount" amount={patient.advanceAmount} variant="light" />
-                <KpiTile label="Bills Amount" amount={patient.billsAmount} variant="light" />
-                <KpiTile label="Balance Amount" amount={patient.balanceAmount} variant="light" />
+                <KpiTile 
+                  label="Bill Amount" 
+                  amount={patient.billAmount} 
+                  variant="light" 
+                  type="bill"
+                  subtitle="3 invoices"
+                />
+                <KpiTile 
+                  label="Advance Amount" 
+                  amount={patient.advanceAmount} 
+                  variant="light" 
+                  type="advance"
+                  subtitle="Deposit paid"
+                />
+                <KpiTile 
+                  label="Collected Amount" 
+                  amount={patient.collectedAmount} 
+                  variant="light" 
+                  type="collected"
+                  trendValue="65% paid"
+                  trend="up"
+                />
+                <KpiTile 
+                  label="Balance Amount" 
+                  amount={patient.balanceAmount} 
+                  variant="light" 
+                  type="balance"
+                  subtitle="Due today"
+                />
               </div>
             </div>
 
