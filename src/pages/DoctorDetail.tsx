@@ -37,25 +37,262 @@ import { LeaveManagement } from "@/components/doctors/LeaveManagement";
 import { Doctor, Location, Leave, DaySchedule, Appointment } from "@/types/scheduling";
 import { format, parseISO, isToday } from "date-fns";
 
-// Mock data for today's appointments
+// Mock data for today's appointments - realistic hospital data
 const mockTodayAppointments = [
-  { id: "APT-001", patientId: "P-001", patientName: "Sarah Johnson", patientAge: 45, patientGender: "F", time: "09:00", endTime: "09:30", type: "Consultation", status: "completed", room: "Room 101" },
-  { id: "APT-002", patientId: "P-002", patientName: "Michael Chen", patientAge: 38, patientGender: "M", time: "09:30", endTime: "10:00", type: "Follow-up", status: "in_progress", room: "Room 101" },
-  { id: "APT-003", patientId: "P-003", patientName: "Priya Sharma", patientAge: 52, patientGender: "F", time: "10:00", endTime: "10:30", type: "Consultation", status: "arrived", room: "Room 101" },
-  { id: "APT-004", patientId: "P-004", patientName: "Amit Patel", patientAge: 60, patientGender: "M", time: "10:30", endTime: "11:00", type: "Consultation", status: "scheduled", room: "Room 101" },
-  { id: "APT-005", patientId: "P-005", patientName: "Lakshmi Iyer", patientAge: 35, patientGender: "F", time: "11:00", endTime: "11:30", type: "Telehealth", status: "scheduled", room: null, teleUrl: "https://meet.gooddoc.app/apt-005" },
-  { id: "APT-006", patientId: "P-006", patientName: "Rajesh Kumar", patientAge: 48, patientGender: "M", time: "11:30", endTime: "12:00", type: "Follow-up", status: "scheduled", room: "Room 101" },
-  { id: "APT-007", patientId: "P-007", patientName: "Meena Gupta", patientAge: 42, patientGender: "F", time: "14:00", endTime: "14:30", type: "Consultation", status: "scheduled", room: "Room 101" },
-  { id: "APT-008", patientId: "P-008", patientName: "Vikram Singh", patientAge: 55, patientGender: "M", time: "14:30", endTime: "15:00", type: "Consultation", status: "no_show", room: "Room 101" },
+  { 
+    id: "APT-2025122101", 
+    patientId: "UHID-2024-00847", 
+    patientName: "Ramesh Krishnamurthy", 
+    patientAge: 58, 
+    patientGender: "M", 
+    time: "09:00", 
+    endTime: "09:20", 
+    type: "Post-Op Review", 
+    chiefComplaint: "Knee replacement follow-up - Day 14",
+    status: "completed", 
+    room: "OPD Cabin 3",
+    vitals: { bp: "128/82", pulse: 76 }
+  },
+  { 
+    id: "APT-2025122102", 
+    patientId: "UHID-2024-01234", 
+    patientName: "Sunita Devi", 
+    patientAge: 45, 
+    patientGender: "F", 
+    time: "09:20", 
+    endTime: "09:40", 
+    type: "New Consultation", 
+    chiefComplaint: "Chronic lower back pain x 3 months",
+    status: "completed", 
+    room: "OPD Cabin 3",
+    vitals: { bp: "134/88", pulse: 82 }
+  },
+  { 
+    id: "APT-2025122103", 
+    patientId: "UHID-2023-00562", 
+    patientName: "Mohammed Farooq", 
+    patientAge: 67, 
+    patientGender: "M", 
+    time: "09:40", 
+    endTime: "10:00", 
+    type: "Review", 
+    chiefComplaint: "Hip arthritis - medication review",
+    status: "in_progress", 
+    room: "OPD Cabin 3",
+    vitals: { bp: "142/90", pulse: 78 }
+  },
+  { 
+    id: "APT-2025122104", 
+    patientId: "UHID-2024-02156", 
+    patientName: "Anjali Sharma", 
+    patientAge: 34, 
+    patientGender: "F", 
+    time: "10:00", 
+    endTime: "10:20", 
+    type: "New Consultation", 
+    chiefComplaint: "Sports injury - ACL tear suspected",
+    status: "arrived", 
+    room: "OPD Cabin 3",
+    vitals: { bp: "118/76", pulse: 72 }
+  },
+  { 
+    id: "APT-2025122105", 
+    patientId: "UHID-2022-00189", 
+    patientName: "Gopal Reddy", 
+    patientAge: 72, 
+    patientGender: "M", 
+    time: "10:20", 
+    endTime: "10:40", 
+    type: "Pre-Op Assessment", 
+    chiefComplaint: "Total hip replacement - surgical fitness",
+    status: "scheduled", 
+    room: "OPD Cabin 3",
+    vitals: null
+  },
+  { 
+    id: "APT-2025122106", 
+    patientId: "UHID-2024-01876", 
+    patientName: "Kavitha Nair", 
+    patientAge: 52, 
+    patientGender: "F", 
+    time: "10:40", 
+    endTime: "11:00", 
+    type: "Telehealth", 
+    chiefComplaint: "Post-surgery rehab progress review",
+    status: "scheduled", 
+    room: null, 
+    teleUrl: "https://meet.baines.health/apt-106"
+  },
+  { 
+    id: "APT-2025122107", 
+    patientId: "UHID-2024-02890", 
+    patientName: "Suresh Babu", 
+    patientAge: 48, 
+    patientGender: "M", 
+    time: "11:00", 
+    endTime: "11:20", 
+    type: "Injection Therapy", 
+    chiefComplaint: "Platelet-rich plasma injection - shoulder",
+    status: "scheduled", 
+    room: "Procedure Room 2"
+  },
+  { 
+    id: "APT-2025122108", 
+    patientId: "UHID-2023-01456", 
+    patientName: "Lakshmi Venkatesh", 
+    patientAge: 61, 
+    patientGender: "F", 
+    time: "11:20", 
+    endTime: "11:40", 
+    type: "Review", 
+    chiefComplaint: "Osteoporosis - DEXA scan results",
+    status: "scheduled", 
+    room: "OPD Cabin 3"
+  },
+  { 
+    id: "APT-2025122109", 
+    patientId: "UHID-2024-00234", 
+    patientName: "Arjun Malhotra", 
+    patientAge: 28, 
+    patientGender: "M", 
+    time: "14:00", 
+    endTime: "14:20", 
+    type: "New Consultation", 
+    chiefComplaint: "Fracture non-union - left tibia",
+    status: "scheduled", 
+    room: "OPD Cabin 3"
+  },
+  { 
+    id: "APT-2025122110", 
+    patientId: "UHID-2024-01567", 
+    patientName: "Meenakshi Iyer", 
+    patientAge: 55, 
+    patientGender: "F", 
+    time: "14:20", 
+    endTime: "14:40", 
+    type: "Post-Op Review", 
+    chiefComplaint: "Carpal tunnel release - wound check",
+    status: "scheduled", 
+    room: "OPD Cabin 3"
+  },
+  { 
+    id: "APT-2025122111", 
+    patientId: "UHID-2023-02341", 
+    patientName: "Ravi Shankar", 
+    patientAge: 64, 
+    patientGender: "M", 
+    time: "14:40", 
+    endTime: "15:00", 
+    type: "Review", 
+    chiefComplaint: "Spinal stenosis - conservative mgmt",
+    status: "no_show", 
+    room: "OPD Cabin 3"
+  },
+  { 
+    id: "APT-2025122112", 
+    patientId: "UHID-2024-03012", 
+    patientName: "Priya Menon", 
+    patientAge: 42, 
+    patientGender: "F", 
+    time: "15:00", 
+    endTime: "15:20", 
+    type: "Second Opinion", 
+    chiefComplaint: "Disc herniation - surgical vs conservative",
+    status: "scheduled", 
+    room: "OPD Cabin 3"
+  },
 ];
 
-// Mock data for doctor's patients
+// Mock data for doctor's patients - realistic hospital data
 const mockDoctorPatients = [
-  { id: "P-001", name: "Sarah Johnson", age: 45, gender: "F", lastVisit: "2025-12-15", nextVisit: "2025-12-20", flags: ["Diabetes"], isPCP: true },
-  { id: "P-002", name: "Michael Chen", age: 38, gender: "M", lastVisit: "2025-12-17", nextVisit: null, flags: [], isPCP: true },
-  { id: "P-003", name: "Priya Sharma", age: 52, gender: "F", lastVisit: "2025-12-10", nextVisit: "2025-12-17", flags: ["Hypertension", "Fall Risk"], isPCP: false },
-  { id: "P-004", name: "Amit Patel", age: 60, gender: "M", lastVisit: "2025-12-05", nextVisit: "2025-12-17", flags: ["Cardiac"], isPCP: true },
-  { id: "P-005", name: "Lakshmi Iyer", age: 35, gender: "F", lastVisit: "2025-12-12", nextVisit: "2025-12-17", flags: [], isPCP: true },
+  { 
+    id: "UHID-2024-00847", 
+    name: "Ramesh Krishnamurthy", 
+    age: 58, 
+    gender: "M", 
+    lastVisit: "2025-12-21", 
+    nextVisit: "2025-12-28", 
+    diagnosis: "S/P Total Knee Replacement (L)",
+    flags: ["Diabetes", "HTN"], 
+    isPCP: true 
+  },
+  { 
+    id: "UHID-2024-01234", 
+    name: "Sunita Devi", 
+    age: 45, 
+    gender: "F", 
+    lastVisit: "2025-12-21", 
+    nextVisit: "2025-12-28", 
+    diagnosis: "Lumbar Spondylosis",
+    flags: [], 
+    isPCP: true 
+  },
+  { 
+    id: "UHID-2023-00562", 
+    name: "Mohammed Farooq", 
+    age: 67, 
+    gender: "M", 
+    lastVisit: "2025-12-21", 
+    nextVisit: "2026-01-04", 
+    diagnosis: "Bilateral Hip Osteoarthritis",
+    flags: ["Cardiac", "CKD-3"], 
+    isPCP: false 
+  },
+  { 
+    id: "UHID-2022-00189", 
+    name: "Gopal Reddy", 
+    age: 72, 
+    gender: "M", 
+    lastVisit: "2025-12-14", 
+    nextVisit: "2025-12-21", 
+    diagnosis: "Avascular Necrosis - Hip",
+    flags: ["Fall Risk", "Anticoag"], 
+    isPCP: true 
+  },
+  { 
+    id: "UHID-2024-01876", 
+    name: "Kavitha Nair", 
+    age: 52, 
+    gender: "F", 
+    lastVisit: "2025-12-18", 
+    nextVisit: null, 
+    diagnosis: "S/P Rotator Cuff Repair",
+    flags: [], 
+    isPCP: true 
+  },
+  { 
+    id: "UHID-2023-01456", 
+    name: "Lakshmi Venkatesh", 
+    age: 61, 
+    gender: "F", 
+    lastVisit: "2025-12-07", 
+    nextVisit: "2025-12-21", 
+    diagnosis: "Osteoporosis with Compression Fx",
+    flags: ["Fragility"], 
+    isPCP: true 
+  },
+  { 
+    id: "UHID-2024-02890", 
+    name: "Suresh Babu", 
+    age: 48, 
+    gender: "M", 
+    lastVisit: "2025-12-10", 
+    nextVisit: "2025-12-21", 
+    diagnosis: "Frozen Shoulder",
+    flags: ["Diabetes"], 
+    isPCP: false 
+  },
+  { 
+    id: "UHID-2024-00234", 
+    name: "Arjun Malhotra", 
+    age: 28, 
+    gender: "M", 
+    lastVisit: "2025-11-28", 
+    nextVisit: "2025-12-21", 
+    diagnosis: "Tibial Fracture Non-Union",
+    flags: ["Smoker"], 
+    isPCP: true 
+  },
 ];
 
 const statusConfig: Record<string, { label: string; className: string }> = {
@@ -357,32 +594,49 @@ export default function DoctorDetail() {
                 </div>
                 <div className="divide-y divide-border">
                   {todayAppointments.map((apt) => (
-                    <div key={apt.id} className="flex items-center justify-between p-4 hover:bg-muted/20 transition-colors">
+                    <div key={apt.id} className={`flex items-center justify-between p-4 hover:bg-muted/20 transition-colors ${apt.status === 'in_progress' ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}>
                       <div className="flex items-center gap-4">
-                        <div className="text-sm font-medium text-foreground w-20">
-                          {apt.time}
+                        <div className="text-center min-w-[60px]">
+                          <div className="text-sm font-semibold text-foreground">
+                            {apt.time}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {apt.endTime}
+                          </div>
                         </div>
+                        <div className="w-px h-10 bg-border" />
                         <div 
-                          className="cursor-pointer hover:text-primary"
+                          className="cursor-pointer hover:text-primary min-w-[180px]"
                           onClick={() => navigate(`/patient-insights/${apt.patientId}?from=doctor-detail`)}
                         >
                           <div className="text-sm font-medium text-foreground hover:underline">
                             {apt.patientName}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {apt.patientAge} | {apt.patientGender} • {apt.type}
+                            {apt.patientId} • {apt.patientAge}Y {apt.patientGender}
                           </div>
                         </div>
+                        <div className="flex-1 min-w-[200px]">
+                          <Badge variant="outline" className="text-xs mb-1">{apt.type}</Badge>
+                          <div className="text-xs text-muted-foreground line-clamp-1">
+                            {apt.chiefComplaint}
+                          </div>
+                        </div>
+                        {apt.vitals && (
+                          <div className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">
+                            BP: {apt.vitals.bp} | P: {apt.vitals.pulse}
+                          </div>
+                        )}
                       </div>
                       <div className="flex items-center gap-3">
                         {apt.teleUrl && (
-                          <Button variant="outline" size="sm" className="gap-1">
+                          <Button variant="default" size="sm" className="gap-1">
                             <Video className="w-4 h-4" />
-                            Start Call
+                            Join Call
                           </Button>
                         )}
                         {apt.room && (
-                          <span className="text-xs text-muted-foreground">{apt.room}</span>
+                          <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">{apt.room}</span>
                         )}
                         <Badge className={statusConfig[apt.status]?.className || ''}>
                           {statusConfig[apt.status]?.label || apt.status}
@@ -398,9 +652,13 @@ export default function DoctorDetail() {
                               <CheckCircle className="w-4 h-4 mr-2" />
                               Mark Arrived
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toast({ title: "Marked as Seen" })}>
+                            <DropdownMenuItem onClick={() => toast({ title: "Started Consultation" })}>
+                              <AlertCircle className="w-4 h-4 mr-2" />
+                              Start Consultation
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toast({ title: "Marked as Completed" })}>
                               <CheckCircle className="w-4 h-4 mr-2" />
-                              Mark Seen
+                              Mark Completed
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => toast({ title: "Marked as No Show" })}>
                               <XCircle className="w-4 h-4 mr-2" />
@@ -464,38 +722,44 @@ export default function DoctorDetail() {
                   {mockDoctorPatients.map((patient) => (
                     <div key={patient.id} className="flex items-center justify-between p-4 hover:bg-muted/20 transition-colors">
                       <div 
-                        className="flex items-center gap-4 cursor-pointer"
+                        className="flex items-center gap-4 cursor-pointer flex-1"
                         onClick={() => navigate(`/patient-insights/${patient.id}?from=doctor-detail`)}
                       >
                         <Avatar className="h-10 w-10">
-                          <AvatarFallback className={patient.gender === 'F' ? 'bg-pink-500 text-white' : 'bg-primary text-primary-foreground'}>
+                          <AvatarFallback className={patient.gender === 'F' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'}>
                             {patient.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div className="min-w-[160px]">
                           <div className="text-sm font-medium text-foreground hover:underline">
                             {patient.name}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {patient.age} | {patient.gender} {patient.isPCP && '• PCP'}
+                            {patient.id} • {patient.age}Y {patient.gender}
                           </div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-foreground">{patient.diagnosis}</div>
+                          {patient.isPCP && (
+                            <span className="text-xs text-primary">Primary Care Patient</span>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
-                        <div className="text-right">
+                        <div className="text-right min-w-[90px]">
                           <div className="text-xs text-muted-foreground">Last visit</div>
-                          <div className="text-sm text-foreground">{format(parseISO(patient.lastVisit), 'MMM d, yyyy')}</div>
+                          <div className="text-sm text-foreground">{format(parseISO(patient.lastVisit), 'dd MMM')}</div>
                         </div>
-                        <div className="text-right min-w-[100px]">
+                        <div className="text-right min-w-[90px]">
                           <div className="text-xs text-muted-foreground">Next visit</div>
                           <div className="text-sm text-foreground">
-                            {patient.nextVisit ? format(parseISO(patient.nextVisit), 'MMM d, yyyy') : '—'}
+                            {patient.nextVisit ? format(parseISO(patient.nextVisit), 'dd MMM') : '—'}
                           </div>
                         </div>
                         {patient.flags.length > 0 && (
-                          <div className="flex gap-1">
+                          <div className="flex gap-1 flex-wrap max-w-[150px]">
                             {patient.flags.map((flag) => (
-                              <Badge key={flag} variant="outline" className="text-xs">
+                              <Badge key={flag} variant="outline" className="text-xs bg-amber-50 text-amber-700 border-amber-200">
                                 {flag}
                               </Badge>
                             ))}
