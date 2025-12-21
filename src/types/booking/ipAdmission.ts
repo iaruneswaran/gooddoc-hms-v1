@@ -13,15 +13,17 @@ export interface IPAdmission {
   baseCharge?: number; // derived from bedType
 }
 
-export type ServiceCategory = 'Procedure' | 'Nursing' | 'Pharmacy' | 'Lab' | 'Room';
+export type ServiceCategory = 'Procedure' | 'Nursing' | 'Pharmacy' | 'Lab' | 'Room' | 'Radiology' | 'Consultation';
 
 export interface ServiceItem {
   id: string;
   code: string;
   name: string;
   category: ServiceCategory;
+  subCategory?: string;
   price: number;
   taxPct: number;
+  description?: string;
 }
 
 export interface CartItem {
@@ -29,10 +31,12 @@ export interface CartItem {
   code: string;
   name: string;
   category: ServiceCategory;
+  subCategory?: string;
   unitPrice: number;
   taxPct: number;
   qty: number;
   discountPct?: number; // 0–100
+  description?: string;
 }
 
 export interface Totals {
