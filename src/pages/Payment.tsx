@@ -136,7 +136,7 @@ const Payment = () => {
                   <div className="bg-primary/5 border-b border-border px-6 py-5">
                     <div className="flex justify-between items-center">
                       <div>
-                        <img src={bainesLogo} alt="Baines Hospital" className="h-10" />
+                        <img src={bainesLogo} alt="Baines Hospital" className="h-9" />
                       </div>
                       <div className="text-right">
                         <p className="text-sm text-muted-foreground">123 Healthcare Avenue, Medical District</p>
