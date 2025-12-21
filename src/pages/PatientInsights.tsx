@@ -312,7 +312,7 @@ const PatientInsightsContent = () => {
                   className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
                 >
-                  Payments
+                  Advance
                 </Button>
               </div>
               {/* Visit Selector */}
