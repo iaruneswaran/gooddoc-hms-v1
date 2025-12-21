@@ -89,30 +89,35 @@ const Discharge = () => {
       <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
-        <main className="p-6">
+        {/* Compact Header */}
+        <div className="h-[72px] bg-card border-b border-border flex items-center justify-between px-6">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="font-semibold">{fromSearch ? "Search Results" : "Patient Insights"}</span>
           </button>
 
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-6">
             <div>
-              <h1 className="text-lg font-semibold text-foreground mb-1">Patient Discharge</h1>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Visit ID:</span>
-                  <Badge variant="secondary" className="font-mono">{visitId}</Badge>
-                </div>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">Admission: 05 Oct 2025</span>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">LOS: 3 days</span>
-              </div>
+              <p className="text-xs text-muted-foreground">Visit ID</p>
+              <p className="text-sm font-medium text-foreground">{visitId}</p>
+            </div>
+            <div className="h-8 w-px bg-border" />
+            <div>
+              <p className="text-xs text-muted-foreground">Admission</p>
+              <p className="text-sm font-medium text-foreground">05 Oct 2025</p>
+            </div>
+            <div className="h-8 w-px bg-border" />
+            <div>
+              <p className="text-xs text-muted-foreground">LOS</p>
+              <p className="text-sm font-medium text-foreground">3 days</p>
             </div>
           </div>
+        </div>
+
+        <main className="p-6">
 
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
