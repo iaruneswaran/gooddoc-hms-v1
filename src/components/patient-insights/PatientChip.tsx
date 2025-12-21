@@ -10,19 +10,23 @@ interface PatientChipProps {
   onClick?: () => void;
   showBackButton?: boolean;
   backPath?: string;
+  variant?: "default" | "light";
 }
 
-export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, backPath }: PatientChipProps) {
+export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, backPath, variant = "default" }: PatientChipProps) {
   const navigate = useNavigate();
   const isMale = gender.toLowerCase().startsWith("m");
   const isFemale = gender.toLowerCase().startsWith("f");
+  const isLight = variant === "light";
 
   // Gender-based styling
-  const avatarBgClass = isFemale 
-    ? "bg-pink-500" 
-    : isMale 
-      ? "bg-primary" 
-      : "bg-muted";
+  const avatarBgClass = isLight
+    ? "bg-white/20 backdrop-blur-sm"
+    : isFemale 
+      ? "bg-pink-500" 
+      : isMale 
+        ? "bg-primary" 
+        : "bg-muted";
 
   const handleBack = () => {
     if (backPath) {
@@ -37,14 +41,18 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
       {showBackButton && (
         <button
           onClick={handleBack}
-          className="p-1 rounded-md hover:bg-accent/50 transition-colors mr-1"
+          className={`p-1.5 rounded-md transition-colors ${
+            isLight 
+              ? "hover:bg-white/20 text-white/80 hover:text-white" 
+              : "hover:bg-accent/50"
+          } mr-1`}
           title="Go back"
         >
-          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          <ArrowLeft className={`h-5 w-5 ${isLight ? "" : "text-muted-foreground"}`} />
         </button>
       )}
-      <Avatar className="h-12 w-12">
-        <AvatarFallback className={`${avatarBgClass} text-primary-foreground`}>
+      <Avatar className="h-12 w-12 ring-2 ring-white/30">
+        <AvatarFallback className={`${avatarBgClass} ${isLight ? "text-white" : "text-primary-foreground"}`}>
           {isFemale ? (
             <UserRound className="h-6 w-6" />
           ) : (
@@ -53,10 +61,10 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
         </AvatarFallback>
       </Avatar>
       <div className="text-left">
-        <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+        <p className={`text-lg font-bold tracking-tight ${isLight ? "text-white" : "text-foreground group-hover:text-primary"} transition-colors`}>
           {name}
         </p>
-        <p className="text-xs text-muted-foreground">
+        <p className={`text-sm font-medium ${isLight ? "text-white/80" : "text-muted-foreground"}`}>
           GDID-{gdid} • {age} | {gender[0]}
         </p>
       </div>
@@ -74,7 +82,9 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 pr-4 py-2 rounded-lg hover:bg-accent/50 transition-colors group"
+      className={`flex items-center gap-3 pr-4 py-2 rounded-lg transition-colors group ${
+        isLight ? "hover:bg-white/10" : "hover:bg-accent/50"
+      }`}
       title="View profile details"
     >
       {content}
