@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, X, Banknote, CreditCard, Smartphone, Building2, IndianRupee } from "lucide-react";
+import { Download, Printer, Eye, Plus, X, Banknote, CreditCard, Smartphone, Building2, IndianRupee, FileText } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 
@@ -129,10 +129,12 @@ const getStatusBadge = (status: "Pending" | "Partial" | "Paid") => {
 };
 
 const paymentMethods = [
-  { id: "cash", label: "Cash", icon: Banknote },
-  { id: "card", label: "Card", icon: CreditCard },
-  { id: "upi", label: "UPI", icon: Smartphone },
-  { id: "insurance", label: "Insurance", icon: Building2 },
+  { id: "cash", label: "Cash", icon: Banknote, color: "text-emerald-600" },
+  { id: "upi", label: "UPI", icon: Smartphone, color: "text-violet-600" },
+  { id: "card", label: "Card", icon: CreditCard, color: "text-violet-600" },
+  { id: "cheque", label: "Cheque", icon: FileText, color: "text-violet-600" },
+  { id: "neft", label: "NEFT/RTGS", icon: Building2, color: "text-violet-600" },
+  { id: "insurance", label: "Insurance", icon: Building2, color: "text-violet-600" },
 ];
 
 export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
@@ -189,7 +191,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     const method = paymentMethods.find((m) => m.id === methodId);
     if (method) {
       const Icon = method.icon;
-      return <Icon className="h-4 w-4" />;
+      return <Icon className={`h-4 w-4 ${method.color}`} />;
     }
     return null;
   };
@@ -418,17 +420,21 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         value={payment.method}
                         onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
                       >
-                        <SelectTrigger className="w-[130px] h-11">
+                        <SelectTrigger className="w-[140px] h-11 bg-background">
                           <div className="flex items-center gap-2">
                             {getMethodIcon(payment.method)}
                             <span className="text-sm">{paymentMethods.find(m => m.id === payment.method)?.label}</span>
                           </div>
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-background border border-border shadow-lg z-50">
                           {paymentMethods.map((method) => (
-                            <SelectItem key={method.id} value={method.id}>
+                            <SelectItem 
+                              key={method.id} 
+                              value={method.id}
+                              className="cursor-pointer hover:bg-primary/10 data-[state=checked]:bg-primary/10"
+                            >
                               <div className="flex items-center gap-2">
-                                <method.icon className="h-4 w-4" />
+                                <method.icon className={`h-4 w-4 ${method.color}`} />
                                 <span>{method.label}</span>
                               </div>
                             </SelectItem>
