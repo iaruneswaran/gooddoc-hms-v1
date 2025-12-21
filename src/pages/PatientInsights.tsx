@@ -251,29 +251,24 @@ const PatientInsightsContent = () => {
                   label="Bill Amount" 
                   amount={patient.billAmount} 
                   variant="light" 
-                  type="bill"
                   subtitle="3 invoices"
                 />
                 <KpiTile 
                   label="Advance Amount" 
                   amount={patient.advanceAmount} 
                   variant="light" 
-                  type="advance"
                   subtitle="Deposit paid"
                 />
                 <KpiTile 
                   label="Collected Amount" 
                   amount={patient.collectedAmount} 
                   variant="light" 
-                  type="collected"
-                  trendValue="65% paid"
-                  trend="up"
+                  subtitle="65% paid"
                 />
                 <KpiTile 
                   label="Balance Amount" 
                   amount={patient.balanceAmount} 
                   variant="light" 
-                  type="balance"
                   subtitle="Due today"
                 />
               </div>
