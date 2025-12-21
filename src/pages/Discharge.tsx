@@ -161,6 +161,7 @@ const Discharge = () => {
               <Card className="p-0 overflow-hidden">
                 <div className="bg-primary px-4 py-3 rounded-t-lg">
                   <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
+                  <p className="text-xs text-primary-foreground/80 mt-0.5">INV-2025-009</p>
                 </div>
                 
                 <div className="p-4 space-y-4">
@@ -203,24 +204,6 @@ const Discharge = () => {
                         </div>
                       </div>
                     )}
-                  </div>
-
-                  {/* Discount Fields */}
-                  <div className="space-y-3 pt-2 border-t border-border">
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-muted-foreground">Discount Type</label>
-                      <Input placeholder="Select type" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground">Amount</label>
-                        <Input placeholder="₹0" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground">Reason</label>
-                        <Input placeholder="Enter reason" />
-                      </div>
-                    </div>
                   </div>
 
                   {/* Payment Collection with Split */}
