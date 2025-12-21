@@ -279,7 +279,7 @@ const PatientInsightsContent = () => {
               <div className="flex gap-1.5">
                 <Button 
                   size="sm"
-                  className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-xs font-medium"
+                  className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
                   onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Services
@@ -287,7 +287,7 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="ghost"
                   size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Transfer
@@ -295,7 +295,7 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
                     state: { visitId: selectedVisit?.visitId }
                   })}
@@ -305,7 +305,7 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-xs"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
                 >
                   Payments
