@@ -625,7 +625,7 @@ const BookAppointment = () => {
                           return (
                             <DynamicConsultationBookingForm
                               key={`consultation-${requestData?.requestId || 'default'}`}
-                              onRemove={isSingleAppointmentMode ? undefined : handleRemoveConsultation}
+                              onRemove={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleRemoveConsultation}
                               onUpdate={handleConsultationUpdate}
                               initialData={consultationData}
                             />
