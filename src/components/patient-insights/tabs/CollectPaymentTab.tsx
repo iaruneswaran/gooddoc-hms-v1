@@ -339,10 +339,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                     {/* Payment Method Dropdown */}
                     <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
                       <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <span>{getMethodEmoji(payment.method)}</span>
-                          <SelectValue />
-                        </div>
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
                         {paymentMethods.map((method) => {
