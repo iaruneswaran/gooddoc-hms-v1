@@ -17,6 +17,7 @@ import { GlobalDiscountControls } from "@/components/pricing/GlobalDiscountContr
 import { StickyFooterBar } from "@/components/pricing/StickyFooterBar";
 import { BookingStickyFooter } from "@/components/booking/BookingStickyFooter";
 import { ConfirmationModal } from "@/components/booking/ConfirmationModal";
+import { AppointmentSummaryCard } from "@/components/booking/AppointmentSummaryCard";
 import { usePricingState } from "@/hooks/usePricingState";
 import { LineItem } from "@/types/pricing";
 import { formatCurrency } from "@/lib/pricingEngine";
@@ -649,360 +650,34 @@ const BookAppointment = () => {
               </div>
 
               {/* Appointment Summary Sidebar */}
-              <Card className="w-full lg:w-[380px] p-6 h-fit shrink-0">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Appointment Summary</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1.5">Patient</p>
-                    <p className="text-sm font-medium text-foreground">
-                      {requestData?.patient || "Siva Karthikeyan"}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      GDID - {requestData?.gdid || "009"} • {requestData?.ageSex || "35 | M"}
-                    </p>
-                  </div>
-
-                  {visitId && (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1.5">Visit ID</p>
-                      <p className="text-sm font-medium text-foreground">{visitId}</p>
-                    </div>
-                  )}
-
-                  {selectedTypes.length === 0 ? (
-                    <div className="pt-4 border-t border-border">
-                      <p className="text-sm font-medium text-muted-foreground mb-1">No Summary</p>
-                      <p className="text-xs text-muted-foreground">Booking summary will appear here</p>
-                    </div>
-                  ) : (
-                    <>
-                      {[...selectedTypes].reverse().map((type) => {
-                        if (type === "laboratory" && laboratoryData) {
-                          const hasLabTests = laboratoryData.selectedTests.length > 0 || laboratoryData.selectedPackages.length > 0;
-                          const hasRadiologyTests = laboratoryData.selectedRadiologyTests && laboratoryData.selectedRadiologyTests.length > 0;
-                          
-                          return (
-                            <div key="laboratory-radiology" className="space-y-4">
-                              {/* Laboratory Section */}
-                              {hasLabTests && (
-                                <div className="pt-4 border-t border-border">
-                                  <div className="flex items-start justify-between mb-3">
-                                    <p className="text-sm font-medium text-foreground">Laboratory</p>
-                                    <button
-                                      onClick={handleRemoveLaboratory}
-                                      className="text-xs text-primary hover:text-primary/80"
-                                    >
-                                      <Trash2 className="w-3 h-3" />
-                                    </button>
-                                  </div>
-
-                                  <div className="space-y-2.5 text-xs">
-                                    <div>
-                                      <p className="text-muted-foreground mb-1">When</p>
-                                      <p className="text-foreground font-medium">
-                                        {format(laboratoryData.laboratoryDate, "dd/MM/yyyy")} {laboratoryData.laboratoryTime} AM | Laboratory
-                                      </p>
-                                    </div>
-
-                                    {laboratoryData.selectedTests.length > 0 && (
-                                      <div className="space-y-2 pt-1.5">
-                                        {laboratoryData.selectedTests.map((test) => {
-                                          const lineItem = pricing.lineItems.find(li => li.id === `lab-test-${test.id}`);
-                                          return (
-                                            <div key={test.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
-                                              <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                                <p className="text-foreground text-xs truncate">{test.name}</p>
-                                                <button
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleRemoveLabTest(test.id);
-                                                  }}
-                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
-                                                >
-                                                  <Trash2 className="w-3 h-3" />
-                                                </button>
-                                              </div>
-                                              {lineItem && (
-                                                <div className="shrink-0">
-                                                  <LineItemPriceEditor
-                                                    item={lineItem}
-                                                    onPriceUpdate={pricing.updateLineItemPrice}
-                                                    onDiscountApply={pricing.applyLineDiscount}
-                                                    onWaiveOff={pricing.waiveOffItem}
-                                                    onOpenModal={() => handleOpenModal(lineItem)}
-                                                  />
-                                                </div>
-                                              )}
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                    )}
-
-                                    {laboratoryData.selectedPackages.length > 0 && (
-                                      <div className="space-y-2 pt-1.5">
-                                        {laboratoryData.selectedPackages.map((pkg) => {
-                                          const lineItem = pricing.lineItems.find(li => li.id === `lab-pkg-${pkg.id}`);
-                                          return (
-                                            <div key={pkg.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
-                                              <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                                <p className="text-foreground text-xs truncate">{pkg.name}</p>
-                                                <button
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleRemoveLabPackage(pkg.id);
-                                                  }}
-                                                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
-                                                >
-                                                  <Trash2 className="w-3 h-3" />
-                                                </button>
-                                              </div>
-                                              {lineItem && (
-                                                <div className="shrink-0">
-                                                  <LineItemPriceEditor
-                                                    item={lineItem}
-                                                    onPriceUpdate={pricing.updateLineItemPrice}
-                                                    onDiscountApply={pricing.applyLineDiscount}
-                                                    onWaiveOff={pricing.waiveOffItem}
-                                                    onOpenModal={() => handleOpenModal(lineItem)}
-                                                  />
-                                                </div>
-                                              )}
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Radiology Section */}
-                              {hasRadiologyTests && (
-                                <div className="pt-4 border-t border-border">
-                                  <div className="flex items-start justify-between mb-3">
-                                    <p className="text-sm font-medium text-foreground">Radiology</p>
-                                    <button
-                                      onClick={handleRemoveLaboratory}
-                                      className="text-xs text-primary hover:text-primary/80"
-                                    >
-                                      <Trash2 className="w-3 h-3" />
-                                    </button>
-                                  </div>
-
-                                  <div className="space-y-2.5 text-xs">
-                                    <div>
-                                      <p className="text-muted-foreground mb-1">When</p>
-                                      <p className="text-foreground font-medium">
-                                        {format(laboratoryData.radiologyDate, "dd/MM/yyyy")} {laboratoryData.radiologyTime} AM | Radiology
-                                      </p>
-                                    </div>
-
-                                    <div className="space-y-2 pt-1.5">
-                                      {laboratoryData.selectedRadiologyTests.map((test) => {
-                                        const lineItem = pricing.lineItems.find(li => li.id === `rad-test-${test.id}`);
-                                        return (
-                                          <div key={test.id} className="flex justify-between items-center gap-2 group min-h-[24px]">
-                                            <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                              <p className="text-foreground text-xs truncate">{test.name}</p>
-                                              <button
-                                                onClick={(e) => {
-                                                  e.stopPropagation();
-                                                  handleRemoveRadiologyTest(test.id);
-                                                }}
-                                                className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
-                                              >
-                                                <Trash2 className="w-3 h-3" />
-                                              </button>
-                                            </div>
-                                            {lineItem && (
-                                              <div className="shrink-0">
-                                                <LineItemPriceEditor
-                                                  item={lineItem}
-                                                  onPriceUpdate={pricing.updateLineItemPrice}
-                                                  onDiscountApply={pricing.applyLineDiscount}
-                                                  onWaiveOff={pricing.waiveOffItem}
-                                                  onOpenModal={() => handleOpenModal(lineItem)}
-                                                />
-                                              </div>
-                                            )}
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-
-                        if (type === "consultation" && consultationData) {
-                          return (
-                            <div key="consultation" className="pt-4 border-t border-border">
-                              <div className="flex items-start justify-between mb-3">
-                                <p className="text-sm font-medium text-foreground">Consultation</p>
-                                <button
-                                  onClick={handleRemoveConsultation}
-                                  className="text-xs text-primary"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
-
-                              <div className="space-y-2.5 text-xs">
-                                <div>
-                                  <p className="text-muted-foreground mb-1">When</p>
-                                  <p className="text-foreground font-medium">
-                                    {consultationData.selectedSlot 
-                                      ? `${format(new Date(consultationData.selectedSlot.start), "dd/MM/yyyy")} ${format(new Date(consultationData.selectedSlot.start), "h:mm a")}`
-                                      : "Not selected"}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground mb-1">Provider</p>
-                                  <p className="text-foreground font-medium">{consultationData.doctorName || "Any available doctor"}</p>
-                                </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border">
-                                  <p className="text-foreground">Consultation</p>
-                                  {(() => {
-                                    const lineItem = pricing.lineItems.find(li => li.id === 'consultation-1');
-                                    return lineItem ? (
-                                      <LineItemPriceEditor
-                                        item={lineItem}
-                                        onPriceUpdate={pricing.updateLineItemPrice}
-                                        onDiscountApply={pricing.applyLineDiscount}
-                                        onWaiveOff={pricing.waiveOffItem}
-                                        onOpenModal={() => handleOpenModal(lineItem)}
-                                      />
-                                    ) : <p className="text-foreground font-semibold">₹1,000</p>;
-                                  })()}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        }
-
-                        if (type === "ipd" && ipdAdmissionData) {
-                          return (
-                            <div key="ipd" className="pt-4 border-t border-border">
-                              <div className="flex items-start justify-between mb-3">
-                                <p className="text-sm font-medium text-foreground">IPD Admission</p>
-                                <button
-                                  onClick={handleRemoveIPDAdmission}
-                                  className="text-xs text-primary"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
-
-                              <div className="space-y-2.5 text-xs">
-                                <div>
-                                  <p className="text-muted-foreground mb-1">When</p>
-                                  <p className="text-foreground font-medium">
-                                    {format(ipdAdmissionData.date, "dd/MM/yyyy")} {ipdAdmissionData.time} AM
-                                  </p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground mb-1">Attending Doctor</p>
-                                  <p className="text-foreground font-medium">{ipdAdmissionData.attendingDoctor}</p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground mb-1">Ward</p>
-                                  <p className="text-foreground font-medium">{ipdAdmissionData.ward}</p>
-                                </div>
-
-                                <div>
-                                  <p className="text-muted-foreground mb-1">Bed</p>
-                                  <p className="text-foreground font-medium">{ipdAdmissionData.bed}</p>
-                                </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border">
-                                  <p className="text-foreground">Admission</p>
-                                  {(() => {
-                                    const lineItem = pricing.lineItems.find(li => li.id === 'ipd-admission-1');
-                                    return lineItem ? (
-                                      <LineItemPriceEditor
-                                        item={lineItem}
-                                        onPriceUpdate={pricing.updateLineItemPrice}
-                                        onDiscountApply={pricing.applyLineDiscount}
-                                        onWaiveOff={pricing.waiveOffItem}
-                                        onOpenModal={() => handleOpenModal(lineItem)}
-                                      />
-                                    ) : <p className="text-foreground font-semibold">₹5,000</p>;
-                                  })()}
-                                </div>
-                              </div>
-                              
-                              {/* Services & Procedures Section */}
-                              {servicesCart.length > 0 && (
-                                <div className="pt-3 mt-3 border-t border-border">
-                                  <div className="flex items-start justify-between mb-2.5">
-                                    <p className="text-sm font-medium text-foreground">Services & Procedures</p>
-                                    <button
-                                      onClick={handleClearServices}
-                                      className="text-xs text-primary hover:text-primary/80"
-                                    >
-                                      <Trash2 className="w-3 h-3" />
-                                    </button>
-                                  </div>
-                                  <div className="space-y-2">
-                                    {servicesCart.map((item) => {
-                                      const lineItem = pricing.lineItems.find(li => li.id === `service-${item.itemId}`);
-                                      return (
-                                        <div key={item.itemId} className="flex justify-between items-center gap-2 group min-h-[24px]">
-                                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                            <p className="text-foreground text-xs truncate">{item.name}</p>
-                                            <button
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveService(item.itemId);
-                                              }}
-                                              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0"
-                                            >
-                                              <Trash2 className="w-3 h-3" />
-                                            </button>
-                                          </div>
-                                          {lineItem && (
-                                            <div className="shrink-0">
-                                              <LineItemPriceEditor
-                                                item={lineItem}
-                                                onPriceUpdate={pricing.updateLineItemPrice}
-                                                onDiscountApply={pricing.applyLineDiscount}
-                                                onWaiveOff={pricing.waiveOffItem}
-                                                onOpenModal={() => handleOpenModal(lineItem)}
-                                              />
-                                            </div>
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-
-                        return null;
-                      })}
-
-                      {/* Total Summary */}
-                      <div className="pt-4 border-t border-border space-y-2 text-xs">
-                        <div className="flex justify-between">
-                          <p className="text-foreground font-semibold">Net Payable</p>
-                          <p className="text-foreground font-bold">{formatCurrency(pricing.totals.netPayable + servicesTotals.netPayable)}</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Card>
+              <AppointmentSummaryCard
+                patientName={requestData?.patient || "Siva Karthikeyan"}
+                patientId={`GDID - ${requestData?.gdid || "009"}`}
+                patientAgeSex={requestData?.ageSex || "35 | M"}
+                visitId={visitId}
+                selectedTypes={selectedTypes}
+                consultationData={consultationData}
+                laboratoryData={laboratoryData}
+                ipdAdmissionData={ipdAdmissionData}
+                servicesCart={servicesCart}
+                pricing={{
+                  lineItems: pricing.lineItems,
+                  totals: pricing.totals,
+                  updateLineItemPrice: pricing.updateLineItemPrice,
+                  applyLineDiscount: pricing.applyLineDiscount,
+                  waiveOffItem: pricing.waiveOffItem,
+                }}
+                servicesTotals={servicesTotals}
+                onRemoveConsultation={handleRemoveConsultation}
+                onRemoveLaboratory={handleRemoveLaboratory}
+                onRemoveIPDAdmission={handleRemoveIPDAdmission}
+                onRemoveLabTest={handleRemoveLabTest}
+                onRemoveLabPackage={handleRemoveLabPackage}
+                onRemoveRadiologyTest={handleRemoveRadiologyTest}
+                onRemoveService={handleRemoveService}
+                onClearServices={handleClearServices}
+                onOpenModal={handleOpenModal}
+              />
             </div>
           </div>
           
