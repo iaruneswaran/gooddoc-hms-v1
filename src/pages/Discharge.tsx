@@ -171,32 +171,39 @@ const Discharge = () => {
                   </div>
 
                   {/* Patient Deposit Section */}
-                  <Collapsible open={depositExpanded} onOpenChange={setDepositExpanded}>
-                    <CollapsibleTrigger asChild>
-                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <Switch 
-                            checked={depositExpanded}
-                            onCheckedChange={setDepositExpanded}
-                          />
-                          <span className="text-sm font-medium">Patient Deposit</span>
-                        </div>
-                        <span className="text-sm font-semibold text-emerald-600">₹{patientDeposit.toLocaleString()}</span>
+                  <div className="p-4 bg-muted/20 rounded-lg border border-border/50 space-y-3">
+                    {/* Header row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium text-foreground">Patient Deposit</span>
                       </div>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="mt-2 p-3 bg-muted/20 rounded-lg border border-border/50 space-y-2">
+                      <span className="text-sm font-semibold text-emerald-600">₹{patientDeposit.toLocaleString()}</span>
+                    </div>
+                    
+                    {/* Toggle row */}
+                    <div className="flex items-center gap-3">
+                      <Switch 
+                        checked={depositExpanded}
+                        onCheckedChange={setDepositExpanded}
+                      />
+                      <span className="text-sm text-muted-foreground">Adjust deposit against this bill</span>
+                    </div>
+                    
+                    {/* Deposit details - shown when toggle is on */}
+                    {depositExpanded && (
+                      <div className="space-y-2 pt-2 border-t border-border/50">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">Deposit Used</span>
+                          <span className="text-sm text-muted-foreground">Deposit Used</span>
                           <span className="text-sm font-medium text-destructive">- ₹{depositUsed.toLocaleString()}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">Remaining Deposit</span>
+                          <span className="text-sm text-muted-foreground">Remaining Deposit</span>
                           <span className="text-sm font-semibold text-emerald-600">₹{remainingDeposit.toLocaleString()}</span>
                         </div>
                       </div>
-                    </CollapsibleContent>
-                  </Collapsible>
+                    )}
+                  </div>
 
                   {/* Discount Fields */}
                   <div className="space-y-3">
