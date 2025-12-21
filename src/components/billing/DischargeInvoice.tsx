@@ -128,7 +128,7 @@ const DischargeInvoice = ({
     <div className="bg-background border border-border rounded-lg overflow-hidden">
       {/* Header */}
       <div className="flex items-start justify-between p-5 border-b border-border">
-        <img src={BainesLogoFull} alt="Baines International Healthcare" className="h-12" />
+        <img src={BainesLogoFull} alt="Baines International Healthcare" className="h-9" />
         <div className="text-right text-sm text-muted-foreground">
           <p>123 Healthcare Avenue, Medical District</p>
           <p>Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
