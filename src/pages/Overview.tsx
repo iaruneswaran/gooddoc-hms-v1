@@ -40,6 +40,7 @@ interface MetricCardProps {
   iconColorClass: string;
   isPrimary?: boolean;
   subMetrics?: SubMetric[];
+  badge?: string;
 }
 
 // Icon color classes per category
@@ -171,6 +172,7 @@ const StandardMetricCard = ({
   icon: Icon, 
   route, 
   iconColorClass,
+  badge,
 }: MetricCardProps) => {
   const navigate = useNavigate();
   
@@ -187,8 +189,13 @@ const StandardMetricCard = ({
         h-[90px] px-4 flex items-center gap-3
       "
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
+      <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
         <Icon className={`w-5 h-5 ${iconColorClass}`} />
+        {badge && (
+          <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-semibold shadow-sm">
+            {badge}
+          </span>
+        )}
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-2xl font-bold text-foreground tracking-tight">
@@ -271,6 +278,7 @@ const Overview = () => {
       icon: CalendarClock,
       route: "/schedule/today?date=today",
       iconColorClass: iconColors.doctors,
+      badge: "12",
     },
     {
       title: "Doctors on Duty",
