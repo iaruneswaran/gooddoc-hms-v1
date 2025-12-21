@@ -233,7 +233,7 @@ const PatientInsightsContent = () => {
             {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between mb-4">
               {/* Patient Info */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <PatientChip
                   name={patient.name}
                   gdid={patient.gdid}
@@ -243,6 +243,10 @@ const PatientInsightsContent = () => {
                   backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
                   variant="light"
                 />
+                <div className="border-l border-white/20 pl-5">
+                  <p className="text-xs text-white/60">+91 98765 43210</p>
+                  <p className="text-xs text-white/60 mt-0.5">name@example.com</p>
+                </div>
               </div>
 
               {/* Right: KPIs */}
