@@ -27,12 +27,11 @@ interface Appointment {
   date: string;
   time: string;
   doctor: string;
-  department: string;
   type: "Consultation" | "Laboratory" | "Radiology" | "Pharmacy" | "Procedure";
-  service: string;
   status: "Completed" | "Scheduled" | "Checked-in" | "Cancelled" | "In Progress";
   tokenNo?: string;
   tokenTime?: string;
+  orderedBy?: string;
 }
 
 // Mock appointments for the current patient
@@ -44,9 +43,7 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "20-Dec-2025",
       time: "10:00",
       doctor: "Dr. Meera Nair",
-      department: "Cardiology",
       type: "Consultation",
-      service: "Follow-up Consultation",
       status: "Scheduled",
     },
     {
@@ -55,10 +52,9 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "20-Dec-2025",
       time: "10:30",
       doctor: "—",
-      department: "Laboratory",
       type: "Laboratory",
-      service: "Lipid Profile, CBC",
       status: "Scheduled",
+      orderedBy: "Dr. Meera Nair",
     },
     {
       id: "apt-3",
@@ -66,10 +62,9 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "20-Dec-2025",
       time: "11:00",
       doctor: "—",
-      department: "Radiology",
       type: "Radiology",
-      service: "Chest X-Ray",
       status: "Scheduled",
+      orderedBy: "Dr. Meera Nair",
     },
     {
       id: "apt-4",
@@ -77,9 +72,7 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "15-Dec-2025",
       time: "09:30",
       doctor: "Dr. Priya Menon",
-      department: "General Medicine",
       type: "Consultation",
-      service: "Annual Health Checkup",
       status: "Completed",
       tokenNo: "T042",
       tokenTime: "09:15",
@@ -90,12 +83,11 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "15-Dec-2025",
       time: "10:00",
       doctor: "—",
-      department: "Laboratory",
       type: "Laboratory",
-      service: "Complete Blood Count",
       status: "Completed",
       tokenNo: "L018",
       tokenTime: "09:55",
+      orderedBy: "Dr. Priya Menon",
     },
     {
       id: "apt-6",
@@ -103,9 +95,7 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "01-Dec-2025",
       time: "11:00",
       doctor: "Dr. Meera Nair",
-      department: "Cardiology",
       type: "Consultation",
-      service: "Chest Pain Evaluation",
       status: "Completed",
       tokenNo: "T018",
       tokenTime: "10:45",
@@ -116,12 +106,11 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "01-Dec-2025",
       time: "11:30",
       doctor: "—",
-      department: "Laboratory",
       type: "Laboratory",
-      service: "Cardiac Enzymes, Troponin",
       status: "Completed",
       tokenNo: "L012",
       tokenTime: "11:25",
+      orderedBy: "Dr. Meera Nair",
     },
     {
       id: "apt-8",
@@ -129,9 +118,7 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "15-Nov-2025",
       time: "14:30",
       doctor: "Dr. Arun Kumar",
-      department: "Orthopedics",
       type: "Consultation",
-      service: "Back Pain Consultation",
       status: "Completed",
       tokenNo: "T056",
       tokenTime: "14:20",
@@ -142,12 +129,11 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       date: "15-Nov-2025",
       time: "15:00",
       doctor: "—",
-      department: "Radiology",
       type: "Radiology",
-      service: "Lumbar Spine X-Ray",
       status: "Completed",
       tokenNo: "R008",
       tokenTime: "14:55",
+      orderedBy: "Dr. Arun Kumar",
     },
   ];
 };
@@ -191,7 +177,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Type</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Department</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Ordered By</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Actions</th>
@@ -226,9 +212,13 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                       <p className="text-sm text-foreground">{appointment.doctor}</p>
                     </td>
                     
-                    {/* Department */}
+                    {/* Ordered By */}
                     <td className="px-4 py-3">
-                      <p className="text-sm text-foreground">{appointment.department}</p>
+                      <p className="text-sm text-foreground">
+                        {appointment.type === "Laboratory" || appointment.type === "Radiology" 
+                          ? (appointment.orderedBy || "—") 
+                          : "—"}
+                      </p>
                     </td>
                     
                     {/* Status */}
