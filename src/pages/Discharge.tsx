@@ -64,9 +64,9 @@ const Discharge = () => {
   
   // Deposit calculations
   const patientDeposit = 20000;
-  const depositUsed = adjustDeposit ? Math.min(patientDeposit, totalBill) : 0;
+  const depositUsed = depositExpanded ? Math.min(patientDeposit, totalBill) : 0;
   const remainingDeposit = patientDeposit - depositUsed;
-  const netPayable = adjustDeposit ? Math.max(0, totalBill - depositUsed) : totalBill;
+  const netPayable = depositExpanded ? Math.max(0, totalBill - depositUsed) : totalBill;
 
   const addSplitPayment = () => {
     setSplitPayments([...splitPayments, { id: Date.now().toString(), amount: "", method: "cash" }]);
@@ -158,10 +158,12 @@ const Discharge = () => {
             {/* Right Column - Actions & Documents */}
             <div className="space-y-6">
               {/* Settlement & Payment Adjustments Combined */}
-              <Card className="p-6">
-                <h2 className="text-base font-semibold text-foreground mb-4">Settlement</h2>
+              <Card className="p-0 overflow-hidden">
+                <div className="bg-primary px-4 py-3 rounded-t-lg">
+                  <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
+                </div>
                 
-                <div className="space-y-4">
+                <div className="p-4 space-y-4">
                   {/* Amount to Collect */}
                   <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                     <p className="text-xs text-muted-foreground mb-1">Amount to Collect</p>
@@ -183,30 +185,15 @@ const Discharge = () => {
                       </div>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="mt-2 p-3 bg-muted/20 rounded-lg border border-border/50 space-y-3">
-                        <div className="flex items-center gap-3">
-                          <Checkbox 
-                            id="adjustDeposit" 
-                            checked={adjustDeposit}
-                            onCheckedChange={(checked) => setAdjustDeposit(checked as boolean)}
-                          />
-                          <label htmlFor="adjustDeposit" className="text-sm cursor-pointer">
-                            Adjust deposit against this bill
-                          </label>
+                      <div className="mt-2 p-3 bg-muted/20 rounded-lg border border-border/50 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Deposit Used</span>
+                          <span className="text-sm font-medium text-destructive">- ₹{depositUsed.toLocaleString()}</span>
                         </div>
-                        
-                        {adjustDeposit && (
-                          <div className="space-y-2 pt-2 border-t border-border/50">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs text-muted-foreground">Deposit Used</span>
-                              <span className="text-sm font-medium text-destructive">- ₹{depositUsed.toLocaleString()}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs text-muted-foreground">Remaining Deposit</span>
-                              <span className="text-sm font-semibold text-emerald-600">₹{remainingDeposit.toLocaleString()}</span>
-                            </div>
-                          </div>
-                        )}
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Remaining Deposit</span>
+                          <span className="text-sm font-semibold text-emerald-600">₹{remainingDeposit.toLocaleString()}</span>
+                        </div>
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
