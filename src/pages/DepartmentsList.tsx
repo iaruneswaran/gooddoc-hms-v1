@@ -6,21 +6,34 @@ import { PageContent } from "@/components/PageContent";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Search, 
   ChevronRight,
   HeartPulse,
   BrainCircuit,
   Accessibility,
-  Cross,
   Pill,
   Smile,
   Stethoscope,
-  UserRound,
   Users,
   BedDouble,
-  Timer
+  Clock,
+  Building2,
+  Phone,
+  MoreVertical,
+  Eye,
+  Edit,
+  Settings,
+  UserPlus
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const DEPARTMENTS = [
   {
@@ -28,90 +41,102 @@ const DEPARTMENTS = [
     name: "Cardiology",
     description: "Heart & Cardiovascular Care",
     headDoctor: "Dr. Priya Sharma",
+    headDoctorPhone: "+91 98765 43210",
     icon: HeartPulse,
-    accentColor: "from-rose-500 to-red-600",
-    lightBg: "bg-rose-50 dark:bg-rose-950/30",
     iconBg: "bg-rose-100 dark:bg-rose-900/50",
     iconColor: "text-rose-600 dark:text-rose-400",
     doctorsCount: 8,
     outpatientCount: 145,
     inpatientCount: 23,
     avgWaitTime: 18,
+    location: "Block A, Floor 2",
+    opHours: "8:00 AM - 6:00 PM",
+    status: "active" as const,
   },
   {
     id: "orthopedics",
     name: "Orthopedics",
     description: "Bones, Joints & Musculoskeletal",
     headDoctor: "Dr. Aisha Khan",
+    headDoctorPhone: "+91 98765 43211",
     icon: Accessibility,
-    accentColor: "from-amber-500 to-orange-600",
-    lightBg: "bg-amber-50 dark:bg-amber-950/30",
     iconBg: "bg-amber-100 dark:bg-amber-900/50",
     iconColor: "text-amber-600 dark:text-amber-400",
     doctorsCount: 6,
     outpatientCount: 98,
     inpatientCount: 15,
     avgWaitTime: 22,
+    location: "Block B, Floor 1",
+    opHours: "9:00 AM - 5:00 PM",
+    status: "active" as const,
   },
   {
     id: "neurology",
     name: "Neurology",
     description: "Brain & Nervous System",
     headDoctor: "Dr. Meera Reddy",
+    headDoctorPhone: "+91 98765 43212",
     icon: BrainCircuit,
-    accentColor: "from-violet-500 to-purple-600",
-    lightBg: "bg-violet-50 dark:bg-violet-950/30",
     iconBg: "bg-violet-100 dark:bg-violet-900/50",
     iconColor: "text-violet-600 dark:text-violet-400",
     doctorsCount: 5,
     outpatientCount: 67,
     inpatientCount: 8,
     avgWaitTime: 25,
+    location: "Block A, Floor 3",
+    opHours: "8:30 AM - 4:30 PM",
+    status: "active" as const,
   },
   {
     id: "general-medicine",
     name: "General Medicine",
     description: "Primary & Internal Medicine",
     headDoctor: "Dr. Vikram Singh",
+    headDoctorPhone: "+91 98765 43213",
     icon: Stethoscope,
-    accentColor: "from-blue-500 to-indigo-600",
-    lightBg: "bg-blue-50 dark:bg-blue-950/30",
     iconBg: "bg-blue-100 dark:bg-blue-900/50",
     iconColor: "text-blue-600 dark:text-blue-400",
     doctorsCount: 12,
     outpatientCount: 234,
     inpatientCount: 45,
     avgWaitTime: 15,
+    location: "Block A, Ground Floor",
+    opHours: "24/7",
+    status: "active" as const,
   },
   {
     id: "endocrinology",
     name: "Endocrinology",
     description: "Diabetes & Hormonal Disorders",
     headDoctor: "Dr. Rahul Mehta",
+    headDoctorPhone: "+91 98765 43214",
     icon: Pill,
-    accentColor: "from-teal-500 to-emerald-600",
-    lightBg: "bg-teal-50 dark:bg-teal-950/30",
     iconBg: "bg-teal-100 dark:bg-teal-900/50",
     iconColor: "text-teal-600 dark:text-teal-400",
     doctorsCount: 4,
     outpatientCount: 89,
     inpatientCount: 5,
     avgWaitTime: 20,
+    location: "Block C, Floor 1",
+    opHours: "9:00 AM - 4:00 PM",
+    status: "active" as const,
   },
   {
     id: "pediatrics",
     name: "Pediatrics",
     description: "Child & Adolescent Care",
     headDoctor: "Dr. Kavitha Menon",
+    headDoctorPhone: "+91 98765 43215",
     icon: Smile,
-    accentColor: "from-pink-500 to-rose-600",
-    lightBg: "bg-pink-50 dark:bg-pink-950/30",
     iconBg: "bg-pink-100 dark:bg-pink-900/50",
     iconColor: "text-pink-600 dark:text-pink-400",
     doctorsCount: 7,
     outpatientCount: 156,
     inpatientCount: 18,
     avgWaitTime: 12,
+    location: "Block D, Floor 1",
+    opHours: "8:00 AM - 8:00 PM",
+    status: "active" as const,
   },
 ];
 
@@ -136,106 +161,178 @@ export default function DepartmentsList() {
         <AppHeader breadcrumbs={["Departments"]} />
 
         <main className="p-6 space-y-6">
-          {/* Header */}
-          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Hospital Departments</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {DEPARTMENTS.length} departments · {totalDoctors} doctors · {totalOP} OP today · {totalIP} IP admitted
-              </p>
+          {/* Header Card */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-semibold text-foreground">Departments</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {DEPARTMENTS.length} departments · {totalDoctors} doctors · {totalOP} OP today · {totalIP} IP admitted
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search departments..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-10 h-9"
+                  />
+                </div>
+                <Button variant="outline" size="sm">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Manage
+                </Button>
+              </div>
             </div>
-            <div className="relative w-full lg:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search departments, doctors..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 h-10"
-              />
-            </div>
-          </div>
+          </Card>
 
-          {/* Departments Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filteredDepartments.map((dept) => {
-              const Icon = dept.icon;
-              return (
-                <Card
-                  key={dept.id}
-                  className="group cursor-pointer overflow-hidden border hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                  onClick={() => navigate(`/departments/${dept.id}`)}
-                >
-                  {/* Top Gradient Bar */}
-                  <div className={`h-1.5 bg-gradient-to-r ${dept.accentColor}`} />
-                  
-                  <div className="p-5">
-                    {/* Header Row */}
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className={`${dept.iconBg} p-3 rounded-xl shrink-0`}>
-                        <Icon className={`w-6 h-6 ${dept.iconColor}`} strokeWidth={1.5} />
+          {/* Departments Table */}
+          {filteredDepartments.length === 0 ? (
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <h3 className="text-lg font-medium mb-2">No departments found</h3>
+                <p className="text-sm text-muted-foreground">
+                  Try a different search term
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card rounded-lg border border-border overflow-hidden">
+              {/* Table Header */}
+              <div className="grid grid-cols-[2fr_1.5fr_1.2fr_1fr_1fr_0.8fr_0.5fr] gap-4 px-4 py-3 border-b border-border bg-muted/30">
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Department</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Head of Department</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Location / Hours</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Doctors</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Patients Today</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Avg Wait</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide"></div>
+              </div>
+
+              {/* Table Rows */}
+              {filteredDepartments.map((dept) => {
+                const Icon = dept.icon;
+                return (
+                  <div
+                    key={dept.id}
+                    className="grid grid-cols-[2fr_1.5fr_1.2fr_1fr_1fr_0.8fr_0.5fr] gap-4 px-4 py-4 border-b border-border last:border-b-0 hover:bg-muted/30 cursor-pointer transition-colors group"
+                    onClick={() => navigate(`/departments/${dept.id}`)}
+                  >
+                    {/* Department */}
+                    <div className="flex items-center gap-3">
+                      <div className={`${dept.iconBg} p-2.5 rounded-lg shrink-0`}>
+                        <Icon className={`w-5 h-5 ${dept.iconColor}`} strokeWidth={1.5} />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {dept.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          {dept.description}
-                        </p>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                            {dept.name}
+                          </p>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">{dept.description}</p>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0 mt-1" />
                     </div>
 
-                    {/* Department Head */}
-                    <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
-                      <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
-                        <UserRound className="w-4 h-4 text-muted-foreground" />
+                    {/* Head of Department */}
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {dept.headDoctor.split(' ').slice(1).map(n => n[0]).join('')}
+                        </span>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{dept.headDoctor}</p>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Head of Department</p>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{dept.headDoctor}</p>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Phone className="w-3 h-3" />
+                          <span className="truncate">{dept.headDoctorPhone}</span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Stats Row */}
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className={`${dept.lightBg} rounded-lg p-2.5 text-center`}>
-                        <div className="flex justify-center mb-1">
-                          <Users className={`w-4 h-4 ${dept.iconColor}`} />
-                        </div>
-                        <div className="text-lg font-bold text-foreground leading-none">{dept.doctorsCount}</div>
-                        <div className="text-[9px] text-muted-foreground mt-1 uppercase">Doctors</div>
+                    {/* Location / Hours */}
+                    <div className="flex flex-col justify-center gap-1">
+                      <div className="flex items-center gap-1.5 text-sm text-foreground">
+                        <Building2 className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="truncate">{dept.location}</span>
                       </div>
-                      <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-2.5 text-center">
-                        <div className="flex justify-center mb-1">
-                          <Cross className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <div className="text-lg font-bold text-blue-600 dark:text-blue-400 leading-none">{dept.outpatientCount}</div>
-                        <div className="text-[9px] text-muted-foreground mt-1 uppercase">OP</div>
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Clock className="w-3 h-3 shrink-0" />
+                        <span className="truncate">{dept.opHours}</span>
                       </div>
-                      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-2.5 text-center">
-                        <div className="flex justify-center mb-1">
-                          <BedDouble className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                        </div>
-                        <div className="text-lg font-bold text-amber-600 dark:text-amber-400 leading-none">{dept.inpatientCount}</div>
-                        <div className="text-[9px] text-muted-foreground mt-1 uppercase">IP</div>
+                    </div>
+
+                    {/* Doctors Count */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/30 px-2.5 py-1.5 rounded-md">
+                        <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">{dept.doctorsCount}</span>
                       </div>
-                      <div className="bg-slate-100 dark:bg-slate-800/50 rounded-lg p-2.5 text-center">
-                        <div className="flex justify-center mb-1">
-                          <Timer className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                        </div>
-                        <div className="text-lg font-bold text-foreground leading-none">{dept.avgWaitTime}<span className="text-[10px] font-normal">m</span></div>
-                        <div className="text-[9px] text-muted-foreground mt-1 uppercase">Wait</div>
+                    </div>
+
+                    {/* Patients Today */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">{dept.outpatientCount}</span>
+                        <span className="text-[10px] text-muted-foreground">OP</span>
                       </div>
+                      <div className="w-px h-6 bg-border" />
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">{dept.inpatientCount}</span>
+                        <span className="text-[10px] text-muted-foreground">IP</span>
+                      </div>
+                    </div>
+
+                    {/* Avg Wait Time */}
+                    <div className="flex items-center">
+                      <Badge 
+                        variant="secondary" 
+                        className={`font-medium ${
+                          dept.avgWaitTime <= 15 
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                            : dept.avgWaitTime <= 20 
+                              ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                              : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                        }`}
+                      >
+                        {dept.avgWaitTime} min
+                      </Badge>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-end" onClick={(e) => e.stopPropagation()}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem onClick={() => navigate(`/departments/${dept.id}`)}>
+                            <Eye className="w-4 h-4 mr-2" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Edit Department
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <UserPlus className="w-4 h-4 mr-2" />
+                            Add Doctor
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Users className="w-4 h-4 mr-2" />
+                            View All Doctors
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
-                </Card>
-              );
-            })}
-          </div>
-
-          {filteredDepartments.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
-              No departments found matching "{search}"
+                );
+              })}
             </div>
           )}
         </main>
