@@ -207,7 +207,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
               <TableHead className="text-xs font-medium">From</TableHead>
               <TableHead className="text-xs font-medium">To</TableHead>
               <TableHead className="text-xs font-medium">Reason</TableHead>
-              <TableHead className="text-xs font-medium">Authorized By</TableHead>
+              <TableHead className="text-xs font-medium">Ordering Clinician</TableHead>
               <TableHead className="text-xs font-medium">Status</TableHead>
             </TableRow>
           </TableHeader>
