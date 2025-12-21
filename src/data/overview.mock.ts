@@ -75,10 +75,8 @@ export interface BedRecord {
   totalPerDay: number;
   // Transfer details
   transferPatient?: string;
-  transferPatientId?: string;
   transferFrom?: string;
-  transferStatus?: "Pending" | "In Transit" | "Completed";
-  transferRequestedAt?: string;
+  transferTo?: string;
 }
 
 export interface ERCaseRecord {
@@ -431,7 +429,10 @@ function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRec
   
   const bedNo = `${1000 + index + 1}`;
   const hasTransfer = status === "Reserved" && index % 3 === 0;
-  const transferStatuses: BedRecord["transferStatus"][] = ["Pending", "In Transit", "Completed"];
+  const fromWard = `Ward-${["A", "B", "C"][(index + 1) % 3]}`;
+  const fromBed = `Bed ${(index % 8) + 1}`;
+  const toWard = wardMap[bedType];
+  const toBed = `Bed ${(index % 4) + 1}`;
 
   return {
     bedNo,
@@ -443,10 +444,8 @@ function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRec
     dailyRate: rateMap[bedType],
     totalPerDay: totalMap[bedType],
     transferPatient: hasTransfer ? generateName(index + 500) : undefined,
-    transferPatientId: hasTransfer ? `GDID-${String(index + 500).padStart(3, "0")}` : undefined,
-    transferFrom: hasTransfer ? `Ward-${["A", "B", "C"][index % 3]} / Bed ${(index % 4) + 1}` : undefined,
-    transferStatus: hasTransfer ? transferStatuses[index % 3] : undefined,
-    transferRequestedAt: hasTransfer ? formatDateTime(subHours(now, index % 5 + 1)) : undefined,
+    transferFrom: hasTransfer ? `${fromWard} / ${fromBed}` : undefined,
+    transferTo: hasTransfer ? `${toWard} / ${toBed}` : undefined,
   };
 }
 
