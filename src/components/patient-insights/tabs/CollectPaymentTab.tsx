@@ -305,7 +305,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5">
+        <div className="flex-1 overflow-y-auto p-5 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {!selectedBill ? (
             <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
               <p className="text-sm text-muted-foreground text-center px-4">
