@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentsTab } from "./tabs/AppointmentsTab";
 import { InvoicesTab } from "./tabs/InvoicesTab";
 import { PaymentsTab } from "./tabs/PaymentsTab";
+import { CollectPaymentTab } from "./tabs/CollectPaymentTab";
 import { DocumentsTab } from "./tabs/DocumentsTab";
 import { InsuranceTab } from "./tabs/InsuranceTab";
 import { PatientDetailsTab } from "./tabs/PatientDetailsTab";
@@ -52,6 +53,12 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
               Bills Summary
             </TabsTrigger>
             <TabsTrigger
+              value="collect-payment"
+              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
+            >
+              Collect Payment
+            </TabsTrigger>
+            <TabsTrigger
               value="payments"
               className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
             >
@@ -96,6 +103,10 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
 
           <TabsContent value="invoices" className="mt-0">
             <InvoicesTab selectedVisit={selectedVisit} />
+          </TabsContent>
+
+          <TabsContent value="collect-payment" className="mt-0 h-full">
+            <CollectPaymentTab selectedVisit={selectedVisit} />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-0">
