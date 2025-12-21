@@ -286,7 +286,7 @@ const PatientInsightsContent = () => {
                   className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
                   onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
-                  Services
+                  Add Services
                 </Button>
                 <Button 
                   variant="ghost"
@@ -294,7 +294,15 @@ const PatientInsightsContent = () => {
                   className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
-                  Transfer
+                  Bed Transfer
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                >
+                  Collect Advance
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -305,14 +313,6 @@ const PatientInsightsContent = () => {
                   })}
                 >
                   Discharge
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                >
-                  Advance
                 </Button>
               </div>
               {/* Visit Selector */}
