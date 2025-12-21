@@ -114,7 +114,7 @@ const Discharge = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-[1fr_320px] gap-6">
+          <div className="grid grid-cols-[680px_320px] gap-6">
             {/* Left Column - Bill Summary */}
             <div className="space-y-6">
               {/* Summary Cards */}
