@@ -138,7 +138,7 @@ const DischargeInvoice = ({
       </div>
 
       {/* Invoice Details Row */}
-      <div className="grid grid-cols-3 gap-6 p-5 border-b border-border bg-muted/30">
+      <div className="grid grid-cols-3 p-5 border-b border-border bg-muted/30">
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Invoice No.</p>
           <p className="text-sm font-semibold text-foreground">{invoiceNo}</p>
