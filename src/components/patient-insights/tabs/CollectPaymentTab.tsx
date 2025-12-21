@@ -36,7 +36,7 @@ interface SplitPayment {
   amount: string;
 }
 
-// Mock payable bills
+// Mock payable bills (amounts in paise - 100 paise = ₹1)
 const mockPayableBills: PayableBill[] = [
   {
     id: "1",
@@ -46,10 +46,10 @@ const mockPayableBills: PayableBill[] = [
     service: "Cardiology Consultation",
     doctor: "Dr. Meera Nair",
     department: "Cardiology",
-    originalAmount: 2500,
-    totalAmount: 2500,
+    originalAmount: 250000,
+    totalAmount: 250000,
     paidAmount: 0,
-    balanceAmount: 2500,
+    balanceAmount: 250000,
     status: "Pending",
     visitId: "V25-004",
   },
@@ -61,10 +61,10 @@ const mockPayableBills: PayableBill[] = [
     service: "ECG Test",
     doctor: "Dr. Meera Nair",
     department: "Diagnostics",
-    originalAmount: 1000,
-    totalAmount: 800,
-    paidAmount: 400,
-    balanceAmount: 400,
+    originalAmount: 100000,
+    totalAmount: 80000,
+    paidAmount: 40000,
+    balanceAmount: 40000,
     status: "Partial",
     visitId: "V25-004",
   },
@@ -76,10 +76,10 @@ const mockPayableBills: PayableBill[] = [
     service: "Laboratory - Lipid Profile",
     doctor: "Dr. Meera Nair",
     department: "Laboratory",
-    originalAmount: 650,
-    totalAmount: 650,
+    originalAmount: 65000,
+    totalAmount: 65000,
     paidAmount: 0,
-    balanceAmount: 650,
+    balanceAmount: 65000,
     status: "Pending",
     visitId: "V25-004",
   },
@@ -91,10 +91,10 @@ const mockPayableBills: PayableBill[] = [
     service: "General Consultation",
     doctor: "Dr. Priya Menon",
     department: "General Medicine",
-    originalAmount: 1500,
-    totalAmount: 1500,
+    originalAmount: 150000,
+    totalAmount: 150000,
     paidAmount: 0,
-    balanceAmount: 1500,
+    balanceAmount: 150000,
     status: "Pending",
     visitId: "V25-002",
   },
@@ -106,10 +106,10 @@ const mockPayableBills: PayableBill[] = [
     service: "Cardiology Consultation",
     doctor: "Dr. Vinod Kumar",
     department: "Cardiology",
-    originalAmount: 2500,
-    totalAmount: 2500,
+    originalAmount: 250000,
+    totalAmount: 250000,
     paidAmount: 0,
-    balanceAmount: 2500,
+    balanceAmount: 250000,
     status: "Pending",
     visitId: "V25-001",
   },
@@ -150,8 +150,8 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   const [sendSms, setSendSms] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
 
-  // Mock patient deposit
-  const patientDeposit = 3200;
+  // Mock patient deposit (in paise - 100 paise = ₹1)
+  const patientDeposit = 320000;
 
   if (!selectedVisit) {
     return (
