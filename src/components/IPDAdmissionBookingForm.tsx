@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Button } from "@/components/ui/button";
+import { Bed, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -148,24 +148,31 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">IPD Admission</h3>
-        <Button
-          variant="ghost"
-          size="sm"
+    <Card className="overflow-hidden">
+      {/* Header */}
+      <div className="bg-orange-600 dark:bg-orange-700 px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <Bed className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-white">IPD Admission</h3>
+            <p className="text-xs text-white/70">In-Patient Admission & Services</p>
+          </div>
+        </div>
+        <button
           onClick={onRemove}
-          className="text-primary"
+          className="text-white/70 hover:text-white transition-colors"
         >
-          Remove
-        </Button>
+          <Trash2 className="w-4 h-4" />
+        </button>
       </div>
-
-      {/* IP Admission & Services Tabs */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      
+      <div className="p-5 space-y-5">
+        {/* IP Admission & Services Tabs */}
         <div>
-          <label className="text-sm font-medium text-foreground mb-3 block">
-            IP Admission & Services
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
+            Select Section
           </label>
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AdmissionTab)}>
             <TabsList className="grid w-full grid-cols-2">
@@ -174,12 +181,10 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
             </TabsList>
           </Tabs>
         </div>
-      </div>
 
-      <div className="space-y-6">
         {activeTab === "Admission" ? (
-          <>
-        {/* Department and Attending Doctor */}
+          <div className="space-y-5">
+            {/* Department and Attending Doctor */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium text-foreground mb-3 block">
@@ -341,7 +346,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
             <p className="text-sm text-muted-foreground">Please select a doctor to see available time slots</p>
           </div>
         )}
-        </>
+          </div>
         ) : (
           // Services Tab
           <ServicesPanel

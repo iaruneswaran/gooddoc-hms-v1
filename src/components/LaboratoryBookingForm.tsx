@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Minus, Search } from "lucide-react";
+import { Check, Minus, Search, FlaskConical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -197,22 +197,29 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
   );
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">{hideMode ? "Laboratory" : "Diagnostics"}</h3>
+    <Card className="overflow-hidden">
+      {/* Header */}
+      <div className="bg-blue-600 dark:bg-blue-700 px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <FlaskConical className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-white">{hideMode ? "Laboratory" : "Diagnostics"}</h3>
+            <p className="text-xs text-white/70">Lab Tests & Radiology</p>
+          </div>
+        </div>
         {onRemove && (
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={onRemove}
-            className="text-primary"
+            className="text-white/70 hover:text-white transition-colors"
           >
-            Remove
-          </Button>
+            <Trash2 className="w-4 h-4" />
+          </button>
         )}
       </div>
-
-      <div className="space-y-6">
+      
+      <div className="p-5 space-y-5">
         {/* Diagnostics Type and Lab Tests */}
         {!hideMode ? (
           <div className="grid grid-cols-2 gap-4">
