@@ -161,6 +161,7 @@ const AppointmentRequests = () => {
         <TableBody>
           {paginatedData.map((row, index) => {
             const requestId = `REQ${String(index + 1).padStart(3, '0')}`;
+            const gdidNumber = String((currentPage - 1) * pageSize + index).padStart(3, '0');
             return (
               <TableRow 
                 key={row.requestId} 
@@ -171,7 +172,7 @@ const AppointmentRequests = () => {
                       type: 'outpatient',
                       requestId,
                       patient: row.patient,
-                      gdid: row.requestId,
+                      gdid: gdidNumber,
                       ageSex: row.ageSex,
                       contact: row.contact,
                       email: row.email,
@@ -214,7 +215,7 @@ const AppointmentRequests = () => {
                             type: 'outpatient',
                             requestId,
                             patient: row.patient,
-                            gdid: row.requestId,
+                            gdid: gdidNumber,
                             ageSex: row.ageSex,
                             contact: row.contact,
                             email: row.email,
