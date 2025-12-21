@@ -1,4 +1,4 @@
-import { LayoutDashboard, CalendarCheck, Stethoscope, Activity, Users, BriefcaseMedical, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Stethoscope, Activity, Users, BriefcaseMedical, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -8,7 +8,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/" },
-  { icon: CalendarCheck, label: "Schedule Request", href: "/inbox", badge: 12 },
   { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
   { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
   { icon: BriefcaseMedical, label: "Doctors", href: "/doctors" },
@@ -82,19 +81,7 @@ export function AppSidebar() {
             >
               <Icon className="w-4 h-4 shrink-0" />
               {!isCollapsed && (
-                <>
-                  <span className="flex-1 truncate">{item.label}</span>
-                  {item.badge && (
-                    <span className="min-w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                      {item.badge}
-                    </span>
-                  )}
-                </>
-              )}
-              {isCollapsed && item.badge && (
-                <span className="absolute top-0 right-0 min-w-4 h-4 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-medium translate-x-1 -translate-y-1">
-                  {item.badge}
-                </span>
+                <span className="flex-1 truncate">{item.label}</span>
               )}
             </Link>
           );
