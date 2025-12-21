@@ -337,7 +337,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       </div>
 
       {/* Right Panel - Payment Settlement */}
-      <div className="w-[420px] flex flex-col bg-background overflow-hidden shadow-lg border border-border mt-6 mr-6">
+      <div className="w-[420px] flex flex-col bg-background overflow-hidden shadow-lg border-t border-r border-b border-border mt-6 mr-6">
         {/* Blue Header */}
         <div className="bg-primary px-5 py-4">
           <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
