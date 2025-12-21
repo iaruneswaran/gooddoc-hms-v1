@@ -228,34 +228,39 @@ const PatientInsightsContent = () => {
         ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="px-6 py-6">
+        <div className="bg-gradient-to-r from-[hsl(var(--gd-primary-700))] via-[hsl(var(--gd-primary-600))] to-[hsl(var(--gd-primary-700))] flex-shrink-0 shadow-lg">
+          <div className="px-6 py-5">
             {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between mb-4">
               {/* Patient Info */}
-              <PatientChip
-                name={patient.name}
-                gdid={patient.gdid}
-                age={patient.age}
-                gender={patient.gender}
-                showBackButton
-                backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
-              />
+              <div className="flex items-center gap-4">
+                <PatientChip
+                  name={patient.name}
+                  gdid={patient.gdid}
+                  age={patient.age}
+                  gender={patient.gender}
+                  showBackButton
+                  backPath={fromPage === 'op-patients' ? '/op-patients-today' : '/outpatient-appointments'}
+                  variant="light"
+                />
+              </div>
 
               {/* Right: KPIs */}
               <div className="flex gap-3">
-                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} />
-                <KpiTile label="Advance Amount" amount={patient.advanceAmount} />
-                <KpiTile label="Bills Amount" amount={patient.billsAmount} />
-                <KpiTile label="Balance Amount" amount={patient.balanceAmount} />
+                <KpiTile label="Outstanding Total" amount={patient.outstandingTotal} variant="light" />
+                <KpiTile label="Advance Amount" amount={patient.advanceAmount} variant="light" />
+                <KpiTile label="Bills Amount" amount={patient.billsAmount} variant="light" />
+                <KpiTile label="Balance Amount" amount={patient.balanceAmount} variant="light" />
               </div>
             </div>
 
             {/* Action Buttons Row */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 <Button 
                   size="sm"
+                  variant="secondary"
+                  className="bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-sm font-medium"
                   onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Services
@@ -263,6 +268,7 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="outline"
                   size="sm"
+                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Transfer
@@ -270,6 +276,7 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
+                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
                     state: { visitId: selectedVisit?.visitId }
                   })}
@@ -279,13 +286,14 @@ const PatientInsightsContent = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
+                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
                   onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
                 >
                   Payments
                 </Button>
               </div>
               {/* Visit Selector */}
-              <VisitSelector />
+              <VisitSelector variant="light" />
             </div>
           </div>
         </div>
