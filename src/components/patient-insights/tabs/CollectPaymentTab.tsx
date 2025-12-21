@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, X, Banknote, CreditCard, Smartphone, Building2, FileText } from "lucide-react";
+import { Download, Printer, Eye, Plus, X } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
@@ -33,12 +33,12 @@ const getStatusBadge = (status: Invoice["status"]) => {
 };
 
 const paymentMethods = [
-  { id: "cash", label: "Cash", icon: Banknote, color: "text-emerald-600" },
-  { id: "upi", label: "UPI", icon: Smartphone, color: "text-violet-600" },
-  { id: "card", label: "Card", icon: CreditCard, color: "text-violet-600" },
-  { id: "cheque", label: "Cheque", icon: FileText, color: "text-violet-600" },
-  { id: "neft", label: "NEFT/RTGS", icon: Building2, color: "text-violet-600" },
-  { id: "insurance", label: "Insurance", icon: Building2, color: "text-violet-600" },
+  { id: "cash", label: "Cash", emoji: "💵" },
+  { id: "upi", label: "UPI", emoji: "📱" },
+  { id: "card", label: "Card", emoji: "💳" },
+  { id: "cheque", label: "Cheque", emoji: "📄" },
+  { id: "neft", label: "NEFT/RTGS", emoji: "🏦" },
+  { id: "insurance", label: "Insurance", emoji: "🏥" },
 ];
 
 export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
@@ -103,13 +103,9 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     setSplitPayments(splitPayments.map((p) => (p.id === id ? { ...p, [field]: value } : p)));
   };
 
-  const getMethodIcon = (methodId: string) => {
+  const getMethodEmoji = (methodId: string) => {
     const method = paymentMethods.find((m) => m.id === methodId);
-    if (method) {
-      const Icon = method.icon;
-      return <Icon className={`h-4 w-4 ${method.color}`} />;
-    }
-    return null;
+    return method ? method.emoji : "💵";
   };
 
   const amountToCollect = selectedBills.length > 0
@@ -314,10 +310,10 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 </div>
               </div>
 
-              {/* Payment Collection Card */}
-              <div className="bg-card border border-border rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                  <h4 className="text-sm font-semibold text-foreground">Payment Collection</h4>
+              {/* Payment Collection */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-foreground">Payment Collection</span>
                   <button 
                     onClick={addSplitPayment}
                     className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
@@ -326,71 +322,69 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   </button>
                 </div>
 
-                <div className="p-4 space-y-3">
-                  {splitPayments.map((payment, index) => (
-                    <div key={payment.id} className="flex items-center gap-3">
-                      {/* Amount Input */}
-                      <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
-                        <Input
-                          type="text"
-                          placeholder="0.00"
-                          value={payment.amount}
-                          onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
-                          className="pl-7 h-10 bg-background border-border rounded-lg text-sm"
-                        />
-                      </div>
-
-                      {/* Payment Method Dropdown */}
-                      <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
-                        <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
-                          <div className="flex items-center gap-2">
-                            {getMethodIcon(payment.method)}
-                            <SelectValue />
-                          </div>
-                        </SelectTrigger>
-                        <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
-                          {paymentMethods.map((method) => {
-                            const isSelected = payment.method === method.id;
-                            return (
-                              <SelectItem 
-                                key={method.id} 
-                                value={method.id}
-                                className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <method.icon className={`h-4 w-4 ${method.color}`} />
-                                  <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
-                                </div>
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-
-                      {/* Remove Button */}
-                      {splitPayments.length > 1 && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-10 w-10 text-muted-foreground hover:text-destructive shrink-0" 
-                          onClick={() => removeSplitPayment(payment.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      )}
+                {splitPayments.map((payment, index) => (
+                  <div key={payment.id} className="flex items-center gap-3">
+                    {/* Amount Input */}
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                      <Input
+                        type="text"
+                        placeholder="0.00"
+                        value={payment.amount}
+                        onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                        className="pl-7 h-10 bg-background border-border rounded-lg text-sm"
+                      />
                     </div>
-                  ))}
 
-                  {/* Add Split Payment Link */}
-                  <button 
-                    onClick={addSplitPayment}
-                    className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-1"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add Split Payment
-                  </button>
-                </div>
+                    {/* Payment Method Dropdown */}
+                    <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
+                      <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <span>{getMethodEmoji(payment.method)}</span>
+                          <SelectValue />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
+                        {paymentMethods.map((method) => {
+                          const isSelected = payment.method === method.id;
+                          return (
+                            <SelectItem 
+                              key={method.id} 
+                              value={method.id}
+                              className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span>{method.emoji}</span>
+                                <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Remove Button */}
+                    {splitPayments.length > 1 && (
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-10 w-10 text-muted-foreground hover:text-destructive shrink-0" 
+                        onClick={() => removeSplitPayment(payment.id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+
+                {/* Add Split Payment Link */}
+                <button 
+                  onClick={addSplitPayment}
+                  className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Split Payment
+                </button>
               </div>
 
               <div className="space-y-3">
