@@ -9,9 +9,17 @@ interface StickyFooterBarProps {
   totals: AppointmentTotals;
   itemCount: number;
   onGenerateInvoice: () => void;
+  onAskConfirmation?: () => void;
+  isScheduleDisabled?: boolean;
 }
 
-export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: StickyFooterBarProps) {
+export function StickyFooterBar({ 
+  totals, 
+  itemCount, 
+  onGenerateInvoice,
+  onAskConfirmation,
+  isScheduleDisabled = false,
+}: StickyFooterBarProps) {
   const { flags } = useFeatureFlags();
   const { isCollapsed } = useSidebarContext();
 
@@ -59,11 +67,11 @@ export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: Sticky
           </div>
 
           <div className="flex items-center gap-4">
-            <Button size="lg" variant="outline" onClick={() => window.history.back()}>
-              Back
+            <Button size="lg" variant="outline" onClick={onAskConfirmation}>
+              Ask Confirmation
             </Button>
-            <Button size="lg" onClick={onGenerateInvoice}>
-              Generate Invoice
+            <Button size="lg" onClick={onGenerateInvoice} disabled={isScheduleDisabled}>
+              Schedule Now
             </Button>
           </div>
         </div>
