@@ -314,49 +314,83 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Payment Method</span>
-                  <Button variant="ghost" size="sm" className="h-7 text-xs text-primary hover:text-primary/80 p-0" onClick={addSplitPayment}>
-                    <Plus className="h-3.5 w-3.5 mr-1" />
+              {/* Payment Collection Card */}
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                  <h4 className="text-sm font-semibold text-foreground">Payment Collection</h4>
+                  <button 
+                    onClick={addSplitPayment}
+                    className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                  >
                     Split Payment
-                  </Button>
+                  </button>
                 </div>
 
-                {splitPayments.map((payment, index) => (
-                  <div key={payment.id} className="flex items-center gap-2">
-                    <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
-                      <SelectTrigger className="w-[140px] h-9">
-                        <div className="flex items-center gap-2">
-                          {getMethodIcon(payment.method)}
-                          <SelectValue />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {paymentMethods.map((method) => (
-                          <SelectItem key={method.id} value={method.id}>
-                            <div className="flex items-center gap-2">
-                              <method.icon className={`h-4 w-4 ${method.color}`} />
-                              {method.label}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      type="number"
-                      placeholder="Amount"
-                      value={payment.amount}
-                      onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
-                      className="flex-1 h-9"
-                    />
-                    {splitPayments.length > 1 && (
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive" onClick={() => removeSplitPayment(payment.id)}>
-                        <X className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                ))}
+                <div className="p-4 space-y-3">
+                  {splitPayments.map((payment, index) => (
+                    <div key={payment.id} className="flex items-center gap-3">
+                      {/* Amount Input */}
+                      <div className="relative flex-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                        <Input
+                          type="text"
+                          placeholder="0.00"
+                          value={payment.amount}
+                          onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                          className="pl-7 h-10 bg-background border-border rounded-lg text-sm"
+                        />
+                      </div>
+
+                      {/* Payment Method Dropdown */}
+                      <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
+                        <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
+                          <div className="flex items-center gap-2">
+                            {getMethodIcon(payment.method)}
+                            <SelectValue />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
+                          {paymentMethods.map((method) => {
+                            const isSelected = payment.method === method.id;
+                            return (
+                              <SelectItem 
+                                key={method.id} 
+                                value={method.id}
+                                className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <method.icon className={`h-4 w-4 ${method.color}`} />
+                                  <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
+                                </div>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+
+                      {/* Remove Button */}
+                      {splitPayments.length > 1 && (
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-10 w-10 text-muted-foreground hover:text-destructive shrink-0" 
+                          onClick={() => removeSplitPayment(payment.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Add Split Payment Link */}
+                  <button 
+                    onClick={addSplitPayment}
+                    className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-1"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Split Payment
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-3">
