@@ -263,14 +263,8 @@ const Overview = () => {
     },
   ];
 
-  const standardCards: MetricCardProps[] = [
-    {
-      title: "Doctors on Duty",
-      count: 89,
-      icon: Stethoscope,
-      route: "/doctors/on-duty?shift=current",
-      iconColorClass: iconColors.doctors,
-    },
+  // Top row cards (first 4)
+  const topRowCards: MetricCardProps[] = [
     {
       title: "Appointment request received",
       count: 342,
@@ -279,18 +273,11 @@ const Overview = () => {
       iconColorClass: iconColors.doctors,
     },
     {
-      title: "Surgeries",
-      count: 24,
-      icon: Scissors,
-      route: "/or/surgeries?date=today",
-      iconColorClass: iconColors.surgery,
-    },
-    {
-      title: "Emergency Cases",
-      count: 15,
-      icon: AlertTriangle,
-      route: "/er/cases?status=active",
-      iconColorClass: iconColors.emergency,
+      title: "Doctors on Duty",
+      count: 89,
+      icon: Stethoscope,
+      route: "/doctors/on-duty?shift=current",
+      iconColorClass: iconColors.doctors,
     },
     {
       title: "Total medicine orders",
@@ -305,6 +292,24 @@ const Overview = () => {
       icon: BedDouble,
       route: "/patients/check-in?date=today",
       iconColorClass: iconColors.patients,
+    },
+  ];
+
+  // Bottom row cards
+  const bottomRowCards: MetricCardProps[] = [
+    {
+      title: "Surgeries",
+      count: 24,
+      icon: Scissors,
+      route: "/or/surgeries?date=today",
+      iconColorClass: iconColors.surgery,
+    },
+    {
+      title: "Emergency Cases",
+      count: 15,
+      icon: AlertTriangle,
+      route: "/er/cases?status=active",
+      iconColorClass: iconColors.emergency,
     },
     {
       title: "Low Stock",
@@ -352,9 +357,16 @@ const Overview = () => {
             ))}
           </div>
 
-          {/* Standard Cards - 4 columns grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {standardCards.map((card) => (
+          {/* Top Row - Appointment, Doctors, Medicine, Beds */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            {topRowCards.map((card) => (
+              <StandardMetricCard key={card.title} {...card} />
+            ))}
+          </div>
+
+          {/* Bottom Row - Other cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {bottomRowCards.map((card) => (
               <StandardMetricCard key={card.title} {...card} />
             ))}
           </div>
