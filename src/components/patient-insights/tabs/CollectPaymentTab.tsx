@@ -230,7 +230,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   return (
     <div className="flex h-full">
       {/* Left Panel - Payable Bills */}
-      <div className="flex-1 border-r border-border p-6 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto">
         <h2 className="text-[14px] font-semibold text-foreground mb-4">Payable Bills</h2>
 
         {visitBills.length === 0 ? (
