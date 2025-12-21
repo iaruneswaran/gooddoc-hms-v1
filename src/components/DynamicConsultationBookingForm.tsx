@@ -173,46 +173,26 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
         )}
       </div>
 
-      {/* Mode of Consultation */}
-      <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm font-medium text-foreground block mb-3">
-              Mode of Consultation
-            </label>
-            <Tabs 
-              value={mode === "in_person" ? "in-person" : "telehealth"} 
-              onValueChange={handleModeChange}
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="in-person">In-Person</TabsTrigger>
-                <TabsTrigger value="telehealth">Telehealth</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-foreground block mb-3">
-              Consultation Type
-            </label>
-            <Select value={consultationType} onValueChange={setConsultationType}>
-              <SelectTrigger className="h-10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {consultationTypes.map(type => (
-                  <SelectItem key={type.id} value={type.id}>
-                    {type.name} ({type.duration} min)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      {/* Department and Doctor */}
+      {/* Consultation Type and Department */}
       <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="text-sm font-medium text-foreground block mb-3">
+            Consultation Type
+          </label>
+          <Select value={consultationType} onValueChange={setConsultationType}>
+            <SelectTrigger className="h-10">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {consultationTypes.map(type => (
+                <SelectItem key={type.id} value={type.id}>
+                  {type.name} ({type.duration} min)
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <div>
           <label className="text-sm font-medium text-foreground block mb-3">
             Department/Specialty
@@ -230,25 +210,26 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
             </SelectContent>
           </Select>
         </div>
+      </div>
 
-        <div>
-          <label className="text-sm font-medium text-foreground block mb-3">
-            Doctor
-          </label>
-          {dataLoading ? (
-            <Skeleton className="h-10 w-full" />
-          ) : (
-            <DoctorSelector
-              doctors={filteredDoctors}
-              summaries={doctorSummaries}
-              selectedDoctorId={selectedDoctorId}
-              onSelect={handleDoctorSelect}
-              mode={mode}
-              departmentId={department}
-              loading={summaryLoading}
-            />
-          )}
-        </div>
+      {/* Doctor */}
+      <div>
+        <label className="text-sm font-medium text-foreground block mb-3">
+          Doctor
+        </label>
+        {dataLoading ? (
+          <Skeleton className="h-10 w-full" />
+        ) : (
+          <DoctorSelector
+            doctors={filteredDoctors}
+            summaries={doctorSummaries}
+            selectedDoctorId={selectedDoctorId}
+            onSelect={handleDoctorSelect}
+            mode={mode}
+            departmentId={department}
+            loading={summaryLoading}
+          />
+        )}
       </div>
 
       {/* Clinical Information */}
