@@ -310,16 +310,10 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 </div>
               </div>
 
-              {/* Payment Collection */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Payment Collection</span>
-                  <button 
-                    onClick={addSplitPayment}
-                    className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Split Payment
-                  </button>
+                  <span className="text-xs font-medium text-muted-foreground">Split Payment</span>
                 </div>
 
                 {splitPayments.map((payment, index) => (
