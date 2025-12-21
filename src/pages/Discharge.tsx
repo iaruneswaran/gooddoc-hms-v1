@@ -90,7 +90,7 @@ const Discharge = () => {
         <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
         {/* Compact Header */}
-        <div className="h-[72px] bg-card border-b border-border flex items-center justify-between px-6">
+        <div className="h-[72px] border-b border-border flex items-center justify-between px-6">
           <button
             onClick={handleBack}
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
