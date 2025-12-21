@@ -36,7 +36,7 @@ import { DoctorFilters } from "@/components/doctors/DoctorFilters";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctorAvailability } from "@/hooks/useDoctorAvailability";
 import { format, parseISO, addDays } from "date-fns";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 
 interface DoctorRow {
   id: string;
@@ -84,69 +84,6 @@ const SPECIALTY_MAP: Record<string, string> = {
   spine: "Spine Surgery",
 };
 
-// Departments data for the Departments tab
-const DEPARTMENTS = [
-  {
-    id: "cardiology",
-    name: "Cardiology",
-    description: "Heart and cardiovascular system disorders",
-    headDoctor: "Dr. Priya Sharma",
-    doctorsCount: 8,
-    outpatientCount: 145,
-    inpatientCount: 23,
-    avgWaitTime: "18 min",
-  },
-  {
-    id: "orthopedics",
-    name: "Orthopedics",
-    description: "Musculoskeletal system including bones and joints",
-    headDoctor: "Dr. Aisha Khan",
-    doctorsCount: 6,
-    outpatientCount: 98,
-    inpatientCount: 15,
-    avgWaitTime: "22 min",
-  },
-  {
-    id: "neurology",
-    name: "Neurology",
-    description: "Brain, spinal cord, and nervous system disorders",
-    headDoctor: "Dr. Meera Reddy",
-    doctorsCount: 5,
-    outpatientCount: 67,
-    inpatientCount: 8,
-    avgWaitTime: "25 min",
-  },
-  {
-    id: "general-medicine",
-    name: "General Medicine",
-    description: "Primary care and general health issues",
-    headDoctor: "Dr. Vikram Singh",
-    doctorsCount: 12,
-    outpatientCount: 234,
-    inpatientCount: 45,
-    avgWaitTime: "15 min",
-  },
-  {
-    id: "endocrinology",
-    name: "Endocrinology",
-    description: "Hormonal disorders including diabetes and thyroid",
-    headDoctor: "Dr. Rahul Mehta",
-    doctorsCount: 4,
-    outpatientCount: 89,
-    inpatientCount: 5,
-    avgWaitTime: "20 min",
-  },
-  {
-    id: "pediatrics",
-    name: "Pediatrics",
-    description: "Medical care for infants, children, and adolescents",
-    headDoctor: "Dr. Kavitha Menon",
-    doctorsCount: 7,
-    outpatientCount: 156,
-    inpatientCount: 18,
-    avgWaitTime: "12 min",
-  },
-];
 
 export default function DoctorsList() {
   const navigate = useNavigate();
@@ -398,7 +335,6 @@ export default function DoctorsList() {
     }
   };
 
-  const [activeTab, setActiveTab] = useState("doctors");
 
   return (
     <div className="min-h-screen flex w-full bg-background">
@@ -424,30 +360,10 @@ export default function DoctorsList() {
             </div>
           </Card>
 
-          {/* Tabs with Filters */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-            <div className="flex items-center justify-between">
-              <TabsList className="bg-transparent rounded-none h-auto p-0 gap-6 border-b border-border">
-                <TabsTrigger 
-                  value="doctors" 
-                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
-                >
-                  Doctors
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="departments"
-                  className="bg-transparent rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-0 pb-2 pr-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary"
-                >
-                  Departments
-                </TabsTrigger>
-              </TabsList>
-              
-              {activeTab === "doctors" && (
-                <DoctorFilters search={search} onSearchChange={setSearch} />
-              )}
-            </div>
-
-            <TabsContent value="doctors" className="mt-6">
+          {/* Filters */}
+          <div className="mb-6">
+            <DoctorFilters search={search} onSearchChange={setSearch} />
+          </div>
 
           {/* Table */}
           {loading ? (
@@ -586,73 +502,6 @@ export default function DoctorsList() {
               ))}
             </div>
           )}
-            </TabsContent>
-
-            <TabsContent value="departments" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {DEPARTMENTS.map((dept) => (
-                  <div
-                    key={dept.id}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => navigate(`/departments/${dept.id}`)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/departments/${dept.id}`); }}
-                    className="
-                      group w-full text-left rounded-xl border border-border bg-card overflow-hidden
-                      transition-all duration-200 ease-out cursor-pointer
-                      hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
-                      active:scale-[0.98]
-                      focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
-                      flex flex-col
-                    "
-                  >
-                    {/* Top section - Department info */}
-                    <div className="flex-1 p-4 pb-3">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center gap-2.5">
-                          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
-                            <Stethoscope className="w-4 h-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-foreground">{dept.name}</p>
-                          </div>
-                        </div>
-                        <ChevronRight 
-                          aria-hidden="true"
-                          className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{dept.description}</p>
-                      <p className="text-xs font-medium text-muted-foreground">Head: {dept.headDoctor}</p>
-                    </div>
-                    
-                    {/* Divider */}
-                    <div className="h-px bg-border" />
-                    
-                    {/* Bottom section - Sub-metrics grid */}
-                    <div className="px-2 py-3 grid grid-cols-4 text-xs">
-                      <div className="flex flex-col py-1.5 px-2 text-center">
-                        <span className="text-muted-foreground text-[11px] leading-tight">Doctors</span>
-                        <span className="font-semibold text-foreground mt-0.5">{dept.doctorsCount}</span>
-                      </div>
-                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
-                        <span className="text-muted-foreground text-[11px] leading-tight">OP</span>
-                        <span className="font-semibold text-foreground mt-0.5">{dept.outpatientCount}</span>
-                      </div>
-                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
-                        <span className="text-muted-foreground text-[11px] leading-tight">IP</span>
-                        <span className="font-semibold text-foreground mt-0.5">{dept.inpatientCount}</span>
-                      </div>
-                      <div className="flex flex-col py-1.5 px-2 text-center border-l border-border">
-                        <span className="text-muted-foreground text-[11px] leading-tight">Wait</span>
-                        <span className="font-semibold text-foreground mt-0.5">{dept.avgWaitTime.replace(' min', '')}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
         </main>
       </PageContent>
 
