@@ -5,12 +5,12 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
+import DischargeInvoice from "@/components/billing/DischargeInvoice";
 
 const Discharge = () => {
   const navigate = useNavigate();
@@ -96,50 +96,20 @@ const Discharge = () => {
               </div>
 
               {/* Invoice Details */}
-              <Card className="p-6">
-                <h2 className="text-base font-semibold text-foreground mb-4">Invoice Summary</h2>
-                
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Items</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Room & Admission</TableCell>
-                      <TableCell className="text-muted-foreground">General Ward (3 days) + Admission Fee</TableCell>
-                      <TableCell className="text-right">₹12,500</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Medications</TableCell>
-                      <TableCell className="text-muted-foreground">IV Fluids & Medications</TableCell>
-                      <TableCell className="text-right">₹8,500</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Laboratory</TableCell>
-                      <TableCell className="text-muted-foreground">CBC, LFT (2 tests)</TableCell>
-                      <TableCell className="text-right">₹3,100</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Radiology</TableCell>
-                      <TableCell className="text-muted-foreground">Chest X-Ray, CT Abdomen</TableCell>
-                      <TableCell className="text-right">₹5,200</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Other Services</TableCell>
-                      <TableCell className="text-muted-foreground">Oxygen, Physiotherapy</TableCell>
-                      <TableCell className="text-right">₹3,400</TableCell>
-                    </TableRow>
-                    <TableRow className="bg-muted/50 font-semibold">
-                      <TableCell colSpan={2}>Total</TableCell>
-                      <TableCell className="text-right text-lg">₹{totalBill.toLocaleString()}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Card>
+              <DischargeInvoice 
+                invoiceNo="INV-2025-009"
+                invoiceDate="21/12/2025"
+                admissionNo="ADM-2025-0142"
+                patientName="Siva Karthikeyan"
+                uhid="GDID-009"
+                age="35 Years"
+                gender="Male"
+                admissionDate="05/10/2025"
+                dischargeDate="08/10/2025"
+                attendingPhysician="Dr. Arun Kumar, MD (Cardiology)"
+                grossTotal={44000}
+                netAmount={44000}
+              />
 
               {/* Adjustments */}
               <Card className="p-6">
