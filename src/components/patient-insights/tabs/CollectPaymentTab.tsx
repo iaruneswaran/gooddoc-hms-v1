@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, X } from "lucide-react";
+import { Download, Printer, Eye, Plus, Trash2 } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
@@ -362,14 +362,12 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
 
                     {/* Remove Button */}
                     {splitPayments.length > 1 && (
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-10 w-10 text-muted-foreground hover:text-destructive shrink-0" 
+                      <button 
+                        className="h-10 w-10 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center shrink-0 transition-colors" 
                         onClick={() => removeSplitPayment(payment.id)}
                       >
-                        <X className="h-4 w-4" />
-                      </Button>
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </button>
                     )}
                   </div>
                 ))}
