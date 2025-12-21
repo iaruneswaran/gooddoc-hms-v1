@@ -47,10 +47,10 @@ const tabs = [
   { value: "appointments", label: "Appointments", icon: Calendar },
   { value: "invoices", label: "Bills Summary", icon: FileText },
   { value: "collect-payment", label: "Collect Payment", icon: CreditCard },
-  { value: "payments", label: "Payment History", icon: History },
+  { value: "payments", label: "Transaction History", icon: History },
   { value: "documents", label: "Documents", icon: FolderOpen },
   { value: "insurance", label: "Insurance", icon: Shield },
-  { value: "timeline", label: "Transfer History", icon: ArrowLeftRight },
+  { value: "timeline", label: "Bed Transfers", icon: ArrowLeftRight },
   { value: "patient-details", label: "Patient Details", icon: User },
 ];
 
