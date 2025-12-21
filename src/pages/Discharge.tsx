@@ -111,11 +111,22 @@ const Discharge = () => {
                 netAmount={44000}
               />
 
-              {/* Adjustments */}
+            </div>
+
+            {/* Right Column - Actions & Documents */}
+            <div className="space-y-6">
+              {/* Settlement & Payment Adjustments Combined */}
               <Card className="p-6">
-                <h2 className="text-base font-semibold text-foreground mb-4">Payment Adjustments</h2>
+                <h2 className="text-base font-semibold text-foreground mb-4">Settlement</h2>
                 
                 <div className="space-y-4">
+                  {/* Amount to Collect */}
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-xs text-muted-foreground mb-1">Amount to Collect</p>
+                    <p className="text-2xl font-bold text-primary">₹{netPayable.toLocaleString()}</p>
+                  </div>
+
+                  {/* Apply Advance */}
                   <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Checkbox 
@@ -130,44 +141,34 @@ const Discharge = () => {
                     <span className="text-sm font-semibold text-emerald-600">₹{advanceBalance.toLocaleString()}</span>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4">
+                  {/* Discount Fields */}
+                  <div className="space-y-3">
                     <div className="space-y-1.5">
                       <label className="text-xs text-muted-foreground">Discount Type</label>
                       <Input placeholder="Select type" />
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-muted-foreground">Discount Amount</label>
-                      <Input placeholder="₹0" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-muted-foreground">Reason</label>
-                      <Input placeholder="Enter reason" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Amount</label>
+                        <Input placeholder="₹0" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Reason</label>
+                        <Input placeholder="Enter reason" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            </div>
 
-            {/* Right Column - Actions & Documents */}
-            <div className="space-y-6">
-              {/* Payment Action */}
-              <Card className="p-6">
-                <h2 className="text-base font-semibold text-foreground mb-4">Settlement</h2>
-                
-                <div className="space-y-4">
-                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                    <p className="text-xs text-muted-foreground mb-1">Amount to Collect</p>
-                    <p className="text-2xl font-bold text-primary">₹{netPayable.toLocaleString()}</p>
+                  {/* Action Buttons */}
+                  <div className="pt-2 space-y-2">
+                    <Button className="w-full" size="lg">
+                      Collect Payment
+                    </Button>
+                    <Button variant="outline" className="w-full gap-2">
+                      <Printer className="w-4 h-4" />
+                      Print Bill
+                    </Button>
                   </div>
-                  
-                  <Button className="w-full" size="lg">
-                    Collect Payment
-                  </Button>
-                  
-                  <Button variant="outline" className="w-full gap-2">
-                    <Printer className="w-4 h-4" />
-                    Print Bill
-                  </Button>
                 </div>
               </Card>
 
