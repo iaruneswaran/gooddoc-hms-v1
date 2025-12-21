@@ -9,12 +9,6 @@ const statusStyles: Record<BedRecord["status"], string> = {
   "Reserved": "bg-blue-100 text-blue-700",
 };
 
-const transferStatusStyles: Record<string, string> = {
-  "Pending": "bg-amber-100 text-amber-700",
-  "In Transit": "bg-blue-100 text-blue-700",
-  "Completed": "bg-green-100 text-green-700",
-};
-
 const BedsAvailability = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -82,13 +76,9 @@ const BedsAvailability = () => {
       render: (row) => row.transferPatient ? (
         <div className="space-y-1">
           <div className="font-medium">{row.transferPatient}</div>
-          <div className="text-xs text-muted-foreground">{row.transferPatientId}</div>
-          <div className="text-xs text-muted-foreground">From: {row.transferFrom}</div>
-          {row.transferStatus && (
-            <Badge className={transferStatusStyles[row.transferStatus]} variant="outline">
-              {row.transferStatus}
-            </Badge>
-          )}
+          <div className="text-xs text-muted-foreground">
+            {row.transferFrom} → {row.transferTo}
+          </div>
         </div>
       ) : (
         <span className="text-muted-foreground">—</span>
