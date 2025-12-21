@@ -601,7 +601,7 @@ const BookAppointment = () => {
 
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Main Content */}
-              <div className="w-full flex-1 space-y-6">
+              <div className="w-full lg:w-[1100px] lg:max-w-[1100px] space-y-6">
                 {/* Display all selected forms in reverse order (most recent at top) */}
                 {selectedTypes.length === 0 ? (
                   <Card className="border-dashed min-h-[400px] flex flex-col items-center justify-center p-8">

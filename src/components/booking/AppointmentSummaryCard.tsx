@@ -73,7 +73,7 @@ export function AppointmentSummaryCard({
   const itemCount = pricing.lineItems.length + servicesCart.length;
 
   return (
-    <Card className="w-full lg:w-[380px] h-fit shrink-0 overflow-hidden">
+    <Card className="w-full lg:w-[420px] h-fit shrink-0 overflow-hidden">
       {/* Header */}
       <div className="bg-primary px-5 py-4">
         <h3 className="text-base font-semibold text-primary-foreground">Appointment Summary</h3>
