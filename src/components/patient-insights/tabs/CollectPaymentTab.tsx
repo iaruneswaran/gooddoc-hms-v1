@@ -234,20 +234,6 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
             </div>
           ) : (
             <div className="space-y-5">
-              {selectedBills.length > 1 && (
-                <div className="space-y-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Selected Invoices</span>
-                  <div className="space-y-1.5">
-                    {selectedBills.map((bill) => (
-                      <div key={bill.id} className="flex justify-between items-center text-sm bg-muted/30 rounded px-3 py-2">
-                        <span className="font-medium text-primary">{bill.invoiceNo}</span>
-                        <span className="text-foreground">{formatINR(bill.balance)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
