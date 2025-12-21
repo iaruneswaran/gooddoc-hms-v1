@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
@@ -35,11 +37,13 @@ const Discharge = () => {
   const { patientId } = useParams();
   const visitId = location.state?.visitId || "V25-004";
   const [applyAdvance, setApplyAdvance] = useState(false);
+  const [depositExpanded, setDepositExpanded] = useState(false);
+  const [adjustDeposit, setAdjustDeposit] = useState(false);
   const [confirmCounseling, setConfirmCounseling] = useState(false);
   const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
     { id: "1", amount: "", method: "cash" }
   ]);
-  
+
   const fromSearch = searchParams.get("from") === "search";
   const patientSearchQuery = searchParams.get("q") || "";
 
@@ -57,7 +61,12 @@ const Discharge = () => {
   const totalBill = 32700;
   const advanceBalance = 20000;
   const insuranceApproved = 0;
-  const netPayable = applyAdvance ? Math.max(0, totalBill - advanceBalance) : totalBill;
+  
+  // Deposit calculations
+  const patientDeposit = 20000;
+  const depositUsed = adjustDeposit ? Math.min(patientDeposit, totalBill) : 0;
+  const remainingDeposit = patientDeposit - depositUsed;
+  const netPayable = adjustDeposit ? Math.max(0, totalBill - depositUsed) : totalBill;
 
   const addSplitPayment = () => {
     setSplitPayments([...splitPayments, { id: Date.now().toString(), amount: "", method: "cash" }]);
@@ -159,20 +168,48 @@ const Discharge = () => {
                     <p className="text-2xl font-bold text-primary">₹{netPayable.toLocaleString()}</p>
                   </div>
 
-                  {/* Apply Advance */}
-                  <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <Checkbox 
-                        id="advance" 
-                        checked={applyAdvance}
-                        onCheckedChange={(checked) => setApplyAdvance(checked as boolean)}
-                      />
-                      <label htmlFor="advance" className="text-sm font-medium cursor-pointer">
-                        Apply Advance Balance
-                      </label>
-                    </div>
-                    <span className="text-sm font-semibold text-emerald-600">₹{advanceBalance.toLocaleString()}</span>
-                  </div>
+                  {/* Patient Deposit Section */}
+                  <Collapsible open={depositExpanded} onOpenChange={setDepositExpanded}>
+                    <CollapsibleTrigger asChild>
+                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Switch 
+                            checked={depositExpanded}
+                            onCheckedChange={setDepositExpanded}
+                          />
+                          <span className="text-sm font-medium">Patient Deposit</span>
+                        </div>
+                        <span className="text-sm font-semibold text-emerald-600">₹{patientDeposit.toLocaleString()}</span>
+                      </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="mt-2 p-3 bg-muted/20 rounded-lg border border-border/50 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <Checkbox 
+                            id="adjustDeposit" 
+                            checked={adjustDeposit}
+                            onCheckedChange={(checked) => setAdjustDeposit(checked as boolean)}
+                          />
+                          <label htmlFor="adjustDeposit" className="text-sm cursor-pointer">
+                            Adjust deposit against this bill
+                          </label>
+                        </div>
+                        
+                        {adjustDeposit && (
+                          <div className="space-y-2 pt-2 border-t border-border/50">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-muted-foreground">Deposit Used</span>
+                              <span className="text-sm font-medium text-destructive">- ₹{depositUsed.toLocaleString()}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-muted-foreground">Remaining Deposit</span>
+                              <span className="text-sm font-semibold text-emerald-600">₹{remainingDeposit.toLocaleString()}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
 
                   {/* Discount Fields */}
                   <div className="space-y-3">
