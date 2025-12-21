@@ -102,7 +102,7 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
         </div>
         
         <div className="p-5">
-          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
+          <div className="grid grid-cols-2 gap-6 items-start">
             {/* From Location */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -130,12 +130,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
               </div>
             </div>
 
-            {/* Arrow */}
-            <div className="flex items-center justify-center pt-8">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <ArrowRight className="h-5 w-5 text-primary" />
-              </div>
-            </div>
 
             {/* To Location */}
             <div className="space-y-3">
