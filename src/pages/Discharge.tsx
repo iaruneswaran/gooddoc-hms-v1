@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList } from "lucide-react";
+import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,25 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
 import DischargeInvoice from "@/components/billing/DischargeInvoice";
+
+interface SplitPayment {
+  id: string;
+  amount: string;
+  method: string;
+}
+
+const paymentMethods = [
+  { value: "cash", label: "Cash", emoji: "💵" },
+  { value: "upi", label: "UPI", emoji: "📱" },
+  { value: "card", label: "Card", emoji: "💳" },
+  { value: "cheque", label: "Cheque", emoji: "📝" },
+  { value: "neft", label: "NEFT/RTGS", emoji: "🏦" },
+  { value: "insurance", label: "Insurance", emoji: "🏥" },
+];
 
 const Discharge = () => {
   const navigate = useNavigate();
@@ -20,6 +36,9 @@ const Discharge = () => {
   const visitId = location.state?.visitId || "V25-004";
   const [applyAdvance, setApplyAdvance] = useState(false);
   const [confirmCounseling, setConfirmCounseling] = useState(false);
+  const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
+    { id: "1", amount: "", method: "cash" }
+  ]);
   
   const fromSearch = searchParams.get("from") === "search";
   const patientSearchQuery = searchParams.get("q") || "";
@@ -39,6 +58,20 @@ const Discharge = () => {
   const advanceBalance = 20000;
   const insuranceApproved = 0;
   const netPayable = applyAdvance ? Math.max(0, totalBill - advanceBalance) : totalBill;
+
+  const addSplitPayment = () => {
+    setSplitPayments([...splitPayments, { id: Date.now().toString(), amount: "", method: "cash" }]);
+  };
+
+  const removeSplitPayment = (id: string) => {
+    if (splitPayments.length > 1) {
+      setSplitPayments(splitPayments.filter(p => p.id !== id));
+    }
+  };
+
+  const updateSplitPayment = (id: string, field: "amount" | "method", value: string) => {
+    setSplitPayments(splitPayments.map(p => p.id === id ? { ...p, [field]: value } : p));
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -156,6 +189,66 @@ const Discharge = () => {
                         <label className="text-xs text-muted-foreground">Reason</label>
                         <Input placeholder="Enter reason" />
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Payment Collection with Split */}
+                  <div className="space-y-3 pt-2 border-t border-border">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-foreground">Payment Collection</p>
+                      <button
+                        onClick={addSplitPayment}
+                        className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add Split Payment
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      {splitPayments.map((payment, index) => (
+                        <div key={payment.id} className="flex items-center gap-2">
+                          <Input
+                            placeholder="₹ 0.00"
+                            value={payment.amount}
+                            onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                            className="flex-1"
+                          />
+                          <Select
+                            value={payment.method}
+                            onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
+                          >
+                            <SelectTrigger className="w-[130px] bg-background">
+                              <SelectValue>
+                                {paymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
+                                {paymentMethods.find(m => m.value === payment.method)?.label}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent className="bg-background border border-border z-50">
+                              {paymentMethods.map((method) => (
+                                <SelectItem key={method.value} value={method.value}>
+                                  <span className="flex items-center gap-2">
+                                    <span>{method.emoji}</span>
+                                    <span>{method.label}</span>
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <button
+                            onClick={() => removeSplitPayment(payment.id)}
+                            className={cn(
+                              "p-2 rounded-lg transition-colors",
+                              splitPayments.length > 1 
+                                ? "text-destructive hover:bg-destructive/10" 
+                                : "text-muted-foreground/30 cursor-not-allowed"
+                            )}
+                            disabled={splitPayments.length <= 1}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
