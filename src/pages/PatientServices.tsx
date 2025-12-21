@@ -133,21 +133,6 @@ const PatientServices = () => {
                 <p className="text-sm font-semibold text-foreground">{patient.name}</p>
                 <p className="text-xs text-muted-foreground">{patient.gdid} • {patient.age}Y / {patient.gender.charAt(0)}</p>
               </div>
-              <div className="h-8 w-px bg-border" />
-              <div>
-                <p className="text-xs text-muted-foreground">Admitted</p>
-                <p className="text-sm font-medium text-foreground">{patient.admissionDate}</p>
-              </div>
-              <div className="h-8 w-px bg-border" />
-              <div>
-                <p className="text-xs text-muted-foreground">Location</p>
-                <p className="text-sm font-medium text-foreground">{patient.ward} • {patient.bed}</p>
-              </div>
-              <div className="h-8 w-px bg-border" />
-              <div>
-                <p className="text-xs text-muted-foreground">Attending</p>
-                <p className="text-sm font-medium text-foreground">{patient.doctor}</p>
-              </div>
             </div>
           </div>
         </div>
