@@ -296,111 +296,111 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       </div>
 
       {/* Right Panel - Payment Settlement */}
-      <div className="w-[420px] bg-muted/20 p-6 overflow-y-auto">
-        <h2 className="text-[14px] font-semibold text-foreground mb-4">Payment Settlement</h2>
+      <div className="w-[420px] border-l border-border bg-background p-6 overflow-y-auto">
+        <h2 className="text-base font-semibold text-foreground mb-6">Payment Settlement</h2>
 
         {!selectedBill ? (
-          <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg">
+          <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
             <p className="text-sm text-muted-foreground text-center px-4">
               Select a bill from the left to collect payment
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Invoice Header */}
-            <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
-              <p className="text-sm font-medium text-primary">Invoice: {selectedBill.invoiceNo}</p>
+            <div className="bg-muted/50 rounded-lg px-4 py-3">
+              <p className="text-sm text-muted-foreground">
+                Invoice: <span className="font-semibold text-foreground">{selectedBill.invoiceNo}</span>
+              </p>
             </div>
 
             {/* Bill Summary */}
             <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Gross Bill Amount</span>
-                <span className="font-medium">{formatINR(selectedBill.originalAmount)}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
+                <span className="text-sm font-medium text-foreground">{formatINR(selectedBill.originalAmount)}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Discount Applied</span>
-                <span className="font-medium text-emerald-600">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Discount Applied</span>
+                <span className="text-sm font-medium text-emerald-600">
                   - {formatINR(selectedBill.originalAmount - selectedBill.totalAmount)}
                 </span>
               </div>
-              <Separator />
-              <div className="flex justify-between text-sm">
-                <span className="font-medium">Net Bill Amount</span>
-                <span className="font-semibold">{formatINR(selectedBill.totalAmount)}</span>
+              <Separator className="my-2" />
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-foreground">Net Bill Amount</span>
+                <span className="text-sm font-semibold text-foreground">{formatINR(selectedBill.totalAmount)}</span>
               </div>
               {selectedBill.paidAmount > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Already Paid</span>
-                  <span className="font-medium text-emerald-600">- {formatINR(selectedBill.paidAmount)}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Already Paid</span>
+                  <span className="text-sm font-medium text-emerald-600">- {formatINR(selectedBill.paidAmount)}</span>
                 </div>
               )}
             </div>
 
             {/* Patient Deposit */}
-            <div className="bg-amber-50 dark:bg-amber-950/20 rounded-lg p-4 border border-amber-200 dark:border-amber-900">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-amber-800 dark:text-amber-200">Patient Deposit</span>
-                <span className="text-lg font-bold text-amber-700 dark:text-amber-300">{formatINR(patientDeposit)}</span>
+            <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-4">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-medium text-amber-900 dark:text-amber-100">Patient Deposit</span>
+                <span className="text-xl font-bold text-amber-700 dark:text-amber-300">{formatINR(patientDeposit)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="adjust-deposit"
                   checked={adjustDeposit}
                   onCheckedChange={(checked) => setAdjustDeposit(checked as boolean)}
+                  className="border-amber-400 data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600"
                 />
-                <Label htmlFor="adjust-deposit" className="text-xs text-amber-700 dark:text-amber-300 cursor-pointer">
+                <Label htmlFor="adjust-deposit" className="text-sm text-amber-800 dark:text-amber-200 cursor-pointer">
                   Adjust deposit against this bill
                 </Label>
               </div>
             </div>
 
             {/* Amount to Collect */}
-            <div className="bg-primary rounded-lg p-4">
+            <div className="bg-primary rounded-xl p-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-primary-foreground">Amount to Collect</span>
-                <span className="text-2xl font-bold text-primary-foreground">{formatINR(amountToCollect)}</span>
+                <span className="text-sm font-medium text-primary-foreground/90">Amount to Collect</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-bold text-primary-foreground">{formatINR(amountToCollect)}</span>
+                </div>
               </div>
             </div>
 
             {/* Payment Collection */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">Payment Collection</Label>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-primary hover:text-primary"
+                <Label className="text-sm font-medium text-foreground">Payment Collection</Label>
+                <button
+                  className="text-sm text-primary hover:text-primary/80 font-medium"
                   onClick={addSplitPayment}
                 >
-                  <Plus className="h-3 w-3 mr-1" />
                   Split Payment
-                </Button>
+                </button>
               </div>
 
-              <div className="space-y-2">
-                {splitPayments.map((payment, index) => (
-                  <div key={payment.id} className="flex gap-2">
-                    <div className="flex-1">
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          value={payment.amount}
-                          onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
-                          className="pl-7"
-                        />
-                      </div>
+              <div className="space-y-3">
+                {splitPayments.map((payment) => (
+                  <div key={payment.id} className="flex gap-2 items-center">
+                    <div className="flex-1 relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={payment.amount}
+                        onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                        className="pl-7 h-10"
+                      />
                     </div>
                     <Select
                       value={payment.method}
                       onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
                     >
-                      <SelectTrigger className="w-[130px]">
+                      <SelectTrigger className="w-[140px] h-10">
                         <div className="flex items-center gap-2">
                           {getMethodIcon(payment.method)}
-                          <SelectValue />
+                          <span className="text-sm">{paymentMethods.find(m => m.id === payment.method)?.label}</span>
                         </div>
                       </SelectTrigger>
                       <SelectContent>
@@ -408,7 +408,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                           <SelectItem key={method.id} value={method.id}>
                             <div className="flex items-center gap-2">
                               <method.icon className="h-4 w-4" />
-                              {method.label}
+                              <span>{method.label}</span>
                             </div>
                           </SelectItem>
                         ))}
@@ -418,7 +418,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-10 w-10 text-muted-foreground hover:text-red-500"
+                        className="h-10 w-10 text-muted-foreground hover:text-destructive"
                         onClick={() => removeSplitPayment(payment.id)}
                       >
                         <X className="h-4 w-4" />
@@ -431,63 +431,66 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full text-xs"
+                className="w-full text-sm border-dashed"
                 onClick={addSplitPayment}
               >
-                <Plus className="h-3 w-3 mr-1" />
+                <Plus className="h-4 w-4 mr-2" />
                 Add Split Payment
               </Button>
             </div>
 
             {/* Payer Details */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Payer Details</Label>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-4">
+              <Label className="text-sm font-medium text-foreground">Payer Details</Label>
+              <div className="space-y-3">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Payer Name</Label>
+                  <Label className="text-xs text-muted-foreground mb-1.5 block">Payer Name</Label>
                   <Input
-                    placeholder="Enter name"
+                    placeholder="Enter payer name"
                     value={payerName}
                     onChange={(e) => setPayerName(e.target.value)}
-                    className="mt-1"
+                    className="h-10"
                   />
                 </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Relation</Label>
-                  <Select value={payerRelation} onValueChange={setPayerRelation}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="self">Self</SelectItem>
-                      <SelectItem value="spouse">Spouse</SelectItem>
-                      <SelectItem value="parent">Parent</SelectItem>
-                      <SelectItem value="child">Child</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">Relation</Label>
+                    <Select value={payerRelation} onValueChange={setPayerRelation}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="self">Self</SelectItem>
+                        <SelectItem value="spouse">Spouse</SelectItem>
+                        <SelectItem value="parent">Parent</SelectItem>
+                        <SelectItem value="child">Child</SelectItem>
+                        <SelectItem value="sibling">Sibling</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">Mobile Number</Label>
+                    <Input
+                      placeholder="Enter mobile"
+                      value={payerMobile}
+                      onChange={(e) => setPayerMobile(e.target.value)}
+                      className="h-10"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Mobile Number</Label>
-                <Input
-                  placeholder="Enter mobile number"
-                  value={payerMobile}
-                  onChange={(e) => setPayerMobile(e.target.value)}
-                  className="mt-1"
-                />
               </div>
             </div>
 
             {/* Notification Options */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6 py-2">
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="print-receipt"
                   checked={printReceipt}
                   onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
                 />
-                <Label htmlFor="print-receipt" className="text-xs cursor-pointer">Print Receipt</Label>
+                <Label htmlFor="print-receipt" className="text-sm cursor-pointer">Print Receipt</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -495,7 +498,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   checked={sendSms}
                   onCheckedChange={(checked) => setSendSms(checked as boolean)}
                 />
-                <Label htmlFor="send-sms" className="text-xs cursor-pointer">Send SMS</Label>
+                <Label htmlFor="send-sms" className="text-sm cursor-pointer">Send SMS</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -503,22 +506,22 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   checked={sendEmail}
                   onCheckedChange={(checked) => setSendEmail(checked as boolean)}
                 />
-                <Label htmlFor="send-email" className="text-xs cursor-pointer">Email</Label>
+                <Label htmlFor="send-email" className="text-sm cursor-pointer">Email</Label>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-2">
-              <Button variant="outline" className="flex-1">
+              <Button variant="outline" className="flex-1 h-11">
                 Pay Later
               </Button>
-              <Button className="flex-1">
+              <Button className="flex-1 h-11">
                 Settle Bill
               </Button>
             </div>
 
             {/* Footer Note */}
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-muted-foreground text-center leading-relaxed">
               By settling this bill, you confirm that payment has been received. A receipt will be generated automatically.
             </p>
           </div>
