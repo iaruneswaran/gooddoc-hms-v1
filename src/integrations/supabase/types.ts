@@ -292,6 +292,101 @@ export type Database = {
         }
         Relationships: []
       }
+      patients: {
+        Row: {
+          address_city: string | null
+          address_line1: string | null
+          address_pincode: string | null
+          address_state: string | null
+          allergies: string[] | null
+          blood_group: string | null
+          created_at: string
+          date_of_birth: string
+          department: string | null
+          email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          first_name: string
+          gdid: string
+          gender: string
+          id: string
+          insurance_policy_number: string | null
+          insurance_provider: string | null
+          last_name: string
+          last_visit_date: string | null
+          medical_alerts: string[] | null
+          phone: string
+          primary_doctor_id: string | null
+          registration_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address_city?: string | null
+          address_line1?: string | null
+          address_pincode?: string | null
+          address_state?: string | null
+          allergies?: string[] | null
+          blood_group?: string | null
+          created_at?: string
+          date_of_birth: string
+          department?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          first_name: string
+          gdid: string
+          gender: string
+          id?: string
+          insurance_policy_number?: string | null
+          insurance_provider?: string | null
+          last_name: string
+          last_visit_date?: string | null
+          medical_alerts?: string[] | null
+          phone: string
+          primary_doctor_id?: string | null
+          registration_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address_city?: string | null
+          address_line1?: string | null
+          address_pincode?: string | null
+          address_state?: string | null
+          allergies?: string[] | null
+          blood_group?: string | null
+          created_at?: string
+          date_of_birth?: string
+          department?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          first_name?: string
+          gdid?: string
+          gender?: string
+          id?: string
+          insurance_policy_number?: string | null
+          insurance_provider?: string | null
+          last_name?: string
+          last_visit_date?: string | null
+          medical_alerts?: string[] | null
+          phone?: string
+          primary_doctor_id?: string | null
+          registration_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patients_primary_doctor_id_fkey"
+            columns: ["primary_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
