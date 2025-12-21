@@ -1,104 +1,337 @@
-import { Download, Printer } from "lucide-react";
+import { Download, Printer, Eye, FileText, AlertCircle, CheckCircle2, Clock, XCircle, RefreshCw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
 
 interface InsuranceTabProps {
   selectedVisit: Visit | null;
 }
 
-const mockClaims = [
+type ClaimStatus = "draft" | "submitted" | "under_review" | "approved" | "partially_approved" | "paid" | "rejected" | "appealed";
+type ClaimType = "cashless" | "reimbursement" | "pre_auth";
+
+interface Claim {
+  id: string;
+  claimNo: string;
+  policyNo: string;
+  insurerName: string;
+  tpaName: string;
+  claimType: ClaimType;
+  submissionDate: string;
+  submissionTime: string;
+  visitId: string;
+  service: string;
+  serviceCode: string;
+  icdCode: string;
+  diagnosis: string;
+  billedAmount: number;
+  approvedAmount: number;
+  paidAmount: number;
+  copay: number;
+  deductible: number;
+  patientLiability: number;
+  status: ClaimStatus;
+  remarks?: string;
+  preAuthNo?: string;
+  settledDate?: string;
+  turnaroundDays?: number;
+}
+
+const getStatusBadge = (status: ClaimStatus) => {
+  const config: Record<ClaimStatus, { icon: React.ReactNode; label: string; className: string }> = {
+    draft: { icon: <FileText className="h-3 w-3" />, label: "Draft", className: "bg-gray-50 text-gray-600 border-gray-200" },
+    submitted: { icon: <Clock className="h-3 w-3" />, label: "Submitted", className: "bg-blue-50 text-blue-700 border-blue-200" },
+    under_review: { icon: <RefreshCw className="h-3 w-3" />, label: "Under Review", className: "bg-amber-50 text-amber-700 border-amber-200" },
+    approved: { icon: <CheckCircle2 className="h-3 w-3" />, label: "Approved", className: "bg-green-50 text-green-700 border-green-200" },
+    partially_approved: { icon: <AlertCircle className="h-3 w-3" />, label: "Partial", className: "bg-orange-50 text-orange-700 border-orange-200" },
+    paid: { icon: <CheckCircle2 className="h-3 w-3" />, label: "Settled", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    rejected: { icon: <XCircle className="h-3 w-3" />, label: "Rejected", className: "bg-red-50 text-red-700 border-red-200" },
+    appealed: { icon: <RefreshCw className="h-3 w-3" />, label: "Appealed", className: "bg-purple-50 text-purple-700 border-purple-200" },
+  };
+  const { icon, label, className } = config[status];
+  return (
+    <Badge variant="outline" className={`${className} text-xs gap-1`}>
+      {icon}
+      {label}
+    </Badge>
+  );
+};
+
+const getClaimTypeBadge = (type: ClaimType) => {
+  const config: Record<ClaimType, { label: string; className: string }> = {
+    cashless: { label: "Cashless", className: "bg-teal-50 text-teal-700 border-teal-200" },
+    reimbursement: { label: "Reimbursement", className: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+    pre_auth: { label: "Pre-Auth", className: "bg-violet-50 text-violet-700 border-violet-200" },
+  };
+  const { label, className } = config[type];
+  return <Badge variant="outline" className={`${className} text-xs`}>{label}</Badge>;
+};
+
+const mockClaims: Claim[] = [
   // V25-004 claims (Active visit - Cardiology follow-up)
   {
-    id: "CLM-2025-041",
-    date: "20 Dec 2025",
+    id: "clm-041",
+    claimNo: "CLM-2025-004521",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "20 Dec 2025",
+    submissionTime: "12:30 PM",
     visitId: "V25-004",
     service: "Cardiology Consultation",
-    billed: "2,500",
-    paid: "0",
-    status: "Submitted",
+    serviceCode: "CONS-CARD-001",
+    icdCode: "I25.9",
+    diagnosis: "Chronic Ischemic Heart Disease",
+    billedAmount: 2500,
+    approvedAmount: 0,
+    paidAmount: 0,
+    copay: 0,
+    deductible: 0,
+    patientLiability: 2500,
+    status: "submitted",
+    remarks: "Awaiting TPA approval",
   },
   {
-    id: "CLM-2025-042",
-    date: "20 Dec 2025",
+    id: "clm-042",
+    claimNo: "CLM-2025-004522",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "20 Dec 2025",
+    submissionTime: "12:35 PM",
     visitId: "V25-004",
-    service: "ECG Test",
-    billed: "800",
-    paid: "0",
-    status: "Submitted",
+    service: "12-Lead ECG",
+    serviceCode: "DIAG-ECG-001",
+    icdCode: "I25.9",
+    diagnosis: "Chronic Ischemic Heart Disease",
+    billedAmount: 800,
+    approvedAmount: 0,
+    paidAmount: 0,
+    copay: 0,
+    deductible: 0,
+    patientLiability: 800,
+    status: "submitted",
+    remarks: "Awaiting TPA approval",
+  },
+  {
+    id: "clm-043",
+    claimNo: "CLM-2025-004523",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "20 Dec 2025",
+    submissionTime: "01:00 PM",
+    visitId: "V25-004",
+    service: "Lipid Profile",
+    serviceCode: "LAB-BIO-003",
+    icdCode: "E78.5",
+    diagnosis: "Hyperlipidemia",
+    billedAmount: 650,
+    approvedAmount: 0,
+    paidAmount: 0,
+    copay: 0,
+    deductible: 0,
+    patientLiability: 650,
+    status: "under_review",
+    remarks: "Additional documents requested",
   },
   // V25-002 claims (General Medicine checkup)
   {
-    id: "CLM-2025-021",
-    date: "15 Dec 2025",
+    id: "clm-021",
+    claimNo: "CLM-2025-004312",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "15 Dec 2025",
+    submissionTime: "10:00 AM",
     visitId: "V25-002",
     service: "General Consultation",
-    billed: "1,500",
-    paid: "1,200",
-    status: "Paid",
+    serviceCode: "CONS-GEN-001",
+    icdCode: "Z00.0",
+    diagnosis: "General Health Examination",
+    billedAmount: 1500,
+    approvedAmount: 1200,
+    paidAmount: 1200,
+    copay: 150,
+    deductible: 150,
+    patientLiability: 300,
+    status: "paid",
+    settledDate: "18 Dec 2025",
+    turnaroundDays: 3,
   },
   {
-    id: "CLM-2025-022",
-    date: "15 Dec 2025",
+    id: "clm-022",
+    claimNo: "CLM-2025-004313",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "15 Dec 2025",
+    submissionTime: "10:30 AM",
     visitId: "V25-002",
-    service: "Laboratory Tests",
-    billed: "2,000",
-    paid: "1,600",
-    status: "Paid",
+    service: "CBC + Lipid Profile",
+    serviceCode: "LAB-PACK-001",
+    icdCode: "Z00.0",
+    diagnosis: "General Health Examination",
+    billedAmount: 2000,
+    approvedAmount: 1600,
+    paidAmount: 1600,
+    copay: 200,
+    deductible: 200,
+    patientLiability: 400,
+    status: "paid",
+    settledDate: "18 Dec 2025",
+    turnaroundDays: 3,
   },
   // V25-001 claims (Cardiology - Chest pain)
   {
-    id: "CLM-2025-011",
-    date: "01 Dec 2025",
+    id: "clm-011",
+    claimNo: "CLM-2025-004101",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "01 Dec 2025",
+    submissionTime: "03:00 PM",
     visitId: "V25-001",
     service: "Cardiology Consultation",
-    billed: "2,500",
-    paid: "2,000",
-    status: "Paid",
+    serviceCode: "CONS-CARD-001",
+    icdCode: "R07.9",
+    diagnosis: "Chest Pain, Unspecified",
+    billedAmount: 2500,
+    approvedAmount: 2000,
+    paidAmount: 2000,
+    copay: 250,
+    deductible: 250,
+    patientLiability: 500,
+    status: "paid",
+    settledDate: "05 Dec 2025",
+    turnaroundDays: 4,
   },
   {
-    id: "CLM-2025-012",
-    date: "01 Dec 2025",
+    id: "clm-012",
+    claimNo: "CLM-2025-004102",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "01 Dec 2025",
+    submissionTime: "03:15 PM",
     visitId: "V25-001",
-    service: "ECG Test",
-    billed: "800",
-    paid: "640",
-    status: "Paid",
+    service: "12-Lead ECG",
+    serviceCode: "DIAG-ECG-001",
+    icdCode: "R07.9",
+    diagnosis: "Chest Pain, Unspecified",
+    billedAmount: 800,
+    approvedAmount: 640,
+    paidAmount: 640,
+    copay: 80,
+    deductible: 80,
+    patientLiability: 160,
+    status: "paid",
+    settledDate: "05 Dec 2025",
+    turnaroundDays: 4,
   },
   {
-    id: "CLM-2025-013",
-    date: "01 Dec 2025",
+    id: "clm-013",
+    claimNo: "CLM-2025-004103",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "cashless",
+    submissionDate: "01 Dec 2025",
+    submissionTime: "03:30 PM",
     visitId: "V25-001",
-    service: "Chest X-Ray",
-    billed: "1,500",
-    paid: "0",
-    status: "In Review",
+    service: "Chest X-Ray PA View",
+    serviceCode: "RAD-XRAY-001",
+    icdCode: "R07.9",
+    diagnosis: "Chest Pain, Unspecified",
+    billedAmount: 1500,
+    approvedAmount: 0,
+    paidAmount: 0,
+    copay: 0,
+    deductible: 0,
+    patientLiability: 1500,
+    status: "rejected",
+    remarks: "Not covered under policy - requires pre-authorization",
   },
   // V24-089 claims (Orthopedics - Back pain)
   {
-    id: "CLM-2024-891",
-    date: "15 Nov 2025",
+    id: "clm-891",
+    claimNo: "CLM-2025-003891",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "pre_auth",
+    preAuthNo: "PA-2025-001234",
+    submissionDate: "15 Nov 2025",
+    submissionTime: "11:00 AM",
     visitId: "V24-089",
     service: "Orthopedics Consultation",
-    billed: "2,000",
-    paid: "1,600",
-    status: "Paid",
+    serviceCode: "CONS-ORTH-001",
+    icdCode: "M54.5",
+    diagnosis: "Low Back Pain",
+    billedAmount: 2000,
+    approvedAmount: 1600,
+    paidAmount: 1600,
+    copay: 200,
+    deductible: 200,
+    patientLiability: 400,
+    status: "paid",
+    settledDate: "20 Nov 2025",
+    turnaroundDays: 5,
   },
   {
-    id: "CLM-2024-892",
-    date: "15 Nov 2025",
+    id: "clm-892",
+    claimNo: "CLM-2025-003892",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "pre_auth",
+    preAuthNo: "PA-2025-001234",
+    submissionDate: "15 Nov 2025",
+    submissionTime: "12:00 PM",
     visitId: "V24-089",
-    service: "MRI Spine",
-    billed: "8,500",
-    paid: "6,800",
-    status: "Paid",
+    service: "MRI Lumbar Spine",
+    serviceCode: "RAD-MRI-002",
+    icdCode: "M54.5",
+    diagnosis: "Low Back Pain",
+    billedAmount: 8500,
+    approvedAmount: 6800,
+    paidAmount: 6800,
+    copay: 850,
+    deductible: 850,
+    patientLiability: 1700,
+    status: "paid",
+    settledDate: "22 Nov 2025",
+    turnaroundDays: 7,
   },
   {
-    id: "CLM-2024-893",
-    date: "16 Nov 2025",
+    id: "clm-893",
+    claimNo: "CLM-2025-003893",
+    policyNo: "ICICI-HLT-789456123",
+    insurerName: "ICICI Lombard",
+    tpaName: "Medi Assist",
+    claimType: "reimbursement",
+    submissionDate: "16 Nov 2025",
+    submissionTime: "09:30 AM",
     visitId: "V24-089",
-    service: "Physiotherapy",
-    billed: "1,000",
-    paid: "0",
-    status: "Rejected",
+    service: "Physiotherapy Session",
+    serviceCode: "REHAB-PT-001",
+    icdCode: "M54.5",
+    diagnosis: "Low Back Pain",
+    billedAmount: 1000,
+    approvedAmount: 0,
+    paidAmount: 0,
+    copay: 0,
+    deductible: 0,
+    patientLiability: 1000,
+    status: "appealed",
+    remarks: "Initial rejection appealed - waiting period clause disputed",
   },
 ];
 
@@ -128,65 +361,189 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
     );
   }
 
+  // Calculate totals
+  const totals = visitClaims.reduce(
+    (acc, claim) => ({
+      billed: acc.billed + claim.billedAmount,
+      approved: acc.approved + claim.approvedAmount,
+      paid: acc.paid + claim.paidAmount,
+      patientLiability: acc.patientLiability + claim.patientLiability,
+    }),
+    { billed: 0, approved: 0, paid: 0, patientLiability: 0 }
+  );
+
+  // Get policy info from first claim
+  const policyInfo = visitClaims[0];
+
   return (
     <div className="p-6 space-y-6">
-      {/* Claims Table */}
-      <div>
-        <h3 className="text-[14px] font-semibold text-foreground mb-4">Insurance Claims</h3>
-        <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
-          <table className="w-full">
-            <thead className="bg-muted/30">
-              <tr>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Visit ID</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Claim No</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Billed Amount</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Insurance paid</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
-                <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-card">
-              {visitClaims.map((claim) => (
-                <tr key={claim.id} className="border-t">
-                  <td className="p-4">
-                    <p className="text-sm font-mono font-medium text-foreground">{claim.visitId}</p>
-                  </td>
-                  <td className="p-4 text-sm">{claim.id}</td>
-                  <td className="p-4 text-sm">{claim.date}</td>
-                  <td className="p-4 text-sm">{claim.service}</td>
-                  <td className="p-4 text-sm">₹{claim.billed}</td>
-                  <td className="p-4 text-sm">₹{claim.paid}</td>
-                  <td className="p-4 text-sm">
-                    <span
-                      className={`font-medium ${
-                        claim.status === "Paid"
-                          ? "text-green-600"
-                          : claim.status === "In Review"
-                          ? "text-orange-600"
-                          : "text-amber-600"
-                      }`}
-                    >
-                      {claim.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-sm">
-                    <div className="flex gap-2">
-                      <button className="text-muted-foreground hover:text-foreground">
-                        <Download className="h-4 w-4" />
-                      </button>
-                      <button className="text-muted-foreground hover:text-foreground">
-                        <Printer className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Policy Summary Card */}
+      <div className="border rounded-lg p-4 bg-muted/20">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Policy Information</h3>
+            <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <p className="text-xs text-muted-foreground">Policy No.</p>
+                <p className="font-mono font-medium text-foreground">{policyInfo.policyNo}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Insurer</p>
+                <p className="font-medium text-foreground">{policyInfo.insurerName}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">TPA</p>
+                <p className="font-medium text-foreground">{policyInfo.tpaName}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Claims this Visit</p>
+                <p className="font-medium text-foreground">{visitClaims.length}</p>
+              </div>
+            </div>
+          </div>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <FileText className="h-4 w-4" />
+            View Policy
+          </Button>
         </div>
       </div>
+
+      {/* Claims Table */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[14px] font-semibold text-foreground">Insurance Claims</h3>
+          <p className="text-xs text-muted-foreground">
+            Showing {visitClaims.length} claim{visitClaims.length !== 1 ? 's' : ''} for visit {selectedVisit.visitId}
+          </p>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-muted/30">
+                <tr>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Claim No.</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Submitted</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / ICD</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Diagnosis</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Billed</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Approved</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Paid</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Patient Due</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-card">
+                {visitClaims.map((claim) => (
+                  <tr key={claim.id} className="border-t hover:bg-muted/20 transition-colors">
+                    <td className="p-3">
+                      <p className="text-xs font-mono font-medium text-primary">{claim.claimNo}</p>
+                      {claim.preAuthNo && (
+                        <p className="text-[10px] text-muted-foreground mt-0.5">PA: {claim.preAuthNo}</p>
+                      )}
+                    </td>
+                    <td className="p-3">
+                      {getClaimTypeBadge(claim.claimType)}
+                    </td>
+                    <td className="p-3">
+                      <div className="text-sm text-foreground">{claim.submissionDate}</div>
+                      <div className="text-xs text-muted-foreground">{claim.submissionTime}</div>
+                    </td>
+                    <td className="p-3">
+                      <div className="text-sm font-medium text-foreground">{claim.service}</div>
+                      <div className="text-xs text-muted-foreground font-mono">{claim.icdCode}</div>
+                    </td>
+                    <td className="p-3">
+                      <span className="text-sm text-foreground max-w-[150px] truncate block" title={claim.diagnosis}>
+                        {claim.diagnosis}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right">
+                      <span className="text-sm font-medium text-foreground">₹{claim.billedAmount.toLocaleString()}</span>
+                    </td>
+                    <td className="p-3 text-right">
+                      <span className={`text-sm font-medium ${claim.approvedAmount > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
+                        {claim.approvedAmount > 0 ? `₹${claim.approvedAmount.toLocaleString()}` : '—'}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right">
+                      <span className={`text-sm font-medium ${claim.paidAmount > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+                        {claim.paidAmount > 0 ? `₹${claim.paidAmount.toLocaleString()}` : '—'}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right">
+                      <span className={`text-sm font-medium ${claim.patientLiability > 0 ? 'text-orange-600' : 'text-muted-foreground'}`}>
+                        ₹{claim.patientLiability.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <div className="space-y-1">
+                        {getStatusBadge(claim.status)}
+                        {claim.settledDate && (
+                          <p className="text-[10px] text-muted-foreground">Settled: {claim.settledDate}</p>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex gap-1">
+                        <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="View Details">
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="Download">
+                          <Download className="h-4 w-4" />
+                        </button>
+                        <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="Print">
+                          <Printer className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              {/* Summary Footer */}
+              <tfoot className="bg-muted/40 border-t-2">
+                <tr>
+                  <td colSpan={5} className="p-3 text-right">
+                    <span className="text-sm font-semibold text-foreground">Totals:</span>
+                  </td>
+                  <td className="p-3 text-right">
+                    <span className="text-sm font-semibold text-foreground">₹{totals.billed.toLocaleString()}</span>
+                  </td>
+                  <td className="p-3 text-right">
+                    <span className="text-sm font-semibold text-green-600">₹{totals.approved.toLocaleString()}</span>
+                  </td>
+                  <td className="p-3 text-right">
+                    <span className="text-sm font-semibold text-emerald-600">₹{totals.paid.toLocaleString()}</span>
+                  </td>
+                  <td className="p-3 text-right">
+                    <span className="text-sm font-semibold text-orange-600">₹{totals.patientLiability.toLocaleString()}</span>
+                  </td>
+                  <td colSpan={2}></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Remarks Section */}
+      {visitClaims.some(c => c.remarks) && (
+        <div className="border rounded-lg p-4 bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800">
+          <h4 className="text-sm font-semibold text-amber-800 dark:text-amber-200 flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            Claim Remarks
+          </h4>
+          <div className="mt-2 space-y-2">
+            {visitClaims.filter(c => c.remarks).map(claim => (
+              <div key={claim.id} className="text-sm">
+                <span className="font-mono text-xs text-amber-700 dark:text-amber-300">{claim.claimNo}:</span>
+                <span className="ml-2 text-amber-900 dark:text-amber-100">{claim.remarks}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
