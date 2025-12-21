@@ -11,11 +11,7 @@ interface StickyFooterBarProps {
   onGenerateInvoice: () => void;
 }
 
-export function StickyFooterBar({ 
-  totals, 
-  itemCount, 
-  onGenerateInvoice,
-}: StickyFooterBarProps) {
+export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: StickyFooterBarProps) {
   const { flags } = useFeatureFlags();
   const { isCollapsed } = useSidebarContext();
 
@@ -63,6 +59,9 @@ export function StickyFooterBar({
           </div>
 
           <div className="flex items-center gap-4">
+            <Button size="lg" variant="outline" onClick={() => window.history.back()}>
+              Back
+            </Button>
             <Button size="lg" onClick={onGenerateInvoice}>
               Generate Invoice
             </Button>
