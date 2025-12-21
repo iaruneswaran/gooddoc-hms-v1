@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import bainesLogo from "@/assets/baines-logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Download, Printer, CheckCircle2, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -133,16 +134,13 @@ const Payment = () => {
                 <Card className="p-0 overflow-hidden">
                   {/* Hospital Header */}
                   <div className="bg-primary/5 border-b border-border px-6 py-5">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-center">
                       <div>
-                        <h2 className="text-xl font-bold text-foreground">GoodDoc Hospital</h2>
-                        <p className="text-sm text-muted-foreground mt-1">123 Healthcare Avenue, Medical District</p>
-                        <p className="text-sm text-muted-foreground">Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
+                        <img src={bainesLogo} alt="Baines Hospital" className="h-10" />
                       </div>
                       <div className="text-right">
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                          TAX INVOICE
-                        </div>
+                        <p className="text-sm text-muted-foreground">123 Healthcare Avenue, Medical District</p>
+                        <p className="text-sm text-muted-foreground">Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
                       </div>
                     </div>
                   </div>
