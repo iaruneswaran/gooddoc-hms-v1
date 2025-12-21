@@ -65,15 +65,20 @@ export interface IPPatientRecord {
 }
 
 export interface BedRecord {
+  bedNo: string;
   ward: string;
   room: string;
   bed: string;
   bedType: "ICU" | "HDU" | "Ward" | "Private" | "Isolation";
-  status: "Available" | "Cleaning" | "Reserved" | "Blocked";
-  lastDischargedAt?: string;
-  cleaningETA?: string;
-  isolationCapability: boolean;
-  reservedFor?: string;
+  status: "Available" | "Reserved";
+  dailyRate: number;
+  totalPerDay: number;
+  // Transfer details
+  transferPatient?: string;
+  transferPatientId?: string;
+  transferFrom?: string;
+  transferStatus?: "Pending" | "In Transit" | "Completed";
+  transferRequestedAt?: string;
 }
 
 export interface ERCaseRecord {
@@ -417,20 +422,31 @@ export const transferPatients: IPPatientRecord[] = Array.from({ length: 10 }, (_
 function generateBed(index: number, typeOverride?: BedRecord["bedType"]): BedRecord {
   const bedTypes: BedRecord["bedType"][] = ["ICU", "HDU", "Ward", "Private", "Isolation"];
   const bedType = typeOverride || bedTypes[index % bedTypes.length];
-  const statuses: BedRecord["status"][] = ["Available", "Available", "Available", "Cleaning", "Reserved", "Blocked"];
+  const statuses: BedRecord["status"][] = ["Available", "Available", "Available", "Available", "Reserved"];
   const status = statuses[index % statuses.length];
   const wardMap = { ICU: "ICU", HDU: "HDU", Ward: `Ward-${["A", "B", "C"][index % 3]}`, Private: "Private Wing", Isolation: "Isolation" };
+  
+  const rateMap = { ICU: 15000, HDU: 10000, Ward: 2000, Private: 8000, Isolation: 6000 };
+  const totalMap = { ICU: 20000, HDU: 13500, Ward: 2800, Private: 10500, Isolation: 8500 };
+  
+  const bedNo = `${1000 + index + 1}`;
+  const hasTransfer = status === "Reserved" && index % 3 === 0;
+  const transferStatuses: BedRecord["transferStatus"][] = ["Pending", "In Transit", "Completed"];
 
   return {
+    bedNo,
     ward: wardMap[bedType],
     room: `${String(100 + Math.floor(index / 4)).padStart(3, "0")}`,
     bed: `${(index % 4) + 1}`,
     bedType,
     status,
-    lastDischargedAt: status === "Cleaning" ? formatDateTime(subHours(now, 1)) : undefined,
-    cleaningETA: status === "Cleaning" ? formatTime(subMinutes(now, -30)) : undefined,
-    isolationCapability: bedType === "Isolation" || Math.random() > 0.7,
-    reservedFor: status === "Reserved" ? generateName(index + 500) : undefined,
+    dailyRate: rateMap[bedType],
+    totalPerDay: totalMap[bedType],
+    transferPatient: hasTransfer ? generateName(index + 500) : undefined,
+    transferPatientId: hasTransfer ? `GDID-${String(index + 500).padStart(3, "0")}` : undefined,
+    transferFrom: hasTransfer ? `Ward-${["A", "B", "C"][index % 3]} / Bed ${(index % 4) + 1}` : undefined,
+    transferStatus: hasTransfer ? transferStatuses[index % 3] : undefined,
+    transferRequestedAt: hasTransfer ? formatDateTime(subHours(now, index % 5 + 1)) : undefined,
   };
 }
 
