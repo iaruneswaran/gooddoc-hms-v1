@@ -102,7 +102,7 @@ const mockInvoices: Invoice[] = [
     paymentMode: "Card",
     status: "Paid",
   },
-  // V25-001 invoices (Cardiology - Chest pain)
+  // V25-001 invoices (Cardiology - Chest pain) - Fresh bills, not yet paid
   {
     id: "INV-2025-001230",
     date: "01-Dec-2025",
@@ -113,10 +113,10 @@ const mockInvoices: Invoice[] = [
     department: "Cardiology",
     originalAmount: 250000,
     totalAmount: 250000,
-    paidAmount: 250000,
-    balance: 0,
-    paymentMode: "Insurance",
-    status: "Paid",
+    paidAmount: 0,
+    balance: 250000,
+    paymentMode: null,
+    status: "Unpaid",
   },
   {
     id: "INV-2025-001231",
@@ -128,10 +128,10 @@ const mockInvoices: Invoice[] = [
     department: "Cardiology",
     originalAmount: 85000,
     totalAmount: 80000,
-    paidAmount: 80000,
-    balance: 0,
-    paymentMode: "Insurance",
-    status: "Paid",
+    paidAmount: 0,
+    balance: 80000,
+    paymentMode: null,
+    status: "Unpaid",
   },
   {
     id: "INV-2025-001232",
@@ -143,10 +143,10 @@ const mockInvoices: Invoice[] = [
     department: "Radiology",
     originalAmount: 150000,
     totalAmount: 150000,
-    paidAmount: 50000,
-    balance: 100000,
-    paymentMode: "Mixed",
-    status: "Partial",
+    paidAmount: 0,
+    balance: 150000,
+    paymentMode: null,
+    status: "Unpaid",
   },
   // V24-089 invoices (Orthopedics - Back pain)
   {
