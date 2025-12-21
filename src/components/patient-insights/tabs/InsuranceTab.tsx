@@ -380,7 +380,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
   const { patientId } = useParams();
 
   const handleGoToInsurance = () => {
-    navigate(`/insurance`);
+    navigate(`/patient-insights/${patientId}/insurance`);
   };
 
   return (
