@@ -734,7 +734,7 @@ function generateMedicineOrder(index: number): MedicineOrderRecord {
                      paymentStatus === "Waived" ? 0 : 0;
 
   return {
-    orderId: `RX${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
+    orderId: `RX${String(100000 + index).slice(-6)}`,
     patient: generateName(index + 700),
     ageSex: generateAgeSex(index + 700),
     visitId: formatVisitId(25, 300 + index),
