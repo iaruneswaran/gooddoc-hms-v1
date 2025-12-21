@@ -169,22 +169,6 @@ function getStatusBadgeVariant(status: string) {
   }
 }
 
-function getTypeBadgeVariant(type: string) {
-  switch (type.toLowerCase()) {
-    case "consultation":
-      return "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300";
-    case "laboratory":
-      return "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300";
-    case "radiology":
-      return "bg-violet-50 text-violet-700 dark:bg-violet-900/20 dark:text-violet-300";
-    case "pharmacy":
-      return "bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300";
-    case "procedure":
-      return "bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-300";
-    default:
-      return "bg-muted text-muted-foreground";
-  }
-}
 
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
   const appointments = getPatientAppointments(patient.gdid);
@@ -206,7 +190,6 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Type</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Service</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Department</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
@@ -235,14 +218,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                     
                     {/* Type */}
                     <td className="px-4 py-3">
-                      <Badge className={getTypeBadgeVariant(appointment.type)} variant="secondary">
-                        {appointment.type}
-                      </Badge>
-                    </td>
-                    
-                    {/* Service */}
-                    <td className="px-4 py-3">
-                      <p className="text-sm text-foreground">{appointment.service}</p>
+                      <p className="text-sm text-foreground">{appointment.type}</p>
                     </td>
                     
                     {/* Doctor */}
@@ -303,7 +279,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 ))
               ) : (
                 <tr>
-                  <td colSpan={10} className="p-8 text-center">
+                  <td colSpan={9} className="p-8 text-center">
                     <p className="text-sm text-muted-foreground">No appointments</p>
                   </td>
                 </tr>
