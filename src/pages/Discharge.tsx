@@ -153,6 +153,17 @@ const Discharge = () => {
                 netAmount={44000}
               />
 
+              {/* Invoice Action Buttons */}
+              <div className="flex items-center gap-3 mt-4">
+                <Button variant="outline" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Printer className="w-4 h-4" />
+                  Print Invoice
+                </Button>
+              </div>
             </div>
 
             {/* Right Column - Actions & Documents */}
