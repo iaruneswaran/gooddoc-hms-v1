@@ -277,18 +277,6 @@ const DischargeInvoice = ({
           </div>
         </div>
       </div>
-
-      {/* Action Buttons */}
-      <div className="p-4 flex items-center gap-3">
-        <Button variant="outline" className="gap-2">
-          <Download className="w-4 h-4" />
-          Download PDF
-        </Button>
-        <Button variant="outline" className="gap-2">
-          <Printer className="w-4 h-4" />
-          Print Invoice
-        </Button>
-      </div>
     </div>
   );
 };
