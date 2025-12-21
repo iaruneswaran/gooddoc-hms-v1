@@ -358,6 +358,24 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                     Adjust deposit against this bill
                   </Label>
                 </div>
+                
+                {/* Expanded Deposit Details */}
+                {adjustDeposit && selectedBill && (
+                  <div className="mt-4 pt-4 border-t border-border space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Deposit Used</span>
+                      <span className="text-sm font-semibold text-red-500">
+                        - {formatINR(Math.min(patientDeposit, selectedBill.balanceAmount))}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Remaining Deposit</span>
+                      <span className="text-sm font-semibold text-emerald-600">
+                        {formatINR(Math.max(0, patientDeposit - selectedBill.balanceAmount))}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Amount to Collect */}
