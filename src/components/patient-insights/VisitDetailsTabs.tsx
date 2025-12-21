@@ -8,6 +8,16 @@ import { InsuranceTab } from "./tabs/InsuranceTab";
 import { PatientDetailsTab } from "./tabs/PatientDetailsTab";
 import { TimelineTab } from "./tabs/TimelineTab";
 import { Visit } from "./VisitListItem";
+import { 
+  Calendar, 
+  FileText, 
+  CreditCard, 
+  History, 
+  FolderOpen, 
+  Shield, 
+  ArrowLeftRight, 
+  User 
+} from "lucide-react";
 
 interface Patient {
   name: string;
@@ -33,61 +43,37 @@ interface VisitDetailsTabsProps {
   patient: Patient;
 }
 
+const tabs = [
+  { value: "appointments", label: "Appointments", icon: Calendar },
+  { value: "invoices", label: "Bills Summary", icon: FileText },
+  { value: "collect-payment", label: "Collect Payment", icon: CreditCard },
+  { value: "payments", label: "Payment History", icon: History },
+  { value: "documents", label: "Documents", icon: FolderOpen },
+  { value: "insurance", label: "Insurance", icon: Shield },
+  { value: "timeline", label: "Transfer History", icon: ArrowLeftRight },
+  { value: "patient-details", label: "Patient Details", icon: User },
+];
+
 export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patient }: VisitDetailsTabsProps) {
   return (
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
         <div className="sticky top-0 bg-background z-10 border-b border-border">
-          <TabsList className="h-auto bg-transparent p-0 gap-8 rounded-none justify-start border-0 px-8 pt-3">
-            <TabsTrigger
-              value="appointments"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Appointments
-            </TabsTrigger>
-            <TabsTrigger
-              value="invoices"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Bills Summary
-            </TabsTrigger>
-            <TabsTrigger
-              value="collect-payment"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Collect Payment
-            </TabsTrigger>
-            <TabsTrigger
-              value="payments"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Payment History
-            </TabsTrigger>
-            <TabsTrigger
-              value="documents"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Documents
-            </TabsTrigger>
-            <TabsTrigger
-              value="insurance"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Insurance
-            </TabsTrigger>
-            <TabsTrigger
-              value="timeline"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Transfer History
-            </TabsTrigger>
-            <TabsTrigger
-              value="patient-details"
-              className="tab-trigger bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none px-0 pb-3 text-sm font-normal data-[state=active]:font-medium border-b-0"
-            >
-              Patient Details
-            </TabsTrigger>
+          <TabsList className="h-10 bg-muted/50 p-1 gap-0.5 rounded-md mx-6 my-3 justify-start w-auto inline-flex">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="gap-2 text-xs px-3 h-8 rounded-sm data-[state=active]:bg-card data-[state=active]:shadow-sm"
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {tab.label}
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
         </div>
 
