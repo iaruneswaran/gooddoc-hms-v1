@@ -1,4 +1,5 @@
-import { Download, Printer, Eye, FileText, AlertCircle, CheckCircle2, Clock, XCircle, RefreshCw } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Download, Printer, Eye, FileText, AlertCircle, CheckCircle2, Clock, XCircle, RefreshCw, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
@@ -375,6 +376,13 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
   // Get policy info from first claim
   const policyInfo = visitClaims[0];
 
+  const navigate = useNavigate();
+  const { patientId } = useParams();
+
+  const handleGoToInsurance = () => {
+    navigate(`/insurance`);
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Policy Summary Card */}
@@ -401,9 +409,9 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
               </div>
             </div>
           </div>
-          <Button variant="outline" size="sm" className="gap-1.5">
-            <FileText className="h-4 w-4" />
-            View Policy
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleGoToInsurance}>
+            <ExternalLink className="h-4 w-4" />
+            Go to Insurance
           </Button>
         </div>
       </div>
