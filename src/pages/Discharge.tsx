@@ -205,8 +205,39 @@ const Discharge = () => {
                     )}
                   </div>
 
+                  {/* Payer Details */}
+                  <div className="space-y-3 pt-2 border-t border-border">
+                    <p className="text-sm font-medium text-foreground">Payer Details</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Name</label>
+                        <Input placeholder="Payer name" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs text-muted-foreground">Relation</label>
+                        <Select defaultValue="self">
+                          <SelectTrigger className="bg-background">
+                            <SelectValue placeholder="Select relation" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-background border border-border z-50">
+                            <SelectItem value="self">Self</SelectItem>
+                            <SelectItem value="spouse">Spouse</SelectItem>
+                            <SelectItem value="parent">Parent</SelectItem>
+                            <SelectItem value="child">Child</SelectItem>
+                            <SelectItem value="sibling">Sibling</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-muted-foreground">Mobile Number</label>
+                      <Input placeholder="+91" />
+                    </div>
+                  </div>
+
                   {/* Discount Fields */}
-                  <div className="space-y-3">
+                  <div className="space-y-3 pt-2 border-t border-border">
                     <div className="space-y-1.5">
                       <label className="text-xs text-muted-foreground">Discount Type</label>
                       <Input placeholder="Select type" />
