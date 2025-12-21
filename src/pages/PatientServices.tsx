@@ -205,7 +205,7 @@ const PatientServices = () => {
           </div>
 
           {/* Center - Services List */}
-          <div className="w-[600px] flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden">
             {/* Search & Sub-category Filters */}
             <div className="p-4 space-y-3 border-b border-border flex-shrink-0 bg-background">
               <div className="relative">
@@ -363,7 +363,7 @@ const PatientServices = () => {
           </div>
           
           {/* Right Side - Order Summary */}
-          <div className="w-[420px] border-l border-border flex flex-col bg-card">
+          <div className="w-[380px] border-l border-border flex flex-col bg-card">
             {/* Header */}
             <div className="p-4 border-b border-border bg-primary">
               <div className="flex items-center justify-between">
