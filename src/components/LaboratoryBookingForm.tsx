@@ -199,7 +199,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">Laboratory</h3>
+        <h3 className="text-lg font-semibold text-foreground">{hideMode ? "Laboratory" : "Diagnostics"}</h3>
         {onRemove && (
           <Button
             variant="ghost"
