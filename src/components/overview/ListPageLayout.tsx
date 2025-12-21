@@ -90,6 +90,7 @@ interface ListPageLayoutProps<T> {
   onRowClick?: (row: T) => void;
   getRowId: (row: T) => string;
   urlParamFilters?: UrlParamFilter[];
+  customHeaderContent?: React.ReactNode;
 }
 
 export function ListPageLayout<T>({
@@ -110,6 +111,7 @@ export function ListPageLayout<T>({
   onRowClick,
   getRowId,
   urlParamFilters = [],
+  customHeaderContent,
 }: ListPageLayoutProps<T>) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -190,6 +192,11 @@ export function ListPageLayout<T>({
                     <Badge variant="secondary" className="text-lg px-3 py-1">
                       {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
                     </Badge>
+                    {customHeaderContent && (
+                      <div className="ml-4">
+                        {customHeaderContent}
+                      </div>
+                    )}
                   </div>
                   <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
                 </div>
