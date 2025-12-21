@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import BainesLogo from "@/assets/baines-logo.svg";
+import BainesLogoFull from "@/assets/baines-logo-full.svg";
 
 interface InvoiceItem {
   sno: number;
@@ -128,13 +128,7 @@ const DischargeInvoice = ({
     <div className="bg-background border border-border rounded-lg overflow-hidden">
       {/* Header */}
       <div className="flex items-start justify-between p-5 border-b border-border">
-        <div className="flex items-center gap-3">
-          <img src={BainesLogo} alt="Logo" className="h-10 w-10" />
-          <div>
-            <h1 className="text-lg font-bold text-foreground tracking-wide">BAINES INTERNATIONAL HEALTHCARE</h1>
-            <p className="text-sm text-muted-foreground">Powered by AI, guided by compassion.</p>
-          </div>
-        </div>
+        <img src={BainesLogoFull} alt="Baines International Healthcare" className="h-12" />
         <div className="text-right text-sm text-muted-foreground">
           <p>123 Healthcare Avenue, Medical District</p>
           <p>Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
