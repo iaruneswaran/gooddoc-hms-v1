@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -96,12 +96,12 @@ const Discharge = () => {
             className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span className="font-semibold">{fromSearch ? "Search Results" : "Patient Insights"}</span>
+            <span className="font-semibold">Back to Patient</span>
           </button>
 
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <FileText className="h-5 w-5 text-primary" />
+              <User className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="text-sm font-semibold text-foreground">Harish Kalyan</p>
