@@ -16,16 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { 
-  ArrowLeft, 
+  ChevronLeft, 
   Plus, 
   X, 
   Receipt, 
@@ -36,7 +28,8 @@ import {
   CheckCircle2,
   Clock,
   Printer,
-  Download
+  Download,
+  User
 } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { toast } from "sonner";
@@ -51,7 +44,7 @@ interface PaymentLine {
 // Mock patient data
 const mockPatient = {
   name: "Harish Kalyan",
-  gdid: "001",
+  gdid: "GDID-001",
   age: 44,
   gender: "Male",
   phone: "+91 98765 43210",
@@ -59,7 +52,9 @@ const mockPatient = {
   admissionType: "IPD Admission",
   doctor: "Dr. Karthik Reddy",
   department: "General Medicine",
-  roomNo: "204",
+  ward: "General Medicine Ward",
+  bed: "Room 204",
+  admissionDate: "07 Aug 2025",
   currentAdvance: 320000, // ₹3,200 in paise
   usedAdvance: 0,
   estimatedBill: 980000, // ₹9,800 in paise
@@ -181,63 +176,62 @@ const PatientAdvanceCollection = () => {
     "Fully Used": "bg-muted text-muted-foreground",
   };
 
+  const handleBack = () => {
+    navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`);
+  };
+
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
-      <PageContent>
+      
+      <PageContent className="flex flex-col overflow-hidden">
         <AppHeader 
           breadcrumbs={[
-            { label: "Patient Insight", onClick: () => navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ""}`) },
+            { label: "Patient Insight", onClick: handleBack },
             "Collect Advance"
           ]} 
         />
         
-        <main className="p-6">
-          {/* Header with Patient Summary */}
-          <Card className="p-5 mb-6 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ""}`)}
-                  className="h-9 w-9"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-lg">
-                  {mockPatient.name.charAt(0)}
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold text-foreground">{mockPatient.name}</h1>
-                  <p className="text-sm text-muted-foreground">
-                    GDID-{mockPatient.gdid} • {mockPatient.age}Y/{mockPatient.gender.charAt(0)} • {mockPatient.phone}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="secondary" className="text-xs">
-                      {mockPatient.visitId}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      Room {mockPatient.roomNo}
-                    </Badge>
-                  </div>
-                </div>
+        {/* Compact Header - Same as Services Page */}
+        <div className="h-[72px] bg-card border-b border-border flex-shrink-0 flex items-center justify-between px-6">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="font-semibold">Back to Patient</span>
+          </button>
+
+          {/* Patient Info */}
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex items-center gap-6">
+              <div>
+                <p className="text-sm font-semibold text-foreground">{mockPatient.name}</p>
+                <p className="text-xs text-muted-foreground">{mockPatient.gdid} • {mockPatient.age}Y / {mockPatient.gender.charAt(0)}</p>
               </div>
-              
-              {/* Balance Summary */}
-              <div className="flex gap-4">
-                <div className="text-right px-4 py-2 rounded-lg bg-background/60">
-                  <p className="text-xs text-muted-foreground">Available Advance</p>
-                  <p className="text-lg font-bold text-green-600">{formatINR(availableBalance)}</p>
-                </div>
-                <div className="text-right px-4 py-2 rounded-lg bg-background/60">
-                  <p className="text-xs text-muted-foreground">Estimated Bill</p>
-                  <p className="text-lg font-bold text-foreground">{formatINR(mockPatient.estimatedBill)}</p>
-                </div>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="text-xs text-muted-foreground">Admitted</p>
+                <p className="text-sm font-medium text-foreground">{mockPatient.admissionDate}</p>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="text-xs text-muted-foreground">Location</p>
+                <p className="text-sm font-medium text-foreground">{mockPatient.ward} • {mockPatient.bed}</p>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="text-xs text-muted-foreground">Attending</p>
+                <p className="text-sm font-medium text-foreground">{mockPatient.doctor}</p>
               </div>
             </div>
-          </Card>
-
+          </div>
+        </div>
+        
+        <main className="flex-1 overflow-auto p-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Collection Form */}
             <div className="lg:col-span-2">
