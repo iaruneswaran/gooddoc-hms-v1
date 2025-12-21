@@ -114,9 +114,9 @@ const Discharge = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="flex gap-6">
             {/* Left Column - Bill Summary */}
-            <div className="col-span-2 space-y-6">
+            <div className="w-[1156px] space-y-6">
               {/* Summary Cards */}
               <div className="grid grid-cols-4 gap-4">
                 <Card className="p-4">
@@ -167,7 +167,7 @@ const Discharge = () => {
             </div>
 
             {/* Right Column - Actions & Documents */}
-            <div className="space-y-6">
+            <div className="w-[420px] space-y-6">
               {/* Settlement & Payment Adjustments Combined */}
               <Card className="p-0 overflow-hidden">
                 <div className="bg-primary px-4 py-3 rounded-t-lg">
