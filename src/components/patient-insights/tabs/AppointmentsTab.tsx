@@ -28,16 +28,15 @@ interface Appointment {
   time: string;
   doctor: string;
   department: string;
-  status: "Completed" | "Scheduled" | "Checked-in" | "Cancelled";
+  type: "Consultation" | "Laboratory" | "Radiology" | "Pharmacy" | "Procedure";
+  service: string;
+  status: "Completed" | "Scheduled" | "Checked-in" | "Cancelled" | "In Progress";
+  tokenNo?: string;
   tokenTime?: string;
-  tokenDate?: string;
-  token?: string;
-  reason?: string;
 }
 
-// Mock appointments for the current patient only
+// Mock appointments for the current patient
 const getPatientAppointments = (gdid: string): Appointment[] => {
-  // Return appointments specific to this patient
   return [
     {
       id: "apt-1",
@@ -46,47 +45,109 @@ const getPatientAppointments = (gdid: string): Appointment[] => {
       time: "10:00",
       doctor: "Dr. Meera Nair",
       department: "Cardiology",
+      type: "Consultation",
+      service: "Follow-up Consultation",
       status: "Scheduled",
-      reason: "Follow-up consultation",
     },
     {
       id: "apt-2",
+      visitId: "V25-004",
+      date: "20-Dec-2025",
+      time: "10:30",
+      doctor: "—",
+      department: "Laboratory",
+      type: "Laboratory",
+      service: "Lipid Profile, CBC",
+      status: "Scheduled",
+    },
+    {
+      id: "apt-3",
+      visitId: "V25-004",
+      date: "20-Dec-2025",
+      time: "11:00",
+      doctor: "—",
+      department: "Radiology",
+      type: "Radiology",
+      service: "Chest X-Ray",
+      status: "Scheduled",
+    },
+    {
+      id: "apt-4",
       visitId: "V25-002",
       date: "15-Dec-2025",
       time: "09:30",
       doctor: "Dr. Priya Menon",
       department: "General Medicine",
+      type: "Consultation",
+      service: "Annual Health Checkup",
       status: "Completed",
+      tokenNo: "T042",
       tokenTime: "09:15",
-      tokenDate: "15-Dec-2025",
-      token: "T042",
-      reason: "Annual health checkup",
     },
     {
-      id: "apt-3",
+      id: "apt-5",
+      visitId: "V25-002",
+      date: "15-Dec-2025",
+      time: "10:00",
+      doctor: "—",
+      department: "Laboratory",
+      type: "Laboratory",
+      service: "Complete Blood Count",
+      status: "Completed",
+      tokenNo: "L018",
+      tokenTime: "09:55",
+    },
+    {
+      id: "apt-6",
       visitId: "V25-001",
       date: "01-Dec-2025",
       time: "11:00",
       doctor: "Dr. Meera Nair",
       department: "Cardiology",
+      type: "Consultation",
+      service: "Chest Pain Evaluation",
       status: "Completed",
+      tokenNo: "T018",
       tokenTime: "10:45",
-      tokenDate: "01-Dec-2025",
-      token: "T018",
-      reason: "Chest pain evaluation",
     },
     {
-      id: "apt-4",
+      id: "apt-7",
+      visitId: "V25-001",
+      date: "01-Dec-2025",
+      time: "11:30",
+      doctor: "—",
+      department: "Laboratory",
+      type: "Laboratory",
+      service: "Cardiac Enzymes, Troponin",
+      status: "Completed",
+      tokenNo: "L012",
+      tokenTime: "11:25",
+    },
+    {
+      id: "apt-8",
       visitId: "V24-089",
       date: "15-Nov-2025",
       time: "14:30",
       doctor: "Dr. Arun Kumar",
       department: "Orthopedics",
+      type: "Consultation",
+      service: "Back Pain Consultation",
       status: "Completed",
+      tokenNo: "T056",
       tokenTime: "14:20",
-      tokenDate: "15-Nov-2025",
-      token: "T056",
-      reason: "Back pain consultation",
+    },
+    {
+      id: "apt-9",
+      visitId: "V24-089",
+      date: "15-Nov-2025",
+      time: "15:00",
+      doctor: "—",
+      department: "Radiology",
+      type: "Radiology",
+      service: "Lumbar Spine X-Ray",
+      status: "Completed",
+      tokenNo: "R008",
+      tokenTime: "14:55",
     },
   ];
 };
@@ -99,6 +160,8 @@ function getStatusBadgeVariant(status: string) {
       return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
     case "checked-in":
       return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
+    case "in progress":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
     case "cancelled":
       return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     default:
@@ -106,76 +169,32 @@ function getStatusBadgeVariant(status: string) {
   }
 }
 
+function getTypeBadgeVariant(type: string) {
+  switch (type.toLowerCase()) {
+    case "consultation":
+      return "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300";
+    case "laboratory":
+      return "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300";
+    case "radiology":
+      return "bg-violet-50 text-violet-700 dark:bg-violet-900/20 dark:text-violet-300";
+    case "pharmacy":
+      return "bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300";
+    case "procedure":
+      return "bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-300";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}
+
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
   const appointments = getPatientAppointments(patient.gdid);
-  const activeAppointment = appointments.find(apt => apt.status === "Scheduled");
-  const pastAppointments = appointments.filter(apt => apt.status !== "Scheduled");
 
   return (
     <div className="h-full overflow-auto">
-      {/* Active Appointment Section */}
-      {activeAppointment && (
-        <div className="mb-6">
-          <div className="px-6 pt-6">
-            <h3 className="text-[14px] font-semibold text-foreground">
-              Active Appointment
-            </h3>
-          </div>
-          
-          <div className="border rounded-lg overflow-hidden mx-6 mt-4 bg-white dark:bg-card">
-            <table className="w-full">
-              <thead className="bg-muted/30">
-                <tr>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Visit ID</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Department</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Reason</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-card">
-                <tr className="border-t hover:bg-muted/20 transition-colors">
-                  <td className="px-4 py-3">
-                    <p className="text-sm font-mono font-medium text-foreground">{activeAppointment.visitId}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-sm text-foreground">{activeAppointment.time}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-sm text-foreground">{activeAppointment.date}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-sm text-foreground">{activeAppointment.doctor}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-sm text-foreground">{activeAppointment.department}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-sm text-muted-foreground">{activeAppointment.reason || "—"}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge className={getStatusBadgeVariant(activeAppointment.status)} variant="secondary">
-                      {activeAppointment.status}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-sm text-muted-foreground">—</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* Past Appointments Section */}
       <div className="mb-6">
-        <div className="px-6">
+        <div className="px-6 pt-6">
           <h3 className="text-[14px] font-semibold text-foreground">
-            Appointments
+            All Appointments
           </h3>
         </div>
         
@@ -184,38 +203,56 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
             <thead className="bg-muted/30">
               <tr>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Visit ID</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date & Time</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Type</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Service</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Reason</th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Department</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
-              {pastAppointments.length > 0 ? (
-                pastAppointments.map((appointment) => (
+              {appointments.length > 0 ? (
+                appointments.map((appointment) => (
                   <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
                     {/* Visit ID */}
                     <td className="px-4 py-3">
                       <p className="text-sm font-mono font-medium text-foreground">{appointment.visitId}</p>
                     </td>
                     
-                    {/* Date & Time */}
+                    {/* Date */}
+                    <td className="px-4 py-3">
+                      <p className="text-sm text-foreground">{appointment.date}</p>
+                    </td>
+                    
+                    {/* Time */}
                     <td className="px-4 py-3">
                       <p className="text-sm text-foreground">{appointment.time}</p>
-                      <p className="text-xs text-muted-foreground">{appointment.date}</p>
                     </td>
                     
-                    {/* Doctor & Department */}
+                    {/* Type */}
+                    <td className="px-4 py-3">
+                      <Badge className={getTypeBadgeVariant(appointment.type)} variant="secondary">
+                        {appointment.type}
+                      </Badge>
+                    </td>
+                    
+                    {/* Service */}
+                    <td className="px-4 py-3">
+                      <p className="text-sm text-foreground">{appointment.service}</p>
+                    </td>
+                    
+                    {/* Doctor */}
                     <td className="px-4 py-3">
                       <p className="text-sm text-foreground">{appointment.doctor}</p>
-                      <p className="text-xs text-muted-foreground">{appointment.department}</p>
                     </td>
                     
-                    {/* Reason */}
+                    {/* Department */}
                     <td className="px-4 py-3">
-                      <p className="text-sm text-muted-foreground">{appointment.reason || "—"}</p>
+                      <p className="text-sm text-foreground">{appointment.department}</p>
                     </td>
                     
                     {/* Status */}
@@ -227,9 +264,9 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                     
                     {/* Token */}
                     <td className="px-4 py-3">
-                      {appointment.token ? (
+                      {appointment.tokenNo ? (
                         <div>
-                          <p className="text-sm font-mono font-medium text-foreground">{appointment.token}</p>
+                          <p className="text-sm font-mono font-medium text-foreground">{appointment.tokenNo}</p>
                           <p className="text-xs text-muted-foreground">{appointment.tokenTime}</p>
                         </div>
                       ) : (
@@ -247,7 +284,15 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>View Notes</DropdownMenuItem>
+                          {appointment.type === "Consultation" && (
+                            <DropdownMenuItem>View Notes</DropdownMenuItem>
+                          )}
+                          {appointment.type === "Laboratory" && (
+                            <DropdownMenuItem>View Results</DropdownMenuItem>
+                          )}
+                          {appointment.type === "Radiology" && (
+                            <DropdownMenuItem>View Report</DropdownMenuItem>
+                          )}
                           {appointment.status === "Scheduled" && (
                             <DropdownMenuItem>Check In</DropdownMenuItem>
                           )}
@@ -258,13 +303,19 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center">
+                  <td colSpan={10} className="p-8 text-center">
                     <p className="text-sm text-muted-foreground">No appointments</p>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+        </div>
+        
+        {/* Footer Summary */}
+        <div className="mx-6 mt-4 flex items-center justify-between text-sm text-muted-foreground">
+          <span>Showing {appointments.length} appointments</span>
+          <span>Page 1 of 1</span>
         </div>
       </div>
     </div>
