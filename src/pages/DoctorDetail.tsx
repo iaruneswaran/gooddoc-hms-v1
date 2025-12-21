@@ -263,7 +263,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 export default function DoctorDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("today");
+  const [activeTab, setActiveTab] = useState("appointments");
   
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -574,8 +574,8 @@ export default function DoctorDetail() {
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="bg-transparent border-b border-border rounded-none h-auto p-0 justify-start w-full">
-              <TabsTrigger value="today" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                Today
+              <TabsTrigger value="appointments" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
+                Appointments
               </TabsTrigger>
               <TabsTrigger value="availability" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Availability
@@ -583,17 +583,27 @@ export default function DoctorDetail() {
               <TabsTrigger value="calendar" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
                 Calendar
               </TabsTrigger>
-              <TabsTrigger value="patients" className="tab-trigger rounded-none border-b-0 data-[state=active]:bg-transparent px-4 py-3">
-                Patients
-              </TabsTrigger>
             </TabsList>
 
-            {/* Today Tab */}
-            <TabsContent value="today" className="mt-6">
+            {/* Appointments Tab - Table View */}
+            <TabsContent value="appointments" className="mt-6">
               <Card className="overflow-hidden">
                 <div className="p-4 border-b border-border bg-muted/30">
-                  <h2 className="text-sm font-medium text-foreground">Today's Agenda - {format(new Date(), 'EEEE, MMMM d, yyyy')}</h2>
+                  <h2 className="text-sm font-medium text-foreground">Today's Appointments - {format(new Date(), 'EEEE, MMMM d, yyyy')}</h2>
                 </div>
+                
+                {/* Table Header */}
+                <div className="grid grid-cols-[180px_100px_120px_1fr_120px_100px_80px] gap-4 px-4 py-3 border-b border-border bg-muted/20 text-xs font-medium text-muted-foreground">
+                  <div>Patient Info</div>
+                  <div>Visit ID</div>
+                  <div>Appt. Time</div>
+                  <div>Chief Complaint</div>
+                  <div>Status</div>
+                  <div>Token</div>
+                  <div>Actions</div>
+                </div>
+
+                {/* Table Body */}
                 <div className="divide-y divide-border">
                   {todayAppointments.map((apt) => {
                     const patientName = apt.patient 
@@ -604,62 +614,66 @@ export default function DoctorDetail() {
                       : null;
                     const patientGender = apt.patient?.gender || '';
                     const patientGdid = apt.patient?.gdid || apt.patient_id;
-                    const appointmentType = apt.appointment_type?.name || (apt.mode === 'telehealth' ? 'Telehealth' : 'Consultation');
-                    const locationName = apt.location?.name || null;
-                    const isTelehealth = apt.mode === 'telehealth';
+                    const visitId = `V25-${apt.id.slice(-3).toUpperCase()}`;
+                    const token = apt.status === 'checked_in' || apt.status === 'completed' ? `T${apt.id.slice(-3)}` : '—';
 
                     return (
-                      <div key={apt.id} className={`flex items-center justify-between p-4 hover:bg-muted/20 transition-colors ${apt.status === 'checked_in' ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}>
-                        <div className="flex items-center gap-4">
-                          <div className="text-center min-w-[60px]">
-                            <div className="text-sm font-semibold text-foreground">
-                              {format(parseISO(apt.start_time), 'HH:mm')}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {format(parseISO(apt.end_time), 'HH:mm')}
-                            </div>
+                      <div 
+                        key={apt.id} 
+                        className={`grid grid-cols-[180px_100px_120px_1fr_120px_100px_80px] gap-4 px-4 py-3 hover:bg-muted/20 transition-colors items-center ${apt.status === 'checked_in' ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}
+                      >
+                        {/* Patient Info */}
+                        <div 
+                          className="cursor-pointer hover:text-primary"
+                          onClick={() => navigate(`/patient-insights/${apt.patient_id}?from=doctor-detail`)}
+                        >
+                          <div className="text-sm font-medium text-foreground hover:underline">
+                            {patientName}
                           </div>
-                          <div className="w-px h-10 bg-border" />
-                          <div 
-                            className="cursor-pointer hover:text-primary min-w-[180px]"
-                            onClick={() => navigate(`/patient-insights/${apt.patient_id}?from=doctor-detail`)}
-                          >
-                            <div className="text-sm font-medium text-foreground hover:underline">
-                              {patientName}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {patientGdid} {patientAge ? `• ${patientAge}Y` : ''} {patientGender ? patientGender.charAt(0).toUpperCase() : ''}
-                            </div>
-                          </div>
-                          <div className="flex-1 min-w-[200px]">
-                            <Badge variant="outline" className="text-xs mb-1">{appointmentType}</Badge>
-                            {apt.notes && (
-                              <div className="text-xs text-muted-foreground line-clamp-1">
-                                {apt.notes}
-                              </div>
-                            )}
+                          <div className="text-xs text-muted-foreground">
+                            {patientGdid} • {patientAge ? `${patientAge}` : ''} | {patientGender ? patientGender.charAt(0).toUpperCase() : ''}
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          {isTelehealth && (
-                            <Button variant="default" size="sm" className="gap-1">
-                              <Video className="w-4 h-4" />
-                              Join Call
-                            </Button>
-                          )}
-                          {locationName && (
-                            <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">{locationName}</span>
-                          )}
+
+                        {/* Visit ID */}
+                        <div className="text-sm text-foreground">{visitId}</div>
+
+                        {/* Appointment Time */}
+                        <div>
+                          <div className="text-sm font-medium text-foreground">
+                            {format(parseISO(apt.start_time), 'HH:mm')}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {format(parseISO(apt.start_time), 'dd-MMM-yyyy')}
+                          </div>
+                        </div>
+
+                        {/* Chief Complaint / Notes */}
+                        <div className="text-sm text-muted-foreground line-clamp-2">
+                          {apt.notes || apt.appointment_type?.name || 'Consultation'}
+                        </div>
+
+                        {/* Status */}
+                        <div>
                           <Badge className={statusConfig[apt.status]?.className || ''}>
                             {statusConfig[apt.status]?.label || apt.status}
                           </Badge>
+                        </div>
+
+                        {/* Token */}
+                        <div className="text-sm text-foreground font-medium">
+                          {token}
+                        </div>
+
+                        {/* Actions */}
+                        <div>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon" className="h-8 w-8">
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="bg-popover z-50">
                               <DropdownMenuItem onClick={() => toast({ title: "Checked In" })}>
                                 <CheckCircle className="w-4 h-4 mr-2" />
                                 Check In
@@ -723,77 +737,6 @@ export default function DoctorDetail() {
                 leaves={leaves}
                 appointments={appointments}
               />
-            </TabsContent>
-
-            {/* Patients Tab */}
-            <TabsContent value="patients" className="mt-6">
-              <Card className="overflow-hidden">
-                <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
-                  <h2 className="text-sm font-medium text-foreground">Today's Patients ({todayAppointments.filter(a => a.patient).length})</h2>
-                </div>
-                <div className="divide-y divide-border">
-                  {todayAppointments.filter(apt => apt.patient).map((apt) => {
-                    const patient = apt.patient!;
-                    const patientName = `${patient.first_name} ${patient.last_name}`;
-                    const patientAge = patient.date_of_birth ? calculateAge(patient.date_of_birth) : null;
-                    
-                    return (
-                      <div key={apt.id} className="flex items-center justify-between p-4 hover:bg-muted/20 transition-colors">
-                        <div 
-                          className="flex items-center gap-4 cursor-pointer flex-1"
-                          onClick={() => navigate(`/patient-insights/${patient.id}?from=doctor-detail`)}
-                        >
-                          <Avatar className="h-10 w-10">
-                            <AvatarFallback className={patient.gender?.toLowerCase() === 'female' || patient.gender?.toLowerCase() === 'f' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'}>
-                              {patientName.split(" ").map(n => n[0]).join("").slice(0, 2)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-[160px]">
-                            <div className="text-sm font-medium text-foreground hover:underline">
-                              {patientName}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {patient.gdid} {patientAge ? `• ${patientAge}Y` : ''} {patient.gender?.charAt(0).toUpperCase() || ''}
-                            </div>
-                          </div>
-                          <div className="flex-1">
-                            <Badge variant="outline" className="text-xs">
-                              {apt.appointment_type?.name || 'Consultation'}
-                            </Badge>
-                            {apt.notes && (
-                              <div className="text-xs text-muted-foreground mt-1 line-clamp-1">{apt.notes}</div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right min-w-[90px]">
-                            <div className="text-xs text-muted-foreground">Appointment</div>
-                            <div className="text-sm text-foreground">{format(parseISO(apt.start_time), 'HH:mm')}</div>
-                          </div>
-                          <Badge className={statusConfig[apt.status]?.className || ''}>
-                            {statusConfig[apt.status]?.label || apt.status}
-                          </Badge>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/book-appointment?patientId=${patient.id}&doctorId=${id}`);
-                            }}
-                          >
-                            Book
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {todayAppointments.filter(a => a.patient).length === 0 && (
-                    <div className="p-12 text-center text-muted-foreground">
-                      No patients with appointments today
-                    </div>
-                  )}
-                </div>
-              </Card>
             </TabsContent>
           </Tabs>
         </main>
