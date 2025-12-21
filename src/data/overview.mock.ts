@@ -58,6 +58,10 @@ export interface IPPatientRecord {
   followUpAppointment?: string;
   plannedDischargeDateTime?: string;
   blockingTasks?: string[];
+  // Payment details
+  advancePaid?: number;
+  admissionFee?: number;
+  totalPaid?: number;
 }
 
 export interface BedRecord {
@@ -363,6 +367,12 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
   const bedClass = bedClasses[index % bedClasses.length];
   const wardMap = { ICU: "ICU", HDU: "HDU", Private: "Private Wing", Ward: `Ward-${["A", "B", "C", "D"][index % 4]}` };
 
+  // Generate payment details
+  const admissionFee = [5000, 8000, 10000, 15000, 20000][index % 5];
+  const hasPaidAdvance = Math.random() > 0.3;
+  const advancePaid = hasPaidAdvance ? [10000, 15000, 20000, 25000, 50000][index % 5] : 0;
+  const totalPaid = advancePaid + (Math.random() > 0.5 ? admissionFee : 0);
+
   return {
     mrn: generateMRN(5000 + index),
     patient: generateName(index + 100),
@@ -381,6 +391,9 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
     source: isERCase ? "ER" : isNewAdmission ? (["ER", "OPD", "Transfer"] as const)[index % 3] : undefined,
     admittingDiagnosis: diagnoses[(index + 3) % diagnoses.length],
     admittingDoctor: doctors[(index + 2) % doctors.length],
+    admissionFee,
+    advancePaid,
+    totalPaid,
   };
 }
 
