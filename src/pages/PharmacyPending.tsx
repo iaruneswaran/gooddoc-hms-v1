@@ -3,19 +3,18 @@ import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { medicineOrders, MedicineOrderRecord } from "@/data/overview.mock";
+import { formatINR } from "@/utils/currency";
 
 const priorityStyles: Record<MedicineOrderRecord["priority"], string> = {
   "Routine": "bg-gray-100 text-gray-700",
   "Stat": "bg-red-100 text-red-700",
 };
 
-const statusStyles: Record<MedicineOrderRecord["status"], string> = {
-  "Pending": "bg-gray-100 text-gray-700",
-  "Verifying": "bg-blue-100 text-blue-700",
-  "Verified": "bg-indigo-100 text-indigo-700",
-  "Dispensed": "bg-green-100 text-green-700",
-  "Administered": "bg-purple-100 text-purple-700",
-  "Canceled": "bg-red-100 text-red-700",
+const paymentStatusStyles: Record<MedicineOrderRecord["paymentStatus"], string> = {
+  "Paid": "bg-green-100 text-green-700",
+  "Pending": "bg-amber-100 text-amber-700",
+  "Partially Paid": "bg-blue-100 text-blue-700",
+  "Waived": "bg-gray-100 text-gray-700",
 };
 
 const routeStyles: Record<MedicineOrderRecord["route"], string> = {
@@ -38,6 +37,7 @@ const MedicineOrdersToday = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.orderId} ageSex={row.ageSex} patientId={row.orderId} fromPage="pharmacy" />
     },
     { key: "visitId", label: "Visit ID" },
+    { key: "orderId", label: "Order ID" },
     { 
       key: "location", 
       label: "Location",
@@ -56,31 +56,27 @@ const MedicineOrdersToday = () => {
       }
     },
     { key: "prescriber", label: "Prescriber" },
-    { key: "medications", label: "Medications" },
     {
-      key: "status",
-      label: "Status",
+      key: "orderAmount",
+      label: "Payment Details",
       sortable: true,
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <div className="flex flex-col">
+          <span className="font-medium">{formatINR(row.orderAmount)}</span>
+          {row.paidAmount > 0 && (
+            <span className="text-muted-foreground text-xs">
+              Paid: {formatINR(row.paidAmount)}
+            </span>
+          )}
+        </div>
       ),
     },
     {
-      key: "allergiesFlag",
-      label: "Allergies",
-      render: (row) => row.allergiesFlag ? (
-        <Badge className="bg-red-500 text-white">Yes</Badge>
-      ) : (
-        <span className="text-muted-foreground">No</span>
-      ),
-    },
-    {
-      key: "interactionsFlag",
-      label: "Interactions",
-      render: (row) => row.interactionsFlag ? (
-        <Badge className="bg-orange-500 text-white">Yes</Badge>
-      ) : (
-        <span className="text-muted-foreground">No</span>
+      key: "paymentStatus",
+      label: "Payment Status",
+      sortable: true,
+      render: (row) => (
+        <Badge className={paymentStatusStyles[row.paymentStatus]}>{row.paymentStatus}</Badge>
       ),
     },
     { 
@@ -101,15 +97,14 @@ const MedicineOrdersToday = () => {
 
   const filters: Filter[] = [
     {
-      key: "status",
-      label: "Status",
+      key: "paymentStatus",
+      label: "Payment Status",
       value: "all",
       options: [
+        { value: "Paid", label: "Paid" },
         { value: "Pending", label: "Pending" },
-        { value: "Verifying", label: "Verifying" },
-        { value: "Verified", label: "Verified" },
-        { value: "Dispensed", label: "Dispensed" },
-        { value: "Administered", label: "Administered" },
+        { value: "Partially Paid", label: "Partially Paid" },
+        { value: "Waived", label: "Waived" },
       ],
     },
   ];
@@ -137,7 +132,7 @@ const MedicineOrdersToday = () => {
       filters={filters}
       rowActions={rowActions}
       emptyMessage="No medicine orders for today."
-      searchPlaceholder="Search by Order ID, patient name, medication..."
+      searchPlaceholder="Search by Order ID, patient name..."
       getRowId={(row) => row.orderId}
       onRowClick={(row) => navigate(`/patient-insights/${row.orderId}?from=pharmacy`)}
     />

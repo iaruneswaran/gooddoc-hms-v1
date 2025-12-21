@@ -208,14 +208,14 @@ export interface MedicineOrderRecord {
   visitId: string;
   location: string;
   prescriber: string;
-  medications: string;
   route: "PO" | "IV" | "IM" | "SC" | "Topical";
   priority: "Routine" | "Stat";
-  status: "Pending" | "Verifying" | "Verified" | "Dispensed" | "Administered" | "Canceled";
-  allergiesFlag: boolean;
-  interactionsFlag: boolean;
   dispensedAt?: string;
   orderTime: string;
+  // Payment details
+  paymentStatus: "Paid" | "Pending" | "Partially Paid" | "Waived";
+  orderAmount: number;
+  paidAmount: number;
 }
 
 export interface RadiologyOrderRecord {
@@ -726,6 +726,13 @@ function generateMedicineOrder(index: number): MedicineOrderRecord {
   const orderDate = subHours(now, Math.floor(Math.random() * 6));
   const isIP = index % 2 === 0;
 
+  const orderAmount = [500, 800, 1200, 1500, 2000, 2500][index % 6];
+  const paymentStatuses = ["Paid", "Pending", "Partially Paid", "Waived"] as const;
+  const paymentStatus = paymentStatuses[index % 4];
+  const paidAmount = paymentStatus === "Paid" ? orderAmount : 
+                     paymentStatus === "Partially Paid" ? Math.floor(orderAmount * 0.5) : 
+                     paymentStatus === "Waived" ? 0 : 0;
+
   return {
     orderId: `RX${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: generateName(index + 700),
@@ -733,14 +740,13 @@ function generateMedicineOrder(index: number): MedicineOrderRecord {
     visitId: formatVisitId(25, 300 + index),
     location: isIP ? `Ward-${["A", "B", "C"][index % 3]}/Bed ${index % 10 + 1}` : "OP",
     prescriber: doctors[index % doctors.length],
-    medications: medicationNames.slice(0, 1 + Math.floor(Math.random() * 3)).join(", "),
     route: (["PO", "IV", "IM", "SC", "Topical"] as const)[index % 5],
     priority: index % 8 === 0 ? "Stat" : "Routine",
-    status: (["Pending", "Verifying", "Verified", "Dispensed", "Administered", "Canceled"] as const)[index % 6],
-    allergiesFlag: index % 15 === 0,
-    interactionsFlag: index % 25 === 0,
-    dispensedAt: index % 6 >= 3 ? formatDateTime(subMinutes(now, Math.floor(Math.random() * 60))) : undefined,
+    dispensedAt: index % 3 === 0 ? formatDateTime(subMinutes(now, Math.floor(Math.random() * 60))) : undefined,
     orderTime: formatDateTime(orderDate),
+    paymentStatus,
+    orderAmount,
+    paidAmount,
   };
 }
 
