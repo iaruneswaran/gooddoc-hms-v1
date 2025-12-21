@@ -23,13 +23,13 @@ interface Invoice {
   status: "Paid" | "Partial" | "Unpaid";
 }
 
-// Mock invoices data with visitId
+// Mock invoices data with visitId (amounts in paise - 100 paise = ₹1)
 const mockInvoices: Invoice[] = [
   // V25-004 invoices (Active visit - Cardiology follow-up)
   {
-    id: "INV-2025-001254",
+    id: "INV-2025-001236",
     date: "20-Dec-2025",
-    time: "10:30",
+    time: "09:00",
     visitId: "V25-004",
     service: "Cardiology Consultation",
     doctor: "Dr. Meera Nair",
@@ -42,17 +42,32 @@ const mockInvoices: Invoice[] = [
     status: "Unpaid",
   },
   {
-    id: "INV-2025-001255",
+    id: "INV-2025-001237",
     date: "20-Dec-2025",
-    time: "11:00",
+    time: "10:30",
     visitId: "V25-004",
     service: "ECG Test",
     doctor: "Dr. Meera Nair",
-    department: "Cardiology",
-    originalAmount: 80000,
+    department: "Diagnostics",
+    originalAmount: 100000,
     totalAmount: 80000,
+    paidAmount: 40000,
+    balance: 40000,
+    paymentMode: "Cash",
+    status: "Partial",
+  },
+  {
+    id: "INV-2025-001238",
+    date: "20-Dec-2025",
+    time: "11:00",
+    visitId: "V25-004",
+    service: "Laboratory - Lipid Profile",
+    doctor: "Dr. Meera Nair",
+    department: "Laboratory",
+    originalAmount: 65000,
+    totalAmount: 65000,
     paidAmount: 0,
-    balance: 80000,
+    balance: 65000,
     paymentMode: null,
     status: "Unpaid",
   },
