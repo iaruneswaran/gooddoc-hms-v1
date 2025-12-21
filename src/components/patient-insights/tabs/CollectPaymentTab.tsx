@@ -385,7 +385,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
               </div>
 
               <div className="space-y-3">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Payer Details</span>
+                <span className="text-sm font-semibold text-foreground">Payer Details</span>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Name</Label>
