@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { X, Calendar as CalendarIcon, AlertCircle, Users } from "lucide-react";
+import { Calendar as CalendarIcon, Users, Stethoscope, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -158,20 +158,29 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
   };
 
   return (
-    <Card className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">Consultation</h3>
+    <Card className="overflow-hidden">
+      {/* Header */}
+      <div className="bg-green-600 dark:bg-green-700 px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <Stethoscope className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-white">Consultation</h3>
+            <p className="text-xs text-white/70">OP Appointment Booking</p>
+          </div>
+        </div>
         {onRemove && (
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={onRemove}
-            className="text-primary"
+            className="text-white/70 hover:text-white transition-colors"
           >
-            Remove
-          </Button>
+            <Trash2 className="w-4 h-4" />
+          </button>
         )}
       </div>
+      
+      <div className="p-5 space-y-5">
 
       {/* Consultation Type and Department */}
       <div className="grid grid-cols-2 gap-4">
@@ -282,6 +291,7 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
             </p>
           </div>
         )}
+      </div>
       </div>
     </Card>
   );
