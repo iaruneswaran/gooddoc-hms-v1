@@ -138,7 +138,7 @@ const paymentMethods = [
 ];
 
 export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
-  const [selectedBill, setSelectedBill] = useState<PayableBill | null>(null);
+  const [selectedBillIds, setSelectedBillIds] = useState<string[]>([]);
   const [adjustDeposit, setAdjustDeposit] = useState(false);
   const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
     { id: "1", method: "cash", amount: "" },
@@ -168,6 +168,31 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     (bill) => bill.visitId === selectedVisit.visitId && bill.status !== "Paid"
   );
 
+  // Get selected bills
+  const selectedBills = visitBills.filter((bill) => selectedBillIds.includes(bill.id));
+
+  // Calculate totals for selected bills
+  const totalOriginalAmount = selectedBills.reduce((sum, bill) => sum + bill.originalAmount, 0);
+  const totalNetAmount = selectedBills.reduce((sum, bill) => sum + bill.totalAmount, 0);
+  const totalPaidAmount = selectedBills.reduce((sum, bill) => sum + bill.paidAmount, 0);
+  const totalBalanceAmount = selectedBills.reduce((sum, bill) => sum + bill.balanceAmount, 0);
+
+  const toggleBillSelection = (billId: string) => {
+    setSelectedBillIds((prev) =>
+      prev.includes(billId)
+        ? prev.filter((id) => id !== billId)
+        : [...prev, billId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedBillIds.length === visitBills.length) {
+      setSelectedBillIds([]);
+    } else {
+      setSelectedBillIds(visitBills.map((bill) => bill.id));
+    }
+  };
+
   const addSplitPayment = () => {
     setSplitPayments([
       ...splitPayments,
@@ -196,10 +221,10 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     return null;
   };
 
-  const amountToCollect = selectedBill
+  const amountToCollect = selectedBills.length > 0
     ? adjustDeposit
-      ? Math.max(0, selectedBill.balanceAmount - patientDeposit)
-      : selectedBill.balanceAmount
+      ? Math.max(0, totalBalanceAmount - patientDeposit)
+      : totalBalanceAmount
     : 0;
 
   return (
@@ -219,6 +244,13 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
             <table className="w-full">
               <thead className="bg-muted/30">
                 <tr>
+                  <th className="text-center text-xs font-medium text-muted-foreground p-3 w-10">
+                    <Checkbox
+                      checked={selectedBillIds.length === visitBills.length && visitBills.length > 0}
+                      onCheckedChange={toggleSelectAll}
+                      aria-label="Select all bills"
+                    />
+                  </th>
                   <th className="text-left text-xs font-medium text-muted-foreground p-3">Invoice No.</th>
                   <th className="text-left text-xs font-medium text-muted-foreground p-3">Date & Time</th>
                   <th className="text-left text-xs font-medium text-muted-foreground p-3">Service</th>
@@ -234,10 +266,17 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   <tr
                     key={bill.id}
                     className={`hover:bg-muted/20 transition-colors cursor-pointer ${
-                      selectedBill?.id === bill.id ? "bg-primary/5 border-l-2 border-l-primary" : ""
+                      selectedBillIds.includes(bill.id) ? "bg-primary/5 border-l-2 border-l-primary" : ""
                     }`}
-                    onClick={() => setSelectedBill(bill)}
+                    onClick={() => toggleBillSelection(bill.id)}
                   >
+                    <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
+                      <Checkbox
+                        checked={selectedBillIds.includes(bill.id)}
+                        onCheckedChange={() => toggleBillSelection(bill.id)}
+                        aria-label={`Select ${bill.invoiceNo}`}
+                      />
+                    </td>
                     <td className="p-3">
                       <div className="flex flex-col">
                         <span className="text-sm font-medium text-primary">{bill.invoiceNo}</span>
@@ -276,7 +315,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         {getStatusBadge(bill.status)}
                       </div>
                     </td>
-                    <td className="p-3">
+                    <td className="p-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex justify-center gap-1">
                         <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                           <Eye className="h-3.5 w-3.5" />
@@ -302,41 +341,60 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
         {/* Blue Header */}
         <div className="bg-primary px-5 py-4">
           <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
-          {selectedBill && (
-            <p className="text-sm text-primary-foreground/80 mt-0.5">Invoice: {selectedBill.invoiceNo}</p>
+          {selectedBills.length > 0 && (
+            <p className="text-sm text-primary-foreground/80 mt-0.5">
+              {selectedBills.length === 1 
+                ? `Invoice: ${selectedBills[0].invoiceNo}` 
+                : `${selectedBills.length} Invoices Selected`}
+            </p>
           )}
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-          {!selectedBill ? (
+          {selectedBills.length === 0 ? (
             <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
               <p className="text-sm text-muted-foreground text-center px-4">
-                Select a bill from the left to collect payment
+                Select bills from the left to collect payment
               </p>
             </div>
           ) : (
             <div className="space-y-5">
+              {/* Selected Invoices List */}
+              {selectedBills.length > 1 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Selected Invoices</span>
+                  <div className="space-y-1.5">
+                    {selectedBills.map((bill) => (
+                      <div key={bill.id} className="flex justify-between items-center text-sm bg-muted/30 rounded px-3 py-2">
+                        <span className="font-medium text-primary">{bill.invoiceNo}</span>
+                        <span className="text-foreground">{formatINR(bill.balanceAmount)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Bill Summary */}
               <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
-                  <span className="text-sm font-semibold text-foreground">{formatINR(selectedBill.originalAmount)}</span>
+                  <span className="text-sm font-semibold text-foreground">{formatINR(totalOriginalAmount)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Discount Applied</span>
                   <span className="text-sm font-medium text-emerald-600">
-                    - {formatINR(selectedBill.originalAmount - selectedBill.totalAmount)}
+                    - {formatINR(totalOriginalAmount - totalNetAmount)}
                   </span>
                 </div>
                 <div className="border-t border-border my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-semibold text-foreground">Net Bill Amount</span>
-                  <span className="text-base font-bold text-foreground">{formatINR(selectedBill.totalAmount)}</span>
+                  <span className="text-base font-bold text-foreground">{formatINR(totalNetAmount)}</span>
                 </div>
-                {selectedBill.paidAmount > 0 && (
+                {totalPaidAmount > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Already Paid</span>
-                    <span className="text-sm font-medium text-emerald-600">- {formatINR(selectedBill.paidAmount)}</span>
+                    <span className="text-sm font-medium text-emerald-600">- {formatINR(totalPaidAmount)}</span>
                   </div>
                 )}
               </div>
@@ -362,18 +420,18 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 </div>
                 
                 {/* Expanded Deposit Details */}
-                {adjustDeposit && selectedBill && (
+                {adjustDeposit && selectedBills.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-border space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Deposit Used</span>
                       <span className="text-sm font-semibold text-red-500">
-                        - {formatINR(Math.min(patientDeposit, selectedBill.balanceAmount))}
+                        - {formatINR(Math.min(patientDeposit, totalBalanceAmount))}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Remaining Deposit</span>
                       <span className="text-sm font-semibold text-emerald-600">
-                        {formatINR(Math.max(0, patientDeposit - selectedBill.balanceAmount))}
+                        {formatINR(Math.max(0, patientDeposit - totalBalanceAmount))}
                       </span>
                     </div>
                   </div>
