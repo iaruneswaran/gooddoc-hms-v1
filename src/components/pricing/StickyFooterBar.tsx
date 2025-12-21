@@ -8,10 +8,23 @@ import { useSidebarContext } from '@/contexts/SidebarContext';
 interface StickyFooterBarProps {
   totals: AppointmentTotals;
   itemCount: number;
-  onGenerateInvoice: () => void;
+  onGenerateInvoice?: () => void;
+  // Single consultation mode props
+  singleConsultationMode?: boolean;
+  onAskConfirmation?: () => void;
+  onScheduleNow?: () => void;
+  isScheduleDisabled?: boolean;
 }
 
-export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: StickyFooterBarProps) {
+export function StickyFooterBar({ 
+  totals, 
+  itemCount, 
+  onGenerateInvoice,
+  singleConsultationMode = false,
+  onAskConfirmation,
+  onScheduleNow,
+  isScheduleDisabled = false,
+}: StickyFooterBarProps) {
   const { flags } = useFeatureFlags();
   const { isCollapsed } = useSidebarContext();
 
@@ -59,12 +72,25 @@ export function StickyFooterBar({ totals, itemCount, onGenerateInvoice }: Sticky
           </div>
 
           <div className="flex items-center gap-4">
-            <Button size="lg" variant="outline" onClick={() => window.history.back()}>
-              Back
-            </Button>
-            <Button size="lg" onClick={onGenerateInvoice}>
-              Generate Invoice
-            </Button>
+            {singleConsultationMode ? (
+              <>
+                <Button size="lg" variant="outline" onClick={onAskConfirmation}>
+                  Ask Confirmation
+                </Button>
+                <Button size="lg" onClick={onScheduleNow} disabled={isScheduleDisabled}>
+                  Schedule Now
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="lg" variant="outline" onClick={() => window.history.back()}>
+                  Back
+                </Button>
+                <Button size="lg" onClick={onGenerateInvoice}>
+                  Generate Invoice
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
