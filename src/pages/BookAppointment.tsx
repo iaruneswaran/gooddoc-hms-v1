@@ -1025,7 +1025,7 @@ const BookAppointment = () => {
                 netPayable: pricing.totals.netPayable + servicesTotals.netPayable,
               }}
               itemCount={pricing.lineItems.length + servicesCart.length}
-              singleConsultationMode={selectedTypes.length === 1 && selectedTypes[0] === 'consultation'}
+              singleConsultationMode={selectedTypes.length === 1 && (selectedTypes[0] === 'consultation' || selectedTypes[0] === 'laboratory')}
               onAskConfirmation={handleAskConfirmation}
               onScheduleNow={handleSchedule}
               isScheduleDisabled={!validateAppointmentData()}
