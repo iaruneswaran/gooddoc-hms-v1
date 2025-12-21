@@ -210,7 +210,7 @@ const Discharge = () => {
                   <div className="space-y-3 pt-2 border-t border-border">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-foreground">Payment Collection</p>
-                      <span className="text-xs text-primary font-medium">Split Payment</span>
+                      <span className="text-xs text-muted-foreground">Split Payment</span>
                     </div>
 
                     <div className="space-y-2">
