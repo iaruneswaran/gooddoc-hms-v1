@@ -158,7 +158,9 @@ const PatientServices = () => {
                   <Package className="w-4 h-4" />
                   All Services
                 </button>
-                {SERVICE_CATEGORIES.map((cat) => {
+                {SERVICE_CATEGORIES
+                  .filter((cat) => !['Lab', 'Radiology', 'Pharmacy'].includes(cat.id))
+                  .map((cat) => {
                   const Icon = getCategoryIcon(cat.id);
                   const count = getServicesByCategory(cat.id).length;
                   return (
