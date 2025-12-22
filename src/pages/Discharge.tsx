@@ -116,7 +116,7 @@ const Discharge = () => {
             {/* Left Column - Bill Summary */}
             <div className="w-[951px] space-y-6">
               {/* Summary Cards */}
-              <div className="bg-[hsl(var(--gd-primary-700))] rounded-xl p-4 shadow-lg">
+              <div className="bg-primary rounded-xl p-4 shadow-lg">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h2 className="text-base font-semibold text-white">Final Bill Summary</h2>
