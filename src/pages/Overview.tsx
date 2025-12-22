@@ -168,7 +168,8 @@ const PrimaryMetricCard = ({
 
 const StandardMetricCard = ({ 
   title, 
-  count, 
+  count,
+  displayCount,
   icon: Icon, 
   route, 
   iconColorClass,
@@ -189,18 +190,20 @@ const StandardMetricCard = ({
         h-[90px] px-4 flex items-center gap-3
       "
     >
-      <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
         <Icon className={`w-5 h-5 ${iconColorClass}`} />
-        {badge && (
-          <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-semibold shadow-sm">
-            {badge}
-          </span>
-        )}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-2xl font-bold text-foreground tracking-tight">
-          {count.toLocaleString()}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-2xl font-bold text-foreground tracking-tight">
+            {displayCount || count.toLocaleString()}
+          </p>
+          {badge && (
+            <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-xs font-semibold shadow-sm">
+              {badge}
+            </span>
+          )}
+        </div>
         <p className="text-xs font-medium text-muted-foreground truncate">
           {title}
         </p>
@@ -275,10 +278,11 @@ const Overview = () => {
     {
       title: "Appointment request received",
       count: 342,
+      displayCount: "342",
       icon: CalendarClock,
       route: "/schedule/today?date=today",
       iconColorClass: iconColors.doctors,
-      badge: "12",
+      badge: "12new",
     },
     {
       title: "Doctors on Duty",
