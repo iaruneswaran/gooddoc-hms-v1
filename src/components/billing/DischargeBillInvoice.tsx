@@ -211,27 +211,9 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
 
         {/* Document Title */}
         <div className="mt-4 pt-4 border-t border-border">
-          <h2 className="text-center text-lg font-bold text-primary uppercase tracking-wide">Final Discharge Bill / Tax Invoice</h2>
+          <h2 className="text-center text-lg font-bold text-primary uppercase tracking-wide">Interim Bill</h2>
         </div>
       </header>
-
-      {/* Invoice Metadata */}
-      <div className="grid grid-cols-4 gap-4 p-5 border-b border-border bg-muted/30">
-        <div>
-          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Invoice No.</p>
-          <p className="text-sm font-semibold text-foreground font-mono">{bill.invoice.number}</p>
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Issue Date</p>
-          <p className="text-sm font-semibold text-foreground">{formatDate(bill.invoice.issueDate, locale)}</p>
-        </div>
-        {bill.invoice.poNumber && (
-          <div>
-            <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">PO Number</p>
-            <p className="text-sm font-semibold text-foreground font-mono">{bill.invoice.poNumber}</p>
-          </div>
-        )}
-      </div>
 
       {/* Patient & Encounter */}
       <div className="p-5 border-b border-border">
