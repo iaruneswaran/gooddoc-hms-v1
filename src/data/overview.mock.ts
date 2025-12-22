@@ -31,6 +31,10 @@ export interface OPPatientRecord {
   reminderStatus?: "Not Sent" | "Sent" | "Confirmed";
   insuranceVerified?: boolean;
   noShowRisk?: "Low" | "Med" | "High";
+  // Payment details
+  billAmount?: number;
+  advancePaid?: number;
+  totalPaid?: number;
 }
 
 export interface IPPatientRecord {
