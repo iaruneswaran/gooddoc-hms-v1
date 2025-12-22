@@ -192,30 +192,20 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
             ) : (
               <img src={BainesLogoFull} alt={bill.facility.name} className="h-10" />
             )}
-            <div>
-              <h1 className="text-xl font-bold text-foreground">{bill.facility.name}</h1>
-              {bill.facility.address && (
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {[bill.facility.address.line1, bill.facility.address.line2, bill.facility.address.city, bill.facility.address.state, bill.facility.address.postalCode].filter(Boolean).join(", ")}
-                </p>
-              )}
-              {bill.facility.contact && (
-                <p className="text-xs text-muted-foreground">
-                  {[bill.facility.contact.phone && `Tel: ${bill.facility.contact.phone}`, bill.facility.contact.email && `Email: ${bill.facility.contact.email}`].filter(Boolean).join(" | ")}
-                </p>
-              )}
-            </div>
           </div>
           <div className="text-right">
-            <div className="flex items-center gap-3">
-              {bill.qrCodeUrl && (
-                <img src={bill.qrCodeUrl} alt="Payment QR" className="w-16 h-16" />
-              )}
-              <div>
-                {bill.facility.taxId && <p className="text-xs text-muted-foreground">{bill.facility.taxId}</p>}
-                {bill.facility.registrationId && <p className="text-xs text-muted-foreground">{bill.facility.registrationId}</p>}
-              </div>
-            </div>
+            {bill.facility.address && (
+              <p className="text-xs text-muted-foreground">
+                {[bill.facility.address.line1, bill.facility.address.line2, bill.facility.address.city, bill.facility.address.state, bill.facility.address.postalCode].filter(Boolean).join(", ")}
+              </p>
+            )}
+            {bill.facility.contact && (
+              <p className="text-xs text-muted-foreground">
+                {[bill.facility.contact.phone && `Tel: ${bill.facility.contact.phone}`, bill.facility.contact.email && `Email: ${bill.facility.contact.email}`].filter(Boolean).join(" | ")}
+              </p>
+            )}
+            {bill.facility.taxId && <p className="text-xs text-muted-foreground">{bill.facility.taxId}</p>}
+            {bill.facility.registrationId && <p className="text-xs text-muted-foreground">{bill.facility.registrationId}</p>}
           </div>
         </div>
 
