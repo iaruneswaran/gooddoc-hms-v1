@@ -50,13 +50,14 @@ const Discharge = () => {
   const [viewMode, setViewMode] = useState<"discharge" | "interim">(initialView);
 
   const fromSearch = searchParams.get("from") === "search";
+  const fromPage = searchParams.get("from") || "ip-patients";
   const patientSearchQuery = searchParams.get("q") || "";
 
   const handleBack = () => {
     if (fromSearch && patientSearchQuery) {
       navigate(`/patients/search?q=${patientSearchQuery}`);
     } else {
-      navigate(`/patient-insights/${patientId}`);
+      navigate(`/patient-insights/${patientId}?from=${fromPage}`);
     }
   };
 
