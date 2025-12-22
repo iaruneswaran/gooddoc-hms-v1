@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { FlaskConical, Scan, User, MapPin, Clock, FileText, AlertTriangle } from "lucide-react";
+import { formatINR } from "@/utils/currency";
+
 interface DiagnosticsOrder {
   id: string;
   patientId: string;
@@ -35,6 +37,10 @@ interface DiagnosticsOrder {
   contrast?: boolean;
   orderedDoctor: string;
   department: string;
+  // Payment details
+  billAmount?: number;
+  advancePaid?: number;
+  totalPaid?: number;
 }
 
 const statusStyles: Record<string, string> = {
@@ -164,6 +170,35 @@ export default function DiagnosticsList() {
           {row.status}
         </Badge>
       ),
+    },
+    {
+      key: "billAmount",
+      label: "Payment Details",
+      render: (row) => {
+        // Generate bill amount based on id for variety
+        const billAmounts = [500, 800, 1200, 1500, 2000, 2500, 3000, 1800, 2200, 900];
+        const numericPart = parseInt(row.id.replace(/\D/g, '')) || 0;
+        const billAmount = row.billAmount ?? billAmounts[numericPart % billAmounts.length];
+        const advance = row.advancePaid ?? row.totalPaid ?? 0;
+        const balance = billAmount - advance;
+        
+        return (
+          <div className="flex flex-col text-xs space-y-0.5">
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Bill:</span>
+              <span className="font-medium">{formatINR(billAmount * 100)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Advance:</span>
+              <span className="text-green-600">{formatINR(advance * 100)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Balance:</span>
+              <span className={balance > 0 ? "text-amber-600 font-medium" : "text-green-600"}>{formatINR(balance * 100)}</span>
+            </div>
+          </div>
+        );
+      },
     },
     {
       key: "orderedTime",
