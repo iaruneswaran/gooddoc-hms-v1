@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import BainesPoweredLogo from "@/assets/baines-powered-logo.svg";
 
 interface SplitPayment {
   id: string;
@@ -225,8 +226,8 @@ const DischargePayment = () => {
               <Card className="p-5 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h1 className="text-xl font-bold text-foreground">GoodDoc Hospital</h1>
-                    <p className="text-sm text-muted-foreground mt-1">123 Healthcare Avenue, Medical District, Chennai - 600001</p>
+                    <img src={BainesPoweredLogo} alt="Baines International Healthcare" className="h-9" />
+                    <p className="text-sm text-muted-foreground mt-2">123 Healthcare Avenue, Medical District, Chennai - 600001</p>
                     <p className="text-sm text-muted-foreground">Phone: +91 44 2345 6789 | GSTIN: 33XXXXX1234X1Z5</p>
                   </div>
                   <div className="text-right">
