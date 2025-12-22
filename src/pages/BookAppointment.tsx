@@ -646,8 +646,9 @@ const BookAppointment = () => {
 
               </div>
 
-              {/* Appointment Summary Sidebar */}
-              <AppointmentSummaryCard
+              {/* Appointment Summary Sidebar - with top margin to align with content below buttons */}
+              <div className={cn(!isSingleAppointmentMode && !isFromScheduledRequests && "mt-[52px]")}>
+                <AppointmentSummaryCard
                 patientName={requestData?.patient || "Siva Karthikeyan"}
                 patientId={`GDID - ${requestData?.gdid || "009"}`}
                 patientAgeSex={requestData?.ageSex || "35 | M"}
@@ -675,6 +676,7 @@ const BookAppointment = () => {
                 onClearServices={handleClearServices}
                 onOpenModal={handleOpenModal}
               />
+              </div>
             </div>
           
           {/* Footer - Different for single vs multi-appointment mode */}
