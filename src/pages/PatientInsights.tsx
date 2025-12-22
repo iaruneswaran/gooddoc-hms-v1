@@ -257,9 +257,18 @@ const PatientInsightsContent = () => {
                   backPath={currentBreadcrumb.path}
                   variant="light"
                 />
-                <div className="border-l border-white/20 pl-5">
-                  <p className="text-xs text-white">+91 98765 43210</p>
-                  <p className="text-xs text-white mt-0.5">name@example.com</p>
+                <div className="border-l border-white/20 pl-5 flex items-center gap-4">
+                  <div>
+                    <p className="text-xs text-white">+91 98765 43210</p>
+                    <p className="text-xs text-white mt-0.5">name@example.com</p>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    isIPPatient 
+                      ? 'bg-orange-500/20 text-orange-200 border border-orange-400/30' 
+                      : 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/30'
+                  }`}>
+                    {isIPPatient ? 'IP Patient' : 'OP Patient'}
+                  </span>
                 </div>
               </div>
 
