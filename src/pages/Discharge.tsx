@@ -132,28 +132,28 @@ const Discharge = () => {
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Total Bill</p>
                     </div>
-                    <p className="text-lg font-bold text-white">₹{totalBill.toLocaleString()}</p>
+                    <p className="text-lg font-semibold text-white">₹{totalBill.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Insurance</p>
                     </div>
-                    <p className="text-lg font-bold text-white">₹{insuranceApproved.toLocaleString()}</p>
+                    <p className="text-lg font-semibold text-white">₹{insuranceApproved.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Advance</p>
                     </div>
-                    <p className="text-lg font-bold text-white">₹{advanceBalance.toLocaleString()}</p>
+                    <p className="text-lg font-semibold text-white">₹{advanceBalance.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Net Payable</p>
                     </div>
-                    <p className="text-lg font-bold text-white">₹{netPayable.toLocaleString()}</p>
+                    <p className="text-lg font-semibold text-white">₹{netPayable.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
