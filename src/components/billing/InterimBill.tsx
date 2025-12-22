@@ -148,8 +148,8 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
       </div>
 
       {/* Title */}
-      <div className="px-6 py-4 border-b border-border bg-primary/5">
-        <h2 className="text-lg font-semibold text-foreground">Interim Bill</h2>
+      <div className="px-6 py-4 border-b border-border bg-white dark:bg-card">
+        <h2 className="text-lg font-semibold text-primary">Interim Bill</h2>
       </div>
 
       <div className="p-6 space-y-6">
