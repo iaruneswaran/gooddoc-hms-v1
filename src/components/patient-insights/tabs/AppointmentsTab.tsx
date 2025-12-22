@@ -1,8 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
-import { MoreVertical, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -158,24 +157,15 @@ function getStatusBadgeVariant(status: string) {
 
 
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
-  const navigate = useNavigate();
   const appointments = getPatientAppointments(patient.gdid);
-
-  const handleBookAppointment = () => {
-    navigate(`/book-appointment?patientId=${patient.gdid}&patientName=${encodeURIComponent(patient.name)}`);
-  };
 
   return (
     <div className="h-full overflow-auto">
       <div className="mb-6">
-        <div className="px-6 pt-6 flex items-center justify-between">
+        <div className="px-6 pt-6">
           <h3 className="text-[14px] font-semibold text-foreground">
             All Appointments
           </h3>
-          <Button onClick={handleBookAppointment} size="sm" className="gap-1.5">
-            <Plus className="h-4 w-4" />
-            Book Appointment
-          </Button>
         </div>
         
         <div className="border rounded-lg overflow-hidden mx-6 mt-4 bg-white dark:bg-card">
