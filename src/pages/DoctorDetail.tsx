@@ -369,8 +369,12 @@ export default function DoctorDetail() {
         } as TodayAppointment);
       }
 
-      // Use mock data if no real appointments exist
-      if (todayAptsWithPatients.length === 0) {
+      // Use mock data if no real appointments exist or if data is incomplete
+      const hasProperPatientData = todayAptsWithPatients.some(apt => 
+        apt.patient && apt.patient.first_name && apt.patient.last_name
+      );
+      
+      if (todayAptsWithPatients.length === 0 || !hasProperPatientData) {
         setTodayAppointments(generateMockTodayAppointments(id));
       } else {
         setTodayAppointments(todayAptsWithPatients);
