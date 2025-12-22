@@ -230,7 +230,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       </div>
 
       {/* Right Panel - Payment Settlement */}
-      <div className="w-[420px] flex flex-col bg-background overflow-hidden shadow-lg rounded-xl border-t border-r border-b border-border mt-6 mr-6 mb-6">
+      <div className="w-[420px] flex flex-col bg-background shadow-lg rounded-xl border-t border-r border-b border-border mt-6 mr-6 mb-6">
         <div className="bg-primary px-5 py-4 rounded-t-xl">
           <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
           {selectedBills.length > 0 && (
@@ -242,7 +242,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5" style={{ scrollbarWidth: "none" }}>
+        <div className="flex-1 p-5">
           {selectedBills.length === 0 ? (
             <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
               <p className="text-sm text-muted-foreground text-center px-4">
