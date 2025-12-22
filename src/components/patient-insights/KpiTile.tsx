@@ -8,6 +8,7 @@ interface KpiTileProps {
   secondaryLabel?: string;
   secondaryAmount?: string;
   showArrow?: boolean;
+  onClick?: () => void;
 }
 
 export function KpiTile({ 
@@ -17,16 +18,21 @@ export function KpiTile({
   subtitle,
   secondaryLabel,
   secondaryAmount,
-  showArrow = false
+  showArrow = false,
+  onClick
 }: KpiTileProps) {
   const isLight = variant === "light";
+  const isClickable = !!onClick;
   
   return (
-    <div className={`rounded-lg px-4 py-2.5 w-[160px] ${
-      isLight 
-        ? "bg-white/10" 
-        : "border border-border bg-card"
-    }`}>
+    <div 
+      className={`rounded-lg px-4 py-2.5 w-[160px] ${
+        isLight 
+          ? "bg-white/10" 
+          : "border border-border bg-card"
+      } ${isClickable ? "cursor-pointer hover:bg-white/20 transition-colors" : ""}`}
+      onClick={onClick}
+    >
       <p className={`text-[11px] font-medium uppercase tracking-wide ${isLight ? "text-white/60" : "text-muted-foreground"}`}>
         {label}
       </p>
