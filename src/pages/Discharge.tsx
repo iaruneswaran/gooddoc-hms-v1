@@ -116,7 +116,7 @@ const Discharge = () => {
             {/* Left Column - Bill Summary */}
             <div className="w-[951px] space-y-6">
               {/* Summary Cards */}
-              <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 shadow-lg">
+              <div className="bg-gradient-to-r from-[hsl(var(--gd-primary-700))] via-[hsl(var(--gd-primary-600))] to-[hsl(var(--gd-primary-700))] rounded-xl p-5 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-lg font-semibold text-white">Final Bill Summary</h2>
@@ -143,17 +143,17 @@ const Discharge = () => {
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-sky-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-sky-300"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Advance</p>
                     </div>
-                    <p className="text-xl font-bold text-sky-400">₹{advanceBalance.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-sky-300">₹{advanceBalance.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-sky-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-sky-300"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Net Payable</p>
                     </div>
-                    <p className="text-xl font-bold text-sky-400">₹{netPayable.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-sky-300">₹{netPayable.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
