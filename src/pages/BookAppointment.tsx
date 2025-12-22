@@ -574,34 +574,31 @@ const BookAppointment = () => {
             <div className="w-[130px]" />
           </div>
 
-          <div className="max-w-[1600px] mx-auto">
-            {/* Appointment Type Buttons - Hide in single-appointment mode and scheduled requests flow */}
-            {!isSingleAppointmentMode && !isFromScheduledRequests && (
-              <div className="mb-4">
-                <div className="flex gap-3">{appointmentTypes.map((type) => {
-                  const Icon = type.icon;
-                  const isSelected = selectedTypes.includes(type.value);
-                  return (
-                    <Button
-                      key={type.value}
-                      variant={isSelected ? "default" : "outline"}
-                      className={cn(
-                        "group h-9 px-4 flex items-center gap-2 hover:bg-primary hover:border-primary hover:text-primary-foreground transition-colors whitespace-nowrap",
-                        isSelected && "bg-primary text-primary-foreground"
-                      )}
-                      onClick={() => handleTypeClick(type.value)}
-                    >
-                      <Icon className={cn("w-4 h-4 transition-colors", isSelected ? "text-primary-foreground" : "text-foreground group-hover:text-primary-foreground")} />
-                      <span className="text-sm">{type.label}</span>
-                    </Button>
-                  );
-                })}</div>
-              </div>
-            )}
-
-            <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
+          <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
               {/* Main Content */}
               <div className="w-full lg:w-[951px] lg:max-w-[951px] space-y-6">
+                {/* Appointment Type Buttons - Hide in single-appointment mode and scheduled requests flow */}
+                {!isSingleAppointmentMode && !isFromScheduledRequests && (
+                  <div className="flex gap-3">{appointmentTypes.map((type) => {
+                    const Icon = type.icon;
+                    const isSelected = selectedTypes.includes(type.value);
+                    return (
+                      <Button
+                        key={type.value}
+                        variant={isSelected ? "default" : "outline"}
+                        className={cn(
+                          "group h-9 px-4 flex items-center gap-2 hover:bg-primary hover:border-primary hover:text-primary-foreground transition-colors whitespace-nowrap",
+                          isSelected && "bg-primary text-primary-foreground"
+                        )}
+                        onClick={() => handleTypeClick(type.value)}
+                      >
+                        <Icon className={cn("w-4 h-4 transition-colors", isSelected ? "text-primary-foreground" : "text-foreground group-hover:text-primary-foreground")} />
+                        <span className="text-sm">{type.label}</span>
+                      </Button>
+                    );
+                  })}</div>
+                )}
+
                 {/* Display all selected forms in reverse order (most recent at top) */}
                 {selectedTypes.length === 0 ? (
                   <Card className="border-dashed min-h-[400px] flex flex-col items-center justify-center p-8">
@@ -679,7 +676,6 @@ const BookAppointment = () => {
                 onOpenModal={handleOpenModal}
               />
             </div>
-          </div>
           
           {/* Footer - Different for single vs multi-appointment mode */}
           {isSingleAppointmentMode ? (
