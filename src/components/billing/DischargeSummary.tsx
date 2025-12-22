@@ -3,17 +3,11 @@ import { Card } from "@/components/ui/card";
 import { 
   User, 
   Calendar, 
-  Stethoscope, 
   Pill, 
   ClipboardList, 
-  FileText, 
-  Activity,
-  HeartPulse,
-  Syringe,
   Clock,
-  CheckCircle2,
   Phone,
-  Bed
+  Heart
 } from "lucide-react";
 import bainesLogo from "@/assets/baines-logo-english.svg";
 
@@ -31,17 +25,17 @@ const DischargeSummary = ({
   gender = "Male"
 }: DischargeSummaryProps) => {
   const timelineEventsLeft = [
-    { event: "Patient Admitted", date: "18/12/2025, 10:30 AM", icon: Bed, color: "bg-primary text-primary-foreground" },
-    { event: "Cardiac Catheterization", date: "18/12/2025, 02:00 PM", icon: Syringe, color: "bg-primary/10 text-primary" },
-    { event: "Echocardiography", date: "19/12/2025, 11:30 AM", icon: HeartPulse, color: "bg-primary/10 text-primary" },
-    { event: "CT Coronary Angiography", date: "21/12/2025, 10:00 AM", icon: Activity, color: "bg-primary/10 text-primary" },
+    { event: "Patient Admitted", date: "18/12/2025, 10:30 AM" },
+    { event: "Cardiac Catheterization", date: "18/12/2025, 02:00 PM" },
+    { event: "Echocardiography", date: "19/12/2025, 11:30 AM" },
+    { event: "CT Coronary Angiography", date: "21/12/2025, 10:00 AM" },
   ];
 
   const timelineEventsRight = [
-    { event: "Initial Assessment", date: "18/12/2025, 11:00 AM", icon: ClipboardList, color: "bg-primary/10 text-primary" },
-    { event: "Cardiologist Consultation", date: "19/12/2025, 09:00 AM", icon: Stethoscope, color: "bg-primary/10 text-primary" },
-    { event: "Lab Tests", date: "20/12/2025, 08:00 AM", icon: FileText, color: "bg-primary/10 text-primary" },
-    { event: "Patient Discharged", date: "22/12/2025, 02:45 PM", icon: CheckCircle2, color: "bg-green-500 text-white" },
+    { event: "Initial Assessment", date: "18/12/2025, 11:00 AM" },
+    { event: "Cardiologist Consultation", date: "19/12/2025, 09:00 AM" },
+    { event: "Lab Tests", date: "20/12/2025, 08:00 AM" },
+    { event: "Patient Discharged", date: "22/12/2025, 02:45 PM", isDischarge: true },
   ];
 
   const medications = [
@@ -139,7 +133,7 @@ const DischargeSummary = ({
           {/* Diagnosis */}
           <Card className="p-5">
             <div className="flex items-center gap-2 mb-4">
-              <HeartPulse className="w-4 h-4 text-primary" />
+              <Heart className="w-4 h-4 text-primary" />
               <h3 className="font-semibold text-foreground">Diagnosis</h3>
             </div>
             <div className="space-y-4">
@@ -163,28 +157,24 @@ const DischargeSummary = ({
               <Clock className="w-4 h-4 text-primary" />
               <h3 className="font-semibold text-foreground">Visit Timeline</h3>
             </div>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
               {/* Left Column */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {timelineEventsLeft.map((item, index) => (
                   <div key={index} className="flex items-start gap-2">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.color}`}>
-                      <item.icon className="w-3 h-3" />
-                    </div>
+                    <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
                     <div>
                       <p className="font-medium text-sm text-foreground leading-tight">{item.event}</p>
-                      <p className="text-xs text-primary">{item.date}</p>
+                      <p className="text-xs text-muted-foreground">{item.date}</p>
                     </div>
                   </div>
                 ))}
               </div>
               {/* Right Column */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {timelineEventsRight.map((item, index) => (
                   <div key={index} className="flex items-start gap-2">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.color}`}>
-                      <item.icon className="w-3 h-3" />
-                    </div>
+                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${item.isDischarge ? 'bg-green-500' : 'bg-primary'}`} />
                     <div>
                       <p className="font-medium text-sm text-foreground leading-tight">{item.event}</p>
                       <p className="text-xs text-muted-foreground">{item.date}</p>
