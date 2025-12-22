@@ -63,9 +63,7 @@ const EmergencyCases = () => {
     {
       key: "modeOfArrival",
       label: "Mode of Arrival",
-      render: (row) => (
-        <Badge className={modeOfArrivalStyles[row.modeOfArrival]}>{row.modeOfArrival}</Badge>
-      ),
+      render: (row) => <span className="text-sm">{row.modeOfArrival}</span>,
     },
     { 
       key: "erZoneArea", 
