@@ -317,7 +317,7 @@ const DischargePayment = () => {
                     <Clock className="w-4 h-4 text-primary" />
                     Visit Timeline
                   </h3>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                     {data.timeline.map((event, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <div className={cn(
