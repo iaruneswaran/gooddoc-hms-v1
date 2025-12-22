@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
 import DischargeSummary from "@/components/billing/DischargeSummary";
+import InterimBill from "@/components/billing/InterimBill";
 
 interface SplitPayment {
   id: string;
@@ -43,6 +44,10 @@ const Discharge = () => {
   const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
     { id: "1", amount: "", method: "cash" }
   ]);
+  
+  // Initialize view mode based on URL param
+  const initialView = searchParams.get("view") === "interim" ? "interim" : "discharge";
+  const [viewMode, setViewMode] = useState<"discharge" | "interim">(initialView);
 
   const fromSearch = searchParams.get("from") === "search";
   const patientSearchQuery = searchParams.get("q") || "";
@@ -115,20 +120,41 @@ const Discharge = () => {
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[1000px] space-y-6">
-              {/* Discharge Summary */}
-              <DischargeSummary />
-
-              {/* Invoice Action Buttons */}
-              <div className="flex items-center justify-end mt-4 gap-3">
-                <Button variant="outline" className="gap-2">
-                  <Download className="w-4 h-4" />
-                  Download PDF
+              {/* Toggle Buttons */}
+              <div className="flex gap-2">
+                <Button 
+                  variant={viewMode === "discharge" ? "default" : "outline"}
+                  onClick={() => setViewMode("discharge")}
+                >
+                  IP Discharge Summary
                 </Button>
-                <Button variant="outline" className="gap-2">
-                  <Printer className="w-4 h-4" />
-                  Print Invoice
+                <Button 
+                  variant={viewMode === "interim" ? "default" : "outline"}
+                  onClick={() => setViewMode("interim")}
+                >
+                  Interim Bill
                 </Button>
               </div>
+
+              {/* Conditional Rendering */}
+              {viewMode === "discharge" ? (
+                <>
+                  <DischargeSummary />
+                  {/* Invoice Action Buttons */}
+                  <div className="flex items-center justify-end mt-4 gap-3">
+                    <Button variant="outline" className="gap-2">
+                      <Download className="w-4 h-4" />
+                      Download PDF
+                    </Button>
+                    <Button variant="outline" className="gap-2">
+                      <Printer className="w-4 h-4" />
+                      Print Invoice
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <InterimBill onProceedToPayment={() => navigate(`/patient-insights/${patientId}/payment`)} />
+              )}
             </div>
 
           </div>
