@@ -303,8 +303,29 @@ const PatientInsightsContent = () => {
                   Add Services
                 </Button>
                 {isIPPatient ? (
-                  // IP Patient buttons: Bed Transfer, Collect Advance, Discharge
+                  // IP Patient buttons: Book Appointment, Bed Transfer, Collect Advance, Discharge
                   <>
+                    <Button 
+                      variant="ghost"
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate("/book-appointment", {
+                        state: { 
+                          fromPatientInsights: true, 
+                          patientId,
+                          patient: {
+                            id: patientId,
+                            name: patient.name,
+                            gdid: patient.gdid,
+                            age: patient.age,
+                            gender: patient.gender === "Male" ? "M" : "F",
+                          },
+                          fromPage,
+                        }
+                      })}
+                    >
+                      Book Appointment
+                    </Button>
                     <Button 
                       variant="ghost"
                       size="sm"
