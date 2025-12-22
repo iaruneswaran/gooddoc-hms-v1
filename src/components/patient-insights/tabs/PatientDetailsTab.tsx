@@ -27,6 +27,10 @@ interface Patient {
   state: string;
   city: string;
   country: string;
+  insuranceProvider?: string;
+  insurancePolicyNumber?: string;
+  insuranceValidFrom?: string;
+  insuranceValidTo?: string;
 }
 
 interface PatientDetailsTabProps {
@@ -332,6 +336,85 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <Input 
                       defaultValue={patient.country}
                       placeholder="India"
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Insurance Details Section */}
+      <div className="mb-6">
+        <div className="px-6 py-3">
+          <h3 className="text-[14px] font-semibold text-foreground">Insurance Details</h3>
+        </div>
+        
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
+          <div className="space-y-4">
+            {!isEditing ? (
+              // View Mode
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Insurance Provider</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.insuranceProvider || "—"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Policy Number</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.insurancePolicyNumber || "—"}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Valid From</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.insuranceValidFrom || "—"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Valid To</Label>
+                    <p className="text-sm text-foreground mt-1">{patient.insuranceValidTo || "—"}</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              // Edit Mode
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm text-foreground">Insurance Provider</Label>
+                    <Input 
+                      defaultValue={patient.insuranceProvider || ""}
+                      placeholder="e.g., Star Health"
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm text-foreground">Policy Number</Label>
+                    <Input 
+                      defaultValue={patient.insurancePolicyNumber || ""}
+                      placeholder="e.g., POL123456789"
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm text-foreground">Valid From</Label>
+                    <Input 
+                      defaultValue={patient.insuranceValidFrom || ""}
+                      placeholder="dd/mm/yyyy"
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm text-foreground">Valid To</Label>
+                    <Input 
+                      defaultValue={patient.insuranceValidTo || ""}
+                      placeholder="dd/mm/yyyy"
                       className="mt-2"
                     />
                   </div>
