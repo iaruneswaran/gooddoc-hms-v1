@@ -1,0 +1,329 @@
+import { useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard } from "lucide-react";
+import { AppSidebar } from "@/components/AppSidebar";
+import { AppHeader } from "@/components/AppHeader";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSidebarContext } from "@/contexts/SidebarContext";
+import { cn } from "@/lib/utils";
+
+interface SplitPayment {
+  id: string;
+  amount: string;
+  method: string;
+}
+
+const paymentMethods = [
+  { value: "cash", label: "Cash", emoji: "💵" },
+  { value: "upi", label: "UPI", emoji: "📱" },
+  { value: "card", label: "Card", emoji: "💳" },
+  { value: "cheque", label: "Cheque", emoji: "📝" },
+  { value: "neft", label: "NEFT/RTGS", emoji: "🏦" },
+  { value: "insurance", label: "Insurance", emoji: "🏥" },
+];
+
+const DischargePayment = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { patientId } = useParams();
+  const [depositExpanded, setDepositExpanded] = useState(false);
+  const [confirmCounseling, setConfirmCounseling] = useState(false);
+  const [splitPayments, setSplitPayments] = useState<SplitPayment[]>([
+    { id: "1", amount: "", method: "cash" }
+  ]);
+
+  const fromSearch = searchParams.get("from") === "search";
+  const patientSearchQuery = searchParams.get("q") || "";
+
+  const handleBack = () => {
+    navigate(`/patient-insights/${patientId}/discharge`);
+  };
+
+  const { isCollapsed } = useSidebarContext();
+
+  // Calculate totals
+  const totalBill = 32700;
+  const patientDeposit = 20000;
+  const depositUsed = depositExpanded ? Math.min(patientDeposit, totalBill) : 0;
+  const remainingDeposit = patientDeposit - depositUsed;
+  const netPayable = depositExpanded ? Math.max(0, totalBill - depositUsed) : totalBill;
+
+  const addSplitPayment = () => {
+    setSplitPayments([...splitPayments, { id: Date.now().toString(), amount: "", method: "cash" }]);
+  };
+
+  const removeSplitPayment = (id: string) => {
+    if (splitPayments.length > 1) {
+      setSplitPayments(splitPayments.filter(p => p.id !== id));
+    }
+  };
+
+  const updateSplitPayment = (id: string, field: "amount" | "method", value: string) => {
+    setSplitPayments(splitPayments.map(p => p.id === id ? { ...p, [field]: value } : p));
+  };
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      
+      <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
+        <AppHeader breadcrumbs={["Patient Insights", "Discharge", "Collect Payment"]} />
+        
+        {/* Compact Header */}
+        <div className="h-[72px] bg-background border-b border-border flex items-center justify-between px-6">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span className="font-semibold">Back to Discharge</span>
+          </button>
+
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">Harish Kalyan</p>
+              <p className="text-xs text-muted-foreground">GDID-001 • 44Y / M</p>
+            </div>
+          </div>
+        </div>
+
+        <main className="p-6">
+          <div className="max-w-[500px] mx-auto space-y-6">
+            {/* Settlement & Payment Adjustments Combined */}
+            <Card className="p-0 overflow-hidden">
+              <div className="bg-primary px-4 py-3 rounded-t-lg">
+                <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
+                <p className="text-xs text-primary-foreground/80 mt-0.5">INV-2025-009</p>
+              </div>
+              
+              <div className="p-4 space-y-4">
+                {/* Amount to Collect */}
+                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                  <p className="text-xs text-muted-foreground mb-1">Amount to Collect</p>
+                  <p className="text-2xl font-bold text-primary">₹{netPayable.toLocaleString()}</p>
+                </div>
+
+                {/* Patient Deposit Section */}
+                <div className="p-4 bg-muted/20 rounded-lg border border-border/50 space-y-3">
+                  {/* Header row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-primary"></div>
+                      <span className="text-sm font-medium text-foreground">Patient Deposit</span>
+                    </div>
+                    <span className="text-sm font-semibold text-emerald-600">₹{patientDeposit.toLocaleString()}</span>
+                  </div>
+                  
+                  {/* Toggle row */}
+                  <div className="flex items-center gap-3">
+                    <Switch 
+                      checked={depositExpanded}
+                      onCheckedChange={setDepositExpanded}
+                    />
+                    <span className="text-sm text-muted-foreground">Adjust deposit against this bill</span>
+                  </div>
+                  
+                  {/* Deposit details - shown when toggle is on */}
+                  {depositExpanded && (
+                    <div className="space-y-2 pt-2 border-t border-border/50">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Deposit Used</span>
+                        <span className="text-sm font-medium text-destructive">- ₹{depositUsed.toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Remaining Deposit</span>
+                        <span className="text-sm font-semibold text-emerald-600">₹{remainingDeposit.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Payment Collection with Split */}
+                <div className="space-y-3 pt-2 border-t border-border">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-foreground">Payment Collection</p>
+                    <span className="text-xs text-muted-foreground">Split Payment</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {splitPayments.map((payment) => (
+                      <div key={payment.id} className="flex items-center gap-2">
+                        <Input
+                          placeholder="₹ 0.00"
+                          value={payment.amount}
+                          onChange={(e) => updateSplitPayment(payment.id, "amount", e.target.value)}
+                          className="flex-1"
+                        />
+                        <Select
+                          value={payment.method}
+                          onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
+                        >
+                          <SelectTrigger className="w-[120px] bg-background">
+                            <SelectValue>
+                              {paymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
+                              {paymentMethods.find(m => m.value === payment.method)?.label}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent className="bg-background border border-border z-50">
+                            {paymentMethods.map((method) => (
+                              <SelectItem key={method.value} value={method.value}>
+                                <span className="flex items-center gap-2">
+                                  <span>{method.emoji}</span>
+                                  <span>{method.label}</span>
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {splitPayments.length > 1 && (
+                          <button
+                            onClick={() => removeSplitPayment(payment.id)}
+                            className="p-2 rounded-lg transition-colors text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={addSplitPayment}
+                    className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Split Payment
+                  </button>
+                </div>
+
+                {/* Payer Details */}
+                <div className="space-y-3 pt-2 border-t border-border">
+                  <p className="text-sm font-medium text-foreground">Payer Details</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-muted-foreground">Name</label>
+                      <Input placeholder="Payer name" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-muted-foreground">Relation</label>
+                      <Select defaultValue="self">
+                        <SelectTrigger className="bg-background">
+                          <SelectValue placeholder="Select relation" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border border-border z-50">
+                          <SelectItem value="self">Self</SelectItem>
+                          <SelectItem value="spouse">Spouse</SelectItem>
+                          <SelectItem value="parent">Parent</SelectItem>
+                          <SelectItem value="child">Child</SelectItem>
+                          <SelectItem value="sibling">Sibling</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">Mobile Number</label>
+                    <Input placeholder="+91" />
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="pt-2 space-y-2">
+                  <Button className="w-full" size="lg">
+                    Collect Payment
+                  </Button>
+                  <Button variant="outline" className="w-full gap-2">
+                    <Printer className="w-4 h-4" />
+                    Print Bill
+                  </Button>
+                </div>
+              </div>
+            </Card>
+
+            {/* Discharge Documents */}
+            <Card className="p-6">
+              <h2 className="text-base font-semibold text-foreground mb-4">Discharge Documents</h2>
+              
+              <div className="space-y-2">
+                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+                  <FileText className="w-5 h-5 text-primary" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Discharge Summary</p>
+                    <p className="text-xs text-muted-foreground">PDF Document</p>
+                  </div>
+                  <Download className="w-4 h-4 text-muted-foreground" />
+                </button>
+                
+                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+                  <Pill className="w-5 h-5 text-primary" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Prescription</p>
+                    <p className="text-xs text-muted-foreground">e-Prescription</p>
+                  </div>
+                  <Download className="w-4 h-4 text-muted-foreground" />
+                </button>
+                
+                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+                  <Receipt className="w-5 h-5 text-primary" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Final Bill</p>
+                    <p className="text-xs text-muted-foreground">Invoice & Receipt</p>
+                  </div>
+                  <Download className="w-4 h-4 text-muted-foreground" />
+                </button>
+                
+                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+                  <ClipboardList className="w-5 h-5 text-primary" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Care Instructions</p>
+                    <p className="text-xs text-muted-foreground">Patient Guide</p>
+                  </div>
+                  <Download className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </div>
+            </Card>
+
+            {/* Finalize */}
+            <Card className="p-6">
+              <h2 className="text-base font-semibold text-foreground mb-4">Finalize Discharge</h2>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                  <Checkbox 
+                    checked={confirmCounseling}
+                    onCheckedChange={(checked) => setConfirmCounseling(!!checked)}
+                  />
+                  <p className="text-sm text-foreground leading-relaxed">
+                    I confirm discharge counseling provided and documents shared with patient/attendant.
+                  </p>
+                </div>
+
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  disabled={!confirmCounseling}
+                >
+                  Complete Discharge
+                </Button>
+                
+                <p className="text-xs text-center text-muted-foreground">
+                  Collect outstanding balance before discharge
+                </p>
+              </div>
+            </Card>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default DischargePayment;
