@@ -597,7 +597,7 @@ const BookAppointment = () => {
                         className={cn(
                           "group h-10 px-5 flex items-center gap-2.5 rounded-full transition-all duration-200 whitespace-nowrap font-medium",
                           isSelected 
-                            ? "bg-[#0891B2] border-[#0891B2] text-white hover:bg-[#0891B2]/90 hover:border-[#0891B2]/90" 
+                            ? "bg-[#2563EB] border-[#2563EB] text-white hover:bg-[#2563EB]/90 hover:border-[#2563EB]/90" 
                             : "bg-background border-border hover:bg-accent hover:border-accent"
                         )}
                         onClick={() => handleTypeClick(type.value)}
