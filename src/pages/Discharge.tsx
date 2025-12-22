@@ -115,7 +115,7 @@ const Discharge = () => {
 
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
-            <div className="w-[951px] space-y-6">
+            <div className="w-[1000px] space-y-6">
               {/* Invoice Details */}
               <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={false} />
 
