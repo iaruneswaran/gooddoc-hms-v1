@@ -13,8 +13,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
-import DischargeBillInvoice from "@/components/billing/DischargeBillInvoice";
-import { SAMPLE_DISCHARGE_BILL } from "@/data/discharge-bill.mock";
+import DischargeSummary from "@/components/billing/DischargeSummary";
 
 interface SplitPayment {
   id: string;
@@ -88,7 +87,7 @@ const Discharge = () => {
       <AppSidebar />
       
       <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
-        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Interim Bill"] : ["Patient Insights", "Interim Bill"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
         
         {/* Compact Header */}
         <div className="h-[72px] bg-background border-b border-border flex items-center justify-between px-6">
@@ -116,8 +115,8 @@ const Discharge = () => {
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[1000px] space-y-6">
-              {/* Interim Bill Invoice */}
-              <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={false} />
+              {/* Discharge Summary */}
+              <DischargeSummary />
 
               {/* Invoice Action Buttons */}
               <div className="flex items-center justify-end mt-4 gap-3">
