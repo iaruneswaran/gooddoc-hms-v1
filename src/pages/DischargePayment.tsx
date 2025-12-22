@@ -454,10 +454,6 @@ const DischargePayment = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center justify-between pt-2">
-                <Button variant="outline" size="sm" className="gap-2" onClick={handleBack}>
-                  <ChevronLeft className="w-4 h-4" />
-                  Back to Patient
-                </Button>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm" className="gap-2">
                     <Download className="w-4 h-4" />
@@ -467,11 +463,11 @@ const DischargePayment = () => {
                     <Printer className="w-4 h-4" />
                     Print
                   </Button>
-                  <Button size="sm" className="gap-2">
-                    <FileText className="w-4 h-4" />
-                    Email to Patient
-                  </Button>
                 </div>
+                <Button size="sm" className="gap-2">
+                  <FileText className="w-4 h-4" />
+                  Email to Patient
+                </Button>
               </div>
             </div>
           </main>
