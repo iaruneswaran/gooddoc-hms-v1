@@ -183,7 +183,7 @@ const PendingBillsCheck = ({
           </div>
           
           {/* Table Header */}
-          <div className="grid grid-cols-[1fr_2fr_auto_auto_auto_auto] gap-4 px-4 py-2 bg-muted/30 border-b border-border text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          <div className="grid grid-cols-[180px_1fr_100px_100px_100px_80px] gap-6 px-4 py-2 bg-muted/30 border-b border-border text-xs font-medium text-muted-foreground uppercase tracking-wide">
             <div>Invoice No.</div>
             <div>Service / Doctor</div>
             <div className="text-right">Amount</div>
@@ -195,7 +195,7 @@ const PendingBillsCheck = ({
           {/* Table Body */}
           <div className="divide-y divide-border">
             {pendingInvoices.map((invoice, index) => (
-              <div key={index} className="grid grid-cols-[1fr_2fr_auto_auto_auto_auto] gap-4 px-4 py-3 items-center">
+              <div key={index} className="grid grid-cols-[180px_1fr_100px_100px_100px_80px] gap-6 px-4 py-3 items-center">
                 <div>
                   <p className="text-sm font-medium text-foreground">{invoice.invoiceNo}</p>
                   <p className="text-xs text-muted-foreground">{invoice.serviceCode}</p>
@@ -235,7 +235,7 @@ const PendingBillsCheck = ({
           </div>
 
           {/* Total Row */}
-          <div className="grid grid-cols-[1fr_2fr_auto_auto_auto_auto] gap-4 px-4 py-3 bg-primary/5 border-t border-border items-center">
+          <div className="grid grid-cols-[180px_1fr_100px_100px_100px_80px] gap-6 px-4 py-3 bg-primary/5 border-t border-border items-center">
             <div className="col-span-2 text-right">
               <span className="font-semibold text-foreground">Total:</span>
             </div>
