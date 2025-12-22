@@ -116,39 +116,39 @@ const Discharge = () => {
             {/* Left Column - Bill Summary */}
             <div className="w-[951px] space-y-6">
               {/* Summary Cards */}
-              <div className="bg-primary rounded-xl p-4 shadow-lg">
+              <div className="bg-background rounded-xl p-4 shadow-lg border border-border">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h2 className="text-base font-semibold text-white">Final Bill Summary</h2>
-                    <p className="text-xs text-white/60">Discharge settlement overview</p>
+                    <h2 className="text-base font-semibold text-foreground">Final Bill Summary</h2>
+                    <p className="text-xs text-muted-foreground">Discharge settlement overview</p>
                   </div>
-                  <Badge variant="outline" className="bg-white/10 text-white border-white/20 text-xs">
+                  <Badge variant="outline" className="text-xs">
                     Visit: {visitId}
                   </Badge>
                 </div>
                 <div className="grid grid-cols-4 gap-3">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
+                  <div className="bg-primary rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Total Bill</p>
                     </div>
                     <p className="text-lg font-semibold text-white">₹{totalBill.toLocaleString()}</p>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
+                  <div className="bg-primary rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Insurance</p>
                     </div>
                     <p className="text-lg font-semibold text-white">₹{insuranceApproved.toLocaleString()}</p>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
+                  <div className="bg-primary rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Advance</p>
                     </div>
                     <p className="text-lg font-semibold text-white">₹{advanceBalance.toLocaleString()}</p>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2.5">
+                  <div className="bg-primary rounded-lg px-3 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                       <p className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Net Payable</p>
