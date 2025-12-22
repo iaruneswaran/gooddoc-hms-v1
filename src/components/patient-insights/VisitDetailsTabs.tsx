@@ -45,7 +45,7 @@ interface VisitDetailsTabsProps {
 
 const tabs = [
   { value: "appointments", label: "Appointments", icon: Calendar },
-  { value: "collect-payment", label: "Collect Payment", icon: CreditCard },
+  { value: "collect-payment", label: "Collect Payment & Bills", icon: CreditCard },
   { value: "payments", label: "Transaction History", icon: History },
   { value: "documents", label: "Documents", icon: FolderOpen },
   { value: "insurance", label: "Insurance", icon: Shield },
