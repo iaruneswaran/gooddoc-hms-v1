@@ -157,14 +157,19 @@ function getStatusBadgeVariant(status: string) {
 
 
 export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
-  const appointments = getPatientAppointments(patient.gdid);
+  const allAppointments = getPatientAppointments(patient.gdid);
+  
+  // Filter appointments by selected visit ID
+  const appointments = selectedVisit 
+    ? allAppointments.filter(apt => apt.visitId === selectedVisit.visitId)
+    : allAppointments;
 
   return (
     <div className="h-full overflow-auto">
       <div className="mb-6">
         <div className="px-6 pt-6">
           <h3 className="text-[14px] font-semibold text-foreground">
-            All Appointments
+            {selectedVisit ? `Appointments for ${selectedVisit.visitId}` : 'All Appointments'}
           </h3>
         </div>
         
