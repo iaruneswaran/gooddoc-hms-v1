@@ -116,35 +116,46 @@ const Discharge = () => {
             {/* Left Column - Bill Summary */}
             <div className="w-[951px] space-y-6">
               {/* Summary Cards */}
-              <div className="grid grid-cols-4 gap-3">
-                <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Total Bill</p>
+              <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className="text-lg font-semibold text-white">Final Bill Summary</h2>
+                    <p className="text-sm text-white/60">Discharge settlement overview</p>
                   </div>
-                  <p className="text-lg font-bold text-green-600">₹{totalBill.toLocaleString()}</p>
-                </Card>
-                <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Insurance</p>
+                  <Badge variant="outline" className="bg-white/10 text-white border-white/20 text-xs">
+                    Visit: {visitId}
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-4 gap-3">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Total Bill</p>
+                    </div>
+                    <p className="text-xl font-bold text-emerald-400">₹{totalBill.toLocaleString()}</p>
                   </div>
-                  <p className="text-lg font-bold text-green-600">₹{insuranceApproved.toLocaleString()}</p>
-                </Card>
-                <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Advance</p>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Insurance</p>
+                    </div>
+                    <p className="text-xl font-bold text-emerald-400">₹{insuranceApproved.toLocaleString()}</p>
                   </div>
-                  <p className="text-lg font-bold text-primary">₹{advanceBalance.toLocaleString()}</p>
-                </Card>
-                <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Net Payable</p>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-sky-400"></div>
+                      <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Advance</p>
+                    </div>
+                    <p className="text-xl font-bold text-sky-400">₹{advanceBalance.toLocaleString()}</p>
                   </div>
-                  <p className="text-lg font-bold text-primary">₹{netPayable.toLocaleString()}</p>
-                </Card>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-sky-400"></div>
+                      <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Net Payable</p>
+                    </div>
+                    <p className="text-xl font-bold text-sky-400">₹{netPayable.toLocaleString()}</p>
+                  </div>
+                </div>
               </div>
 
               {/* Invoice Details */}
