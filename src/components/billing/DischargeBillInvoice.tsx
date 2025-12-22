@@ -364,7 +364,7 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
       {/* Bed/Room Charges */}
       {bill.bedCharges && bill.bedCharges.length > 0 && (
         <div className="p-5 border-b border-border">
-          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 section-header">Bed & Room Charges</h3>
+          <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3 section-header">Bed & Room Charges</h3>
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/50">
