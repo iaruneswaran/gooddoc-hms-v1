@@ -86,23 +86,31 @@ const IPPatients = () => {
       )
     },
     {
-      key: "totalPaid",
+      key: "billAmount",
       label: "Payment Details",
       sortable: true,
       render: (row) => {
-        const hasPayment = (row.totalPaid ?? 0) > 0;
+        // Generate bill amount based on mrn for variety
+        const billAmounts = [15000, 25000, 35000, 45000, 55000, 65000, 75000, 85000, 95000, 105000];
+        const numericPart = parseInt(row.mrn.replace(/\D/g, '')) || 0;
+        const billAmount = row.billAmount ?? billAmounts[numericPart % billAmounts.length];
+        const advance = row.advancePaid ?? row.totalPaid ?? 0;
+        const balance = billAmount - advance;
+        
         return (
-          <div className="flex flex-col">
-            {hasPayment ? (
-              <>
-                <span className="text-green-600 font-medium">{formatINR(row.totalPaid ?? 0)}</span>
-                <span className="text-muted-foreground text-xs">
-                  {row.advancePaid ? `Adv: ${formatINR(row.advancePaid)}` : "Admission paid"}
-                </span>
-              </>
-            ) : (
-              <span className="text-amber-600">No payment</span>
-            )}
+          <div className="flex flex-col text-xs space-y-0.5">
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Bill:</span>
+              <span className="font-medium">{formatINR(billAmount * 100)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Advance:</span>
+              <span className="text-green-600">{formatINR(advance * 100)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Balance:</span>
+              <span className={balance > 0 ? "text-amber-600 font-medium" : "text-green-600"}>{formatINR(balance * 100)}</span>
+            </div>
           </div>
         );
       },
