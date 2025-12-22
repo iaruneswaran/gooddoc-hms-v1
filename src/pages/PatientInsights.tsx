@@ -290,6 +290,7 @@ const PatientInsightsContent = () => {
                   variant="light" 
                   subtitle="Due today"
                   secondaryAmount="₹4,850"
+                  showArrow
                 />
               </div>
             </div>
