@@ -599,7 +599,7 @@ const BookAppointment = () => {
               </div>
             )}
 
-            <div className="flex flex-col lg:flex-row gap-6 items-start">
+            <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
               {/* Main Content */}
               <div className="w-full lg:w-[951px] lg:max-w-[951px] space-y-6">
                 {/* Display all selected forms in reverse order (most recent at top) */}
