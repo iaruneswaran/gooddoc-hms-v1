@@ -13,8 +13,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
-import DischargeBillInvoice from "@/components/billing/DischargeBillInvoice";
-import { SAMPLE_DISCHARGE_BILL } from "@/data/discharge-bill.mock";
+import DischargeSummary from "@/components/billing/DischargeSummary";
 
 interface SplitPayment {
   id: string;
@@ -116,8 +115,8 @@ const Discharge = () => {
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[1000px] space-y-6">
-              {/* Invoice Details */}
-              <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={false} />
+              {/* Discharge Summary */}
+              <DischargeSummary />
 
               {/* Invoice Action Buttons */}
               <div className="flex items-center justify-between mt-4">
