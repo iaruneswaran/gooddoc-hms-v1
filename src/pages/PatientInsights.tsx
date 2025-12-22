@@ -289,6 +289,8 @@ const PatientInsightsContent = () => {
                   amount={patient.balanceAmount} 
                   variant="light" 
                   subtitle="Due today"
+                  secondaryLabel="Pending Services"
+                  secondaryAmount="₹4,850"
                 />
               </div>
             </div>
