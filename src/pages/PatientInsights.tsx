@@ -159,7 +159,7 @@ const PatientInsightsContent = () => {
   const fromPage = searchParams.get("from");
   const [activeTab, setActiveTab] = useState("appointments");
   
-  const { setVisits, selectedVisit: selectedVisitOption, setIsLoading } = useVisit();
+  const { setVisits, selectedVisit: selectedVisitOption, selectedVisitId, setIsLoading } = useVisit();
 
   // Determine if this is an IP or OP patient based on the source page
   const isIPPatient = fromPage === "ip-patients" || fromPage === "discharged" || fromPage === "emergency" || fromPage === "transfers";
@@ -224,7 +224,8 @@ const PatientInsightsContent = () => {
   }, [setVisits, setIsLoading]);
 
   // Find the full visit object for the selected visit
-  const selectedVisit = selectedVisitOption 
+  // When "all" is selected, pass null to show all data
+  const selectedVisit = selectedVisitOption && selectedVisitId !== "all"
     ? mockVisits.find(v => v.visitId === selectedVisitOption.visitId) || null
     : null;
 

@@ -156,10 +156,10 @@ function getStatusBadgeVariant(status: string) {
 }
 
 
-export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps) {
+export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps & { showAllVisits?: boolean }) {
   const allAppointments = getPatientAppointments(patient.gdid);
   
-  // Filter appointments by selected visit ID
+  // Filter appointments by selected visit ID (null means show all)
   const appointments = selectedVisit 
     ? allAppointments.filter(apt => apt.visitId === selectedVisit.visitId)
     : allAppointments;
