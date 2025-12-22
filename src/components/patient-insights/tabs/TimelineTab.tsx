@@ -19,9 +19,11 @@ interface TransferHistoryItem {
   visitId: string;
   transferDate: string;
   transferTime: string;
-  fromLocation: string;
+  fromWard: string;
+  fromRoom: string;
   fromBed: string;
-  toLocation: string;
+  toWard: string;
+  toRoom: string;
   toBed: string;
   reason: string;
   authorizedBy: string;
@@ -36,10 +38,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-004",
     transferDate: "2025-12-20",
     transferTime: "10:15",
-    fromLocation: "Reception",
-    fromBed: "—",
-    toLocation: "Cardiology OPD",
-    toBed: "Room 12",
+    fromWard: "Ward A",
+    fromRoom: "Room 102",
+    fromBed: "WA-102-1",
+    toWard: "ICU",
+    toRoom: "ICU Bay 1",
+    toBed: "IC-01",
     reason: "Scheduled consultation",
     authorizedBy: "Front Desk",
     status: "Completed",
@@ -50,10 +54,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-002",
     transferDate: "2025-12-15",
     transferTime: "09:00",
-    fromLocation: "Reception",
-    fromBed: "—",
-    toLocation: "General Medicine OPD",
-    toBed: "Room 5",
+    fromWard: "Reception",
+    fromRoom: "",
+    fromBed: "",
+    toWard: "General Medicine",
+    toRoom: "Room 5",
+    toBed: "GM-05-A",
     reason: "Annual checkup",
     authorizedBy: "Front Desk",
     status: "Completed",
@@ -63,10 +69,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-002",
     transferDate: "2025-12-15",
     transferTime: "09:45",
-    fromLocation: "General Medicine OPD",
-    fromBed: "Room 5",
-    toLocation: "Laboratory",
-    toBed: "—",
+    fromWard: "General Medicine",
+    fromRoom: "Room 5",
+    fromBed: "GM-05-A",
+    toWard: "Laboratory",
+    toRoom: "",
+    toBed: "",
     reason: "Blood tests ordered",
     authorizedBy: "Dr. Priya Menon",
     status: "Completed",
@@ -77,10 +85,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-001",
     transferDate: "2025-12-01",
     transferTime: "10:30",
-    fromLocation: "Emergency Room",
+    fromWard: "Emergency",
+    fromRoom: "ER Bay 1",
     fromBed: "ER-03",
-    toLocation: "Cardiology OPD",
-    toBed: "Room 8",
+    toWard: "Cardiology",
+    toRoom: "Room 8",
+    toBed: "CARD-08-1",
     reason: "Chest pain evaluation",
     authorizedBy: "Dr. Emergency",
     status: "Completed",
@@ -90,10 +100,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-001",
     transferDate: "2025-12-01",
     transferTime: "11:30",
-    fromLocation: "Cardiology OPD",
-    fromBed: "Room 8",
-    toLocation: "ECG Lab",
-    toBed: "—",
+    fromWard: "Cardiology",
+    fromRoom: "Room 8",
+    fromBed: "CARD-08-1",
+    toWard: "ECG Lab",
+    toRoom: "",
+    toBed: "",
     reason: "ECG ordered",
     authorizedBy: "Dr. Meera Nair",
     status: "Completed",
@@ -103,10 +115,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V25-001",
     transferDate: "2025-12-01",
     transferTime: "12:00",
-    fromLocation: "ECG Lab",
-    fromBed: "—",
-    toLocation: "Radiology",
-    toBed: "—",
+    fromWard: "ECG Lab",
+    fromRoom: "",
+    fromBed: "",
+    toWard: "Radiology",
+    toRoom: "",
+    toBed: "",
     reason: "Chest X-Ray ordered",
     authorizedBy: "Dr. Meera Nair",
     status: "Completed",
@@ -117,10 +131,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V24-089",
     transferDate: "2025-11-15",
     transferTime: "14:00",
-    fromLocation: "Reception",
-    fromBed: "—",
-    toLocation: "Orthopedics OPD",
-    toBed: "Room 15",
+    fromWard: "Reception",
+    fromRoom: "",
+    fromBed: "",
+    toWard: "Orthopedics",
+    toRoom: "Room 15",
+    toBed: "ORTH-15-1",
     reason: "Back pain consultation",
     authorizedBy: "Front Desk",
     status: "Completed",
@@ -130,10 +146,12 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V24-089",
     transferDate: "2025-11-15",
     transferTime: "15:00",
-    fromLocation: "Orthopedics OPD",
-    fromBed: "Room 15",
-    toLocation: "MRI Center",
-    toBed: "—",
+    fromWard: "Orthopedics",
+    fromRoom: "Room 15",
+    fromBed: "ORTH-15-1",
+    toWard: "MRI Center",
+    toRoom: "",
+    toBed: "",
     reason: "MRI Spine ordered",
     authorizedBy: "Dr. Arun Kumar",
     status: "Completed",
@@ -143,9 +161,11 @@ const allTransferHistory: TransferHistoryItem[] = [
     visitId: "V24-089",
     transferDate: "2025-11-16",
     transferTime: "10:00",
-    fromLocation: "Reception",
-    fromBed: "—",
-    toLocation: "Physiotherapy",
+    fromWard: "Reception",
+    fromRoom: "",
+    fromBed: "",
+    toWard: "Physiotherapy",
+    toRoom: "PT Room",
     toBed: "PT-2",
     reason: "Physiotherapy session",
     authorizedBy: "Dr. Arun Kumar",
@@ -226,15 +246,23 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
                   </div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm font-medium text-foreground">{transfer.fromLocation}</div>
-                  {transfer.fromBed !== "—" && (
-                    <div className="text-xs text-muted-foreground">{transfer.fromBed}</div>
+                  <div className="text-sm font-medium text-foreground">{transfer.fromWard}</div>
+                  {(transfer.fromRoom || transfer.fromBed) && (
+                    <div className="text-xs text-muted-foreground">
+                      {transfer.fromRoom && transfer.fromBed 
+                        ? `${transfer.fromRoom} • ${transfer.fromBed}`
+                        : transfer.fromRoom || transfer.fromBed}
+                    </div>
                   )}
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm font-medium text-foreground">{transfer.toLocation}</div>
-                  {transfer.toBed !== "—" && (
-                    <div className="text-xs text-muted-foreground">{transfer.toBed}</div>
+                  <div className="text-sm font-medium text-foreground">{transfer.toWard}</div>
+                  {(transfer.toRoom || transfer.toBed) && (
+                    <div className="text-xs text-muted-foreground">
+                      {transfer.toRoom && transfer.toBed 
+                        ? `${transfer.toRoom} • ${transfer.toBed}`
+                        : transfer.toRoom || transfer.toBed}
+                    </div>
                   )}
                 </TableCell>
                 <TableCell className="py-3">
