@@ -124,26 +124,26 @@ const Discharge = () => {
                   </div>
                   <p className="text-lg font-bold text-foreground">₹{totalBill.toLocaleString()}</p>
                 </Card>
-                <Card className="p-4 bg-blue-50/50 dark:bg-blue-950/20 border-blue-200/50 dark:border-blue-800/30 hover:shadow-sm transition-shadow">
+                <Card className="p-4 bg-muted/30 border-border/50 hover:shadow-sm transition-shadow">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                    <p className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">Insurance</p>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground/50"></div>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Insurance</p>
                   </div>
-                  <p className="text-lg font-bold text-blue-600 dark:text-blue-400">₹{insuranceApproved.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-foreground">₹{insuranceApproved.toLocaleString()}</p>
                 </Card>
-                <Card className="p-4 bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200/50 dark:border-emerald-800/30 hover:shadow-sm transition-shadow">
+                <Card className="p-4 bg-muted/30 border-border/50 hover:shadow-sm transition-shadow">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                    <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Advance</p>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground/50"></div>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Advance</p>
                   </div>
-                  <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">₹{advanceBalance.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-foreground">₹{advanceBalance.toLocaleString()}</p>
                 </Card>
-                <Card className="p-4 bg-primary/5 border-primary/30 hover:shadow-sm transition-shadow">
+                <Card className="p-4 bg-muted/30 border-border/50 hover:shadow-sm transition-shadow">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <p className="text-xs font-medium text-primary uppercase tracking-wide">Net Payable</p>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground/50"></div>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Net Payable</p>
                   </div>
-                  <p className="text-lg font-bold text-primary">₹{netPayable.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-foreground">₹{netPayable.toLocaleString()}</p>
                 </Card>
               </div>
 
