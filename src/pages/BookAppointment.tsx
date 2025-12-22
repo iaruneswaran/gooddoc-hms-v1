@@ -57,6 +57,7 @@ const BookAppointment = () => {
   const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
+  const [additionalConsultations, setAdditionalConsultations] = useState<{ id: string; data: DynamicConsultationData }[]>([]);
   const [laboratoryData, setLaboratoryData] = useState<LaboratoryData | null>(null);
   const [ipdAdmissionData, setIpdAdmissionData] = useState<IPDAdmissionData | null>(null);
   
@@ -351,6 +352,31 @@ const BookAppointment = () => {
     setConsultationData(data);
   };
 
+  const handleAddAnotherConsultation = () => {
+    const newId = `consultation-${Date.now()}`;
+    setAdditionalConsultations(prev => [...prev, {
+      id: newId,
+      data: {
+        mode: "in_person",
+        type: "first_visit",
+        department: "",
+        doctorId: null,
+        doctorName: "Any available doctor",
+        clinicalInfo: "",
+        selectedSlot: null,
+        holdId: null,
+      }
+    }]);
+  };
+
+  const handleAdditionalConsultationUpdate = (id: string, data: DynamicConsultationData) => {
+    setAdditionalConsultations(prev => prev.map(c => c.id === id ? { ...c, data } : c));
+  };
+
+  const handleRemoveAdditionalConsultation = (id: string) => {
+    setAdditionalConsultations(prev => prev.filter(c => c.id !== id));
+  };
+
   const handleLaboratoryUpdate = (data: LaboratoryData) => {
     setLaboratoryData(data);
   };
@@ -637,12 +663,23 @@ const BookAppointment = () => {
                         }
                         if (type === "consultation" && consultationData) {
                           return (
-                            <DynamicConsultationBookingForm
-                              key={`consultation-${requestData?.requestId || 'default'}`}
-                              onRemove={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleRemoveConsultation}
-                              onUpdate={handleConsultationUpdate}
-                              initialData={consultationData}
-                            />
+                            <div key="consultation-group" className="space-y-6">
+                              <DynamicConsultationBookingForm
+                                key={`consultation-${requestData?.requestId || 'default'}`}
+                                onRemove={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleRemoveConsultation}
+                                onUpdate={handleConsultationUpdate}
+                                initialData={consultationData}
+                                onAddAnother={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleAddAnotherConsultation}
+                              />
+                              {additionalConsultations.map((consultation) => (
+                                <DynamicConsultationBookingForm
+                                  key={consultation.id}
+                                  onRemove={() => handleRemoveAdditionalConsultation(consultation.id)}
+                                  onUpdate={(data) => handleAdditionalConsultationUpdate(consultation.id, data)}
+                                  initialData={consultation.data}
+                                />
+                              ))}
+                            </div>
                           );
                         }
                       if (type === "ipd" && ipdAdmissionData) {

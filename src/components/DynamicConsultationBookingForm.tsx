@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Calendar as CalendarIcon, Users, Stethoscope, Trash2 } from "lucide-react";
+import { Calendar as CalendarIcon, Users, Stethoscope, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,6 +17,7 @@ interface DynamicConsultationBookingFormProps {
   onRemove?: () => void;
   onUpdate: (data: DynamicConsultationData) => void;
   initialData?: DynamicConsultationData;
+  onAddAnother?: () => void;
 }
 
 export interface DynamicConsultationData {
@@ -46,7 +47,7 @@ const consultationTypes = [
   { id: "second_opinion", name: "Second Opinion", duration: 45 },
 ];
 
-export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData }: DynamicConsultationBookingFormProps) {
+export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData, onAddAnother }: DynamicConsultationBookingFormProps) {
   const [mode, setMode] = useState<ScheduleMode>(initialData?.mode || "in_person");
   const [consultationType, setConsultationType] = useState(initialData?.type || "first_visit");
   const [department, setDepartment] = useState(initialData?.department || "");
@@ -170,14 +171,27 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
             <p className="text-xs text-white/70">OP Appointment Booking</p>
           </div>
         </div>
-        {onRemove && (
-          <button
-            onClick={onRemove}
-            className="text-white/70 hover:text-white transition-colors"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {onAddAnother && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onAddAnother}
+              className="text-white/80 hover:text-white hover:bg-white/10 text-xs gap-1.5"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Add Appointment
+            </Button>
+          )}
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="text-white/70 hover:text-white transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
       
       <div className="p-5 space-y-5">
