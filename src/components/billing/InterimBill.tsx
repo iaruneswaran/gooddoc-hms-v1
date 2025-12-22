@@ -430,10 +430,6 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
           <Printer className="w-4 h-4" />
           Print Invoice
         </Button>
-        <Button className="gap-2" onClick={onProceedToPayment}>
-          <CreditCard className="w-4 h-4" />
-          Proceed to Payment
-        </Button>
       </div>
     </div>
   );
