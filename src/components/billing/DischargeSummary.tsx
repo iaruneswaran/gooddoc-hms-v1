@@ -502,27 +502,6 @@ const DischargeSummary = ({
           </div>
         </Card>
 
-        {/* Warning Signs */}
-        <Card className="p-5 border-amber-500/30 bg-amber-500/5">
-          <div className="flex items-center gap-2 mb-4">
-            <AlertCircle className="w-5 h-5 text-amber-600" />
-            <h3 className="font-semibold text-amber-700">Warning Signs - Seek Immediate Medical Care</h3>
-          </div>
-          <div className="grid grid-cols-3 gap-3 text-sm text-amber-800">
-            <p>• Chest pain or pressure</p>
-            <p>• Severe breathlessness</p>
-            <p>• Palpitations</p>
-            <p>• Dizziness or fainting</p>
-            <p>• Excessive sweating</p>
-            <p>• Swelling in legs</p>
-            <p>• Pain radiating to arm/jaw</p>
-            <p>• Unusual fatigue</p>
-            <p>• Nausea or vomiting</p>
-          </div>
-          <p className="text-sm text-amber-700 mt-3 font-medium">
-            Emergency Contact: 108 (Ambulance) | Hospital: +91 44 2345 6789
-          </p>
-        </Card>
 
         {/* Signature Section */}
         <Card className="p-5">
