@@ -196,7 +196,14 @@ const StandardMetricCard = ({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-2xl font-bold text-foreground tracking-tight">
-            {displayCount || count.toLocaleString()}
+            {displayCount ? (
+              displayCount.includes('|') ? (
+                <>
+                  {displayCount.split('|')[0].trim()}
+                  <span className="text-[14px] font-medium text-muted-foreground">{displayCount.split('|').slice(1).join('|')}</span>
+                </>
+              ) : displayCount
+            ) : count.toLocaleString()}
           </p>
           {badge && (
             <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-xs font-semibold shadow-sm">
@@ -301,6 +308,7 @@ const Overview = () => {
     {
       title: "Beds Availability",
       count: 67,
+      displayCount: "67| - ICU 37 - Ward 30",
       icon: BedDouble,
       route: "/patients/check-in?date=today",
       iconColorClass: iconColors.patients,
