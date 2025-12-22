@@ -120,21 +120,7 @@ const Discharge = () => {
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[1000px] space-y-6">
-              {/* Toggle Buttons */}
-              <div className="flex gap-2">
-                <Button 
-                  variant={viewMode === "discharge" ? "default" : "outline"}
-                  onClick={() => setViewMode("discharge")}
-                >
-                  IP Discharge Summary
-                </Button>
-                <Button 
-                  variant={viewMode === "interim" ? "default" : "outline"}
-                  onClick={() => setViewMode("interim")}
-                >
-                  Interim Bill
-                </Button>
-              </div>
+              {/* Conditional Rendering based on URL param */}
 
               {/* Conditional Rendering */}
               {viewMode === "discharge" ? (
