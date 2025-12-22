@@ -45,7 +45,6 @@ interface VisitDetailsTabsProps {
 
 const tabs = [
   { value: "appointments", label: "Appointments", icon: Calendar },
-  { value: "invoices", label: "Bills Summary", icon: FileText },
   { value: "collect-payment", label: "Collect Payment", icon: CreditCard },
   { value: "payments", label: "Transaction History", icon: History },
   { value: "documents", label: "Documents", icon: FolderOpen },
@@ -87,9 +86,6 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
             <TimelineTab selectedVisit={selectedVisit} />
           </TabsContent>
 
-          <TabsContent value="invoices" className="mt-0">
-            <InvoicesTab selectedVisit={selectedVisit} />
-          </TabsContent>
 
           <TabsContent value="collect-payment" className="mt-0 h-full">
             <CollectPaymentTab selectedVisit={selectedVisit} />
