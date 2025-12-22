@@ -133,10 +133,10 @@ const Discharge = () => {
                 </Card>
                 <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-muted-foreground/50"></div>
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Advance</p>
                   </div>
-                  <p className="text-lg font-bold text-foreground">₹{advanceBalance.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">₹{advanceBalance.toLocaleString()}</p>
                 </Card>
                 <Card className="p-4 bg-white dark:bg-card border-border/50 hover:shadow-sm transition-shadow">
                   <div className="flex items-center gap-2 mb-2">
