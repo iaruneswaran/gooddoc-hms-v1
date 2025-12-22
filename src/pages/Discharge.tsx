@@ -15,6 +15,7 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
 import DischargeSummary from "@/components/billing/DischargeSummary";
 import InterimBill from "@/components/billing/InterimBill";
+import PendingBillsCheck from "@/components/billing/PendingBillsCheck";
 
 interface SplitPayment {
   id: string;
@@ -48,6 +49,7 @@ const Discharge = () => {
   // Initialize view mode based on URL param
   const initialView = searchParams.get("view") === "interim" ? "interim" : "discharge";
   const [viewMode, setViewMode] = useState<"discharge" | "interim">(initialView);
+  const [showDischargeSummary, setShowDischargeSummary] = useState(false);
 
   const fromSearch = searchParams.get("from") === "search";
   const fromPage = searchParams.get("from") || "ip-patients";
@@ -126,18 +128,30 @@ const Discharge = () => {
               {/* Conditional Rendering */}
               {viewMode === "discharge" ? (
                 <>
-                  <DischargeSummary />
-                  {/* Invoice Action Buttons */}
-                  <div className="flex items-center justify-end mt-4 gap-3">
-                    <Button variant="outline" className="gap-2">
-                      <Download className="w-4 h-4" />
-                      Download PDF
-                    </Button>
-                    <Button variant="outline" className="gap-2">
-                      <Printer className="w-4 h-4" />
-                      Print Invoice
-                    </Button>
-                  </div>
+                  {!showDischargeSummary ? (
+                    <PendingBillsCheck
+                      patientName="Harish Kalyan"
+                      mrn="GDID-001"
+                      admissionId="ADM-2025-0142"
+                      onProceedToDischarge={() => setShowDischargeSummary(true)}
+                      onCollectPayment={() => navigate(`/patient-insights/${patientId}/payment?from=${fromPage}`)}
+                    />
+                  ) : (
+                    <>
+                      <DischargeSummary />
+                      {/* Invoice Action Buttons */}
+                      <div className="flex items-center justify-end mt-4 gap-3">
+                        <Button variant="outline" className="gap-2">
+                          <Download className="w-4 h-4" />
+                          Download PDF
+                        </Button>
+                        <Button variant="outline" className="gap-2">
+                          <Printer className="w-4 h-4" />
+                          Print
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </>
               ) : (
                 <InterimBill onProceedToPayment={() => navigate(`/patient-insights/${patientId}/payment`)} />
