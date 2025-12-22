@@ -265,8 +265,19 @@ const PendingBillsCheck = ({
           <Button variant="outline" className="flex-1" onClick={onCollectPayment}>
             Collect Payment
           </Button>
-          <Button variant="secondary" className="flex-1" disabled>
-            Proceed to Discharge
+          <Button 
+            className="flex-1" 
+            onClick={handleProceed}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Loading Discharge Summary...
+              </>
+            ) : (
+              "Proceed to Discharge"
+            )}
           </Button>
         </div>
       </div>
