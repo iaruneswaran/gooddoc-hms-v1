@@ -207,20 +207,6 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
                         </span>
                       </div>
                     )}
-                    {selectedBed.features.length > 0 && (
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {selectedBed.features.slice(0, 3).map((feature) => (
-                          <Badge key={feature} variant="outline" className="text-xs">
-                            {featureLabels[feature]}
-                          </Badge>
-                        ))}
-                        {selectedBed.features.length > 3 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{selectedBed.features.length - 3} more
-                          </Badge>
-                        )}
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

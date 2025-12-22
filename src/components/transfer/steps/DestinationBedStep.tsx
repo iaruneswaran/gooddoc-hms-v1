@@ -206,16 +206,6 @@ export function DestinationBedStep({
                         </p>
                       </div>
 
-                      <div className="space-y-3">
-                        <h4 className="font-medium">Features</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {detailBed.features.map((feature) => (
-                            <Badge key={feature} variant="secondary">
-                              {featureLabels[feature]}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
 
                       <div className="space-y-3">
                         <h4 className="font-medium">Restrictions</h4>
