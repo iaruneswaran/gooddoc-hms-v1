@@ -209,25 +209,50 @@ const DischargeSummary = ({
             <Clock className="w-5 h-5 text-primary" />
             <h3 className="font-semibold text-foreground">Visit Timeline</h3>
           </div>
-          <div className="relative">
-            <div className="absolute left-[15px] top-2 bottom-2 w-0.5 bg-border" />
-            <div className="space-y-4">
-              {timelineEvents.map((item, index) => (
-                <div key={index} className="flex items-center gap-4 relative">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                    index === timelineEvents.length - 1 
-                      ? 'bg-green-500/10 text-green-600' 
-                      : 'bg-primary/10 text-primary'
-                  }`}>
-                    <item.icon className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1 flex items-center justify-between py-2">
-                    <p className="font-medium text-foreground">{item.event}</p>
-                    <p className="text-sm text-muted-foreground">{item.date}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-2 font-medium text-muted-foreground w-12">S.No</th>
+                  <th className="text-left py-2 font-medium text-muted-foreground">Event</th>
+                  <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
+                  <th className="text-left py-2 font-medium text-muted-foreground">Time</th>
+                  <th className="text-left py-2 font-medium text-muted-foreground">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timelineEvents.map((item, index) => {
+                  const [datePart, timePart] = item.date.split(', ');
+                  return (
+                    <tr key={index} className="border-b border-border/50">
+                      <td className="py-2.5 text-muted-foreground">{index + 1}</td>
+                      <td className="py-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-6 h-6 rounded flex items-center justify-center ${
+                            index === timelineEvents.length - 1 
+                              ? 'bg-green-500/10 text-green-600' 
+                              : 'bg-primary/10 text-primary'
+                          }`}>
+                            <item.icon className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="font-medium">{item.event}</span>
+                        </div>
+                      </td>
+                      <td className="py-2.5">{datePart}</td>
+                      <td className="py-2.5">{timePart}</td>
+                      <td className="py-2.5">
+                        <Badge className={index === timelineEvents.length - 1 
+                          ? "bg-green-500/10 text-green-600 border-green-500/30" 
+                          : "bg-primary/10 text-primary border-primary/30"
+                        }>
+                          {index === timelineEvents.length - 1 ? 'Discharged' : 'Completed'}
+                        </Badge>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </Card>
 
