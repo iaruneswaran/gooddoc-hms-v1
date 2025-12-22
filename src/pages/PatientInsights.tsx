@@ -291,6 +291,7 @@ const PatientInsightsContent = () => {
                   subtitle="Due today"
                   secondaryAmount="₹4,850"
                   showArrow
+                  onClick={() => navigate(`/patient-insights/${patientId}/discharge`)}
                 />
               </div>
             </div>
