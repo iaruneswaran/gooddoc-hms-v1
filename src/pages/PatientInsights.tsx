@@ -206,6 +206,10 @@ const PatientInsightsContent = () => {
     advanceAmount: "3,200",
     collectedAmount: "6,400",
     balanceAmount: "3,400",
+    insuranceProvider: "Star Health Insurance",
+    insurancePolicyNumber: "POL-2024-78456123",
+    insuranceValidFrom: "01/01/2024",
+    insuranceValidTo: "31/12/2024",
   };
 
   // Load visits into context on mount
