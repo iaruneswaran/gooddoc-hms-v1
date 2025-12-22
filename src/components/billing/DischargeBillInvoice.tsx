@@ -225,12 +225,6 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
           <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Issue Date</p>
           <p className="text-sm font-semibold text-foreground">{formatDate(bill.invoice.issueDate, locale)}</p>
         </div>
-        {bill.invoice.dueDate && (
-          <div>
-            <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Due Date</p>
-            <p className="text-sm font-semibold text-foreground">{formatDate(bill.invoice.dueDate, locale)}</p>
-          </div>
-        )}
         {bill.invoice.poNumber && (
           <div>
             <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">PO Number</p>
