@@ -13,7 +13,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
-import DischargeInvoice from "@/components/billing/DischargeInvoice";
+import DischargeBillInvoice from "@/components/billing/DischargeBillInvoice";
+import { SAMPLE_DISCHARGE_BILL } from "@/data/discharge-bill.mock";
 
 interface SplitPayment {
   id: string;
@@ -159,20 +160,7 @@ const Discharge = () => {
               </div>
 
               {/* Invoice Details */}
-              <DischargeInvoice 
-                invoiceNo="INV-2025-009"
-                invoiceDate="21/12/2025"
-                admissionNo="ADM-2025-0142"
-                patientName="Siva Karthikeyan"
-                uhid="GDID-009"
-                age="35 Years"
-                gender="Male"
-                admissionDate="05/10/2025"
-                dischargeDate="08/10/2025"
-                attendingPhysician="Dr. Arun Kumar, MD (Cardiology)"
-                grossTotal={44000}
-                netAmount={44000}
-              />
+              <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={true} />
 
               {/* Invoice Action Buttons */}
               <div className="flex items-center justify-between mt-4">
