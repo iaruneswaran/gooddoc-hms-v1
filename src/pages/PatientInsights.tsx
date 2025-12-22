@@ -298,10 +298,11 @@ const PatientInsightsContent = () => {
               <div className="flex gap-1.5">
                 <Button 
                   size="sm"
-                  className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
+                  className="relative bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
                   onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
                 >
                   Add Services
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-primary" />
                 </Button>
                 {isIPPatient ? (
                   // IP Patient buttons: Book Appointment, Bed Transfer, Collect Advance, Discharge
