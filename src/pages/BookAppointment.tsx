@@ -52,6 +52,8 @@ const BookAppointment = () => {
   
   const fromPatientInsights = location.state?.fromPatientInsights;
   const patientId = location.state?.patientId || patientIdFromQuery;
+  const patientFromState = location.state?.patient;
+  const fromPage = location.state?.fromPage; // e.g., "op-patients"
   const visitId = location.state?.visitId; // Visit ID for new appointments
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
@@ -537,21 +539,27 @@ const BookAppointment = () => {
       <AppSidebar />
       
       <PageContent>
-        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"] : (fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"])} />
+        <AppHeader breadcrumbs={
+          fromPatientInsights 
+            ? [{ label: fromPage === "op-patients" ? "OP Patients" : "Patient Insight", onClick: () => navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`) }, "Book Appointment"]
+            : fromSearch 
+              ? [{ label: "Search Results", onClick: () => navigate(`/patients/search?q=${patientSearchQuery}`) }, "Book Appointment"] 
+              : (fromPatients ? ["Patients", "Book Appointment"] : ["Appointments", "Appointment"])
+        } />
         
         <main className="p-6 pb-32">
           <div className="flex items-center justify-between h-10 mb-12">
             <div className="w-[130px]">
               <button
                 onClick={() => {
-                  if (fromSearch && patientSearchQuery) {
+                  if (fromPatientInsights) {
+                    navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`);
+                  } else if (fromSearch && patientSearchQuery) {
                     navigate(`/patients/search?q=${patientSearchQuery}`);
                   } else if (fromPatients) {
                     navigate("/patients");
                   } else if (isSingleAppointmentMode) {
                     navigate("/inbox");
-                  } else if (fromPatientInsights) {
-                    navigate(`/patient-insights/${patientId}`);
                   } else if (isFromScheduledRequests) {
                     navigate("/schedule/today");
                   } else {
@@ -562,7 +570,7 @@ const BookAppointment = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span className="font-semibold">
-                  {fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (fromPatientInsights ? "Patient Insights" : (isFromScheduledRequests ? "Appointments" : "Registration"))))}
+                  {fromPatientInsights ? "Patient Insight" : (fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (isFromScheduledRequests ? "Appointments" : "Registration"))))}
                 </span>
               </button>
             </div>

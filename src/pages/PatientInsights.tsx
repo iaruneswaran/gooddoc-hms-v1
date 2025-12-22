@@ -335,7 +335,20 @@ const PatientInsightsContent = () => {
                       variant="ghost"
                       size="sm"
                       className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                      onClick={() => navigate(`/new-appointment?patientId=${patientId}${fromPage ? `&from=${fromPage}` : ''}`)}
+                      onClick={() => navigate("/book-appointment", {
+                        state: { 
+                          fromPatientInsights: true, 
+                          patientId,
+                          patient: {
+                            id: patientId,
+                            name: patient.name,
+                            gdid: patient.gdid,
+                            age: patient.age,
+                            gender: patient.gender === "Male" ? "M" : "F",
+                          },
+                          fromPage,
+                        }
+                      })}
                     >
                       Book Appointment
                     </Button>
