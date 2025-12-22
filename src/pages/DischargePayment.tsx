@@ -225,13 +225,13 @@ const DischargePayment = () => {
               <Card className="p-5 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h1 className="text-lg font-bold text-foreground">GoodDoc Hospital</h1>
-                    <p className="text-xs text-muted-foreground mt-1">123 Healthcare Avenue, Medical District, Chennai - 600001</p>
-                    <p className="text-xs text-muted-foreground">Phone: +91 44 2345 6789 | GSTIN: 33XXXXX1234X1Z5</p>
+                    <h1 className="text-xl font-bold text-foreground">GoodDoc Hospital</h1>
+                    <p className="text-sm text-muted-foreground mt-1">123 Healthcare Avenue, Medical District, Chennai - 600001</p>
+                    <p className="text-sm text-muted-foreground">Phone: +91 44 2345 6789 | GSTIN: 33XXXXX1234X1Z5</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-base font-bold text-primary">IP Discharge Summary</p>
-                    <p className="text-xs text-muted-foreground">{data.admission.admissionNo}</p>
+                    <p className="text-lg font-bold text-primary">IP Discharge Summary</p>
+                    <p className="text-sm text-muted-foreground">{data.admission.admissionNo}</p>
                   </div>
                 </div>
               </Card>
@@ -239,51 +239,51 @@ const DischargePayment = () => {
               {/* Patient & Admission Info */}
               <div className="grid grid-cols-2 gap-5">
                 <Card className="p-4">
-                  <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <User className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <User className="w-4 h-4 text-primary" />
                     Patient Information
                   </h3>
-                  <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm">
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Patient Name</p>
-                      <p className="text-xs font-medium">{data.patient.name}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Patient Name</p>
+                      <p className="text-sm font-medium">{data.patient.name}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">UHID</p>
-                      <p className="text-xs font-medium">{data.patient.uhid}</p>
+                      <p className="text-xs text-muted-foreground uppercase">UHID</p>
+                      <p className="text-sm font-medium">{data.patient.uhid}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Age / Gender</p>
-                      <p className="text-xs font-medium">{data.patient.age} / {data.patient.gender}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Age / Gender</p>
+                      <p className="text-sm font-medium">{data.patient.age} / {data.patient.gender}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Blood Group</p>
-                      <p className="text-xs font-medium">{data.patient.bloodGroup}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Blood Group</p>
+                      <p className="text-sm font-medium">{data.patient.bloodGroup}</p>
                     </div>
                   </div>
                 </Card>
 
                 <Card className="p-4">
-                  <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Building2 className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-primary" />
                     Admission Details
                   </h3>
-                  <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm">
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Admission</p>
-                      <p className="text-xs font-medium">{data.admission.admissionDate}, {data.admission.admissionTime}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Admission</p>
+                      <p className="text-sm font-medium">{data.admission.admissionDate}, {data.admission.admissionTime}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Discharge</p>
-                      <p className="text-xs font-medium">{data.admission.dischargeDate}, {data.admission.dischargeTime}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Discharge</p>
+                      <p className="text-sm font-medium">{data.admission.dischargeDate}, {data.admission.dischargeTime}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Length of Stay</p>
-                      <p className="text-xs font-medium">{data.admission.los}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Length of Stay</p>
+                      <p className="text-sm font-medium">{data.admission.los}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Ward</p>
-                      <p className="text-xs font-medium">{data.admission.ward}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Ward</p>
+                      <p className="text-sm font-medium">{data.admission.ward}</p>
                     </div>
                   </div>
                 </Card>
@@ -292,20 +292,20 @@ const DischargePayment = () => {
               {/* Diagnosis & Timeline */}
               <div className="grid grid-cols-3 gap-5">
                 <Card className="p-4">
-                  <h3 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
-                    <Stethoscope className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Stethoscope className="w-4 h-4 text-primary" />
                     Diagnosis
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Primary</p>
-                      <p className="text-xs font-medium">{data.diagnosis.primary}</p>
+                      <p className="text-xs text-muted-foreground uppercase">Primary</p>
+                      <p className="text-sm font-medium">{data.diagnosis.primary}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase">Secondary</p>
+                      <p className="text-xs text-muted-foreground uppercase">Secondary</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {data.diagnosis.secondary.map((d, i) => (
-                          <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">{d}</Badge>
+                          <Badge key={i} variant="secondary" className="text-xs px-2 py-0.5">{d}</Badge>
                         ))}
                       </div>
                     </div>
@@ -313,15 +313,15 @@ const DischargePayment = () => {
                 </Card>
 
                 <Card className="p-4 col-span-2">
-                  <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-primary" />
                     Visit Timeline
                   </h3>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                     {data.timeline.map((event, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <div className={cn(
-                          "w-5 h-5 rounded-full flex items-center justify-center shrink-0",
+                          "w-6 h-6 rounded-full flex items-center justify-center shrink-0",
                           event.type === "admission" || event.type === "discharge" 
                             ? "bg-primary text-primary-foreground" 
                             : "bg-muted text-muted-foreground"
@@ -329,8 +329,8 @@ const DischargePayment = () => {
                           {getTimelineIcon(event.type)}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-medium text-foreground truncate">{event.event}</p>
-                          <p className="text-[10px] text-muted-foreground">{event.date}, {event.time}</p>
+                          <p className="text-sm font-medium text-foreground truncate">{event.event}</p>
+                          <p className="text-xs text-muted-foreground">{event.date}, {event.time}</p>
                         </div>
                       </div>
                     ))}
@@ -340,19 +340,19 @@ const DischargePayment = () => {
 
               {/* Detailed Bill */}
               <Card className="p-4 overflow-hidden">
-                <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Receipt className="w-3.5 h-3.5 text-primary" />
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Receipt className="w-4 h-4 text-primary" />
                   Detailed Bill Statement
                 </h3>
                 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border bg-muted/30">
-                        <th className="text-left py-1.5 px-2 font-medium text-muted-foreground">Particulars</th>
-                        <th className="text-center py-1.5 px-2 font-medium text-muted-foreground w-12">Qty</th>
-                        <th className="text-right py-1.5 px-2 font-medium text-muted-foreground w-20">Rate</th>
-                        <th className="text-right py-1.5 px-2 font-medium text-muted-foreground w-20">Amount</th>
+                        <th className="text-left py-2 px-3 font-medium text-muted-foreground">Particulars</th>
+                        <th className="text-center py-2 px-3 font-medium text-muted-foreground w-16">Qty</th>
+                        <th className="text-right py-2 px-3 font-medium text-muted-foreground w-24">Rate</th>
+                        <th className="text-right py-2 px-3 font-medium text-muted-foreground w-24">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -366,14 +366,14 @@ const DischargePayment = () => {
                       ].map((section, sIdx) => (
                         <>
                           <tr key={`section-${sIdx}`} className="bg-muted/20">
-                            <td colSpan={4} className="py-1 px-2 font-semibold text-foreground">{section.label}</td>
+                            <td colSpan={4} className="py-1.5 px-3 font-semibold text-foreground">{section.label}</td>
                           </tr>
                           {section.items.map((item, i) => (
                             <tr key={`${sIdx}-${i}`} className="border-b border-border/50">
-                              <td className="py-1 px-2">{item.item}</td>
-                              <td className="py-1 px-2 text-center">{item.qty}</td>
-                              <td className="py-1 px-2 text-right">₹{item.rate.toLocaleString()}</td>
-                              <td className="py-1 px-2 text-right font-medium">₹{item.amount.toLocaleString()}</td>
+                              <td className="py-1.5 px-3">{item.item}</td>
+                              <td className="py-1.5 px-3 text-center">{item.qty}</td>
+                              <td className="py-1.5 px-3 text-right">₹{item.rate.toLocaleString()}</td>
+                              <td className="py-1.5 px-3 text-right font-medium">₹{item.amount.toLocaleString()}</td>
                             </tr>
                           ))}
                         </>
@@ -383,8 +383,8 @@ const DischargePayment = () => {
                 </div>
 
                 {/* Bill Summary */}
-                <div className="mt-3 pt-3 border-t border-border flex justify-end">
-                  <div className="w-56 space-y-1 text-xs">
+                <div className="mt-4 pt-4 border-t border-border flex justify-end">
+                  <div className="w-64 space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Gross Total</span>
                       <span className="font-medium">₹{payment.grossTotal.toLocaleString()}</span>
@@ -393,11 +393,11 @@ const DischargePayment = () => {
                       <span className="text-muted-foreground">Advance Paid</span>
                       <span className="font-medium text-emerald-600">- ₹{payment.advancePaid.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between pt-1 border-t border-border">
+                    <div className="flex justify-between pt-2 border-t border-border">
                       <span className="font-semibold">Amount Collected</span>
                       <span className="font-bold text-primary">₹{payment.amountCollected.toLocaleString()}</span>
                     </div>
-                    <div className="text-[10px] text-muted-foreground text-right">
+                    <div className="text-xs text-muted-foreground text-right">
                       {payment.paymentMode} • {payment.paymentDate}
                     </div>
                   </div>
@@ -407,16 +407,16 @@ const DischargePayment = () => {
               {/* Medications & Follow-up */}
               <div className="grid grid-cols-2 gap-5">
                 <Card className="p-4">
-                  <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Pill className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Pill className="w-4 h-4 text-primary" />
                     Discharge Medications
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {data.dischargeSummary.medications.map((med, i) => (
-                      <div key={i} className="flex items-start justify-between text-xs border-b border-border/50 pb-1.5 last:border-0 last:pb-0">
+                      <div key={i} className="flex items-start justify-between text-sm border-b border-border/50 pb-2 last:border-0 last:pb-0">
                         <div>
                           <p className="font-medium">{med.name}</p>
-                          <p className="text-[10px] text-muted-foreground">{med.frequency} • {med.duration}</p>
+                          <p className="text-xs text-muted-foreground">{med.frequency} • {med.duration}</p>
                         </div>
                         <span className="text-muted-foreground shrink-0">{med.dosage}</span>
                       </div>
@@ -425,11 +425,11 @@ const DischargePayment = () => {
                 </Card>
 
                 <Card className="p-4">
-                  <h3 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-primary" />
                     Follow-up & Instructions
                   </h3>
-                  <div className="space-y-2 text-xs">
+                  <div className="space-y-3 text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Next Visit</span>
                       <span className="font-medium">{data.dischargeSummary.followUpDate}</span>
@@ -440,13 +440,13 @@ const DischargePayment = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Condition</span>
-                      <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px]">
+                      <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-xs">
                         {data.dischargeSummary.conditionAtDischarge}
                       </Badge>
                     </div>
                     <div className="pt-2 border-t border-border">
-                      <p className="text-[10px] text-muted-foreground uppercase mb-1">Emergency</p>
-                      <p className="text-xs text-amber-700 dark:text-amber-300">{data.dischargeSummary.emergencyInstructions}</p>
+                      <p className="text-xs text-muted-foreground uppercase mb-1">Emergency</p>
+                      <p className="text-sm text-amber-700 dark:text-amber-300">{data.dischargeSummary.emergencyInstructions}</p>
                     </div>
                   </div>
                 </Card>
