@@ -242,7 +242,7 @@ const PatientInsightsContent = () => {
         ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
-        <div className="bg-[hsl(var(--gd-primary-700))] flex-shrink-0 shadow-lg">
+        <div className="bg-primary flex-shrink-0 shadow-lg">
           <div className="px-6 py-5">
             {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between mb-4">
