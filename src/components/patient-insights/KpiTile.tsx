@@ -3,13 +3,17 @@ interface KpiTileProps {
   amount: string;
   variant?: "default" | "light";
   subtitle?: string;
+  secondaryLabel?: string;
+  secondaryAmount?: string;
 }
 
 export function KpiTile({ 
   label, 
   amount, 
   variant = "default", 
-  subtitle
+  subtitle,
+  secondaryLabel,
+  secondaryAmount
 }: KpiTileProps) {
   const isLight = variant === "light";
   
@@ -25,6 +29,11 @@ export function KpiTile({
       <p className={`text-lg font-semibold mt-0.5 ${isLight ? "text-white" : "text-foreground"}`}>
         {amount}
       </p>
+      {secondaryLabel && secondaryAmount && (
+        <p className={`text-[10px] mt-0.5 ${isLight ? "text-amber-300" : "text-amber-600"}`}>
+          {secondaryLabel}: {secondaryAmount}
+        </p>
+      )}
       {subtitle && (
         <p className={`text-[10px] mt-0.5 ${isLight ? "text-white/50" : "text-muted-foreground"}`}>
           {subtitle}
