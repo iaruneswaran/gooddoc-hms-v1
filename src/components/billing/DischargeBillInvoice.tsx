@@ -242,9 +242,8 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
             {bill.encounter.admissionType && <p className="text-xs text-muted-foreground">{bill.encounter.admissionType}</p>}
           </div>
           <div>
-            <p className="text-[10px] font-medium text-muted-foreground uppercase">Discharge</p>
+            <p className="text-[10px] font-medium text-muted-foreground uppercase">Till Date</p>
             <p className="text-sm font-semibold text-primary">{bill.encounter.dischargeDateTime ? formatDate(bill.encounter.dischargeDateTime, locale, true) : "—"}</p>
-            {bill.encounter.lengthOfStayDays && <p className="text-xs text-muted-foreground">Till Date</p>}
           </div>
         </div>
         
