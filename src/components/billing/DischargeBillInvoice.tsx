@@ -244,7 +244,7 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
           <div>
             <p className="text-[10px] font-medium text-muted-foreground uppercase">Discharge</p>
             <p className="text-sm font-semibold text-primary">{bill.encounter.dischargeDateTime ? formatDate(bill.encounter.dischargeDateTime, locale, true) : "—"}</p>
-            {bill.encounter.lengthOfStayDays && <p className="text-xs text-muted-foreground">{bill.encounter.lengthOfStayDays} day(s)</p>}
+            {bill.encounter.lengthOfStayDays && <p className="text-xs text-muted-foreground">Till Date</p>}
           </div>
         </div>
         
