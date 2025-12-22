@@ -585,128 +585,170 @@ export default function DoctorDetail() {
               </TabsTrigger>
             </TabsList>
 
-            {/* Appointments Tab - Table View */}
+            {/* Appointments Tab - Two Column Layout */}
             <TabsContent value="appointments" className="mt-6">
-              <Card className="overflow-hidden">
-                <div className="p-4 border-b border-border bg-muted/30">
-                  <h2 className="text-sm font-medium text-foreground">Today's Appointments - {format(new Date(), 'EEEE, MMMM d, yyyy')}</h2>
-                </div>
-                
-                {/* Table Header */}
-                <div className="grid grid-cols-[180px_100px_120px_1fr_120px_100px_80px] gap-4 px-4 py-3 border-b border-border bg-muted/20 text-xs font-medium text-muted-foreground">
-                  <div>Patient Info</div>
-                  <div>Visit ID</div>
-                  <div>Appt. Time</div>
-                  <div>Chief Complaint</div>
-                  <div>Status</div>
-                  <div>Token</div>
-                  <div>Actions</div>
-                </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left: Today's Appointments List */}
+                <Card className="overflow-hidden">
+                  <div className="p-4 border-b border-border bg-muted/30">
+                    <h2 className="text-sm font-medium text-foreground">Today's Appointments - {format(new Date(), 'EEEE, MMMM d, yyyy')}</h2>
+                  </div>
+                  
+                  <div className="divide-y divide-border max-h-[600px] overflow-y-auto">
+                    {todayAppointments.map((apt) => {
+                      const patientName = apt.patient 
+                        ? `${apt.patient.first_name} ${apt.patient.last_name}` 
+                        : apt.patient_name || 'Unknown Patient';
+                      const patientAge = apt.patient?.date_of_birth 
+                        ? calculateAge(apt.patient.date_of_birth) 
+                        : null;
+                      const patientGender = apt.patient?.gender || '';
+                      const patientGdid = apt.patient?.gdid || apt.patient_id;
+                      const token = apt.status === 'checked_in' || apt.status === 'completed' ? `T${apt.id.slice(-3)}` : '—';
 
-                {/* Table Body */}
-                <div className="divide-y divide-border">
-                  {todayAppointments.map((apt) => {
-                    const patientName = apt.patient 
-                      ? `${apt.patient.first_name} ${apt.patient.last_name}` 
-                      : apt.patient_name || 'Unknown Patient';
-                    const patientAge = apt.patient?.date_of_birth 
-                      ? calculateAge(apt.patient.date_of_birth) 
-                      : null;
-                    const patientGender = apt.patient?.gender || '';
-                    const patientGdid = apt.patient?.gdid || apt.patient_id;
-                    const visitId = `V25-${apt.id.slice(-3).toUpperCase()}`;
-                    const token = apt.status === 'checked_in' || apt.status === 'completed' ? `T${apt.id.slice(-3)}` : '—';
-
-                    return (
-                      <div 
-                        key={apt.id} 
-                        className={`grid grid-cols-[180px_100px_120px_1fr_120px_100px_80px] gap-4 px-4 py-3 hover:bg-muted/20 transition-colors items-center ${apt.status === 'checked_in' ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}
-                      >
-                        {/* Patient Info */}
+                      return (
                         <div 
-                          className="cursor-pointer hover:text-primary"
-                          onClick={() => navigate(`/patient-insights/${apt.patient_id}?from=doctor-detail`)}
+                          key={apt.id} 
+                          className={`flex items-center justify-between p-4 hover:bg-muted/20 transition-colors ${apt.status === 'checked_in' ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}
                         >
-                          <div className="text-sm font-medium text-foreground hover:underline">
-                            {patientName}
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-foreground">
+                              {patientName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div 
+                                className="text-sm font-medium text-foreground truncate cursor-pointer hover:text-primary hover:underline"
+                                onClick={() => navigate(`/patient-insights/${apt.patient_id}?from=doctor-detail`)}
+                              >
+                                {patientName}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {patientGdid} • {patientAge ? `${patientAge}` : ''}{patientGender ? ` | ${patientGender.charAt(0).toUpperCase()}` : ''}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5 truncate">
+                                {apt.notes || apt.appointment_type?.name || 'Consultation'}
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-xs text-muted-foreground">
-                            {patientGdid} • {patientAge ? `${patientAge}` : ''} | {patientGender ? patientGender.charAt(0).toUpperCase() : ''}
+                          
+                          <div className="flex items-center gap-3 flex-shrink-0">
+                            <div className="text-right">
+                              <div className="text-sm font-medium text-foreground">
+                                {format(parseISO(apt.start_time), 'HH:mm')}
+                              </div>
+                              <Badge className={`${statusConfig[apt.status]?.className || ''} text-xs`}>
+                                {statusConfig[apt.status]?.label || apt.status}
+                              </Badge>
+                            </div>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <MoreVertical className="w-4 h-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="bg-popover z-50">
+                                <DropdownMenuItem onClick={() => toast({ title: "Checked In" })}>
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Check In
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => toast({ title: "Started Consultation" })}>
+                                  <AlertCircle className="w-4 h-4 mr-2" />
+                                  Start Consultation
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => toast({ title: "Marked as Completed" })}>
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Mark Completed
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => toast({ title: "Marked as No Show" })}>
+                                  <XCircle className="w-4 h-4 mr-2" />
+                                  Mark No Show
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate(`/book-appointment?reschedule=${apt.id}`)}>
+                                  <Calendar className="w-4 h-4 mr-2" />
+                                  Reschedule
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         </div>
-
-                        {/* Visit ID */}
-                        <div className="text-sm text-foreground">{visitId}</div>
-
-                        {/* Appointment Time */}
-                        <div>
-                          <div className="text-sm font-medium text-foreground">
-                            {format(parseISO(apt.start_time), 'HH:mm')}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {format(parseISO(apt.start_time), 'dd-MMM-yyyy')}
-                          </div>
-                        </div>
-
-                        {/* Chief Complaint / Notes */}
-                        <div className="text-sm text-muted-foreground line-clamp-2">
-                          {apt.notes || apt.appointment_type?.name || 'Consultation'}
-                        </div>
-
-                        {/* Status */}
-                        <div>
-                          <Badge className={statusConfig[apt.status]?.className || ''}>
-                            {statusConfig[apt.status]?.label || apt.status}
-                          </Badge>
-                        </div>
-
-                        {/* Token */}
-                        <div className="text-sm text-foreground font-medium">
-                          {token}
-                        </div>
-
-                        {/* Actions */}
-                        <div>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreVertical className="w-4 h-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-popover z-50">
-                              <DropdownMenuItem onClick={() => toast({ title: "Checked In" })}>
-                                <CheckCircle className="w-4 h-4 mr-2" />
-                                Check In
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => toast({ title: "Started Consultation" })}>
-                                <AlertCircle className="w-4 h-4 mr-2" />
-                                Start Consultation
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => toast({ title: "Marked as Completed" })}>
-                                <CheckCircle className="w-4 h-4 mr-2" />
-                                Mark Completed
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => toast({ title: "Marked as No Show" })}>
-                                <XCircle className="w-4 h-4 mr-2" />
-                                Mark No Show
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => navigate(`/book-appointment?reschedule=${apt.id}`)}>
-                                <Calendar className="w-4 h-4 mr-2" />
-                                Reschedule
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
+                      );
+                    })}
+                    {todayAppointments.length === 0 && (
+                      <div className="p-12 text-center text-muted-foreground">
+                        No appointments scheduled for today
                       </div>
-                    );
-                  })}
-                  {todayAppointments.length === 0 && (
-                    <div className="p-12 text-center text-muted-foreground">
-                      No appointments scheduled for today
-                    </div>
-                  )}
-                </div>
-              </Card>
+                    )}
+                  </div>
+                </Card>
+
+                {/* Right: Doctor's Agenda */}
+                <Card className="overflow-hidden">
+                  <div className="p-4 border-b border-border bg-muted/30">
+                    <h2 className="text-sm font-medium text-foreground">Today's Agenda</h2>
+                  </div>
+                  
+                  <div className="p-4 space-y-3 max-h-[600px] overflow-y-auto">
+                    {/* Timeline view of today's schedule */}
+                    {todayAppointments.map((apt, index) => {
+                      const patientName = apt.patient 
+                        ? `${apt.patient.first_name} ${apt.patient.last_name}` 
+                        : apt.patient_name || 'Unknown Patient';
+                      const isCompleted = apt.status === 'completed';
+                      const isCurrentOrNext = apt.status === 'checked_in' || 
+                        (apt.status === 'booked' && todayAppointments.slice(0, index).every(a => a.status === 'completed' || a.status === 'no_show'));
+
+                      return (
+                        <div 
+                          key={apt.id} 
+                          className={`flex gap-3 ${isCompleted ? 'opacity-60' : ''}`}
+                        >
+                          {/* Time indicator */}
+                          <div className="flex flex-col items-center">
+                            <div className={`w-3 h-3 rounded-full ${
+                              isCompleted ? 'bg-green-500' : 
+                              isCurrentOrNext ? 'bg-primary ring-4 ring-primary/20' : 
+                              apt.status === 'no_show' ? 'bg-amber-500' :
+                              'bg-muted-foreground/30'
+                            }`} />
+                            {index < todayAppointments.length - 1 && (
+                              <div className="w-0.5 h-full min-h-[40px] bg-border" />
+                            )}
+                          </div>
+                          
+                          {/* Appointment details */}
+                          <div className={`flex-1 pb-4 ${isCurrentOrNext ? 'bg-primary/5 -mx-2 px-2 py-2 rounded-lg border border-primary/20' : ''}`}>
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-medium text-muted-foreground">
+                                {format(parseISO(apt.start_time), 'HH:mm')} - {format(parseISO(apt.end_time), 'HH:mm')}
+                              </span>
+                              {apt.mode === 'telehealth' && (
+                                <Video className="w-3.5 h-3.5 text-blue-500" />
+                              )}
+                            </div>
+                            <div className={`text-sm font-medium ${isCompleted ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                              {patientName}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {apt.appointment_type?.name || 'Consultation'} {apt.location?.name ? `• ${apt.location.name}` : ''}
+                            </div>
+                            {apt.notes && (
+                              <div className="text-xs text-muted-foreground mt-1 italic truncate">
+                                "{apt.notes}"
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    {todayAppointments.length === 0 && (
+                      <div className="p-8 text-center text-muted-foreground">
+                        No agenda items for today
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
             </TabsContent>
 
             {/* Availability Tab */}
