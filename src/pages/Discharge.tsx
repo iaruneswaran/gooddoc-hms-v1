@@ -110,7 +110,7 @@ const Discharge = () => {
       <AppSidebar />
       
       <div className={cn("flex-1 transition-all duration-300", isCollapsed ? "ml-[60px]" : "ml-[220px]")}>
-        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, "Discharge"] : ["Patient Insights", "Discharge"]} />
+        <AppHeader breadcrumbs={fromSearch ? [{ label: "Search Results", onClick: handleBack }, viewMode === "interim" ? "Interim Bill" : "Discharge"] : ["Patient Insights", viewMode === "interim" ? "Interim Bill" : "Discharge"]} />
         
         {/* Compact Header */}
         <div className="h-[72px] bg-background border-b border-border flex items-center justify-between px-6">
