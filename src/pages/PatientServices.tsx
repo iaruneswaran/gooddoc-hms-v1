@@ -3,7 +3,8 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { 
   ChevronLeft, Search, Plus, Minus, Trash2, Receipt, User, 
   Stethoscope, FlaskConical, ScanLine, Pill, HeartPulse, BedDouble, 
-  UserRound, Package, Clock, FileText, AlertCircle, CheckCircle2
+  UserRound, Package, Clock, FileText, AlertCircle, CheckCircle2,
+  ClipboardList, Square, CheckSquare, ShoppingCart
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -14,11 +15,14 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useServicesCart } from "@/hooks/useServicesCart";
 import { searchServices, SERVICE_CATEGORIES, getSubCategories, getServicesByCategory } from "@/data/services.mock";
+import { getPendingServicesForPatient, PendingService } from "@/data/pending-services.mock";
 import { ServiceCategory } from "@/types/booking/ipAdmission";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
@@ -48,15 +52,19 @@ const getCategoryColor = (category: string) => {
   }
 };
 
+type ViewMode = 'pending' | 'catalog';
+
 const PatientServices = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
   
+  const [viewMode, setViewMode] = useState<ViewMode>('pending');
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
+  const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -72,6 +80,11 @@ const PatientServices = () => {
     bed: "Bed 12A",
     doctor: "Dr. Arun Kumar",
   };
+
+  // Get pending services
+  const pendingServices = useMemo(() => {
+    return getPendingServicesForPatient(patientId || '');
+  }, [patientId]);
 
   const subCategories = useMemo(() => {
     if (selectedCategory === "all") return [];
@@ -106,6 +119,48 @@ const PatientServices = () => {
   const isInCart = (serviceId: string) => cart.some(item => item.itemId === serviceId);
   const getCartItem = (serviceId: string) => cart.find(item => item.itemId === serviceId);
 
+  // Pending services selection handlers
+  const togglePendingSelection = (id: string) => {
+    setSelectedPendingIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const selectAllPending = () => {
+    if (selectedPendingIds.size === pendingServices.length) {
+      setSelectedPendingIds(new Set());
+    } else {
+      setSelectedPendingIds(new Set(pendingServices.map(s => s.id)));
+    }
+  };
+
+  const addSelectedToCart = () => {
+    pendingServices
+      .filter(ps => selectedPendingIds.has(ps.id))
+      .forEach(ps => {
+        // Add with quantity from pending service
+        for (let i = 0; i < ps.quantity; i++) {
+          if (!isInCart(ps.service.id) || i > 0) {
+            addToCart(ps.service);
+          } else {
+            const cartItem = getCartItem(ps.service.id);
+            if (cartItem) {
+              updateQty(cartItem.itemId, cartItem.qty + 1);
+            }
+          }
+        }
+      });
+    setSelectedPendingIds(new Set());
+  };
+
+  const allSelected = pendingServices.length > 0 && selectedPendingIds.size === pendingServices.length;
+
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
@@ -139,214 +194,410 @@ const PatientServices = () => {
         
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Side - Category Sidebar */}
-          <div className="w-[200px] border-r border-border bg-muted/30 flex flex-col">
+          {/* Left Side - View Mode & Category Sidebar */}
+          <div className="w-[220px] border-r border-border bg-muted/30 flex flex-col">
+            {/* View Mode Toggle */}
             <div className="p-3 border-b border-border">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
-            </div>
-            <ScrollArea className="flex-1">
-              <div className="p-2 space-y-1">
+              <div className="flex gap-1 bg-muted rounded-lg p-1">
                 <button
-                  onClick={() => handleCategoryChange("all")}
+                  onClick={() => setViewMode('pending')}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                    selectedCategory === "all" 
-                      ? "bg-primary text-primary-foreground" 
-                      : "text-foreground hover:bg-muted"
+                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
+                    viewMode === 'pending'
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <Package className="w-4 h-4" />
-                  All Services
+                  <ClipboardList className="w-3.5 h-3.5" />
+                  Pending
+                  {pendingServices.length > 0 && (
+                    <Badge variant="destructive" className="h-4 px-1 text-[10px]">
+                      {pendingServices.length}
+                    </Badge>
+                  )}
                 </button>
-                {SERVICE_CATEGORIES
-                  .filter((cat) => !['Lab', 'Radiology', 'Pharmacy'].includes(cat.id))
-                  .map((cat) => {
-                  const Icon = getCategoryIcon(cat.id);
-                  const count = getServicesByCategory(cat.id).length;
-                  return (
+                <button
+                  onClick={() => setViewMode('catalog')}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
+                    viewMode === 'catalog'
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  Catalog
+                </button>
+              </div>
+            </div>
+
+            {viewMode === 'catalog' && (
+              <>
+                <div className="p-3 border-b border-border">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
+                </div>
+                <ScrollArea className="flex-1">
+                  <div className="p-2 space-y-1">
                     <button
-                      key={cat.id}
-                      onClick={() => handleCategoryChange(cat.id)}
+                      onClick={() => handleCategoryChange("all")}
                       className={cn(
                         "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                        selectedCategory === cat.id 
+                        selectedCategory === "all" 
                           ? "bg-primary text-primary-foreground" 
                           : "text-foreground hover:bg-muted"
                       )}
                     >
-                      <Icon className="w-4 h-4" />
-                      <span className="flex-1 text-left">{cat.name}</span>
-                      <span className={cn(
-                        "text-xs px-1.5 py-0.5 rounded",
-                        selectedCategory === cat.id 
-                          ? "bg-primary-foreground/20 text-primary-foreground" 
-                          : "bg-muted text-muted-foreground"
-                      )}>
-                        {count}
-                      </span>
+                      <Package className="w-4 h-4" />
+                      All Services
                     </button>
-                  );
-                })}
+                    {SERVICE_CATEGORIES
+                      .filter((cat) => !['Lab', 'Radiology', 'Pharmacy'].includes(cat.id))
+                      .map((cat) => {
+                      const Icon = getCategoryIcon(cat.id);
+                      const count = getServicesByCategory(cat.id).length;
+                      return (
+                        <button
+                          key={cat.id}
+                          onClick={() => handleCategoryChange(cat.id)}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                            selectedCategory === cat.id 
+                              ? "bg-primary text-primary-foreground" 
+                              : "text-foreground hover:bg-muted"
+                          )}
+                        >
+                          <Icon className="w-4 h-4" />
+                          <span className="flex-1 text-left">{cat.name}</span>
+                          <span className={cn(
+                            "text-xs px-1.5 py-0.5 rounded",
+                            selectedCategory === cat.id 
+                              ? "bg-primary-foreground/20 text-primary-foreground" 
+                              : "bg-muted text-muted-foreground"
+                          )}>
+                            {count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </>
+            )}
+
+            {viewMode === 'pending' && (
+              <div className="flex-1 flex flex-col p-3">
+                <p className="text-xs text-muted-foreground mb-2">
+                  Services performed by nursing staff that need to be billed.
+                </p>
+                <div className="mt-auto pt-3 border-t border-border">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => setViewMode('catalog')}
+                  >
+                    <Plus className="w-3 h-3 mr-1" />
+                    Add from Catalog
+                  </Button>
+                </div>
               </div>
-            </ScrollArea>
+            )}
           </div>
 
           {/* Center - Services List */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Search & Sub-category Filters */}
-            <div className="p-4 space-y-3 border-b border-border flex-shrink-0 bg-background">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by service name, code, or description..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-10"
-                />
-              </div>
-              
-              {/* Sub-category Pills */}
-              {subCategories.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  <Badge
-                    variant={selectedSubCategory === "all" ? "default" : "outline"}
-                    className="cursor-pointer transition-colors"
-                    onClick={() => setSelectedSubCategory("all")}
-                  >
-                    All
-                  </Badge>
-                  {subCategories.map((sub) => (
-                    <Badge
-                      key={sub}
-                      variant={selectedSubCategory === sub ? "default" : "outline"}
-                      className="cursor-pointer transition-colors"
-                      onClick={() => setSelectedSubCategory(sub)}
+            {viewMode === 'pending' ? (
+              <>
+                {/* Pending Services Header */}
+                <div className="px-4 py-3 border-b border-border bg-background flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={selectAllPending}
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {sub}
-                    </Badge>
-                  ))}
+                      {allSelected ? (
+                        <CheckSquare className="w-4 h-4 text-primary" />
+                      ) : (
+                        <Square className="w-4 h-4" />
+                      )}
+                      <span>{allSelected ? 'Deselect All' : 'Select All'}</span>
+                    </button>
+                    {selectedPendingIds.size > 0 && (
+                      <Badge variant="secondary" className="text-xs">
+                        {selectedPendingIds.size} selected
+                      </Badge>
+                    )}
+                  </div>
+                  {selectedPendingIds.size > 0 && (
+                    <Button size="sm" onClick={addSelectedToCart} className="gap-1.5">
+                      <ShoppingCart className="w-3.5 h-3.5" />
+                      Add to Bill ({selectedPendingIds.size})
+                    </Button>
+                  )}
                 </div>
-              )}
-            </div>
-            
-            {/* Results Header */}
-            <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">
-                Showing <span className="font-medium text-foreground">{results.length}</span> services
-                {selectedCategory !== "all" && (
-                  <> in <span className="font-medium text-foreground">{selectedCategory}</span></>
-                )}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Clock className="w-3 h-3" />
-                Prices as of today
-              </div>
-            </div>
 
-            {/* Results List */}
-            <ScrollArea className="flex-1">
-              {results.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                  <AlertCircle className="w-12 h-12 text-muted-foreground/50 mb-3" />
-                  <p className="text-sm font-medium text-foreground">No services found</p>
-                  <p className="text-xs text-muted-foreground mt-1">Try adjusting your search or filter</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-border">
-                  {results.map((service) => {
-                    const inCart = isInCart(service.id);
-                    const cartItem = getCartItem(service.id);
-                    const Icon = getCategoryIcon(service.category);
-                    
-                    return (
-                      <div 
-                        key={service.id} 
-                        className={cn(
-                          "flex items-center gap-4 px-4 py-3 transition-colors",
-                          inCart ? "bg-primary/5" : "hover:bg-muted/50"
-                        )}
+                {/* Pending Services List */}
+                <ScrollArea className="flex-1">
+                  {pendingServices.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      <CheckCircle2 className="w-12 h-12 text-green-500/50 mb-3" />
+                      <p className="text-sm font-medium text-foreground">No pending services</p>
+                      <p className="text-xs text-muted-foreground mt-1">All services have been billed</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={() => setViewMode('catalog')}
                       >
-                        {/* Service Icon */}
-                        <div className={cn(
-                          "w-10 h-10 rounded-lg flex items-center justify-center border",
-                          getCategoryColor(service.category)
-                        )}>
-                          <Icon className="w-5 h-5" />
-                        </div>
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        Add Services from Catalog
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {pendingServices.map((ps) => {
+                        const isSelected = selectedPendingIds.has(ps.id);
+                        const Icon = getCategoryIcon(ps.service.category);
+                        const inCart = isInCart(ps.service.id);
                         
-                        {/* Service Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm font-medium text-foreground truncate">{service.name}</p>
-                            {inCart && (
-                              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+                        return (
+                          <div 
+                            key={ps.id}
+                            onClick={() => togglePendingSelection(ps.id)}
+                            className={cn(
+                              "flex items-start gap-4 px-4 py-4 cursor-pointer transition-colors",
+                              isSelected ? "bg-primary/5" : "hover:bg-muted/50",
+                              inCart && "opacity-60"
                             )}
-                          </div>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                              {service.code}
-                            </span>
-                            {service.subCategory && (
-                              <span className="text-xs text-muted-foreground">{service.subCategory}</span>
-                            )}
-                          </div>
-                          {service.description && (
-                            <p className="text-xs text-muted-foreground mt-1 truncate">{service.description}</p>
-                          )}
-                        </div>
-                        
-                        {/* Price & Actions */}
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-sm font-bold text-foreground">{formatPrice(service.price)}</p>
-                            {service.taxPct > 0 && (
-                              <p className="text-xs text-muted-foreground">+{service.taxPct}% GST</p>
-                            )}
-                          </div>
-                          
-                          {inCart && cartItem ? (
-                            <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-7 w-7"
-                                onClick={() => {
-                                  if (cartItem.qty === 1) {
-                                    removeFromCart(cartItem.itemId);
-                                  } else {
-                                    updateQty(cartItem.itemId, cartItem.qty - 1);
-                                  }
-                                }}
-                              >
-                                {cartItem.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-destructive" /> : <Minus className="w-3.5 h-3.5" />}
-                              </Button>
-                              <span className="text-sm font-semibold w-8 text-center">{cartItem.qty}</span>
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-7 w-7"
-                                onClick={() => updateQty(cartItem.itemId, cartItem.qty + 1)}
-                              >
-                                <Plus className="w-3.5 h-3.5" />
-                              </Button>
+                          >
+                            {/* Checkbox */}
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={() => togglePendingSelection(ps.id)}
+                              className="mt-1"
+                            />
+                            
+                            {/* Service Icon */}
+                            <div className={cn(
+                              "w-10 h-10 rounded-lg flex items-center justify-center border flex-shrink-0",
+                              getCategoryColor(ps.service.category)
+                            )}>
+                              <Icon className="w-5 h-5" />
                             </div>
-                          ) : (
-                            <Button
-                              size="sm"
-                              onClick={() => addToCart(service)}
-                              className="h-8 gap-1"
-                            >
-                              <Plus className="w-4 h-4" />
-                              Add
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                            
+                            {/* Service Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                {ps.quantity > 1 && (
+                                  <Badge variant="outline" className="text-xs">
+                                    ×{ps.quantity}
+                                  </Badge>
+                                )}
+                                {inCart && (
+                                  <Badge variant="secondary" className="text-xs">
+                                    In Cart
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                                  {ps.service.code}
+                                </span>
+                                <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
+                              </div>
+                              <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
+                                </span>
+                                <span>•</span>
+                                <span>{ps.performedBy}</span>
+                              </div>
+                              {ps.notes && (
+                                <p className="text-xs text-muted-foreground mt-1 italic">"{ps.notes}"</p>
+                              )}
+                            </div>
+                            
+                            {/* Price */}
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-sm font-bold text-foreground">
+                                {formatPrice(ps.service.price * ps.quantity)}
+                              </p>
+                              {ps.quantity > 1 && (
+                                <p className="text-xs text-muted-foreground">
+                                  {formatPrice(ps.service.price)} × {ps.quantity}
+                                </p>
+                              )}
+                              {ps.service.taxPct > 0 && (
+                                <p className="text-xs text-muted-foreground">+{ps.service.taxPct}% GST</p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </ScrollArea>
+              </>
+            ) : (
+              <>
+                {/* Catalog: Search & Sub-category Filters */}
+                <div className="p-4 space-y-3 border-b border-border flex-shrink-0 bg-background">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search by service name, code, or description..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9 h-10"
+                    />
+                  </div>
+                  
+                  {/* Sub-category Pills */}
+                  {subCategories.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      <Badge
+                        variant={selectedSubCategory === "all" ? "default" : "outline"}
+                        className="cursor-pointer transition-colors"
+                        onClick={() => setSelectedSubCategory("all")}
+                      >
+                        All
+                      </Badge>
+                      {subCategories.map((sub) => (
+                        <Badge
+                          key={sub}
+                          variant={selectedSubCategory === sub ? "default" : "outline"}
+                          className="cursor-pointer transition-colors"
+                          onClick={() => setSelectedSubCategory(sub)}
+                        >
+                          {sub}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </ScrollArea>
+                
+                {/* Results Header */}
+                <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground">
+                    Showing <span className="font-medium text-foreground">{results.length}</span> services
+                    {selectedCategory !== "all" && (
+                      <> in <span className="font-medium text-foreground">{selectedCategory}</span></>
+                    )}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Clock className="w-3 h-3" />
+                    Prices as of today
+                  </div>
+                </div>
+
+                {/* Results List */}
+                <ScrollArea className="flex-1">
+                  {results.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      <AlertCircle className="w-12 h-12 text-muted-foreground/50 mb-3" />
+                      <p className="text-sm font-medium text-foreground">No services found</p>
+                      <p className="text-xs text-muted-foreground mt-1">Try adjusting your search or filter</p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {results.map((service) => {
+                        const inCart = isInCart(service.id);
+                        const cartItem = getCartItem(service.id);
+                        const Icon = getCategoryIcon(service.category);
+                        
+                        return (
+                          <div 
+                            key={service.id} 
+                            className={cn(
+                              "flex items-center gap-4 px-4 py-3 transition-colors",
+                              inCart ? "bg-primary/5" : "hover:bg-muted/50"
+                            )}
+                          >
+                            {/* Service Icon */}
+                            <div className={cn(
+                              "w-10 h-10 rounded-lg flex items-center justify-center border",
+                              getCategoryColor(service.category)
+                            )}>
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            
+                            {/* Service Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium text-foreground truncate">{service.name}</p>
+                                {inCart && (
+                                  <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                                  {service.code}
+                                </span>
+                                {service.subCategory && (
+                                  <span className="text-xs text-muted-foreground">{service.subCategory}</span>
+                                )}
+                              </div>
+                              {service.description && (
+                                <p className="text-xs text-muted-foreground mt-1 truncate">{service.description}</p>
+                              )}
+                            </div>
+                            
+                            {/* Price & Actions */}
+                            <div className="flex items-center gap-4">
+                              <div className="text-right">
+                                <p className="text-sm font-bold text-foreground">{formatPrice(service.price)}</p>
+                                {service.taxPct > 0 && (
+                                  <p className="text-xs text-muted-foreground">+{service.taxPct}% GST</p>
+                                )}
+                              </div>
+                              
+                              {inCart && cartItem ? (
+                                <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-7 w-7"
+                                    onClick={() => {
+                                      if (cartItem.qty === 1) {
+                                        removeFromCart(cartItem.itemId);
+                                      } else {
+                                        updateQty(cartItem.itemId, cartItem.qty - 1);
+                                      }
+                                    }}
+                                  >
+                                    {cartItem.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-destructive" /> : <Minus className="w-3.5 h-3.5" />}
+                                  </Button>
+                                  <span className="text-sm font-semibold w-8 text-center">{cartItem.qty}</span>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-7 w-7"
+                                    onClick={() => updateQty(cartItem.itemId, cartItem.qty + 1)}
+                                  >
+                                    <Plus className="w-3.5 h-3.5" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  onClick={() => addToCart(service)}
+                                  className="h-8 gap-1"
+                                >
+                                  <Plus className="w-4 h-4" />
+                                  Add
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </ScrollArea>
+              </>
+            )}
           </div>
           
           {/* Right Side - Order Summary */}
