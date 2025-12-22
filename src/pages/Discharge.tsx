@@ -180,7 +180,7 @@ const Discharge = () => {
                   onClick={() => navigate(`/patient-insights/${patientId}/discharge/payment`)}
                 >
                   <CreditCard className="w-4 h-4" />
-                  Collect Payment
+                  Proceed to Payment
                 </Button>
               </div>
             </div>
