@@ -129,31 +129,31 @@ const Discharge = () => {
                 <div className="grid grid-cols-4 gap-3">
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Total Bill</p>
                     </div>
-                    <p className="text-xl font-bold text-emerald-400">₹{totalBill.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-white">₹{totalBill.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Insurance</p>
                     </div>
-                    <p className="text-xl font-bold text-emerald-400">₹{insuranceApproved.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-white">₹{insuranceApproved.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-sky-300"></div>
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Advance</p>
                     </div>
-                    <p className="text-xl font-bold text-sky-300">₹{advanceBalance.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-white">₹{advanceBalance.toLocaleString()}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-sky-300"></div>
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
                       <p className="text-[11px] font-medium text-white/60 uppercase tracking-wide">Net Payable</p>
                     </div>
-                    <p className="text-xl font-bold text-sky-300">₹{netPayable.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-white">₹{netPayable.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
