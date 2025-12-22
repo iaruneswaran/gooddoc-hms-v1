@@ -59,7 +59,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
-        <div className="sticky top-0 bg-background z-10 border-b border-border">
+        <div className="sticky top-0 bg-card z-10 border-b border-border">
           <TabsList className="h-11 bg-muted/50 p-1 gap-0.5 rounded-md mx-6 my-3 justify-start w-auto inline-flex">
             {tabs.map((tab) => {
               const Icon = tab.icon;
