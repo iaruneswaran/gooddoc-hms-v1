@@ -161,6 +161,9 @@ const PatientInsightsContent = () => {
   
   const { setVisits, selectedVisit: selectedVisitOption, setIsLoading } = useVisit();
 
+  // Determine if this is an IP or OP patient based on the source page
+  const isIPPatient = fromPage === "ip-patients" || fromPage === "discharged" || fromPage === "emergency" || fromPage === "transfers";
+
   // Mapping for breadcrumb navigation based on source page
   const breadcrumbConfig: Record<string, { label: string; path: string }> = {
     "patients": { label: "Patients", path: "/patients" },
@@ -295,32 +298,57 @@ const PatientInsightsContent = () => {
                 >
                   Add Services
                 </Button>
-                <Button 
-                  variant="ghost"
-                  size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
-                >
-                  Bed Transfer
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                >
-                  Collect Advance
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                  onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
-                    state: { visitId: selectedVisit?.visitId }
-                  })}
-                >
-                  Discharge
-                </Button>
+                {isIPPatient ? (
+                  // IP Patient buttons: Bed Transfer, Collect Advance, Discharge
+                  <>
+                    <Button 
+                      variant="ghost"
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
+                    >
+                      Bed Transfer
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                    >
+                      Collect Advance
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
+                        state: { visitId: selectedVisit?.visitId }
+                      })}
+                    >
+                      Discharge
+                    </Button>
+                  </>
+                ) : (
+                  // OP Patient buttons: Book Appointment, Collect Advance (no Discharge, no Bed Transfer)
+                  <>
+                    <Button 
+                      variant="ghost"
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate(`/new-appointment?patientId=${patientId}${fromPage ? `&from=${fromPage}` : ''}`)}
+                    >
+                      Book Appointment
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                      onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                    >
+                      Collect Advance
+                    </Button>
+                  </>
+                )}
               </div>
               {/* Visit Selector */}
               <VisitSelector variant="light" />
