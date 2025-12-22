@@ -107,7 +107,20 @@ export function VisitSelector({ variant = "default" }: VisitSelectorProps) {
               isLight && "bg-white/10 border-0 text-white hover:bg-white/20"
             )}
           >
-            {selectedVisit ? (
+            {selectedVisitId === "all" ? (
+              <div className="flex items-center gap-1.5 truncate">
+                <span className="font-medium">All Visits</span>
+                <Badge 
+                  variant="secondary" 
+                  className={cn(
+                    "text-[10px] px-1.5 py-0 h-4",
+                    isLight ? "bg-blue-500/80 text-white border-0" : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
+                  )}
+                >
+                  {visits.length} visits
+                </Badge>
+              </div>
+            ) : selectedVisit ? (
               <div className="flex items-center gap-1.5 truncate">
                 <span className="font-mono font-medium">{selectedVisit.visitId}</span>
                 <span className={isLight ? "text-white/40" : "text-muted-foreground"}>•</span>
@@ -142,6 +155,33 @@ export function VisitSelector({ variant = "default" }: VisitSelectorProps) {
             <CommandList>
               <CommandEmpty>No visits found.</CommandEmpty>
               <CommandGroup>
+                {/* All Visits Option */}
+                <CommandItem
+                  value="all"
+                  onSelect={() => handleSelect("all")}
+                  className="flex items-start gap-3 py-2.5 px-3 cursor-pointer border-b border-border mb-1"
+                >
+                  <Check
+                    className={cn(
+                      "h-4 w-4 mt-0.5 shrink-0",
+                      selectedVisitId === "all" ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">All Visits</span>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-xs px-1.5 py-0"
+                      >
+                        {visits.length} visits
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Show appointments and data from all visits
+                    </div>
+                  </div>
+                </CommandItem>
                 {sortedVisits.map((visit) => (
                   <CommandItem
                     key={visit.id}

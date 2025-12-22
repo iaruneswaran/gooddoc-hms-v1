@@ -68,6 +68,15 @@ export function VisitProvider({ children }: { children: React.ReactNode }) {
   // Update URL when selection changes (after initialization)
   const setSelectedVisitId = useCallback(
     (visitId: string) => {
+      // Allow "all" as a special value
+      if (visitId === "all") {
+        setSelectedVisitIdState("all");
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set("visitId", "all");
+        setSearchParams(newParams, { replace: true });
+        return;
+      }
+
       const visit = visits.find((v) => v.visitId === visitId);
       if (!visit) {
         toast.error("Visit not available");
