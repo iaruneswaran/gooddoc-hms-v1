@@ -88,22 +88,6 @@ export function BedCard({ bed, isSelected, onSelect, onHold, onCancel, compact }
         </Badge>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 mt-3">
-        {bed.features.slice(0, 4).map((feature) => {
-          const Icon = featureIcons[feature];
-          return (
-            <Badge key={feature} variant="outline" className="text-xs gap-1 py-0.5">
-              <Icon className="w-3 h-3" />
-              {featureLabels[feature]}
-            </Badge>
-          );
-        })}
-        {bed.features.length > 4 && (
-          <Badge variant="outline" className="text-xs py-0.5">
-            +{bed.features.length - 4}
-          </Badge>
-        )}
-      </div>
 
       <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
         <div>
