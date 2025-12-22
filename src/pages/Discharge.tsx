@@ -134,7 +134,7 @@ const Discharge = () => {
                       mrn="GDID-001"
                       admissionId="ADM-2025-0142"
                       onProceedToDischarge={() => setShowDischargeSummary(true)}
-                      onCollectPayment={() => navigate(`/patient-insights/${patientId}/payment?from=${fromPage}`)}
+                      onCollectPayment={() => navigate(`/patient-insights/${patientId}?from=${fromPage}&tab=collect-payment`)}
                     />
                   ) : (
                     <>
