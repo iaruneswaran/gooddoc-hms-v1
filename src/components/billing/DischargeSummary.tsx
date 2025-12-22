@@ -12,13 +12,11 @@ import {
   Activity,
   HeartPulse,
   Syringe,
-  AlertCircle,
   Clock,
   CheckCircle2,
-  Building2,
-  Phone,
-  Mail
+  Phone
 } from "lucide-react";
+import bainesLogo from "@/assets/baines-logo-english.svg";
 
 interface DischargeSummaryProps {
   patientName?: string;
@@ -48,26 +46,18 @@ const DischargeSummary = ({
     <div className="bg-card border border-border rounded-lg overflow-hidden">
       {/* Hospital Header */}
       <div className="bg-primary/5 border-b border-border p-6">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Building2 className="w-8 h-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Baines International Healthcare</h1>
-              <p className="text-sm text-muted-foreground">123 Healthcare Avenue, Medical District, Chennai - 600001</p>
-              <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Phone className="w-3 h-3" />
-                  +91 44 2345 6789
-                </span>
-                <span>GSTIN: 33XXXXX1234X1Z5</span>
-              </div>
+        <div className="flex items-center justify-between">
+          <img src={bainesLogo} alt="Baines International Healthcare" className="h-10" />
+          <div className="text-right text-sm text-muted-foreground">
+            <p>123 Healthcare Avenue, Medical District, Chennai - 600001</p>
+            <div className="flex items-center justify-end gap-4 mt-1">
+              <span className="flex items-center gap-1">
+                <Phone className="w-3 h-3" />
+                +91 44 2345 6789
+              </span>
+              <span>GSTIN: 33XXXXX1234X1Z5</span>
             </div>
           </div>
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/30">
-            Pending Approval
-          </Badge>
         </div>
       </div>
 
