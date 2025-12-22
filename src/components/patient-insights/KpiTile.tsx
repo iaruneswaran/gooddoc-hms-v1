@@ -26,14 +26,16 @@ export function KpiTile({
       <p className={`text-[11px] font-medium uppercase tracking-wide ${isLight ? "text-white/60" : "text-muted-foreground"}`}>
         {label}
       </p>
-      <p className={`text-lg font-semibold mt-0.5 ${isLight ? "text-white" : "text-foreground"}`}>
-        {amount}
-      </p>
-      {secondaryLabel && secondaryAmount && (
-        <p className={`text-[10px] mt-0.5 ${isLight ? "text-amber-300" : "text-amber-600"}`}>
-          {secondaryLabel}: {secondaryAmount}
+      <div className="flex items-baseline gap-2 mt-0.5">
+        <p className={`text-lg font-semibold ${isLight ? "text-white" : "text-foreground"}`}>
+          {amount}
         </p>
-      )}
+        {secondaryAmount && (
+          <p className={`text-[10px] ${isLight ? "text-amber-300" : "text-amber-600"}`}>
+            +{secondaryAmount}
+          </p>
+        )}
+      </div>
       {subtitle && (
         <p className={`text-[10px] mt-0.5 ${isLight ? "text-white/50" : "text-muted-foreground"}`}>
           {subtitle}
