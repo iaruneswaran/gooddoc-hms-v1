@@ -597,16 +597,19 @@ const BookAppointment = () => {
                         className={cn(
                           "group h-10 px-5 flex items-center gap-2.5 rounded-full transition-all duration-200 whitespace-nowrap font-medium",
                           isSelected 
-                            ? "bg-[#2563EB] border-[#2563EB] text-white hover:bg-[#2563EB]/90 hover:border-[#2563EB]/90" 
-                            : "bg-background border-border hover:bg-accent hover:border-accent"
+                            ? "bg-[#0D9488] border-[#0D9488] text-white hover:bg-[#0D9488]/90 hover:border-[#0D9488]/90" 
+                            : "bg-background border-border hover:border-[#0D9488]/50"
                         )}
                         onClick={() => handleTypeClick(type.value)}
                       >
                         <Icon className={cn(
                           "w-4 h-4 transition-colors", 
-                          isSelected ? "text-white" : "text-muted-foreground group-hover:text-foreground"
+                          isSelected ? "text-white" : "text-[#0D9488] group-hover:text-[#0D9488]"
                         )} />
-                        <span className="text-sm">{type.label}</span>
+                        <span className={cn(
+                          "text-sm transition-colors",
+                          isSelected ? "text-white" : "text-foreground group-hover:text-[#0D9488]"
+                        )}>{type.label}</span>
                       </Button>
                     );
                   })}</div>
