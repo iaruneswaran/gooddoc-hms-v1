@@ -18,7 +18,7 @@ export function KpiTile({
   const isLight = variant === "light";
   
   return (
-    <div className={`rounded-lg px-4 py-2.5 min-w-[140px] ${
+    <div className={`rounded-lg px-4 py-2.5 w-[160px] ${
       isLight 
         ? "bg-white/10" 
         : "border border-border bg-card"
