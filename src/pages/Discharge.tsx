@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User } from "lucide-react";
+import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -160,6 +160,13 @@ const Discharge = () => {
                 <Button variant="outline" className="gap-2">
                   <Printer className="w-4 h-4" />
                   Print Invoice
+                </Button>
+                <Button 
+                  className="gap-2"
+                  onClick={() => navigate(`/patient-insights/${patientId}/discharge/payment`)}
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Collect Payment
                 </Button>
               </div>
             </div>

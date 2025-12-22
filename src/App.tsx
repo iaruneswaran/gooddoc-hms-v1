@@ -16,6 +16,7 @@ import PatientTimeline from "./pages/PatientTimeline";
 import PatientServices from "./pages/PatientServices";
 import Payments from "./pages/Payments";
 import Discharge from "./pages/Discharge";
+import DischargePayment from "./pages/DischargePayment";
 import DoctorsList from "./pages/DoctorsList";
 import DoctorDetail from "./pages/DoctorDetail";
 import DoctorForm from "./pages/DoctorForm";
@@ -79,6 +80,7 @@ const App = () => (
             <Route path="/patient-insights/:patientId/services" element={<PatientServices />} />
             <Route path="/patient-insights/:patientId/payments" element={<PatientAdvanceCollection />} />
             <Route path="/patient-insights/:patientId/discharge" element={<Discharge />} />
+            <Route path="/patient-insights/:patientId/discharge/payment" element={<DischargePayment />} />
             <Route path="/patient-insights/:patientId/transfer" element={<TransferPatient />} />
             <Route path="/doctors" element={<DoctorsList />} />
             <Route path="/doctors/new" element={<DoctorForm />} />
