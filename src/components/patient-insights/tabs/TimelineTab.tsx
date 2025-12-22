@@ -226,16 +226,16 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
                   </div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm text-foreground">{transfer.fromLocation}</div>
-                  <div className="text-xs text-muted-foreground">
-                    Bed: {transfer.fromBed}
-                  </div>
+                  <div className="text-sm font-medium text-foreground">{transfer.fromLocation}</div>
+                  {transfer.fromBed !== "—" && (
+                    <div className="text-xs text-muted-foreground">{transfer.fromBed}</div>
+                  )}
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm text-foreground">{transfer.toLocation}</div>
-                  <div className="text-xs text-muted-foreground">
-                    Bed: {transfer.toBed}
-                  </div>
+                  <div className="text-sm font-medium text-foreground">{transfer.toLocation}</div>
+                  {transfer.toBed !== "—" && (
+                    <div className="text-xs text-muted-foreground">{transfer.toBed}</div>
+                  )}
                 </TableCell>
                 <TableCell className="py-3">
                   <p className="text-sm text-foreground max-w-[200px] truncate" title={transfer.reason}>
