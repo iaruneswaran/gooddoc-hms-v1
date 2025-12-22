@@ -59,6 +59,7 @@ export interface IPPatientRecord {
   plannedDischargeDateTime?: string;
   blockingTasks?: string[];
   // Payment details
+  billAmount?: number;
   advancePaid?: number;
   admissionFee?: number;
   totalPaid?: number;
