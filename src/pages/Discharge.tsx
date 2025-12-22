@@ -116,49 +116,6 @@ const Discharge = () => {
           <div className="flex gap-6 justify-center">
             {/* Left Column - Bill Summary */}
             <div className="w-[951px] space-y-6">
-              {/* Summary Cards */}
-              <div className="bg-background rounded-xl p-4 shadow-lg border border-border">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h2 className="text-base font-semibold text-foreground">Final Bill Summary</h2>
-                    <p className="text-xs text-muted-foreground">Discharge settlement overview</p>
-                  </div>
-                  <Badge variant="outline" className="text-xs">
-                    Visit: {visitId}
-                  </Badge>
-                </div>
-                <div className="grid grid-cols-4 gap-3">
-                  <div className="bg-muted rounded-lg px-3 py-2.5 border border-border">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                      <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Total Bill</p>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">₹{totalBill.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-muted rounded-lg px-3 py-2.5 border border-border">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                      <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Insurance</p>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">₹{insuranceApproved.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-muted rounded-lg px-3 py-2.5 border border-border">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                      <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Advance</p>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">₹{advanceBalance.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-muted rounded-lg px-3 py-2.5 border border-border">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                      <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Net Payable</p>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">₹{netPayable.toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-
               {/* Invoice Details */}
               <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={false} />
 
