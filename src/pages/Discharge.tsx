@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -50,6 +51,20 @@ const Discharge = () => {
   const initialView = searchParams.get("view") === "interim" ? "interim" : "discharge";
   const [viewMode, setViewMode] = useState<"discharge" | "interim">(initialView);
   const [showDischargeSummary, setShowDischargeSummary] = useState(false);
+  const [showInterimBill, setShowInterimBill] = useState(false);
+  const [isLoadingInterim, setIsLoadingInterim] = useState(false);
+
+  // Auto-load interim bill with loading state
+  useEffect(() => {
+    if (initialView === "interim") {
+      setIsLoadingInterim(true);
+      const timer = setTimeout(() => {
+        setIsLoadingInterim(false);
+        setShowInterimBill(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [initialView]);
 
   const fromSearch = searchParams.get("from") === "search";
   const fromPage = searchParams.get("from") || "ip-patients";
@@ -154,7 +169,18 @@ const Discharge = () => {
                   )}
                 </>
               ) : (
-                <InterimBill onProceedToPayment={() => navigate(`/patient-insights/${patientId}/payment`)} />
+                <>
+                  {isLoadingInterim || !showInterimBill ? (
+                    <Card className="p-12">
+                      <div className="flex flex-col items-center justify-center gap-4">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        <p className="text-muted-foreground">Loading Interim Bill...</p>
+                      </div>
+                    </Card>
+                  ) : (
+                    <InterimBill onProceedToPayment={() => navigate(`/patient-insights/${patientId}/payment`)} />
+                  )}
+                </>
               )}
             </div>
 
