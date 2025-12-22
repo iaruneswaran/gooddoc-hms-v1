@@ -593,18 +593,18 @@ const BookAppointment = () => {
                     return (
                       <Button
                         key={type.value}
-                        variant={isSelected ? "default" : "outline"}
+                        variant="outline"
                         className={cn(
                           "group h-10 px-5 flex items-center gap-2.5 rounded-full transition-all duration-200 whitespace-nowrap font-medium",
                           isSelected 
-                            ? "bg-primary text-primary-foreground shadow-sm" 
+                            ? "bg-[#0891B2] border-[#0891B2] text-white hover:bg-[#0891B2]/90 hover:border-[#0891B2]/90" 
                             : "bg-background border-border hover:bg-accent hover:border-accent"
                         )}
                         onClick={() => handleTypeClick(type.value)}
                       >
                         <Icon className={cn(
                           "w-4 h-4 transition-colors", 
-                          isSelected ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
+                          isSelected ? "text-white" : "text-muted-foreground group-hover:text-foreground"
                         )} />
                         <span className="text-sm">{type.label}</span>
                       </Button>
