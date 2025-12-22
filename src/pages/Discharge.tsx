@@ -152,15 +152,17 @@ const Discharge = () => {
               />
 
               {/* Invoice Action Buttons */}
-              <div className="flex items-center gap-3 mt-4">
-                <Button variant="outline" className="gap-2">
-                  <Download className="w-4 h-4" />
-                  Download PDF
-                </Button>
-                <Button variant="outline" className="gap-2">
-                  <Printer className="w-4 h-4" />
-                  Print Invoice
-                </Button>
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-3">
+                  <Button variant="outline" className="gap-2">
+                    <Download className="w-4 h-4" />
+                    Download PDF
+                  </Button>
+                  <Button variant="outline" className="gap-2">
+                    <Printer className="w-4 h-4" />
+                    Print Invoice
+                  </Button>
+                </div>
                 <Button 
                   className="gap-2"
                   onClick={() => navigate(`/patient-insights/${patientId}/discharge/payment`)}
