@@ -160,7 +160,7 @@ const Discharge = () => {
               </div>
 
               {/* Invoice Details */}
-              <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={true} />
+              <DischargeBillInvoice bill={SAMPLE_DISCHARGE_BILL} isSample={false} />
 
               {/* Invoice Action Buttons */}
               <div className="flex items-center justify-between mt-4">
