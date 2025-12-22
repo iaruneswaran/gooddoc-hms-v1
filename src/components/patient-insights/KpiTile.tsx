@@ -1,3 +1,5 @@
+import { ChevronRight } from "lucide-react";
+
 interface KpiTileProps {
   label: string;
   amount: string;
@@ -5,6 +7,7 @@ interface KpiTileProps {
   subtitle?: string;
   secondaryLabel?: string;
   secondaryAmount?: string;
+  showArrow?: boolean;
 }
 
 export function KpiTile({ 
@@ -13,7 +16,8 @@ export function KpiTile({
   variant = "default", 
   subtitle,
   secondaryLabel,
-  secondaryAmount
+  secondaryAmount,
+  showArrow = false
 }: KpiTileProps) {
   const isLight = variant === "light";
   
@@ -26,14 +30,19 @@ export function KpiTile({
       <p className={`text-[11px] font-medium uppercase tracking-wide ${isLight ? "text-white/60" : "text-muted-foreground"}`}>
         {label}
       </p>
-      <div className="flex items-baseline gap-2 mt-0.5">
-        <p className={`text-lg font-semibold ${isLight ? "text-white" : "text-foreground"}`}>
-          {amount}
-        </p>
-        {secondaryAmount && (
-          <p className={`text-[10px] ${isLight ? "text-amber-300" : "text-amber-600"}`}>
-            +{secondaryAmount}
+      <div className="flex items-center justify-between mt-0.5">
+        <div className="flex items-baseline gap-2">
+          <p className={`text-lg font-semibold ${isLight ? "text-white" : "text-foreground"}`}>
+            {amount}
           </p>
+          {secondaryAmount && (
+            <p className={`text-[10px] ${isLight ? "text-amber-300" : "text-amber-600"}`}>
+              +{secondaryAmount}
+            </p>
+          )}
+        </div>
+        {showArrow && (
+          <ChevronRight className={`h-4 w-4 ${isLight ? "text-white/60" : "text-muted-foreground"}`} />
         )}
       </div>
       {subtitle && (
