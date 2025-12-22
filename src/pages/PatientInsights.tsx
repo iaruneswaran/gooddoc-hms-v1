@@ -157,7 +157,8 @@ const PatientInsightsContent = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
-  const [activeTab, setActiveTab] = useState("appointments");
+  const tabParam = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(tabParam || "appointments");
   
   const { setVisits, selectedVisit: selectedVisitOption, selectedVisitId, setIsLoading } = useVisit();
 
