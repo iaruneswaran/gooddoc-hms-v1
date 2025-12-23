@@ -104,30 +104,19 @@ export default function DischargeFlow() {
 
         {/* Patient Snapshot Bar */}
         <div className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <button onClick={handleBack} className="flex items-center gap-2 text-sm text-foreground hover:text-primary">
-              <ChevronLeft className="w-4 h-4" />
-              <span className="font-medium">Back</span>
-            </button>
-            <div className="h-6 w-px bg-border" />
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                {patient.name.charAt(0)}
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">{patient.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {patient.mrn} • {patient.age}Y / {patient.sex} • {patient.ward} - {patient.bed}
-                </p>
-              </div>
-            </div>
-          </div>
+          <button onClick={handleBack} className="flex items-center gap-2 text-sm text-foreground hover:text-primary">
+            <ChevronLeft className="w-4 h-4" />
+            <span className="font-medium">Back to Patient</span>
+          </button>
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="font-semibold text-foreground">{patient.name}</p>
               <p className="text-xs text-muted-foreground">
                 {patient.mrn} • {patient.age}Y / {patient.sex} • {patient.ward} - {patient.bed}
               </p>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+              {patient.name.charAt(0)}
             </div>
             {isDirty && (
               <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
