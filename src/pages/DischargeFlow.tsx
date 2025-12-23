@@ -123,12 +123,12 @@ export default function DischargeFlow() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {patient.allergies.length > 0 && (
-              <Badge variant="destructive" className="gap-1">
-                <AlertTriangle className="w-3 h-3" />
-                Allergies: {patient.allergies.join(", ")}
-              </Badge>
-            )}
+            <div className="text-right">
+              <p className="font-semibold text-foreground">{patient.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {patient.mrn} • {patient.age}Y / {patient.sex} • {patient.ward} - {patient.bed}
+              </p>
+            </div>
             {isDirty && (
               <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
                 <Save className="w-4 h-4 mr-2" />
