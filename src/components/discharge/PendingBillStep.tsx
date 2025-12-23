@@ -280,15 +280,15 @@ export default function PendingBillStep({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Bill No.</TableHead>
-              <TableHead>Service / Doctor</TableHead>
-              <TableHead>Service Dates</TableHead>
-              <TableHead className="text-right">Total</TableHead>
-              <TableHead className="text-right">Paid</TableHead>
-              <TableHead className="text-right">Outstanding</TableHead>
-              <TableHead>Last Payment</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-center pr-6">Actions</TableHead>
+              <TableHead className="w-[140px]">Bill No.</TableHead>
+              <TableHead className="w-[220px]">Service / Doctor</TableHead>
+              <TableHead className="w-[120px]">Service Dates</TableHead>
+              <TableHead className="text-right w-[100px]">Total</TableHead>
+              <TableHead className="text-right w-[100px]">Paid</TableHead>
+              <TableHead className="text-right w-[120px]">Outstanding</TableHead>
+              <TableHead className="w-[120px]">Last Payment</TableHead>
+              <TableHead className="w-[100px]">Status</TableHead>
+              <TableHead className="text-center w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
