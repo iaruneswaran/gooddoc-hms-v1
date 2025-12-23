@@ -619,10 +619,20 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
             {/* Follow-up Tab */}
             <TabsContent value="followups" className="mt-0 space-y-4">
+              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg mb-4">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                  <p className="text-sm text-amber-700">
+                    <span className="font-medium">Note:</span> The doctor can only recommend a follow-up date. 
+                    The patient or front desk staff will need to book the actual appointment.
+                  </p>
+                </div>
+              </div>
+              
               <div className="max-w-md">
-                <label className="text-sm font-medium mb-2 block">Follow-up Appointment Date</label>
+                <label className="text-sm font-medium mb-2 block">Recommended Follow-up Date</label>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Enter the recommended follow-up date. This will appear on the discharge summary.
+                  Suggest when the patient should return for follow-up. This recommendation will appear on the discharge summary.
                 </p>
                 <input
                   type="date"
@@ -634,17 +644,22 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
                 {data.followUps.followUpDate && (
-                  <p className="text-sm text-muted-foreground mt-3">
-                    Patient will be advised to schedule a follow-up appointment on{" "}
-                    <span className="font-medium text-foreground">
-                      {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                      })}
-                    </span>
-                  </p>
+                  <div className="mt-4 p-3 bg-muted/50 rounded-lg border">
+                    <p className="text-sm text-muted-foreground">
+                      <span className="font-medium text-foreground">Recommendation:</span> Patient should schedule a follow-up appointment on or around{" "}
+                      <span className="font-semibold text-primary">
+                        {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
+                          weekday: "long",
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric"
+                        })}
+                      </span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2 italic">
+                      Patient will be advised to contact the front desk to book this appointment.
+                    </p>
+                  </div>
                 )}
               </div>
             </TabsContent>
