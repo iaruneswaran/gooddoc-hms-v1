@@ -619,16 +619,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
             {/* Follow-up Tab */}
             <TabsContent value="followups" className="mt-0 space-y-4">
-              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg mb-4">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-                  <p className="text-sm text-amber-700">
-                    <span className="font-medium">Note:</span> The doctor can only recommend a follow-up date. 
-                    The patient or front desk staff will need to book the actual appointment.
-                  </p>
-                </div>
-              </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="text-sm font-medium mb-2 block">Recommended Follow-up Date</label>
