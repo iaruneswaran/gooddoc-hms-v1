@@ -529,51 +529,47 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 <TableHeader>
                   <TableRow className="border-border">
                     <TableHead>Medication</TableHead>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Dose</TableHead>
+                    <TableHead>Strength</TableHead>
+                    <TableHead>Dosage</TableHead>
                     <TableHead>Frequency</TableHead>
                     <TableHead>Duration</TableHead>
-                    <TableHead>Instructions</TableHead>
                     <TableHead className="text-center pr-6">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {medications.map((med) => (
-                    <TableRow key={med.medId} className="border-border">
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{med.name}</p>
-                          {med.reason && <p className="text-xs text-muted-foreground">{med.reason}</p>}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary" className={medicationActionColors[med.action]}>
-                          {med.action}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{med.dose}</TableCell>
-                      <TableCell>{med.frequency}</TableCell>
-                      <TableCell>{med.duration}</TableCell>
-                      <TableCell className="max-w-[200px]">
-                        <p className="text-sm text-muted-foreground truncate">{med.instructions || "—"}</p>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center gap-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Edit3 className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-destructive"
-                            onClick={() => handleDeleteMedication(med.medId)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {medications.map((med) => {
+                    // Extract medication name without strength for display
+                    const medNameParts = med.name.split(' ');
+                    const strength = medNameParts.find(part => /^\d+\s*(mg|ml|g|mcg|iu)$/i.test(part)) || med.dose;
+                    const medName = medNameParts.filter(part => !/^\d+\s*(mg|ml|g|mcg|iu)$/i.test(part)).join(' ') || med.name;
+                    
+                    return (
+                      <TableRow key={med.medId} className="border-border">
+                        <TableCell>
+                          <p className="font-medium">{medName}</p>
+                        </TableCell>
+                        <TableCell>{strength}</TableCell>
+                        <TableCell>{med.dose}</TableCell>
+                        <TableCell>{med.frequency}</TableCell>
+                        <TableCell>{med.duration}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center justify-center gap-2">
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Edit3 className="w-4 h-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-destructive"
+                              onClick={() => handleDeleteMedication(med.medId)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TabsContent>
