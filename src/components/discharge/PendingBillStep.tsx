@@ -288,7 +288,7 @@ export default function PendingBillStep({
               <TableHead className="text-right">Outstanding</TableHead>
               <TableHead>Last Payment</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-center pr-6">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
