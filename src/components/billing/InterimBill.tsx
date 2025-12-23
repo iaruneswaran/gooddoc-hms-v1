@@ -363,8 +363,8 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
 
         {/* Bill Summary */}
         <Card className="p-5 bg-muted/30">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-2 text-sm">
+          <div className="flex justify-end">
+            <div className="space-y-2 text-sm w-80">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Gross Charges</span>
                 <span className="font-medium">₹44,800.00</span>
@@ -386,7 +386,7 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
                 <span className="font-semibold">AMOUNT DUE</span>
                 <span className="font-bold text-primary">₹25,940.00</span>
               </div>
-              <p className="text-xs text-muted-foreground italic">Rupees Twenty Five Thousand Nine Hundred Forty Only</p>
+              <p className="text-xs text-muted-foreground italic text-right">Rupees Twenty Five Thousand Nine Hundred Forty Only</p>
             </div>
           </div>
         </Card>
@@ -420,8 +420,8 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
         </Card>
       </div>
 
-      {/* Action Buttons */}
-      <div className="p-6 border-t border-border flex items-center justify-end gap-3">
+      {/* Action Buttons - Outside the bill box */}
+      <div className="flex items-center justify-end gap-3 mt-4 px-6 pb-6">
         <Button variant="outline" className="gap-2">
           <Download className="w-4 h-4" />
           Download PDF
