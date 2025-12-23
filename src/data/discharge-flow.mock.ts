@@ -295,16 +295,6 @@ export const SAMPLE_DOCTOR_CLEARANCE: DoctorClearance = {
   },
   followUps: {
     followUpDate: "2025-12-29",
-    followUpAppointment: {
-      date: "2025-12-29",
-      time: "10:30",
-      doctorName: "Dr. Arun Kumar",
-      doctorId: "doc-001",
-      department: "Cardiology",
-      location: "OPD Block A, Room 105",
-      visitType: "OPD",
-      notes: "Review ECG and cardiac enzymes. Assess medication tolerance."
-    },
     appointments: [],
     externalReferrals: [],
     certificates: {},

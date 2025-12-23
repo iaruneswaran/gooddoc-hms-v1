@@ -233,20 +233,8 @@ export interface Certificates {
   fitToTravel?: boolean;
 }
 
-export interface FollowUpAppointment {
-  date?: string;
-  time?: string;
-  doctorName?: string;
-  doctorId?: string;
-  department?: string;
-  location?: string;
-  visitType?: 'OPD' | 'Telehealth' | 'Home Visit';
-  notes?: string;
-}
-
 export interface FollowUps {
   followUpDate?: string;
-  followUpAppointment?: FollowUpAppointment;
   appointments: Appointment[];
   externalReferrals: ExternalReferral[];
   certificates: Certificates;
