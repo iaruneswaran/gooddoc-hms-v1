@@ -131,35 +131,6 @@ export default function DischargeSummaryStep({
             </div>
           </div>
 
-          {/* Diagnoses - Compact */}
-          <div className="mb-8">
-            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2 text-sm">
-              <FileText className="w-4 h-4 text-primary" />
-              Diagnoses
-            </h3>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3 p-2 bg-primary/5 rounded-md">
-                <Badge variant="default" className="text-xs">Primary</Badge>
-                <span className="text-sm">
-                  <span className="font-mono text-xs text-muted-foreground">{data.diagnoses.primary.code}</span>
-                  {" — "}
-                  <span className="font-medium">{data.diagnoses.primary.text}</span>
-                </span>
-              </div>
-              {data.diagnoses.secondary.map((dx, i) => (
-                <div key={i} className="flex items-center gap-3 p-2 rounded-md">
-                  <Badge variant="outline" className="text-xs">Secondary</Badge>
-                  <span className="text-sm">
-                    <span className="font-mono text-xs text-muted-foreground">{dx.code}</span>
-                    {" — "}
-                    <span>{dx.text}</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Separator className="my-6" />
 
           {/* Hospital Course - Compact */}
           <div className="mb-8">
