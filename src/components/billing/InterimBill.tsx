@@ -122,306 +122,309 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
   );
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
-      {/* Hospital Header */}
-      <div className="bg-primary/5 border-b border-border p-6">
-        <div className="flex items-start justify-between">
-          <img src={bainesLogo} alt="Baines International Healthcare" className="h-10" />
-          <div className="text-right text-sm text-muted-foreground">
-            <p>123 Healthcare Avenue, Medical District, Chennai, Tamil Nadu, 600001</p>
-            <div className="flex items-center justify-end gap-4 mt-1">
-              <span className="flex items-center gap-1">
-                <Phone className="w-3 h-3" />
-                +91 98765 43210
-              </span>
-              <span className="flex items-center gap-1">
-                <Mail className="w-3 h-3" />
-                billing@baines.health
-              </span>
-            </div>
-            <div className="flex items-center justify-end gap-4 mt-1">
-              <span>GSTIN: 33XXXXX1234X1Z5</span>
-              <span>REG-TN-HOSP-2024-001</span>
+    <div className="space-y-4">
+      {/* Interim Bill Box */}
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
+        {/* Hospital Header */}
+        <div className="bg-primary/5 border-b border-border p-6">
+          <div className="flex items-start justify-between">
+            <img src={bainesLogo} alt="Baines International Healthcare" className="h-10" />
+            <div className="text-right text-sm text-muted-foreground">
+              <p>123 Healthcare Avenue, Medical District, Chennai, Tamil Nadu, 600001</p>
+              <div className="flex items-center justify-end gap-4 mt-1">
+                <span className="flex items-center gap-1">
+                  <Phone className="w-3 h-3" />
+                  +91 98765 43210
+                </span>
+                <span className="flex items-center gap-1">
+                  <Mail className="w-3 h-3" />
+                  billing@baines.health
+                </span>
+              </div>
+              <div className="flex items-center justify-end gap-4 mt-1">
+                <span>GSTIN: 33XXXXX1234X1Z5</span>
+                <span>REG-TN-HOSP-2024-001</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Title */}
-      <div className="px-6 py-4 border-b border-border bg-white dark:bg-card">
-        <h2 className="text-lg font-semibold text-primary">Interim Bill</h2>
-      </div>
-
-      <div className="p-6 space-y-6">
-        {/* Patient & Admission Info Grid */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* Patient Information */}
-          <Card className="p-5">
-            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <User className="w-4 h-4 text-primary" />
-              Patient Information
-            </h3>
-            <div className="space-y-3 text-sm">
-              <div>
-                <p className="font-semibold text-foreground text-base">Siva Karthikeyan</p>
-                <p className="text-muted-foreground">MRN: GDID-009 | Ph: +91 98765 12345</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-muted-foreground">DOB</p>
-                  <p className="font-medium">15 May 1990</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Sex: Male</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Admission Details */}
-          <Card className="p-5">
-            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              Admission Details
-            </h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground">Admission</p>
-                <p className="font-medium">18 Dec 2025, 15:00</p>
-                <Badge variant="outline" className="mt-1">Elective</Badge>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Till Date</p>
-                <p className="font-medium">21 Dec 2025, 19:30</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Admission ID</p>
-                <p className="font-mono text-xs">ADM-2025-0142</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Ward / Room / Bed</p>
-                <p className="font-medium">Cardiac Care / CC-207 / Bed A</p>
-              </div>
-            </div>
-          </Card>
+        {/* Title */}
+        <div className="px-6 py-4 border-b border-border bg-white dark:bg-card">
+          <h2 className="text-lg font-semibold text-primary">Interim Bill</h2>
         </div>
 
-        {/* Attending Providers */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-3">Attending Providers</h3>
-          <div className="flex gap-6 text-sm">
-            <div>
-              <p className="font-medium">Dr. Arun Kumar</p>
-              <p className="text-muted-foreground">Attending Cardiologist</p>
-            </div>
-            <div>
-              <p className="font-medium">Dr. Priya Sharma</p>
-              <p className="text-muted-foreground">Consulting Physician</p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Insurance Details */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-3">Insurance Details</h3>
-          <div className="grid grid-cols-6 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Payer</p>
-              <p className="font-medium">Star Health Insurance</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Plan</p>
-              <p className="font-medium">Family Health Optima</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Member ID</p>
-              <p className="font-mono text-xs">SH-88991234</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Policy No.</p>
-              <p className="font-mono text-xs">POL-2024-559900</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Pre-Auth No.</p>
-              <p className="font-mono text-xs">PA-2025-00456</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Coverage</p>
-              <p className="font-medium text-green-600">80%</p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Bed & Room Charges */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-4">Bed & Room Charges</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Ward/Room</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Room Type</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Bed Type</th>
-                  <th className="text-right py-2 font-medium text-muted-foreground">Days</th>
-                  <th className="text-right py-2 font-medium text-muted-foreground">Rate</th>
-                  <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bedCharges.map((item, index) => (
-                  <tr key={index} className="border-b border-border/50">
-                    <td className="py-2.5">{item.date}</td>
-                    <td className="py-2.5">{item.ward}</td>
-                    <td className="py-2.5">{item.roomType}</td>
-                    <td className="py-2.5">{item.bedType}</td>
-                    <td className="py-2.5 text-right">{item.days}</td>
-                    <td className="py-2.5 text-right">₹{item.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                    <td className="py-2.5 text-right font-medium">₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="bg-muted/30">
-                  <td colSpan={6} className="py-2.5 text-right font-medium">Bed Charges Subtotal</td>
-                  <td className="py-2.5 text-right font-semibold">₹7,500.00</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </Card>
-
-        {/* Service Categories */}
-        {renderServiceTable("Doctor Consultation", "CONS", consultations, 2500)}
-        {renderServiceTable("Procedures & Services", "PROC", procedures, 22260, "19 Dec 2025, 13:30 — 19 Dec 2025, 18:00")}
-        {renderServiceTable("Laboratory", "LAB", labTests, 3675, "18 Dec 2025, 13:00 — 20 Dec 2025, 13:30")}
-        {renderServiceTable("Radiology & Imaging", "RAD", radiology, 7297.50)}
-        {renderServiceTable("Pharmacy & Consumables", "PHARM", pharmacy, 1207.50)}
-        {renderServiceTable("Nursing & Care", "NURS", nursing, 2000)}
-
-        {/* Adjustments */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-4">Adjustments</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Type</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Reason</th>
-                  <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {adjustments.map((item, index) => (
-                  <tr key={index} className="border-b border-border/50">
-                    <td className="py-2.5">{item.date}</td>
-                    <td className="py-2.5">{item.type}</td>
-                    <td className="py-2.5 text-muted-foreground">{item.reason}</td>
-                    <td className="py-2.5 text-right font-medium text-green-600">{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-
-        {/* Payments Received */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-4">Payments Received</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Method</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Reference</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">Remarks</th>
-                  <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.map((item, index) => (
-                  <tr key={index} className="border-b border-border/50">
-                    <td className="py-2.5">{item.date}</td>
-                    <td className="py-2.5">{item.method}</td>
-                    <td className="py-2.5 font-mono text-xs">{item.reference}</td>
-                    <td className="py-2.5 text-muted-foreground">{item.remarks}</td>
-                    <td className="py-2.5 text-right font-medium">₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="bg-muted/30">
-                  <td colSpan={4} className="py-2.5 text-right font-medium">Total Paid</td>
-                  <td className="py-2.5 text-right font-semibold">₹20,000.00</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </Card>
-
-        {/* Bill Summary */}
-        <Card className="p-5 bg-muted/30">
-          <div className="flex justify-end">
-            <div className="space-y-2 text-sm w-80">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Gross Charges</span>
-                <span className="font-medium">₹44,800.00</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Tax</span>
-                <span className="font-medium">₹1,640.00</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Adjustments</span>
-                <span className="font-medium text-green-600">-₹500.00</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Amount Paid</span>
-                <span className="font-medium">- ₹20,000.00</span>
-              </div>
-              <Separator className="my-2" />
-              <div className="flex justify-between text-lg">
-                <span className="font-semibold">AMOUNT DUE</span>
-                <span className="font-bold text-primary">₹25,940.00</span>
-              </div>
-              <p className="text-xs text-muted-foreground italic text-right">Rupees Twenty Five Thousand Nine Hundred Forty Only</p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Terms */}
-        <Card className="p-5">
-          <h3 className="font-semibold text-foreground mb-3">Terms & Conditions</h3>
-          <ul className="text-sm text-muted-foreground space-y-1">
-            <li>• Payment is due on discharge unless prior arrangements have been made.</li>
-            <li>• Accepted payment methods: Cash, Card, UPI, Net Banking, Cheque.</li>
-            <li>• Insurance claims are processed within 7-14 working days.</li>
-            <li>• For billing queries, contact: billing@baines.health</li>
-          </ul>
-          <p className="text-sm text-muted-foreground mt-4">Thank you for choosing Baines International Healthcare. Wishing you a speedy recovery!</p>
-        </Card>
-
-        {/* Signature Section */}
-        <Card className="p-5">
+        <div className="p-6 space-y-6">
+          {/* Patient & Admission Info Grid */}
           <div className="grid grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-muted-foreground">For Baines International Healthcare</p>
-              <p className="font-semibold mt-2">Dr. V. Krishnan (Medical Director)</p>
-              <p className="text-sm text-muted-foreground">Authorized Signatory</p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground">Cashier: A. Patel</p>
-              <p className="text-xs text-muted-foreground">Generated by: Hospital Billing System v3.2</p>
-              <p className="text-xs text-muted-foreground mt-2">This is a system-generated document. Page 1 of 1</p>
-            </div>
+            {/* Patient Information */}
+            <Card className="p-5">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                <User className="w-4 h-4 text-primary" />
+                Patient Information
+              </h3>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="font-semibold text-foreground text-base">Siva Karthikeyan</p>
+                  <p className="text-muted-foreground">MRN: GDID-009 | Ph: +91 98765 12345</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-muted-foreground">DOB</p>
+                    <p className="font-medium">15 May 1990</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Sex: Male</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Admission Details */}
+            <Card className="p-5">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                Admission Details
+              </h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground">Admission</p>
+                  <p className="font-medium">18 Dec 2025, 15:00</p>
+                  <Badge variant="outline" className="mt-1">Elective</Badge>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Till Date</p>
+                  <p className="font-medium">21 Dec 2025, 19:30</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Admission ID</p>
+                  <p className="font-mono text-xs">ADM-2025-0142</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Ward / Room / Bed</p>
+                  <p className="font-medium">Cardiac Care / CC-207 / Bed A</p>
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
+
+          {/* Attending Providers */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-3">Attending Providers</h3>
+            <div className="flex gap-6 text-sm">
+              <div>
+                <p className="font-medium">Dr. Arun Kumar</p>
+                <p className="text-muted-foreground">Attending Cardiologist</p>
+              </div>
+              <div>
+                <p className="font-medium">Dr. Priya Sharma</p>
+                <p className="text-muted-foreground">Consulting Physician</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Insurance Details */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-3">Insurance Details</h3>
+            <div className="grid grid-cols-6 gap-4 text-sm">
+              <div>
+                <p className="text-muted-foreground">Payer</p>
+                <p className="font-medium">Star Health Insurance</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Plan</p>
+                <p className="font-medium">Family Health Optima</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Member ID</p>
+                <p className="font-mono text-xs">SH-88991234</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Policy No.</p>
+                <p className="font-mono text-xs">POL-2024-559900</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Pre-Auth No.</p>
+                <p className="font-mono text-xs">PA-2025-00456</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Coverage</p>
+                <p className="font-medium text-green-600">80%</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Bed & Room Charges */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-4">Bed & Room Charges</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Ward/Room</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Room Type</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Bed Type</th>
+                    <th className="text-right py-2 font-medium text-muted-foreground">Days</th>
+                    <th className="text-right py-2 font-medium text-muted-foreground">Rate</th>
+                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bedCharges.map((item, index) => (
+                    <tr key={index} className="border-b border-border/50">
+                      <td className="py-2.5">{item.date}</td>
+                      <td className="py-2.5">{item.ward}</td>
+                      <td className="py-2.5">{item.roomType}</td>
+                      <td className="py-2.5">{item.bedType}</td>
+                      <td className="py-2.5 text-right">{item.days}</td>
+                      <td className="py-2.5 text-right">₹{item.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td className="py-2.5 text-right font-medium">₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-muted/30">
+                    <td colSpan={6} className="py-2.5 text-right font-medium">Bed Charges Subtotal</td>
+                    <td className="py-2.5 text-right font-semibold">₹7,500.00</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </Card>
+
+          {/* Service Categories */}
+          {renderServiceTable("Doctor Consultation", "CONS", consultations, 2500)}
+          {renderServiceTable("Procedures & Services", "PROC", procedures, 22260, "19 Dec 2025, 13:30 — 19 Dec 2025, 18:00")}
+          {renderServiceTable("Laboratory", "LAB", labTests, 3675, "18 Dec 2025, 13:00 — 20 Dec 2025, 13:30")}
+          {renderServiceTable("Radiology & Imaging", "RAD", radiology, 7297.50)}
+          {renderServiceTable("Pharmacy & Consumables", "PHARM", pharmacy, 1207.50)}
+          {renderServiceTable("Nursing & Care", "NURS", nursing, 2000)}
+
+          {/* Adjustments */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-4">Adjustments</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Type</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Reason</th>
+                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adjustments.map((item, index) => (
+                    <tr key={index} className="border-b border-border/50">
+                      <td className="py-2.5">{item.date}</td>
+                      <td className="py-2.5">{item.type}</td>
+                      <td className="py-2.5 text-muted-foreground">{item.reason}</td>
+                      <td className="py-2.5 text-right font-medium text-green-600">{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          {/* Payments Received */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-4">Payments Received</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Method</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Reference</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Remarks</th>
+                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {payments.map((item, index) => (
+                    <tr key={index} className="border-b border-border/50">
+                      <td className="py-2.5">{item.date}</td>
+                      <td className="py-2.5">{item.method}</td>
+                      <td className="py-2.5 font-mono text-xs">{item.reference}</td>
+                      <td className="py-2.5 text-muted-foreground">{item.remarks}</td>
+                      <td className="py-2.5 text-right font-medium">₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-muted/30">
+                    <td colSpan={4} className="py-2.5 text-right font-medium">Total Paid</td>
+                    <td className="py-2.5 text-right font-semibold">₹20,000.00</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </Card>
+
+          {/* Bill Summary */}
+          <Card className="p-5 bg-muted/30">
+            <div className="flex justify-end">
+              <div className="space-y-2 text-sm w-80">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Gross Charges</span>
+                  <span className="font-medium">₹44,800.00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Tax</span>
+                  <span className="font-medium">₹1,640.00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Adjustments</span>
+                  <span className="font-medium text-green-600">-₹500.00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Amount Paid</span>
+                  <span className="font-medium">- ₹20,000.00</span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between text-lg">
+                  <span className="font-semibold">AMOUNT DUE</span>
+                  <span className="font-bold text-primary">₹25,940.00</span>
+                </div>
+                <p className="text-xs text-muted-foreground italic text-right">Rupees Twenty Five Thousand Nine Hundred Forty Only</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Terms */}
+          <Card className="p-5">
+            <h3 className="font-semibold text-foreground mb-3">Terms & Conditions</h3>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Payment is due on discharge unless prior arrangements have been made.</li>
+              <li>• Accepted payment methods: Cash, Card, UPI, Net Banking, Cheque.</li>
+              <li>• Insurance claims are processed within 7-14 working days.</li>
+              <li>• For billing queries, contact: billing@baines.health</li>
+            </ul>
+            <p className="text-sm text-muted-foreground mt-4">Thank you for choosing Baines International Healthcare. Wishing you a speedy recovery!</p>
+          </Card>
+
+          {/* Signature Section */}
+          <Card className="p-5">
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm text-muted-foreground">For Baines International Healthcare</p>
+                <p className="font-semibold mt-2">Dr. V. Krishnan (Medical Director)</p>
+                <p className="text-sm text-muted-foreground">Authorized Signatory</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground">Cashier: A. Patel</p>
+                <p className="text-xs text-muted-foreground">Generated by: Hospital Billing System v3.2</p>
+                <p className="text-xs text-muted-foreground mt-2">This is a system-generated document. Page 1 of 1</p>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* Action Buttons - Outside the bill box */}
-      <div className="flex items-center justify-end gap-3 mt-4 px-6 pb-6">
+      <div className="flex items-center justify-end gap-3">
         <Button variant="outline" className="gap-2">
           <Download className="w-4 h-4" />
           Download PDF
