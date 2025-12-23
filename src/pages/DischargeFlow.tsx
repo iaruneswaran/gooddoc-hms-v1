@@ -140,7 +140,7 @@ export default function DischargeFlow() {
 
         {/* Stepper */}
         <div className="bg-card border-b border-border px-6 py-4">
-          <div className="flex items-center justify-center gap-8">
+          <div className="flex items-center justify-center gap-6">
             {steps.map((s, index) => {
               const Icon = s.icon;
               const isActive = s.step === currentStep;
@@ -148,14 +148,14 @@ export default function DischargeFlow() {
               const status = stepStatuses[s.step];
 
               return (
-                <div key={s.step} className="flex items-center gap-8">
+                <div key={s.step} className="flex items-center gap-6">
                   <button
                     onClick={() => handleStepChange(s.step)}
-                    className="flex flex-col items-center gap-2 group"
+                    className="flex items-center gap-3 group"
                   >
                     <div
                       className={cn(
-                        "w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all",
+                        "w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all shrink-0",
                         isActive && "bg-primary border-primary text-primary-foreground",
                         status === "cleared" && "bg-green-500 border-green-500 text-white",
                         status === "finalized" && "bg-primary border-primary text-primary-foreground",
@@ -163,9 +163,9 @@ export default function DischargeFlow() {
                         !isActive && status === "in_progress" && "border-blue-500 text-blue-500"
                       )}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-start">
                       <span className={cn("text-sm font-medium", isActive ? "text-foreground" : "text-muted-foreground")}>
                         {s.label}
                       </span>
@@ -173,7 +173,7 @@ export default function DischargeFlow() {
                     </div>
                   </button>
                   {index < steps.length - 1 && (
-                    <div className={cn("w-24 h-0.5", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
+                    <div className={cn("w-16 h-0.5", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
                   )}
                 </div>
               );
