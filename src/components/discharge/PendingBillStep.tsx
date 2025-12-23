@@ -2,19 +2,14 @@ import { useState } from "react";
 import { format } from "date-fns";
 import {
   Search,
-  Filter,
   Download,
-  Bell,
-  ChevronRight,
   Receipt,
   CreditCard,
   FileText,
   Printer,
-  StickyNote,
   AlertTriangle,
   CheckCircle2,
-  Clock,
-  X,
+  Eye,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -268,19 +263,6 @@ export default function PendingBillStep({
               <SelectItem value="TPA">TPA</SelectItem>
             </SelectContent>
           </Select>
-          {selectedBills.length > 0 && (
-            <div className="flex items-center gap-2 ml-4">
-              <span className="text-sm text-muted-foreground">{selectedBills.length} selected</span>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Bell className="w-4 h-4" />
-                Send Reminder
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Download className="w-4 h-4" />
-                Export CSV
-              </Button>
-            </div>
-          )}
         </div>
         <div className="relative w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -298,12 +280,6 @@ export default function PendingBillStep({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[40px]">
-                <Checkbox
-                  checked={selectedBills.length === filteredBills.length && filteredBills.length > 0}
-                  onCheckedChange={handleSelectAll}
-                />
-              </TableHead>
               <TableHead>Bill No.</TableHead>
               <TableHead>Service / Doctor</TableHead>
               <TableHead>Service Dates</TableHead>
@@ -319,7 +295,7 @@ export default function PendingBillStep({
           <TableBody>
             {filteredBills.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={11} className="text-center py-12">
+                <TableCell colSpan={10} className="text-center py-12">
                   <p className="text-muted-foreground">No pending bills for this encounter.</p>
                 </TableCell>
               </TableRow>
@@ -327,15 +303,8 @@ export default function PendingBillStep({
               filteredBills.map((bill) => (
                 <TableRow
                   key={bill.billNumber}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => setSelectedBillDetail(bill)}
+                  className="hover:bg-muted/50"
                 >
-                  <TableCell onClick={(e) => e.stopPropagation()}>
-                    <Checkbox
-                      checked={selectedBills.includes(bill.billNumber)}
-                      onCheckedChange={(checked) => handleSelectBill(bill.billNumber, !!checked)}
-                    />
-                  </TableCell>
                   <TableCell>
                     <span className="font-medium text-foreground">{bill.billNumber}</span>
                   </TableCell>
@@ -378,15 +347,34 @@ export default function PendingBillStep({
                     )}
                   </TableCell>
                   <TableCell>{getStatusBadge(bill.status)}</TableCell>
-                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-end gap-1">
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
                         onClick={() => setSelectedBillDetail(bill)}
                         title="View Details"
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                        onClick={() => {}}
+                        title="Download"
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                        onClick={() => {}}
+                        title="Print"
+                      >
+                        <Printer className="w-4 h-4" />
                       </Button>
                     </div>
                   </TableCell>
