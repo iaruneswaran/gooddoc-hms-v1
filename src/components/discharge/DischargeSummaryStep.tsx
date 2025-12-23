@@ -16,7 +16,8 @@ import {
   ArrowRight,
   Clock,
   FileText,
-  Stethoscope
+  Stethoscope,
+  Calendar
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DischargeSummaryData, StepStatus } from "@/types/discharge-flow";
@@ -40,14 +41,15 @@ const conditionColors: Record<string, string> = {
 };
 
 const servicesUsed = [
-  { name: "Cardiac Catheterization", department: "Cardiology", date: "18 Dec" },
-  { name: "Echocardiography", department: "Cardiology", date: "19 Dec" },
-  { name: "CT Coronary Angiography", department: "Radiology", date: "21 Dec" },
+  { name: "Cardiac Catheterization", department: "Cardiology", date: "18 Dec 2025", doctor: "Dr. Arun Kumar", amount: 27500 },
+  { name: "Echocardiography", department: "Cardiology", date: "19 Dec 2025", doctor: "Dr. Arun Kumar", amount: 4130 },
+  { name: "CT Coronary Angiography", department: "Radiology", date: "21 Dec 2025", doctor: "Dr. Meera Nair", amount: 12500 },
+  { name: "ICU Bed Charges (4 days)", department: "Cardiac ICU", date: "18-21 Dec 2025", doctor: "-", amount: 33440 },
 ];
 
 const bedTransfers = [
-  { from: "ER Bay 3", to: "Cardiac ICU C-302", date: "18 Dec" },
-  { from: "Cardiac ICU C-302", to: "Cardiac Ward B-108", date: "21 Dec" },
+  { from: "ER Bay 3", to: "Cardiac ICU C-302", date: "18 Dec 2025", time: "11:30 AM", reason: "Admission for monitoring" },
+  { from: "Cardiac ICU C-302", to: "Cardiac Ward B-108", date: "21 Dec 2025", time: "09:00 AM", reason: "Step-down after stabilization" },
 ];
 
 export default function DischargeSummaryStep({ 
@@ -123,24 +125,33 @@ export default function DischargeSummaryStep({
             ))}
           </div>
 
-          {/* Three Column Layout */}
-          <div className="grid grid-cols-3 gap-4 mb-5">
-            {/* Column 1: Services & Transfers */}
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-2 gap-4 mb-5">
+            {/* Column 1: Services */}
             <div className="space-y-4">
-              {/* Services */}
               <div className="bg-muted/20 rounded-lg p-3">
-                <div className="flex items-center gap-1.5 mb-2">
+                <div className="flex items-center gap-1.5 mb-3">
                   <Activity className="w-3.5 h-3.5 text-primary" />
-                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Services</h4>
+                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Services & Charges</h4>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {servicesUsed.map((s, i) => (
-                    <div key={i} className="flex items-center justify-between bg-background rounded px-2 py-1.5">
-                      <div>
-                        <p className="text-xs font-medium">{s.name}</p>
-                        <p className="text-[10px] text-muted-foreground">{s.department}</p>
+                    <div key={i} className="bg-background rounded-lg p-2.5 border border-border/50">
+                      <div className="flex items-start justify-between mb-1">
+                        <p className="text-sm font-medium">{s.name}</p>
+                        <span className="font-semibold text-sm">{formatCurrency(s.amount)}</span>
                       </div>
-                      <span className="text-[10px] text-muted-foreground">{s.date}</span>
+                      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                        <span>{s.department}</span>
+                        <span>•</span>
+                        <span>{s.date}</span>
+                        {s.doctor !== "-" && (
+                          <>
+                            <span>•</span>
+                            <span>{s.doctor}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -148,98 +159,89 @@ export default function DischargeSummaryStep({
 
               {/* Bed Transfers */}
               <div className="bg-muted/20 rounded-lg p-3">
-                <div className="flex items-center gap-1.5 mb-2">
+                <div className="flex items-center gap-1.5 mb-3">
                   <Bed className="w-3.5 h-3.5 text-primary" />
                   <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Bed Transfers</h4>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {bedTransfers.map((t, i) => (
-                    <div key={i} className="bg-background rounded px-2 py-1.5">
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <span className="font-medium">{t.from}</span>
-                        <ArrowRight className="w-3 h-3 text-primary" />
-                        <span className="font-medium">{t.to}</span>
+                    <div key={i} className="bg-background rounded-lg p-2.5 border border-border/50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">{t.from}</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-sm font-medium">{t.to}</span>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{t.date}</p>
+                      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                        <span>{t.date}</span>
+                        <span>•</span>
+                        <span>{t.time}</span>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-1 italic">{t.reason}</p>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Column 2: Payment & Follow-up */}
+            <div className="space-y-4">
+              {/* Payment */}
+              <div className="bg-muted/20 rounded-lg p-3">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <CreditCard className="w-3.5 h-3.5 text-primary" />
+                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Payment Summary</h4>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center bg-background rounded-lg px-3 py-2 border border-border/50">
+                    <span className="text-sm text-muted-foreground">Total Bill</span>
+                    <span className="font-bold text-base">{formatCurrency(data.billingSummary.total)}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-green-500/10 rounded-lg px-3 py-2">
+                    <span className="text-sm text-muted-foreground">Amount Paid</span>
+                    <span className="font-bold text-base text-green-600">{formatCurrency(data.billingSummary.paid)}</span>
+                  </div>
+                  <div className={cn("flex justify-between items-center rounded-lg px-3 py-2", 
+                    data.billingSummary.outstanding > 0 ? "bg-red-500/10" : "bg-green-500/10"
+                  )}>
+                    <span className="text-sm text-muted-foreground">Outstanding</span>
+                    <span className={cn("font-bold text-base", 
+                      data.billingSummary.outstanding > 0 ? "text-red-600" : "text-green-600"
+                    )}>
+                      {formatCurrency(data.billingSummary.outstanding)}
+                    </span>
+                  </div>
                 </div>
               </div>
 
               {/* Follow-up */}
               <div className="bg-muted/20 rounded-lg p-3">
-                <div className="flex items-center gap-1.5 mb-2">
+                <div className="flex items-center gap-1.5 mb-3">
                   <Clock className="w-3.5 h-3.5 text-primary" />
-                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Follow-up</h4>
+                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Follow-up Appointment</h4>
                 </div>
                 {data.followUps.followUpDate ? (
-                  <div className="bg-primary/10 border border-primary/20 rounded px-3 py-2">
-                    <p className="text-sm font-semibold text-primary">
-                      {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
-                        weekday: "short",
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric"
-                      })}
-                    </p>
+                  <div className="bg-background rounded-lg p-3 border border-border/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Calendar className="w-4 h-4 text-primary" />
+                      <p className="text-sm font-semibold">
+                        {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
+                          weekday: "long",
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric"
+                        })}
+                      </p>
+                    </div>
                     {data.followUps.followUpReason && (
-                      <p className="text-[10px] text-muted-foreground mt-1">{data.followUps.followUpReason}</p>
+                      <div className="mt-2 pt-2 border-t border-border/50">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1">Reason</p>
+                        <p className="text-sm text-foreground">{data.followUps.followUpReason}</p>
+                      </div>
                     )}
                   </div>
                 ) : (
-                  <p className="text-xs text-muted-foreground italic">Not scheduled</p>
+                  <p className="text-sm text-muted-foreground italic">No follow-up scheduled</p>
                 )}
-              </div>
-            </div>
-
-            {/* Column 2: Medications */}
-            <div className="bg-muted/20 rounded-lg p-3">
-              <div className="flex items-center gap-1.5 mb-2">
-                <Pill className="w-3.5 h-3.5 text-primary" />
-                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">
-                  Medications ({data.dischargeMeds.length})
-                </h4>
-              </div>
-              <div className="space-y-1 max-h-[280px] overflow-y-auto">
-                {data.dischargeMeds.map((med, i) => (
-                  <div key={i} className="flex gap-2 bg-background rounded px-2 py-1.5">
-                    <span className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center text-[9px] font-bold text-primary shrink-0">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium truncate">{med.name}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">{med.frequency}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Column 3: Payment */}
-            <div className="bg-muted/20 rounded-lg p-3">
-              <div className="flex items-center gap-1.5 mb-2">
-                <CreditCard className="w-3.5 h-3.5 text-primary" />
-                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Payment</h4>
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center bg-background rounded px-2 py-1.5">
-                  <span className="text-xs text-muted-foreground">Total Bill</span>
-                  <span className="font-semibold text-sm">{formatCurrency(data.billingSummary.total)}</span>
-                </div>
-                <div className="flex justify-between items-center bg-green-500/10 rounded px-2 py-1.5">
-                  <span className="text-xs text-muted-foreground">Paid</span>
-                  <span className="font-semibold text-sm text-green-600">{formatCurrency(data.billingSummary.paid)}</span>
-                </div>
-                <div className={cn("flex justify-between items-center rounded px-2 py-1.5", 
-                  data.billingSummary.outstanding > 0 ? "bg-red-500/10" : "bg-green-500/10"
-                )}>
-                  <span className="text-xs text-muted-foreground">Outstanding</span>
-                  <span className={cn("font-semibold text-sm", 
-                    data.billingSummary.outstanding > 0 ? "text-red-600" : "text-green-600"
-                  )}>
-                    {formatCurrency(data.billingSummary.outstanding)}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
