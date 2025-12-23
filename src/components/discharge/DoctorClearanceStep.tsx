@@ -610,14 +610,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                         </div>
                       </div>
                       
-                      {/* Instructions Row */}
-                      {med.instructions && (
-                        <div className="mt-3 pt-3 border-t border-border/50">
-                          <p className="text-xs text-muted-foreground">
-                            <span className="font-medium text-foreground">Instructions:</span> {med.instructions}
-                          </p>
-                        </div>
-                      )}
                     </CardContent>
                   </Card>
                 ))}
