@@ -59,10 +59,10 @@ const MEDICATION_SUGGESTIONS = [
   "Paracetamol", "Ibuprofen", "Ciprofloxacin", "Amoxicillin", "Azithromycin"
 ];
 
-const STRENGTH_OPTIONS = ["10mg", "20mg", "25mg", "40mg", "50mg", "75mg", "100mg", "250mg", "500mg"];
-const DOSAGE_OPTIONS = ["1 tablet", "2 tablets", "1/2 tablet", "1 capsule", "5ml", "10ml"];
-const FREQUENCY_OPTIONS = ["Morning & Night", "OD", "BD", "TDS", "QID", "SOS", "HS", "Before meals", "After meals"];
-const DURATION_OPTIONS = ["3d", "5d", "7d", "10d", "14d", "1 month", "3 months", "Lifelong"];
+const STRENGTH_OPTIONS = ["5mg", "10mg", "20mg", "25mg", "40mg", "50mg", "75mg", "100mg", "250mg", "500mg", "1g"];
+const DOSAGE_OPTIONS = ["1 tablet", "2 tablets", "1/2 tablet", "1 capsule", "5ml", "10ml", "15ml"];
+const FREQUENCY_OPTIONS = ["Morning", "Night", "Morning & Night", "Before Breakfast", "After Breakfast", "Before Lunch", "After Lunch", "Before Dinner", "After Dinner", "Three times a day", "Four times a day", "As needed"];
+const DURATION_OPTIONS = ["3 days", "5 days", "7 days", "10 days", "14 days", "1 month", "2 months", "3 months", "6 months", "Lifelong"];
 
 const checklistItems: { key: keyof ClinicalChecklist; label: string }[] = [
   { key: "stableVitals", label: "Vitals stable for discharge" },
@@ -537,39 +537,32 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {medications.map((med) => {
-                    // Extract medication name without strength for display
-                    const medNameParts = med.name.split(' ');
-                    const strength = medNameParts.find(part => /^\d+\s*(mg|ml|g|mcg|iu)$/i.test(part)) || med.dose;
-                    const medName = medNameParts.filter(part => !/^\d+\s*(mg|ml|g|mcg|iu)$/i.test(part)).join(' ') || med.name;
-                    
-                    return (
-                      <TableRow key={med.medId} className="border-border">
-                        <TableCell>
-                          <p className="font-medium">{medName}</p>
-                        </TableCell>
-                        <TableCell>{strength}</TableCell>
-                        <TableCell>{med.dose}</TableCell>
-                        <TableCell>{med.frequency}</TableCell>
-                        <TableCell>{med.duration}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-center gap-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <Edit3 className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-destructive"
-                              onClick={() => handleDeleteMedication(med.medId)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {medications.map((med) => (
+                    <TableRow key={med.medId} className="border-border">
+                      <TableCell>
+                        <p className="font-medium">{med.name}</p>
+                      </TableCell>
+                      <TableCell>{med.strength || med.dose}</TableCell>
+                      <TableCell>{med.dose}</TableCell>
+                      <TableCell>{med.frequency}</TableCell>
+                      <TableCell>{med.duration}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-center gap-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-destructive"
+                            onClick={() => handleDeleteMedication(med.medId)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TabsContent>

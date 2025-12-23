@@ -158,6 +158,7 @@ export interface MedicationReconciliationItem {
   medId: string;
   name: string;
   action: MedicationAction;
+  strength?: string;
   dose: string;
   route: string;
   frequency: string;
