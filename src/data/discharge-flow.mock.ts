@@ -1,0 +1,317 @@
+import {
+  DischargeFlowState,
+  PendingBill,
+  DoctorClearance,
+  DischargeSummaryData,
+  PatientSnapshot,
+  DischargeConfig,
+  ClinicalChecklist,
+} from "@/types/discharge-flow";
+
+// Default config
+export const DEFAULT_DISCHARGE_CONFIG: DischargeConfig = {
+  requireBillingClearanceToFinalize: true,
+  enableeSignForDoctor: true,
+  enablePDFDownload: true,
+  enablePatientPortalShare: true,
+};
+
+// Sample patient snapshot
+export const SAMPLE_PATIENT_SNAPSHOT: PatientSnapshot = {
+  patientId: "P-12345",
+  name: "Harish Kalyan",
+  mrn: "GDID-001",
+  age: 44,
+  sex: "M",
+  ward: "Cardiac ICU",
+  bed: "C-302",
+  diagnosis: "Unstable Angina (I20.0)",
+  allergies: ["Penicillin", "Sulfa drugs"],
+  codeStatus: "Full Code",
+  admittingTeam: "Cardiology",
+  admissionDate: "2025-12-18T10:30:00",
+};
+
+// Sample pending bills
+export const SAMPLE_PENDING_BILLS: PendingBill[] = [
+  {
+    billNumber: "BILL-2025-001236",
+    serviceDateFrom: "2025-12-18",
+    serviceDateTo: "2025-12-22",
+    payerType: "Self",
+    totalAmount: 85000,
+    paidAmount: 20000,
+    outstandingAmount: 65000,
+    lastPaymentAt: "2025-12-18T11:00:00",
+    status: "PartiallyPaid",
+    lineItems: [
+      { code: "BED-ICU-001", description: "ICU Bed Charges (4 days)", quantity: 4, unitCost: 8000, tax: 1440, discount: 0, net: 33440 },
+      { code: "CONS-CARD-001", description: "Cardiology Consultation", quantity: 2, unitCost: 2500, tax: 450, discount: 0, net: 5450, clinician: "Dr. Arun Kumar" },
+      { code: "PROC-CATH-001", description: "Cardiac Catheterization", quantity: 1, unitCost: 25000, tax: 4500, discount: 2000, net: 27500, clinician: "Dr. Arun Kumar" },
+      { code: "DIAG-ECHO-001", description: "Echocardiography", quantity: 1, unitCost: 3500, tax: 630, discount: 0, net: 4130 },
+      { code: "LAB-CBC-001", description: "Complete Blood Count", quantity: 3, unitCost: 450, tax: 81, discount: 0, net: 1431 },
+      { code: "LAB-LIPID-001", description: "Lipid Profile", quantity: 1, unitCost: 850, tax: 153, discount: 0, net: 1003 },
+      { code: "MED-INJ-001", description: "Injectable Medications", quantity: 1, unitCost: 5200, tax: 936, discount: 0, net: 6136 },
+      { code: "MED-ORAL-001", description: "Oral Medications", quantity: 1, unitCost: 1800, tax: 324, discount: 0, net: 2124 },
+    ],
+    payments: [
+      { date: "2025-12-18T11:00:00", method: "upi", reference: "UPI123456", amount: 20000, remarks: "Advance payment" },
+    ],
+    notes: "Patient requested itemized bill",
+  },
+  {
+    billNumber: "BILL-2025-001237",
+    serviceDateFrom: "2025-12-21",
+    serviceDateTo: "2025-12-21",
+    payerType: "Self",
+    totalAmount: 12500,
+    paidAmount: 0,
+    outstandingAmount: 12500,
+    status: "Pending",
+    lineItems: [
+      { code: "DIAG-CTA-001", description: "CT Coronary Angiography", quantity: 1, unitCost: 12500, tax: 2250, discount: 2250, net: 12500, clinician: "Dr. Arun Kumar" },
+    ],
+    payments: [],
+  },
+  {
+    billNumber: "BILL-2025-001238",
+    serviceDateFrom: "2025-12-20",
+    serviceDateTo: "2025-12-22",
+    payerType: "Insurance",
+    payerName: "Star Health Insurance",
+    totalAmount: 15000,
+    paidAmount: 15000,
+    outstandingAmount: 0,
+    status: "Cleared",
+    lineItems: [
+      { code: "ROOM-DLX-001", description: "Deluxe Room Upgrade (2 days)", quantity: 2, unitCost: 6000, tax: 1080, discount: 0, net: 13080 },
+      { code: "NURS-CARE-001", description: "Special Nursing Care", quantity: 1, unitCost: 1920, tax: 0, discount: 0, net: 1920 },
+    ],
+    insurance: {
+      policyNumber: "SH-2025-456789",
+      coveragePercent: 80,
+      preauthNumber: "PA-12345",
+      approvedAmount: 15000,
+      tpaRemarks: "Approved for room upgrade",
+    },
+    payments: [
+      { date: "2025-12-22T09:00:00", method: "insurance", reference: "INS-CLM-789", amount: 15000, remarks: "Insurance settlement" },
+    ],
+  },
+];
+
+// Default clinical checklist
+export const DEFAULT_CLINICAL_CHECKLIST: ClinicalChecklist = {
+  stableVitals: false,
+  afebrile: false,
+  painControlled: false,
+  oxygenBaseline: false,
+  toleratingDiet: false,
+  mobilitySafe: false,
+  anticoagPlan: false,
+  ivRemovedOrPlan: false,
+  drainsSafe: false,
+  criticalLabsReviewed: false,
+  imagingReviewed: false,
+  returnPrecautionsGiven: false,
+};
+
+// Sample doctor clearance
+export const SAMPLE_DOCTOR_CLEARANCE: DoctorClearance = {
+  patientId: "P-12345",
+  encounterId: "E-98765",
+  clinicalStatus: {
+    checklist: {
+      stableVitals: true,
+      afebrile: true,
+      painControlled: true,
+      oxygenBaseline: true,
+      toleratingDiet: true,
+      mobilitySafe: true,
+      anticoagPlan: true,
+      ivRemovedOrPlan: true,
+      drainsSafe: true,
+      criticalLabsReviewed: true,
+      imagingReviewed: true,
+      returnPrecautionsGiven: true,
+    },
+    conditionAtDischarge: "Stable",
+    destination: "Home",
+    vitalsSnapshot: {
+      timestamp: "2025-12-22T08:00:00",
+      bp: "126/78",
+      pulse: 72,
+      temp: 98.4,
+      spo2: 98,
+      respRate: 16,
+    },
+    labsSummary: [
+      { name: "Troponin I", value: "0.02 ng/mL", date: "2025-12-22", critical: false },
+      { name: "BNP", value: "120 pg/mL", date: "2025-12-22" },
+      { name: "Creatinine", value: "1.0 mg/dL", date: "2025-12-22" },
+      { name: "HbA1c", value: "7.2%", date: "2025-12-20" },
+    ],
+    imagingSummary: [
+      { type: "Echo", date: "2025-12-19", impression: "LVEF 55%, mild MR, no regional wall motion abnormality" },
+      { type: "CT Angio", date: "2025-12-21", impression: "50% stenosis LAD, no significant CAD" },
+    ],
+  },
+  medicationReconciliation: {
+    items: [
+      { medId: "med-001", name: "Aspirin 75mg", action: "Continue", dose: "75 mg", route: "PO", frequency: "OD", duration: "Lifelong", instructions: "Take after breakfast" },
+      { medId: "med-002", name: "Atorvastatin 40mg", action: "Continue", dose: "40 mg", route: "PO", frequency: "HS", duration: "Lifelong", instructions: "Take at bedtime" },
+      { medId: "med-003", name: "Metoprolol 50mg", action: "Continue", dose: "50 mg", route: "PO", frequency: "BD", duration: "3 months", instructions: "Do not stop suddenly" },
+      { medId: "med-004", name: "Clopidogrel 75mg", action: "Start", dose: "75 mg", route: "PO", frequency: "OD", duration: "1 year", instructions: "Take with food", reason: "Post-catheterization antiplatelet" },
+      { medId: "med-005", name: "Enoxaparin 40mg", action: "Stop", dose: "40 mg", route: "SC", frequency: "OD", duration: "0", reason: "Prophylaxis completed" },
+      { medId: "med-006", name: "Pantoprazole 40mg", action: "Start", dose: "40 mg", route: "PO", frequency: "OD", duration: "1 month", instructions: "Take before breakfast", reason: "GI protection with dual antiplatelet" },
+    ],
+    completed: true,
+  },
+  ordersInstructions: {
+    homeCare: {
+      nursing: false,
+      physiotherapy: true,
+      woundCare: false,
+      notes: "Cardiac rehabilitation exercises 3x/week",
+    },
+    activity: {
+      level: "LightActivity",
+      restrictions: "No heavy lifting (>5kg), no driving for 1 week",
+    },
+    diet: {
+      type: "Diabetic",
+      fluidRestriction: "2L/day",
+      customNotes: "Low salt, low fat cardiac diet",
+    },
+    investigationsAfterDischarge: [
+      { type: "Lab", name: "Lipid Profile", dueDate: "2026-01-05" },
+      { type: "Lab", name: "HbA1c", dueDate: "2026-03-20" },
+      { type: "Imaging", name: "Follow-up Echo", dueDate: "2026-03-22" },
+    ],
+    returnPrecautions: [
+      "Chest pain or discomfort",
+      "Shortness of breath at rest",
+      "Palpitations or irregular heartbeat",
+      "Fever > 101°F",
+      "Swelling in legs",
+      "Uncontrolled bleeding from catheter site",
+    ],
+    language: "en",
+  },
+  followUps: {
+    appointments: [
+      { service: "Cardiology", provider: "Dr. Arun Kumar", location: "OPD-2", datetime: "2025-12-29T10:30:00" },
+      { service: "Diabetology", location: "OPD-5", toBeScheduled: true },
+    ],
+    externalReferrals: [],
+    certificates: {
+      sickLeaveDays: 14,
+      startDate: "2025-12-22",
+    },
+  },
+  notesAttachments: {
+    doctorNote: "Patient is a 44-year-old male with Type 2 DM and HTN who presented with unstable angina. Cardiac catheterization showed 50% LAD stenosis managed medically. Patient stable throughout admission with good response to medical management. Discharge planned with dual antiplatelet therapy and cardiac rehab referral.",
+    attachments: [],
+  },
+  signoff: {
+    confirmFitForDischarge: false,
+  },
+  status: "in_progress",
+  lastUpdated: "2025-12-22T12:00:00",
+};
+
+// Sample discharge summary
+export const SAMPLE_DISCHARGE_SUMMARY: DischargeSummaryData = {
+  header: {
+    patientId: "P-12345",
+    encounterId: "E-98765",
+    admissionAt: "2025-12-18T10:30:00",
+    dischargeAt: "2025-12-22T14:45:00",
+    attending: "Dr. Arun Kumar",
+    service: "Cardiology",
+  },
+  diagnoses: {
+    primary: { code: "I20.0", text: "Unstable Angina" },
+    secondary: [
+      { code: "I10", text: "Essential Hypertension" },
+      { code: "E11.9", text: "Type 2 Diabetes Mellitus" },
+    ],
+  },
+  hospitalCourse: "Patient presented with chest pain of 2-day duration. Initial troponin mildly elevated. ECG showed ST depression in lateral leads. Started on antiplatelet therapy and heparin. Cardiac catheterization on Day 1 showed 50% LAD stenosis - managed medically. Echocardiography showed preserved LVEF of 55% with mild MR. CT Coronary Angiography confirmed findings. Patient remained hemodynamically stable throughout. Pain resolved with medical management. Blood sugars optimized with adjustment of diabetic medications.",
+  procedures: [
+    {
+      name: "Cardiac Catheterization",
+      date: "2025-12-18T14:00:00",
+      operator: "Dr. Arun Kumar",
+      anesthesia: "Local with conscious sedation",
+      findings: "50% stenosis in mid LAD, no other significant lesions",
+      complications: "None",
+    },
+  ],
+  investigations: [
+    { type: "Lab", name: "Troponin I", date: "2025-12-18", resultSummary: "0.15 ng/mL (mildly elevated)", critical: true },
+    { type: "Lab", name: "Troponin I (Follow-up)", date: "2025-12-22", resultSummary: "0.02 ng/mL (normal)" },
+    { type: "Lab", name: "BNP", date: "2025-12-22", resultSummary: "120 pg/mL (normal)" },
+    { type: "Imaging", name: "Echocardiography", date: "2025-12-19", resultSummary: "LVEF 55%, mild MR, no RWMA" },
+    { type: "Imaging", name: "CT Coronary Angiography", date: "2025-12-21", resultSummary: "50% LAD stenosis, no significant CAD" },
+  ],
+  conditionAtDischarge: "Stable",
+  devicesAndLines: [
+    { type: "Peripheral IV", status: "Removed" },
+    { type: "Urinary Catheter", status: "Removed" },
+  ],
+  dischargeMeds: SAMPLE_DOCTOR_CLEARANCE.medicationReconciliation.items.filter(m => m.action !== "Stop"),
+  allergies: [
+    { substance: "Penicillin", reaction: "Rash", severity: "Moderate" },
+    { substance: "Sulfa drugs", reaction: "Hives", severity: "Mild" },
+  ],
+  instructions: {
+    diet: "Diabetic, low salt, low fat cardiac diet. 2L fluid restriction per day.",
+    activity: "Light activity. No heavy lifting (>5kg). No driving for 1 week.",
+    woundCare: "Keep catheter insertion site clean and dry. Remove bandage after 24 hours.",
+    returnPrecautions: [
+      "Chest pain or discomfort",
+      "Shortness of breath at rest",
+      "Palpitations or irregular heartbeat",
+      "Fever > 101°F",
+    ],
+  },
+  followUps: SAMPLE_DOCTOR_CLEARANCE.followUps,
+  pendingResults: [
+    { name: "Lipid Panel", expectedDate: "2026-01-05", responsible: "Dr. Arun Kumar" },
+  ],
+  certificates: {
+    sickLeaveDays: 14,
+    startDate: "2025-12-22",
+  },
+  billingSummary: {
+    total: 112500,
+    paid: 35000,
+    outstanding: 77500,
+    status: "PartiallyPaid",
+  },
+  signatures: [
+    { name: "Dr. Priya Sharma", role: "Resident Doctor" },
+    { name: "Dr. Arun Kumar", role: "Consultant Cardiologist" },
+  ],
+  status: "pending",
+  lastUpdated: "2025-12-22T14:00:00",
+};
+
+// Initial discharge flow state
+export const INITIAL_DISCHARGE_FLOW_STATE: DischargeFlowState = {
+  patientId: "P-12345",
+  encounterId: "E-98765",
+  currentStep: 1,
+  config: DEFAULT_DISCHARGE_CONFIG,
+  userRole: "admin",
+  pendingBills: SAMPLE_PENDING_BILLS,
+  doctorClearance: undefined,
+  dischargeSummary: undefined,
+  stepStatuses: {
+    step1: "pending",
+    step2: "pending",
+    step3: "pending",
+  },
+  isDirty: false,
+};
