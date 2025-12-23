@@ -89,7 +89,6 @@ const medicationActionColors: Record<string, string> = {
 export default function DoctorClearanceStep({ stepStatus, onStepComplete }: DoctorClearanceStepProps) {
   const [data, setData] = useState<DoctorClearance>(SAMPLE_DOCTOR_CLEARANCE);
   const [activeTab, setActiveTab] = useState("clinical");
-  const [showAddMedForm, setShowAddMedForm] = useState(false);
   const [medSearch, setMedSearch] = useState("");
   const [newMed, setNewMed] = useState<NewMedicationForm>({
     name: "",
@@ -165,7 +164,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
     setNewMed({ name: "", strength: "", dose: "", frequency: "", duration: "" });
     setMedSearch("");
-    setShowAddMedForm(false);
   };
 
   const handleDeleteMedication = (medId: string) => {
@@ -433,114 +431,95 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
             {/* Medications Tab */}
             <TabsContent value="medications" className="mt-0 space-y-4">
-              {/* Add Medication Form */}
-              {showAddMedForm ? (
-                <Card className="border-primary/30 bg-primary/5">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      {/* Medication Search */}
-                      <div className="relative flex-1 min-w-[200px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input
-                          placeholder="Search medication..."
-                          value={medSearch}
-                          onChange={(e) => {
-                            setMedSearch(e.target.value);
-                            setNewMed(prev => ({ ...prev, name: e.target.value }));
-                          }}
-                          className="pl-9"
-                        />
-                        {medSearch && filteredSuggestions.length > 0 && (
-                          <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-10 max-h-40 overflow-auto">
-                            {filteredSuggestions.map(suggestion => (
-                              <button
-                                key={suggestion}
-                                className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
-                                onClick={() => {
-                                  setNewMed(prev => ({ ...prev, name: suggestion }));
-                                  setMedSearch(suggestion);
-                                }}
-                              >
-                                {suggestion}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Strength */}
-                      <Select value={newMed.strength} onValueChange={(v) => setNewMed(prev => ({ ...prev, strength: v }))}>
-                        <SelectTrigger className="w-[120px]">
-                          <SelectValue placeholder="Strength" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {STRENGTH_OPTIONS.map(opt => (
-                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+              {/* Add Medication Form - Always visible at top */}
+              <Card className="border-primary/30 bg-primary/5">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    {/* Medication Search */}
+                    <div className="relative flex-1 min-w-[200px]">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search medication..."
+                        value={medSearch}
+                        onChange={(e) => {
+                          setMedSearch(e.target.value);
+                          setNewMed(prev => ({ ...prev, name: e.target.value }));
+                        }}
+                        className="pl-9"
+                      />
+                      {medSearch && filteredSuggestions.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-10 max-h-40 overflow-auto">
+                          {filteredSuggestions.map(suggestion => (
+                            <button
+                              key={suggestion}
+                              className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                              onClick={() => {
+                                setNewMed(prev => ({ ...prev, name: suggestion }));
+                                setMedSearch(suggestion);
+                              }}
+                            >
+                              {suggestion}
+                            </button>
                           ))}
-                        </SelectContent>
-                      </Select>
-
-                      {/* Dosage */}
-                      <Select value={newMed.dose} onValueChange={(v) => setNewMed(prev => ({ ...prev, dose: v }))}>
-                        <SelectTrigger className="w-[120px]">
-                          <SelectValue placeholder="Dosage" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {DOSAGE_OPTIONS.map(opt => (
-                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                      {/* Frequency */}
-                      <Select value={newMed.frequency} onValueChange={(v) => setNewMed(prev => ({ ...prev, frequency: v }))}>
-                        <SelectTrigger className="w-[160px]">
-                          <SelectValue placeholder="Morning & Night" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {FREQUENCY_OPTIONS.map(opt => (
-                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                      {/* Duration */}
-                      <Select value={newMed.duration} onValueChange={(v) => setNewMed(prev => ({ ...prev, duration: v }))}>
-                        <SelectTrigger className="w-[100px]">
-                          <SelectValue placeholder="7d" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {DURATION_OPTIONS.map(opt => (
-                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                      {/* Actions */}
-                      <Button size="sm" onClick={handleAddMedication} disabled={!newMed.name}>
-                        <Check className="w-4 h-4" />
-                      </Button>
-                      <Button size="sm" variant="ghost" onClick={() => {
-                        setShowAddMedForm(false);
-                        setNewMed({ name: "", strength: "", dose: "", frequency: "", duration: "" });
-                        setMedSearch("");
-                      }}>
-                        <X className="w-4 h-4" />
-                      </Button>
+                        </div>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setShowAddMedForm(true)}
-                  className="text-primary border-primary/30 hover:bg-primary/5"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add More Medicines
-                </Button>
-              )}
+
+                    {/* Strength */}
+                    <Select value={newMed.strength} onValueChange={(v) => setNewMed(prev => ({ ...prev, strength: v }))}>
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue placeholder="Strength" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STRENGTH_OPTIONS.map(opt => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Dosage */}
+                    <Select value={newMed.dose} onValueChange={(v) => setNewMed(prev => ({ ...prev, dose: v }))}>
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue placeholder="Dosage" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {DOSAGE_OPTIONS.map(opt => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Frequency */}
+                    <Select value={newMed.frequency} onValueChange={(v) => setNewMed(prev => ({ ...prev, frequency: v }))}>
+                      <SelectTrigger className="w-[160px]">
+                        <SelectValue placeholder="Morning & Night" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FREQUENCY_OPTIONS.map(opt => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Duration */}
+                    <Select value={newMed.duration} onValueChange={(v) => setNewMed(prev => ({ ...prev, duration: v }))}>
+                      <SelectTrigger className="w-[100px]">
+                        <SelectValue placeholder="7d" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {DURATION_OPTIONS.map(opt => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Add Button */}
+                    <Button size="sm" onClick={handleAddMedication} disabled={!newMed.name}>
+                      <Check className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Medications Table */}
               <div className="flex items-center justify-between mb-4">
