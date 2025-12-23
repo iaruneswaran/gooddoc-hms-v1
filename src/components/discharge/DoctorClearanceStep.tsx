@@ -26,7 +26,14 @@ import {
   Heart,
   Thermometer,
   Droplets,
-  Search
+  Search,
+  Clock,
+  MapPin,
+  User,
+  Building2,
+  Video,
+  Home,
+  Stethoscope
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -618,35 +625,303 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             </TabsContent>
 
             {/* Follow-up Tab */}
-            <TabsContent value="followups" className="mt-0 space-y-4">
-              <div className="max-w-md">
-                <label className="text-sm font-medium mb-2 block">Follow-up Appointment Date</label>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Enter the recommended follow-up date. This will appear on the discharge summary.
-                </p>
-                <input
-                  type="date"
-                  value={data.followUps.followUpDate || ""}
+            <TabsContent value="followups" className="mt-0 space-y-6">
+              {/* Visit Type Selection */}
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { value: 'OPD', label: 'OPD Visit', icon: Building2, desc: 'In-person clinic visit' },
+                  { value: 'Telehealth', label: 'Telehealth', icon: Video, desc: 'Video consultation' },
+                  { value: 'Home Visit', label: 'Home Visit', icon: Home, desc: 'Doctor visits at home' },
+                ].map((type) => (
+                  <button
+                    key={type.value}
+                    onClick={() => setData(prev => ({
+                      ...prev,
+                      followUps: {
+                        ...prev.followUps,
+                        followUpAppointment: {
+                          ...prev.followUps.followUpAppointment,
+                          visitType: type.value as 'OPD' | 'Telehealth' | 'Home Visit'
+                        }
+                      }
+                    }))}
+                    className={cn(
+                      "p-4 rounded-lg border-2 text-left transition-all",
+                      data.followUps.followUpAppointment?.visitType === type.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50"
+                    )}
+                  >
+                    <type.icon className={cn(
+                      "w-5 h-5 mb-2",
+                      data.followUps.followUpAppointment?.visitType === type.value
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )} />
+                    <p className="font-medium text-sm">{type.label}</p>
+                    <p className="text-xs text-muted-foreground">{type.desc}</p>
+                  </button>
+                ))}
+              </div>
+
+              {/* Date and Time */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    Appointment Date
+                  </label>
+                  <input
+                    type="date"
+                    value={data.followUps.followUpAppointment?.date || data.followUps.followUpDate || ""}
+                    onChange={(e) => setData(prev => ({
+                      ...prev,
+                      followUps: {
+                        ...prev.followUps,
+                        followUpDate: e.target.value,
+                        followUpAppointment: {
+                          ...prev.followUps.followUpAppointment,
+                          date: e.target.value
+                        }
+                      }
+                    }))}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    Preferred Time
+                  </label>
+                  <Select
+                    value={data.followUps.followUpAppointment?.time || ""}
+                    onValueChange={(value) => setData(prev => ({
+                      ...prev,
+                      followUps: {
+                        ...prev.followUps,
+                        followUpAppointment: {
+                          ...prev.followUps.followUpAppointment,
+                          time: value
+                        }
+                      }
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select time slot" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="09:00">09:00 AM</SelectItem>
+                      <SelectItem value="09:30">09:30 AM</SelectItem>
+                      <SelectItem value="10:00">10:00 AM</SelectItem>
+                      <SelectItem value="10:30">10:30 AM</SelectItem>
+                      <SelectItem value="11:00">11:00 AM</SelectItem>
+                      <SelectItem value="11:30">11:30 AM</SelectItem>
+                      <SelectItem value="14:00">02:00 PM</SelectItem>
+                      <SelectItem value="14:30">02:30 PM</SelectItem>
+                      <SelectItem value="15:00">03:00 PM</SelectItem>
+                      <SelectItem value="15:30">03:30 PM</SelectItem>
+                      <SelectItem value="16:00">04:00 PM</SelectItem>
+                      <SelectItem value="16:30">04:30 PM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Doctor and Department */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                    <Stethoscope className="w-4 h-4 text-muted-foreground" />
+                    Consulting Doctor
+                  </label>
+                  <Select
+                    value={data.followUps.followUpAppointment?.doctorName || ""}
+                    onValueChange={(value) => {
+                      const doctorDept: Record<string, string> = {
+                        "Dr. Arun Kumar": "Cardiology",
+                        "Dr. Priya Sharma": "Internal Medicine",
+                        "Dr. Rajesh Patel": "Endocrinology",
+                        "Dr. Sanjay Gupta": "Nephrology",
+                        "Dr. Meena Reddy": "Pulmonology"
+                      };
+                      setData(prev => ({
+                        ...prev,
+                        followUps: {
+                          ...prev.followUps,
+                          followUpAppointment: {
+                            ...prev.followUps.followUpAppointment,
+                            doctorName: value,
+                            department: doctorDept[value] || prev.followUps.followUpAppointment?.department
+                          }
+                        }
+                      }));
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select doctor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dr. Arun Kumar">Dr. Arun Kumar - Cardiology</SelectItem>
+                      <SelectItem value="Dr. Priya Sharma">Dr. Priya Sharma - Internal Medicine</SelectItem>
+                      <SelectItem value="Dr. Rajesh Patel">Dr. Rajesh Patel - Endocrinology</SelectItem>
+                      <SelectItem value="Dr. Sanjay Gupta">Dr. Sanjay Gupta - Nephrology</SelectItem>
+                      <SelectItem value="Dr. Meena Reddy">Dr. Meena Reddy - Pulmonology</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                    Department
+                  </label>
+                  <Input
+                    value={data.followUps.followUpAppointment?.department || ""}
+                    onChange={(e) => setData(prev => ({
+                      ...prev,
+                      followUps: {
+                        ...prev.followUps,
+                        followUpAppointment: {
+                          ...prev.followUps.followUpAppointment,
+                          department: e.target.value
+                        }
+                      }
+                    }))}
+                    placeholder="e.g., Cardiology"
+                  />
+                </div>
+              </div>
+
+              {/* Location */}
+              <div>
+                <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-muted-foreground" />
+                  Location / Room
+                </label>
+                <Input
+                  value={data.followUps.followUpAppointment?.location || ""}
                   onChange={(e) => setData(prev => ({
                     ...prev,
-                    followUps: { ...prev.followUps, followUpDate: e.target.value }
+                    followUps: {
+                      ...prev.followUps,
+                      followUpAppointment: {
+                        ...prev.followUps.followUpAppointment,
+                        location: e.target.value
+                      }
+                    }
                   }))}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  placeholder="e.g., OPD Block A, Room 105"
                 />
-                {data.followUps.followUpDate && (
-                  <p className="text-sm text-muted-foreground mt-3">
-                    Patient will be advised to schedule a follow-up appointment on{" "}
-                    <span className="font-medium text-foreground">
-                      {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                      })}
-                    </span>
-                  </p>
-                )}
               </div>
+
+              {/* Notes */}
+              <div>
+                <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  Follow-up Notes
+                </label>
+                <Textarea
+                  value={data.followUps.followUpAppointment?.notes || ""}
+                  onChange={(e) => setData(prev => ({
+                    ...prev,
+                    followUps: {
+                      ...prev.followUps,
+                      followUpAppointment: {
+                        ...prev.followUps.followUpAppointment,
+                        notes: e.target.value
+                      }
+                    }
+                  }))}
+                  placeholder="Notes about what to review during follow-up..."
+                  rows={3}
+                />
+              </div>
+
+              {/* Preview Card */}
+              {(data.followUps.followUpAppointment?.date || data.followUps.followUpDate) && (
+                <Card className="bg-primary/5 border-primary/20">
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary" />
+                      Follow-up Appointment Summary
+                    </h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="flex items-start gap-2">
+                        <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-muted-foreground text-xs">Date</p>
+                          <p className="font-medium">
+                            {new Date(data.followUps.followUpAppointment?.date || data.followUps.followUpDate || "").toLocaleDateString("en-IN", {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric"
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      {data.followUps.followUpAppointment?.time && (
+                        <div className="flex items-start gap-2">
+                          <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                          <div>
+                            <p className="text-muted-foreground text-xs">Time</p>
+                            <p className="font-medium">
+                              {data.followUps.followUpAppointment.time.split(':')[0] >= '12' 
+                                ? `${parseInt(data.followUps.followUpAppointment.time.split(':')[0]) > 12 
+                                    ? parseInt(data.followUps.followUpAppointment.time.split(':')[0]) - 12 
+                                    : data.followUps.followUpAppointment.time.split(':')[0]}:${data.followUps.followUpAppointment.time.split(':')[1]} PM`
+                                : `${data.followUps.followUpAppointment.time} AM`}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {data.followUps.followUpAppointment?.doctorName && (
+                        <div className="flex items-start gap-2">
+                          <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                          <div>
+                            <p className="text-muted-foreground text-xs">Doctor</p>
+                            <p className="font-medium">{data.followUps.followUpAppointment.doctorName}</p>
+                          </div>
+                        </div>
+                      )}
+                      {data.followUps.followUpAppointment?.department && (
+                        <div className="flex items-start gap-2">
+                          <Building2 className="w-4 h-4 text-muted-foreground mt-0.5" />
+                          <div>
+                            <p className="text-muted-foreground text-xs">Department</p>
+                            <p className="font-medium">{data.followUps.followUpAppointment.department}</p>
+                          </div>
+                        </div>
+                      )}
+                      {data.followUps.followUpAppointment?.location && (
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                          <div>
+                            <p className="text-muted-foreground text-xs">Location</p>
+                            <p className="font-medium">{data.followUps.followUpAppointment.location}</p>
+                          </div>
+                        </div>
+                      )}
+                      {data.followUps.followUpAppointment?.visitType && (
+                        <div className="flex items-start gap-2">
+                          {data.followUps.followUpAppointment.visitType === 'OPD' && <Building2 className="w-4 h-4 text-muted-foreground mt-0.5" />}
+                          {data.followUps.followUpAppointment.visitType === 'Telehealth' && <Video className="w-4 h-4 text-muted-foreground mt-0.5" />}
+                          {data.followUps.followUpAppointment.visitType === 'Home Visit' && <Home className="w-4 h-4 text-muted-foreground mt-0.5" />}
+                          <div>
+                            <p className="text-muted-foreground text-xs">Visit Type</p>
+                            <p className="font-medium">{data.followUps.followUpAppointment.visitType}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {data.followUps.followUpAppointment?.notes && (
+                      <div className="mt-3 pt-3 border-t border-border/50">
+                        <p className="text-xs text-muted-foreground">Notes</p>
+                        <p className="text-sm">{data.followUps.followUpAppointment.notes}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
 
             {/* Notes Tab */}
