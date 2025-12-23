@@ -220,8 +220,8 @@ export default function DischargeSummaryStep({
                   <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Follow-up Appointment</h4>
                 </div>
                 {data.followUps.followUpDate ? (
-                  <div className="bg-background rounded-lg p-3 border border-border/50">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="bg-background rounded-lg p-3 border border-border/50 space-y-2">
+                    <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-primary" />
                       <p className="text-sm font-semibold">
                         {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
@@ -233,11 +233,11 @@ export default function DischargeSummaryStep({
                       </p>
                     </div>
                     {data.followUps.followUpReason && (
-                      <div className="mt-2 pt-2 border-t border-border/50">
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1">Reason</p>
-                        <p className="text-sm text-foreground">{data.followUps.followUpReason}</p>
-                      </div>
+                      <p className="text-sm text-muted-foreground">{data.followUps.followUpReason}</p>
                     )}
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">Advised by:</span> {data.header.attending}
+                    </p>
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground italic">No follow-up scheduled</p>
