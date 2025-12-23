@@ -1,0 +1,612 @@
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { 
+  CheckCircle2, 
+  AlertCircle, 
+  Activity, 
+  Pill, 
+  ClipboardList, 
+  Calendar,
+  FileText,
+  Edit3,
+  Plus,
+  Trash2,
+  Check,
+  X,
+  ArrowRight,
+  Heart,
+  Thermometer,
+  Droplets,
+  Wind
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { 
+  DoctorClearance, 
+  StepStatus, 
+  ClinicalChecklist,
+  MedicationReconciliationItem,
+  ConditionAtDischarge,
+  DischargeDestination
+} from "@/types/discharge-flow";
+import { SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
+
+interface DoctorClearanceStepProps {
+  stepStatus: StepStatus;
+  onStepComplete: () => void;
+}
+
+const checklistItems: { key: keyof ClinicalChecklist; label: string }[] = [
+  { key: "stableVitals", label: "Vitals stable for discharge" },
+  { key: "afebrile", label: "Afebrile (>24 hours)" },
+  { key: "painControlled", label: "Pain adequately controlled" },
+  { key: "oxygenBaseline", label: "Oxygen at baseline/room air" },
+  { key: "toleratingDiet", label: "Tolerating oral diet" },
+  { key: "mobilitySafe", label: "Mobility/ambulation safe" },
+  { key: "anticoagPlan", label: "Anticoagulation plan documented" },
+  { key: "ivRemovedOrPlan", label: "IV access removed/plan documented" },
+  { key: "drainsSafe", label: "Drains/devices safe for discharge" },
+  { key: "criticalLabsReviewed", label: "Critical labs reviewed" },
+  { key: "imagingReviewed", label: "Imaging results reviewed" },
+  { key: "returnPrecautionsGiven", label: "Return precautions provided" },
+];
+
+const medicationActionColors: Record<string, string> = {
+  Continue: "bg-green-500/10 text-green-600 border-green-500/30",
+  Start: "bg-blue-500/10 text-blue-600 border-blue-500/30",
+  Change: "bg-amber-500/10 text-amber-600 border-amber-500/30",
+  Stop: "bg-red-500/10 text-red-600 border-red-500/30",
+};
+
+export default function DoctorClearanceStep({ stepStatus, onStepComplete }: DoctorClearanceStepProps) {
+  const [data, setData] = useState<DoctorClearance>(SAMPLE_DOCTOR_CLEARANCE);
+  const [activeTab, setActiveTab] = useState("clinical");
+  
+  const checklist = data.clinicalStatus.checklist;
+  const completedChecks = Object.values(checklist).filter(Boolean).length;
+  const totalChecks = checklistItems.length;
+  const checklistProgress = Math.round((completedChecks / totalChecks) * 100);
+
+  const handleChecklistChange = (key: keyof ClinicalChecklist, checked: boolean) => {
+    setData(prev => ({
+      ...prev,
+      clinicalStatus: {
+        ...prev.clinicalStatus,
+        checklist: {
+          ...prev.clinicalStatus.checklist,
+          [key]: checked
+        }
+      }
+    }));
+  };
+
+  const handleConditionChange = (value: ConditionAtDischarge) => {
+    setData(prev => ({
+      ...prev,
+      clinicalStatus: {
+        ...prev.clinicalStatus,
+        conditionAtDischarge: value
+      }
+    }));
+  };
+
+  const handleDestinationChange = (value: DischargeDestination) => {
+    setData(prev => ({
+      ...prev,
+      clinicalStatus: {
+        ...prev.clinicalStatus,
+        destination: value
+      }
+    }));
+  };
+
+  const handleSignoff = () => {
+    setData(prev => ({
+      ...prev,
+      signoff: {
+        ...prev.signoff,
+        confirmFitForDischarge: true,
+        eSign: {
+          byUserId: "user-001",
+          signedAt: new Date().toISOString()
+        }
+      }
+    }));
+    onStepComplete();
+  };
+
+  const vitals = data.clinicalStatus.vitalsSnapshot;
+  const labs = data.clinicalStatus.labsSummary || [];
+  const imaging = data.clinicalStatus.imagingSummary || [];
+  const medications = data.medicationReconciliation.items;
+
+  return (
+    <div className="space-y-6">
+      {/* Summary Cards Row */}
+      <div className="grid grid-cols-4 gap-4">
+        <Card className="border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Clinical Checklist</p>
+                <p className="text-2xl font-bold text-foreground">{completedChecks}/{totalChecks}</p>
+              </div>
+              <div className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center",
+                checklistProgress === 100 ? "bg-green-500/10" : "bg-amber-500/10"
+              )}>
+                {checklistProgress === 100 ? (
+                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                ) : (
+                  <AlertCircle className="w-6 h-6 text-amber-600" />
+                )}
+              </div>
+            </div>
+            <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
+              <div 
+                className={cn("h-full transition-all", checklistProgress === 100 ? "bg-green-500" : "bg-amber-500")}
+                style={{ width: `${checklistProgress}%` }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Medications</p>
+                <p className="text-2xl font-bold text-foreground">{medications.length}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Pill className="w-6 h-6 text-primary" />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {medications.filter(m => m.action === "Start").length} new, {medications.filter(m => m.action === "Stop").length} stopped
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Follow-ups</p>
+                <p className="text-2xl font-bold text-foreground">{data.followUps.appointments.length}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {data.followUps.appointments.filter(a => a.toBeScheduled).length} to be scheduled
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Condition</p>
+                <p className="text-xl font-bold text-green-600">{data.clinicalStatus.conditionAtDischarge}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                <Activity className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Destination: {data.clinicalStatus.destination}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Tabs */}
+      <Card className="border-border">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <CardHeader className="pb-0 border-b border-border">
+            <TabsList className="bg-transparent p-0 h-auto gap-0">
+              <TabsTrigger 
+                value="clinical" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
+              >
+                <Activity className="w-4 h-4 mr-2" />
+                Clinical Status
+              </TabsTrigger>
+              <TabsTrigger 
+                value="medications" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
+              >
+                <Pill className="w-4 h-4 mr-2" />
+                Medications ({medications.length})
+              </TabsTrigger>
+              <TabsTrigger 
+                value="orders" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
+              >
+                <ClipboardList className="w-4 h-4 mr-2" />
+                Orders & Instructions
+              </TabsTrigger>
+              <TabsTrigger 
+                value="followups" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Follow-ups
+              </TabsTrigger>
+              <TabsTrigger 
+                value="notes" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Notes
+              </TabsTrigger>
+            </TabsList>
+          </CardHeader>
+
+          <CardContent className="p-6">
+            {/* Clinical Status Tab */}
+            <TabsContent value="clinical" className="mt-0 space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                {/* Discharge Readiness Checklist */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-foreground">Discharge Readiness Checklist</h3>
+                  <div className="space-y-2">
+                    {checklistItems.map(item => (
+                      <div key={item.key} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
+                        <Checkbox 
+                          id={item.key}
+                          checked={checklist[item.key] === true}
+                          onCheckedChange={(checked) => handleChecklistChange(item.key, checked as boolean)}
+                        />
+                        <label htmlFor={item.key} className="text-sm cursor-pointer flex-1">
+                          {item.label}
+                        </label>
+                        {checklist[item.key] && <Check className="w-4 h-4 text-green-600" />}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Vitals & Status */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-foreground">Latest Vitals</h3>
+                  {vitals && (
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                          <Heart className="w-3 h-3" /> Blood Pressure
+                        </div>
+                        <p className="font-semibold text-foreground">{vitals.bp} mmHg</p>
+                      </div>
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                          <Activity className="w-3 h-3" /> Pulse
+                        </div>
+                        <p className="font-semibold text-foreground">{vitals.pulse} bpm</p>
+                      </div>
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                          <Thermometer className="w-3 h-3" /> Temperature
+                        </div>
+                        <p className="font-semibold text-foreground">{vitals.temp}°F</p>
+                      </div>
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                          <Droplets className="w-3 h-3" /> SpO2
+                        </div>
+                        <p className="font-semibold text-foreground">{vitals.spo2}%</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-foreground">Discharge Details</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-muted-foreground mb-1 block">Condition at Discharge</label>
+                        <Select value={data.clinicalStatus.conditionAtDischarge} onValueChange={handleConditionChange}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Stable">Stable</SelectItem>
+                            <SelectItem value="Improved">Improved</SelectItem>
+                            <SelectItem value="Unchanged">Unchanged</SelectItem>
+                            <SelectItem value="Guarded">Guarded</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground mb-1 block">Discharge Destination</label>
+                        <Select value={data.clinicalStatus.destination} onValueChange={handleDestinationChange}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Home">Home</SelectItem>
+                            <SelectItem value="Rehab">Rehab Facility</SelectItem>
+                            <SelectItem value="SNF">Skilled Nursing Facility</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-foreground">Recent Labs</h3>
+                    <div className="space-y-2">
+                      {labs.map((lab, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            {lab.critical && <AlertCircle className="w-4 h-4 text-red-500" />}
+                            <span className="text-sm font-medium">{lab.name}</span>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-semibold">{lab.value}</p>
+                            <p className="text-xs text-muted-foreground">{lab.date}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Medications Tab */}
+            <TabsContent value="medications" className="mt-0">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-foreground">Medication Reconciliation</h3>
+                <Button variant="outline" size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Medication
+                </Button>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border">
+                    <TableHead>Medication</TableHead>
+                    <TableHead>Action</TableHead>
+                    <TableHead>Dose</TableHead>
+                    <TableHead>Frequency</TableHead>
+                    <TableHead>Duration</TableHead>
+                    <TableHead>Instructions</TableHead>
+                    <TableHead className="text-center pr-6">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {medications.map((med, i) => (
+                    <TableRow key={med.medId} className="border-border">
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">{med.name}</p>
+                          {med.reason && <p className="text-xs text-muted-foreground">{med.reason}</p>}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className={medicationActionColors[med.action]}>
+                          {med.action}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{med.dose}</TableCell>
+                      <TableCell>{med.frequency}</TableCell>
+                      <TableCell>{med.duration}</TableCell>
+                      <TableCell className="max-w-[200px]">
+                        <p className="text-sm text-muted-foreground truncate">{med.instructions || "—"}</p>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-center gap-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TabsContent>
+
+            {/* Orders & Instructions Tab */}
+            <TabsContent value="orders" className="mt-0 space-y-6">
+              <div className="grid grid-cols-3 gap-6">
+                <Card className="border-border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium">Home Care</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Checkbox checked={data.ordersInstructions.homeCare.nursing === true} disabled />
+                      <span className="text-sm">Nursing care</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox checked={data.ordersInstructions.homeCare.physiotherapy === true} disabled />
+                      <span className="text-sm">Physiotherapy</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox checked={data.ordersInstructions.homeCare.woundCare === true} disabled />
+                      <span className="text-sm">Wound care</span>
+                    </div>
+                    {data.ordersInstructions.homeCare.notes && (
+                      <p className="text-xs text-muted-foreground mt-2">{data.ordersInstructions.homeCare.notes}</p>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium">Activity Level</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge variant="secondary" className="mb-2">{data.ordersInstructions.activity.level}</Badge>
+                    {data.ordersInstructions.activity.restrictions && (
+                      <p className="text-sm text-muted-foreground">{data.ordersInstructions.activity.restrictions}</p>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium">Diet</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge variant="secondary" className="mb-2">{data.ordersInstructions.diet.type}</Badge>
+                    {data.ordersInstructions.diet.fluidRestriction && (
+                      <p className="text-sm text-muted-foreground">Fluid: {data.ordersInstructions.diet.fluidRestriction}</p>
+                    )}
+                    {data.ordersInstructions.diet.customNotes && (
+                      <p className="text-sm text-muted-foreground">{data.ordersInstructions.diet.customNotes}</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card className="border-border">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">Return Precautions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="grid grid-cols-2 gap-2">
+                    {data.ordersInstructions.returnPrecautions.map((item, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <AlertCircle className="w-4 h-4 text-amber-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Follow-ups Tab */}
+            <TabsContent value="followups" className="mt-0 space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-foreground">Scheduled Appointments</h3>
+                <Button variant="outline" size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Appointment
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {data.followUps.appointments.map((apt, i) => (
+                  <Card key={i} className="border-border">
+                    <CardContent className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{apt.service}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {apt.provider ? `${apt.provider} • ` : ""}{apt.location}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        {apt.toBeScheduled ? (
+                          <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 border-amber-500/30">
+                            To be scheduled
+                          </Badge>
+                        ) : apt.datetime ? (
+                          <div>
+                            <p className="font-medium">{new Date(apt.datetime).toLocaleDateString()}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(apt.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        ) : null}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {data.followUps.certificates.sickLeaveDays && (
+                <Card className="border-border mt-6">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium">Medical Certificate</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm">
+                      Sick leave: <span className="font-semibold">{data.followUps.certificates.sickLeaveDays} days</span> 
+                      {data.followUps.certificates.startDate && ` from ${data.followUps.certificates.startDate}`}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* Notes Tab */}
+            <TabsContent value="notes" className="mt-0 space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Doctor's Notes</label>
+                <Textarea 
+                  value={data.notesAttachments.doctorNote}
+                  onChange={(e) => setData(prev => ({
+                    ...prev,
+                    notesAttachments: { ...prev.notesAttachments, doctorNote: e.target.value }
+                  }))}
+                  rows={6}
+                  className="resize-none"
+                />
+              </div>
+            </TabsContent>
+          </CardContent>
+        </Tabs>
+      </Card>
+
+      {/* Sign-off Section */}
+      <Card className="border-border">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Checkbox 
+                id="confirm-discharge"
+                checked={data.signoff.confirmFitForDischarge}
+                onCheckedChange={(checked) => setData(prev => ({
+                  ...prev,
+                  signoff: { ...prev.signoff, confirmFitForDischarge: checked as boolean }
+                }))}
+              />
+              <label htmlFor="confirm-discharge" className="text-sm font-medium cursor-pointer">
+                I confirm this patient is fit for discharge and all clinical requirements have been met
+              </label>
+            </div>
+            <Button 
+              onClick={handleSignoff}
+              disabled={!data.signoff.confirmFitForDischarge || checklistProgress < 100}
+              className="gap-2"
+            >
+              Sign & Clear
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
+          {checklistProgress < 100 && (
+            <p className="text-sm text-amber-600 mt-2">
+              Complete all checklist items to proceed with sign-off
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
