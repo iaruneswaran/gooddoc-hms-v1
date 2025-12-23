@@ -157,8 +157,12 @@ export interface ImagingSummary {
 export interface MedicationReconciliationItem {
   medId: string;
   name: string;
+  genericName?: string;
+  brandName?: string;
+  drugCode?: string;
   action: MedicationAction;
   strength?: string;
+  form?: string;
   dose: string;
   route: string;
   frequency: string;
