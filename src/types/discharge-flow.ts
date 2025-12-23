@@ -41,6 +41,9 @@ export interface PendingBill {
   outstandingAmount: number;
   lastPaymentAt?: string;
   status: BillStatus;
+  serviceName?: string;
+  doctorName?: string;
+  department?: string;
   lineItems: BillLineItem[];
   insurance?: BillInsurance;
   payments: BillPayment[];
