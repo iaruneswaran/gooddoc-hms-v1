@@ -523,48 +523,98 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
               {/* Medications Table */}
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-foreground">Medication Reconciliation</h3>
+                <div>
+                  <h3 className="font-semibold text-foreground">Discharge Medications</h3>
+                  <p className="text-xs text-muted-foreground">{medications.length} medications prescribed</p>
+                </div>
               </div>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-border">
-                    <TableHead>Medication</TableHead>
-                    <TableHead>Strength</TableHead>
-                    <TableHead>Dosage</TableHead>
-                    <TableHead>Frequency</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead className="text-center pr-6">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {medications.map((med) => (
-                    <TableRow key={med.medId} className="border-border">
-                      <TableCell>
-                        <p className="font-medium">{med.name}</p>
-                      </TableCell>
-                      <TableCell>{med.strength || med.dose}</TableCell>
-                      <TableCell>{med.dose}</TableCell>
-                      <TableCell>{med.frequency}</TableCell>
-                      <TableCell>{med.duration}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center gap-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Edit3 className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-destructive"
-                            onClick={() => handleDeleteMedication(med.medId)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+              
+              <div className="space-y-3">
+                {medications.map((med, index) => (
+                  <Card key={med.medId} className="border-border hover:border-primary/30 transition-colors">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4 flex-1">
+                          {/* Serial Number */}
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <span className="text-sm font-semibold text-primary">{index + 1}</span>
+                          </div>
+                          
+                          {/* Medication Details */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="font-semibold text-foreground">{med.name}</h4>
+                              <Badge variant="outline" className="text-xs font-mono">
+                                {med.strength}
+                              </Badge>
+                              {med.form && (
+                                <span className="text-xs text-muted-foreground">({med.form})</span>
+                              )}
+                            </div>
+                            
+                            {med.genericName && (
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                {med.genericName}
+                                {med.brandName && <span className="text-primary"> • {med.brandName}</span>}
+                              </p>
+                            )}
+                            
+                            {med.drugCode && (
+                              <Badge variant="secondary" className="text-[10px] font-mono mt-1 bg-muted">
+                                ATC: {med.drugCode}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                        
+                        {/* Dosage Info Grid */}
+                        <div className="flex items-center gap-6 text-sm">
+                          <div className="text-center min-w-[80px]">
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</p>
+                            <p className="font-medium">{med.dose}</p>
+                          </div>
+                          <div className="text-center min-w-[120px]">
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</p>
+                            <p className="font-medium text-primary">{med.frequency}</p>
+                          </div>
+                          <div className="text-center min-w-[80px]">
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</p>
+                            <p className="font-medium">{med.duration}</p>
+                          </div>
+                          <div className="text-center min-w-[50px]">
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Route</p>
+                            <Badge variant="secondary" className="text-xs">{med.route}</Badge>
+                          </div>
+                          
+                          {/* Actions */}
+                          <div className="flex items-center gap-1 ml-2">
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Edit3 className="w-4 h-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-destructive"
+                              onClick={() => handleDeleteMedication(med.medId)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Instructions Row */}
+                      {med.instructions && (
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <p className="text-xs text-muted-foreground">
+                            <span className="font-medium text-foreground">Instructions:</span> {med.instructions}
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Follow-up Tab */}
