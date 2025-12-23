@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -25,7 +26,7 @@ import {
   Heart,
   Thermometer,
   Droplets,
-  Wind
+  Search
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -34,7 +35,8 @@ import {
   ClinicalChecklist,
   MedicationReconciliationItem,
   ConditionAtDischarge,
-  DischargeDestination
+  DischargeDestination,
+  MedicationAction
 } from "@/types/discharge-flow";
 import { SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
 
@@ -42,6 +44,25 @@ interface DoctorClearanceStepProps {
   stepStatus: StepStatus;
   onStepComplete: () => void;
 }
+
+interface NewMedicationForm {
+  name: string;
+  strength: string;
+  dose: string;
+  frequency: string;
+  duration: string;
+}
+
+const MEDICATION_SUGGESTIONS = [
+  "Aspirin", "Atorvastatin", "Metoprolol", "Clopidogrel", "Pantoprazole",
+  "Metformin", "Amlodipine", "Lisinopril", "Losartan", "Omeprazole",
+  "Paracetamol", "Ibuprofen", "Ciprofloxacin", "Amoxicillin", "Azithromycin"
+];
+
+const STRENGTH_OPTIONS = ["10mg", "20mg", "25mg", "40mg", "50mg", "75mg", "100mg", "250mg", "500mg"];
+const DOSAGE_OPTIONS = ["1 tablet", "2 tablets", "1/2 tablet", "1 capsule", "5ml", "10ml"];
+const FREQUENCY_OPTIONS = ["Morning & Night", "OD", "BD", "TDS", "QID", "SOS", "HS", "Before meals", "After meals"];
+const DURATION_OPTIONS = ["3d", "5d", "7d", "10d", "14d", "1 month", "3 months", "Lifelong"];
 
 const checklistItems: { key: keyof ClinicalChecklist; label: string }[] = [
   { key: "stableVitals", label: "Vitals stable for discharge" },
@@ -68,11 +89,24 @@ const medicationActionColors: Record<string, string> = {
 export default function DoctorClearanceStep({ stepStatus, onStepComplete }: DoctorClearanceStepProps) {
   const [data, setData] = useState<DoctorClearance>(SAMPLE_DOCTOR_CLEARANCE);
   const [activeTab, setActiveTab] = useState("clinical");
+  const [showAddMedForm, setShowAddMedForm] = useState(false);
+  const [medSearch, setMedSearch] = useState("");
+  const [newMed, setNewMed] = useState<NewMedicationForm>({
+    name: "",
+    strength: "",
+    dose: "",
+    frequency: "",
+    duration: ""
+  });
   
   const checklist = data.clinicalStatus.checklist;
   const completedChecks = Object.values(checklist).filter(Boolean).length;
   const totalChecks = checklistItems.length;
   const checklistProgress = Math.round((completedChecks / totalChecks) * 100);
+
+  const filteredSuggestions = MEDICATION_SUGGESTIONS.filter(med => 
+    med.toLowerCase().includes(medSearch.toLowerCase())
+  );
 
   const handleChecklistChange = (key: keyof ClinicalChecklist, checked: boolean) => {
     setData(prev => ({
@@ -103,6 +137,43 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
       clinicalStatus: {
         ...prev.clinicalStatus,
         destination: value
+      }
+    }));
+  };
+
+  const handleAddMedication = () => {
+    if (!newMed.name) return;
+    
+    const medication: MedicationReconciliationItem = {
+      medId: `med-${Date.now()}`,
+      name: `${newMed.name} ${newMed.strength}`.trim(),
+      action: "Start" as MedicationAction,
+      dose: newMed.dose || newMed.strength,
+      route: "PO",
+      frequency: newMed.frequency,
+      duration: newMed.duration,
+      instructions: "",
+    };
+
+    setData(prev => ({
+      ...prev,
+      medicationReconciliation: {
+        ...prev.medicationReconciliation,
+        items: [...prev.medicationReconciliation.items, medication]
+      }
+    }));
+
+    setNewMed({ name: "", strength: "", dose: "", frequency: "", duration: "" });
+    setMedSearch("");
+    setShowAddMedForm(false);
+  };
+
+  const handleDeleteMedication = (medId: string) => {
+    setData(prev => ({
+      ...prev,
+      medicationReconciliation: {
+        ...prev.medicationReconciliation,
+        items: prev.medicationReconciliation.items.filter(m => m.medId !== medId)
       }
     }));
   };
@@ -361,13 +432,119 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             </TabsContent>
 
             {/* Medications Tab */}
-            <TabsContent value="medications" className="mt-0">
+            <TabsContent value="medications" className="mt-0 space-y-4">
+              {/* Add Medication Form */}
+              {showAddMedForm ? (
+                <Card className="border-primary/30 bg-primary/5">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      {/* Medication Search */}
+                      <div className="relative flex-1 min-w-[200px]">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search medication..."
+                          value={medSearch}
+                          onChange={(e) => {
+                            setMedSearch(e.target.value);
+                            setNewMed(prev => ({ ...prev, name: e.target.value }));
+                          }}
+                          className="pl-9"
+                        />
+                        {medSearch && filteredSuggestions.length > 0 && (
+                          <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-10 max-h-40 overflow-auto">
+                            {filteredSuggestions.map(suggestion => (
+                              <button
+                                key={suggestion}
+                                className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                                onClick={() => {
+                                  setNewMed(prev => ({ ...prev, name: suggestion }));
+                                  setMedSearch(suggestion);
+                                }}
+                              >
+                                {suggestion}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Strength */}
+                      <Select value={newMed.strength} onValueChange={(v) => setNewMed(prev => ({ ...prev, strength: v }))}>
+                        <SelectTrigger className="w-[120px]">
+                          <SelectValue placeholder="Strength" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {STRENGTH_OPTIONS.map(opt => (
+                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {/* Dosage */}
+                      <Select value={newMed.dose} onValueChange={(v) => setNewMed(prev => ({ ...prev, dose: v }))}>
+                        <SelectTrigger className="w-[120px]">
+                          <SelectValue placeholder="Dosage" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {DOSAGE_OPTIONS.map(opt => (
+                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {/* Frequency */}
+                      <Select value={newMed.frequency} onValueChange={(v) => setNewMed(prev => ({ ...prev, frequency: v }))}>
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue placeholder="Morning & Night" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {FREQUENCY_OPTIONS.map(opt => (
+                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {/* Duration */}
+                      <Select value={newMed.duration} onValueChange={(v) => setNewMed(prev => ({ ...prev, duration: v }))}>
+                        <SelectTrigger className="w-[100px]">
+                          <SelectValue placeholder="7d" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {DURATION_OPTIONS.map(opt => (
+                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {/* Actions */}
+                      <Button size="sm" onClick={handleAddMedication} disabled={!newMed.name}>
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        setShowAddMedForm(false);
+                        setNewMed({ name: "", strength: "", dose: "", frequency: "", duration: "" });
+                        setMedSearch("");
+                      }}>
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowAddMedForm(true)}
+                  className="text-primary border-primary/30 hover:bg-primary/5"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add More Medicines
+                </Button>
+              )}
+
+              {/* Medications Table */}
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-foreground">Medication Reconciliation</h3>
-                <Button variant="outline" size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Medication
-                </Button>
               </div>
               <Table>
                 <TableHeader>
@@ -382,7 +559,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {medications.map((med, i) => (
+                  {medications.map((med) => (
                     <TableRow key={med.medId} className="border-border">
                       <TableCell>
                         <div>
@@ -406,7 +583,12 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                           <Button variant="ghost" size="icon" className="h-8 w-8">
                             <Edit3 className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-destructive"
+                            onClick={() => handleDeleteMedication(med.medId)}
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>

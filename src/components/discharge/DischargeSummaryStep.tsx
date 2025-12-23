@@ -336,29 +336,30 @@ export default function DischargeSummaryStep({
 
           <Separator className="my-6" />
 
-          {/* Follow-ups */}
+          {/* Follow-up */}
           <div className="mb-6">
             <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              Follow-up Appointments
+              Follow-up Appointment
             </h3>
-            <div className="space-y-2">
-              {data.followUps.appointments.map((apt, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                  <div>
-                    <p className="font-medium">{apt.service}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {apt.provider ? `${apt.provider} • ` : ""}{apt.location}
-                    </p>
-                  </div>
-                  {apt.toBeScheduled ? (
-                    <Badge variant="secondary">To be scheduled</Badge>
-                  ) : apt.datetime ? (
-                    <span className="text-sm font-medium">{new Date(apt.datetime).toLocaleDateString()}</span>
-                  ) : null}
-                </div>
-              ))}
-            </div>
+            {data.followUps.followUpDate ? (
+              <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                <p className="text-sm text-muted-foreground mb-1">Please schedule a follow-up appointment on:</p>
+                <p className="text-lg font-semibold text-blue-600">
+                  {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                  })}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Contact the hospital reception or visit the OPD to confirm your appointment.
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">No follow-up appointment scheduled</p>
+            )}
           </div>
 
           <Separator className="my-6" />
