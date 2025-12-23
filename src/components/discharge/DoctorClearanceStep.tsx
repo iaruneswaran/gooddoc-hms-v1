@@ -582,9 +582,9 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</p>
                             <p className="font-medium">{med.dose}</p>
                           </div>
-                          <div className="text-center w-24">
+                          <div className="text-center w-40">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</p>
-                            <p className="font-medium text-primary truncate">{med.frequency}</p>
+                            <p className="font-medium text-primary">{med.frequency}</p>
                           </div>
                           <div className="text-center w-24">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</p>
@@ -629,38 +629,57 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </div>
               </div>
               
-              <div className="max-w-md">
-                <label className="text-sm font-medium mb-2 block">Recommended Follow-up Date</label>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Suggest when the patient should return for follow-up. This recommendation will appear on the discharge summary.
-                </p>
-                <input
-                  type="date"
-                  value={data.followUps.followUpDate || ""}
-                  onChange={(e) => setData(prev => ({
-                    ...prev,
-                    followUps: { ...prev.followUps, followUpDate: e.target.value }
-                  }))}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
-                {data.followUps.followUpDate && (
-                  <div className="mt-4 p-3 bg-muted/50 rounded-lg border">
-                    <p className="text-sm text-muted-foreground">
-                      <span className="font-medium text-foreground">Recommendation:</span> Patient should schedule a follow-up appointment on or around{" "}
-                      <span className="font-semibold text-primary">
-                        {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
-                          weekday: "long",
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric"
-                        })}
-                      </span>
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-2 italic">
-                      Patient will be advised to contact the front desk to book this appointment.
-                    </p>
-                  </div>
-                )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Recommended Follow-up Date</label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Suggest when the patient should return for follow-up.
+                  </p>
+                  <input
+                    type="date"
+                    value={data.followUps.followUpDate || ""}
+                    onChange={(e) => setData(prev => ({
+                      ...prev,
+                      followUps: { ...prev.followUps, followUpDate: e.target.value }
+                    }))}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  />
+                  {data.followUps.followUpDate && (
+                    <div className="mt-4 p-3 bg-muted/50 rounded-lg border">
+                      <p className="text-sm text-muted-foreground">
+                        <span className="font-medium text-foreground">Recommendation:</span> Patient should schedule a follow-up on{" "}
+                        <span className="font-semibold text-primary">
+                          {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
+                            weekday: "long",
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                          })}
+                        </span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-2 italic">
+                        Patient will be advised to contact the front desk to book this appointment.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Reason for Follow-up</label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Specify the purpose of the follow-up visit.
+                  </p>
+                  <Textarea
+                    placeholder="e.g., Review blood test results, wound check, medication adjustment..."
+                    value={data.followUps.followUpReason || ""}
+                    onChange={(e) => setData(prev => ({
+                      ...prev,
+                      followUps: { ...prev.followUps, followUpReason: e.target.value }
+                    }))}
+                    rows={4}
+                    className="resize-none"
+                  />
+                </div>
               </div>
             </TabsContent>
 

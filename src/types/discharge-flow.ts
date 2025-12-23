@@ -235,6 +235,7 @@ export interface Certificates {
 
 export interface FollowUps {
   followUpDate?: string;
+  followUpReason?: string;
   appointments: Appointment[];
   externalReferrals: ExternalReferral[];
   certificates: Certificates;
