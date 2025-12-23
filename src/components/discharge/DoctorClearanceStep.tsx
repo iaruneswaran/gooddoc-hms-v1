@@ -577,41 +577,40 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                         </div>
                         
                         {/* Dosage Info Grid */}
-                        <div className="flex items-center gap-6 text-sm">
-                          <div className="text-center min-w-[80px]">
+                        <div className="grid grid-cols-4 gap-4 text-sm">
+                          <div className="text-center w-24">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</p>
                             <p className="font-medium">{med.dose}</p>
                           </div>
-                          <div className="text-center min-w-[120px]">
+                          <div className="text-center w-24">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</p>
-                            <p className="font-medium text-primary">{med.frequency}</p>
+                            <p className="font-medium text-primary truncate">{med.frequency}</p>
                           </div>
-                          <div className="text-center min-w-[80px]">
+                          <div className="text-center w-24">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</p>
                             <p className="font-medium">{med.duration}</p>
                           </div>
-                          <div className="text-center min-w-[50px]">
+                          <div className="text-center w-24">
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Route</p>
-                            <Badge variant="secondary" className="text-xs">{med.route}</Badge>
-                          </div>
-                          
-                          {/* Actions */}
-                          <div className="flex items-center gap-1 ml-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <Edit3 className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-destructive"
-                              onClick={() => handleDeleteMedication(med.medId)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                            <p className="font-medium">{med.route}</p>
                           </div>
                         </div>
+                          
+                        {/* Actions */}
+                        <div className="flex items-center gap-1 ml-4">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-destructive"
+                            onClick={() => handleDeleteMedication(med.medId)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
-                      
                     </CardContent>
                   </Card>
                 ))}
