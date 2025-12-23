@@ -351,9 +351,7 @@ const PatientInsightsContent = () => {
                       variant="ghost" 
                       size="sm"
                       className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                      onClick={() => navigate(`/patient-insights/${patientId}/discharge`, {
-                        state: { visitId: selectedVisit?.visitId }
-                      })}
+                      onClick={() => navigate(`/patients/${patientId}/encounters/${selectedVisit?.visitId || 'E-001'}/discharge`)}
                     >
                       Discharge
                     </Button>
