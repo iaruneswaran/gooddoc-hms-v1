@@ -125,8 +125,10 @@ export default function PendingBillStep({
   const totalOutstanding = bills.reduce((sum, b) => sum + b.outstandingAmount, 0);
   const allCleared = totalOutstanding === 0;
 
-  // Filter bills
-  const filteredBills = bills.filter((bill) => {
+  // Filter bills - exclude cleared bills by default
+  const pendingAndPartialBills = bills.filter(bill => bill.status !== "Cleared");
+  
+  const filteredBills = pendingAndPartialBills.filter((bill) => {
     const matchesSearch =
       bill.billNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -253,8 +255,6 @@ export default function PendingBillStep({
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="PartiallyPaid">Partially Paid</SelectItem>
-              <SelectItem value="Cleared">Cleared</SelectItem>
-              <SelectItem value="OnHold">On Hold</SelectItem>
             </SelectContent>
           </Select>
           <Select value={payerFilter} onValueChange={setPayerFilter}>
@@ -305,6 +305,7 @@ export default function PendingBillStep({
                 />
               </TableHead>
               <TableHead>Bill No.</TableHead>
+              <TableHead>Service / Doctor</TableHead>
               <TableHead>Service Dates</TableHead>
               <TableHead>Payer</TableHead>
               <TableHead className="text-right">Total</TableHead>
@@ -318,7 +319,7 @@ export default function PendingBillStep({
           <TableBody>
             {filteredBills.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="text-center py-12">
+                <TableCell colSpan={11} className="text-center py-12">
                   <p className="text-muted-foreground">No pending bills for this encounter.</p>
                 </TableCell>
               </TableRow>
@@ -337,6 +338,14 @@ export default function PendingBillStep({
                   </TableCell>
                   <TableCell>
                     <span className="font-medium text-foreground">{bill.billNumber}</span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span className="font-medium text-foreground">{bill.serviceName || "General Services"}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {bill.doctorName} • {bill.department}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col text-sm">
@@ -379,15 +388,6 @@ export default function PendingBillStep({
                       >
                         <ChevronRight className="w-4 h-4" />
                       </Button>
-                      {bill.outstandingAmount > 0 && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCollectPayment(bill)}
-                        >
-                          Collect
-                        </Button>
-                      )}
                     </div>
                   </TableCell>
                 </TableRow>

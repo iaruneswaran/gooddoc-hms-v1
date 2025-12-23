@@ -44,6 +44,9 @@ export const SAMPLE_PENDING_BILLS: PendingBill[] = [
     outstandingAmount: 65000,
     lastPaymentAt: "2025-12-18T11:00:00",
     status: "PartiallyPaid",
+    serviceName: "Cardiology Consultation",
+    doctorName: "Dr. Arun Kumar",
+    department: "Cardiology",
     lineItems: [
       { code: "BED-ICU-001", description: "ICU Bed Charges (4 days)", quantity: 4, unitCost: 8000, tax: 1440, discount: 0, net: 33440 },
       { code: "CONS-CARD-001", description: "Cardiology Consultation", quantity: 2, unitCost: 2500, tax: 450, discount: 0, net: 5450, clinician: "Dr. Arun Kumar" },
@@ -68,35 +71,13 @@ export const SAMPLE_PENDING_BILLS: PendingBill[] = [
     paidAmount: 0,
     outstandingAmount: 12500,
     status: "Pending",
+    serviceName: "CT Coronary Angiography",
+    doctorName: "Dr. Meera Nair",
+    department: "Radiology",
     lineItems: [
-      { code: "DIAG-CTA-001", description: "CT Coronary Angiography", quantity: 1, unitCost: 12500, tax: 2250, discount: 2250, net: 12500, clinician: "Dr. Arun Kumar" },
+      { code: "DIAG-CTA-001", description: "CT Coronary Angiography", quantity: 1, unitCost: 12500, tax: 2250, discount: 2250, net: 12500, clinician: "Dr. Meera Nair" },
     ],
     payments: [],
-  },
-  {
-    billNumber: "BILL-2025-001238",
-    serviceDateFrom: "2025-12-20",
-    serviceDateTo: "2025-12-22",
-    payerType: "Insurance",
-    payerName: "Star Health Insurance",
-    totalAmount: 15000,
-    paidAmount: 15000,
-    outstandingAmount: 0,
-    status: "Cleared",
-    lineItems: [
-      { code: "ROOM-DLX-001", description: "Deluxe Room Upgrade (2 days)", quantity: 2, unitCost: 6000, tax: 1080, discount: 0, net: 13080 },
-      { code: "NURS-CARE-001", description: "Special Nursing Care", quantity: 1, unitCost: 1920, tax: 0, discount: 0, net: 1920 },
-    ],
-    insurance: {
-      policyNumber: "SH-2025-456789",
-      coveragePercent: 80,
-      preauthNumber: "PA-12345",
-      approvedAmount: 15000,
-      tpaRemarks: "Approved for room upgrade",
-    },
-    payments: [
-      { date: "2025-12-22T09:00:00", method: "insurance", reference: "INS-CLM-789", amount: 15000, remarks: "Insurance settlement" },
-    ],
   },
 ];
 
