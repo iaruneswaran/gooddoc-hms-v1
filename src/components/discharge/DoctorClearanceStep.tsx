@@ -446,10 +446,11 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                     <Input
                       placeholder="Search medication..."
-                      value={medSearch}
+                      value={newMed.name || medSearch}
                       onChange={(e) => {
-                        setMedSearch(e.target.value);
-                        setNewMed(prev => ({ ...prev, name: e.target.value }));
+                        const value = e.target.value;
+                        setMedSearch(value);
+                        setNewMed(prev => ({ ...prev, name: value }));
                       }}
                       className="pl-9 bg-background border-border/60 focus:border-primary shadow-sm"
                     />
@@ -458,6 +459,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                         {filteredSuggestions.map(suggestion => (
                           <button
                             key={suggestion}
+                            type="button"
                             className="w-full px-4 py-2.5 text-left text-sm hover:bg-accent transition-colors first:rounded-t-lg last:rounded-b-lg flex items-center gap-2"
                             onClick={() => {
                               setNewMed(prev => ({ ...prev, name: suggestion }));
@@ -567,9 +569,9 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                             )}
                             
                             {med.drugCode && (
-                              <Badge variant="secondary" className="text-[10px] font-mono mt-1 bg-muted">
+                              <p className="text-[10px] font-mono text-muted-foreground mt-1">
                                 ATC: {med.drugCode}
-                              </Badge>
+                              </p>
                             )}
                           </div>
                         </div>
