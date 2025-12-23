@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { toast } from "sonner";
 import PendingBillStep from "@/components/discharge/PendingBillStep";
+import DoctorClearanceStep from "@/components/discharge/DoctorClearanceStep";
+import DischargeSummaryStep from "@/components/discharge/DischargeSummaryStep";
 import {
   SAMPLE_PENDING_BILLS,
   SAMPLE_PATIENT_SNAPSHOT,
@@ -194,28 +196,18 @@ export default function DischargeFlow() {
             />
           )}
           {currentStep === 2 && (
-            <Card className="p-12 text-center">
-              <Stethoscope className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Doctor Clearance</h3>
-              <p className="text-muted-foreground mb-4">Clinical status, medication reconciliation, orders & instructions</p>
-              <Button onClick={() => { setStepStatuses(p => ({...p, 2: "cleared"})); handleStepChange(3); }}>
-                Mark as Cleared (Demo)
-              </Button>
-            </Card>
+            <DoctorClearanceStep
+              stepStatus={stepStatuses[2]}
+              onStepComplete={() => { setStepStatuses(p => ({...p, 2: "cleared"})); handleStepChange(3); }}
+            />
           )}
           {currentStep === 3 && (
-            <Card className="p-12 text-center">
-              <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Discharge Summary</h3>
-              <p className="text-muted-foreground mb-4">Review and finalize the complete discharge summary</p>
-              {config.requireBillingClearanceToFinalize && totalOutstanding > 0 ? (
-                <p className="text-amber-600">Clear outstanding bills to finalize discharge</p>
-              ) : (
-                <Button onClick={() => { setStepStatuses(p => ({...p, 3: "finalized"})); toast.success("Discharge finalized!"); }}>
-                  Finalize Discharge
-                </Button>
-              )}
-            </Card>
+            <DischargeSummaryStep
+              stepStatus={stepStatuses[3]}
+              onFinalize={() => { setStepStatuses(p => ({...p, 3: "finalized"})); }}
+              requireBillingClearance={config.requireBillingClearanceToFinalize}
+              totalOutstanding={totalOutstanding}
+            />
           )}
         </main>
       </PageContent>
