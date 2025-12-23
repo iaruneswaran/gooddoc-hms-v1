@@ -283,7 +283,6 @@ export default function PendingBillStep({
               <TableHead>Bill No.</TableHead>
               <TableHead>Service / Doctor</TableHead>
               <TableHead>Service Dates</TableHead>
-              <TableHead>Payer</TableHead>
               <TableHead className="text-right">Total</TableHead>
               <TableHead className="text-right">Paid</TableHead>
               <TableHead className="text-right">Outstanding</TableHead>
@@ -295,7 +294,7 @@ export default function PendingBillStep({
           <TableBody>
             {filteredBills.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="text-center py-12">
+                <TableCell colSpan={9} className="text-center py-12">
                   <p className="text-muted-foreground">No pending bills for this encounter.</p>
                 </TableCell>
               </TableRow>
@@ -326,7 +325,6 @@ export default function PendingBillStep({
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>{getPayerBadge(bill.payerType, bill.payerName)}</TableCell>
                   <TableCell className="text-right font-medium">{formatCurrency(bill.totalAmount)}</TableCell>
                   <TableCell className="text-right text-muted-foreground">
                     {bill.paidAmount > 0 ? formatCurrency(bill.paidAmount) : "—"}
@@ -380,6 +378,24 @@ export default function PendingBillStep({
                   </TableCell>
                 </TableRow>
               ))
+            )}
+            {/* Total Row */}
+            {filteredBills.length > 0 && (
+              <TableRow className="border-t-2 bg-muted/30">
+                <TableCell colSpan={3} className="text-right font-medium text-muted-foreground">
+                  Total:
+                </TableCell>
+                <TableCell className="text-right font-semibold">
+                  {formatCurrency(filteredBills.reduce((sum, b) => sum + b.totalAmount, 0))}
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground font-medium">
+                  {formatCurrency(filteredBills.reduce((sum, b) => sum + b.paidAmount, 0))}
+                </TableCell>
+                <TableCell className={`text-right font-semibold ${getOutstandingRiskColor(filteredBills.reduce((sum, b) => sum + b.outstandingAmount, 0))}`}>
+                  {formatCurrency(filteredBills.reduce((sum, b) => sum + b.outstandingAmount, 0))}
+                </TableCell>
+                <TableCell colSpan={3}></TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
