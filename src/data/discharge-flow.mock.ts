@@ -180,15 +180,10 @@ export const SAMPLE_DOCTOR_CLEARANCE: DoctorClearance = {
     language: "en",
   },
   followUps: {
-    appointments: [
-      { service: "Cardiology", provider: "Dr. Arun Kumar", location: "OPD-2", datetime: "2025-12-29T10:30:00" },
-      { service: "Diabetology", location: "OPD-5", toBeScheduled: true },
-    ],
+    followUpDate: "2025-12-29",
+    appointments: [],
     externalReferrals: [],
-    certificates: {
-      sickLeaveDays: 14,
-      startDate: "2025-12-22",
-    },
+    certificates: {},
   },
   notesAttachments: {
     doctorNote: "Patient is a 44-year-old male with Type 2 DM and HTN who presented with unstable angina. Cardiac catheterization showed 50% LAD stenosis managed medically. Patient stable throughout admission with good response to medical management. Discharge planned with dual antiplatelet therapy and cardiac rehab referral.",

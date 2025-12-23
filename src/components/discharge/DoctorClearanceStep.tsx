@@ -14,7 +14,6 @@ import {
   AlertCircle, 
   Activity, 
   Pill, 
-  ClipboardList, 
   Calendar,
   FileText,
   Edit3,
@@ -180,16 +179,15 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Follow-ups</p>
-                <p className="text-2xl font-bold text-foreground">{data.followUps.appointments.length}</p>
+                <p className="text-xs text-muted-foreground">Follow-up</p>
+                <p className="text-lg font-bold text-foreground">
+                  {data.followUps.followUpDate || "Not set"}
+                </p>
               </div>
               <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {data.followUps.appointments.filter(a => a.toBeScheduled).length} to be scheduled
-            </p>
           </CardContent>
         </Card>
 
@@ -231,18 +229,11 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 Medications ({medications.length})
               </TabsTrigger>
               <TabsTrigger 
-                value="orders" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
-              >
-                <ClipboardList className="w-4 h-4 mr-2" />
-                Orders & Instructions
-              </TabsTrigger>
-              <TabsTrigger 
                 value="followups" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
               >
                 <Calendar className="w-4 h-4 mr-2" />
-                Follow-ups
+                Follow-up
               </TabsTrigger>
               <TabsTrigger 
                 value="notes" 
@@ -426,133 +417,36 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               </Table>
             </TabsContent>
 
-            {/* Orders & Instructions Tab */}
-            <TabsContent value="orders" className="mt-0 space-y-6">
-              <div className="grid grid-cols-3 gap-6">
-                <Card className="border-border">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Home Care</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Checkbox checked={data.ordersInstructions.homeCare.nursing === true} disabled />
-                      <span className="text-sm">Nursing care</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox checked={data.ordersInstructions.homeCare.physiotherapy === true} disabled />
-                      <span className="text-sm">Physiotherapy</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox checked={data.ordersInstructions.homeCare.woundCare === true} disabled />
-                      <span className="text-sm">Wound care</span>
-                    </div>
-                    {data.ordersInstructions.homeCare.notes && (
-                      <p className="text-xs text-muted-foreground mt-2">{data.ordersInstructions.homeCare.notes}</p>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Activity Level</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Badge variant="secondary" className="mb-2">{data.ordersInstructions.activity.level}</Badge>
-                    {data.ordersInstructions.activity.restrictions && (
-                      <p className="text-sm text-muted-foreground">{data.ordersInstructions.activity.restrictions}</p>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Diet</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Badge variant="secondary" className="mb-2">{data.ordersInstructions.diet.type}</Badge>
-                    {data.ordersInstructions.diet.fluidRestriction && (
-                      <p className="text-sm text-muted-foreground">Fluid: {data.ordersInstructions.diet.fluidRestriction}</p>
-                    )}
-                    {data.ordersInstructions.diet.customNotes && (
-                      <p className="text-sm text-muted-foreground">{data.ordersInstructions.diet.customNotes}</p>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card className="border-border">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Return Precautions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="grid grid-cols-2 gap-2">
-                    {data.ordersInstructions.returnPrecautions.map((item, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm">
-                        <AlertCircle className="w-4 h-4 text-amber-500" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Follow-ups Tab */}
+            {/* Follow-up Tab */}
             <TabsContent value="followups" className="mt-0 space-y-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-foreground">Scheduled Appointments</h3>
-                <Button variant="outline" size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Appointment
-                </Button>
+              <div className="max-w-md">
+                <label className="text-sm font-medium mb-2 block">Follow-up Appointment Date</label>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Enter the recommended follow-up date. This will appear on the discharge summary.
+                </p>
+                <input
+                  type="date"
+                  value={data.followUps.followUpDate || ""}
+                  onChange={(e) => setData(prev => ({
+                    ...prev,
+                    followUps: { ...prev.followUps, followUpDate: e.target.value }
+                  }))}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+                {data.followUps.followUpDate && (
+                  <p className="text-sm text-muted-foreground mt-3">
+                    Patient will be advised to schedule a follow-up appointment on{" "}
+                    <span className="font-medium text-foreground">
+                      {new Date(data.followUps.followUpDate).toLocaleDateString("en-IN", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                      })}
+                    </span>
+                  </p>
+                )}
               </div>
-              <div className="space-y-3">
-                {data.followUps.appointments.map((apt, i) => (
-                  <Card key={i} className="border-border">
-                    <CardContent className="p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Calendar className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{apt.service}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {apt.provider ? `${apt.provider} • ` : ""}{apt.location}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        {apt.toBeScheduled ? (
-                          <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 border-amber-500/30">
-                            To be scheduled
-                          </Badge>
-                        ) : apt.datetime ? (
-                          <div>
-                            <p className="font-medium">{new Date(apt.datetime).toLocaleDateString()}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(apt.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                        ) : null}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {data.followUps.certificates.sickLeaveDays && (
-                <Card className="border-border mt-6">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Medical Certificate</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm">
-                      Sick leave: <span className="font-semibold">{data.followUps.certificates.sickLeaveDays} days</span> 
-                      {data.followUps.certificates.startDate && ` from ${data.followUps.certificates.startDate}`}
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
             </TabsContent>
 
             {/* Notes Tab */}
