@@ -10,10 +10,7 @@ import {
   AlertTriangle,
   ClipboardList,
   Heart,
-  CalendarCheck,
-  Clock,
-  Phone,
-  MapPin
+  CalendarCheck
 } from "lucide-react";
 import { StepStatus } from "@/types/discharge-flow";
 import { SAMPLE_DISCHARGE_SUMMARY, SAMPLE_PATIENT_SNAPSHOT, SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
@@ -349,49 +346,6 @@ export default function DischargeSummaryStep({
         </CardContent>
       </Card>
 
-      {/* Pending Results / Investigations After Discharge */}
-      {(summary.pendingResults.length > 0 || clearance.ordersInstructions.investigationsAfterDischarge.length > 0) && (
-        <Card>
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              Pending Investigations / Follow-up Tests
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Test</th>
-                    <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Expected Date</th>
-                    <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Contact</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {summary.pendingResults.map((result, idx) => (
-                    <tr key={`pending-${idx}`} className="border-b border-border/50 last:border-0">
-                      <td className="py-3 px-4 text-foreground font-medium">{result.name}</td>
-                      <td className="py-3 px-4 text-foreground">{result.expectedDate}</td>
-                      <td className="py-3 px-4 text-foreground">{result.responsible}</td>
-                    </tr>
-                  ))}
-                  {clearance.ordersInstructions.investigationsAfterDischarge.map((inv, idx) => (
-                    <tr key={`inv-${idx}`} className="border-b border-border/50 last:border-0">
-                      <td className="py-3 px-4 text-foreground font-medium">
-                        <Badge variant="outline" className="mr-2 text-xs">{inv.type}</Badge>
-                        {inv.name}
-                      </td>
-                      <td className="py-3 px-4 text-foreground">{inv.dueDate}</td>
-                      <td className="py-3 px-4 text-foreground">{summary.header.attending}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Signatures */}
       <Card>
