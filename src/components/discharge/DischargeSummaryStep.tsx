@@ -165,37 +165,6 @@ export default function DischargeSummaryStep({
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Column 2: Payments & Follow-up */}
-            <div className="space-y-4">
-              {/* Payment Summary */}
-              <div className="bg-muted/20 rounded-lg p-3">
-                <div className="flex items-center gap-1.5 mb-2">
-                  <CreditCard className="w-3.5 h-3.5 text-primary" />
-                  <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Payment</h4>
-                </div>
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-center bg-background rounded px-2 py-1.5">
-                    <span className="text-xs text-muted-foreground">Total Bill</span>
-                    <span className="font-semibold text-sm">{formatCurrency(data.billingSummary.total)}</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-green-500/10 rounded px-2 py-1.5">
-                    <span className="text-xs text-muted-foreground">Paid</span>
-                    <span className="font-semibold text-sm text-green-600">{formatCurrency(data.billingSummary.paid)}</span>
-                  </div>
-                  <div className={cn("flex justify-between items-center rounded px-2 py-1.5", 
-                    data.billingSummary.outstanding > 0 ? "bg-red-500/10" : "bg-green-500/10"
-                  )}>
-                    <span className="text-xs text-muted-foreground">Outstanding</span>
-                    <span className={cn("font-semibold text-sm", 
-                      data.billingSummary.outstanding > 0 ? "text-red-600" : "text-green-600"
-                    )}>
-                      {formatCurrency(data.billingSummary.outstanding)}
-                    </span>
-                  </div>
-                </div>
-              </div>
 
               {/* Follow-up */}
               <div className="bg-muted/20 rounded-lg p-3">
@@ -213,6 +182,9 @@ export default function DischargeSummaryStep({
                         year: "numeric"
                       })}
                     </p>
+                    {data.followUps.followUpReason && (
+                      <p className="text-[10px] text-muted-foreground mt-1">{data.followUps.followUpReason}</p>
+                    )}
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground italic">Not scheduled</p>
@@ -220,7 +192,7 @@ export default function DischargeSummaryStep({
               </div>
             </div>
 
-            {/* Column 3: Medications */}
+            {/* Column 2: Medications */}
             <div className="bg-muted/20 rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-2">
                 <Pill className="w-3.5 h-3.5 text-primary" />
@@ -228,7 +200,7 @@ export default function DischargeSummaryStep({
                   Medications ({data.dischargeMeds.length})
                 </h4>
               </div>
-              <div className="space-y-1 max-h-[200px] overflow-y-auto">
+              <div className="space-y-1 max-h-[280px] overflow-y-auto">
                 {data.dischargeMeds.map((med, i) => (
                   <div key={i} className="flex gap-2 bg-background rounded px-2 py-1.5">
                     <span className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center text-[9px] font-bold text-primary shrink-0">
@@ -240,6 +212,34 @@ export default function DischargeSummaryStep({
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Column 3: Payment */}
+            <div className="bg-muted/20 rounded-lg p-3">
+              <div className="flex items-center gap-1.5 mb-2">
+                <CreditCard className="w-3.5 h-3.5 text-primary" />
+                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground">Payment</h4>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center bg-background rounded px-2 py-1.5">
+                  <span className="text-xs text-muted-foreground">Total Bill</span>
+                  <span className="font-semibold text-sm">{formatCurrency(data.billingSummary.total)}</span>
+                </div>
+                <div className="flex justify-between items-center bg-green-500/10 rounded px-2 py-1.5">
+                  <span className="text-xs text-muted-foreground">Paid</span>
+                  <span className="font-semibold text-sm text-green-600">{formatCurrency(data.billingSummary.paid)}</span>
+                </div>
+                <div className={cn("flex justify-between items-center rounded px-2 py-1.5", 
+                  data.billingSummary.outstanding > 0 ? "bg-red-500/10" : "bg-green-500/10"
+                )}>
+                  <span className="text-xs text-muted-foreground">Outstanding</span>
+                  <span className={cn("font-semibold text-sm", 
+                    data.billingSummary.outstanding > 0 ? "text-red-600" : "text-green-600"
+                  )}>
+                    {formatCurrency(data.billingSummary.outstanding)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
