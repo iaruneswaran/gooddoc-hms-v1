@@ -70,9 +70,6 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
       <div className="flex items-center gap-2">
         <button className="relative p-2 hover:bg-secondary rounded-lg transition-colors">
           <Bell className="w-5 h-5 text-foreground" />
-        </button>
-        <button className="relative p-2 hover:bg-secondary rounded-lg transition-colors">
-          <Bell className="w-5 h-5 text-foreground" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-primary text-primary-foreground text-xs">
             1
           </Badge>
