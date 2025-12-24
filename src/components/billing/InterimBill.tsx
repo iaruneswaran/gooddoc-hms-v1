@@ -122,9 +122,9 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-6xl mx-auto">
       {/* Interim Bill Box */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden w-full">
         {/* Hospital Header */}
         <div className="bg-primary/5 border-b border-border p-6">
           <div className="flex items-start justify-between">
@@ -211,12 +211,12 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
           {/* Attending Providers */}
           <Card className="p-5">
             <h3 className="font-semibold text-foreground mb-3">Attending Providers</h3>
-            <div className="flex gap-6 text-sm">
-              <div>
+            <div className="flex flex-wrap items-start gap-x-12 gap-y-3 text-sm">
+              <div className="min-w-[180px]">
                 <p className="font-medium">Dr. Arun Kumar</p>
                 <p className="text-muted-foreground">Attending Cardiologist</p>
               </div>
-              <div>
+              <div className="min-w-[180px]">
                 <p className="font-medium">Dr. Priya Sharma</p>
                 <p className="text-muted-foreground">Consulting Physician</p>
               </div>
@@ -226,28 +226,28 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
           {/* Insurance Details */}
           <Card className="p-5">
             <h3 className="font-semibold text-foreground mb-3">Insurance Details</h3>
-            <div className="grid grid-cols-6 gap-4 text-sm">
-              <div>
+            <div className="flex flex-wrap items-start gap-x-10 gap-y-4 text-sm">
+              <div className="min-w-[160px]">
                 <p className="text-muted-foreground">Payer</p>
                 <p className="font-medium">Star Health Insurance</p>
               </div>
-              <div>
+              <div className="min-w-[140px]">
                 <p className="text-muted-foreground">Plan</p>
                 <p className="font-medium">Family Health Optima</p>
               </div>
-              <div>
+              <div className="min-w-[120px]">
                 <p className="text-muted-foreground">Member ID</p>
                 <p className="font-mono text-xs">SH-88991234</p>
               </div>
-              <div>
+              <div className="min-w-[140px]">
                 <p className="text-muted-foreground">Policy No.</p>
                 <p className="font-mono text-xs">POL-2024-559900</p>
               </div>
-              <div>
+              <div className="min-w-[130px]">
                 <p className="text-muted-foreground">Pre-Auth No.</p>
                 <p className="font-mono text-xs">PA-2025-00456</p>
               </div>
-              <div>
+              <div className="min-w-[80px]">
                 <p className="text-muted-foreground">Coverage</p>
                 <p className="font-medium text-green-600">80%</p>
               </div>
