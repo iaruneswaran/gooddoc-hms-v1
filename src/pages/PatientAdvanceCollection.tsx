@@ -219,7 +219,7 @@ const PatientAdvanceCollection = () => {
                         <td className="p-4 text-sm">{adv.reason}</td>
                         <td className="p-4 text-sm">{adv.payerName}</td>
                         <td className="p-4 text-sm">{adv.method}</td>
-                        <td className="p-4 text-sm font-medium text-right">{formatINR(adv.amount)}</td>
+                        <td className="p-4 text-sm font-medium text-right text-green-600">{formatINR(adv.amount)}</td>
                         <td className="p-4">
                           <div className="flex gap-1">
                             <Button variant="ghost" size="icon" className="h-8 w-8">
