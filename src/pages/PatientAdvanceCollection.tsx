@@ -56,9 +56,7 @@ const advanceHistory = [
     amount: 200000,
     method: "UPI",
     reason: "Admission Deposit",
-    status: "Available",
-    usedAmount: 0,
-    collectedBy: "Reception",
+    payerName: "Harish Kalyan",
   },
   {
     id: "ADV-2025-002",
@@ -68,9 +66,7 @@ const advanceHistory = [
     amount: 120000,
     method: "Cash",
     reason: "Additional Deposit",
-    status: "Available",
-    usedAmount: 0,
-    collectedBy: "Billing Counter",
+    payerName: "Priya Kalyan",
   },
 ];
 
@@ -149,12 +145,6 @@ const PatientAdvanceCollection = () => {
 
   const canConfirm = payerName.trim() !== "" && totalAmount > 0;
 
-  const statusStyles: Record<string, string> = {
-    Available: "bg-green-100 text-green-700",
-    "Partially Used": "bg-amber-100 text-amber-700",
-    "Fully Used": "bg-muted text-muted-foreground",
-  };
-
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       <AppSidebar />
@@ -210,11 +200,9 @@ const PatientAdvanceCollection = () => {
                       <th className="text-left text-sm font-medium text-muted-foreground p-4">Receipt No.</th>
                       <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
                       <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
+                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Name</th>
                       <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
                       <th className="text-right text-sm font-medium text-muted-foreground p-4">Amount</th>
-                      <th className="text-right text-sm font-medium text-muted-foreground p-4">Used</th>
-                      <th className="text-right text-sm font-medium text-muted-foreground p-4">Balance</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
                       <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
                     </tr>
                   </thead>
@@ -223,26 +211,15 @@ const PatientAdvanceCollection = () => {
                       <tr key={adv.id} className="border-t hover:bg-muted/20 transition-colors">
                         <td className="p-4">
                           <p className="text-sm font-medium">{adv.receiptNo}</p>
-                          <p className="text-xs text-muted-foreground">{adv.collectedBy}</p>
                         </td>
                         <td className="p-4">
                           <p className="text-sm">{adv.date}</p>
                           <p className="text-xs text-muted-foreground">{adv.time}</p>
                         </td>
                         <td className="p-4 text-sm">{adv.reason}</td>
+                        <td className="p-4 text-sm">{adv.payerName}</td>
                         <td className="p-4 text-sm">{adv.method}</td>
                         <td className="p-4 text-sm font-medium text-right">{formatINR(adv.amount)}</td>
-                        <td className="p-4 text-sm text-muted-foreground text-right">
-                          {adv.usedAmount > 0 ? formatINR(adv.usedAmount) : "—"}
-                        </td>
-                        <td className="p-4 text-sm font-semibold text-green-600 text-right">
-                          {formatINR(adv.amount - adv.usedAmount)}
-                        </td>
-                        <td className="p-4">
-                          <Badge className={`${statusStyles[adv.status]} text-xs`}>
-                            {adv.status}
-                          </Badge>
-                        </td>
                         <td className="p-4">
                           <div className="flex gap-1">
                             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -260,18 +237,10 @@ const PatientAdvanceCollection = () => {
               </div>
 
               {/* Summary Footer */}
-              <div className="mt-4 pt-4 border-t flex items-center justify-end gap-8 text-sm">
+              <div className="mt-4 pt-4 border-t flex items-center justify-end text-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-muted-foreground">Total Collected:</span>
                   <span className="font-semibold">{formatINR(mockPatient.currentAdvance)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Used:</span>
-                  <span className="font-medium">{formatINR(mockPatient.usedAdvance)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Available:</span>
-                  <span className="font-semibold text-green-600">{formatINR(availableBalance)}</span>
                 </div>
               </div>
             </Card>
