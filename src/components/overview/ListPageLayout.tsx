@@ -194,27 +194,25 @@ export function ListPageLayout<T>({
                     <Badge variant="secondary" className="text-lg px-3 py-1">
                       {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
                     </Badge>
-                    {customHeaderContent && (
-                      <div className="ml-4">
-                        {customHeaderContent}
-                      </div>
-                    )}
                   </div>
                   <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
                 </div>
               </div>
-              {!hideExportPrint && (
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Download className="w-4 h-4" />
-                    Export CSV
-                  </Button>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Printer className="w-4 h-4" />
-                    Print List
-                  </Button>
-                </div>
-              )}
+              <div className="flex items-center gap-4">
+                {customHeaderContent}
+                {!hideExportPrint && (
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Download className="w-4 h-4" />
+                      Export CSV
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Printer className="w-4 h-4" />
+                      Print List
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </Card>
 
