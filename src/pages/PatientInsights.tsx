@@ -211,6 +211,8 @@ const PatientInsightsContent = () => {
     insurancePolicyNumber: "POL-2024-78456123",
     insuranceValidFrom: "01/01/2024",
     insuranceValidTo: "31/12/2024",
+    primaryDoctor: "Dr. Meera Nair",
+    primaryDoctorDepartment: "Cardiology",
   };
 
   // Load visits into context on mount
@@ -262,6 +264,11 @@ const PatientInsightsContent = () => {
                 <div className="border-l border-white/20 pl-5">
                   <p className="text-xs text-white">+91 98765 43210</p>
                   <p className="text-xs text-white mt-0.5">name@example.com</p>
+                </div>
+                <div className="border-l border-white/20 pl-5">
+                  <p className="text-xs text-white/60">Primary Doctor</p>
+                  <p className="text-xs text-white mt-0.5">{patient.primaryDoctor}</p>
+                  <p className="text-xs text-white/80 mt-0.5">{patient.primaryDoctorDepartment}</p>
                 </div>
               </div>
 
