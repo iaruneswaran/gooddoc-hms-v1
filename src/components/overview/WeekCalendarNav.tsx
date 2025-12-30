@@ -53,17 +53,17 @@ export function WeekCalendarNav({ selectedDate, onDateChange }: WeekCalendarNavP
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <Button
         variant="ghost"
         size="icon"
         onClick={handlePrevWeek}
-        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground rounded-full"
       >
         <ChevronLeft className="w-4 h-4" />
       </Button>
 
-      <div className="flex items-center gap-0.5 px-2 py-1.5 bg-muted/50 rounded-lg">
+      <div className="flex items-center gap-1">
         {weekDays.map((day) => {
           const isSelected = isSameDay(day, selectedDate);
           const dayLetter = dayLetters[day.getDay()];
@@ -73,14 +73,14 @@ export function WeekCalendarNav({ selectedDate, onDateChange }: WeekCalendarNavP
             <button
               key={day.toISOString()}
               onClick={() => onDateChange(day)}
-              className={`flex flex-col items-center justify-center w-8 h-10 rounded-md text-xs transition-colors ${
+              className={`flex flex-col items-center justify-center w-9 h-12 rounded-lg text-xs transition-all ${
                 isSelected
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "hover:bg-muted/60 text-muted-foreground hover:text-foreground"
               }`}
             >
-              <span className="text-[10px] leading-none font-medium">{dayLetter}</span>
-              <span className="text-sm font-semibold mt-0.5">{dayNum}</span>
+              <span className="text-[10px] leading-none font-medium opacity-80">{dayLetter}</span>
+              <span className="text-sm font-semibold mt-1">{dayNum}</span>
             </button>
           );
         })}
@@ -90,7 +90,7 @@ export function WeekCalendarNav({ selectedDate, onDateChange }: WeekCalendarNavP
         variant="ghost"
         size="icon"
         onClick={handleNextWeek}
-        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground rounded-full"
       >
         <ChevronRight className="w-4 h-4" />
       </Button>
@@ -99,7 +99,7 @@ export function WeekCalendarNav({ selectedDate, onDateChange }: WeekCalendarNavP
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="ml-2 gap-2 h-9 px-3 text-sm font-medium"
+            className="ml-1 gap-2 h-9 px-4 text-sm font-medium rounded-full border-border/60 bg-background hover:bg-muted/50"
           >
             {monthYear}
             <ChevronDown className="w-4 h-4 text-muted-foreground" />
