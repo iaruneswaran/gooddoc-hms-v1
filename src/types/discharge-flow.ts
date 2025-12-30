@@ -89,11 +89,145 @@ export interface BillAdjustment {
 // STEP 2 - DOCTOR CLEARANCE TYPES
 // ═══════════════════════════════════════════════════════════════════════════
 
-export type ConditionAtDischarge = 'Stable' | 'Improved' | 'Unchanged' | 'Guarded';
+export type ConditionAtDischarge = 'Stable' | 'Improved' | 'Unchanged' | 'Guarded' | 'Critical';
 export type DischargeDestination = 'Home' | 'Rehab' | 'SNF' | 'Other';
 export type MedicationAction = 'Continue' | 'Start' | 'Change' | 'Stop';
 export type ActivityLevel = 'BedRest' | 'LightActivity' | 'AsTolerated';
 export type DietType = 'Regular' | 'Diabetic' | 'Renal' | 'Custom';
+
+// Comprehensive discharge reasons covering all hospital scenarios
+export type DischargeReason = 
+  | 'treatment_completed'      // Treatment completed successfully
+  | 'improved'                 // Condition improved, stable for home care
+  | 'referred_higher_center'   // Referred to higher center for advanced care
+  | 'transferred_other_hospital' // Transferred to another hospital
+  | 'lama'                     // Left Against Medical Advice
+  | 'absconded'               // Patient absconded/left without notice
+  | 'death'                   // Death during admission
+  | 'brought_dead'            // Brought dead to hospital
+  | 'dama'                    // Discharge Against Medical Advice (requested by family)
+  | 'not_improved'            // Condition not improved
+  | 'palliative_home'         // Palliative/terminal care at home
+  | 'other';                  // Other reason
+
+export const DISCHARGE_REASON_CONFIG: Record<DischargeReason, {
+  label: string;
+  description: string;
+  requiresMedications: boolean;
+  requiresFollowUp: boolean;
+  requiresChecklist: boolean;
+  requiresDestination: boolean;
+  confirmationText: string;
+}> = {
+  treatment_completed: {
+    label: 'Treatment Completed',
+    description: 'Patient has completed full course of treatment',
+    requiresMedications: true,
+    requiresFollowUp: true,
+    requiresChecklist: true,
+    requiresDestination: true,
+    confirmationText: 'I confirm this patient has completed treatment and is fit for discharge'
+  },
+  improved: {
+    label: 'Condition Improved',
+    description: 'Patient condition improved, stable for home care',
+    requiresMedications: true,
+    requiresFollowUp: true,
+    requiresChecklist: true,
+    requiresDestination: true,
+    confirmationText: 'I confirm this patient is fit for discharge and all clinical requirements have been met'
+  },
+  referred_higher_center: {
+    label: 'Referred to Higher Center',
+    description: 'Patient requires advanced care at specialized facility',
+    requiresMedications: true,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: true,
+    confirmationText: 'I confirm the referral details and transfer arrangements are complete'
+  },
+  transferred_other_hospital: {
+    label: 'Transferred to Other Hospital',
+    description: 'Patient transferred to another healthcare facility',
+    requiresMedications: true,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: true,
+    confirmationText: 'I confirm the transfer details and receiving facility coordination is complete'
+  },
+  lama: {
+    label: 'Left Against Medical Advice (LAMA)',
+    description: 'Patient leaving against medical advice',
+    requiresMedications: false,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: false,
+    confirmationText: 'I confirm the patient has been counseled about risks and LAMA consent obtained'
+  },
+  absconded: {
+    label: 'Absconded',
+    description: 'Patient left without informing staff',
+    requiresMedications: false,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: false,
+    confirmationText: 'I confirm the patient absconded and appropriate authorities have been notified'
+  },
+  death: {
+    label: 'Death',
+    description: 'Patient expired during admission',
+    requiresMedications: false,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: false,
+    confirmationText: 'I confirm the death and all required documentation (death certificate, summary) is complete'
+  },
+  brought_dead: {
+    label: 'Brought Dead',
+    description: 'Patient was brought dead to hospital',
+    requiresMedications: false,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: false,
+    confirmationText: 'I confirm brought dead status and required documentation is complete'
+  },
+  dama: {
+    label: 'Discharge Against Medical Advice (DAMA)',
+    description: 'Family requested discharge against medical advice',
+    requiresMedications: false,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: false,
+    confirmationText: 'I confirm the family has been counseled about risks and DAMA consent obtained'
+  },
+  not_improved: {
+    label: 'Not Improved',
+    description: 'Patient condition unchanged despite treatment',
+    requiresMedications: true,
+    requiresFollowUp: true,
+    requiresChecklist: true,
+    requiresDestination: true,
+    confirmationText: 'I confirm discharge with continued care plan and follow-up arranged'
+  },
+  palliative_home: {
+    label: 'Palliative/Terminal Care at Home',
+    description: 'Patient discharged for end-of-life care at home',
+    requiresMedications: true,
+    requiresFollowUp: false,
+    requiresChecklist: false,
+    requiresDestination: true,
+    confirmationText: 'I confirm palliative care arrangements and family counseling is complete'
+  },
+  other: {
+    label: 'Other',
+    description: 'Other discharge reason',
+    requiresMedications: true,
+    requiresFollowUp: true,
+    requiresChecklist: true,
+    requiresDestination: true,
+    confirmationText: 'I confirm all discharge requirements have been met'
+  }
+};
 
 export interface ClinicalChecklist {
   stableVitals: boolean;
@@ -124,6 +258,8 @@ export interface ClinicalChecklist {
 
 export interface ClinicalStatus {
   checklist: ClinicalChecklist;
+  dischargeReason: DischargeReason;
+  dischargeReasonNotes?: string;
   conditionAtDischarge: ConditionAtDischarge;
   destination: DischargeDestination;
   justification?: string;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,13 @@ import {
   Heart,
   Thermometer,
   Droplets,
-  Search
+  Search,
+  AlertTriangle,
+  Skull,
+  LogOut,
+  Building2,
+  Home,
+  Ambulance
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -36,7 +42,9 @@ import {
   MedicationReconciliationItem,
   ConditionAtDischarge,
   DischargeDestination,
-  MedicationAction
+  MedicationAction,
+  DischargeReason,
+  DISCHARGE_REASON_CONFIG
 } from "@/types/discharge-flow";
 import { SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
 
@@ -86,6 +94,47 @@ const medicationActionColors: Record<string, string> = {
   Stop: "bg-red-500/10 text-red-600 border-red-500/30",
 };
 
+const getDischargeReasonIcon = (reason: DischargeReason) => {
+  switch (reason) {
+    case 'death':
+    case 'brought_dead':
+      return Skull;
+    case 'lama':
+    case 'dama':
+    case 'absconded':
+      return LogOut;
+    case 'referred_higher_center':
+    case 'transferred_other_hospital':
+      return Ambulance;
+    case 'palliative_home':
+      return Home;
+    default:
+      return CheckCircle2;
+  }
+};
+
+const getDischargeReasonColor = (reason: DischargeReason) => {
+  switch (reason) {
+    case 'death':
+    case 'brought_dead':
+      return 'bg-gray-900 text-white';
+    case 'lama':
+    case 'dama':
+    case 'absconded':
+      return 'bg-red-500/10 text-red-600';
+    case 'referred_higher_center':
+    case 'transferred_other_hospital':
+      return 'bg-blue-500/10 text-blue-600';
+    case 'palliative_home':
+      return 'bg-purple-500/10 text-purple-600';
+    case 'treatment_completed':
+    case 'improved':
+      return 'bg-green-500/10 text-green-600';
+    default:
+      return 'bg-muted text-foreground';
+  }
+};
+
 export default function DoctorClearanceStep({ stepStatus, onStepComplete }: DoctorClearanceStepProps) {
   const [data, setData] = useState<DoctorClearance>(SAMPLE_DOCTOR_CLEARANCE);
   const [activeTab, setActiveTab] = useState("clinical");
@@ -98,14 +147,33 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
     duration: ""
   });
   
+  // Get current discharge reason config
+  const dischargeReason = data.clinicalStatus.dischargeReason || 'improved';
+  const reasonConfig = DISCHARGE_REASON_CONFIG[dischargeReason];
+  
   const checklist = data.clinicalStatus.checklist;
   const completedChecks = Object.values(checklist).filter(Boolean).length;
   const totalChecks = checklistItems.length;
   const checklistProgress = Math.round((completedChecks / totalChecks) * 100);
 
+  // Determine if checklist is required based on discharge reason
+  const checklistRequired = reasonConfig.requiresChecklist;
+  const medsRequired = reasonConfig.requiresMedications;
+  const followUpRequired = reasonConfig.requiresFollowUp;
+
   const filteredSuggestions = MEDICATION_SUGGESTIONS.filter(med => 
     med.toLowerCase().includes(medSearch.toLowerCase())
   );
+
+  const handleDischargeReasonChange = (value: DischargeReason) => {
+    setData(prev => ({
+      ...prev,
+      clinicalStatus: {
+        ...prev.clinicalStatus,
+        dischargeReason: value
+      }
+    }));
+  };
 
   const handleChecklistChange = (key: keyof ClinicalChecklist, checked: boolean) => {
     setData(prev => ({
@@ -176,6 +244,13 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
     }));
   };
 
+  // Calculate if sign-off is allowed based on discharge reason requirements
+  const canSignOff = useMemo(() => {
+    if (!data.signoff.confirmFitForDischarge) return false;
+    if (checklistRequired && checklistProgress < 100) return false;
+    return true;
+  }, [data.signoff.confirmFitForDischarge, checklistRequired, checklistProgress]);
+
   const handleSignoff = () => {
     setData(prev => ({
       ...prev,
@@ -195,66 +270,187 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
   const labs = data.clinicalStatus.labsSummary || [];
   const imaging = data.clinicalStatus.imagingSummary || [];
   const medications = data.medicationReconciliation.items;
+  const ReasonIcon = getDischargeReasonIcon(dischargeReason);
 
   return (
     <div className="space-y-6">
+      {/* Discharge Reason Banner - Shows prominently at top */}
+      <Card className={cn("border-2", getDischargeReasonColor(dischargeReason))}>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", getDischargeReasonColor(dischargeReason))}>
+                <ReasonIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Reason for Discharge</p>
+                <p className="text-lg font-bold">{reasonConfig.label}</p>
+                <p className="text-xs mt-0.5">{reasonConfig.description}</p>
+              </div>
+            </div>
+            <Select value={dischargeReason} onValueChange={handleDischargeReasonChange}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="treatment_completed">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    Treatment Completed
+                  </div>
+                </SelectItem>
+                <SelectItem value="improved">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    Condition Improved
+                  </div>
+                </SelectItem>
+                <SelectItem value="not_improved">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-600" />
+                    Not Improved
+                  </div>
+                </SelectItem>
+                <SelectItem value="referred_higher_center">
+                  <div className="flex items-center gap-2">
+                    <Ambulance className="w-4 h-4 text-blue-600" />
+                    Referred to Higher Center
+                  </div>
+                </SelectItem>
+                <SelectItem value="transferred_other_hospital">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-blue-600" />
+                    Transferred to Other Hospital
+                  </div>
+                </SelectItem>
+                <SelectItem value="lama">
+                  <div className="flex items-center gap-2">
+                    <LogOut className="w-4 h-4 text-red-600" />
+                    Left Against Medical Advice (LAMA)
+                  </div>
+                </SelectItem>
+                <SelectItem value="dama">
+                  <div className="flex items-center gap-2">
+                    <LogOut className="w-4 h-4 text-red-600" />
+                    Discharge Against Medical Advice (DAMA)
+                  </div>
+                </SelectItem>
+                <SelectItem value="absconded">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-600" />
+                    Absconded
+                  </div>
+                </SelectItem>
+                <SelectItem value="death">
+                  <div className="flex items-center gap-2">
+                    <Skull className="w-4 h-4 text-gray-600" />
+                    Death
+                  </div>
+                </SelectItem>
+                <SelectItem value="brought_dead">
+                  <div className="flex items-center gap-2">
+                    <Skull className="w-4 h-4 text-gray-600" />
+                    Brought Dead
+                  </div>
+                </SelectItem>
+                <SelectItem value="palliative_home">
+                  <div className="flex items-center gap-2">
+                    <Home className="w-4 h-4 text-purple-600" />
+                    Palliative/Terminal Care at Home
+                  </div>
+                </SelectItem>
+                <SelectItem value="other">
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-gray-600" />
+                    Other
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {/* Show what's required/not required based on reason */}
+          <div className="flex gap-4 mt-4 pt-3 border-t border-border/50">
+            <Badge variant={checklistRequired ? "default" : "secondary"} className="text-xs">
+              Checklist: {checklistRequired ? "Required" : "Not Required"}
+            </Badge>
+            <Badge variant={medsRequired ? "default" : "secondary"} className="text-xs">
+              Medications: {medsRequired ? "Required" : "Not Required"}
+            </Badge>
+            <Badge variant={followUpRequired ? "default" : "secondary"} className="text-xs">
+              Follow-up: {followUpRequired ? "Required" : "Not Required"}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Summary Cards Row */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="border-border">
+        <Card className={cn("border-border", !checklistRequired && "opacity-50")}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Clinical Checklist</p>
-                <p className="text-2xl font-bold text-foreground">{completedChecks}/{totalChecks}</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {checklistRequired ? `${completedChecks}/${totalChecks}` : "N/A"}
+                </p>
               </div>
               <div className={cn(
                 "w-12 h-12 rounded-full flex items-center justify-center",
-                checklistProgress === 100 ? "bg-green-500/10" : "bg-amber-500/10"
+                !checklistRequired ? "bg-muted" : checklistProgress === 100 ? "bg-green-500/10" : "bg-amber-500/10"
               )}>
-                {checklistProgress === 100 ? (
+                {!checklistRequired ? (
+                  <X className="w-6 h-6 text-muted-foreground" />
+                ) : checklistProgress === 100 ? (
                   <CheckCircle2 className="w-6 h-6 text-green-600" />
                 ) : (
                   <AlertCircle className="w-6 h-6 text-amber-600" />
                 )}
               </div>
             </div>
-            <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
-              <div 
-                className={cn("h-full transition-all", checklistProgress === 100 ? "bg-green-500" : "bg-amber-500")}
-                style={{ width: `${checklistProgress}%` }}
-              />
-            </div>
+            {checklistRequired && (
+              <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
+                <div 
+                  className={cn("h-full transition-all", checklistProgress === 100 ? "bg-green-500" : "bg-amber-500")}
+                  style={{ width: `${checklistProgress}%` }}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <Card className="border-border">
+        <Card className={cn("border-border", !medsRequired && "opacity-50")}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Medications</p>
-                <p className="text-2xl font-bold text-foreground">{medications.length}</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {medsRequired ? medications.length : "N/A"}
+                </p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Pill className="w-6 h-6 text-primary" />
+              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", medsRequired ? "bg-primary/10" : "bg-muted")}>
+                <Pill className={cn("w-6 h-6", medsRequired ? "text-primary" : "text-muted-foreground")} />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {medications.filter(m => m.action === "Start").length} new, {medications.filter(m => m.action === "Stop").length} stopped
-            </p>
+            {medsRequired && (
+              <p className="text-xs text-muted-foreground mt-2">
+                {medications.filter(m => m.action === "Start").length} new, {medications.filter(m => m.action === "Stop").length} stopped
+              </p>
+            )}
           </CardContent>
         </Card>
 
-        <Card className="border-border">
+        <Card className={cn("border-border", !followUpRequired && "opacity-50")}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Follow-up</p>
                 <p className="text-lg font-bold text-foreground">
-                  {data.followUps.followUpDate || "Not set"}
+                  {followUpRequired ? (data.followUps.followUpDate || "Not set") : "N/A"}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-blue-600" />
+              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", followUpRequired ? "bg-blue-500/10" : "bg-muted")}>
+                <Calendar className={cn("w-6 h-6", followUpRequired ? "text-blue-600" : "text-muted-foreground")} />
               </div>
             </div>
           </CardContent>
@@ -317,26 +513,52 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
           <CardContent className="p-6">
             {/* Clinical Status Tab */}
             <TabsContent value="clinical" className="mt-0 space-y-6">
+              {/* Discharge Reason Notes - shown for all discharge types */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground">Discharge Notes</h3>
+                <Textarea
+                  placeholder={`Notes for ${reasonConfig.label}...`}
+                  value={data.clinicalStatus.dischargeReasonNotes || ""}
+                  onChange={(e) => setData(prev => ({
+                    ...prev,
+                    clinicalStatus: { ...prev.clinicalStatus, dischargeReasonNotes: e.target.value }
+                  }))}
+                  rows={3}
+                  className="resize-none"
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-6">
-                {/* Discharge Readiness Checklist */}
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-foreground">Discharge Readiness Checklist</h3>
-                  <div className="space-y-2">
-                    {checklistItems.map(item => (
-                      <div key={item.key} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
-                        <Checkbox 
-                          id={item.key}
-                          checked={checklist[item.key] === true}
-                          onCheckedChange={(checked) => handleChecklistChange(item.key, checked as boolean)}
-                        />
-                        <label htmlFor={item.key} className="text-sm cursor-pointer flex-1">
-                          {item.label}
-                        </label>
-                        {checklist[item.key] && <Check className="w-4 h-4 text-green-600" />}
-                      </div>
-                    ))}
+                {/* Discharge Readiness Checklist - Only shown when required */}
+                {checklistRequired ? (
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-foreground">Discharge Readiness Checklist</h3>
+                    <div className="space-y-2">
+                      {checklistItems.map(item => (
+                        <div key={item.key} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
+                          <Checkbox 
+                            id={item.key}
+                            checked={checklist[item.key] === true}
+                            onCheckedChange={(checked) => handleChecklistChange(item.key, checked as boolean)}
+                          />
+                          <label htmlFor={item.key} className="text-sm cursor-pointer flex-1">
+                            {item.label}
+                          </label>
+                          {checklist[item.key] && <Check className="w-4 h-4 text-green-600" />}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-foreground">Checklist Not Required</h3>
+                    <div className="p-4 bg-muted/50 rounded-lg border border-dashed">
+                      <p className="text-sm text-muted-foreground">
+                        Clinical checklist is not required for <span className="font-medium">{reasonConfig.label}</span> discharges.
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Vitals & Status */}
                 <div className="space-y-4">
@@ -706,19 +928,19 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 }))}
               />
               <label htmlFor="confirm-discharge" className="text-sm font-medium cursor-pointer">
-                I confirm this patient is fit for discharge and all clinical requirements have been met
+                {reasonConfig.confirmationText}
               </label>
             </div>
             <Button 
               onClick={handleSignoff}
-              disabled={!data.signoff.confirmFitForDischarge || checklistProgress < 100}
+              disabled={!canSignOff}
               className="gap-2"
             >
               Sign & Clear
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
-          {checklistProgress < 100 && (
+          {checklistRequired && checklistProgress < 100 && (
             <p className="text-sm text-amber-600 mt-2">
               Complete all checklist items to proceed with sign-off
             </p>

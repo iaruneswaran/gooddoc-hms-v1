@@ -116,6 +116,7 @@ export const SAMPLE_DOCTOR_CLEARANCE: DoctorClearance = {
       imagingReviewed: true,
       returnPrecautionsGiven: true,
     },
+    dischargeReason: "improved",
     conditionAtDischarge: "Stable",
     destination: "Home",
     vitalsSnapshot: {
