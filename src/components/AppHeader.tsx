@@ -61,7 +61,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-12 h-10 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 focus:border-primary transition-all"
+            className="pl-12 h-10 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 transition-all"
           />
         </div>
       </div>
