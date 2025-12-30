@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
-import { WeekCalendarNav } from "@/components/overview/WeekCalendarNav";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { opPatients as initialOpPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
@@ -28,7 +27,6 @@ const OPPatientsToday = () => {
   const [opPatientsData, setOpPatientsData] = useState<OPPatientRecord[]>(initialOpPatients);
   const [selectedPatient, setSelectedPatient] = useState<OPPatientRecord | null>(null);
   const [showSummary, setShowSummary] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const allowedStatuses = ["Pending Check-in", "Checked-in", "Completed"];
   const filteredByStatus = opPatientsData.filter(p => allowedStatuses.includes(p.status));
@@ -196,10 +194,6 @@ const OPPatientsToday = () => {
     { label: "View Summary", onClick: (row) => handleViewSummary(row) },
   ];
 
-  const weekCalendarNav = (
-    <WeekCalendarNav selectedDate={selectedDate} onDateChange={setSelectedDate} />
-  );
-
   return (
     <>
       <ListPageLayout
@@ -215,7 +209,6 @@ const OPPatientsToday = () => {
         searchPlaceholder="Search by MRN, name, Visit ID..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`)}
-        customHeaderContent={weekCalendarNav}
         hideExportPrint={true}
       />
 
