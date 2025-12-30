@@ -281,49 +281,28 @@ export default function DischargeSummaryStep({
         </CardContent>
       </Card>
 
-      {/* Follow-up Appointment */}
+      {/* Follow-up Recommendation */}
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="text-lg flex items-center gap-2">
             <CalendarCheck className="h-5 w-5 text-primary" />
-            Follow-up Appointment
+            Follow-up Recommendation
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <Calendar className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-wide">Date</span>
-                <p className="font-semibold text-foreground mt-0.5">
-                  {clearance.followUps.followUpDate 
-                    ? formatDateOnly(clearance.followUps.followUpDate) 
-                    : 'To be scheduled'}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <ClipboardList className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-wide">Reason</span>
-                <p className="font-medium text-foreground mt-0.5">
-                  Post-discharge evaluation and medication review
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <User className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-wide">Consultant</span>
-                <p className="font-medium text-foreground mt-0.5">{summary.header.attending}</p>
-              </div>
-            </div>
+          <div className="p-5 bg-primary/5 rounded-lg border border-primary/20">
+            <p className="text-sm text-foreground leading-relaxed">
+              The attending physician, <span className="font-semibold">{summary.header.attending}</span>, recommends a follow-up visit on{" "}
+              <span className="font-semibold text-primary">
+                {clearance.followUps.followUpDate 
+                  ? formatDateOnly(clearance.followUps.followUpDate) 
+                  : '[Date to be scheduled]'}
+              </span>{" "}
+              for <span className="font-medium">post-discharge evaluation and medication review</span>.
+            </p>
+            <p className="text-xs text-muted-foreground mt-3 italic">
+              Please contact the outpatient reception or call the hospital helpline to schedule your appointment.
+            </p>
           </div>
 
           {/* External Referrals if any */}
