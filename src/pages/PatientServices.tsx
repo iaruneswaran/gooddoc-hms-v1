@@ -200,6 +200,18 @@ const PatientServices = () => {
             <div className="p-3 border-b border-border">
               <div className="flex gap-1 bg-muted rounded-lg p-1">
                 <button
+                  onClick={() => setViewMode('catalog')}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
+                    viewMode === 'catalog'
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  Catalog
+                </button>
+                <button
                   onClick={() => setViewMode('pending')}
                   className={cn(
                     "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
@@ -215,18 +227,6 @@ const PatientServices = () => {
                       {pendingServices.length}
                     </Badge>
                   )}
-                </button>
-                <button
-                  onClick={() => setViewMode('catalog')}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
-                    viewMode === 'catalog'
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  <Package className="w-3.5 h-3.5" />
-                  Catalog
                 </button>
               </div>
             </div>
