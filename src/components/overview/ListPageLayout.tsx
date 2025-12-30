@@ -91,7 +91,6 @@ interface ListPageLayoutProps<T> {
   getRowId: (row: T) => string;
   urlParamFilters?: UrlParamFilter[];
   customHeaderContent?: React.ReactNode;
-  customHeaderRightContent?: React.ReactNode;
 }
 
 export function ListPageLayout<T>({
@@ -113,7 +112,6 @@ export function ListPageLayout<T>({
   getRowId,
   urlParamFilters = [],
   customHeaderContent,
-  customHeaderRightContent,
 }: ListPageLayoutProps<T>) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -204,20 +202,14 @@ export function ListPageLayout<T>({
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {customHeaderRightContent ? (
-                  customHeaderRightContent
-                ) : (
-                  <>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Download className="w-4 h-4" />
-                      Export CSV
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Printer className="w-4 h-4" />
-                      Print List
-                    </Button>
-                  </>
-                )}
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export CSV
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Printer className="w-4 h-4" />
+                  Print List
+                </Button>
               </div>
             </div>
           </Card>

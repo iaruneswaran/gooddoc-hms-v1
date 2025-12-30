@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
@@ -13,65 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Phone } from "lucide-react";
 import { formatINR } from "@/utils/currency";
-import { format, startOfWeek, addDays, isSameDay } from "date-fns";
-
-// Week calendar strip component
-const WeekCalendarStrip = () => {
-  const today = new Date();
-  const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Monday start
-  
-  const days = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = addDays(weekStart, i);
-      return {
-        dayLetter: format(date, "EEEEE"), // M, T, W, etc.
-        dayNum: format(date, "dd"),
-        isToday: isSameDay(date, today),
-        date,
-      };
-    });
-  }, [weekStart, today]);
-
-  const monthYear = format(today, "MMM yyyy").toUpperCase();
-
-  return (
-    <div className="flex items-center gap-1">
-      {days.map((day, idx) => (
-        <div
-          key={idx}
-          className={`flex flex-col items-center justify-center w-9 h-12 rounded-md text-xs font-medium transition-colors ${
-            day.isToday
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted/50 text-muted-foreground hover:bg-muted"
-          }`}
-        >
-          <span className="text-[10px] font-normal">{day.dayLetter}</span>
-          <span className="text-sm font-semibold">{day.dayNum}</span>
-        </div>
-      ))}
-      <div className="ml-2 text-xs font-medium text-muted-foreground">{monthYear}</div>
-    </div>
-  );
-};
-
-// Subcount display component
-const SubcountDisplay = () => {
-  return (
-    <div className="flex items-center gap-3 text-sm">
-      <div className="flex items-center gap-1.5">
-        <span className="w-2 h-2 rounded-full bg-red-500"></span>
-        <span className="text-muted-foreground">ICU</span>
-        <span className="font-semibold">37</span>
-      </div>
-      <div className="w-px h-4 bg-border"></div>
-      <div className="flex items-center gap-1.5">
-        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-        <span className="text-muted-foreground">Ward</span>
-        <span className="font-semibold">30</span>
-      </div>
-    </div>
-  );
-};
 
 const statusStyles: Record<string, string> = {
   "Pending Check-in": "bg-amber-100 text-amber-700",
@@ -268,8 +209,6 @@ const OPPatientsToday = () => {
         searchPlaceholder="Search by MRN, name, Visit ID..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`)}
-        customHeaderContent={<SubcountDisplay />}
-        customHeaderRightContent={<WeekCalendarStrip />}
       />
 
       <Dialog open={showSummary} onOpenChange={setShowSummary}>
