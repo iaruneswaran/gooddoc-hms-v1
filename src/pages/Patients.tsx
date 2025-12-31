@@ -240,8 +240,8 @@ export default function Patients() {
               <div className="text-xs font-medium text-muted-foreground">Department</div>
               <div className="text-xs font-medium text-muted-foreground">City</div>
               <div className="text-xs font-medium text-muted-foreground">Blood</div>
-              <div className="text-xs font-medium text-muted-foreground">Last Visit</div>
               <div className="text-xs font-medium text-muted-foreground">Registered</div>
+              <div className="text-xs font-medium text-muted-foreground">Last Visit</div>
               <div className="text-xs font-medium text-muted-foreground">Status</div>
               <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
             </div>
@@ -287,10 +287,10 @@ export default function Patients() {
                 <div className="text-sm text-foreground truncate">{patient.department || "-"}</div>
                 <div className="text-sm text-foreground truncate">{patient.address_city || "-"}</div>
                 <div className="text-sm text-foreground">{patient.blood_group || "-"}</div>
+                <div className="text-sm text-foreground truncate">{formatDate(patient.registration_date)}</div>
                 <div className="text-sm text-foreground truncate">
                   {patient.last_visit_date ? formatDate(patient.last_visit_date) : "-"}
                 </div>
-                <div className="text-sm text-foreground truncate">{formatDate(patient.registration_date)}</div>
                 <div>
                   <Badge
                     variant="secondary"
