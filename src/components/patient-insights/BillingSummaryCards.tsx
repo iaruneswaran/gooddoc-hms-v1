@@ -27,7 +27,7 @@ export function BillingSummaryCards({
     <div className="flex gap-4">
       {/* Billing Summary Card */}
       <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-5 py-4 min-w-[280px] hover:bg-white/15 transition-colors">
-        <p className="text-white font-semibold text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
+        <p className="text-white text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
           Billing Summary
         </p>
         <div className="space-y-2.5">
@@ -44,7 +44,7 @@ export function BillingSummaryCards({
 
       {/* Collection Status Card */}
       <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-5 py-4 min-w-[280px] hover:bg-white/15 transition-colors">
-        <p className="text-white font-semibold text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
+        <p className="text-white text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
           Collection Status
         </p>
         <div className="space-y-2.5">
@@ -62,7 +62,7 @@ export function BillingSummaryCards({
       {/* Total Due Amount Card - Hero Card */}
       <Card className="bg-white/15 backdrop-blur-sm border-white/30 px-5 py-4 min-w-[300px] hover:bg-white/20 transition-colors ring-1 ring-white/10">
         <div className="flex items-baseline justify-between pb-2.5 border-b border-white/25 mb-3">
-          <p className="text-white font-semibold text-sm tracking-wide">Total Due Amount</p>
+          <p className="text-white text-sm tracking-wide">Total Due Amount</p>
           <span className="text-white font-bold text-2xl tabular-nums">{totalDue}</span>
         </div>
         <div className="space-y-2.5">
