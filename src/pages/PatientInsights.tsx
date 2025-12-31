@@ -251,7 +251,7 @@ const PatientInsightsContent = () => {
             {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between">
               {/* Patient Info Section with Action Buttons */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-6">
                   <PatientChip
                     name={patient.name}
