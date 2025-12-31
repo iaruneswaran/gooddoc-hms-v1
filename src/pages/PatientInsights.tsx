@@ -6,7 +6,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
-import { KpiTile } from "@/components/patient-insights/KpiTile";
+import { BillingSummaryCards } from "@/components/patient-insights/BillingSummaryCards";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
 import { VisitSelector } from "@/components/patient-insights/VisitSelector";
 import { VisitProvider, useVisit, VisitOption } from "@/contexts/VisitContext";
@@ -271,36 +271,16 @@ const PatientInsightsContent = () => {
                 </div>
               </div>
 
-              {/* Right: KPIs */}
-              <div className="flex gap-3">
-                <KpiTile 
-                  label="Bill Amount" 
-                  amount={patient.billAmount} 
-                  variant="light" 
-                  subtitle="3 invoices"
-                />
-                <KpiTile 
-                  label="Advance Amount" 
-                  amount={patient.advanceAmount} 
-                  variant="light" 
-                  subtitle="Deposit paid"
-                />
-                <KpiTile 
-                  label="Collected Amount" 
-                  amount={patient.collectedAmount} 
-                  variant="light" 
-                  subtitle="65% paid"
-                />
-                <KpiTile 
-                  label="Balance Amount" 
-                  amount={patient.balanceAmount} 
-                  variant="light" 
-                  subtitle="Due today"
-                  secondaryAmount="₹4,850"
-                  showArrow
-                  onClick={() => navigate(`/patient-insights/${patientId}/discharge?view=interim`)}
-                />
-              </div>
+              {/* Right: Billing Summary Cards */}
+              <BillingSummaryCards
+                billedAmount="₹10,000"
+                unbilledAmount="₹2,000"
+                totalDue="₹12,000"
+                advanceAmount="₹3,000"
+                collectedAmount="₹8,000"
+                balanceAmount="₹4,000"
+                variant="light"
+              />
             </div>
 
             {/* Action Buttons Row */}
