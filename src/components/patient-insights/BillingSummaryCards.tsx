@@ -44,7 +44,7 @@ export function BillingSummaryCards({
   return (
     <div className="flex gap-3">
       {/* Billing Summary Card */}
-      <Card className={`${cardClass} px-4 py-3 min-w-[280px]`}>
+      <Card className={`${cardClass} px-5 py-3 min-w-[320px]`}>
         <p className={titleClass}>Billing Summary</p>
         <div className="mt-2 space-y-1.5">
           <div className="flex items-center justify-between">
@@ -72,7 +72,7 @@ export function BillingSummaryCards({
       </Card>
 
       {/* Collection Status Card */}
-      <Card className={`${cardClass} px-4 py-3 min-w-[320px]`}>
+      <Card className={`${cardClass} px-5 py-3 min-w-[360px]`}>
         <p className={titleClass}>Collection Status</p>
         <div className="mt-2 space-y-1.5">
           <div className="flex items-center justify-between">
