@@ -36,51 +36,87 @@ export default function PendingBillStep({
   return (
     <div className="flex flex-col items-center py-8">
       {/* Summary Cards Grid */}
-      <div className="grid grid-cols-2 gap-6 max-w-3xl w-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl w-full">
         {/* Billing Summary Card */}
-        <Card className="overflow-hidden">
-          <div className="bg-muted/50 px-5 py-3 border-b flex items-center gap-2">
-            <Receipt className="w-4 h-4 text-muted-foreground" />
-            <h3 className="font-semibold text-foreground text-sm">Billing Summary</h3>
+        <Card className="overflow-hidden border-border/60 shadow-sm">
+          <div className="bg-gradient-to-r from-muted/80 to-muted/40 px-5 py-3.5 border-b border-border/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1.5 rounded-md bg-primary/10">
+                <Receipt className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-semibold text-foreground">Billing Summary</h3>
+            </div>
           </div>
-          <div className="p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Billed Amount</span>
-              <span className="font-semibold text-foreground">{formatCurrency(totalAmount)}</span>
+          <div className="p-5 space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Billed Amount</span>
+                <span className="font-semibold text-foreground tabular-nums">{formatCurrency(totalAmount)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Unbilled Amount</span>
+                <span className="font-semibold text-foreground tabular-nums">{formatCurrency(unbilledAmount)}</span>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Unbilled Amount</span>
-              <span className="font-semibold text-foreground">{formatCurrency(unbilledAmount)}</span>
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Paid Amount</span>
-              <span className="font-semibold text-green-600">{formatCurrency(totalPaid)}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Outstanding</span>
-              <span className="font-semibold text-red-600">{formatCurrency(totalOutstanding)}</span>
+            <Separator className="bg-border/50" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Paid Amount</span>
+                <span className="font-semibold text-green-600 tabular-nums">{formatCurrency(totalPaid)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Outstanding</span>
+                <span className="font-semibold text-destructive tabular-nums">{formatCurrency(totalOutstanding)}</span>
+              </div>
             </div>
           </div>
         </Card>
 
-        {/* Total Due Amount Card */}
-        <Card className="overflow-hidden">
-          <div className="bg-muted/50 px-5 py-3 border-b flex items-center gap-2">
-            <Wallet className="w-4 h-4 text-muted-foreground" />
-            <h3 className="font-semibold text-foreground text-sm">Total Due Amount</h3>
+        {/* Collection Status Card */}
+        <Card className="overflow-hidden border-border/60 shadow-sm">
+          <div className="bg-gradient-to-r from-muted/80 to-muted/40 px-5 py-3.5 border-b border-border/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1.5 rounded-md bg-green-500/10">
+                <Wallet className="w-4 h-4 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-foreground">Collection Status</h3>
+            </div>
           </div>
-          <div className="p-5">
-            <p className="text-3xl font-bold text-foreground mb-4">{formatCurrency(totalDue)}</p>
+          <div className="p-5 space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Advance Paid</span>
-                <span className="font-semibold text-green-600">−{formatCurrency(advancePaid)}</span>
+                <span className="font-semibold text-green-600 tabular-nums">{formatCurrency(advancePaid)}</span>
               </div>
-              <Separator />
               <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Advance Balance</span>
+                <span className="font-semibold text-foreground tabular-nums">{formatCurrency(advancePaid)}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Total Due Amount Card - Hero Card */}
+        <Card className="overflow-hidden border-primary/30 shadow-sm bg-gradient-to-br from-primary/5 to-primary/10">
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 px-5 py-3.5 border-b border-primary/20">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1.5 rounded-md bg-primary/20">
+                <Receipt className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-semibold text-primary">Total Due Amount</h3>
+            </div>
+          </div>
+          <div className="p-5">
+            <p className="text-4xl font-bold text-primary mb-5 tabular-nums">{formatCurrency(totalDue)}</p>
+            <div className="space-y-3 bg-background/50 rounded-lg p-3 -mx-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Advance Paid</span>
+                <span className="font-semibold text-green-600 tabular-nums">−{formatCurrency(advancePaid)}</span>
+              </div>
+              <Separator className="bg-border/50" />
+              <div className="flex items-center justify-between pt-1">
                 <span className="text-sm font-medium text-foreground">Total Payable</span>
-                <span className="text-xl font-bold text-primary">{formatCurrency(totalPayable)}</span>
+                <span className="text-2xl font-bold text-primary tabular-nums">{formatCurrency(totalPayable)}</span>
               </div>
             </div>
           </div>
