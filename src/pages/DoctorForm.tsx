@@ -26,7 +26,7 @@ import {
 import { ChevronDown, ChevronLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 
 export default function DoctorForm() {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ export default function DoctorForm() {
         return;
       }
     }
-    setCurrentStep((prev) => Math.min(prev + 1, 3) as Step);
+    setCurrentStep((prev) => Math.min(prev + 1, 2) as Step);
   };
 
   const handleBack = () => {
@@ -130,7 +130,7 @@ export default function DoctorForm() {
 
           {/* Stepper */}
           <div className="mb-8 flex items-center justify-center gap-4">
-            {[1, 2, 3].map((step) => (
+            {[1, 2].map((step) => (
               <div key={step} className="flex items-center gap-2">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -143,10 +143,9 @@ export default function DoctorForm() {
                 </div>
                 <span className="text-sm font-medium">
                   {step === 1 && "Basic Info"}
-                  {step === 2 && "Availability"}
-                  {step === 3 && "Fees"}
+                  {step === 2 && "Availability & Fees"}
                 </span>
-                {step < 3 && (
+                {step < 2 && (
                   <div className="w-12 h-[2px] bg-muted mx-2" />
                 )}
               </div>
@@ -226,6 +225,19 @@ export default function DoctorForm() {
                         onChange={(e) => setPhone(e.target.value)}
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="licenseNo">License/Registration No.</Label>
+                    <Input
+                      id="licenseNo"
+                      placeholder="MCI-XXXXXXX"
+                      value={licenseNo}
+                      onChange={(e) => setLicenseNo(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      License is required to activate.
+                    </p>
                   </div>
 
                   {/* Advanced Options */}
@@ -392,41 +404,6 @@ export default function DoctorForm() {
                   </div>
                 </div>
 
-                {/* Advanced Options */}
-                <Collapsible open={advancedOpen2} onOpenChange={setAdvancedOpen2}>
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="w-full justify-between">
-                      Advanced Options
-                      <ChevronDown className={`w-4 h-4 transition-transform ${advancedOpen2 ? "rotate-180" : ""}`} />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="space-y-4 mt-4">
-                    <div>
-                      <Label htmlFor="buffer">Buffer before/after (minutes)</Label>
-                      <Input
-                        id="buffer"
-                        type="number"
-                        placeholder="5"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="maxPatients">Max patients per slot</Label>
-                      <Input
-                        id="maxPatients"
-                        type="number"
-                        placeholder="1"
-                      />
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </div>
-            )}
-
-            {/* Step 3 - Fees */}
-            {currentStep === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Fees & Publish</h2>
-                
                 <div>
                   <Label htmlFor="fee">Fee (in-person) *</Label>
                   <Input
@@ -463,18 +440,33 @@ export default function DoctorForm() {
                   )}
                 </div>
 
-                <div>
-                  <Label htmlFor="licenseNo">License/Registration No.</Label>
-                  <Input
-                    id="licenseNo"
-                    placeholder="MCI-XXXXXXX"
-                    value={licenseNo}
-                    onChange={(e) => setLicenseNo(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    License is required to activate.
-                  </p>
-                </div>
+                {/* Advanced Options */}
+                <Collapsible open={advancedOpen2} onOpenChange={setAdvancedOpen2}>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between">
+                      Advanced Options
+                      <ChevronDown className={`w-4 h-4 transition-transform ${advancedOpen2 ? "rotate-180" : ""}`} />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-4 mt-4">
+                    <div>
+                      <Label htmlFor="buffer">Buffer before/after (minutes)</Label>
+                      <Input
+                        id="buffer"
+                        type="number"
+                        placeholder="5"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="maxPatients">Max patients per slot</Label>
+                      <Input
+                        id="maxPatients"
+                        type="number"
+                        placeholder="1"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             )}
 
@@ -485,7 +477,7 @@ export default function DoctorForm() {
                   Back
                 </Button>
               )}
-              {currentStep < 3 ? (
+              {currentStep < 2 ? (
                 <Button onClick={handleNext} className="ml-auto">
                   Next
                 </Button>
