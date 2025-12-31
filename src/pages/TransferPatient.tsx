@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { TransferDetailsStep } from "@/components/transfer/steps/TransferDetailsStep";
 import { TransferRequest, Bed, TransferTimelineEvent } from "@/types/transfer";
+import { createBedChargeFromTransfer } from "@/data/pending-bed-charges.mock";
 
 const TransferPatient = () => {
   const { patientId } = useParams();
@@ -36,6 +37,7 @@ const TransferPatient = () => {
     },
     currentTariff: 3500,
     admissionStatus: "Admitted",
+    admissionDate: "2025-12-18T10:00:00", // Added for bed charge calculation
   };
 
   const [transferData, setTransferData] = useState<Partial<TransferRequest>>({
@@ -86,6 +88,8 @@ const TransferPatient = () => {
   };
 
   const handleConfirm = async () => {
+    if (!selectedBed) return;
+    
     setIsSubmitting(true);
     
     // Simulate API call
@@ -93,9 +97,26 @@ const TransferPatient = () => {
     
     const transferId = `TR-${Date.now().toString().slice(-6)}`;
     
+    // Create bed charge entry for the old bed based on days stayed
+    createBedChargeFromTransfer(
+      patientId || '',
+      patient.currentLocation.bedId,
+      patient.currentLocation.bedName,
+      patient.currentLocation.roomName,
+      patient.currentLocation.unitName,
+      patient.currentTariff,
+      selectedBed.id,
+      selectedBed.bedName,
+      selectedBed.roomName,
+      selectedBed.unitName,
+      selectedBed.tariff,
+      patient.admissionDate,
+      transferId
+    );
+    
     toast({
       title: "Transfer request created",
-      description: `Transfer ID: ${transferId}`,
+      description: `Transfer ID: ${transferId}. Bed charges added to pending services.`,
     });
     
     // Navigate back to patient insights
