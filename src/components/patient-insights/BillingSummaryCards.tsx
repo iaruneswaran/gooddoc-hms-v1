@@ -63,7 +63,7 @@ export function BillingSummaryCards({
       <Card className="bg-white/15 backdrop-blur-sm border-white/30 px-5 py-4 min-w-[300px] hover:bg-white/20 transition-colors ring-1 ring-white/10">
         <div className="flex items-baseline justify-between pb-2.5 border-b border-white/25 mb-3">
           <p className="text-white text-sm tracking-wide">Total Due Amount</p>
-          <span className="text-white font-bold text-2xl tabular-nums">{totalDue}</span>
+          <span className="text-white font-bold text-lg tabular-nums">{totalDue}</span>
         </div>
         <div className="space-y-2.5">
           <div className="flex items-center justify-between">
