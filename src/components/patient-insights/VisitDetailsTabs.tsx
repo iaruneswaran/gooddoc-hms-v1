@@ -7,6 +7,7 @@ import { DocumentsTab } from "./tabs/DocumentsTab";
 import { InsuranceTab } from "./tabs/InsuranceTab";
 import { PatientDetailsTab } from "./tabs/PatientDetailsTab";
 import { TimelineTab } from "./tabs/TimelineTab";
+import { VisitSelector } from "./VisitSelector";
 import { Visit } from "./VisitListItem";
 import { 
   Calendar, 
@@ -59,21 +60,24 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
         {/* Sticky Tab Bar */}
         <div className="sticky top-0 bg-card z-10 border-b border-border">
-          <TabsList className="h-11 bg-muted/50 p-1 gap-0.5 rounded-md mx-6 my-3 justify-start w-auto inline-flex">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className="gap-2 text-sm px-4 h-9 rounded-sm data-[state=active]:bg-card data-[state=active]:shadow-sm"
-                >
-                  <Icon className="w-4 h-4" />
-                  {tab.label}
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+          <div className="flex items-center gap-4 px-6 py-3">
+            <VisitSelector />
+            <TabsList className="h-11 bg-muted/50 p-1 gap-0.5 rounded-md justify-start w-auto inline-flex">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className="gap-2 text-sm px-4 h-9 rounded-sm data-[state=active]:bg-card data-[state=active]:shadow-sm"
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+          </div>
         </div>
 
         {/* Tab Content */}

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { PatientChip } from "@/components/patient-insights/PatientChip";
 import { BillingSummaryCards } from "@/components/patient-insights/BillingSummaryCards";
 import { VisitDetailsTabs } from "@/components/patient-insights/VisitDetailsTabs";
-import { VisitSelector } from "@/components/patient-insights/VisitSelector";
 import { VisitProvider, useVisit, VisitOption } from "@/contexts/VisitContext";
 import { Visit } from "@/components/patient-insights/VisitListItem";
 
@@ -362,11 +361,6 @@ const PatientInsightsContent = () => {
                       </Button>
                     </>
                   )}
-                </div>
-                
-                {/* Visit Selector Row */}
-                <div className="mt-3">
-                  <VisitSelector variant="light" />
                 </div>
               </div>
 
