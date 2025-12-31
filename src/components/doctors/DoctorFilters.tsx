@@ -50,7 +50,8 @@ export function DoctorFilters({
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
       <Select onValueChange={(val) => addFilter(`Department: ${val}`)}>
         <SelectTrigger className="w-[120px] h-9 text-xs">
           <SelectValue placeholder="Department" />
@@ -119,49 +120,50 @@ export function DoctorFilters({
           <SelectItem value="inactive">Inactive</SelectItem>
           <SelectItem value="pending">Pending</SelectItem>
         </SelectContent>
-      </Select>
+        </Select>
 
-      {/* Applied Filters as badges */}
-      {(filters.length > 0 || availableDate) && (
-        <>
-          {availableDate && (
-            <Badge variant="secondary" className="gap-1 pr-1 h-9 px-3">
-              Available: {format(availableDate, "dd MMM")}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-4 w-4 p-0 hover:bg-transparent"
-                onClick={() => onAvailableDateChange?.(undefined)}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </Badge>
-          )}
-          {filters.map((filter, i) => (
-            <Badge key={i} variant="secondary" className="gap-1 pr-1 h-9 px-3">
-              {filter}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-4 w-4 p-0 hover:bg-transparent"
-                onClick={() => removeFilter(filter)}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </Badge>
-          ))}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearAllFilters}
-            className="h-9 text-xs"
-          >
-            Clear
-          </Button>
-        </>
-      )}
+        {/* Applied Filters as badges */}
+        {(filters.length > 0 || availableDate) && (
+          <>
+            {availableDate && (
+              <Badge variant="secondary" className="gap-1 pr-1 h-9 px-3">
+                Available: {format(availableDate, "dd MMM")}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  onClick={() => onAvailableDateChange?.(undefined)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </Badge>
+            )}
+            {filters.map((filter, i) => (
+              <Badge key={i} variant="secondary" className="gap-1 pr-1 h-9 px-3">
+                {filter}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  onClick={() => removeFilter(filter)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </Badge>
+            ))}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="h-9 text-xs"
+            >
+              Clear
+            </Button>
+          </>
+        )}
+      </div>
 
-      {/* Search bar */}
+      {/* Search bar - Right side */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
