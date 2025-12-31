@@ -38,6 +38,8 @@ interface ScheduleBlock {
   end: string;
   location: string;
   mode: "in_person" | "telehealth" | "both";
+  duration: number;
+  capacity: number;
 }
 
 interface DaySchedule {
@@ -77,7 +79,7 @@ export default function DoctorForm() {
   const [weekPattern, setWeekPattern] = useState<DaySchedule[]>([]);
   const [editingBlock, setEditingBlock] = useState<{ day: number; blockIndex: number } | null>(null);
   const [addingToDay, setAddingToDay] = useState<number | null>(null);
-  const [blockForm, setBlockForm] = useState<{ start: string; end: string; location: string; mode: "in_person" | "telehealth" | "both" }>({ start: "09:00", end: "13:00", location: "main", mode: "in_person" });
+  const [blockForm, setBlockForm] = useState<{ start: string; end: string; location: string; mode: "in_person" | "telehealth" | "both"; duration: number; capacity: number }>({ start: "09:00", end: "13:00", location: "main", mode: "in_person", duration: 30, capacity: 1 });
 
   // Form state - Fees
   const [fee, setFee] = useState("");
@@ -110,7 +112,7 @@ export default function DoctorForm() {
   };
 
   const handleAddBlock = (day: number) => {
-    setBlockForm({ start: "09:00", end: "13:00", location: "main", mode: "in_person" });
+    setBlockForm({ start: "09:00", end: "13:00", location: "main", mode: "in_person", duration: 30, capacity: 1 });
     setAddingToDay(day);
   };
 
@@ -122,6 +124,8 @@ export default function DoctorForm() {
       end: block.end,
       location: block.location || "main",
       mode: block.mode || "in_person",
+      duration: block.duration || 30,
+      capacity: block.capacity || 1,
     });
     setEditingBlock({ day, blockIndex });
   };
@@ -149,6 +153,8 @@ export default function DoctorForm() {
       end: blockForm.end,
       location: blockForm.location,
       mode: blockForm.mode,
+      duration: blockForm.duration,
+      capacity: blockForm.capacity,
     };
 
     if (addingToDay !== null) {
@@ -586,6 +592,30 @@ export default function DoctorForm() {
                         <SelectItem value="both">Both</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Duration (min)</Label>
+                      <Input
+                        type="number"
+                        min={5}
+                        value={blockForm.duration}
+                        onChange={(e) => setBlockForm({ ...blockForm, duration: parseInt(e.target.value) || 30 })}
+                      />
+                    </div>
+                    <div>
+                      <Label>Patients per Slot</Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={blockForm.capacity}
+                        onChange={(e) => setBlockForm({ ...blockForm, capacity: parseInt(e.target.value) || 1 })}
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Patients booked per time slot
+                      </p>
+                    </div>
                   </div>
                 </div>
 
