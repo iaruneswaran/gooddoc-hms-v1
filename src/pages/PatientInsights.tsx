@@ -247,10 +247,10 @@ const PatientInsightsContent = () => {
         
         {/* Fixed Header with Patient Info and Actions */}
         <div className="bg-primary flex-shrink-0 shadow-lg">
-          <div className="px-6 py-5 flex flex-col gap-4">
-            {/* Top Row: Patient Info + Billing Cards */}
+          <div className="px-6 py-5">
+            {/* Top Row: Patient Info + KPIs */}
             <div className="flex items-start justify-between">
-              {/* Patient Info Section */}
+              {/* Patient Info Section with Action Buttons */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-6">
                   <PatientChip
@@ -274,6 +274,98 @@ const PatientInsightsContent = () => {
                 
                 {/* Visit Selector Row */}
                 <VisitSelector variant="light" />
+                
+                {/* Action Buttons - Inside Patient Info Section */}
+                <div className="flex gap-1.5">
+                  <Button 
+                    size="sm"
+                    className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
+                    onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
+                  >
+                    Add Services
+                  </Button>
+                  {isIPPatient ? (
+                    <>
+                      <Button 
+                        variant="ghost"
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate("/book-appointment", {
+                          state: { 
+                            fromPatientInsights: true, 
+                            patientId,
+                            patient: {
+                              id: patientId,
+                              name: patient.name,
+                              gdid: patient.gdid,
+                              age: patient.age,
+                              gender: patient.gender === "Male" ? "M" : "F",
+                            },
+                            fromPage,
+                          }
+                        })}
+                      >
+                        Book Appointment
+                      </Button>
+                      <Button 
+                        variant="ghost"
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
+                      >
+                        Bed Transfer
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                      >
+                        Collect Advance
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate(`/patients/${patientId}/encounters/${selectedVisit?.visitId || 'E-001'}/discharge`)}
+                      >
+                        Discharge
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="ghost"
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate("/book-appointment", {
+                          state: { 
+                            fromPatientInsights: true, 
+                            patientId,
+                            patient: {
+                              id: patientId,
+                              name: patient.name,
+                              gdid: patient.gdid,
+                              age: patient.age,
+                              gender: patient.gender === "Male" ? "M" : "F",
+                            },
+                            fromPage,
+                          }
+                        })}
+                      >
+                        Book Appointment
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
+                        onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                      >
+                        Collect Advance
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Right: Billing Summary Cards */}
@@ -288,97 +380,6 @@ const PatientInsightsContent = () => {
               />
             </div>
 
-            {/* Action Buttons Row - Below cards */}
-            <div className="flex gap-1.5">
-              <Button 
-                size="sm"
-                className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
-                onClick={() => navigate(`/patient-insights/${patientId}/services${fromPage ? `?from=${fromPage}` : ''}`)}
-              >
-                Add Services
-              </Button>
-              {isIPPatient ? (
-                <>
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate("/book-appointment", {
-                      state: { 
-                        fromPatientInsights: true, 
-                        patientId,
-                        patient: {
-                          id: patientId,
-                          name: patient.name,
-                          gdid: patient.gdid,
-                          age: patient.age,
-                          gender: patient.gender === "Male" ? "M" : "F",
-                        },
-                        fromPage,
-                      }
-                    })}
-                  >
-                    Book Appointment
-                  </Button>
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/transfer${fromPage ? `?from=${fromPage}` : ''}`)}
-                  >
-                    Bed Transfer
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                  >
-                    Collect Advance
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate(`/patients/${patientId}/encounters/${selectedVisit?.visitId || 'E-001'}/discharge`)}
-                  >
-                    Discharge
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate("/book-appointment", {
-                      state: { 
-                        fromPatientInsights: true, 
-                        patientId,
-                        patient: {
-                          id: patientId,
-                          name: patient.name,
-                          gdid: patient.gdid,
-                          age: patient.age,
-                          gender: patient.gender === "Male" ? "M" : "F",
-                        },
-                        fromPage,
-                      }
-                    })}
-                  >
-                    Book Appointment
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                    onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
-                  >
-                    Collect Advance
-                  </Button>
-                </>
-              )}
-            </div>
           </div>
         </div>
 
