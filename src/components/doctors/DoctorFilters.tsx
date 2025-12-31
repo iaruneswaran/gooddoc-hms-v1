@@ -9,14 +9,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Search } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { X, Search, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface DoctorFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
+  availableDate?: Date;
+  onAvailableDateChange?: (date: Date | undefined) => void;
 }
 
-export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
+export function DoctorFilters({ 
+  search, 
+  onSearchChange,
+  availableDate,
+  onAvailableDateChange 
+}: DoctorFiltersProps) {
   const [filters, setFilters] = useState<string[]>([]);
 
   const addFilter = (filter: string) => {
@@ -31,6 +46,7 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
 
   const clearAllFilters = () => {
     setFilters([]);
+    onAvailableDateChange?.(undefined);
   };
 
   return (
@@ -69,6 +85,31 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
         </SelectContent>
       </Select>
 
+      {/* Available Date Picker */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-[150px] h-9 justify-start text-left font-normal text-xs",
+              !availableDate && "text-muted-foreground"
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {availableDate ? format(availableDate, "dd MMM yyyy") : "Available on"}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-popover z-50" align="start">
+          <Calendar
+            mode="single"
+            selected={availableDate}
+            onSelect={onAvailableDateChange}
+            initialFocus
+            disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+          />
+        </PopoverContent>
+      </Popover>
+
       <Select onValueChange={(val) => addFilter(`Status: ${val}`)}>
         <SelectTrigger className="w-[100px] h-9 text-xs">
           <SelectValue placeholder="Status" />
@@ -81,8 +122,21 @@ export function DoctorFilters({ search, onSearchChange }: DoctorFiltersProps) {
       </Select>
 
       {/* Applied Filters as badges */}
-      {filters.length > 0 && (
+      {(filters.length > 0 || availableDate) && (
         <>
+          {availableDate && (
+            <Badge variant="secondary" className="gap-1 pr-1 h-9 px-3">
+              Available: {format(availableDate, "dd MMM")}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 p-0 hover:bg-transparent"
+                onClick={() => onAvailableDateChange?.(undefined)}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </Badge>
+          )}
           {filters.map((filter, i) => (
             <Badge key={i} variant="secondary" className="gap-1 pr-1 h-9 px-3">
               {filter}
