@@ -274,22 +274,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
   return (
     <div className="space-y-6">
-      {/* Discharge Reason Banner - Shows prominently at top */}
-      <Card className={cn("border-2", getDischargeReasonColor(dischargeReason))}>
-        <CardContent className="p-4">
-          <div className="flex items-center gap-4">
-            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", getDischargeReasonColor(dischargeReason))}>
-              <ReasonIcon className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Reason for Discharge</p>
-              <p className="text-lg font-bold">{reasonConfig.label}</p>
-              <p className="text-xs mt-0.5">{reasonConfig.description}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Summary Cards Row */}
       <div className="grid grid-cols-4 gap-4">
         <Card className={cn("border-border", !checklistRequired && "opacity-50")}>
