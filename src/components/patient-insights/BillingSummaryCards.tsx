@@ -67,7 +67,7 @@ export function BillingSummaryCards({
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-white/70 text-[11px]">Advance Paid</span>
+            <span className="text-white/70 text-[11px]">Total Paid</span>
             <span className="text-emerald-300 text-xs tabular-nums">−{collectedAmount}</span>
           </div>
           <div className="flex items-center justify-between gap-4 pt-1 border-t border-white/15">
