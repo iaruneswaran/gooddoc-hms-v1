@@ -150,7 +150,7 @@ export default function DischargeFlow() {
             })}
           </div>
 
-          {/* Right - Patient Info */}
+          {/* Right - Actions */}
           <div className="flex items-center gap-4 shrink-0">
             {isDirty && (
               <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
@@ -158,12 +158,6 @@ export default function DischargeFlow() {
                 Save Draft
               </Button>
             )}
-            <div className="text-right">
-              <p className="font-semibold text-foreground">{patient.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {patient.mrn} • {patient.age}Y / {patient.sex} • {patient.ward} - {patient.bed}
-              </p>
-            </div>
             <Button 
               className="h-10"
               disabled={stepStatuses[1] !== "cleared" || stepStatuses[2] !== "cleared"}
