@@ -375,13 +375,16 @@ export function ScheduleBuilder({
                   </div>
                 </div>
                 <div>
-                  <Label>Max Concurrent (Capacity)</Label>
+                  <Label>Patients per Slot (Capacity)</Label>
                   <Input
                     type="number"
                     min={1}
                     value={blockForm.capacity}
                     onChange={(e) => setBlockForm({ ...blockForm, capacity: parseInt(e.target.value) || 1 })}
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Number of patients that can be booked for the same time slot
+                  </p>
                 </div>
               </div>
             )}
