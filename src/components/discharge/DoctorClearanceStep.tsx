@@ -375,9 +375,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               >
                 <Activity className="w-4 h-4 mr-2" />
                 Clinical Status
-                {checklistRequired && (
-                  <Badge variant="secondary" className="ml-2 text-[10px] px-1.5 py-0">Required</Badge>
-                )}
               </TabsTrigger>
               <TabsTrigger 
                 value="medications" 
@@ -389,9 +386,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               >
                 <Pill className="w-4 h-4 mr-2" />
                 Medications ({medications.length})
-                {medsRequired && (
-                  <Badge variant="secondary" className="ml-2 text-[10px] px-1.5 py-0">Required</Badge>
-                )}
               </TabsTrigger>
               <TabsTrigger 
                 value="followups" 
@@ -403,9 +397,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               >
                 <Calendar className="w-4 h-4 mr-2" />
                 Follow-up
-                {followUpRequired && (
-                  <Badge variant="secondary" className="ml-2 text-[10px] px-1.5 py-0">Required</Badge>
-                )}
               </TabsTrigger>
               <TabsTrigger 
                 value="notes" 
