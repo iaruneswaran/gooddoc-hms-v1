@@ -151,7 +151,7 @@ export default function DischargeFlow() {
           </div>
 
           {/* Right - Patient Info */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             {isDirty && (
               <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
                 <Save className="w-4 h-4 mr-2" />
@@ -164,9 +164,17 @@ export default function DischargeFlow() {
                 {patient.mrn} • {patient.age}Y / {patient.sex} • {patient.ward} - {patient.bed}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-              {patient.name.charAt(0)}
-            </div>
+            <Button 
+              size="sm"
+              disabled={stepStatuses[1] !== "cleared" || stepStatuses[2] !== "cleared"}
+              onClick={() => {
+                setStepStatuses(p => ({...p, 3: "finalized"}));
+                toast.success("Patient discharged successfully!");
+                setTimeout(() => navigate(`/patient-insights/${patientId}?from=ip-patients`), 1500);
+              }}
+            >
+              Proceed to Discharge
+            </Button>
           </div>
         </div>
 
