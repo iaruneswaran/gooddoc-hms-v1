@@ -27,16 +27,16 @@ export function BillingSummaryCards({
     <div className="flex gap-3">
       {/* Billing Summary Card */}
       <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
-        <p className="text-white font-medium text-sm pb-2 border-b border-white/30 mb-3">
+        <p className="text-white font-medium text-xs pb-2 border-b border-white/30 mb-3">
           Billing Summary
         </p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Billed Amount</span>
+            <span className="text-white/60 text-xs">Billed Amount</span>
             <span className="text-white font-medium text-sm">{billedAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Unbilled Amount</span>
+            <span className="text-white/60 text-xs">Unbilled Amount</span>
             <span className="text-white font-medium text-sm">{unbilledAmount}</span>
           </div>
         </div>
@@ -44,16 +44,16 @@ export function BillingSummaryCards({
 
       {/* Collection Status Card */}
       <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
-        <p className="text-white font-medium text-sm pb-2 border-b border-white/30 mb-3">
+        <p className="text-white font-medium text-xs pb-2 border-b border-white/30 mb-3">
           Collection Status
         </p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Advance Paid</span>
+            <span className="text-white/60 text-xs">Advance Paid</span>
             <span className="text-white font-medium text-sm">{advanceAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Advance Balance</span>
+            <span className="text-white/60 text-xs">Advance Balance</span>
             <span className="text-white font-medium text-sm">{advanceBalance}</span>
           </div>
         </div>
@@ -62,16 +62,16 @@ export function BillingSummaryCards({
       {/* Total Due Amount Card */}
       <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
         <div className="flex items-center justify-between pb-2 border-b border-white/30 mb-3">
-          <p className="text-white font-medium text-sm">Total Due Amount</p>
+          <p className="text-white font-medium text-xs">Total Due Amount</p>
           <span className="text-white font-medium text-lg">{totalDue}</span>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Advance Paid</span>
+            <span className="text-white/60 text-xs">Advance Paid</span>
             <span className="text-white font-medium text-sm">{collectedAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Total Payable</span>
+            <span className="text-white/60 text-xs">Total Payable</span>
             <span className="text-white font-medium text-sm">{balanceAmount}</span>
           </div>
         </div>
