@@ -24,55 +24,55 @@ export function BillingSummaryCards({
   const advanceBalance = `₹${(advanceNum).toLocaleString('en-IN')}`;
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-4">
       {/* Billing Summary Card */}
-      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
-        <p className="text-white font-medium text-xs pb-2 border-b border-white/30 mb-3">
+      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-5 py-4 min-w-[280px] hover:bg-white/15 transition-colors">
+        <p className="text-white font-semibold text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
           Billing Summary
         </p>
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Billed Amount</span>
-            <span className="text-white font-medium text-sm">{billedAmount}</span>
+            <span className="text-white/70 text-xs">Billed Amount</span>
+            <span className="text-white font-semibold text-base tabular-nums">{billedAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Unbilled Amount</span>
-            <span className="text-white font-medium text-sm">{unbilledAmount}</span>
+            <span className="text-white/70 text-xs">Unbilled Amount</span>
+            <span className="text-white/90 font-medium text-sm tabular-nums">{unbilledAmount}</span>
           </div>
         </div>
       </Card>
 
       {/* Collection Status Card */}
-      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
-        <p className="text-white font-medium text-xs pb-2 border-b border-white/30 mb-3">
+      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-5 py-4 min-w-[280px] hover:bg-white/15 transition-colors">
+        <p className="text-white font-semibold text-sm pb-2.5 border-b border-white/25 mb-3 tracking-wide">
           Collection Status
         </p>
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Advance Paid</span>
-            <span className="text-white font-medium text-sm">{advanceAmount}</span>
+            <span className="text-white/70 text-xs">Advance Paid</span>
+            <span className="text-emerald-300 font-semibold text-base tabular-nums">{advanceAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Advance Balance</span>
-            <span className="text-white font-medium text-sm">{advanceBalance}</span>
+            <span className="text-white/70 text-xs">Advance Balance</span>
+            <span className="text-white/90 font-medium text-sm tabular-nums">{advanceBalance}</span>
           </div>
         </div>
       </Card>
 
-      {/* Total Due Amount Card */}
-      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
-        <div className="flex items-center justify-between pb-2 border-b border-white/30 mb-3">
-          <p className="text-white font-medium text-xs">Total Due Amount</p>
-          <span className="text-white font-medium text-lg">{totalDue}</span>
+      {/* Total Due Amount Card - Hero Card */}
+      <Card className="bg-white/15 backdrop-blur-sm border-white/30 px-5 py-4 min-w-[300px] hover:bg-white/20 transition-colors ring-1 ring-white/10">
+        <div className="flex items-baseline justify-between pb-2.5 border-b border-white/25 mb-3">
+          <p className="text-white font-semibold text-sm tracking-wide">Total Due Amount</p>
+          <span className="text-white font-bold text-2xl tabular-nums">{totalDue}</span>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Advance Paid</span>
-            <span className="text-white font-medium text-sm">{collectedAmount}</span>
+            <span className="text-white/70 text-xs">Advance Paid</span>
+            <span className="text-emerald-300 font-medium text-sm tabular-nums">−{collectedAmount}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-white/60 text-xs">Total Payable</span>
-            <span className="text-white font-medium text-sm">{balanceAmount}</span>
+          <div className="flex items-center justify-between pt-1 border-t border-white/15">
+            <span className="text-white font-medium text-xs">Total Payable</span>
+            <span className="text-amber-300 font-bold text-lg tabular-nums">{balanceAmount}</span>
           </div>
         </div>
       </Card>
