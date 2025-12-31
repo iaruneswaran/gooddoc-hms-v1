@@ -118,7 +118,7 @@ const PrimaryMetricCard = ({
             className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
           />
         </div>
-        <p className="text-2xl font-bold text-foreground tracking-tight mt-auto ml-[46px]">
+        <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
           {displayCount ? (
             displayCount.includes('|') ? (
               <>
