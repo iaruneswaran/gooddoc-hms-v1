@@ -270,6 +270,9 @@ const PatientInsightsContent = () => {
                     <p className="text-xs text-white/60">Primary Doctor</p>
                     <p className="text-xs text-white mt-0.5">{patient.primaryDoctor} – {patient.primaryDoctorDepartment}</p>
                   </div>
+                  <div className="border-l border-white/20 pl-5">
+                    <VisitSelector variant="light" />
+                  </div>
                 </div>
                 
                 {/* Action Buttons - Inside Patient Info Section */}
@@ -377,10 +380,6 @@ const PatientInsightsContent = () => {
               />
             </div>
 
-            {/* Visit Selector Row */}
-            <div className="flex items-center justify-end mt-4">
-              <VisitSelector variant="light" />
-            </div>
           </div>
         </div>
 
