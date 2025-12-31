@@ -102,13 +102,62 @@ export default function DischargeFlow() {
       <PageContent>
         <AppHeader breadcrumbs={["Patients", patient.name, "Discharge"]} />
 
-        {/* Patient Snapshot Bar */}
-        <div className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
-          <button onClick={handleBack} className="flex items-center gap-2 text-sm text-foreground hover:text-primary">
+        {/* Patient Snapshot Bar with Stepper */}
+        <div className="h-20 bg-card border-b border-border flex items-center justify-between px-6">
+          {/* Left - Back Button */}
+          <button onClick={handleBack} className="flex items-center gap-2 text-sm text-foreground hover:text-primary shrink-0">
             <ChevronLeft className="w-4 h-4" />
             <span className="font-medium">Back to Patient</span>
           </button>
-          <div className="flex items-center gap-3">
+
+          {/* Center - Stepper */}
+          <div className="flex items-center gap-6">
+            {steps.map((s, index) => {
+              const Icon = s.icon;
+              const isActive = s.step === currentStep;
+              const status = stepStatuses[s.step];
+
+              return (
+                <div key={s.step} className="flex items-center gap-6">
+                  <button
+                    onClick={() => handleStepChange(s.step)}
+                    className="flex items-center gap-2 group"
+                  >
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all shrink-0",
+                        isActive && "bg-primary border-primary text-primary-foreground",
+                        status === "cleared" && "bg-green-500 border-green-500 text-white",
+                        status === "finalized" && "bg-primary border-primary text-primary-foreground",
+                        !isActive && status === "pending" && "border-border text-muted-foreground group-hover:border-primary/50",
+                        !isActive && status === "in_progress" && "border-blue-500 text-blue-500"
+                      )}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col items-start">
+                      <span className={cn("text-xs font-medium", isActive ? "text-foreground" : "text-muted-foreground")}>
+                        {s.label}
+                      </span>
+                      {getStepStatusBadge(status)}
+                    </div>
+                  </button>
+                  {index < steps.length - 1 && (
+                    <div className={cn("w-12 h-0.5", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right - Patient Info */}
+          <div className="flex items-center gap-3 shrink-0">
+            {isDirty && (
+              <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
+                <Save className="w-4 h-4 mr-2" />
+                Save Draft
+              </Button>
+            )}
             <div className="text-right">
               <p className="font-semibold text-foreground">{patient.name}</p>
               <p className="text-xs text-muted-foreground">
@@ -118,55 +167,6 @@ export default function DischargeFlow() {
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
               {patient.name.charAt(0)}
             </div>
-            {isDirty && (
-              <Button variant="outline" size="sm" onClick={() => { toast.success("Draft saved"); setIsDirty(false); }}>
-                <Save className="w-4 h-4 mr-2" />
-                Save Draft
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Stepper */}
-        <div className="bg-card border-b border-border px-6 py-4">
-          <div className="flex items-center justify-center gap-6">
-            {steps.map((s, index) => {
-              const Icon = s.icon;
-              const isActive = s.step === currentStep;
-              const isPast = s.step < currentStep;
-              const status = stepStatuses[s.step];
-
-              return (
-                <div key={s.step} className="flex items-center gap-6">
-                  <button
-                    onClick={() => handleStepChange(s.step)}
-                    className="flex items-center gap-3 group"
-                  >
-                    <div
-                      className={cn(
-                        "w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all shrink-0",
-                        isActive && "bg-primary border-primary text-primary-foreground",
-                        status === "cleared" && "bg-green-500 border-green-500 text-white",
-                        status === "finalized" && "bg-primary border-primary text-primary-foreground",
-                        !isActive && status === "pending" && "border-border text-muted-foreground group-hover:border-primary/50",
-                        !isActive && status === "in_progress" && "border-blue-500 text-blue-500"
-                      )}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div className="flex flex-col items-start">
-                      <span className={cn("text-sm font-medium", isActive ? "text-foreground" : "text-muted-foreground")}>
-                        {s.label}
-                      </span>
-                      {getStepStatusBadge(status)}
-                    </div>
-                  </button>
-                  {index < steps.length - 1 && (
-                    <div className={cn("w-16 h-0.5", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
-                  )}
-                </div>
-              );
-            })}
           </div>
         </div>
 
