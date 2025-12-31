@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -23,10 +21,38 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronLeft } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { ChevronDown, ChevronLeft, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type Step = 1 | 2;
+
+interface ScheduleBlock {
+  start: string;
+  end: string;
+  location: string;
+  mode: "in_person" | "telehealth" | "both";
+}
+
+interface DaySchedule {
+  day: number;
+  blocks: ScheduleBlock[];
+}
+
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAY_ABBREVS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const MOCK_LOCATIONS = [
+  { id: "main", name: "Main Clinic" },
+  { id: "branch-a", name: "Branch A" },
+  { id: "branch-b", name: "Branch B" },
+];
 
 export default function DoctorForm() {
   const navigate = useNavigate();
@@ -34,7 +60,6 @@ export default function DoctorForm() {
   const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [advancedOpen1, setAdvancedOpen1] = useState(false);
-  const [advancedOpen2, setAdvancedOpen2] = useState(false);
 
   // Form state - Step 1
   const [displayName, setDisplayName] = useState("");
@@ -46,18 +71,18 @@ export default function DoctorForm() {
   const [experience, setExperience] = useState("");
   const [languages, setLanguages] = useState("");
   const [acceptingPatients, setAcceptingPatients] = useState(true);
+  const [licenseNo, setLicenseNo] = useState("");
 
-  // Form state - Step 2
-  const [duration, setDuration] = useState("20");
-  const [scheduleType, setScheduleType] = useState("preset-a");
-  const [clinic, setClinic] = useState("");
-  const [telemedicine, setTelemedicine] = useState(false);
+  // Form state - Step 2 (Schedule)
+  const [weekPattern, setWeekPattern] = useState<DaySchedule[]>([]);
+  const [editingBlock, setEditingBlock] = useState<{ day: number; blockIndex: number } | null>(null);
+  const [addingToDay, setAddingToDay] = useState<number | null>(null);
+  const [blockForm, setBlockForm] = useState<{ start: string; end: string; location: string; mode: "in_person" | "telehealth" | "both" }>({ start: "09:00", end: "13:00", location: "main", mode: "in_person" });
 
-  // Form state - Step 3
+  // Form state - Fees
   const [fee, setFee] = useState("");
   const [telemedicineFee, setTelemedicineFee] = useState("");
   const [sameFee, setSameFee] = useState(true);
-  const [licenseNo, setLicenseNo] = useState("");
 
   // Handle step parameter from URL
   useEffect(() => {
@@ -75,13 +100,113 @@ export default function DoctorForm() {
         return;
       }
     }
-    if (currentStep === 2) {
-      if (scheduleType !== "by-appointment" && !clinic && !telemedicine) {
-        toast({ title: "Please select at least one location", variant: "destructive" });
-        return;
-      }
-    }
     setCurrentStep((prev) => Math.min(prev + 1, 2) as Step);
+  };
+
+  // Schedule helper functions
+  const getDayBlocks = (day: number): ScheduleBlock[] => {
+    const daySchedule = weekPattern.find(d => d.day === day);
+    return daySchedule?.blocks || [];
+  };
+
+  const handleAddBlock = (day: number) => {
+    setBlockForm({ start: "09:00", end: "13:00", location: "main", mode: "in_person" });
+    setAddingToDay(day);
+  };
+
+  const handleEditBlock = (day: number, blockIndex: number) => {
+    const blocks = getDayBlocks(day);
+    const block = blocks[blockIndex];
+    setBlockForm({
+      start: block.start,
+      end: block.end,
+      location: block.location || "main",
+      mode: block.mode || "in_person",
+    });
+    setEditingBlock({ day, blockIndex });
+  };
+
+  const handleDeleteBlock = (day: number, blockIndex: number) => {
+    setWeekPattern(prev => {
+      const newSchedule = [...prev];
+      const dayIndex = newSchedule.findIndex(d => d.day === day);
+      if (dayIndex >= 0) {
+        newSchedule[dayIndex] = {
+          ...newSchedule[dayIndex],
+          blocks: newSchedule[dayIndex].blocks.filter((_, i) => i !== blockIndex),
+        };
+        if (newSchedule[dayIndex].blocks.length === 0) {
+          return newSchedule.filter(d => d.day !== day);
+        }
+      }
+      return newSchedule;
+    });
+  };
+
+  const handleSaveBlock = () => {
+    const newBlock: ScheduleBlock = {
+      start: blockForm.start,
+      end: blockForm.end,
+      location: blockForm.location,
+      mode: blockForm.mode,
+    };
+
+    if (addingToDay !== null) {
+      setWeekPattern(prev => {
+        const dayIndex = prev.findIndex(d => d.day === addingToDay);
+        if (dayIndex >= 0) {
+          const updated = [...prev];
+          updated[dayIndex] = {
+            ...updated[dayIndex],
+            blocks: [...updated[dayIndex].blocks, newBlock].sort((a, b) => a.start.localeCompare(b.start)),
+          };
+          return updated;
+        }
+        return [...prev, { day: addingToDay, blocks: [newBlock] }].sort((a, b) => a.day - b.day);
+      });
+      setAddingToDay(null);
+    } else if (editingBlock) {
+      setWeekPattern(prev => {
+        const newSchedule = [...prev];
+        const dayIndex = newSchedule.findIndex(d => d.day === editingBlock.day);
+        if (dayIndex >= 0) {
+          newSchedule[dayIndex] = {
+            ...newSchedule[dayIndex],
+            blocks: newSchedule[dayIndex].blocks.map((b, i) =>
+              i === editingBlock.blockIndex ? newBlock : b
+            ).sort((a, b) => a.start.localeCompare(b.start)),
+          };
+        }
+        return newSchedule;
+      });
+      setEditingBlock(null);
+    }
+  };
+
+  const handleCopyMonToWeekdays = () => {
+    const mondayBlocks = getDayBlocks(1);
+    if (mondayBlocks.length === 0) {
+      toast({ title: "No schedule on Monday to copy", variant: "destructive" });
+      return;
+    }
+    setWeekPattern(prev => {
+      let updated = prev.filter(d => ![2, 3, 4, 5].includes(d.day));
+      [2, 3, 4, 5].forEach(day => {
+        updated.push({ day, blocks: [...mondayBlocks] });
+      });
+      return updated.sort((a, b) => a.day - b.day);
+    });
+    toast({ title: "Copied Monday schedule to weekdays" });
+  };
+
+  const getLocationName = (locationId: string) => {
+    return MOCK_LOCATIONS.find(l => l.id === locationId)?.name || "Unknown";
+  };
+
+  const getModeColor = (mode: string) => {
+    if (mode === "telehealth") return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+    if (mode === "both") return "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400";
+    return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
   };
 
   const handleBack = () => {
@@ -291,184 +416,192 @@ export default function DoctorForm() {
               </div>
             )}
 
-            {/* Step 2 - Availability */}
+            {/* Step 2 - Schedule & Fees */}
             {currentStep === 2 && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Availability & Location</h2>
-                
-                <div>
-                  <Label>Appointment Duration *</Label>
-                  <RadioGroup value={duration} onValueChange={setDuration} className="flex gap-4 mt-2">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="15" id="15min" />
-                      <Label htmlFor="15min" className="font-normal cursor-pointer">15 min</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="20" id="20min" />
-                      <Label htmlFor="20min" className="font-normal cursor-pointer">20 min</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="30" id="30min" />
-                      <Label htmlFor="30min" className="font-normal cursor-pointer">30 min</Label>
-                    </div>
-                  </RadioGroup>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Weekly Schedule</h2>
                 </div>
 
-                <div>
-                  <Label>Schedule *</Label>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    Presets create slots automatically; choose Custom for full control.
-                  </p>
-                  <RadioGroup value={scheduleType} onValueChange={setScheduleType} className="space-y-3">
-                    <Card className="p-4">
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem value="preset-a" id="preset-a" className="mt-1" />
-                        <div className="flex-1">
-                          <Label htmlFor="preset-a" className="font-normal cursor-pointer">
-                            <div className="font-medium">Preset A</div>
-                            <div className="text-sm text-muted-foreground">
-                              Weekdays 10:00–13:00, 16:00–19:00
-                            </div>
-                          </Label>
-                        </div>
+                {/* Week Grid */}
+                <div className="grid grid-cols-7 gap-2">
+                  {DAYS.map((day, dayIndex) => (
+                    <div key={dayIndex} className="min-h-[180px]">
+                      <div className="text-sm font-medium text-center mb-2 pb-2 border-b">
+                        {DAY_ABBREVS[dayIndex]}
                       </div>
-                    </Card>
-                    <Card className="p-4">
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem value="preset-b" id="preset-b" className="mt-1" />
-                        <div className="flex-1">
-                          <Label htmlFor="preset-b" className="font-normal cursor-pointer">
-                            <div className="font-medium">Preset B</div>
-                            <div className="text-sm text-muted-foreground">
-                              Tue/Thu/Sat 11:00–16:00
+                      <div className="space-y-2">
+                        {getDayBlocks(dayIndex).map((block, blockIndex) => (
+                          <div
+                            key={blockIndex}
+                            className={`p-2 rounded-md border cursor-pointer hover:shadow-sm transition-shadow ${getModeColor(block.mode)}`}
+                            onClick={() => handleEditBlock(dayIndex, blockIndex)}
+                          >
+                            <div className="text-xs font-medium">
+                              {block.start} - {block.end}
                             </div>
-                          </Label>
-                        </div>
-                      </div>
-                    </Card>
-                    <Card className="p-4">
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem value="by-appointment" id="by-appointment" className="mt-1" />
-                        <div className="flex-1">
-                          <Label htmlFor="by-appointment" className="font-normal cursor-pointer">
-                            <div className="font-medium">By appointment only</div>
-                            <div className="text-sm text-muted-foreground">
-                              No slots, manual scheduling
+                            <div className="text-xs opacity-75 mt-1">
+                              {getLocationName(block.location)}
                             </div>
-                          </Label>
-                        </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-5 w-5 mt-1"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteBlock(dayIndex, blockIndex);
+                              }}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full h-8 border-dashed border"
+                          onClick={() => handleAddBlock(dayIndex)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
                       </div>
-                    </Card>
-                    <Card className="p-4">
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem value="custom" id="custom" className="mt-1" />
-                        <div className="flex-1">
-                          <Label htmlFor="custom" className="font-normal cursor-pointer">
-                            <div className="font-medium">Custom</div>
-                            <div className="text-sm text-muted-foreground">
-                              Pick your own days and hours
-                            </div>
-                          </Label>
-                        </div>
-                      </div>
-                    </Card>
-                  </RadioGroup>
+                    </div>
+                  ))}
                 </div>
 
-                <div>
-                  <Label>Location *</Label>
-                  <div className="space-y-3 mt-2">
-                    <div>
-                      <Label htmlFor="clinic" className="text-sm font-normal">Clinic</Label>
-                      <Select value={clinic} onValueChange={setClinic}>
-                        <SelectTrigger id="clinic" className="mt-1">
-                          <SelectValue placeholder="Select clinic" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="main">Main Campus</SelectItem>
-                          <SelectItem value="branch-a">Branch A</SelectItem>
-                          <SelectItem value="branch-b">Branch B</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex items-center space-x-2">
+                {/* Quick Copy Actions */}
+                <div className="flex items-center gap-2 pt-4 border-t">
+                  <span className="text-sm text-muted-foreground">Quick copy:</span>
+                  <Button variant="outline" size="sm" onClick={handleCopyMonToWeekdays}>
+                    Mon → Weekdays
+                  </Button>
+                </div>
+
+                {/* Fees Section */}
+                <div className="pt-6 border-t space-y-4">
+                  <h3 className="text-lg font-medium">Consultation Fees</h3>
+                  
+                  <div>
+                    <Label htmlFor="fee">Fee (in-person) *</Label>
+                    <Input
+                      id="fee"
+                      type="number"
+                      placeholder="1,500"
+                      value={fee}
+                      onChange={(e) => setFee(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center space-x-2 mb-2">
                       <Checkbox
-                        id="telemedicine"
-                        checked={telemedicine}
-                        onCheckedChange={(checked) => setTelemedicine(checked as boolean)}
+                        id="sameFee"
+                        checked={sameFee}
+                        onCheckedChange={(checked) => setSameFee(checked as boolean)}
                       />
-                      <Label htmlFor="telemedicine" className="font-normal cursor-pointer">
-                        Telemedicine
+                      <Label htmlFor="sameFee" className="font-normal cursor-pointer">
+                        Telemedicine fee same as in-person
                       </Label>
                     </div>
+                    {!sameFee && (
+                      <div>
+                        <Label htmlFor="telemedicineFee">Telemedicine Fee</Label>
+                        <Input
+                          id="telemedicineFee"
+                          type="number"
+                          placeholder="1,200"
+                          value={telemedicineFee}
+                          onChange={(e) => setTelemedicineFee(e.target.value)}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                <div>
-                  <Label htmlFor="fee">Fee (in-person) *</Label>
-                  <Input
-                    id="fee"
-                    type="number"
-                    placeholder="1,500"
-                    value={fee}
-                    onChange={(e) => setFee(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Checkbox
-                      id="sameFee"
-                      checked={sameFee}
-                      onCheckedChange={(checked) => setSameFee(checked as boolean)}
-                    />
-                    <Label htmlFor="sameFee" className="font-normal cursor-pointer">
-                      Telemedicine fee same as in-person
-                    </Label>
-                  </div>
-                  {!sameFee && (
-                    <div>
-                      <Label htmlFor="telemedicineFee">Telemedicine Fee</Label>
-                      <Input
-                        id="telemedicineFee"
-                        type="number"
-                        placeholder="1,200"
-                        value={telemedicineFee}
-                        onChange={(e) => setTelemedicineFee(e.target.value)}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Advanced Options */}
-                <Collapsible open={advancedOpen2} onOpenChange={setAdvancedOpen2}>
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="w-full justify-between">
-                      Advanced Options
-                      <ChevronDown className={`w-4 h-4 transition-transform ${advancedOpen2 ? "rotate-180" : ""}`} />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="space-y-4 mt-4">
-                    <div>
-                      <Label htmlFor="buffer">Buffer before/after (minutes)</Label>
-                      <Input
-                        id="buffer"
-                        type="number"
-                        placeholder="5"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="maxPatients">Max patients per slot</Label>
-                      <Input
-                        id="maxPatients"
-                        type="number"
-                        placeholder="1"
-                      />
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
               </div>
             )}
+
+            {/* Block Edit Dialog */}
+            <Dialog open={addingToDay !== null || editingBlock !== null} onOpenChange={() => {
+              setAddingToDay(null);
+              setEditingBlock(null);
+            }}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingBlock ? "Edit Time Block" : `Add Block - ${addingToDay !== null ? DAYS[addingToDay] : ""}`}
+                  </DialogTitle>
+                </DialogHeader>
+
+                <div className="space-y-4 py-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Start Time</Label>
+                      <Input
+                        type="time"
+                        value={blockForm.start}
+                        onChange={(e) => setBlockForm({ ...blockForm, start: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label>End Time</Label>
+                      <Input
+                        type="time"
+                        value={blockForm.end}
+                        onChange={(e) => setBlockForm({ ...blockForm, end: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Location</Label>
+                    <Select
+                      value={blockForm.location}
+                      onValueChange={(v) => setBlockForm({ ...blockForm, location: v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select location" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {MOCK_LOCATIONS.map((loc) => (
+                          <SelectItem key={loc.id} value={loc.id}>
+                            {loc.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label>Mode</Label>
+                    <Select
+                      value={blockForm.mode}
+                      onValueChange={(v) => setBlockForm({ ...blockForm, mode: v as "in_person" | "telehealth" | "both" })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="in_person">In-person</SelectItem>
+                        <SelectItem value="telehealth">Telehealth</SelectItem>
+                        <SelectItem value="both">Both</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => {
+                    setAddingToDay(null);
+                    setEditingBlock(null);
+                  }}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSaveBlock}>
+                    {editingBlock ? "Update" : "Add Block"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
 
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-8 pt-6 border-t">
