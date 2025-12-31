@@ -272,11 +272,8 @@ const PatientInsightsContent = () => {
                   </div>
                 </div>
                 
-                {/* Visit Selector Row */}
-                <VisitSelector variant="light" />
-                
-                {/* Action Buttons - Below Visit Selector */}
-                <div className="flex gap-1.5 mt-3">
+                {/* Action Buttons - Above Visit Selector */}
+                <div className="flex gap-1.5">
                   <Button 
                     size="sm"
                     className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
@@ -366,6 +363,9 @@ const PatientInsightsContent = () => {
                     </>
                   )}
                 </div>
+                
+                {/* Visit Selector Row */}
+                <VisitSelector variant="light" />
               </div>
 
               {/* Right: Billing Summary Cards */}
