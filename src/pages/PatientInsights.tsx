@@ -246,12 +246,12 @@ const PatientInsightsContent = () => {
         ]} />
         
         {/* Fixed Header with Patient Info and Actions */}
-        <div className="bg-primary flex-shrink-0 shadow-lg h-[192px]">
-          <div className="px-6 py-4 h-full">
+        <div className="bg-primary flex-shrink-0 shadow-lg">
+          <div className="px-6 py-5">
             {/* Top Row: Patient Info + KPIs */}
-            <div className="flex items-start justify-between h-full">
+            <div className="flex items-start justify-between">
               {/* Patient Info Section with Action Buttons */}
-              <div className="flex flex-col justify-between h-full">
+              <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-6">
                   <PatientChip
                     name={patient.name}
