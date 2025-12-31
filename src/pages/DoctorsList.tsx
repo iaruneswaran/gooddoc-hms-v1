@@ -97,6 +97,7 @@ export default function DoctorsList() {
   const [deactivateDialogOpen, setDeactivateDialogOpen] = useState(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [availableDate, setAvailableDate] = useState<Date | undefined>(undefined);
   
   const { getAvailability } = useDoctorAvailability();
 
@@ -228,16 +229,43 @@ export default function DoctorsList() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Filter doctors by search
+  // Filter doctors by search and available date
   const filteredDoctors = useMemo(() => {
-    if (!search) return doctors;
-    const lowerSearch = search.toLowerCase();
-    return doctors.filter(d => 
-      d.displayName.toLowerCase().includes(lowerSearch) ||
-      d.department.toLowerCase().includes(lowerSearch) ||
-      d.specialty.toLowerCase().includes(lowerSearch)
-    );
-  }, [doctors, search]);
+    let result = doctors;
+    
+    // Filter by search
+    if (search) {
+      const lowerSearch = search.toLowerCase();
+      result = result.filter(d => 
+        d.displayName.toLowerCase().includes(lowerSearch) ||
+        d.department.toLowerCase().includes(lowerSearch) ||
+        d.specialty.toLowerCase().includes(lowerSearch)
+      );
+    }
+    
+    // Filter by available date
+    if (availableDate) {
+      const selectedDateStr = format(availableDate, 'yyyy-MM-dd');
+      result = result.filter(d => {
+        // Include if doctor has availability on or after selected date
+        if (d.availabilityStatus === 'on_leave') {
+          // Check if leave ends before selected date
+          if (d.leaveUntil) {
+            return d.leaveUntil < selectedDateStr;
+          }
+          return false;
+        }
+        if (d.nextAvailableTime) {
+          const availableDateStr = d.nextAvailableTime.split('T')[0];
+          return availableDateStr <= selectedDateStr;
+        }
+        // No schedule - exclude when filtering by date
+        return d.availabilityStatus !== 'no_schedule';
+      });
+    }
+    
+    return result;
+  }, [doctors, search, availableDate]);
 
   const handleView = (doctor: DoctorDisplay) => {
     setSelectedDoctor(doctor);
@@ -362,7 +390,12 @@ export default function DoctorsList() {
 
           {/* Filters */}
           <div className="mb-6">
-            <DoctorFilters search={search} onSearchChange={setSearch} />
+            <DoctorFilters 
+              search={search} 
+              onSearchChange={setSearch}
+              availableDate={availableDate}
+              onAvailableDateChange={setAvailableDate}
+            />
           </div>
 
           {/* Table */}
