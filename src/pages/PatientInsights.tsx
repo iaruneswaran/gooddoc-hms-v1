@@ -272,7 +272,7 @@ const PatientInsightsContent = () => {
                 </div>
                 
                 {/* Action Buttons - Above Visit Selector */}
-                <div className="flex gap-1.5 mt-3">
+                <div className="flex gap-1.5 mt-5">
                   <Button 
                     size="sm"
                     className="bg-white text-primary hover:bg-white/90 h-8 px-3 text-sm font-medium"
