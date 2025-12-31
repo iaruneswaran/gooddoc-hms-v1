@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card";
-
 interface BillingSummaryCardsProps {
   billedAmount: string;
   unbilledAmount: string;
@@ -9,22 +8,19 @@ interface BillingSummaryCardsProps {
   balanceAmount: string;
   variant?: "default" | "light";
 }
-
 export function BillingSummaryCards({
   billedAmount,
   unbilledAmount,
   totalDue,
   advanceAmount,
   collectedAmount,
-  balanceAmount,
+  balanceAmount
 }: BillingSummaryCardsProps) {
   // Calculate advance balance (advance - used portion)
   const advanceNum = parseFloat(advanceAmount.replace(/[₹,]/g, '')) || 0;
   const collectedNum = parseFloat(collectedAmount.replace(/[₹,]/g, '')) || 0;
-  const advanceBalance = `₹${(advanceNum).toLocaleString('en-IN')}`;
-
-  return (
-    <div className="flex gap-3">
+  const advanceBalance = `₹${advanceNum.toLocaleString('en-IN')}`;
+  return <div className="flex gap-3">
       {/* Billing Summary Card */}
       <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
         <p className="text-white font-medium text-sm pb-2 border-b border-white/30 mb-3">
@@ -67,7 +63,7 @@ export function BillingSummaryCards({
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">Advance Paid</span>
+            <span className="text-white/60 text-sm">Total Paid</span>
             <span className="text-white font-medium text-sm">{collectedAmount}</span>
           </div>
           <div className="flex items-center justify-between">
@@ -76,6 +72,5 @@ export function BillingSummaryCards({
           </div>
         </div>
       </Card>
-    </div>
-  );
+    </div>;
 }
