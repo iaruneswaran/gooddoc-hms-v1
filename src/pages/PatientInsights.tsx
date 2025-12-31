@@ -365,7 +365,9 @@ const PatientInsightsContent = () => {
                 </div>
                 
                 {/* Visit Selector Row */}
-                <VisitSelector variant="light" />
+                <div className="mt-3">
+                  <VisitSelector variant="light" />
+                </div>
               </div>
 
               {/* Right: Billing Summary Cards */}
