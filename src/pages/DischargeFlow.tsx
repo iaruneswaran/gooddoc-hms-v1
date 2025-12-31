@@ -159,7 +159,7 @@ export default function DischargeFlow() {
               </Button>
             )}
             <Button 
-              className="h-10"
+              className="h-9"
               disabled={stepStatuses[1] !== "cleared" || stepStatuses[2] !== "cleared"}
               onClick={() => {
                 setStepStatuses(p => ({...p, 3: "finalized"}));
