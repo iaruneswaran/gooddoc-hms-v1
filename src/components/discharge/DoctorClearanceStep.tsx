@@ -277,109 +277,15 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
       {/* Discharge Reason Banner - Shows prominently at top */}
       <Card className={cn("border-2", getDischargeReasonColor(dischargeReason))}>
         <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", getDischargeReasonColor(dischargeReason))}>
-                <ReasonIcon className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Reason for Discharge</p>
-                <p className="text-lg font-bold">{reasonConfig.label}</p>
-                <p className="text-xs mt-0.5">{reasonConfig.description}</p>
-              </div>
+          <div className="flex items-center gap-4">
+            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", getDischargeReasonColor(dischargeReason))}>
+              <ReasonIcon className="w-6 h-6" />
             </div>
-            <Select value={dischargeReason} onValueChange={handleDischargeReasonChange}>
-              <SelectTrigger className="w-[280px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="treatment_completed">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    Treatment Completed
-                  </div>
-                </SelectItem>
-                <SelectItem value="improved">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    Condition Improved
-                  </div>
-                </SelectItem>
-                <SelectItem value="not_improved">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-amber-600" />
-                    Not Improved
-                  </div>
-                </SelectItem>
-                <SelectItem value="referred_higher_center">
-                  <div className="flex items-center gap-2">
-                    <Ambulance className="w-4 h-4 text-blue-600" />
-                    Referred to Higher Center
-                  </div>
-                </SelectItem>
-                <SelectItem value="transferred_other_hospital">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-blue-600" />
-                    Transferred to Other Hospital
-                  </div>
-                </SelectItem>
-                <SelectItem value="lama">
-                  <div className="flex items-center gap-2">
-                    <LogOut className="w-4 h-4 text-red-600" />
-                    Left Against Medical Advice (LAMA)
-                  </div>
-                </SelectItem>
-                <SelectItem value="dama">
-                  <div className="flex items-center gap-2">
-                    <LogOut className="w-4 h-4 text-red-600" />
-                    Discharge Against Medical Advice (DAMA)
-                  </div>
-                </SelectItem>
-                <SelectItem value="absconded">
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-600" />
-                    Absconded
-                  </div>
-                </SelectItem>
-                <SelectItem value="death">
-                  <div className="flex items-center gap-2">
-                    <Skull className="w-4 h-4 text-gray-600" />
-                    Death
-                  </div>
-                </SelectItem>
-                <SelectItem value="brought_dead">
-                  <div className="flex items-center gap-2">
-                    <Skull className="w-4 h-4 text-gray-600" />
-                    Brought Dead
-                  </div>
-                </SelectItem>
-                <SelectItem value="palliative_home">
-                  <div className="flex items-center gap-2">
-                    <Home className="w-4 h-4 text-purple-600" />
-                    Palliative/Terminal Care at Home
-                  </div>
-                </SelectItem>
-                <SelectItem value="other">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-gray-600" />
-                    Other
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {/* Show what's required/not required based on reason */}
-          <div className="flex gap-4 mt-4 pt-3 border-t border-border/50">
-            <Badge variant={checklistRequired ? "default" : "secondary"} className="text-xs">
-              Checklist: {checklistRequired ? "Required" : "Not Required"}
-            </Badge>
-            <Badge variant={medsRequired ? "default" : "secondary"} className="text-xs">
-              Medications: {medsRequired ? "Required" : "Not Required"}
-            </Badge>
-            <Badge variant={followUpRequired ? "default" : "secondary"} className="text-xs">
-              Follow-up: {followUpRequired ? "Required" : "Not Required"}
-            </Badge>
+            <div>
+              <p className="text-xs text-muted-foreground">Reason for Discharge</p>
+              <p className="text-lg font-bold">{reasonConfig.label}</p>
+              <p className="text-xs mt-0.5">{reasonConfig.description}</p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -530,6 +436,90 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
           <CardContent className="p-6">
             {/* Clinical Status Tab */}
             <TabsContent value="clinical" className="mt-0 space-y-6">
+              {/* Discharge Reason Selector */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground">Discharge Reason</h3>
+                <Select value={dischargeReason} onValueChange={handleDischargeReasonChange}>
+                  <SelectTrigger className="w-full max-w-md">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="treatment_completed">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        Treatment Completed
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="improved">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        Condition Improved
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="not_improved">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-amber-600" />
+                        Not Improved
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="referred_higher_center">
+                      <div className="flex items-center gap-2">
+                        <Ambulance className="w-4 h-4 text-blue-600" />
+                        Referred to Higher Center
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="transferred_other_hospital">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-blue-600" />
+                        Transferred to Other Hospital
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="lama">
+                      <div className="flex items-center gap-2">
+                        <LogOut className="w-4 h-4 text-red-600" />
+                        Left Against Medical Advice (LAMA)
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="dama">
+                      <div className="flex items-center gap-2">
+                        <LogOut className="w-4 h-4 text-red-600" />
+                        Discharge Against Medical Advice (DAMA)
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="absconded">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 text-red-600" />
+                        Absconded
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="death">
+                      <div className="flex items-center gap-2">
+                        <Skull className="w-4 h-4 text-gray-600" />
+                        Death
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="brought_dead">
+                      <div className="flex items-center gap-2">
+                        <Skull className="w-4 h-4 text-gray-600" />
+                        Brought Dead
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="palliative_home">
+                      <div className="flex items-center gap-2">
+                        <Home className="w-4 h-4 text-purple-600" />
+                        Palliative/Terminal Care at Home
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="other">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-gray-600" />
+                        Other
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Discharge Reason Notes - shown for all discharge types */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground">Discharge Notes</h3>
