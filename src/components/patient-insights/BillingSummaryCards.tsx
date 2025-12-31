@@ -17,84 +17,62 @@ export function BillingSummaryCards({
   advanceAmount,
   collectedAmount,
   balanceAmount,
-  variant = "light"
 }: BillingSummaryCardsProps) {
-  const isLight = variant === "light";
-  
-  const cardClass = isLight 
-    ? "bg-white/10 border-white/20" 
-    : "bg-card border-border";
-  
-  const titleClass = isLight 
-    ? "text-white font-semibold text-sm" 
-    : "text-foreground font-semibold text-sm";
-  
-  const labelClass = isLight 
-    ? "text-white/70 text-xs" 
-    : "text-muted-foreground text-xs";
-  
-  const valueClass = isLight 
-    ? "text-white font-semibold text-sm" 
-    : "text-foreground font-semibold text-sm";
-  
-  const subtitleClass = isLight 
-    ? "text-white/50 text-[10px]" 
-    : "text-muted-foreground text-[10px]";
+  // Calculate advance balance (advance - used portion)
+  const advanceNum = parseFloat(advanceAmount.replace(/[₹,]/g, '')) || 0;
+  const collectedNum = parseFloat(collectedAmount.replace(/[₹,]/g, '')) || 0;
+  const advanceBalance = `₹${(advanceNum).toLocaleString('en-IN')}`;
 
   return (
     <div className="flex gap-3">
       {/* Billing Summary Card */}
-      <Card className={`${cardClass} px-5 py-3 min-w-[320px]`}>
-        <p className={titleClass}>Billing Summary</p>
-        <div className="mt-2 space-y-1.5">
+      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
+        <p className="text-white font-semibold text-sm pb-2 border-b border-yellow-400/60 mb-3">
+          Billing Summary
+        </p>
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className={labelClass}>Billed Amount</span>
-            <div className="text-right">
-              <span className={valueClass}>{billedAmount}</span>
-              <p className={subtitleClass}>Invoices sent</p>
-            </div>
+            <span className="text-white/80 text-sm">Billed Amount</span>
+            <span className="text-yellow-400 font-semibold text-sm">{billedAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className={labelClass}>Unbilled Amount</span>
-            <div className="text-right">
-              <span className={valueClass}>{unbilledAmount}</span>
-              <p className={subtitleClass}>Services used but not invoiced</p>
-            </div>
-          </div>
-          <div className={`flex items-center justify-between pt-1.5 border-t ${isLight ? "border-white/20" : "border-border"}`}>
-            <span className={labelClass}>Total Due</span>
-            <div className="text-right">
-              <span className={valueClass}>{totalDue}</span>
-              <p className={subtitleClass}>Billed + Unbilled</p>
-            </div>
+            <span className="text-white/80 text-sm">Unbilled Amount</span>
+            <span className="text-yellow-400 font-semibold text-sm">{unbilledAmount}</span>
           </div>
         </div>
       </Card>
 
       {/* Collection Status Card */}
-      <Card className={`${cardClass} px-5 py-3 min-w-[360px]`}>
-        <p className={titleClass}>Collection Status</p>
-        <div className="mt-2 space-y-1.5">
+      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
+        <p className="text-white font-semibold text-sm pb-2 border-b border-yellow-400/60 mb-3">
+          Collection Status
+        </p>
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className={labelClass}>Advance Amount</span>
-            <div className="text-right">
-              <span className={valueClass}>{advanceAmount}</span>
-              <p className={subtitleClass}>Paid in advance</p>
-            </div>
+            <span className="text-white/80 text-sm">Advance Paid</span>
+            <span className="text-yellow-400 font-semibold text-sm">{advanceAmount}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className={labelClass}>Collected Amount</span>
-            <div className="text-right">
-              <span className={valueClass}>{collectedAmount}</span>
-              <p className={subtitleClass}>Includes advance + against invoice</p>
-            </div>
+            <span className="text-white/80 text-sm">Advance Balance</span>
+            <span className="text-yellow-400 font-semibold text-sm">{advanceBalance}</span>
           </div>
-          <div className={`flex items-center justify-between pt-1.5 border-t ${isLight ? "border-white/20" : "border-border"}`}>
-            <span className={labelClass}>Balance Amount</span>
-            <div className="text-right">
-              <span className={valueClass}>{balanceAmount}</span>
-              <p className={subtitleClass}>Amount still to be collected</p>
-            </div>
+        </div>
+      </Card>
+
+      {/* Total Due Amount Card */}
+      <Card className="bg-white/10 border-white/20 px-5 py-3 min-w-[260px]">
+        <div className="flex items-center justify-between pb-2 border-b border-yellow-400/60 mb-3">
+          <p className="text-white font-semibold text-sm">Total Due Amount</p>
+          <span className="text-yellow-400 font-bold text-lg">{totalDue}</span>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-white/80 text-sm">Advance Paid</span>
+            <span className="text-yellow-400 font-semibold text-sm">{collectedAmount}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-white/80 text-sm">Total Payable</span>
+            <span className="text-yellow-400 font-semibold text-sm">{balanceAmount}</span>
           </div>
         </div>
       </Card>
