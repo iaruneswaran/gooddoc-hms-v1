@@ -35,6 +35,39 @@ export default function PendingBillStep({
 
   return (
     <div className="flex flex-col items-center py-8">
+      {/* Status Messages - Above Cards */}
+      <div className="max-w-3xl w-full mb-5">
+        {/* Billing Clearance Warning */}
+        {requireBillingClearance && totalPayable > 0 && (
+          <Card className="p-4 bg-amber-500/10 border-amber-500/30">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-medium text-amber-800 dark:text-amber-200">Billing Clearance Required</p>
+                <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                  Outstanding balance of {formatCurrency(totalPayable)} must be cleared before discharge.
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* All Cleared Message */}
+        {allCleared && totalPayable <= 0 && (
+          <Card className="p-4 bg-green-500/10 border-green-500/30">
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-medium text-green-800 dark:text-green-200">All Bills Cleared</p>
+                <p className="text-sm text-green-700 dark:text-green-300 mt-1">
+                  All outstanding bills have been settled.
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
+      </div>
+
       {/* Summary Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl w-full">
         {/* Billing Summary Card */}
@@ -100,39 +133,6 @@ export default function PendingBillStep({
             </div>
           </div>
         </Card>
-      </div>
-
-      {/* Status Messages */}
-      <div className="max-w-3xl w-full mt-6">
-        {/* Billing Clearance Warning */}
-        {requireBillingClearance && totalPayable > 0 && (
-          <Card className="p-4 bg-amber-500/10 border-amber-500/30">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <div>
-                <p className="font-medium text-amber-800 dark:text-amber-200">Billing Clearance Required</p>
-                <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                  Outstanding balance of {formatCurrency(totalPayable)} must be cleared before discharge.
-                </p>
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {/* All Cleared Message */}
-        {allCleared && totalPayable <= 0 && (
-          <Card className="p-4 bg-green-500/10 border-green-500/30">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-              <div>
-                <p className="font-medium text-green-800 dark:text-green-200">All Bills Cleared</p>
-                <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                  All outstanding bills have been settled.
-                </p>
-              </div>
-            </div>
-          </Card>
-        )}
       </div>
     </div>
   );
