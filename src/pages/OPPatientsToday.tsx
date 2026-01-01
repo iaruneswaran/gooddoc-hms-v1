@@ -160,6 +160,9 @@ const OPPatientsToday = () => {
     { key: "tokenQueueNo", label: "Token/Queue No.", render: (row) => row.tokenQueueNo || "—" },
   ];
 
+  // Get unique doctors from data
+  const uniqueDoctors = [...new Set(data.map(p => p.provider))].sort();
+
   const filters: Filter[] = [
     {
       key: "department",
@@ -171,6 +174,12 @@ const OPPatientsToday = () => {
         { value: "Neurology", label: "Neurology" },
         { value: "General Medicine", label: "General Medicine" },
       ],
+    },
+    {
+      key: "provider",
+      label: "Doctor",
+      value: "all",
+      options: uniqueDoctors.map(doctor => ({ value: doctor, label: doctor })),
     },
     {
       key: "status",
