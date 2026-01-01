@@ -49,12 +49,29 @@ const IPPatients = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} patientId={row.mrn} fromPage="ip-patients" />
     },
     { key: "visitId", label: "Visit ID" },
+    {
+      key: "ipStatus",
+      label: "Status",
+      sortable: true,
+      render: (row) => (
+        <Badge 
+          className={row.ipStatus === "admitted" 
+            ? "bg-green-100 text-green-700 border-green-200" 
+            : "bg-gray-100 text-gray-700 border-gray-200"}
+        >
+          {row.ipStatus === "admitted" ? "Admitted" : "Discharged"}
+        </Badge>
+      )
+    },
     { 
       key: "admitDateTime", 
-      label: "Admit Date/Time", 
+      label: "Admit/Discharged Date", 
       sortable: true,
       render: (row) => {
-        const [date, time] = row.admitDateTime.split(' ');
+        const displayDateTime = row.ipStatus === "discharged" && row.dischargeDateTime 
+          ? row.dischargeDateTime 
+          : row.admitDateTime;
+        const [date, time] = displayDateTime.split(' ');
         return (
           <div className="flex flex-col">
             <span>{time}</span>
@@ -129,6 +146,15 @@ const IPPatients = () => {
 
   const filters: Filter[] = [
     {
+      key: "ipStatus",
+      label: "Status",
+      value: "all",
+      options: [
+        { value: "admitted", label: "Admitted" },
+        { value: "discharged", label: "Discharged" },
+      ],
+    },
+    {
       key: "ward",
       label: "Ward",
       value: "all",
@@ -156,6 +182,26 @@ const IPPatients = () => {
       label: "Doctor",
       value: "all",
       options: uniqueDoctors.map(doctor => ({ value: doctor, label: doctor })),
+    },
+    {
+      key: "admitDate",
+      label: "Admit Date",
+      value: "all",
+      options: [
+        { value: "today", label: "Today" },
+        { value: "last7days", label: "Last 7 Days" },
+        { value: "last30days", label: "Last 30 Days" },
+      ],
+    },
+    {
+      key: "dischargeDate",
+      label: "Discharge Date",
+      value: "all",
+      options: [
+        { value: "today", label: "Today" },
+        { value: "last7days", label: "Last 7 Days" },
+        { value: "last30days", label: "Last 30 Days" },
+      ],
     },
   ];
 
