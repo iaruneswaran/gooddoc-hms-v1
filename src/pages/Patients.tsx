@@ -67,7 +67,8 @@ export default function Patients() {
   const [genderFilter, setGenderFilter] = useState("all");
   const [bloodGroupFilter, setBloodGroupFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [departmentFilter, setDepartmentFilter] = useState("all");
+const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [lastVisitDateFilter, setLastVisitDateFilter] = useState("all");
 
   const { data: patients = [], isLoading, error } = usePatients();
   const updatePatient = useUpdatePatient();
@@ -104,10 +105,35 @@ export default function Patients() {
       const matchesBloodGroup = bloodGroupFilter === "all" || patient.blood_group === bloodGroupFilter;
       const matchesStatus = statusFilter === "all" || patient.status === statusFilter;
       const matchesDepartment = departmentFilter === "all" || patient.department === departmentFilter;
+      
+      // Last visit date filter
+      let matchesLastVisitDate = true;
+      if (lastVisitDateFilter !== "all" && patient.last_visit_date) {
+        const visitDate = parseISO(patient.last_visit_date);
+        const today = new Date();
+        const daysDiff = Math.floor((today.getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        switch (lastVisitDateFilter) {
+          case "today":
+            matchesLastVisitDate = daysDiff === 0;
+            break;
+          case "last7days":
+            matchesLastVisitDate = daysDiff >= 0 && daysDiff <= 7;
+            break;
+          case "last30days":
+            matchesLastVisitDate = daysDiff >= 0 && daysDiff <= 30;
+            break;
+          case "last90days":
+            matchesLastVisitDate = daysDiff >= 0 && daysDiff <= 90;
+            break;
+        }
+      } else if (lastVisitDateFilter !== "all" && !patient.last_visit_date) {
+        matchesLastVisitDate = false;
+      }
 
-      return matchesSearch && matchesGender && matchesBloodGroup && matchesStatus && matchesDepartment;
+      return matchesSearch && matchesGender && matchesBloodGroup && matchesStatus && matchesDepartment && matchesLastVisitDate;
     });
-  }, [searchQuery, patients, genderFilter, bloodGroupFilter, statusFilter, departmentFilter]);
+  }, [searchQuery, patients, genderFilter, bloodGroupFilter, statusFilter, departmentFilter, lastVisitDateFilter]);
 
   const handleEditPatient = (patient: Patient) => {
     setSelectedPatient(patient);
@@ -228,6 +254,18 @@ export default function Patients() {
                 ))}
               </SelectContent>
             </Select>
+            <Select value={lastVisitDateFilter} onValueChange={setLastVisitDateFilter}>
+              <SelectTrigger className="w-[150px] h-9">
+                <SelectValue placeholder="Last Visit Date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Dates</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="last7days">Last 7 Days</SelectItem>
+                <SelectItem value="last30days">Last 30 Days</SelectItem>
+                <SelectItem value="last90days">Last 90 Days</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
@@ -242,7 +280,7 @@ export default function Patients() {
               <div className="text-xs font-medium text-muted-foreground">Blood</div>
               <div className="text-xs font-medium text-muted-foreground">Registered</div>
               <div className="text-xs font-medium text-muted-foreground">Last Visit</div>
-              <div className="text-xs font-medium text-muted-foreground">Status</div>
+              <div className="text-xs font-medium text-muted-foreground">Last Visit Type</div>
               <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
             </div>
             {filteredPatients.map((patient) => (
