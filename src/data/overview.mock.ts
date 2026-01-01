@@ -67,6 +67,8 @@ export interface IPPatientRecord {
   advancePaid?: number;
   admissionFee?: number;
   totalPaid?: number;
+  // Status
+  ipStatus: "admitted" | "discharged";
 }
 
 export interface BedRecord {
@@ -381,6 +383,13 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
   const advancePaid = hasPaidAdvance ? [10000, 15000, 20000, 25000, 50000][index % 5] : 0;
   const totalPaid = advancePaid + (Math.random() > 0.5 ? admissionFee : 0);
 
+  // Determine status - some patients are discharged (for demo variety)
+  const isAdmitted = index % 5 !== 0; // 80% admitted, 20% discharged
+  const dischargeDate = !isAdmitted ? subDays(now, Math.floor(Math.random() * 3)) : undefined;
+  if (dischargeDate) {
+    dischargeDate.setHours(10 + Math.floor(Math.random() * 8), Math.floor(Math.random() * 60), 0, 0);
+  }
+
   return {
     mrn: generateMRN(5000 + index),
     patient: generateName(index + 100),
@@ -402,6 +411,8 @@ function generateIPPatient(index: number, isNewAdmission = false, isERCase = fal
     admissionFee,
     advancePaid,
     totalPaid,
+    ipStatus: isAdmitted ? "admitted" : "discharged",
+    dischargeDateTime: dischargeDate ? formatDateTime(dischargeDate) : undefined,
   };
 }
 
@@ -495,6 +506,7 @@ function generateDischargedPatient(index: number, isPending = false): IPPatientR
     followUpAppointment: !isPending && Math.random() > 0.4 ? formatDateTime(addDays(now, 7 + Math.floor(Math.random() * 14))) : undefined,
     plannedDischargeDateTime: isPending ? formatDateTime(dischargeDate) : undefined,
     blockingTasks: isPending ? blockingTasksOptions.slice(0, 1 + Math.floor(Math.random() * 3)) : undefined,
+    ipStatus: isPending ? "admitted" : "discharged",
   };
 }
 
