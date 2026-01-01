@@ -143,7 +143,7 @@ const AppointmentRequests = () => {
     const paginatedData = appointmentRequests.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     
     return (
-      <Table>
+      <Table className="w-full table-fixed">
         <TableHeader>
           <TableRow>
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
@@ -258,7 +258,7 @@ const AppointmentRequests = () => {
   };
 
   const renderLaboratoryTable = () => (
-    <Table>
+    <Table className="w-full table-fixed">
       <TableHeader>
         <TableRow>
           <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
@@ -348,14 +348,13 @@ const AppointmentRequests = () => {
   );
 
   const renderScheduledTable = () => (
-    <Table>
+    <Table className="w-full table-fixed">
       <TableHeader>
         <TableRow>
           <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
           <TableHead>Contact</TableHead>
           <TableHead>Appointment ID</TableHead>
-          <TableHead>Scheduled Date</TableHead>
-          <TableHead>Scheduled Time</TableHead>
+          <TableHead>Scheduled Date/Time</TableHead>
           <TableHead>Doctor / Test</TableHead>
           <TableHead>Department</TableHead>
           <TableHead>Visit Type</TableHead>
@@ -376,8 +375,12 @@ const AppointmentRequests = () => {
               </div>
             </TableCell>
             <TableCell className="font-medium">{row.appointmentId}</TableCell>
-            <TableCell>{row.scheduledDate}</TableCell>
-            <TableCell>{row.scheduledTime}</TableCell>
+            <TableCell>
+              <div className="flex flex-col">
+                <span>{row.scheduledTime}</span>
+                <span className="text-muted-foreground text-xs">{row.scheduledDate}</span>
+              </div>
+            </TableCell>
             <TableCell>
               {row.appointmentFor === "Laboratory" ? (
                 <span className="font-medium">{row.testCode}</span>
@@ -532,10 +535,12 @@ const AppointmentRequests = () => {
           </div>
 
           {/* Table */}
-          <Card>
-            {activeTab === "outpatient" && renderOutpatientTable()}
-            {activeTab === "laboratory" && renderLaboratoryTable()}
-            {activeTab === "scheduled" && renderScheduledTable()}
+          <Card className="overflow-x-auto">
+            <div className="min-w-full">
+              {activeTab === "outpatient" && renderOutpatientTable()}
+              {activeTab === "laboratory" && renderLaboratoryTable()}
+              {activeTab === "scheduled" && renderScheduledTable()}
+            </div>
 
             {/* Pagination */}
             <div className="flex items-center justify-between px-4 py-3 border-t">
