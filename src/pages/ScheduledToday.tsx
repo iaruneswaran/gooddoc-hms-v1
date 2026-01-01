@@ -149,8 +149,7 @@ const AppointmentRequests = () => {
             <TableHead style={{ width: "220px", minWidth: "220px" }}>Patient Info</TableHead>
             <TableHead>Contact</TableHead>
             <TableHead>Request ID</TableHead>
-            <TableHead>Preferred Date</TableHead>
-            <TableHead>Preferred Time</TableHead>
+            <TableHead>Preferred Date/Time</TableHead>
             <TableHead>Preferred Doctor</TableHead>
             <TableHead>Department</TableHead>
             <TableHead>Visit Type</TableHead>
@@ -194,9 +193,12 @@ const AppointmentRequests = () => {
                     <span className="text-muted-foreground text-xs">{row.email}</span>
                   </div>
                 </TableCell>
-                <TableCell className="font-medium">{requestId}</TableCell>
-                <TableCell>{row.preferredDate}</TableCell>
-                <TableCell>{row.preferredTime}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span>{row.preferredTime}</span>
+                    <span className="text-muted-foreground text-xs">{row.preferredDate}</span>
+                  </div>
+                </TableCell>
                 <TableCell>{row.preferredProvider || "Any"}</TableCell>
                 <TableCell>{row.department}</TableCell>
                 <TableCell>
@@ -264,8 +266,7 @@ const AppointmentRequests = () => {
           <TableHead>Order ID</TableHead>
           <TableHead>Test Type</TableHead>
           <TableHead>Ordered By</TableHead>
-          <TableHead>Preferred Date</TableHead>
-          <TableHead>Preferred Time</TableHead>
+          <TableHead>Preferred Date/Time</TableHead>
           <TableHead>Visit Type</TableHead>
           <TableHead style={{ width: "140px" }}></TableHead>
           <TableHead style={{ width: "80px" }}>Actions</TableHead>
@@ -286,8 +287,12 @@ const AppointmentRequests = () => {
             <TableCell className="font-medium">{row.orderId}</TableCell>
             <TableCell>{row.testType}</TableCell>
             <TableCell>{row.orderedBy}</TableCell>
-            <TableCell>{row.preferredDate}</TableCell>
-            <TableCell>{row.preferredTime}</TableCell>
+            <TableCell>
+              <div className="flex flex-col">
+                <span>{row.preferredTime}</span>
+                <span className="text-muted-foreground text-xs">{row.preferredDate}</span>
+              </div>
+            </TableCell>
             <TableCell>
               <Badge variant="outline" className={row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}>
                 {row.visitType}
