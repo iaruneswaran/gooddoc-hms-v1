@@ -36,7 +36,7 @@ export default function PendingBillStep({
   return (
     <div className="flex flex-col items-center py-8">
       {/* Summary Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl w-full">
         {/* Billing Summary Card */}
         <Card className="overflow-hidden border-border/60 shadow-sm">
           <div className="bg-gradient-to-r from-muted/80 to-muted/40 px-5 py-3.5 border-b border-border/50">
@@ -72,52 +72,31 @@ export default function PendingBillStep({
           </div>
         </Card>
 
-        {/* Collection Status Card */}
+        {/* Total Due Amount Card */}
         <Card className="overflow-hidden border-border/60 shadow-sm">
           <div className="bg-gradient-to-r from-muted/80 to-muted/40 px-5 py-3.5 border-b border-border/50">
             <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-md bg-green-500/10">
-                <Wallet className="w-4 h-4 text-green-600" />
+              <div className="p-1.5 rounded-md bg-primary/10">
+                <Wallet className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-semibold text-foreground">Collection Status</h3>
+              <h3 className="font-semibold text-foreground">Total Due Amount</h3>
             </div>
           </div>
           <div className="p-5 space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Advance Paid</span>
-                <span className="font-semibold text-green-600 tabular-nums">{formatCurrency(advancePaid)}</span>
+                <span className="text-sm text-muted-foreground">Total Due</span>
+                <span className="font-semibold text-foreground tabular-nums">{formatCurrency(totalDue)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Advance Balance</span>
-                <span className="font-semibold text-foreground tabular-nums">{formatCurrency(advancePaid)}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Total Due Amount Card - Hero Card */}
-        <Card className="overflow-hidden border-primary/30 shadow-sm bg-gradient-to-br from-primary/5 to-primary/10">
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 px-5 py-3.5 border-b border-primary/20">
-            <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-md bg-primary/20">
-                <Receipt className="w-4 h-4 text-primary" />
-              </div>
-              <h3 className="font-semibold text-primary">Total Due Amount</h3>
-            </div>
-          </div>
-          <div className="p-5">
-            <p className="text-4xl font-bold text-primary mb-5 tabular-nums">{formatCurrency(totalDue)}</p>
-            <div className="space-y-3 bg-background/50 rounded-lg p-3 -mx-1">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Advance Paid</span>
+                <span className="text-sm text-muted-foreground">Total Paid</span>
                 <span className="font-semibold text-green-600 tabular-nums">−{formatCurrency(advancePaid)}</span>
               </div>
-              <Separator className="bg-border/50" />
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-sm font-medium text-foreground">Total Payable</span>
-                <span className="text-2xl font-bold text-primary tabular-nums">{formatCurrency(totalPayable)}</span>
-              </div>
+            </div>
+            <Separator className="bg-border/50" />
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-sm font-medium text-foreground">Total Payable</span>
+              <span className="text-lg font-bold text-primary tabular-nums">{formatCurrency(totalPayable)}</span>
             </div>
           </div>
         </Card>
