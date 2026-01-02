@@ -621,134 +621,173 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               </div>
             </TabsContent>
 
-            {/* Medications Tab - New Pharmacy Style Layout */}
+            {/* Medications Tab - Patient Services Style Layout */}
             <TabsContent value="medications" className="mt-0">
               <div className="flex h-[600px]">
-                {/* Left Side - Medicine Catalog */}
-                <div className="flex-1 border-r border-border flex flex-col">
-                  {/* Search & Filter Header */}
-                  <div className="p-4 border-b border-border bg-muted/30">
-                    <div className="relative mb-3">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search medications by name, generic, or category..."
-                        value={medSearch}
-                        onChange={(e) => setMedSearch(e.target.value)}
-                        className="pl-9 bg-background"
-                      />
-                    </div>
-                    
-                    {/* Category Pills */}
-                    <div className="flex flex-wrap gap-2">
+                {/* Left Sidebar - Categories */}
+                <div className="w-[200px] border-r border-border bg-muted/30 flex flex-col">
+                  <div className="p-3 border-b border-border">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
+                  </div>
+                  <ScrollArea className="flex-1">
+                    <div className="p-2 space-y-1">
                       <button
                         onClick={() => setSelectedCategory("all")}
                         className={cn(
-                          "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                          "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                           selectedCategory === "all" 
                             ? "bg-primary text-primary-foreground" 
-                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                            : "text-foreground hover:bg-muted"
                         )}
                       >
-                        All
+                        <Package className="w-4 h-4" />
+                        <span className="flex-1 text-left">All Medications</span>
+                        <span className={cn(
+                          "text-xs px-1.5 py-0.5 rounded",
+                          selectedCategory === "all" 
+                            ? "bg-primary-foreground/20 text-primary-foreground" 
+                            : "bg-muted text-muted-foreground"
+                        )}>
+                          {MEDICATIONS_CATALOG.length}
+                        </span>
                       </button>
-                      {MEDICATION_CATEGORIES.map(cat => (
-                        <button
-                          key={cat.value}
-                          onClick={() => setSelectedCategory(cat.value)}
-                          className={cn(
-                            "px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5",
-                            selectedCategory === cat.value 
-                              ? "bg-primary text-primary-foreground" 
-                              : "bg-muted text-muted-foreground hover:bg-muted/80"
-                          )}
-                        >
-                          <span>{cat.icon}</span>
-                          {cat.label}
-                        </button>
-                      ))}
+                      {MEDICATION_CATEGORIES.map(cat => {
+                        const count = MEDICATIONS_CATALOG.filter(m => m.category === cat.value).length;
+                        return (
+                          <button
+                            key={cat.value}
+                            onClick={() => setSelectedCategory(cat.value)}
+                            className={cn(
+                              "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                              selectedCategory === cat.value 
+                                ? "bg-primary text-primary-foreground" 
+                                : "text-foreground hover:bg-muted"
+                            )}
+                          >
+                            <span className="text-base">{cat.icon}</span>
+                            <span className="flex-1 text-left">{cat.label}</span>
+                            <span className={cn(
+                              "text-xs px-1.5 py-0.5 rounded",
+                              selectedCategory === cat.value 
+                                ? "bg-primary-foreground/20 text-primary-foreground" 
+                                : "bg-muted text-muted-foreground"
+                            )}>
+                              {count}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+                </div>
+
+                {/* Center - Medications List */}
+                <div className="flex-1 flex flex-col overflow-hidden">
+                  {/* Search Header */}
+                  <div className="px-4 py-3 border-b border-border bg-background">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search medications by name, generic, or brand..."
+                        value={medSearch}
+                        onChange={(e) => setMedSearch(e.target.value)}
+                        className="pl-9 bg-background h-9"
+                      />
                     </div>
                   </div>
 
                   {/* Medication List */}
                   <ScrollArea className="flex-1">
-                    <div className="p-4 space-y-2">
-                      {filteredCatalogMeds.length === 0 ? (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                          <p className="text-sm">No medications found</p>
-                          <p className="text-xs">Try a different search term or category</p>
-                        </div>
-                      ) : (
-                        filteredCatalogMeds.map(med => {
+                    {filteredCatalogMeds.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <Package className="w-12 h-12 text-muted-foreground/50 mb-3" />
+                        <p className="text-sm font-medium text-foreground">No medications found</p>
+                        <p className="text-xs text-muted-foreground mt-1">Try a different search term or category</p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-border">
+                        {filteredCatalogMeds.map(med => {
                           const isInCart = isMedicationInCart(med.id);
                           return (
                             <div 
                               key={med.id}
                               className={cn(
-                                "p-3 rounded-lg border transition-all cursor-pointer group",
-                                isInCart 
-                                  ? "bg-green-500/5 border-green-500/30" 
-                                  : "bg-card border-border hover:border-primary/50 hover:shadow-sm"
+                                "flex items-center gap-4 px-4 py-3 transition-colors cursor-pointer group",
+                                isInCart ? "bg-green-500/5" : "hover:bg-muted/50"
                               )}
                               onClick={() => !isInCart && handleAddMedicationFromCatalog(med)}
                             >
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <h4 className="font-medium text-foreground text-sm">{med.name}</h4>
-                                    <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0">
-                                      {med.defaultStrength}
-                                    </Badge>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground truncate">
-                                    {med.genericName} • {med.brandName}
-                                  </p>
-                                  <div className="flex items-center gap-2 mt-1.5">
-                                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                                      {med.category}
-                                    </Badge>
-                                    <span className="text-[10px] text-muted-foreground">{med.form}</span>
-                                  </div>
-                                </div>
-                                
-                                {isInCart ? (
-                                  <div className="flex items-center gap-1 text-green-600">
-                                    <CheckCircle2 className="w-5 h-5" />
-                                    <span className="text-xs font-medium">Added</span>
-                                  </div>
-                                ) : (
-                                  <Button 
-                                    size="sm" 
-                                    variant="ghost"
-                                    className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleAddMedicationFromCatalog(med);
-                                    }}
-                                  >
-                                    <Plus className="w-4 h-4" />
-                                  </Button>
-                                )}
+                              {/* Icon */}
+                              <div className={cn(
+                                "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
+                                isInCart ? "bg-green-500/10" : "bg-primary/10"
+                              )}>
+                                <Pill className={cn(
+                                  "w-5 h-5",
+                                  isInCart ? "text-green-600" : "text-primary"
+                                )} />
                               </div>
+
+                              {/* Details */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
+                                  <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0 shrink-0">
+                                    {med.defaultStrength}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground truncate mt-0.5">
+                                  {med.genericName} • {med.brandName}
+                                </p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                    {med.category}
+                                  </Badge>
+                                  <span className="text-[10px] text-muted-foreground">{med.form}</span>
+                                </div>
+                              </div>
+
+                              {/* Add Button */}
+                              {isInCart ? (
+                                <div className="flex items-center gap-1.5 text-green-600 shrink-0">
+                                  <CheckCircle2 className="w-4 h-4" />
+                                  <span className="text-xs font-medium">Added</span>
+                                </div>
+                              ) : (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className="h-8 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddMedicationFromCatalog(med);
+                                  }}
+                                >
+                                  <Plus className="w-3.5 h-3.5 mr-1" />
+                                  Add
+                                </Button>
+                              )}
                             </div>
                           );
-                        })
-                      )}
-                    </div>
+                        })}
+                      </div>
+                    )}
                   </ScrollArea>
                 </div>
 
                 {/* Right Side - Prescription Cart */}
-                <div className="w-[420px] flex flex-col bg-muted/20">
+                <div className="w-[380px] border-l border-border flex flex-col bg-background">
                   {/* Cart Header */}
-                  <div className="p-4 border-b border-border bg-gradient-to-r from-primary/10 to-primary/5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                        <ShoppingCart className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">Discharge Prescription</h3>
-                        <p className="text-xs text-muted-foreground">{medications.length} medications</p>
+                  <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <ShoppingCart className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-sm text-foreground">Discharge Prescription</h3>
+                          <p className="text-xs text-muted-foreground">{medications.length} medications</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -757,119 +796,69 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                   <ScrollArea className="flex-1">
                     <div className="p-3 space-y-2">
                       {medications.length === 0 ? (
-                        <div className="text-center py-12 text-muted-foreground">
-                          <Pill className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                          <p className="text-sm font-medium">No medications added</p>
-                          <p className="text-xs">Click on medications from the left to add them</p>
+                        <div className="flex flex-col items-center justify-center py-12 text-center">
+                          <Pill className="w-10 h-10 text-muted-foreground/40 mb-3" />
+                          <p className="text-sm font-medium text-foreground">No medications added</p>
+                          <p className="text-xs text-muted-foreground mt-1">Select medications from the list</p>
                         </div>
                       ) : (
                         medications.map((med, index) => (
-                          <Card key={med.medId} className="border-border bg-card shadow-sm">
-                            <CardContent className="p-3">
-                              {/* Med Header */}
-                              <div className="flex items-start justify-between gap-2 mb-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
-                                    {index + 1}
-                                  </span>
-                                  <div>
-                                    <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
-                                    {med.genericName && (
-                                      <p className="text-[10px] text-muted-foreground">{med.genericName}</p>
-                                    )}
-                                  </div>
+                          <div key={med.medId} className="rounded-lg border border-border bg-card p-3">
+                            {/* Med Header */}
+                            <div className="flex items-start justify-between gap-2 mb-3">
+                              <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">
+                                  {index + 1}
+                                </span>
+                                <div>
+                                  <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
+                                  {med.genericName && (
+                                    <p className="text-[10px] text-muted-foreground">{med.genericName}</p>
+                                  )}
                                 </div>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6 text-muted-foreground hover:text-destructive"
-                                  onClick={() => handleDeleteMedication(med.medId)}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                                onClick={() => handleDeleteMedication(med.medId)}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </Button>
+                            </div>
+
+                            {/* Quick Edit Fields */}
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Strength</label>
+                                <Select 
+                                  value={med.strength || ""} 
+                                  onValueChange={(v) => handleUpdateMedication(med.medId, 'strength', v)}
                                 >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </Button>
+                                  <SelectTrigger className="h-7 text-xs">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {DURATION_OPTIONS.map(opt => (
+                                      <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                               </div>
+                            </div>
 
-                              {/* Quick Edit Fields */}
-                              <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Strength</label>
-                                  <Select 
-                                    value={med.strength || ""} 
-                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'strength', v)}
-                                  >
-                                    <SelectTrigger className="h-7 text-xs">
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {STRENGTH_OPTIONS.map(opt => (
-                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</label>
-                                  <Select 
-                                    value={med.dose} 
-                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'dose', v)}
-                                  >
-                                    <SelectTrigger className="h-7 text-xs">
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {DOSAGE_OPTIONS.map(opt => (
-                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</label>
-                                  <Select 
-                                    value={med.frequency} 
-                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'frequency', v)}
-                                  >
-                                    <SelectTrigger className="h-7 text-xs">
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {FREQUENCY_OPTIONS.map(opt => (
-                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</label>
-                                  <Select 
-                                    value={med.duration} 
-                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'duration', v)}
-                                  >
-                                    <SelectTrigger className="h-7 text-xs">
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {DURATION_OPTIONS.map(opt => (
-                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              </div>
-
-                              {/* Route Badge */}
-                              <div className="flex items-center gap-2 mt-2">
-                                <Badge variant="outline" className="text-[10px]">
-                                  Route: {med.route}
-                                </Badge>
-                                {med.drugCode && (
-                                  <span className="text-[10px] text-muted-foreground font-mono">
-                                    ATC: {med.drugCode}
-                                  </span>
-                                )}
-                              </div>
-                            </CardContent>
-                          </Card>
+                            {/* Route Badge */}
+                            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border">
+                              <Badge variant="outline" className="text-[10px]">
+                                Route: {med.route}
+                              </Badge>
+                              {med.drugCode && (
+                                <span className="text-[10px] text-muted-foreground font-mono">
+                                  ATC: {med.drugCode}
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         ))
                       )}
                     </div>
@@ -877,7 +866,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
                   {/* Cart Footer Summary */}
                   {medications.length > 0 && (
-                    <div className="p-4 border-t border-border bg-card">
+                    <div className="p-3 border-t border-border bg-muted/30">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Total Medications</span>
                         <span className="font-semibold">{medications.length}</span>
