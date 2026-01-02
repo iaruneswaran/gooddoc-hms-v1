@@ -284,20 +284,11 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             "absolute inset-0 opacity-[0.03]",
             checklistProgress === 100 ? "bg-green-500" : "bg-amber-500"
           )} />
-          <CardContent className="p-4 relative">
-            <div className="flex items-start justify-between mb-3">
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center",
-                !checklistRequired ? "bg-muted" : checklistProgress === 100 ? "bg-green-500/10" : "bg-amber-500/10"
-              )}>
-                {!checklistRequired ? (
-                  <X className="w-5 h-5 text-muted-foreground" />
-                ) : checklistProgress === 100 ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-amber-600" />
-                )}
-              </div>
+          <CardContent className="px-4 py-3 relative">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Clinical Checklist
+              </p>
               {checklistRequired && checklistProgress === 100 && (
                 <Badge className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px] font-medium">
                   Complete
@@ -305,13 +296,9 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               )}
             </div>
             
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Clinical Checklist
-            </p>
-            
             <div className="flex items-baseline gap-1">
               <span className={cn(
-                "text-2xl font-semibold tabular-nums",
+                "text-xl font-semibold tabular-nums",
                 !checklistRequired ? "text-muted-foreground" : checklistProgress === 100 ? "text-green-600" : "text-amber-600"
               )}>
                 {checklistRequired ? completedChecks : "—"}
@@ -323,7 +310,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             
             {checklistRequired && (
               <>
-                <div className="mt-3 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div className="mt-2 h-1 bg-muted rounded-full overflow-hidden">
                   <div 
                     className={cn(
                       "h-full rounded-full transition-all duration-500 ease-out",
@@ -332,8 +319,8 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                     style={{ width: `${checklistProgress}%` }}
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1.5">
-                  {checklistProgress === 100 ? "All items verified" : `${totalChecks - completedChecks} items remaining`}
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {checklistProgress === 100 ? "All items verified" : `${totalChecks - completedChecks} remaining`}
                 </p>
               </>
             )}
@@ -347,14 +334,11 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
           medsRequired && medications.length > 0 && "ring-1 ring-primary/20"
         )}>
           <div className="absolute inset-0 bg-primary opacity-[0.02]" />
-          <CardContent className="p-4 relative">
-            <div className="flex items-start justify-between mb-3">
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center",
-                medsRequired ? "bg-primary/10" : "bg-muted"
-              )}>
-                <Pill className={cn("w-5 h-5", medsRequired ? "text-primary" : "text-muted-foreground")} />
-              </div>
+          <CardContent className="px-4 py-3 relative">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Medications
+              </p>
               {medsRequired && medications.length > 0 && (
                 <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] font-medium">
                   {medications.length} Rx
@@ -362,13 +346,9 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               )}
             </div>
             
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Medications
-            </p>
-            
             <div className="flex items-baseline gap-1">
               <span className={cn(
-                "text-2xl font-semibold tabular-nums",
+                "text-xl font-semibold tabular-nums",
                 medsRequired ? "text-foreground" : "text-muted-foreground"
               )}>
                 {medsRequired ? medications.length : "—"}
@@ -379,22 +359,22 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             </div>
             
             {medsRequired && medications.length > 0 && (
-              <div className="flex items-center gap-3 mt-3">
+              <div className="flex items-center gap-3 mt-2">
                 {newMedsCount > 0 && (
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                     <span className="text-[10px] text-muted-foreground">{newMedsCount} new</span>
                   </div>
                 )}
                 {continuedMedsCount > 0 && (
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                     <span className="text-[10px] text-muted-foreground">{continuedMedsCount} cont.</span>
                   </div>
                 )}
                 {stoppedMedsCount > 0 && (
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
                     <span className="text-[10px] text-muted-foreground">{stoppedMedsCount} stop</span>
                   </div>
                 )}
@@ -402,7 +382,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             )}
             
             {medsRequired && medications.length === 0 && (
-              <p className="text-[10px] text-muted-foreground mt-1.5">No medications added yet</p>
+              <p className="text-[10px] text-muted-foreground mt-1">No medications added</p>
             )}
           </CardContent>
         </Card>
@@ -414,14 +394,11 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
           followUpRequired && followUpDate && "ring-1 ring-blue-500/20"
         )}>
           <div className="absolute inset-0 bg-blue-500 opacity-[0.02]" />
-          <CardContent className="p-4 relative">
-            <div className="flex items-start justify-between mb-3">
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center",
-                followUpRequired ? "bg-blue-500/10" : "bg-muted"
-              )}>
-                <Calendar className={cn("w-5 h-5", followUpRequired ? "text-blue-600" : "text-muted-foreground")} />
-              </div>
+          <CardContent className="px-4 py-3 relative">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Follow-up
+              </p>
               {followUpRequired && daysUntilFollowUp !== null && daysUntilFollowUp > 0 && (
                 <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-[10px] font-medium">
                   In {daysUntilFollowUp}d
@@ -429,36 +406,31 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               )}
             </div>
             
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Follow-up
-            </p>
-            
             {followUpRequired ? (
               followUpDate ? (
-                <>
-                  <p className="text-lg font-semibold text-foreground">
+                <div className="flex items-baseline gap-2">
+                  <p className="text-xl font-semibold text-foreground">
                     {new Date(followUpDate).toLocaleDateString("en-IN", { 
                       day: "numeric",
                       month: "short"
                     })}
                   </p>
-                  <p className="text-[10px] text-muted-foreground mt-1">
+                  <p className="text-[10px] text-muted-foreground">
                     {new Date(followUpDate).toLocaleDateString("en-IN", { 
-                      weekday: "long",
-                      year: "numeric"
+                      weekday: "short"
                     })}
                   </p>
-                </>
+                </div>
               ) : (
                 <>
-                  <p className="text-lg font-semibold text-muted-foreground">Not set</p>
-                  <p className="text-[10px] text-amber-600 mt-1">Schedule recommended</p>
+                  <p className="text-xl font-semibold text-muted-foreground">Not set</p>
+                  <p className="text-[10px] text-amber-600 mt-0.5">Schedule recommended</p>
                 </>
               )
             ) : (
               <>
-                <p className="text-lg font-semibold text-muted-foreground">N/A</p>
-                <p className="text-[10px] text-muted-foreground mt-1">Not required</p>
+                <p className="text-xl font-semibold text-muted-foreground">N/A</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Not required</p>
               </>
             )}
           </CardContent>
@@ -467,30 +439,23 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
         {/* Condition & Destination Card */}
         <Card className="relative overflow-hidden border-0 shadow-sm ring-1 ring-green-500/20">
           <div className="absolute inset-0 bg-green-500 opacity-[0.02]" />
-          <CardContent className="p-4 relative">
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-                <Activity className="w-5 h-5 text-green-600" />
-              </div>
+          <CardContent className="px-4 py-3 relative">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Discharge Status
+              </p>
               <Badge className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px] font-medium">
                 Ready
               </Badge>
             </div>
             
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Discharge Status
-            </p>
-            
-            <p className="text-lg font-semibold text-green-600">
+            <p className="text-xl font-semibold text-green-600">
               {data.clinicalStatus.conditionAtDischarge}
             </p>
             
-            <div className="flex items-center gap-1.5 mt-2">
-              <Home className="w-3 h-3 text-muted-foreground" />
-              <span className="text-[11px] text-muted-foreground">
-                To: <span className="font-medium text-foreground">{data.clinicalStatus.destination}</span>
-              </span>
-            </div>
+            <p className="text-[10px] text-muted-foreground mt-1">
+              To: <span className="font-medium text-foreground">{data.clinicalStatus.destination}</span>
+            </p>
           </CardContent>
         </Card>
       </div>
