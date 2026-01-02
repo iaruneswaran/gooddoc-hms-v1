@@ -137,13 +137,15 @@ export default function DiagnosticsList() {
     },
     {
       key: "location",
-      label: "Location",
-      render: (row) => (
-        <div className="flex flex-col">
-          <span className="text-sm">{row.location}</span>
-          {row.bed && <span className="text-xs text-muted-foreground">{row.bed}</span>}
-        </div>
-      ),
+      label: "Patient Type",
+      render: (row) => {
+        const isIP = row.location !== "OP";
+        return (
+          <Badge className={isIP ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-gray-100 text-gray-700 border-gray-200"}>
+            {isIP ? "IP" : "OP"}
+          </Badge>
+        );
+      },
     },
     {
       key: "orderedDoctor",
