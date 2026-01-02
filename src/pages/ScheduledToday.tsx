@@ -447,80 +447,77 @@ const AppointmentRequests = () => {
           </Card>
 
           {/* Controls Row with Tabs, Filters and Search */}
-          <div className="flex items-center justify-between mb-4 border-b">
-            {/* Left: Tabs + Filters */}
-            <div className="flex items-center gap-6">
-              {/* Tabs */}
-              <div className="flex">
-                <button
-                  onClick={() => { setActiveTab("outpatient"); setCurrentPage(1); }}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === "outpatient" 
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Outpatient
-                </button>
-                <button
-                  onClick={() => { setActiveTab("laboratory"); setCurrentPage(1); }}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === "laboratory" 
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Laboratory
-                </button>
-                <button
-                  onClick={() => { setActiveTab("scheduled"); setCurrentPage(1); }}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === "scheduled" 
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Scheduled
-                </button>
-              </div>
-
-              {/* Filters - Right of Tabs */}
-              <div className="flex items-center gap-2 pb-[2px]">
-                <Select value={visitTypeFilter} onValueChange={setVisitTypeFilter}>
-                  <SelectTrigger className="w-[150px] h-8 text-sm">
-                    <SelectValue placeholder="All Visit Types" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border shadow-md z-50">
-                    <SelectItem value="all">All Visit Types</SelectItem>
-                    <SelectItem value="First Visit">First Visit</SelectItem>
-                    <SelectItem value="Follow-up">Follow up</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-                  <SelectTrigger className="w-[150px] h-8 text-sm">
-                    <SelectValue placeholder="All Departments" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border shadow-md z-50">
-                    <SelectItem value="all">All Departments</SelectItem>
-                    <SelectItem value="Cardiology">Cardiology</SelectItem>
-                    <SelectItem value="Orthopedics">Orthopedics</SelectItem>
-                    <SelectItem value="Neurology">Neurology</SelectItem>
-                    <SelectItem value="General Medicine">General Medicine</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            {/* Left: Tabs */}
+            <div className="flex items-center border-b">
+              <button
+                onClick={() => { setActiveTab("outpatient"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "outpatient" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Outpatient
+              </button>
+              <button
+                onClick={() => { setActiveTab("laboratory"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "laboratory" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Laboratory
+              </button>
+              <button
+                onClick={() => { setActiveTab("scheduled"); setCurrentPage(1); }}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === "scheduled" 
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Scheduled
+              </button>
             </div>
 
-            {/* Right: Search */}
-            <div className="relative w-72 mb-[2px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by Request ID, patient name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+            {/* Right: Filters and Search */}
+            <div className="flex items-center gap-3">
+              <Select value={visitTypeFilter} onValueChange={setVisitTypeFilter}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Visit Type" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border shadow-md z-50">
+                  <SelectItem value="all">All Visit Type</SelectItem>
+                  <SelectItem value="First Visit">First Visit</SelectItem>
+                  <SelectItem value="Follow-up">Follow up</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Department" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border shadow-md z-50">
+                  <SelectItem value="all">All Department</SelectItem>
+                  <SelectItem value="Cardiology">Cardiology</SelectItem>
+                  <SelectItem value="Orthopedics">Orthopedics</SelectItem>
+                  <SelectItem value="Neurology">Neurology</SelectItem>
+                  <SelectItem value="General Medicine">General Medicine</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Search */}
+              <div className="relative w-72">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by Request ID, patient name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
           </div>
 
