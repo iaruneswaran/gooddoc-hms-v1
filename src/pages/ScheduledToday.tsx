@@ -244,10 +244,8 @@ const AppointmentRequests = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                      <DropdownMenuItem onClick={() => handleViewSummary(row)}>View Appointment Summary</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate(`/book-appointment?requestId=${row.requestId}`)}>Schedule Now</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => console.log("Contact", row.contact)}>Contact Patient</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => console.log("Reject", row.requestId)}>Reject</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate(`/patient-insights/${gdidNumber}?from=scheduled`)}>Patient Insight</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleViewSummary(row)}>View Summary</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -336,10 +334,8 @@ const AppointmentRequests = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>Schedule Now</DropdownMenuItem>
-                  <DropdownMenuItem>Contact Patient</DropdownMenuItem>
-                  <DropdownMenuItem>Cancel</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate(`/patient-insights/${row.gdid}?from=scheduled`)}>Patient Insight</DropdownMenuItem>
+                  <DropdownMenuItem>View Summary</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -405,10 +401,8 @@ const AppointmentRequests = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
-                  <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>Reschedule</DropdownMenuItem>
-                  <DropdownMenuItem>Contact Patient</DropdownMenuItem>
-                  <DropdownMenuItem>Cancel</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate(`/patient-insights/${row.gdid}?from=scheduled`)}>Patient Insight</DropdownMenuItem>
+                  <DropdownMenuItem>View Summary</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
