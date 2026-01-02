@@ -372,6 +372,7 @@ const PatientInsightsContent = () => {
                 advanceAmount="₹3,000"
                 collectedAmount="₹8,000"
                 balanceAmount="₹4,000"
+                patientId={patientId}
                 variant="light"
               />
             </div>
