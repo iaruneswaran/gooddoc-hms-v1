@@ -680,7 +680,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 {/* Center - Medications List */}
                 <div className="flex-1 flex flex-col overflow-hidden">
                   {/* Search Header */}
-                  <div className="px-4 py-3 border-b border-border bg-background">
+                  <div className="p-4 border-b border-border bg-background">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
