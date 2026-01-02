@@ -410,8 +410,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Prepared By</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Verified By</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Format</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Size</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Format / Size</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
               </tr>
@@ -445,10 +444,10 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                     <span className="text-sm text-foreground">{doc.verifiedBy || "—"}</span>
                   </td>
                   <td className="p-3">
-                    <Badge variant="secondary" className="text-xs font-mono">{doc.format}</Badge>
-                  </td>
-                  <td className="p-3">
-                    <span className="text-sm text-muted-foreground">{doc.size}</span>
+                    <div className="flex flex-col">
+                      <Badge variant="secondary" className="text-xs font-mono w-fit">{doc.format}</Badge>
+                      <span className="text-xs text-muted-foreground mt-0.5">{doc.size}</span>
+                    </div>
                   </td>
                   <td className="p-3">
                     {getStatusBadge(doc.status)}
