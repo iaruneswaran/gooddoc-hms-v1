@@ -762,7 +762,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 {/* Right Side - Prescription Cart */}
                 <div className="w-[420px] border-l border-border flex flex-col bg-background">
                   {/* Cart Header */}
-                  <div className="px-4 py-3 border-b border-border bg-primary">
+                  <div className="p-4 border-b border-border bg-primary">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-sm font-semibold text-primary-foreground">Discharge Prescription</h3>
