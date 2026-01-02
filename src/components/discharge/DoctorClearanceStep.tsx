@@ -625,7 +625,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             <TabsContent value="medications" className="mt-0">
               <div className="flex h-[600px]">
                 {/* Left Sidebar - Categories */}
-                <div className="w-[200px] border-r border-border bg-muted/30 flex flex-col">
+                <div className="w-[240px] border-r border-border bg-muted/30 flex flex-col">
                   <div className="p-3 border-b border-border">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
                   </div>
@@ -776,7 +776,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </div>
 
                 {/* Right Side - Prescription Cart */}
-                <div className="w-[380px] border-l border-border flex flex-col bg-background">
+                <div className="w-[420px] border-l border-border flex flex-col bg-background">
                   {/* Cart Header */}
                   <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
                     <div className="flex items-center justify-between">
