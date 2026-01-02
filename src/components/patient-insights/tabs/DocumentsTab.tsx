@@ -405,12 +405,9 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
               <tr>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Document No.</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Document Name</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Prepared / Verified By</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Format / Size</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
@@ -427,9 +424,6 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                     </div>
                   </td>
                   <td className="p-3">
-                    {getTypeBadge(doc.type)}
-                  </td>
-                  <td className="p-3">
                     <div className="text-sm text-foreground">{doc.date}</div>
                     <div className="text-xs text-muted-foreground">{doc.time}</div>
                   </td>
@@ -443,15 +437,6 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                         <span className="text-xs text-muted-foreground mt-0.5">{doc.verifiedBy}</span>
                       )}
                     </div>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex flex-col">
-                      <Badge variant="secondary" className="text-xs font-mono w-fit">{doc.format}</Badge>
-                      <span className="text-xs text-muted-foreground mt-0.5">{doc.size}</span>
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    {getStatusBadge(doc.status)}
                   </td>
                   <td className="p-3">
                     <div className="flex gap-1">
