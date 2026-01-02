@@ -342,7 +342,7 @@ const PatientServices = () => {
             {viewMode === 'pending' ? (
               <>
                 {/* Pending Services Header */}
-                <div className="p-4 border-b border-border bg-background flex items-center justify-between">
+                <div className="h-[75px] px-4 border-b border-border bg-background flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={selectAllPending}
