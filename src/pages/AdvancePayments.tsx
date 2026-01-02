@@ -27,7 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowLeft, Search, Download, Printer, MoreVertical, User, UserRound, FileText, Eye } from "lucide-react";
+import { ArrowLeft, Search, Download, Printer, MoreVertical, User, UserRound } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { Badge } from "@/components/ui/badge";
 
@@ -431,15 +431,12 @@ const AdvancePayments = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem onClick={() => navigate(`/patient-insights/${payment.patientId}`)}>
-                            <Eye className="w-4 h-4 mr-2" />
                             Patient Insight
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <FileText className="w-4 h-4 mr-2" />
                             View Receipt
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Printer className="w-4 h-4 mr-2" />
                             Print Receipt
                           </DropdownMenuItem>
                         </DropdownMenuContent>
