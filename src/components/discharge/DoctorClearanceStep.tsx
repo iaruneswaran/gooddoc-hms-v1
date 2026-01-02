@@ -678,7 +678,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </div>
 
                 {/* Center - Medications List */}
-                <div className="w-[320px] flex flex-col overflow-hidden border-r border-border">
+                <div className="flex-1 flex flex-col overflow-hidden">
                   {/* Search Header */}
                   <div className="p-4 border-b border-border bg-background">
                     <div className="relative">
@@ -763,7 +763,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </div>
 
                 {/* Right Side - Prescription Cart */}
-                <div className="flex-1 border-l border-border flex flex-col bg-background">
+                <div className="w-[420px] border-l border-border flex flex-col bg-background">
                   {/* Cart Header */}
                   <div className="p-4 border-b border-border bg-primary">
                     <div className="flex items-center justify-between">
