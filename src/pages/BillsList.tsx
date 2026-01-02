@@ -178,7 +178,7 @@ const BillsList = () => {
   const rowActions: RowAction<BillRecord>[] = [
     { label: "View Invoice", onClick: (row) => console.log("View invoice", row.invoiceNo) },
     { label: "Print Bill", onClick: (row) => console.log("Print bill", row.billId) },
-    { label: "Collect Payment", onClick: (row) => navigate(`/patient-insights/${row.patientId}/payments?action=collect&billId=${row.billId}`) },
+    { label: "Collect Payment", onClick: (row) => navigate(`/patient-insights/${row.patientId}/payments?action=collect&billId=${row.billId}`), hidden: (row) => row.status === "Paid" },
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.patientId}?from=bills`) },
   ];
 
