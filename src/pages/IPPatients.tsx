@@ -168,17 +168,6 @@ const IPPatients = () => {
       ],
     },
     {
-      key: "bedClass",
-      label: "Bed Class",
-      value: "all",
-      options: [
-        { value: "ICU", label: "ICU" },
-        { value: "HDU", label: "HDU" },
-        { value: "Private", label: "Private" },
-        { value: "Ward", label: "Ward" },
-      ],
-    },
-    {
       key: "attendingDoctor",
       label: "Doctor",
       value: "all",
