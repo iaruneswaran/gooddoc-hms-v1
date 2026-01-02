@@ -27,9 +27,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowLeft, Search, Download, Printer, MoreVertical, User, UserRound } from "lucide-react";
+import { ArrowLeft, Search, MoreVertical, User, UserRound } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { Badge } from "@/components/ui/badge";
+import { CalendarWidget } from "@/components/CalendarWidget";
 
 interface AdvancePayment {
   id: string;
@@ -310,16 +311,7 @@ const AdvancePayments = () => {
                   </Badge>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="w-4 h-4" />
-                  Export CSV
-                </Button>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Printer className="w-4 h-4" />
-                  Print List
-                </Button>
-              </div>
+              <CalendarWidget />
             </div>
           </Card>
 
