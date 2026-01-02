@@ -260,94 +260,237 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
     return medications.some(m => m.name === catalogMed.name);
   };
 
+  // Derived stats for cards
+  const newMedsCount = medications.filter(m => m.action === "Start").length;
+  const continuedMedsCount = medications.filter(m => m.action === "Continue").length;
+  const stoppedMedsCount = medications.filter(m => m.action === "Stop").length;
+  
+  const followUpDate = data.followUps.followUpDate;
+  const daysUntilFollowUp = followUpDate 
+    ? Math.ceil((new Date(followUpDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
   return (
     <div className="space-y-6">
-      {/* Summary Cards Row */}
+      {/* Summary Cards Row - Enhanced Design */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className={cn("border-border", !checklistRequired && "opacity-50")}>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Clinical Checklist</p>
-                <p className="text-2xl font-bold text-foreground">
-                  {checklistRequired ? `${completedChecks}/${totalChecks}` : "N/A"}
-                </p>
-              </div>
+        {/* Clinical Checklist Card */}
+        <Card className={cn(
+          "relative overflow-hidden border-0 shadow-sm transition-all duration-200",
+          !checklistRequired && "opacity-50",
+          checklistRequired && checklistProgress === 100 && "ring-1 ring-green-500/20"
+        )}>
+          <div className={cn(
+            "absolute inset-0 opacity-[0.03]",
+            checklistProgress === 100 ? "bg-green-500" : "bg-amber-500"
+          )} />
+          <CardContent className="p-4 relative">
+            <div className="flex items-start justify-between mb-3">
               <div className={cn(
-                "w-12 h-12 rounded-full flex items-center justify-center",
+                "w-10 h-10 rounded-xl flex items-center justify-center",
                 !checklistRequired ? "bg-muted" : checklistProgress === 100 ? "bg-green-500/10" : "bg-amber-500/10"
               )}>
                 {!checklistRequired ? (
-                  <X className="w-6 h-6 text-muted-foreground" />
+                  <X className="w-5 h-5 text-muted-foreground" />
                 ) : checklistProgress === 100 ? (
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
                 ) : (
-                  <AlertCircle className="w-6 h-6 text-amber-600" />
+                  <AlertCircle className="w-5 h-5 text-amber-600" />
                 )}
               </div>
+              {checklistRequired && checklistProgress === 100 && (
+                <Badge className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px] font-medium">
+                  Complete
+                </Badge>
+              )}
             </div>
-            {checklistRequired && (
-              <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className={cn("h-full transition-all", checklistProgress === 100 ? "bg-green-500" : "bg-amber-500")}
-                  style={{ width: `${checklistProgress}%` }}
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className={cn("border-border", !medsRequired && "opacity-50")}>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Medications</p>
-                <p className="text-2xl font-bold text-foreground">
-                  {medsRequired ? medications.length : "N/A"}
-                </p>
-              </div>
-              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", medsRequired ? "bg-primary/10" : "bg-muted")}>
-                <Pill className={cn("w-6 h-6", medsRequired ? "text-primary" : "text-muted-foreground")} />
-              </div>
-            </div>
-            {medsRequired && (
-              <p className="text-xs text-muted-foreground mt-2">
-                {medications.filter(m => m.action === "Start").length} new, {medications.filter(m => m.action === "Stop").length} stopped
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className={cn("border-border", !followUpRequired && "opacity-50")}>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Follow-up</p>
-                <p className="text-lg font-bold text-foreground">
-                  {followUpRequired ? (data.followUps.followUpDate || "Not set") : "N/A"}
-                </p>
-              </div>
-              <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", followUpRequired ? "bg-blue-500/10" : "bg-muted")}>
-                <Calendar className={cn("w-6 h-6", followUpRequired ? "text-blue-600" : "text-muted-foreground")} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Condition</p>
-                <p className="text-xl font-bold text-green-600">{data.clinicalStatus.conditionAtDischarge}</p>
-              </div>
-              <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
-                <Activity className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Destination: {data.clinicalStatus.destination}
+            
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Clinical Checklist
             </p>
+            
+            <div className="flex items-baseline gap-1">
+              <span className={cn(
+                "text-2xl font-semibold tabular-nums",
+                !checklistRequired ? "text-muted-foreground" : checklistProgress === 100 ? "text-green-600" : "text-amber-600"
+              )}>
+                {checklistRequired ? completedChecks : "—"}
+              </span>
+              {checklistRequired && (
+                <span className="text-sm text-muted-foreground">/ {totalChecks}</span>
+              )}
+            </div>
+            
+            {checklistRequired && (
+              <>
+                <div className="mt-3 h-1.5 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    className={cn(
+                      "h-full rounded-full transition-all duration-500 ease-out",
+                      checklistProgress === 100 ? "bg-green-500" : "bg-amber-500"
+                    )}
+                    style={{ width: `${checklistProgress}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1.5">
+                  {checklistProgress === 100 ? "All items verified" : `${totalChecks - completedChecks} items remaining`}
+                </p>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Medications Card */}
+        <Card className={cn(
+          "relative overflow-hidden border-0 shadow-sm transition-all duration-200",
+          !medsRequired && "opacity-50",
+          medsRequired && medications.length > 0 && "ring-1 ring-primary/20"
+        )}>
+          <div className="absolute inset-0 bg-primary opacity-[0.02]" />
+          <CardContent className="p-4 relative">
+            <div className="flex items-start justify-between mb-3">
+              <div className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center",
+                medsRequired ? "bg-primary/10" : "bg-muted"
+              )}>
+                <Pill className={cn("w-5 h-5", medsRequired ? "text-primary" : "text-muted-foreground")} />
+              </div>
+              {medsRequired && medications.length > 0 && (
+                <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] font-medium">
+                  {medications.length} Rx
+                </Badge>
+              )}
+            </div>
+            
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Medications
+            </p>
+            
+            <div className="flex items-baseline gap-1">
+              <span className={cn(
+                "text-2xl font-semibold tabular-nums",
+                medsRequired ? "text-foreground" : "text-muted-foreground"
+              )}>
+                {medsRequired ? medications.length : "—"}
+              </span>
+              {medsRequired && medications.length > 0 && (
+                <span className="text-sm text-muted-foreground">prescribed</span>
+              )}
+            </div>
+            
+            {medsRequired && medications.length > 0 && (
+              <div className="flex items-center gap-3 mt-3">
+                {newMedsCount > 0 && (
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-blue-500" />
+                    <span className="text-[10px] text-muted-foreground">{newMedsCount} new</span>
+                  </div>
+                )}
+                {continuedMedsCount > 0 && (
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-[10px] text-muted-foreground">{continuedMedsCount} cont.</span>
+                  </div>
+                )}
+                {stoppedMedsCount > 0 && (
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-[10px] text-muted-foreground">{stoppedMedsCount} stop</span>
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {medsRequired && medications.length === 0 && (
+              <p className="text-[10px] text-muted-foreground mt-1.5">No medications added yet</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Follow-up Card */}
+        <Card className={cn(
+          "relative overflow-hidden border-0 shadow-sm transition-all duration-200",
+          !followUpRequired && "opacity-50",
+          followUpRequired && followUpDate && "ring-1 ring-blue-500/20"
+        )}>
+          <div className="absolute inset-0 bg-blue-500 opacity-[0.02]" />
+          <CardContent className="p-4 relative">
+            <div className="flex items-start justify-between mb-3">
+              <div className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center",
+                followUpRequired ? "bg-blue-500/10" : "bg-muted"
+              )}>
+                <Calendar className={cn("w-5 h-5", followUpRequired ? "text-blue-600" : "text-muted-foreground")} />
+              </div>
+              {followUpRequired && daysUntilFollowUp !== null && daysUntilFollowUp > 0 && (
+                <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-[10px] font-medium">
+                  In {daysUntilFollowUp}d
+                </Badge>
+              )}
+            </div>
+            
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Follow-up
+            </p>
+            
+            {followUpRequired ? (
+              followUpDate ? (
+                <>
+                  <p className="text-lg font-semibold text-foreground">
+                    {new Date(followUpDate).toLocaleDateString("en-IN", { 
+                      day: "numeric",
+                      month: "short"
+                    })}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    {new Date(followUpDate).toLocaleDateString("en-IN", { 
+                      weekday: "long",
+                      year: "numeric"
+                    })}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-lg font-semibold text-muted-foreground">Not set</p>
+                  <p className="text-[10px] text-amber-600 mt-1">Schedule recommended</p>
+                </>
+              )
+            ) : (
+              <>
+                <p className="text-lg font-semibold text-muted-foreground">N/A</p>
+                <p className="text-[10px] text-muted-foreground mt-1">Not required</p>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Condition & Destination Card */}
+        <Card className="relative overflow-hidden border-0 shadow-sm ring-1 ring-green-500/20">
+          <div className="absolute inset-0 bg-green-500 opacity-[0.02]" />
+          <CardContent className="p-4 relative">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
+                <Activity className="w-5 h-5 text-green-600" />
+              </div>
+              <Badge className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px] font-medium">
+                Ready
+              </Badge>
+            </div>
+            
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Discharge Status
+            </p>
+            
+            <p className="text-lg font-semibold text-green-600">
+              {data.clinicalStatus.conditionAtDischarge}
+            </p>
+            
+            <div className="flex items-center gap-1.5 mt-2">
+              <Home className="w-3 h-3 text-muted-foreground" />
+              <span className="text-[11px] text-muted-foreground">
+                To: <span className="font-medium text-foreground">{data.clinicalStatus.destination}</span>
+              </span>
+            </div>
           </CardContent>
         </Card>
       </div>
