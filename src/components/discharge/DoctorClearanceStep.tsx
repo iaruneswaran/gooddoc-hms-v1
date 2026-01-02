@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -17,7 +16,6 @@ import {
   Pill, 
   Calendar,
   FileText,
-  Edit3,
   Plus,
   Trash2,
   Check,
@@ -32,7 +30,11 @@ import {
   LogOut,
   Building2,
   Home,
-  Ambulance
+  Ambulance,
+  ShoppingCart,
+  Package,
+  Clock,
+  ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -47,30 +49,22 @@ import {
   DISCHARGE_REASON_CONFIG
 } from "@/types/discharge-flow";
 import { SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
+import { 
+  MEDICATIONS_CATALOG, 
+  MEDICATION_CATEGORIES,
+  MedicationCatalogItem,
+  MedicationCategory,
+  STRENGTH_OPTIONS,
+  DOSAGE_OPTIONS,
+  FREQUENCY_OPTIONS,
+  DURATION_OPTIONS,
+  ROUTE_OPTIONS
+} from "@/data/medications-catalog.mock";
 
 interface DoctorClearanceStepProps {
   stepStatus: StepStatus;
   onStepComplete: () => void;
 }
-
-interface NewMedicationForm {
-  name: string;
-  strength: string;
-  dose: string;
-  frequency: string;
-  duration: string;
-}
-
-const MEDICATION_SUGGESTIONS = [
-  "Aspirin", "Atorvastatin", "Metoprolol", "Clopidogrel", "Pantoprazole",
-  "Metformin", "Amlodipine", "Lisinopril", "Losartan", "Omeprazole",
-  "Paracetamol", "Ibuprofen", "Ciprofloxacin", "Amoxicillin", "Azithromycin"
-];
-
-const STRENGTH_OPTIONS = ["5mg", "10mg", "20mg", "25mg", "40mg", "50mg", "75mg", "100mg", "250mg", "500mg", "1g"];
-const DOSAGE_OPTIONS = ["1 tablet", "2 tablets", "1/2 tablet", "1 capsule", "5ml", "10ml", "15ml"];
-const FREQUENCY_OPTIONS = ["Morning", "Night", "Morning & Night", "Before Breakfast", "After Breakfast", "Before Lunch", "After Lunch", "Before Dinner", "After Dinner", "Three times a day", "Four times a day", "As needed"];
-const DURATION_OPTIONS = ["3 days", "5 days", "7 days", "10 days", "14 days", "1 month", "2 months", "3 months", "6 months", "Lifelong"];
 
 const checklistItems: { key: keyof ClinicalChecklist; label: string }[] = [
   { key: "stableVitals", label: "Vitals stable for discharge" },
@@ -86,13 +80,6 @@ const checklistItems: { key: keyof ClinicalChecklist; label: string }[] = [
   { key: "imagingReviewed", label: "Imaging results reviewed" },
   { key: "returnPrecautionsGiven", label: "Return precautions provided" },
 ];
-
-const medicationActionColors: Record<string, string> = {
-  Continue: "bg-green-500/10 text-green-600 border-green-500/30",
-  Start: "bg-blue-500/10 text-blue-600 border-blue-500/30",
-  Change: "bg-amber-500/10 text-amber-600 border-amber-500/30",
-  Stop: "bg-red-500/10 text-red-600 border-red-500/30",
-};
 
 const getDischargeReasonIcon = (reason: DischargeReason) => {
   switch (reason) {
@@ -113,39 +100,12 @@ const getDischargeReasonIcon = (reason: DischargeReason) => {
   }
 };
 
-const getDischargeReasonColor = (reason: DischargeReason) => {
-  switch (reason) {
-    case 'death':
-    case 'brought_dead':
-      return 'bg-gray-900 text-white';
-    case 'lama':
-    case 'dama':
-    case 'absconded':
-      return 'bg-red-500/10 text-red-600';
-    case 'referred_higher_center':
-    case 'transferred_other_hospital':
-      return 'bg-blue-500/10 text-blue-600';
-    case 'palliative_home':
-      return 'bg-purple-500/10 text-purple-600';
-    case 'treatment_completed':
-    case 'improved':
-      return 'bg-green-500/10 text-green-600';
-    default:
-      return 'bg-muted text-foreground';
-  }
-};
-
 export default function DoctorClearanceStep({ stepStatus, onStepComplete }: DoctorClearanceStepProps) {
   const [data, setData] = useState<DoctorClearance>(SAMPLE_DOCTOR_CLEARANCE);
   const [activeTab, setActiveTab] = useState("clinical");
   const [medSearch, setMedSearch] = useState("");
-  const [newMed, setNewMed] = useState<NewMedicationForm>({
-    name: "",
-    strength: "",
-    dose: "",
-    frequency: "",
-    duration: ""
-  });
+  const [selectedCategory, setSelectedCategory] = useState<MedicationCategory | "all">("all");
+  const [selectedMedForEdit, setSelectedMedForEdit] = useState<string | null>(null);
   
   // Get current discharge reason config
   const dischargeReason = data.clinicalStatus.dischargeReason || 'improved';
@@ -161,9 +121,20 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
   const medsRequired = reasonConfig.requiresMedications;
   const followUpRequired = reasonConfig.requiresFollowUp;
 
-  const filteredSuggestions = MEDICATION_SUGGESTIONS.filter(med => 
-    med.toLowerCase().includes(medSearch.toLowerCase())
-  );
+  // Filter medications from catalog
+  const filteredCatalogMeds = useMemo(() => {
+    return MEDICATIONS_CATALOG.filter(med => {
+      const matchesSearch = medSearch === "" || 
+        med.name.toLowerCase().includes(medSearch.toLowerCase()) ||
+        med.genericName.toLowerCase().includes(medSearch.toLowerCase()) ||
+        med.brandName.toLowerCase().includes(medSearch.toLowerCase()) ||
+        med.tags.some(tag => tag.toLowerCase().includes(medSearch.toLowerCase()));
+      
+      const matchesCategory = selectedCategory === "all" || med.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [medSearch, selectedCategory]);
 
   const handleDischargeReasonChange = (value: DischargeReason) => {
     setData(prev => ({
@@ -208,17 +179,20 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
     }));
   };
 
-  const handleAddMedication = () => {
-    if (!newMed.name) return;
-    
+  const handleAddMedicationFromCatalog = (catalogMed: MedicationCatalogItem) => {
     const medication: MedicationReconciliationItem = {
       medId: `med-${Date.now()}`,
-      name: `${newMed.name} ${newMed.strength}`.trim(),
+      name: catalogMed.name,
+      genericName: catalogMed.genericName,
+      brandName: catalogMed.brandName,
+      drugCode: catalogMed.drugCode,
       action: "Start" as MedicationAction,
-      dose: newMed.dose || newMed.strength,
-      route: "PO",
-      frequency: newMed.frequency,
-      duration: newMed.duration,
+      strength: catalogMed.defaultStrength,
+      form: catalogMed.form,
+      dose: catalogMed.defaultDose,
+      route: catalogMed.route,
+      frequency: catalogMed.defaultFrequency,
+      duration: catalogMed.defaultDuration,
       instructions: "",
     };
 
@@ -229,9 +203,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
         items: [...prev.medicationReconciliation.items, medication]
       }
     }));
-
-    setNewMed({ name: "", strength: "", dose: "", frequency: "", duration: "" });
-    setMedSearch("");
   };
 
   const handleDeleteMedication = (medId: string) => {
@@ -240,6 +211,18 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
       medicationReconciliation: {
         ...prev.medicationReconciliation,
         items: prev.medicationReconciliation.items.filter(m => m.medId !== medId)
+      }
+    }));
+  };
+
+  const handleUpdateMedication = (medId: string, field: keyof MedicationReconciliationItem, value: string) => {
+    setData(prev => ({
+      ...prev,
+      medicationReconciliation: {
+        ...prev.medicationReconciliation,
+        items: prev.medicationReconciliation.items.map(m => 
+          m.medId === medId ? { ...m, [field]: value } : m
+        )
       }
     }));
   };
@@ -268,9 +251,14 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
 
   const vitals = data.clinicalStatus.vitalsSnapshot;
   const labs = data.clinicalStatus.labsSummary || [];
-  const imaging = data.clinicalStatus.imagingSummary || [];
   const medications = data.medicationReconciliation.items;
-  const ReasonIcon = getDischargeReasonIcon(dischargeReason);
+
+  // Check if a medication is already in the prescription
+  const isMedicationInCart = (catalogMedId: string) => {
+    const catalogMed = MEDICATIONS_CATALOG.find(m => m.id === catalogMedId);
+    if (!catalogMed) return false;
+    return medications.some(m => m.name === catalogMed.name);
+  };
 
   return (
     <div className="space-y-6">
@@ -408,9 +396,9 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             </TabsList>
           </CardHeader>
 
-          <CardContent className="p-6">
+          <CardContent className="p-0">
             {/* Clinical Status Tab */}
-            <TabsContent value="clinical" className="mt-0 space-y-6">
+            <TabsContent value="clinical" className="mt-0 p-6 space-y-6">
               {/* Discharge Reason Selector */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground">Discharge Reason</h3>
@@ -495,7 +483,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </Select>
               </div>
 
-              {/* Discharge Reason Notes - shown for all discharge types */}
+              {/* Discharge Reason Notes */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground">Discharge Notes</h3>
                 <Textarea
@@ -511,7 +499,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               </div>
 
               <div className="grid grid-cols-2 gap-6">
-                {/* Discharge Readiness Checklist - Only shown when required */}
+                {/* Discharge Readiness Checklist */}
                 {checklistRequired ? (
                   <div className="space-y-4">
                     <h3 className="font-semibold text-foreground">Discharge Readiness Checklist</h3>
@@ -633,196 +621,283 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               </div>
             </TabsContent>
 
-            {/* Medications Tab */}
-            <TabsContent value="medications" className="mt-0 space-y-4">
-              {/* Add Medication Form - Redesigned */}
-              <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-4 border border-primary/20 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Plus className="w-3.5 h-3.5 text-primary" />
+            {/* Medications Tab - New Pharmacy Style Layout */}
+            <TabsContent value="medications" className="mt-0">
+              <div className="flex h-[600px]">
+                {/* Left Side - Medicine Catalog */}
+                <div className="flex-1 border-r border-border flex flex-col">
+                  {/* Search & Filter Header */}
+                  <div className="p-4 border-b border-border bg-muted/30">
+                    <div className="relative mb-3">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search medications by name, generic, or category..."
+                        value={medSearch}
+                        onChange={(e) => setMedSearch(e.target.value)}
+                        className="pl-9 bg-background"
+                      />
+                    </div>
+                    
+                    {/* Category Pills */}
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setSelectedCategory("all")}
+                        className={cn(
+                          "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                          selectedCategory === "all" 
+                            ? "bg-primary text-primary-foreground" 
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        )}
+                      >
+                        All
+                      </button>
+                      {MEDICATION_CATEGORIES.map(cat => (
+                        <button
+                          key={cat.value}
+                          onClick={() => setSelectedCategory(cat.value)}
+                          className={cn(
+                            "px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5",
+                            selectedCategory === cat.value 
+                              ? "bg-primary text-primary-foreground" 
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          )}
+                        >
+                          <span>{cat.icon}</span>
+                          {cat.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <span className="text-sm font-medium text-foreground">Add New Medication</span>
-                </div>
-                
-                <div className="flex flex-wrap items-center gap-3">
-                  {/* Medication Search - Improved */}
-                  <div className="relative flex-1 min-w-[220px]">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                    <Input
-                      placeholder="Search medication..."
-                      value={newMed.name || medSearch}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setMedSearch(value);
-                        setNewMed(prev => ({ ...prev, name: value }));
-                      }}
-                      className="pl-9 bg-background border-border/60 focus:border-primary shadow-sm"
-                    />
-                    {medSearch && filteredSuggestions.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-xl z-50 max-h-48 overflow-auto">
-                        {filteredSuggestions.map(suggestion => (
-                          <button
-                            key={suggestion}
-                            type="button"
-                            className="w-full px-4 py-2.5 text-left text-sm hover:bg-accent transition-colors first:rounded-t-lg last:rounded-b-lg flex items-center gap-2"
-                            onClick={() => {
-                              setNewMed(prev => ({ ...prev, name: suggestion }));
-                              setMedSearch("");
-                            }}
-                          >
-                            <Pill className="w-3.5 h-3.5 text-primary" />
-                            <span className="text-foreground">{suggestion}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
 
-                  {/* Strength */}
-                  <Select value={newMed.strength} onValueChange={(v) => setNewMed(prev => ({ ...prev, strength: v }))}>
-                    <SelectTrigger className="w-[110px] bg-background shadow-sm">
-                      <SelectValue placeholder="Strength" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50">
-                      {STRENGTH_OPTIONS.map(opt => (
-                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* Dosage */}
-                  <Select value={newMed.dose} onValueChange={(v) => setNewMed(prev => ({ ...prev, dose: v }))}>
-                    <SelectTrigger className="w-[110px] bg-background shadow-sm">
-                      <SelectValue placeholder="Dosage" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50">
-                      {DOSAGE_OPTIONS.map(opt => (
-                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* Frequency */}
-                  <Select value={newMed.frequency} onValueChange={(v) => setNewMed(prev => ({ ...prev, frequency: v }))}>
-                    <SelectTrigger className="w-[150px] bg-background shadow-sm">
-                      <SelectValue placeholder="Frequency" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50">
-                      {FREQUENCY_OPTIONS.map(opt => (
-                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* Duration */}
-                  <Select value={newMed.duration} onValueChange={(v) => setNewMed(prev => ({ ...prev, duration: v }))}>
-                    <SelectTrigger className="w-[100px] bg-background shadow-sm">
-                      <SelectValue placeholder="Duration" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50">
-                      {DURATION_OPTIONS.map(opt => (
-                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* Add Button */}
-                  <Button onClick={handleAddMedication} disabled={!newMed.name} className="gap-1.5 shadow-sm">
-                    <Plus className="w-4 h-4" />
-                    Add
-                  </Button>
-                </div>
-              </div>
-
-              {/* Medications Table */}
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="font-semibold text-foreground">Discharge Medications</h3>
-                  <p className="text-xs text-muted-foreground">{medications.length} medications prescribed</p>
-                </div>
-              </div>
-              
-              <div className="space-y-3">
-                {medications.map((med, index) => (
-                  <Card key={med.medId} className="border-border hover:border-primary/30 transition-colors">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-4 flex-1">
-                          {/* Serial Number */}
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                            <span className="text-sm font-semibold text-primary">{index + 1}</span>
-                          </div>
-                          
-                          {/* Medication Details */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <h4 className="font-semibold text-foreground">{med.name}</h4>
-                              <Badge variant="outline" className="text-xs font-mono">
-                                {med.strength}
-                              </Badge>
-                              {med.form && (
-                                <span className="text-xs text-muted-foreground">({med.form})</span>
+                  {/* Medication List */}
+                  <ScrollArea className="flex-1">
+                    <div className="p-4 space-y-2">
+                      {filteredCatalogMeds.length === 0 ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                          <p className="text-sm">No medications found</p>
+                          <p className="text-xs">Try a different search term or category</p>
+                        </div>
+                      ) : (
+                        filteredCatalogMeds.map(med => {
+                          const isInCart = isMedicationInCart(med.id);
+                          return (
+                            <div 
+                              key={med.id}
+                              className={cn(
+                                "p-3 rounded-lg border transition-all cursor-pointer group",
+                                isInCart 
+                                  ? "bg-green-500/5 border-green-500/30" 
+                                  : "bg-card border-border hover:border-primary/50 hover:shadow-sm"
                               )}
+                              onClick={() => !isInCart && handleAddMedicationFromCatalog(med)}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h4 className="font-medium text-foreground text-sm">{med.name}</h4>
+                                    <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0">
+                                      {med.defaultStrength}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground truncate">
+                                    {med.genericName} • {med.brandName}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-1.5">
+                                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                      {med.category}
+                                    </Badge>
+                                    <span className="text-[10px] text-muted-foreground">{med.form}</span>
+                                  </div>
+                                </div>
+                                
+                                {isInCart ? (
+                                  <div className="flex items-center gap-1 text-green-600">
+                                    <CheckCircle2 className="w-5 h-5" />
+                                    <span className="text-xs font-medium">Added</span>
+                                  </div>
+                                ) : (
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost"
+                                    className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleAddMedicationFromCatalog(med);
+                                    }}
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                  </Button>
+                                )}
+                              </div>
                             </div>
-                            
-                            {med.genericName && (
-                              <p className="text-xs text-muted-foreground mt-0.5">
-                                {med.genericName}
-                                {med.brandName && <span className="text-primary"> • {med.brandName}</span>}
-                              </p>
-                            )}
-                            
-                            {med.drugCode && (
-                              <p className="text-[10px] font-mono text-muted-foreground mt-1">
-                                ATC: {med.drugCode}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Dosage Info Grid */}
-                        <div className="grid grid-cols-4 gap-4 text-sm">
-                          <div className="text-center w-24">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</p>
-                            <p className="font-medium">{med.dose}</p>
-                          </div>
-                          <div className="text-center w-40">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</p>
-                            <p className="font-medium text-primary">{med.frequency}</p>
-                          </div>
-                          <div className="text-center w-24">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</p>
-                            <p className="font-medium">{med.duration}</p>
-                          </div>
-                          <div className="text-center w-24">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Route</p>
-                            <p className="font-medium">{med.route}</p>
-                          </div>
-                        </div>
-                          
-                        {/* Actions */}
-                        <div className="flex items-center gap-1 ml-4">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Edit3 className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-destructive"
-                            onClick={() => handleDeleteMedication(med.medId)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </ScrollArea>
+                </div>
+
+                {/* Right Side - Prescription Cart */}
+                <div className="w-[420px] flex flex-col bg-muted/20">
+                  {/* Cart Header */}
+                  <div className="p-4 border-b border-border bg-gradient-to-r from-primary/10 to-primary/5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <ShoppingCart className="w-5 h-5 text-primary" />
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      <div>
+                        <h3 className="font-semibold text-foreground">Discharge Prescription</h3>
+                        <p className="text-xs text-muted-foreground">{medications.length} medications</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cart Items */}
+                  <ScrollArea className="flex-1">
+                    <div className="p-3 space-y-2">
+                      {medications.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                          <Pill className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                          <p className="text-sm font-medium">No medications added</p>
+                          <p className="text-xs">Click on medications from the left to add them</p>
+                        </div>
+                      ) : (
+                        medications.map((med, index) => (
+                          <Card key={med.medId} className="border-border bg-card shadow-sm">
+                            <CardContent className="p-3">
+                              {/* Med Header */}
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
+                                    {index + 1}
+                                  </span>
+                                  <div>
+                                    <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
+                                    {med.genericName && (
+                                      <p className="text-[10px] text-muted-foreground">{med.genericName}</p>
+                                    )}
+                                  </div>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                                  onClick={() => handleDeleteMedication(med.medId)}
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
+
+                              {/* Quick Edit Fields */}
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Strength</label>
+                                  <Select 
+                                    value={med.strength || ""} 
+                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'strength', v)}
+                                  >
+                                    <SelectTrigger className="h-7 text-xs">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {STRENGTH_OPTIONS.map(opt => (
+                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Dosage</label>
+                                  <Select 
+                                    value={med.dose} 
+                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'dose', v)}
+                                  >
+                                    <SelectTrigger className="h-7 text-xs">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {DOSAGE_OPTIONS.map(opt => (
+                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Frequency</label>
+                                  <Select 
+                                    value={med.frequency} 
+                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'frequency', v)}
+                                  >
+                                    <SelectTrigger className="h-7 text-xs">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {FREQUENCY_OPTIONS.map(opt => (
+                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Duration</label>
+                                  <Select 
+                                    value={med.duration} 
+                                    onValueChange={(v) => handleUpdateMedication(med.medId, 'duration', v)}
+                                  >
+                                    <SelectTrigger className="h-7 text-xs">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {DURATION_OPTIONS.map(opt => (
+                                        <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
+
+                              {/* Route Badge */}
+                              <div className="flex items-center gap-2 mt-2">
+                                <Badge variant="outline" className="text-[10px]">
+                                  Route: {med.route}
+                                </Badge>
+                                {med.drugCode && (
+                                  <span className="text-[10px] text-muted-foreground font-mono">
+                                    ATC: {med.drugCode}
+                                  </span>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))
+                      )}
+                    </div>
+                  </ScrollArea>
+
+                  {/* Cart Footer Summary */}
+                  {medications.length > 0 && (
+                    <div className="p-4 border-t border-border bg-card">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Total Medications</span>
+                        <span className="font-semibold">{medications.length}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
+                        <span>New medications</span>
+                        <span>{medications.filter(m => m.action === "Start").length}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>Continued</span>
+                        <span>{medications.filter(m => m.action === "Continue").length}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </TabsContent>
 
             {/* Follow-up Tab */}
-            <TabsContent value="followups" className="mt-0 space-y-4">
+            <TabsContent value="followups" className="mt-0 p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="text-sm font-medium mb-2 block">Recommended Follow-up Date</label>
@@ -878,7 +953,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             </TabsContent>
 
             {/* Notes Tab */}
-            <TabsContent value="notes" className="mt-0 space-y-4">
+            <TabsContent value="notes" className="mt-0 p-6 space-y-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Doctor's Notes</label>
                 <Textarea 
