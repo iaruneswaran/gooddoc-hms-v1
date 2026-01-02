@@ -626,10 +626,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
               <div className="flex h-[600px]">
                 {/* Left Sidebar - Categories */}
                 <div className="w-[240px] border-r border-border bg-muted/30 flex flex-col">
-                  <div className="p-3 border-b border-border">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
-                  </div>
-                  <ScrollArea className="flex-1">
+                  <ScrollArea className="flex-1 pt-2">
                     <div className="p-2 space-y-1">
                       <button
                         onClick={() => setSelectedCategory("all")}
