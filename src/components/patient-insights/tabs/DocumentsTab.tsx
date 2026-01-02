@@ -408,8 +408,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Prepared By</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Verified By</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Prepared / Verified By</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Format / Size</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
@@ -438,10 +437,12 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                     <span className="text-sm text-foreground">{doc.service}</span>
                   </td>
                   <td className="p-3">
-                    <span className="text-sm text-foreground">{doc.preparedBy}</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="text-sm text-foreground">{doc.verifiedBy || "—"}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-foreground">{doc.preparedBy}</span>
+                      {doc.verifiedBy && (
+                        <span className="text-xs text-muted-foreground mt-0.5">{doc.verifiedBy}</span>
+                      )}
+                    </div>
                   </td>
                   <td className="p-3">
                     <div className="flex flex-col">
