@@ -5,7 +5,8 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Download, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock, Stethoscope } from "lucide-react";
+import { Plus, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock, Stethoscope } from "lucide-react";
+import { CalendarWidget } from "@/components/CalendarWidget";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -375,11 +376,8 @@ export default function DoctorsList() {
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Doctors</h1>
-              <div className="flex gap-3">
-                <Button variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export CSV
-                </Button>
+              <div className="flex gap-3 items-center">
+                <CalendarWidget />
                 <Button onClick={() => navigate("/doctors/new")}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Doctor
