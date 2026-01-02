@@ -229,10 +229,10 @@ export function ListPageLayout<T>({
                   }
                 >
                   <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder={filter.label} />
+                    <SelectValue placeholder={`All ${filter.label}`} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All {filter.label}</SelectItem>
+                    <SelectItem value="all">All {filter.label}s</SelectItem>
                     {filter.options.map((opt) => (
                       <SelectItem key={opt.value} value={opt.value}>
                         {opt.label}
