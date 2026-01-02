@@ -28,7 +28,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { ChevronDown, ChevronLeft, Plus, Trash2, Save } from "lucide-react";
+import { ChevronDown, ChevronLeft, Plus, Trash2, Save, Upload, FileText, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type Step = 1 | 2;
@@ -74,6 +74,7 @@ export default function DoctorForm() {
   const [languages, setLanguages] = useState("");
   const [acceptingPatients, setAcceptingPatients] = useState(true);
   const [licenseNo, setLicenseNo] = useState("");
+  const [documents, setDocuments] = useState<{ name: string; type: string; size: number }[]>([]);
 
   // Form state - Step 2 (Schedule)
   const [weekPattern, setWeekPattern] = useState<DaySchedule[]>([]);
@@ -369,6 +370,79 @@ export default function DoctorForm() {
                     <p className="text-xs text-muted-foreground mt-1">
                       License is required to activate.
                     </p>
+                  </div>
+
+                  {/* Documents Upload Section */}
+                  <div className="space-y-3">
+                    <Label>Documents</Label>
+                    <p className="text-xs text-muted-foreground -mt-2">
+                      Upload license certificate, ID proof, qualifications, etc.
+                    </p>
+                    
+                    {/* Upload Area */}
+                    <label
+                      htmlFor="doc-upload"
+                      className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors"
+                    >
+                      <Upload className="h-8 w-8 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Click to upload or drag and drop
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        PDF, JPG, PNG up to 10MB each
+                      </span>
+                      <input
+                        id="doc-upload"
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="hidden"
+                        onChange={(e) => {
+                          const files = e.target.files;
+                          if (files) {
+                            const newDocs = Array.from(files).map((f) => ({
+                              name: f.name,
+                              type: f.type,
+                              size: f.size,
+                            }));
+                            setDocuments((prev) => [...prev, ...newDocs]);
+                          }
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+
+                    {/* Uploaded Files List */}
+                    {documents.length > 0 && (
+                      <div className="space-y-2">
+                        {documents.map((doc, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                          >
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="text-sm font-medium">{doc.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {(doc.size / 1024).toFixed(1)} KB
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() =>
+                                setDocuments((prev) => prev.filter((_, i) => i !== idx))
+                              }
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Advanced Options */}
