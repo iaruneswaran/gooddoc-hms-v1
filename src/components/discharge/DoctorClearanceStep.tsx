@@ -785,24 +785,22 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                         </div>
                       ) : (
                         medications.map((med, index) => (
-                          <div key={med.medId} className="rounded-lg border border-border bg-card p-3">
+                          <div key={med.medId} className="rounded-xl border border-border bg-card shadow-sm hover:shadow-md transition-shadow">
                             {/* Med Header */}
-                            <div className="flex items-start justify-between gap-2 mb-3">
-                              <div className="flex items-center gap-2">
-                                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">
+                            <div className="flex items-start justify-between gap-2 p-3 pb-2">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                                   {index + 1}
-                                </span>
+                                </div>
                                 <div>
-                                  <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
-                                  {med.genericName && (
-                                    <p className="text-[10px] text-muted-foreground">{med.genericName}</p>
-                                  )}
+                                  <h4 className="font-semibold text-sm text-foreground">{med.name}</h4>
+                                  <p className="text-[11px] text-muted-foreground">{med.genericName} • {med.form}</p>
                                 </div>
                               </div>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                                className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                                 onClick={() => handleDeleteMedication(med.medId)}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -810,14 +808,62 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                             </div>
 
                             {/* Quick Edit Fields */}
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="px-3 pb-3 grid grid-cols-4 gap-2">
                               <div>
-                                <label className="text-[10px] text-muted-foreground uppercase tracking-wide">Strength</label>
+                                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Strength</label>
                                 <Select 
                                   value={med.strength || ""} 
                                   onValueChange={(v) => handleUpdateMedication(med.medId, 'strength', v)}
                                 >
-                                  <SelectTrigger className="h-7 text-xs">
+                                  <SelectTrigger className="h-8 text-xs bg-muted/50">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {STRENGTH_OPTIONS.map(opt => (
+                                      <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Dosage</label>
+                                <Select 
+                                  value={med.dose} 
+                                  onValueChange={(v) => handleUpdateMedication(med.medId, 'dose', v)}
+                                >
+                                  <SelectTrigger className="h-8 text-xs bg-muted/50">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {DOSAGE_OPTIONS.map(opt => (
+                                      <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Frequency</label>
+                                <Select 
+                                  value={med.frequency} 
+                                  onValueChange={(v) => handleUpdateMedication(med.medId, 'frequency', v)}
+                                >
+                                  <SelectTrigger className="h-8 text-xs bg-muted/50">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {FREQUENCY_OPTIONS.map(opt => (
+                                      <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Duration</label>
+                                <Select 
+                                  value={med.duration} 
+                                  onValueChange={(v) => handleUpdateMedication(med.medId, 'duration', v)}
+                                >
+                                  <SelectTrigger className="h-8 text-xs bg-muted/50">
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -829,13 +875,16 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                               </div>
                             </div>
 
-                            {/* Route Badge */}
-                            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border">
-                              <Badge variant="outline" className="text-[10px]">
-                                Route: {med.route}
-                              </Badge>
+                            {/* Footer with Route & ATC */}
+                            <div className="flex items-center justify-between gap-2 px-3 py-2 bg-muted/30 rounded-b-xl border-t border-border">
+                              <div className="flex items-center gap-2">
+                                <Badge variant="secondary" className="text-[10px] font-medium">
+                                  {med.route}
+                                </Badge>
+                                <span className="text-[10px] text-muted-foreground">Route</span>
+                              </div>
                               {med.drugCode && (
-                                <span className="text-[10px] text-muted-foreground font-mono">
+                                <span className="text-[10px] text-muted-foreground font-mono bg-background px-2 py-0.5 rounded">
                                   ATC: {med.drugCode}
                                 </span>
                               )}
