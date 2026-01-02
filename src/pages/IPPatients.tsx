@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { User, UserRound, FileText, Stethoscope, Calendar, BedDouble, MapPin, IndianRupee } from "lucide-react";
 import { formatINR } from "@/utils/currency";
+import { CalendarWidget } from "@/components/CalendarWidget";
 
 const IPPatients = () => {
   const navigate = useNavigate();
@@ -234,6 +235,8 @@ const IPPatients = () => {
         searchPlaceholder="Search by MRN, name, ward, bed..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
+        hideExportPrint
+        customHeaderContent={<CalendarWidget />}
       />
 
       <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
