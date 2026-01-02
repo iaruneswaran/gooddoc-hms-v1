@@ -674,9 +674,13 @@ export default function DoctorForm() {
                       <Input
                         type="number"
                         min={5}
+                        placeholder="30"
                         value={blockForm.duration}
                         onChange={(e) => setBlockForm({ ...blockForm, duration: parseInt(e.target.value) || 30 })}
                       />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Default: 30 min per slot
+                      </p>
                     </div>
                     <div>
                       <Label>Patients per Slot</Label>
