@@ -72,9 +72,9 @@ export function BillingSummaryCards({
 
       {/* Total Due Amount Card - Hero Card */}
       <Card className="bg-white/15 backdrop-blur-sm border-white/30 px-4 py-3 min-w-[220px] hover:bg-white/20 transition-colors ring-1 ring-white/10">
-        <div className="pb-2 border-b border-white/25 mb-2">
-          <p className="text-white text-xs mb-1">Total Due Amount</p>
-          <span className="text-white font-semibold text-lg tabular-nums">{totalDue}</span>
+        <div className="flex items-baseline justify-between pb-2 border-b border-white/25 mb-2">
+          <p className="text-white text-xs">Total Due Amount</p>
+          <span className="text-white font-semibold text-base tabular-nums">{totalDue}</span>
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center justify-between gap-4">
@@ -83,7 +83,7 @@ export function BillingSummaryCards({
           </div>
           <button 
             onClick={handlePayableClick}
-            className="flex items-center justify-between gap-4 pt-1.5 border-t border-white/15 w-full hover:bg-white/10 rounded -mx-1 px-1 transition-colors cursor-pointer"
+            className="flex items-center justify-between gap-4 pt-1 border-t border-white/15 w-full hover:bg-white/10 rounded -mx-1 px-1 transition-colors cursor-pointer"
           >
             <span className="text-white text-[11px]">Total Payable</span>
             <span className="text-amber-300 font-semibold text-sm tabular-nums underline underline-offset-2">{balanceAmount}</span>
