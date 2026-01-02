@@ -245,7 +245,6 @@ export default function DiagnosticsList() {
         setSummaryOpen(true);
       }
     },
-    { label: "View Details", onClick: (row) => console.log("View details", row.id) },
     { label: "Patient Insight", onClick: (row) => console.log("Patient insight", row.patientId) },
   ];
 
