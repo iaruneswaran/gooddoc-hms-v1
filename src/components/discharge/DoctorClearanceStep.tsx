@@ -701,53 +701,56 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                         <p className="text-xs text-muted-foreground mt-1">Try a different search term or category</p>
                       </div>
                     ) : (
-                      <div className="divide-y divide-border">
+                      <div className="p-3 space-y-2">
                         {filteredCatalogMeds.map(med => {
                           const isInCart = isMedicationInCart(med.id);
                           return (
                             <div 
                               key={med.id}
                               className={cn(
-                                "flex items-center gap-4 px-4 py-3 transition-colors cursor-pointer group",
-                                isInCart ? "bg-green-500/5" : "hover:bg-muted/50"
+                                "flex items-center gap-4 p-3 rounded-xl border transition-all cursor-pointer group",
+                                isInCart 
+                                  ? "bg-green-500/5 border-green-500/30" 
+                                  : "bg-card border-border hover:border-primary/40 hover:shadow-sm"
                               )}
                               onClick={() => !isInCart && handleAddMedicationFromCatalog(med)}
                             >
+                              {/* Main Content */}
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                  <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
-                                  <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0 shrink-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-sm text-foreground">{med.name}</h4>
+                                  <Badge className="text-[10px] font-mono px-1.5 py-0 shrink-0 bg-primary/10 text-primary border-0">
                                     {med.defaultStrength}
                                   </Badge>
                                 </div>
-                                <p className="text-xs text-muted-foreground truncate mt-0.5">
+                                <p className="text-xs text-muted-foreground truncate">
                                   {med.genericName} • {med.brandName}
                                 </p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                <div className="flex items-center gap-2 mt-2">
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium">
                                     {med.category}
-                                  </Badge>
+                                  </span>
+                                  <span className="text-[10px] text-muted-foreground">•</span>
                                   <span className="text-[10px] text-muted-foreground">{med.form}</span>
                                 </div>
                               </div>
 
-                              {/* Add Button */}
+                              {/* Add Button / Added State */}
                               {isInCart ? (
-                                <div className="flex items-center gap-1.5 text-green-600 shrink-0">
-                                  <CheckCircle2 className="w-4 h-4" />
+                                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 shrink-0">
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
                                   <span className="text-xs font-medium">Added</span>
                                 </div>
                               ) : (
                                 <Button 
                                   size="sm" 
-                                  variant="outline"
-                                  className="h-8 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                                  className="h-8 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 gap-1"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleAddMedicationFromCatalog(med);
                                   }}
                                 >
-                                  <Plus className="w-3.5 h-3.5 mr-1" />
+                                  <Plus className="w-3.5 h-3.5" />
                                   Add
                                 </Button>
                               )}
