@@ -716,18 +716,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                               )}
                               onClick={() => !isInCart && handleAddMedicationFromCatalog(med)}
                             >
-                              {/* Icon */}
-                              <div className={cn(
-                                "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
-                                isInCart ? "bg-green-500/10" : "bg-primary/10"
-                              )}>
-                                <Pill className={cn(
-                                  "w-5 h-5",
-                                  isInCart ? "text-green-600" : "text-primary"
-                                )} />
-                              </div>
-
-                              {/* Details */}
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <h4 className="font-medium text-sm text-foreground">{med.name}</h4>
