@@ -684,7 +684,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search medications by name, generic, or brand..."
+                        placeholder="Search medications..."
                         value={medSearch}
                         onChange={(e) => setMedSearch(e.target.value)}
                         className="pl-9 bg-background h-9"
@@ -763,7 +763,7 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                 </div>
 
                 {/* Right Side - Prescription Cart */}
-                <div className="w-[420px] border-l border-border flex flex-col bg-background">
+                <div className="w-[480px] border-l border-border flex flex-col bg-background">
                   {/* Cart Header */}
                   <div className="p-4 border-b border-border bg-primary">
                     <div className="flex items-center justify-between">
