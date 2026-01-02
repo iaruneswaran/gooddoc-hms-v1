@@ -1,9 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction } from "@/components/overview/ListPageLayout";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { medicineOrders, MedicineOrderRecord } from "@/data/overview.mock";
 import { formatINR } from "@/utils/currency";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { Pill, User } from "lucide-react";
 
 const priorityStyles: Record<MedicineOrderRecord["priority"], string> = {
   "Routine": "bg-gray-100 text-gray-700",
@@ -27,6 +36,13 @@ const routeStyles: Record<MedicineOrderRecord["route"], string> = {
 
 const MedicineOrdersToday = () => {
   const navigate = useNavigate();
+  const [selectedOrder, setSelectedOrder] = useState<MedicineOrderRecord | null>(null);
+  const [showSummary, setShowSummary] = useState(false);
+
+  const handleViewSummary = (row: MedicineOrderRecord) => {
+    setSelectedOrder(row);
+    setShowSummary(true);
+  };
 
   const columns: Column<MedicineOrderRecord>[] = [
     { 
@@ -110,9 +126,7 @@ const MedicineOrdersToday = () => {
   ];
 
   const rowActions: RowAction<MedicineOrderRecord>[] = [
-    { label: "Open Order", onClick: (row) => console.log("Open", row.orderId) },
-    { label: "Verify", onClick: (row) => console.log("Verify", row.orderId) },
-    { label: "Dispense", onClick: (row) => console.log("Dispense", row.orderId) },
+    { label: "View Order Summary", onClick: (row) => handleViewSummary(row) },
   ];
 
   // Sort by priority (Stat first), then order time
@@ -123,19 +137,118 @@ const MedicineOrdersToday = () => {
   });
 
   return (
-    <ListPageLayout
-      title="Medicine Orders Today"
-      count={medicineOrders.length}
-      breadcrumbs={["Overview", "Medicine Orders Today"]}
-      columns={columns}
-      data={sortedOrders}
-      filters={filters}
-      rowActions={rowActions}
-      emptyMessage="No medicine orders for today."
-      searchPlaceholder="Search by Order ID, patient name..."
-      getRowId={(row) => row.orderId}
-      onRowClick={(row) => navigate(`/patient-insights/${row.orderId}?from=pharmacy`)}
-    />
+    <>
+      <ListPageLayout
+        title="Medicine Orders Today"
+        count={medicineOrders.length}
+        breadcrumbs={["Overview", "Medicine Orders Today"]}
+        columns={columns}
+        data={sortedOrders}
+        filters={filters}
+        rowActions={rowActions}
+        emptyMessage="No medicine orders for today."
+        searchPlaceholder="Search by Order ID, patient name..."
+        getRowId={(row) => row.orderId}
+        onRowClick={(row) => navigate(`/patient-insights/${row.orderId}?from=pharmacy`)}
+      />
+
+      <Dialog open={showSummary} onOpenChange={setShowSummary}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Pill className="w-5 h-5" />
+              Order Summary
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedOrder && (
+            <div className="space-y-4">
+              {/* Patient Info */}
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${selectedOrder.ageSex.includes('F') ? 'bg-pink-500' : 'bg-primary'}`}>
+                  <User className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{selectedOrder.patient}</p>
+                  <p className="text-sm text-muted-foreground">GDID - {selectedOrder.orderId.replace(/\D/g, '').slice(-3).padStart(3, '0')} • {selectedOrder.ageSex}</p>
+                </div>
+                <Badge className={`ml-auto ${paymentStatusStyles[selectedOrder.paymentStatus]}`}>{selectedOrder.paymentStatus}</Badge>
+              </div>
+
+              {/* Order Details */}
+              <div className="grid grid-cols-4 gap-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Order ID</p>
+                  <p className="text-sm font-medium">{selectedOrder.orderId}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Visit ID</p>
+                  <p className="text-sm font-medium">{selectedOrder.visitId}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Priority</p>
+                  <Badge className={priorityStyles[selectedOrder.priority]}>{selectedOrder.priority}</Badge>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Route</p>
+                  <Badge className={routeStyles[selectedOrder.route]}>{selectedOrder.route}</Badge>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Location & Prescriber */}
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Location</p>
+                  <p className="text-sm font-medium">{selectedOrder.location || "—"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Prescriber</p>
+                  <p className="text-sm font-medium">{selectedOrder.prescriber}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Order Time</p>
+                  <p className="text-sm font-medium">{selectedOrder.orderTime}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Dispensing Details */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Dispensed At</p>
+                  <p className="text-sm font-medium">{selectedOrder.dispensedAt || "Not dispensed"}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Payment Details */}
+              <div className="grid grid-cols-3 gap-4 p-3 bg-muted/30 rounded-lg">
+                <div>
+                  <p className="text-xs text-muted-foreground">Order Amount</p>
+                  <p className="text-sm font-semibold">{formatINR(selectedOrder.orderAmount)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Paid Amount</p>
+                  <p className="text-sm font-medium text-green-600">{formatINR(selectedOrder.paidAmount)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Balance</p>
+                  <p className={`text-sm font-medium ${selectedOrder.orderAmount - selectedOrder.paidAmount > 0 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+                    {selectedOrder.orderAmount - selectedOrder.paidAmount > 0 
+                      ? formatINR(selectedOrder.orderAmount - selectedOrder.paidAmount) 
+                      : "—"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
