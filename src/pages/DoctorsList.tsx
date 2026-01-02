@@ -425,7 +425,7 @@ export default function DoctorsList() {
                 <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
                 <div className="text-xs font-medium text-muted-foreground">Availability</div>
                 <div className="text-xs font-medium text-muted-foreground">Locations</div>
-                <div className="text-xs font-medium text-muted-foreground">Duration / Fee</div>
+                <div className="text-xs font-medium text-muted-foreground">Fee</div>
                 <div className="text-xs font-medium text-muted-foreground">Status</div>
                 <div className="text-xs font-medium text-muted-foreground">Action</div>
               </div>
@@ -468,7 +468,7 @@ export default function DoctorsList() {
                     {doctor.locations.join(", ")}
                   </div>
 
-                  <div className="text-sm text-foreground">{doctor.duration} min / ₹{doctor.fee.toLocaleString('en-IN')}</div>
+                  <div className="text-sm text-foreground">₹{doctor.fee.toLocaleString('en-IN')}</div>
 
                   <div>
                     <Badge variant={getStatusVariant(doctor.status)}>
