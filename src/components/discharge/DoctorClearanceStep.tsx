@@ -624,58 +624,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
             {/* Medications Tab - Patient Services Style Layout */}
             <TabsContent value="medications" className="mt-0">
               <div className="flex h-[600px]">
-                {/* Left Sidebar - Categories */}
-                <div className="w-[240px] border-r border-border bg-muted/30 flex flex-col">
-                  <ScrollArea className="flex-1 pt-2">
-                    <div className="p-2 space-y-1">
-                      <button
-                        onClick={() => setSelectedCategory("all")}
-                        className={cn(
-                          "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                          selectedCategory === "all" 
-                            ? "bg-primary text-primary-foreground" 
-                            : "text-foreground hover:bg-muted"
-                        )}
-                      >
-                        <Package className="w-4 h-4" />
-                        <span className="flex-1 text-left">All Medications</span>
-                        <span className={cn(
-                          "text-xs px-1.5 py-0.5 rounded",
-                          selectedCategory === "all" 
-                            ? "bg-primary-foreground/20 text-primary-foreground" 
-                            : "bg-muted text-muted-foreground"
-                        )}>
-                          {MEDICATIONS_CATALOG.length}
-                        </span>
-                      </button>
-                      {MEDICATION_CATEGORIES.map(cat => {
-                        const count = MEDICATIONS_CATALOG.filter(m => m.category === cat.value).length;
-                        return (
-                          <button
-                            key={cat.value}
-                            onClick={() => setSelectedCategory(cat.value)}
-                            className={cn(
-                              "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                              selectedCategory === cat.value 
-                                ? "bg-primary text-primary-foreground" 
-                                : "text-foreground hover:bg-muted"
-                            )}
-                          >
-                            <span className="flex-1 text-left">{cat.label}</span>
-                            <span className={cn(
-                              "text-xs px-1.5 py-0.5 rounded",
-                              selectedCategory === cat.value 
-                                ? "bg-primary-foreground/20 text-primary-foreground" 
-                                : "bg-muted text-muted-foreground"
-                            )}>
-                              {count}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </ScrollArea>
-                </div>
 
                 {/* Center - Medications List */}
                 <div className="flex-1 flex flex-col overflow-hidden">
