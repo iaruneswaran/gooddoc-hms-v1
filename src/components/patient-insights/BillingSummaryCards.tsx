@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 interface BillingSummaryCardsProps {
   billedAmount: string;
@@ -7,6 +8,7 @@ interface BillingSummaryCardsProps {
   advanceAmount: string;
   collectedAmount: string;
   balanceAmount: string;
+  patientId?: string;
   variant?: "default" | "light";
 }
 
@@ -17,11 +19,20 @@ export function BillingSummaryCards({
   advanceAmount,
   collectedAmount,
   balanceAmount,
+  patientId,
 }: BillingSummaryCardsProps) {
+  const navigate = useNavigate();
+  
   // Calculate advance balance (advance - used portion)
   const advanceNum = parseFloat(advanceAmount.replace(/[₹,]/g, '')) || 0;
   const collectedNum = parseFloat(collectedAmount.replace(/[₹,]/g, '')) || 0;
   const advanceBalance = `₹${(advanceNum).toLocaleString('en-IN')}`;
+
+  const handlePayableClick = () => {
+    if (patientId) {
+      navigate(`/patient-insights/${patientId}/discharge?view=interim`);
+    }
+  };
 
   return (
     <div className="flex gap-3">
@@ -70,10 +81,13 @@ export function BillingSummaryCards({
             <span className="text-white/70 text-[11px]">Total Paid</span>
             <span className="text-emerald-300 text-xs tabular-nums">−{collectedAmount}</span>
           </div>
-          <div className="flex items-center justify-between gap-4 pt-1 border-t border-white/15">
+          <button 
+            onClick={handlePayableClick}
+            className="flex items-center justify-between gap-4 pt-1 border-t border-white/15 w-full hover:bg-white/10 rounded -mx-1 px-1 transition-colors cursor-pointer"
+          >
             <span className="text-white text-[11px]">Total Payable</span>
-            <span className="text-amber-300 font-semibold text-sm tabular-nums">{balanceAmount}</span>
-          </div>
+            <span className="text-amber-300 font-semibold text-sm tabular-nums underline underline-offset-2">{balanceAmount}</span>
+          </button>
         </div>
       </Card>
     </div>
