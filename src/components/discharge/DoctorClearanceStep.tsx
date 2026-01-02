@@ -664,7 +664,6 @@ export default function DoctorClearanceStep({ stepStatus, onStepComplete }: Doct
                                 : "text-foreground hover:bg-muted"
                             )}
                           >
-                            <span className="text-base">{cat.icon}</span>
                             <span className="flex-1 text-left">{cat.label}</span>
                             <span className={cn(
                               "text-xs px-1.5 py-0.5 rounded",
