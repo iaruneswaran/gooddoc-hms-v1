@@ -391,8 +391,6 @@ export default function DoctorsList() {
             <DoctorFilters 
               search={search} 
               onSearchChange={setSearch}
-              availableDate={availableDate}
-              onAvailableDateChange={setAvailableDate}
             />
           </div>
 
