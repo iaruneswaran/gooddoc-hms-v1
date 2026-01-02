@@ -230,8 +230,8 @@ const PatientServices = () => {
           {/* Left Side - View Mode & Category Sidebar */}
           <div className="w-[220px] border-r border-border bg-muted/30 flex flex-col">
             {/* View Mode Toggle */}
-            <div className="p-3 border-b border-border">
-              <div className="flex gap-1 bg-muted rounded-lg p-1">
+            <div className="h-[75px] px-3 border-b border-border flex items-center">
+              <div className="flex gap-1 bg-muted rounded-lg p-1 w-full">
                 <button
                   onClick={() => setViewMode('catalog')}
                   className={cn(
