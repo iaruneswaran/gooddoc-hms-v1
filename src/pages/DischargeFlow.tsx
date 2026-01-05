@@ -117,7 +117,7 @@ export default function DischargeFlow() {
                   <button
                     onClick={() => handleStepChange(s.step)}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all",
+                      "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all min-w-[180px]",
                       isActive && "bg-primary/10 border border-primary/30",
                       !isActive && "hover:bg-muted/50"
                     )}
