@@ -453,12 +453,12 @@ export function GenerateInterimBillDrawer({
               {/* Department Filter */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">Department Filter (optional)</Label>
-                <Select value={departmentIds[0] || ""} onValueChange={(v) => setDepartmentIds(v ? [v] : [])}>
+                <Select value={departmentIds[0] || "all"} onValueChange={(v) => setDepartmentIds(v === "all" ? [] : [v])}>
                   <SelectTrigger>
                     <SelectValue placeholder="All Departments" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Departments</SelectItem>
+                    <SelectItem value="all">All Departments</SelectItem>
                     {MOCK_DEPARTMENTS.map((dept) => (
                       <SelectItem key={dept.id} value={dept.id}>
                         {dept.name}
