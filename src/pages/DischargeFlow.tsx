@@ -5,7 +5,6 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { toast } from "sonner";
@@ -25,15 +24,14 @@ const steps = [
   { step: 2 as Step, label: "Discharge Summary", icon: FileText },
 ];
 
-const getStepStatusBadge = (status: StepStatus) => {
+const getStepStatusText = (status: StepStatus) => {
   const config = {
-    pending: { label: "Pending", className: "bg-gray-500/10 text-gray-600 border-gray-500/30" },
-    in_progress: { label: "In Progress", className: "bg-blue-500/10 text-blue-600 border-blue-500/30" },
-    cleared: { label: "Cleared", className: "bg-green-500/10 text-green-600 border-green-500/30" },
-    finalized: { label: "Finalized", className: "bg-primary/10 text-primary border-primary/30" },
+    pending: { label: "Pending", color: "text-muted-foreground" },
+    in_progress: { label: "In Progress", color: "text-blue-600" },
+    cleared: { label: "Cleared", color: "text-green-600" },
+    finalized: { label: "Finalized", color: "text-primary" },
   };
-  const { label, className } = config[status];
-  return <Badge variant="secondary" className={className}>{label}</Badge>;
+  return config[status];
 };
 
 export default function DischargeFlow() {
@@ -107,39 +105,46 @@ export default function DischargeFlow() {
           </button>
 
           {/* Center - Stepper */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             {steps.map((s, index) => {
               const Icon = s.icon;
               const isActive = s.step === currentStep;
               const status = stepStatuses[s.step];
+              const statusInfo = getStepStatusText(status);
 
               return (
-                <div key={s.step} className="flex items-center gap-6">
+                <div key={s.step} className="flex items-center gap-4">
                   <button
                     onClick={() => handleStepChange(s.step)}
-                    className="flex items-center gap-2 group"
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all",
+                      isActive && "bg-primary/10 border border-primary/30",
+                      !isActive && "hover:bg-muted/50"
+                    )}
                   >
                     <div
                       className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all shrink-0",
-                        isActive && "bg-primary border-primary text-primary-foreground",
-                        status === "cleared" && "bg-green-500 border-green-500 text-white",
-                        status === "finalized" && "bg-primary border-primary text-primary-foreground",
-                        !isActive && status === "pending" && "border-border text-muted-foreground group-hover:border-primary/50",
-                        !isActive && status === "in_progress" && "border-blue-500 text-blue-500"
+                        "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
+                        isActive && "bg-primary text-primary-foreground",
+                        status === "cleared" && !isActive && "bg-green-500 text-white",
+                        status === "finalized" && "bg-primary text-primary-foreground",
+                        !isActive && status === "pending" && "bg-muted text-muted-foreground",
+                        !isActive && status === "in_progress" && "bg-blue-500/10 text-blue-600 border border-blue-500/30"
                       )}
                     >
-                      <Icon className="w-3.5 h-3.5" />
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <div className="flex flex-col items-start">
-                      <span className={cn("text-xs font-medium", isActive ? "text-foreground" : "text-muted-foreground")}>
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className={cn("text-sm font-medium", isActive ? "text-foreground" : "text-muted-foreground")}>
                         {s.label}
                       </span>
-                      {getStepStatusBadge(status)}
+                      <span className={cn("text-xs", statusInfo.color)}>
+                        {statusInfo.label}
+                      </span>
                     </div>
                   </button>
                   {index < steps.length - 1 && (
-                    <div className={cn("w-12 h-0.5", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
+                    <div className={cn("w-16 h-0.5 rounded-full", status === "cleared" || status === "finalized" ? "bg-green-500" : "bg-border")} />
                   )}
                 </div>
               );
