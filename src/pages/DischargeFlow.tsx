@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Receipt, Stethoscope, FileText, Save, AlertTriangle } from "lucide-react";
+import { ChevronLeft, Receipt, FileText, Save } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { toast } from "sonner";
 import PendingBillStep from "@/components/discharge/PendingBillStep";
-import DoctorClearanceStep from "@/components/discharge/DoctorClearanceStep";
 import DischargeSummaryStep from "@/components/discharge/DischargeSummaryStep";
 import {
   SAMPLE_PENDING_BILLS,
@@ -20,12 +18,11 @@ import {
 } from "@/data/discharge-flow.mock";
 import { PendingBill, StepStatus } from "@/types/discharge-flow";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 
 const steps = [
   { step: 1 as Step, label: "Pending Bill", icon: Receipt },
-  { step: 2 as Step, label: "Doctor Clearance", icon: Stethoscope },
-  { step: 3 as Step, label: "Discharge Summary", icon: FileText },
+  { step: 2 as Step, label: "Discharge Summary", icon: FileText },
 ];
 
 const getStepStatusBadge = (status: StepStatus) => {
@@ -50,7 +47,6 @@ export default function DischargeFlow() {
   const [stepStatuses, setStepStatuses] = useState<Record<Step, StepStatus>>({
     1: "in_progress",
     2: "pending",
-    3: "pending",
   });
   const [isDirty, setIsDirty] = useState(false);
 
@@ -160,9 +156,9 @@ export default function DischargeFlow() {
             )}
             <Button 
               className="h-9"
-              disabled={stepStatuses[1] !== "cleared" || stepStatuses[2] !== "cleared"}
+              disabled={stepStatuses[1] !== "cleared"}
               onClick={() => {
-                setStepStatuses(p => ({...p, 3: "finalized"}));
+                setStepStatuses(p => ({...p, 2: "finalized"}));
                 toast.success("Patient discharged successfully!");
                 setTimeout(() => navigate(`/patient-insights/${patientId}?from=ip-patients`), 1500);
               }}
@@ -187,15 +183,9 @@ export default function DischargeFlow() {
             />
           )}
           {currentStep === 2 && (
-            <DoctorClearanceStep
-              stepStatus={stepStatuses[2]}
-              onStepComplete={() => { setStepStatuses(p => ({...p, 2: "cleared"})); handleStepChange(3); }}
-            />
-          )}
-          {currentStep === 3 && (
             <DischargeSummaryStep
-              stepStatus={stepStatuses[3]}
-              onFinalize={() => { setStepStatuses(p => ({...p, 3: "finalized"})); }}
+              stepStatus={stepStatuses[2]}
+              onFinalize={() => { setStepStatuses(p => ({...p, 2: "finalized"})); }}
               requireBillingClearance={config.requireBillingClearanceToFinalize}
               totalOutstanding={totalOutstanding}
             />
