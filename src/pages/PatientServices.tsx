@@ -55,7 +55,7 @@ const getCategoryColor = (category: string) => {
   }
 };
 
-type ViewMode = 'pending' | 'catalog' | 'room-bed';
+type ViewMode = 'pending' | 'catalog';
 
 const PatientServices = () => {
   const { patientId } = useParams();
@@ -263,20 +263,6 @@ const PatientServices = () => {
                   )}
                 </button>
               </div>
-              
-              {/* Room & Bed Tab */}
-              <button
-                onClick={() => setViewMode('room-bed')}
-                className={cn(
-                  "w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg text-xs font-medium transition-colors border",
-                  viewMode === 'room-bed'
-                    ? "bg-cyan-500/10 text-cyan-700 border-cyan-200 shadow-sm"
-                    : "text-muted-foreground hover:text-foreground border-transparent hover:border-border hover:bg-muted/50"
-                )}
-              >
-                <BedDouble className="w-3.5 h-3.5" />
-                Room & Bed
-              </button>
             </div>
 
             {viewMode === 'catalog' && (
@@ -350,30 +336,12 @@ const PatientServices = () => {
                 </div>
               </div>
             )}
-
-            {viewMode === 'room-bed' && (
-              <div className="flex-1 flex flex-col p-3">
-                <p className="text-xs text-muted-foreground mb-2">
-                  View patient room/bed transfer history and add charges to bill.
-                </p>
-                <div className="mt-auto pt-3 border-t border-border space-y-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-xs"
-                    onClick={() => setViewMode('pending')}
-                  >
-                    <ClipboardList className="w-3 h-3 mr-1" />
-                    View Pending Services
-                  </Button>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Center - Services List */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {viewMode === 'room-bed' ? (
+            {/* Show Room & Bed transfer history when Room category is selected */}
+            {viewMode === 'catalog' && selectedCategory === 'Room' ? (
               <RoomBedTab
                 patientId={patientId || ''}
                 onAddToCart={addToCart}
