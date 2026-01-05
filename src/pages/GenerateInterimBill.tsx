@@ -251,7 +251,7 @@ const GenerateInterimBill = () => {
         
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-6xl mx-auto space-y-6">
             {/* Context Banner */}
             <Card className="p-4 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800">
               <div className="flex items-start gap-3">
@@ -304,9 +304,9 @@ const GenerateInterimBill = () => {
                 </div>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Form Panel */}
-                <Card className="p-6 space-y-6">
+                <Card className="lg:col-span-4 p-6 space-y-6">
                   <h2 className="font-semibold text-lg">Bill Configuration</h2>
                   
                   {/* Cutoff Date & Time */}
@@ -533,7 +533,7 @@ const GenerateInterimBill = () => {
                 </Card>
                 
                 {/* Preview Panel */}
-                <Card className="p-6 space-y-4">
+                <Card className="lg:col-span-8 p-6 space-y-4">
                   <Collapsible open={isPreviewExpanded} onOpenChange={setIsPreviewExpanded}>
                     <CollapsibleTrigger asChild>
                       <button className="flex items-center justify-between w-full text-left">
