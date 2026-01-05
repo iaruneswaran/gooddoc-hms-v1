@@ -96,6 +96,7 @@ const TransferPatient = () => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     
     const transferId = `TR-${Date.now().toString().slice(-6)}`;
+    const isScheduledForFuture = transferData.scheduledAt && transferData.scheduledAt > new Date();
     
     // Create bed charge entry for the old bed based on days stayed
     createBedChargeFromTransfer(
@@ -115,8 +116,10 @@ const TransferPatient = () => {
     );
     
     toast({
-      title: "Transfer request created",
-      description: `Transfer ID: ${transferId}. Bed charges added to pending services.`,
+      title: isScheduledForFuture ? "Transfer scheduled" : "Transfer completed",
+      description: isScheduledForFuture 
+        ? `Transfer ID: ${transferId}. Scheduled for ${transferData.scheduledAt?.toLocaleString()}.`
+        : `Transfer ID: ${transferId}. Bed charges added to pending services.`,
     });
     
     // Navigate back to patient insights
@@ -185,6 +188,7 @@ const TransferPatient = () => {
               currentTariff={patient.currentTariff}
               fromLocation={patient.currentLocation}
               onSelectBed={handleSelectBed}
+              admissionDate={patient.admissionDate}
             />
           </div>
         </main>
