@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { TransferRequest, TransferReason, BedLocation, Bed } from "@/types/transfer";
 import { reasonLabels, mockUnits, mockBeds, featureLabels } from "@/data/transfer.mock";
+import { TransferDateTimePicker } from "@/components/transfer/TransferDateTimePicker";
 import { cn } from "@/lib/utils";
 
 interface TransferDetailsStepProps {
@@ -14,17 +15,41 @@ interface TransferDetailsStepProps {
   currentTariff: number;
   fromLocation: BedLocation;
   onSelectBed: (bed: Bed) => void;
+  admissionDate?: string; // For min date validation
+  lastTransferEndTime?: string; // For min date validation
 }
 
 const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
-export function TransferDetailsStep({ data, onChange, currentTariff, fromLocation, onSelectBed }: TransferDetailsStepProps) {
-  // Auto-fill ordering clinician
+export function TransferDetailsStep({ 
+  data, 
+  onChange, 
+  currentTariff, 
+  fromLocation, 
+  onSelectBed,
+  admissionDate,
+  lastTransferEndTime 
+}: TransferDetailsStepProps) {
+  // Auto-fill ordering clinician and transfer date
   useEffect(() => {
     if (!data.orderingClinician) {
       onChange({ orderingClinician: "Dr. Meera Nair" });
     }
+    if (!data.scheduledAt) {
+      onChange({ scheduledAt: new Date() });
+    }
   }, []);
+
+  // Calculate min date for transfer
+  const minTransferDate = useMemo(() => {
+    if (lastTransferEndTime) {
+      return new Date(lastTransferEndTime);
+    }
+    if (admissionDate) {
+      return new Date(admissionDate);
+    }
+    return undefined;
+  }, [lastTransferEndTime, admissionDate]);
 
   // Get available units for destination
   const availableUnits = useMemo(() => {
@@ -275,6 +300,14 @@ export function TransferDetailsStep({ data, onChange, currentTariff, fromLocatio
               </Select>
             </div>
           </div>
+
+          {/* Transfer Date & Time */}
+          <TransferDateTimePicker
+            value={data.scheduledAt}
+            onChange={(date) => onChange({ scheduledAt: date })}
+            minDate={minTransferDate}
+            testId="transfer-datetime"
+          />
 
           {/* Notes */}
           <div className="space-y-2">

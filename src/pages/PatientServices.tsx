@@ -23,6 +23,7 @@ import { getPendingBedChargesForPatient } from "@/data/pending-bed-charges.mock"
 import { BedChargePending } from "@/types/bed-charge";
 import { ServiceCategory, ServiceItem } from "@/types/booking/ipAdmission";
 import { useDebounce } from "@/hooks/useDebounce";
+import { RoomBedTab } from "@/components/services/RoomBedTab";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -54,7 +55,7 @@ const getCategoryColor = (category: string) => {
   }
 };
 
-type ViewMode = 'pending' | 'catalog';
+type ViewMode = 'pending' | 'catalog' | 'room-bed';
 
 const PatientServices = () => {
   const { patientId } = useParams();
@@ -230,7 +231,7 @@ const PatientServices = () => {
           {/* Left Side - View Mode & Category Sidebar */}
           <div className="w-[220px] border-r border-border bg-muted/30 flex flex-col">
             {/* View Mode Toggle */}
-            <div className="h-[75px] px-3 border-b border-border flex items-center">
+            <div className="px-3 py-2 border-b border-border flex flex-col gap-1">
               <div className="flex gap-1 bg-muted rounded-lg p-1 w-full">
                 <button
                   onClick={() => setViewMode('catalog')}
@@ -262,6 +263,20 @@ const PatientServices = () => {
                   )}
                 </button>
               </div>
+              
+              {/* Room & Bed Tab */}
+              <button
+                onClick={() => setViewMode('room-bed')}
+                className={cn(
+                  "w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg text-xs font-medium transition-colors border",
+                  viewMode === 'room-bed'
+                    ? "bg-cyan-500/10 text-cyan-700 border-cyan-200 shadow-sm"
+                    : "text-muted-foreground hover:text-foreground border-transparent hover:border-border hover:bg-muted/50"
+                )}
+              >
+                <BedDouble className="w-3.5 h-3.5" />
+                Room & Bed
+              </button>
             </div>
 
             {viewMode === 'catalog' && (
@@ -335,11 +350,36 @@ const PatientServices = () => {
                 </div>
               </div>
             )}
+
+            {viewMode === 'room-bed' && (
+              <div className="flex-1 flex flex-col p-3">
+                <p className="text-xs text-muted-foreground mb-2">
+                  View patient room/bed transfer history and add charges to bill.
+                </p>
+                <div className="mt-auto pt-3 border-t border-border space-y-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => setViewMode('pending')}
+                  >
+                    <ClipboardList className="w-3 h-3 mr-1" />
+                    View Pending Services
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Center - Services List */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {viewMode === 'pending' ? (
+            {viewMode === 'room-bed' ? (
+              <RoomBedTab
+                patientId={patientId || ''}
+                onAddToCart={addToCart}
+                isInCart={isInCart}
+              />
+            ) : viewMode === 'pending' ? (
               <>
                 {/* Pending Services Header */}
                 <div className="h-[75px] px-4 border-b border-border bg-background flex items-center justify-between">
