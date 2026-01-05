@@ -231,17 +231,9 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                     {/* From Location with Bed below */}
                     <TableCell>
                       {transfer.fromLocationName ? (
-                        <div className="flex items-center gap-2">
-                          <div className={cn(
-                            "w-6 h-6 rounded flex items-center justify-center",
-                            getLocationTypeColor(transfer.fromLocationType)
-                          )}>
-                            <Building2 className="w-3.5 h-3.5" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium">{transfer.fromLocationName}</div>
-                            <div className="text-xs text-muted-foreground">{transfer.fromBedNumber || 'No bed'}</div>
-                          </div>
+                        <div>
+                          <div className="text-sm font-medium">{transfer.fromLocationName}</div>
+                          <div className="text-xs text-muted-foreground">{transfer.fromBedNumber || 'No bed'}</div>
                         </div>
                       ) : (
                         <span className="text-xs text-muted-foreground italic">No ward</span>
@@ -250,17 +242,9 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
 
                     {/* To Location with Bed below */}
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className={cn(
-                          "w-6 h-6 rounded flex items-center justify-center",
-                          getLocationTypeColor(transfer.toLocationType)
-                        )}>
-                          <Building2 className="w-3.5 h-3.5" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">{transfer.toLocationName}</div>
-                          <div className="text-xs text-muted-foreground">{transfer.toBedNumber}</div>
-                        </div>
+                      <div>
+                        <div className="text-sm font-medium">{transfer.toLocationName}</div>
+                        <div className="text-xs text-muted-foreground">{transfer.toBedNumber}</div>
                       </div>
                     </TableCell>
 
@@ -343,13 +327,11 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                       ) : canAdd ? (
                         <Button
                           size="sm"
-                          variant="outline"
-                          className="h-7 text-xs gap-1"
+                          className="h-7 text-xs gap-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                           onClick={() => handleAddToCart(transfer)}
                           data-testid={`room-bed-add-to-cart-${transfer.id}`}
                         >
-                          <ShoppingCart className="w-3 h-3" />
-                          Add to cart
+                          + Add
                         </Button>
                       ) : (
                         <TooltipProvider>
