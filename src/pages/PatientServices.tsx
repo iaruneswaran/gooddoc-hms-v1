@@ -20,6 +20,7 @@ import { useServicesCart } from "@/hooks/useServicesCart";
 import { searchServices, SERVICE_CATEGORIES, getSubCategories, getServicesByCategory } from "@/data/services.mock";
 import { getPendingServicesForPatient, PendingService } from "@/data/pending-services.mock";
 import { getPendingBedChargesForPatient } from "@/data/pending-bed-charges.mock";
+import { getTransferHistoryForPatient } from "@/data/transfer-history.mock";
 import { BedChargePending } from "@/types/bed-charge";
 import { ServiceCategory, ServiceItem } from "@/types/booking/ipAdmission";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -63,9 +64,9 @@ const PatientServices = () => {
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
   
-  const [viewMode, setViewMode] = useState<ViewMode>('pending');
+  const [viewMode, setViewMode] = useState<ViewMode>('catalog');
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Room");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
@@ -97,6 +98,11 @@ const PatientServices = () => {
   // Combined pending items count
   const totalPendingCount = pendingServices.length + pendingBedCharges.length;
 
+  // Get transfer count for Room category
+  const transferHistory = useMemo(() => {
+    return getTransferHistoryForPatient(patientId || '');
+  }, [patientId]);
+  const transferCount = transferHistory.length;
   const subCategories = useMemo(() => {
     if (selectedCategory === "all") return [];
     return getSubCategories(selectedCategory);
@@ -288,7 +294,9 @@ const PatientServices = () => {
                       .filter((cat) => !['Lab', 'Radiology', 'Pharmacy'].includes(cat.id))
                       .map((cat) => {
                       const Icon = getCategoryIcon(cat.id);
-                      const count = getServicesByCategory(cat.id).length;
+                      // For Room category, show transfer count in red; otherwise show service count
+                      const isRoom = cat.id === 'Room';
+                      const count = isRoom ? transferCount : getServicesByCategory(cat.id).length;
                       return (
                         <button
                           key={cat.id}
@@ -303,10 +311,12 @@ const PatientServices = () => {
                           <Icon className="w-4 h-4" />
                           <span className="flex-1 text-left">{cat.name}</span>
                           <span className={cn(
-                            "text-xs px-1.5 py-0.5 rounded",
-                            selectedCategory === cat.id 
-                              ? "bg-primary-foreground/20 text-primary-foreground" 
-                              : "bg-muted text-muted-foreground"
+                            "text-xs px-1.5 py-0.5 rounded font-semibold",
+                            isRoom 
+                              ? "bg-red-100 text-red-600"
+                              : selectedCategory === cat.id 
+                                ? "bg-primary-foreground/20 text-primary-foreground" 
+                                : "bg-muted text-muted-foreground"
                           )}>
                             {count}
                           </span>
