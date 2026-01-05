@@ -206,11 +206,8 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
           <Table>
             <TableHeader className="sticky top-0 bg-background z-10">
               <TableRow>
-                <TableHead className="w-12 text-center">No.</TableHead>
                 <TableHead>From Location</TableHead>
-                <TableHead>From Bed</TableHead>
                 <TableHead>To Location</TableHead>
-                <TableHead>To Bed</TableHead>
                 <TableHead>Start</TableHead>
                 <TableHead>End</TableHead>
                 <TableHead>Duration</TableHead>
@@ -231,12 +228,7 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                     key={transfer.id}
                     className={cn(inCart && "bg-primary/5")}
                   >
-                    {/* No. */}
-                    <TableCell className="text-center text-muted-foreground text-sm">
-                      {allTransfers.length - index}
-                    </TableCell>
-
-                    {/* From Location */}
+                    {/* From Location with Bed below */}
                     <TableCell>
                       {transfer.fromLocationName ? (
                         <div className="flex items-center gap-2">
@@ -246,23 +238,17 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                           )}>
                             <Building2 className="w-3.5 h-3.5" />
                           </div>
-                          <span className="text-sm font-medium">{transfer.fromLocationName}</span>
+                          <div>
+                            <div className="text-sm font-medium">{transfer.fromLocationName}</div>
+                            <div className="text-xs text-muted-foreground">{transfer.fromBedNumber || 'No bed'}</div>
+                          </div>
                         </div>
                       ) : (
                         <span className="text-xs text-muted-foreground italic">No ward</span>
                       )}
                     </TableCell>
 
-                    {/* From Bed */}
-                    <TableCell>
-                      {transfer.fromBedNumber ? (
-                        <span className="text-sm">{transfer.fromBedNumber}</span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground italic">No bed</span>
-                      )}
-                    </TableCell>
-
-                    {/* To Location */}
+                    {/* To Location with Bed below */}
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div className={cn(
@@ -271,13 +257,11 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                         )}>
                           <Building2 className="w-3.5 h-3.5" />
                         </div>
-                        <span className="text-sm font-medium">{transfer.toLocationName}</span>
+                        <div>
+                          <div className="text-sm font-medium">{transfer.toLocationName}</div>
+                          <div className="text-xs text-muted-foreground">{transfer.toBedNumber}</div>
+                        </div>
                       </div>
-                    </TableCell>
-
-                    {/* To Bed */}
-                    <TableCell>
-                      <span className="text-sm font-medium">{transfer.toBedNumber}</span>
                     </TableCell>
 
                     {/* Start */}
