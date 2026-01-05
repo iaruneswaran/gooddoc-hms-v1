@@ -120,7 +120,7 @@ export function BillingSummaryCards({
                   role="button"
                   aria-label="Generate interim bill from Total Payable"
                   tabIndex={0}
-                  className="flex items-center justify-between gap-4 pt-1 border-t border-white/15 w-full hover:bg-white/10 rounded -mx-1 px-1 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-0"
+                  className="flex items-center justify-between gap-4 pt-1 border-t border-white/15 w-full hover:bg-white/10 rounded transition-colors cursor-pointer focus:outline-none"
                   data-testid="open-generate-interim"
                 >
                   <span className="text-white text-[11px]">Total Payable</span>
