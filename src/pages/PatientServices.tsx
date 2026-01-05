@@ -726,7 +726,21 @@ const PatientServices = () => {
                                 )}
                               </div>
                               
-                              {inCart && cartItem ? (
+                              {/* Special case for Operation Theatre - show search instead of Add */}
+                              {service.code === 'ROOM-OT' ? (
+                                <div className="relative w-48">
+                                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                                  <Input
+                                    placeholder="Search by location or bed..."
+                                    className="h-8 pl-8 text-xs"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setViewMode('room-bed');
+                                    }}
+                                    readOnly
+                                  />
+                                </div>
+                              ) : inCart && cartItem ? (
                                 <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
                                   <Button
                                     size="icon"
