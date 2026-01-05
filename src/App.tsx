@@ -59,6 +59,7 @@ import TransferPatient from "./pages/TransferPatient";
 import AdvancePayments from "./pages/AdvancePayments";
 import DiagnosticsList from "./pages/DiagnosticsList";
 import PatientAdvanceCollection from "./pages/PatientAdvanceCollection";
+import GenerateInterimBill from "./pages/GenerateInterimBill";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -84,6 +85,7 @@ const App = () => (
             <Route path="/patient-insights/:patientId/discharge/payment" element={<DischargePayment />} />
             <Route path="/patients/:patientId/encounters/:encounterId/discharge" element={<DischargeFlow />} />
             <Route path="/patient-insights/:patientId/transfer" element={<TransferPatient />} />
+            <Route path="/patient-insights/:patientId/interim-bill" element={<GenerateInterimBill />} />
             <Route path="/doctors" element={<DoctorsList />} />
             <Route path="/doctors/new" element={<DoctorForm />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
