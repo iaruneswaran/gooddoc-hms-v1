@@ -36,7 +36,7 @@ export default function PendingBillStep({
   return (
     <div className="flex flex-col items-center py-8">
       {/* Status Messages - Above Cards */}
-      <div className="max-w-3xl w-full mb-5">
+      <div className="max-w-4xl w-full mb-5">
         {/* Billing Clearance Warning */}
         {requireBillingClearance && totalPayable > 0 && (
           <Card className="p-4 bg-amber-500/10 border-amber-500/30">
