@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { 
-  Search, ArrowRight, ShoppingCart, Clock, Building2, 
-  BedDouble, AlertTriangle, Info, Filter
+  Search, Clock, Building2, 
+  BedDouble, AlertTriangle, Info, Filter, Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -327,11 +327,12 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                       ) : canAdd ? (
                         <Button
                           size="sm"
-                          className="h-7 text-xs gap-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                          className="h-8 gap-1"
                           onClick={() => handleAddToCart(transfer)}
                           data-testid={`room-bed-add-to-cart-${transfer.id}`}
                         >
-                          + Add
+                          <Plus className="w-4 h-4" />
+                          Add
                         </Button>
                       ) : (
                         <TooltipProvider>
