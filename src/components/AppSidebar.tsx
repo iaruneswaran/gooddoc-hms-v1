@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -17,6 +16,7 @@ import iconPharmacy from "@/assets/icons/icon-pharmacy.svg";
 import iconReports from "@/assets/icons/icon-reports.svg";
 import iconSettings from "@/assets/icons/icon-settings.svg";
 import iconSignout from "@/assets/icons/icon-signout.svg";
+import iconChevronMenu from "@/assets/icons/icon-chevron-menu.svg";
 
 const menuItems = [
   { icon: iconOverview, label: "Overview", href: "/" },
@@ -55,7 +55,7 @@ export function AppSidebar() {
             className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-sidebar-accent/50 transition-colors"
             aria-label="Collapse menu"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <img src={iconChevronMenu} alt="" className="w-4 h-4 rotate-180" style={{ filter: "brightness(0) invert(1)" }} />
           </button>
         )}
       </div>
@@ -68,7 +68,7 @@ export function AppSidebar() {
             className="w-full flex items-center justify-center py-2 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
             aria-label="Expand menu"
           >
-            <ChevronRight className="w-4 h-4" />
+            <img src={iconChevronMenu} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
           </button>
         </div>
       )}
