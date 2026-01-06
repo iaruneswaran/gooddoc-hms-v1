@@ -190,7 +190,7 @@ const Overview = () => {
                   <Plus className="w-4 h-4 mr-1" />
                   New Appointment
                 </Button>
-                <Button onClick={() => navigate("/new-appointment", { state: { flowType: "ip-admission" } })} className="h-9 bg-[#ea580c] hover:bg-[#ea580c]/90 text-white border-none">
+                <Button onClick={() => navigate("/new-appointment", { state: { flowType: "ip-admission" } })} className="h-9 bg-[#16a34a] hover:bg-[#16a34a]/90 text-white border-none">
                   <BedDouble className="w-4 h-4 mr-1" />
                   IP Admission
                 </Button>
