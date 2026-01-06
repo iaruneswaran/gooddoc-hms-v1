@@ -220,60 +220,59 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
       </div>
       
       <div className="p-5 space-y-5">
-        {/* Diagnostics Type and Lab Tests */}
-        {!hideMode ? (
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">
-                Diagnostics Type
-              </label>
-              <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
-                  <TabsTrigger value="radiology">Radiology</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-
-            {mode === "laboratory" && (
-              <div>
-                <label className="text-sm font-medium text-foreground mb-3 block">
-                  Lab Tests
-                </label>
-                <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                    <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-            )}
-          </div>
-        ) : mode === "laboratory" ? (
+        {/* Diagnostics Type Toggle - Only show when not hideMode */}
+        {!hideMode && (
           <div>
             <label className="text-sm font-medium text-foreground mb-3 block">
-              Lab Tests
+              Diagnostics Type
             </label>
-            <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
+            <Tabs value={mode} onValueChange={(v) => handleModeChange(v as any)}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="health-packages">Health Packages</TabsTrigger>
-                <TabsTrigger value="individual-tests">Individual Tests</TabsTrigger>
+                <TabsTrigger value="laboratory">Laboratory</TabsTrigger>
+                <TabsTrigger value="radiology">Radiology</TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
-        ) : null}
+        )}
 
         {/* Lab Tests Content */}
         {mode === "laboratory" && (
           <div>
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search lab tests..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
+            {/* Search and Inline Tabs */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search lab tests..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              <div className="flex gap-1 p-1 bg-muted rounded-lg">
+                <button
+                  onClick={() => setLabTestType("health-packages")}
+                  className={cn(
+                    "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                    labTestType === "health-packages" 
+                      ? "bg-background text-foreground shadow-sm" 
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Health Packages
+                </button>
+                <button
+                  onClick={() => setLabTestType("individual-tests")}
+                  className={cn(
+                    "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                    labTestType === "individual-tests" 
+                      ? "bg-background text-foreground shadow-sm" 
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Individual Tests
+                </button>
+              </div>
             </div>
             
             <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
