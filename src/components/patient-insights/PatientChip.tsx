@@ -11,9 +11,10 @@ interface PatientChipProps {
   showBackButton?: boolean;
   backPath?: string;
   variant?: "default" | "light";
+  patientType?: "IP" | "OP";
 }
 
-export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, backPath, variant = "default" }: PatientChipProps) {
+export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, backPath, variant = "default", patientType }: PatientChipProps) {
   const navigate = useNavigate();
   const isMale = gender.toLowerCase().startsWith("m");
   const isFemale = gender.toLowerCase().startsWith("f");
@@ -64,9 +65,22 @@ export function PatientChip({ name, gdid, age, gender, onClick, showBackButton, 
         <p className={`text-base font-semibold ${isLight ? "text-white" : "text-foreground group-hover:text-primary"} transition-colors`}>
           {name}
         </p>
-        <p className={`text-xs ${isLight ? "text-white/70" : "text-muted-foreground"}`}>
-          {gdid} • {age} | {gender[0]}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className={`text-xs ${isLight ? "text-white/70" : "text-muted-foreground"}`}>
+            {gdid} • {age} | {gender[0]}
+          </p>
+          {patientType && (
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
+              isLight 
+                ? "bg-white/20 text-white" 
+                : patientType === "IP" 
+                  ? "bg-primary/10 text-primary" 
+                  : "bg-muted text-muted-foreground"
+            }`}>
+              {patientType} Patient
+            </span>
+          )}
+        </div>
       </div>
     </>
   );
