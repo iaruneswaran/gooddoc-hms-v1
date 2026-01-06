@@ -74,7 +74,7 @@ export function OverviewKpiCard({
             />
             <span
               className="text-lg font-semibold text-[#0F172A] tracking-[0]"
-              style={{ fontSize: "18px", fontWeight: 600 }}
+              style={{ fontSize: "16px", fontWeight: 600 }}
             >
               {title}
             </span>
@@ -83,7 +83,7 @@ export function OverviewKpiCard({
           {/* KPI Number */}
           <p
             className="text-[#0F172A] mb-2 tabular-nums"
-            style={{ fontSize: "30px", fontWeight: 600, lineHeight: 1.1, letterSpacing: "-0.02em" }}
+            style={{ fontSize: "26px", fontWeight: 600, lineHeight: 1.1, letterSpacing: "-0.02em" }}
           >
             {kpiValue}
           </p>
