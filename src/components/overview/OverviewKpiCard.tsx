@@ -1,0 +1,136 @@
+import { useNavigate } from "react-router-dom";
+import { LucideIcon } from "lucide-react";
+
+interface ChipData {
+  label: string;
+  value: string;
+  route?: string;
+}
+
+interface BulletData {
+  text: string;
+}
+
+interface OverviewKpiCardProps {
+  title: string;
+  kpiValue: string;
+  icon: LucideIcon;
+  route: string;
+  bullets: BulletData[];
+  chips: ChipData[];
+}
+
+export function OverviewKpiCard({
+  title,
+  kpiValue,
+  icon: Icon,
+  route,
+  bullets,
+  chips,
+}: OverviewKpiCardProps) {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(route);
+  };
+
+  const handleChipClick = (e: React.MouseEvent, chip: ChipData) => {
+    if (chip.route) {
+      e.stopPropagation();
+      navigate(chip.route);
+    }
+  };
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleCardClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") handleCardClick();
+      }}
+      aria-label={`Open ${title} (${kpiValue})`}
+      className="
+        group relative w-full rounded-[20px] bg-white border border-[#E6E8ED]
+        p-6 cursor-pointer
+        transition-all duration-200 ease-out
+        shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.04)]
+        hover:shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.06)]
+        hover:-translate-y-0.5
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)] focus-visible:ring-offset-2
+      "
+      style={{ fontFamily: 'Inter, "SF Pro", "Segoe UI", system-ui, sans-serif' }}
+    >
+      <div className="flex justify-between gap-6">
+        {/* Left Column - Title, KPI, Bullets */}
+        <div className="flex flex-col min-w-0">
+          {/* Header with icon and title */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#F7F8FA] border border-[#E6E8ED]">
+              <Icon className="w-4 h-4 text-[#0F172A]" strokeWidth={1.5} />
+            </div>
+            <span
+              className="text-lg font-semibold text-[#0F172A] tracking-[0]"
+              style={{ fontSize: "18px", fontWeight: 600 }}
+            >
+              {title}
+            </span>
+          </div>
+
+          {/* KPI Number */}
+          <p
+            className="text-[#2A6AF7] mb-4 tabular-nums"
+            style={{ fontSize: "44px", fontWeight: 600, lineHeight: 1.1 }}
+          >
+            {kpiValue}
+          </p>
+
+          {/* Bullets */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {bullets.map((bullet, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2A6AF7]" />
+                <span
+                  className="text-[#0F172A]"
+                  style={{ fontSize: "14px", fontWeight: 500 }}
+                >
+                  {bullet.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column - Chips */}
+        <div className="flex flex-col gap-3 shrink-0">
+          {chips.map((chip, idx) => (
+            <button
+              key={idx}
+              onClick={(e) => handleChipClick(e, chip)}
+              className="
+                flex flex-col items-start px-4 py-3 min-h-[44px] min-w-[120px]
+                bg-white rounded-[14px] border border-[#E6E8ED]
+                transition-colors duration-150
+                hover:border-[#D7DBE0]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)]
+              "
+            >
+              <span
+                className="text-[#6B7280]"
+                style={{ fontSize: "12px", fontWeight: 500 }}
+              >
+                {chip.label}
+              </span>
+              <span
+                className="text-[#0F172A]"
+                style={{ fontSize: "14px", fontWeight: 600 }}
+              >
+                {chip.value}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
