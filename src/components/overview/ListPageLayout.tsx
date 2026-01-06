@@ -189,12 +189,7 @@ export function ListPageLayout<T>({
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
                 <div>
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
-                    <span className="text-[24px] font-bold text-foreground tracking-tight">
-                      {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
-                    </span>
-                  </div>
+                  <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
                   <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
                 </div>
               </div>
