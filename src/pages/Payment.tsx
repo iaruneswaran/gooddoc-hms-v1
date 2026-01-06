@@ -80,7 +80,7 @@ const Payment = () => {
   };
   
   const advanceAmount = 1000;
-  const billAmount = 44000; // Grand total from invoice
+  const billAmount = 6000; // Grand total from invoice (Doctor Consultation + Laboratory only)
   const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
   const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
   const payableAmount = Math.max(0, billAmount - usedAdvance);
@@ -205,162 +205,63 @@ const Payment = () => {
                           <div className="col-span-2 text-right">Amount (₹)</div>
                         </div>
 
-                        {/* Admission Section */}
+                        {/* Doctor Consultation Section */}
                         <div className="py-2 border-b border-dashed border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">A. Room & Bed Charges</p>
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">A. Doctor Consultation</p>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
                             <div className="col-span-1 text-muted-foreground">1</div>
-                            <div className="col-span-5">Deluxe Room - 3 Days @ ₹2,500/day</div>
-                            <div className="col-span-2 text-center">3</div>
-                            <div className="col-span-2 text-right">2,500.00</div>
-                            <div className="col-span-2 text-right font-medium">7,500.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">2</div>
-                            <div className="col-span-5">Nursing Charges (per day)</div>
-                            <div className="col-span-2 text-center">3</div>
-                            <div className="col-span-2 text-right">400.00</div>
-                            <div className="col-span-2 text-right font-medium">1,200.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (A)</div>
-                            <div className="col-span-2 text-right font-bold">8,700.00</div>
-                          </div>
-                        </div>
-
-                        {/* Consultation Section */}
-                        <div className="py-2 border-b border-dashed border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">B. Doctor Consultation</p>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">3</div>
                             <div className="col-span-5">Cardiology Consultation - Dr. Arun Kumar</div>
                             <div className="col-span-2 text-center">1</div>
                             <div className="col-span-2 text-right">1,500.00</div>
                             <div className="col-span-2 text-right font-medium">1,500.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">4</div>
+                            <div className="col-span-1 text-muted-foreground">2</div>
                             <div className="col-span-5">Follow-up Visit</div>
                             <div className="col-span-2 text-center">2</div>
                             <div className="col-span-2 text-right">500.00</div>
                             <div className="col-span-2 text-right font-medium">1,000.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (B)</div>
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (A)</div>
                             <div className="col-span-2 text-right font-bold">2,500.00</div>
                           </div>
                         </div>
 
-                        {/* Procedures Section */}
-                        <div className="py-2 border-b border-dashed border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">C. Procedures & Services</p>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">5</div>
-                            <div className="col-span-5">Cardiac Catheterization</div>
-                            <div className="col-span-2 text-center">1</div>
-                            <div className="col-span-2 text-right">18,000.00</div>
-                            <div className="col-span-2 text-right font-medium">18,000.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">6</div>
-                            <div className="col-span-5">ECG - 12 Lead</div>
-                            <div className="col-span-2 text-center">2</div>
-                            <div className="col-span-2 text-right">350.00</div>
-                            <div className="col-span-2 text-right font-medium">700.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">7</div>
-                            <div className="col-span-5">Echocardiography</div>
-                            <div className="col-span-2 text-center">1</div>
-                            <div className="col-span-2 text-right">2,500.00</div>
-                            <div className="col-span-2 text-right font-medium">2,500.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (C)</div>
-                            <div className="col-span-2 text-right font-bold">21,200.00</div>
-                          </div>
-                        </div>
-
                         {/* Laboratory Section */}
-                        <div className="py-2 border-b border-dashed border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">D. Laboratory Investigations</p>
+                        <div className="py-2 border-b border-border">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">B. Laboratory Investigations</p>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">8</div>
+                            <div className="col-span-1 text-muted-foreground">3</div>
                             <div className="col-span-5">Complete Blood Count (CBC)</div>
                             <div className="col-span-2 text-center">2</div>
                             <div className="col-span-2 text-right">400.00</div>
                             <div className="col-span-2 text-right font-medium">800.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">9</div>
+                            <div className="col-span-1 text-muted-foreground">4</div>
                             <div className="col-span-5">Lipid Profile</div>
                             <div className="col-span-2 text-center">1</div>
                             <div className="col-span-2 text-right">650.00</div>
                             <div className="col-span-2 text-right font-medium">650.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">10</div>
+                            <div className="col-span-1 text-muted-foreground">5</div>
                             <div className="col-span-5">Liver Function Test (LFT)</div>
                             <div className="col-span-2 text-center">1</div>
                             <div className="col-span-2 text-right">850.00</div>
                             <div className="col-span-2 text-right font-medium">850.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">11</div>
+                            <div className="col-span-1 text-muted-foreground">6</div>
                             <div className="col-span-5">Cardiac Biomarkers (Troponin I)</div>
                             <div className="col-span-2 text-center">1</div>
                             <div className="col-span-2 text-right">1,200.00</div>
                             <div className="col-span-2 text-right font-medium">1,200.00</div>
                           </div>
                           <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (D)</div>
+                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (B)</div>
                             <div className="col-span-2 text-right font-bold">3,500.00</div>
-                          </div>
-                        </div>
-
-                        {/* Radiology Section */}
-                        <div className="py-2 border-b border-dashed border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">E. Radiology & Imaging</p>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">12</div>
-                            <div className="col-span-5">Chest X-Ray (PA View)</div>
-                            <div className="col-span-2 text-center">1</div>
-                            <div className="col-span-2 text-right">450.00</div>
-                            <div className="col-span-2 text-right font-medium">450.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">13</div>
-                            <div className="col-span-5">CT Coronary Angiography</div>
-                            <div className="col-span-2 text-center">1</div>
-                            <div className="col-span-2 text-right">6,500.00</div>
-                            <div className="col-span-2 text-right font-medium">6,500.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (E)</div>
-                            <div className="col-span-2 text-right font-bold">6,950.00</div>
-                          </div>
-                        </div>
-
-                        {/* Pharmacy Section */}
-                        <div className="py-2 border-b border-border">
-                          <p className="text-xs font-bold text-primary uppercase tracking-wide mb-2">F. Pharmacy & Consumables</p>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">14</div>
-                            <div className="col-span-5">Medicines & Drugs</div>
-                            <div className="col-span-2 text-center">—</div>
-                            <div className="col-span-2 text-right">—</div>
-                            <div className="col-span-2 text-right font-medium">850.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1.5 text-sm">
-                            <div className="col-span-1 text-muted-foreground">15</div>
-                            <div className="col-span-5">Surgical Consumables</div>
-                            <div className="col-span-2 text-center">—</div>
-                            <div className="col-span-2 text-right">—</div>
-                            <div className="col-span-2 text-right font-medium">300.00</div>
-                          </div>
-                          <div className="grid grid-cols-12 gap-2 py-1 text-sm bg-muted/30 rounded mt-1">
-                            <div className="col-span-10 text-right font-semibold text-muted-foreground">Sub-Total (F)</div>
-                            <div className="col-span-2 text-right font-bold">1,150.00</div>
                           </div>
                         </div>
                       </div>
@@ -377,7 +278,7 @@ const Payment = () => {
                       <div className="space-y-2">
                         <div className="grid grid-cols-12 gap-2 text-sm">
                           <div className="col-span-10 text-right text-muted-foreground">Gross Total</div>
-                          <div className="col-span-2 text-right font-semibold">44,000.00</div>
+                          <div className="col-span-2 text-right font-semibold">6,000.00</div>
                         </div>
                         <div className="grid grid-cols-12 gap-2 text-sm">
                           <div className="col-span-10 text-right text-muted-foreground">Discount (0%)</div>
@@ -385,7 +286,7 @@ const Payment = () => {
                         </div>
                         <div className="grid grid-cols-12 gap-2 text-sm border-t border-dashed border-border pt-2">
                           <div className="col-span-10 text-right text-muted-foreground">Taxable Amount</div>
-                          <div className="col-span-2 text-right font-semibold">44,000.00</div>
+                          <div className="col-span-2 text-right font-semibold">6,000.00</div>
                         </div>
                         <div className="grid grid-cols-12 gap-2 text-sm">
                           <div className="col-span-10 text-right text-muted-foreground">CGST @ 0%</div>
@@ -398,10 +299,10 @@ const Payment = () => {
                       </div>
                       <div className="grid grid-cols-12 gap-2 mt-4 pt-3 border-t-2 border-foreground/30">
                         <div className="col-span-10 text-right font-bold text-base">NET AMOUNT PAYABLE</div>
-                        <div className="col-span-2 text-right font-bold text-lg text-primary">₹44,000</div>
+                        <div className="col-span-2 text-right font-bold text-lg text-primary">₹6,000</div>
                       </div>
                       <div className="mt-2 text-xs text-muted-foreground text-right italic">
-                        Rupees Forty-Four Thousand Only
+                        Rupees Six Thousand Only
                       </div>
                     </div>
                   )}
