@@ -7,6 +7,8 @@ import BainesLogoFull from "@/assets/baines-logo-full.svg";
 interface DischargeBillInvoiceProps {
   bill: DischargeBill;
   isSample?: boolean;
+  /** Filter to show only specific department codes (e.g., ['LAB', 'CONS']) */
+  departmentFilter?: string[];
 }
 
 // Calculation helpers
@@ -49,26 +51,34 @@ const formatDateRange = (start?: string, end?: string, locale: string = "en-IN")
   return `${startFormatted} — ${endFormatted}`;
 };
 
-export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInvoiceProps) {
+export function DischargeBillInvoice({ bill, isSample = true, departmentFilter }: DischargeBillInvoiceProps) {
   const locale = bill.invoice.locale || "en-IN";
   const currency = bill.invoice.currency || "INR";
 
-  // Calculate all totals
+  // Filter departments if filter is provided
+  const filteredDepartments = departmentFilter && departmentFilter.length > 0
+    ? bill.departments.filter((dept) => departmentFilter.includes(dept.code || ''))
+    : bill.departments;
+
+  // Hide bed charges if filter is active (only show specific departments)
+  const showBedCharges = !departmentFilter || departmentFilter.length === 0;
+
+  // Calculate all totals (using filtered departments)
   const calculations = useMemo(() => {
     let totalBedCharges = 0;
     let totalGross = 0;
     let totalDiscounts = 0;
     let totalTax = 0;
 
-    // Bed charges
-    if (bill.bedCharges) {
+    // Bed charges (only if no filter active)
+    if (showBedCharges && bill.bedCharges) {
       totalBedCharges = bill.bedCharges.reduce((sum, c) => sum + calcBedCharge(c), 0);
     }
 
-    // Department line items
+    // Department line items (use filtered departments)
     const departmentSubtotals: Record<string, { gross: number; discount: number; tax: number; total: number }> = {};
     
-    bill.departments.forEach((dept) => {
+    filteredDepartments.forEach((dept) => {
       let deptGross = 0;
       let deptDiscount = 0;
       let deptTax = 0;
@@ -121,7 +131,7 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
       roundOff,
       amountDue,
     };
-  }, [bill]);
+  }, [bill, filteredDepartments, showBedCharges]);
 
   // Number to words (Indian system)
   const numberToWords = (num: number): string => {
@@ -138,12 +148,12 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
     return numberToWords(Math.floor(num / 10000000)) + " Crore" + (num % 10000000 ? " " + numberToWords(num % 10000000) : "");
   };
 
-  // Check which columns have data
-  const hasServiceCodes = bill.departments.some((d) => d.lineItems.some((i) => i.serviceCode));
-  const hasClinicians = bill.departments.some((d) => d.lineItems.some((i) => i.clinician));
-  const hasUom = bill.departments.some((d) => d.lineItems.some((i) => i.uom));
-  const hasDiscounts = bill.departments.some((d) => d.lineItems.some((i) => i.discountPercent || i.discountAmount));
-  const hasTax = bill.departments.some((d) => d.lineItems.some((i) => i.taxPercent || i.taxAmount));
+  // Check which columns have data (use filtered departments)
+  const hasServiceCodes = filteredDepartments.some((d) => d.lineItems.some((i) => i.serviceCode));
+  const hasClinicians = filteredDepartments.some((d) => d.lineItems.some((i) => i.clinician));
+  const hasUom = filteredDepartments.some((d) => d.lineItems.some((i) => i.uom));
+  const hasDiscounts = filteredDepartments.some((d) => d.lineItems.some((i) => i.discountPercent || i.discountAmount));
+  const hasTax = filteredDepartments.some((d) => d.lineItems.some((i) => i.taxPercent || i.taxAmount));
 
   return (
     <div className={cn("bg-white border border-border rounded-lg overflow-hidden relative print:border-0 print:rounded-none", isSample && "is-sample")}>
@@ -342,8 +352,8 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
         </div>
       )}
 
-      {/* Bed/Room Charges */}
-      {bill.bedCharges && bill.bedCharges.length > 0 && (
+      {/* Bed/Room Charges (hidden when filter is active) */}
+      {showBedCharges && bill.bedCharges && bill.bedCharges.length > 0 && (
         <div className="p-5 border-b border-border">
           <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3 section-header">Bed & Room Charges</h3>
           <table className="w-full text-sm">
@@ -379,8 +389,8 @@ export function DischargeBillInvoice({ bill, isSample = true }: DischargeBillInv
         </div>
       )}
 
-      {/* Department Sections */}
-      {bill.departments.map((dept, deptIdx) => (
+      {/* Department Sections (uses filtered departments) */}
+      {filteredDepartments.map((dept, deptIdx) => (
         <div key={deptIdx} className="p-5 border-b border-border">
           <div className="flex items-center justify-between mb-3 section-header">
             <h3 className="text-xs font-bold text-primary uppercase tracking-wider">
