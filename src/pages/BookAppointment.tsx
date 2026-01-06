@@ -653,18 +653,30 @@ const BookAppointment = () => {
                         className={cn(
                           "group h-10 px-5 flex items-center gap-2.5 rounded-full transition-all duration-200 whitespace-nowrap font-medium",
                           isSelected 
-                            ? "bg-[#2563EB] border-[#2563EB] text-white hover:bg-[#2563EB]/90 hover:border-[#2563EB]/90" 
-                            : "bg-background border-border hover:border-[#2563EB]/50"
+                            ? type.value === "ipd"
+                              ? "bg-[#ea580c] border-[#ea580c] text-white hover:bg-[#ea580c]/90 hover:border-[#ea580c]/90"
+                              : "bg-[#2563EB] border-[#2563EB] text-white hover:bg-[#2563EB]/90 hover:border-[#2563EB]/90" 
+                            : type.value === "ipd"
+                              ? "bg-background border-border hover:border-[#ea580c]/50"
+                              : "bg-background border-border hover:border-[#2563EB]/50"
                         )}
                         onClick={() => handleTypeClick(type.value)}
                       >
                         <Icon className={cn(
                           "w-4 h-4 transition-colors", 
-                          isSelected ? "text-white" : "text-[#2563EB] group-hover:text-[#2563EB]"
+                          isSelected 
+                            ? "text-white" 
+                            : type.value === "ipd" 
+                              ? "text-[#ea580c] group-hover:text-[#ea580c]"
+                              : "text-[#2563EB] group-hover:text-[#2563EB]"
                         )} />
                         <span className={cn(
                           "text-sm transition-colors",
-                          isSelected ? "text-white" : "text-foreground group-hover:text-[#2563EB]"
+                          isSelected 
+                            ? "text-white" 
+                            : type.value === "ipd"
+                              ? "text-foreground group-hover:text-[#ea580c]"
+                              : "text-foreground group-hover:text-[#2563EB]"
                         )}>{type.label}</span>
                       </Button>
                     );
