@@ -82,14 +82,14 @@ export function OverviewKpiCard({
 
           {/* KPI Number */}
           <p
-            className="text-[#0F172A] mb-2 tabular-nums"
+            className="text-[#0F172A] tabular-nums"
             style={{ fontSize: "22px", fontWeight: 600, lineHeight: 1.1, letterSpacing: "-1.5px" }}
           >
             {kpiValue}
           </p>
 
           {/* Bullets as horizontal pills */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 mt-3">
             {bullets.map((bullet, idx) => (
               <div 
                 key={idx} 

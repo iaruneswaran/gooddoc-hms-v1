@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, CalendarIcon, X } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { format, addDays, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isSameMonth } from "date-fns";
+import { format, addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isSameMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { PageKey, getPageSubtext } from "@/lib/pageSubtextConfig";
@@ -91,16 +91,6 @@ export function CalendarWidget({
     }
     onRangeChange?.(range);
   }, [controlledRange, onRangeChange]);
-
-  const goToPreviousDay = () => {
-    const newDate = subDays(selectedDate, 1);
-    handleDateSelect(newDate);
-  };
-
-  const goToNextDay = () => {
-    const newDate = addDays(selectedDate, 1);
-    handleDateSelect(newDate);
-  };
 
   const handlePresetClick = (preset: typeof presets[0]) => {
     const value = preset.getValue();
@@ -188,24 +178,6 @@ export function CalendarWidget({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      {/* Navigation arrows */}
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="h-8 w-8 shrink-0"
-        onClick={goToPreviousDay}
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-      
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="h-8 w-8 shrink-0"
-        onClick={goToNextDay}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
 
       {/* Date Header: "Tue | 06 Jan 2026" with subtext */}
       <div className="flex flex-col gap-0.5 min-w-[180px]">
