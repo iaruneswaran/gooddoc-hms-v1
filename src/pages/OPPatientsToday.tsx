@@ -6,14 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { opPatients as initialOpPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Phone } from "lucide-react";
 import { formatINR } from "@/utils/currency";
+import { PaymentDetailsPopup } from "@/components/billing/PaymentDetailsPopup";
 
 const statusStyles: Record<string, string> = {
   "Pending Check-in": "bg-amber-100 text-amber-700",
@@ -27,7 +21,7 @@ const OPPatientsToday = () => {
   const visitStatusFilter = searchParams.get("visitStatus");
   const [opPatientsData, setOpPatientsData] = useState<OPPatientRecord[]>(initialOpPatients);
   const [selectedPatient, setSelectedPatient] = useState<OPPatientRecord | null>(null);
-  const [showSummary, setShowSummary] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
 
   const allowedStatuses = ["Pending Check-in", "Checked-in", "Completed"];
   const filteredByStatus = opPatientsData.filter(p => allowedStatuses.includes(p.status));
@@ -67,9 +61,15 @@ const OPPatientsToday = () => {
     });
   };
 
-  const handleViewSummary = (row: OPPatientRecord) => {
+  const handlePaymentDetails = (row: OPPatientRecord) => {
     setSelectedPatient(row);
-    setShowSummary(true);
+    setPaymentOpen(true);
+  };
+
+  const getPatientBillAmount = (row: OPPatientRecord) => {
+    const billAmounts = [500, 800, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
+    const numericPart = parseInt(row.mrn.replace(/\D/g, '')) || 0;
+    return row.billAmount ?? billAmounts[numericPart % billAmounts.length];
   };
 
   const columns: Column<OPPatientRecord>[] = [
@@ -197,7 +197,7 @@ const OPPatientsToday = () => {
   const rowActions: RowAction<OPPatientRecord>[] = [
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
     { label: "Check In", onClick: (row) => handleCheckIn(row), hidden: (row) => row.status !== "Pending Check-in" },
-    { label: "View Summary", onClick: (row) => handleViewSummary(row) },
+    { label: "Payment Details", onClick: (row) => handlePaymentDetails(row) },
   ];
 
   return (
@@ -219,92 +219,18 @@ const OPPatientsToday = () => {
         hideExportPrint={true}
       />
 
-      <Dialog open={showSummary} onOpenChange={setShowSummary}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">Appointment Summary</DialogTitle>
-          </DialogHeader>
-          
-          {selectedPatient && (
-            <div className="space-y-4">
-              {/* Patient Info */}
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${selectedPatient.ageSex.includes('F') ? 'bg-pink-100' : 'bg-blue-100'}`}>
-                  <User className={`w-5 h-5 ${selectedPatient.ageSex.includes('F') ? 'text-pink-600' : 'text-blue-600'}`} />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">{selectedPatient.patient}</p>
-                  <p className="text-sm text-muted-foreground">GDID - {selectedPatient.mrn.slice(-3)} • {selectedPatient.ageSex}</p>
-                </div>
-                <Badge className={`ml-auto ${statusStyles[selectedPatient.status] || "bg-gray-100 text-gray-700"}`}>{selectedPatient.status}</Badge>
-              </div>
-
-              {/* Visit Details */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Visit ID</p>
-                      <p className="text-sm font-medium">{selectedPatient.visitId}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Appointment Time</p>
-                      <p className="text-sm font-medium">{selectedPatient.appointmentTime}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Check-in Time</p>
-                      <p className="text-sm font-medium">{selectedPatient.checkInTime || "Not checked in"}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <Phone className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Token/Queue No.</p>
-                      <p className="text-sm font-medium">{selectedPatient.tokenQueueNo || "Not assigned"}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Doctor</p>
-                      <p className="text-sm font-medium">{selectedPatient.provider}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Department</p>
-                      <p className="text-sm font-medium">{selectedPatient.department}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Clinical Information */}
-              <div className="p-3 border rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
-                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {selectedPatient && (
+        <PaymentDetailsPopup
+          open={paymentOpen}
+          onOpenChange={setPaymentOpen}
+          patientName={selectedPatient.patient}
+          gdid={selectedPatient.mrn.slice(-3)}
+          ageSex={selectedPatient.ageSex}
+          billAmount={getPatientBillAmount(selectedPatient)}
+          advancePaid={selectedPatient.advancePaid ?? selectedPatient.totalPaid ?? 0}
+          unbilledAmount={200}
+        />
+      )}
     </>
   );
 };

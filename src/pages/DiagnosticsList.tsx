@@ -4,15 +4,8 @@ import { PatientCell } from "@/components/overview/PatientCell";
 import { format } from "date-fns";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
-import { FlaskConical, Scan, User, MapPin, Clock, FileText, AlertTriangle } from "lucide-react";
 import { formatINR } from "@/utils/currency";
+import { PaymentDetailsPopup } from "@/components/billing/PaymentDetailsPopup";
 
 interface DiagnosticsOrder {
   id: string;
@@ -236,7 +229,7 @@ export default function DiagnosticsList() {
 
   const rowActions: RowAction<DiagnosticsOrder>[] = [
     { 
-      label: "View Summary", 
+      label: "Payment Details", 
       onClick: (row) => {
         setSelectedOrder(row);
         setSummaryOpen(true);
@@ -245,152 +238,11 @@ export default function DiagnosticsList() {
     { label: "Patient Insight", onClick: (row) => console.log("Patient insight", row.patientId) },
   ];
 
-  const renderLabSummary = (order: DiagnosticsOrder) => (
-    <div className="space-y-3">
-      <div className="grid grid-cols-4 gap-4">
-        <div>
-          <p className="text-xs text-muted-foreground">Order ID</p>
-          <p className="text-sm font-medium">{order.id}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Visit ID</p>
-          <p className="text-sm font-medium">{order.visitId}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Status</p>
-          <Badge className={statusStyles[order.status] || "bg-gray-100 text-gray-700"}>
-            {order.status}
-          </Badge>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Location</p>
-          <p className="text-sm font-medium">{order.location}{order.bed ? ` - ${order.bed}` : ""}</p>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-2">
-          <p className="text-xs text-muted-foreground">Patient</p>
-          <p className="text-sm font-medium">{order.patientName}</p>
-          <p className="text-xs text-muted-foreground">GDID - {order.gdid} • {order.ageSex}</p>
-        </div>
-        <div className="col-span-2">
-          <p className="text-xs text-muted-foreground">Ordered By</p>
-          <p className="text-sm font-medium">{order.orderedDoctor}</p>
-          <p className="text-xs text-muted-foreground">{order.department}</p>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="grid grid-cols-4 gap-4">
-        <div>
-          <p className="text-xs text-muted-foreground">Test Ordered</p>
-          <p className="text-sm font-medium">{order.tests}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Specimen Type</p>
-          <p className="text-sm font-medium">{order.specimenType || "—"}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Collected At</p>
-          <p className="text-sm font-medium">
-            {order.collectedAt ? format(order.collectedAt, "HH:mm, dd-MMM-yyyy") : "—"}
-          </p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Result ETA</p>
-          <p className="text-sm font-medium">{order.resultEta || "—"}</p>
-        </div>
-      </div>
-
-      {order.criticalResult && (
-        <div className="flex items-center gap-2 p-2 bg-destructive/10 rounded-md mt-2">
-          <AlertTriangle className="w-4 h-4 text-destructive" />
-          <span className="text-sm text-destructive font-medium">Critical Result Flagged</span>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderRadiologySummary = (order: DiagnosticsOrder) => (
-    <div className="space-y-3">
-      <div className="grid grid-cols-4 gap-4">
-        <div>
-          <p className="text-xs text-muted-foreground">Order ID</p>
-          <p className="text-sm font-medium">{order.id}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Visit ID</p>
-          <p className="text-sm font-medium">{order.visitId}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Status</p>
-          <Badge className={statusStyles[order.status] || "bg-gray-100 text-gray-700"}>
-            {order.status}
-          </Badge>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Location</p>
-          <p className="text-sm font-medium">{order.location}{order.bed ? ` - ${order.bed}` : ""}</p>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-2">
-          <p className="text-xs text-muted-foreground">Patient</p>
-          <p className="text-sm font-medium">{order.patientName}</p>
-          <p className="text-xs text-muted-foreground">GDID - {order.gdid} • {order.ageSex}</p>
-        </div>
-        <div className="col-span-2">
-          <p className="text-xs text-muted-foreground">Ordered By</p>
-          <p className="text-sm font-medium">{order.orderedDoctor}</p>
-          <p className="text-xs text-muted-foreground">{order.department}</p>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="grid grid-cols-4 gap-4">
-        <div>
-          <p className="text-xs text-muted-foreground">Imaging Study</p>
-          <p className="text-sm font-medium">{order.tests}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Modality</p>
-          <p className="text-sm font-medium">{order.modality || "—"}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Imaging Location</p>
-          <p className="text-sm font-medium">{order.imagingLocation || "—"}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Contrast</p>
-          <p className="text-sm font-medium">{order.contrast ? "Yes" : "No"}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-2">
-          <p className="text-xs text-muted-foreground">Scheduled At</p>
-          <p className="text-sm font-medium">
-            {order.scheduledAt ? format(order.scheduledAt, "HH:mm, dd-MMM-yyyy") : "—"}
-          </p>
-        </div>
-      </div>
-
-      {order.criticalResult && (
-        <div className="flex items-center gap-2 p-2 bg-destructive/10 rounded-md mt-2">
-          <AlertTriangle className="w-4 h-4 text-destructive" />
-          <span className="text-sm text-destructive font-medium">Critical Result Flagged</span>
-        </div>
-      )}
-    </div>
-  );
+  const getPatientBillAmount = (order: DiagnosticsOrder) => {
+    const billAmounts = [800, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
+    const numericPart = parseInt(order.gdid.replace(/\D/g, '')) || 0;
+    return order.billAmount ?? billAmounts[numericPart % billAmounts.length];
+  };
 
   return (
     <>
@@ -407,30 +259,18 @@ export default function DiagnosticsList() {
         getRowId={(row) => row.id}
       />
 
-      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {selectedOrder?.type === "Laboratory" ? (
-                <>
-                  <FlaskConical className="w-5 h-5" />
-                  Lab Order Summary
-                </>
-              ) : (
-                <>
-                  <Scan className="w-5 h-5" />
-                  Radiology Order Summary
-                </>
-              )}
-            </DialogTitle>
-          </DialogHeader>
-          {selectedOrder && (
-            selectedOrder.type === "Laboratory" 
-              ? renderLabSummary(selectedOrder)
-              : renderRadiologySummary(selectedOrder)
-          )}
-        </DialogContent>
-      </Dialog>
+      {selectedOrder && (
+        <PaymentDetailsPopup
+          open={summaryOpen}
+          onOpenChange={setSummaryOpen}
+          patientName={selectedOrder.patientName}
+          gdid={selectedOrder.gdid}
+          ageSex={selectedOrder.ageSex}
+          billAmount={getPatientBillAmount(selectedOrder)}
+          advancePaid={selectedOrder.advancePaid ?? selectedOrder.totalPaid ?? 0}
+          unbilledAmount={500}
+        />
+      )}
     </>
   );
 }

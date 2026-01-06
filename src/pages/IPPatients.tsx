@@ -3,23 +3,17 @@ import { useState } from "react";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { ipPatients, newAdmissions, erCasesToday, IPPatientRecord } from "@/data/overview.mock";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { User, UserRound, FileText, Stethoscope, Calendar, BedDouble, MapPin, IndianRupee } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { CalendarWidget } from "@/components/CalendarWidget";
+import { PaymentDetailsPopup } from "@/components/billing/PaymentDetailsPopup";
 
 const IPPatients = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const admittedToday = searchParams.get("admittedToday");
   const erCase = searchParams.get("erCase");
-  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<IPPatientRecord | null>(null);
 
   let data = ipPatients;
@@ -36,9 +30,9 @@ const IPPatients = () => {
     pageTitle = "Emergency Case";
   }
 
-  const handleViewSummary = (row: IPPatientRecord) => {
+  const handlePaymentDetails = (row: IPPatientRecord) => {
     setSelectedPatient(row);
-    setSummaryOpen(true);
+    setPaymentOpen(true);
   };
 
   const columns: Column<IPPatientRecord>[] = [
@@ -198,8 +192,14 @@ const IPPatients = () => {
 
   const rowActions: RowAction<IPPatientRecord>[] = [
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`) },
-    { label: "View Summary", onClick: (row) => handleViewSummary(row) },
+    { label: "Payment Details", onClick: (row) => handlePaymentDetails(row) },
   ];
+
+  const getPatientBillAmount = (row: IPPatientRecord) => {
+    const billAmounts = [15000, 25000, 35000, 45000, 55000, 65000, 75000, 85000, 95000, 105000];
+    const numericPart = parseInt(row.mrn.replace(/\D/g, '')) || 0;
+    return row.billAmount ?? billAmounts[numericPart % billAmounts.length];
+  };
 
   const getGender = (ageSex: string) => {
     return ageSex.includes("M") ? "male" : "female";
@@ -224,105 +224,18 @@ const IPPatients = () => {
         customHeaderContent={<CalendarWidget />}
       />
 
-      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Admission Summary</DialogTitle>
-          </DialogHeader>
-          {selectedPatient && (
-            <div className="space-y-5">
-              {/* Patient Header */}
-              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    getGender(selectedPatient.ageSex) === "male" ? "bg-blue-100" : "bg-pink-100"
-                  }`}>
-                    {getGender(selectedPatient.ageSex) === "male" ? (
-                      <User className="w-6 h-6 text-blue-600" />
-                    ) : (
-                      <UserRound className="w-6 h-6 text-pink-600" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-base">{selectedPatient.patient}</p>
-                    <p className="text-muted-foreground text-sm">
-                      GDID - {selectedPatient.mrn.slice(-3).padStart(3, '0')} • {selectedPatient.ageSex}
-                    </p>
-                  </div>
-                </div>
-                <Badge className="bg-green-100 text-green-700 border-green-200">
-                  Admitted
-                </Badge>
-              </div>
-
-              {/* Info Grids */}
-              <div className="space-y-4">
-                {/* Info Grid Row 1 */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="flex items-start gap-2">
-                    <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Visit ID</p>
-                      <p className="text-sm font-medium">{selectedPatient.visitId}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <IndianRupee className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Payment Details</p>
-                      <p className="text-sm font-medium">
-                        {(selectedPatient.totalPaid ?? 0) > 0 
-                          ? formatINR(selectedPatient.totalPaid ?? 0)
-                          : "No payment"}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Doctor</p>
-                      <p className="text-sm font-medium">{selectedPatient.attendingDoctor}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info Grid Row 2 */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="flex items-start gap-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Admit Date/Time</p>
-                      <p className="text-sm font-medium">{selectedPatient.admitDateTime}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <BedDouble className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Ward/Bed</p>
-                      <p className="text-sm font-medium">{selectedPatient.ward} - Bed {selectedPatient.bed}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Bed Class</p>
-                      <p className="text-sm font-medium">{selectedPatient.bedClass}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Clinical Information Box */}
-              <div className="bg-muted/50 rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
-                <p className="text-sm text-muted-foreground italic">
-                  Patient admitted for {selectedPatient.primaryDiagnosis}. Currently in {selectedPatient.ward} under the care of {selectedPatient.attendingDoctor}.
-                </p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {selectedPatient && (
+        <PaymentDetailsPopup
+          open={paymentOpen}
+          onOpenChange={setPaymentOpen}
+          patientName={selectedPatient.patient}
+          gdid={selectedPatient.mrn.slice(-3).padStart(3, '0')}
+          ageSex={selectedPatient.ageSex}
+          billAmount={getPatientBillAmount(selectedPatient)}
+          advancePaid={selectedPatient.advancePaid ?? selectedPatient.totalPaid ?? 0}
+          unbilledAmount={2000}
+        />
+      )}
     </>
   );
 };
