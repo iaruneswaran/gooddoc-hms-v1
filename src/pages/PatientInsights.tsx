@@ -390,6 +390,7 @@ const PatientInsightsContent = () => {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             patient={patient}
+            isIPPatient={isIPPatient}
           />
         </main>
       </PageContent>
