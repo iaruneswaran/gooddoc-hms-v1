@@ -260,6 +260,7 @@ const PatientInsightsContent = () => {
                     showBackButton
                     backPath={currentBreadcrumb.path}
                     variant="light"
+                    patientType={isIPPatient ? "IP" : "OP"}
                   />
                   <div className="border-l border-white/20 pl-5">
                     <p className="text-xs text-white">+91 98765 43210</p>
