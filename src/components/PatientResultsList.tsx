@@ -1,4 +1,4 @@
-import { User, UserRound, ChevronRight } from "lucide-react";
+import { User, UserRound, ChevronRight, BedDouble } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Patient {
@@ -12,9 +12,11 @@ interface Patient {
 interface PatientResultsListProps {
   patients: Patient[];
   onBookAppointment: (patientId: string) => void;
+  flowType?: string;
 }
 
-export function PatientResultsList({ patients, onBookAppointment }: PatientResultsListProps) {
+export function PatientResultsList({ patients, onBookAppointment, flowType }: PatientResultsListProps) {
+  const isIPAdmission = flowType === "ip-admission";
   if (patients.length === 0) {
     return null;
   }
@@ -54,9 +56,10 @@ export function PatientResultsList({ patients, onBookAppointment }: PatientResul
             <Button
               variant="ghost"
               onClick={() => onBookAppointment(patient.id)}
-              className="text-primary hover:text-primary hover:bg-primary/10 gap-2"
+              className={`gap-2 ${isIPAdmission ? 'text-[#16a34a] hover:text-[#16a34a] hover:bg-[#16a34a]/10' : 'text-primary hover:text-primary hover:bg-primary/10'}`}
             >
-              Book Appointment
+              {isIPAdmission ? <BedDouble className="w-4 h-4" /> : null}
+              {isIPAdmission ? "IP Admission" : "Book Appointment"}
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
