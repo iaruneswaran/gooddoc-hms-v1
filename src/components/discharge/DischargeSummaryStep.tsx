@@ -106,15 +106,11 @@ export default function DischargeSummaryStep({
         {/* Header Card */}
         <div className="bg-primary text-primary-foreground p-6 print:bg-[#1D3557] print:text-white">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <Heart className="h-6 w-6" />
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">Baines Memorial Hospital</h1>
-                <p className="text-sm opacity-85">Excellence in Healthcare</p>
-              </div>
-            </div>
+            <img 
+              src="/src/assets/baines-logo-english.svg" 
+              alt="Baines Memorial Hospital" 
+              className="h-12"
+            />
             <div className="flex items-center gap-4">
               <Badge className="bg-green-500 text-white border-0">
                 FINAL
