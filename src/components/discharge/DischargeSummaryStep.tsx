@@ -130,14 +130,9 @@ export default function DischargeSummaryStep({
                 <User className="h-4 w-4" />
                 Patient Information
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center text-2xl font-semibold text-muted-foreground">
-                  {patient.name.split(' ').map(n => n[0]).join('')}
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-xl font-bold text-foreground">{patient.name}</h2>
-                  <p className="text-sm text-muted-foreground font-mono">{patient.mrn}</p>
-                </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">{patient.name}</h2>
+                <p className="text-sm text-muted-foreground font-mono">{patient.mrn}</p>
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
