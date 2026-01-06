@@ -1,4 +1,4 @@
-import { Settings, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -15,6 +15,8 @@ import iconPatients from "@/assets/icons/icon-patients.svg";
 import iconPricing from "@/assets/icons/icon-pricing.svg";
 import iconPharmacy from "@/assets/icons/icon-pharmacy.svg";
 import iconReports from "@/assets/icons/icon-reports.svg";
+import iconSettings from "@/assets/icons/icon-settings.svg";
+import iconSignout from "@/assets/icons/icon-signout.svg";
 
 const menuItems = [
   { icon: iconOverview, label: "Overview", href: "/" },
@@ -129,7 +131,7 @@ export function AppSidebar() {
                   to="/settings"
                   className="flex items-center justify-center px-2 py-2.5 rounded-lg text-sm mb-1 hover:bg-sidebar-accent/50 transition-colors"
                 >
-                  <Settings className="w-4 h-4" />
+                  <img src={iconSettings} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={10}>
@@ -139,7 +141,7 @@ export function AppSidebar() {
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <button className="w-full flex items-center justify-center px-2 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
-                  <LogOut className="w-4 h-4" />
+                  <img src={iconSignout} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={10}>
@@ -153,11 +155,11 @@ export function AppSidebar() {
               to="/settings"
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm mb-1 hover:bg-sidebar-accent/50 transition-colors"
             >
-              <Settings className="w-4 h-4" />
+              <img src={iconSettings} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
               <span>Settings</span>
             </Link>
             <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
-              <LogOut className="w-4 h-4" />
+              <img src={iconSignout} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
               <span>Sign Out</span>
             </button>
           </>
