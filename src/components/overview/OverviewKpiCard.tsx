@@ -81,7 +81,7 @@ export function OverviewKpiCard({
 
           {/* KPI Number */}
           <p
-            className="text-[#2A6AF7] mb-4 tabular-nums"
+            className="text-[#2A6AF7] mb-2 tabular-nums"
             style={{ fontSize: "30px", fontWeight: 600, lineHeight: 1.1 }}
           >
             {kpiValue}
