@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 
 interface ChipData {
   label: string;
@@ -112,25 +113,30 @@ export function OverviewKpiCard({
               key={idx}
               onClick={(e) => handleChipClick(e, chip)}
               className="
-                flex flex-col items-start px-3 py-2 min-h-[38px] w-[140px]
+                group/chip flex items-center justify-between px-3 py-2 min-h-[38px] w-[140px]
                 bg-white rounded-[16px] border border-[#E6E8ED]
                 transition-colors duration-150
                 hover:border-[#D7DBE0]
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)]
               "
             >
-              <span
-                className="text-[#6B7280]"
-                style={{ fontSize: "12px", fontWeight: 500 }}
-              >
-                {chip.label}
-              </span>
-              <span
-                className="text-[#0F172A]"
-                style={{ fontSize: "14px", fontWeight: 600 }}
-              >
-                {chip.value}
-              </span>
+              <div className="flex flex-col items-start">
+                <span
+                  className="text-[#6B7280]"
+                  style={{ fontSize: "12px", fontWeight: 500 }}
+                >
+                  {chip.label}
+                </span>
+                <span
+                  className="text-[#0F172A]"
+                  style={{ fontSize: "14px", fontWeight: 600 }}
+                >
+                  {chip.value}
+                </span>
+              </div>
+              <ChevronRight 
+                className="w-4 h-4 text-[#9CA3AF] opacity-0 group-hover/chip:opacity-100 transition-opacity duration-150" 
+              />
             </button>
           ))}
         </div>
