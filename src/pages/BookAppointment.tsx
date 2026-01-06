@@ -189,6 +189,26 @@ const BookAppointment = () => {
     }
   }, [isSingleAppointmentMode, appointmentType, isFromScheduledRequests]);
 
+  // Initialize with IP Admission type if in IP Admission flow
+  useEffect(() => {
+    if (isIPAdmissionFlow && !selectedTypes.includes("ipd")) {
+      setSelectedTypes(["ipd"]);
+      setIpdAdmissionData({
+        department: "General Medicine",
+        attendingDoctor: "Dr. A. Joseph (Ophthalmology)",
+        ward: "General Ward - 01A",
+        bed: "Bed - 35A",
+        reasonForAdmission: "",
+        date: new Date(2025, 7, 5),
+        time: "07:30",
+        emergencyContactName: "",
+        relationship: "",
+        contactNumber: "",
+        address: "",
+      });
+    }
+  }, [isIPAdmissionFlow]);
+
   // Sync line items with selected services
   useEffect(() => {
     const items: LineItem[] = [];
@@ -621,8 +641,8 @@ const BookAppointment = () => {
           <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
               {/* Main Content */}
               <div className="w-full lg:w-[951px] lg:max-w-[951px] space-y-6">
-                {/* Appointment Type Buttons - Hide in single-appointment mode and scheduled requests flow */}
-                {!isSingleAppointmentMode && !isFromScheduledRequests && (
+                {/* Appointment Type Buttons - Hide in single-appointment mode, scheduled requests flow, and IP admission flow */}
+                {!isSingleAppointmentMode && !isFromScheduledRequests && !isIPAdmissionFlow && (
                   <div className="flex gap-3">{appointmentTypes.map((type) => {
                     const Icon = type.icon;
                     const isSelected = selectedTypes.includes(type.value);
