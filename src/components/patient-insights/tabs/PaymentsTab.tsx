@@ -126,14 +126,14 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                     <p className="text-xs text-muted-foreground">{txn.time}</p>
                   </td>
                   <td className="p-3">
-                    {txn.invoiceNos.length === 1 ? (
+                    {txn.invoiceNos.length === 0 ? (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    ) : txn.invoiceNos.length === 1 ? (
                       <p className="text-sm font-mono text-foreground">{txn.invoiceNos[0]}</p>
                     ) : (
-                      <div className="space-y-0.5">
-                        {txn.invoiceNos.map((inv, idx) => (
-                          <p key={idx} className="text-sm font-mono text-foreground">{inv}</p>
-                        ))}
-                      </div>
+                      <p className="text-sm font-mono text-foreground">
+                        {txn.invoiceNos[0]} <span className="text-xs text-muted-foreground">+{txn.invoiceNos.length - 1}</span>
+                      </p>
                     )}
                   </td>
                   <td className="p-3 text-center">
