@@ -26,7 +26,7 @@ import { toast } from "@/hooks/use-toast";
 import { CartItem, Totals } from "@/types/booking/ipAdmission";
 import { calcLineTotal } from "@/utils/billing/totals";
 
-const appointmentTypes = [
+const allAppointmentTypes = [
   { icon: Calendar, label: "OP Consultation", value: "consultation" },
   { icon: Bed, label: "IP Admission", value: "ipd" },
   { icon: FlaskConical, label: "Diagnostics", value: "laboratory" },
@@ -55,6 +55,16 @@ const BookAppointment = () => {
   const patientFromState = location.state?.patient;
   const fromPage = location.state?.fromPage; // e.g., "op-patients"
   const visitId = location.state?.visitId; // Visit ID for new appointments
+  const flowType = location.state?.flowType; // "ip-admission" for IP Admission flow
+  const isIPAdmissionFlow = flowType === "ip-admission";
+  
+  // Filter appointment types based on flow
+  const appointmentTypes = allAppointmentTypes.filter((type) => {
+    if (isIPAdmissionFlow) {
+      return type.value === "ipd"; // Only show IP Admission
+    }
+    return type.value !== "ipd"; // Show OP Consultation and Diagnostics only
+  });
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [consultationData, setConsultationData] = useState<DynamicConsultationData | null>(null);
   const [additionalConsultations, setAdditionalConsultations] = useState<{ id: string; data: DynamicConsultationData }[]>([]);
