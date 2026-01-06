@@ -20,6 +20,7 @@ import {
 import { StepStatus } from "@/types/discharge-flow";
 import { SAMPLE_DISCHARGE_SUMMARY, SAMPLE_PATIENT_SNAPSHOT, SAMPLE_DOCTOR_CLEARANCE } from "@/data/discharge-flow.mock";
 import { format } from "date-fns";
+import bainesLogo from "@/assets/baines-logo-english.svg";
 
 interface DischargeSummaryStepProps {
   stepStatus: StepStatus;
@@ -107,7 +108,7 @@ export default function DischargeSummaryStep({
         <div className="bg-white text-foreground p-6 border-b print:bg-white">
           <div className="flex items-center justify-between">
             <img 
-              src="/src/assets/baines-logo-english.svg" 
+              src={bainesLogo} 
               alt="Baines Memorial Hospital" 
               className="h-10"
             />
