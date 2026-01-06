@@ -109,7 +109,7 @@ export default function DischargeSummaryStep({
             <img 
               src="/src/assets/baines-logo-english.svg" 
               alt="Baines Memorial Hospital" 
-              className="h-12"
+              className="h-10"
             />
             <div className="flex items-center gap-4">
               <Badge className="bg-white text-primary border-0 font-semibold">
