@@ -255,7 +255,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                   className={cn(
                     "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
                     labTestType === "health-packages" 
-                      ? "bg-white text-foreground shadow-sm" 
+                      ? "bg-background text-foreground shadow-sm" 
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -266,7 +266,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                   className={cn(
                     "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
                     labTestType === "individual-tests" 
-                      ? "bg-white text-foreground shadow-sm" 
+                      ? "bg-background text-foreground shadow-sm" 
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
