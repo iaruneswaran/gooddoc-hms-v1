@@ -104,7 +104,7 @@ export default function DischargeSummaryStep({
         className="bg-white border border-border rounded-lg overflow-hidden print:border-0 print:rounded-none"
       >
         {/* Header Card */}
-        <div className="bg-primary text-primary-foreground p-6 print:bg-[#1D3557] print:text-white">
+        <div className="bg-white text-foreground p-6 border-b print:bg-white">
           <div className="flex items-center justify-between">
             <img 
               src="/src/assets/baines-logo-english.svg" 
@@ -112,8 +112,8 @@ export default function DischargeSummaryStep({
               className="h-12"
             />
             <div className="flex items-center gap-4">
-              <Badge className="bg-green-500 text-white border-0">
-                FINAL
+              <Badge className="bg-white text-primary border-0 font-semibold">
+                Discharge FINAL
               </Badge>
               <span className="text-lg font-semibold">Discharge Summary</span>
             </div>
