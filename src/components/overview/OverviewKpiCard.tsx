@@ -83,7 +83,7 @@ export function OverviewKpiCard({
           {/* KPI Number */}
           <p
             className="text-[#0F172A] mb-2 tabular-nums"
-            style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
+            style={{ fontSize: "22px", fontWeight: 600, lineHeight: 1.1, letterSpacing: "-1.5px" }}
           >
             {kpiValue}
           </p>
@@ -129,7 +129,7 @@ export function OverviewKpiCard({
                 </span>
                 <span
                   className="text-[#0F172A]"
-                  style={{ fontSize: "14px", fontWeight: 600 }}
+                  style={{ fontSize: "22px", fontWeight: 600, letterSpacing: "-1.5px" }}
                 >
                   {chip.value}
                 </span>
