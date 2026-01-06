@@ -112,7 +112,7 @@ export function OverviewKpiCard({
               key={idx}
               onClick={(e) => handleChipClick(e, chip)}
               className="
-                flex flex-col items-start px-3 py-2 min-h-[38px] min-w-[110px]
+                flex flex-col items-start px-3 py-2 min-h-[38px] w-[130px]
                 bg-white rounded-[16px] border border-[#E6E8ED]
                 transition-colors duration-150
                 hover:border-[#D7DBE0]
