@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { format, addDays, isSameDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, isSameMonth } from "date-fns";
+import { format, addDays, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isSameMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { PageKey, getPageSubtext } from "@/lib/pageSubtextConfig";
@@ -75,14 +75,6 @@ export function CalendarWidget({
   const selectedDate = controlledDate ?? internalDate;
   const dateRange = controlledRange ?? internalRange;
 
-  // Generate quick day pills: yesterday, today, tomorrow
-  const today = new Date();
-  const quickDays = [
-    { date: subDays(today, 1), label: "Yesterday" },
-    { date: today, label: "Today" },
-    { date: addDays(today, 1), label: "Tomorrow" },
-  ];
-
   const handleDateSelect = useCallback((date: Date | undefined) => {
     if (date) {
       if (controlledDate === undefined) {
@@ -99,14 +91,6 @@ export function CalendarWidget({
     }
     onRangeChange?.(range);
   }, [controlledRange, onRangeChange]);
-
-  const handleQuickDayClick = (date: Date) => {
-    if (isRangeMode) {
-      setIsRangeMode(false);
-      setInternalRange({ from: undefined, to: undefined });
-    }
-    handleDateSelect(date);
-  };
 
   const goToPreviousDay = () => {
     const newDate = subDays(selectedDate, 1);
@@ -213,34 +197,6 @@ export function CalendarWidget({
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
-      
-      {/* Quick day pills: Yesterday, Today, Tomorrow */}
-      <div className="flex gap-1 items-center bg-muted/50 rounded-lg px-1.5 py-1">
-        {quickDays.map((day) => (
-          <button
-            key={day.label}
-            onClick={() => handleQuickDayClick(day.date)}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-md transition-all min-w-[40px]",
-              isSameDay(day.date, selectedDate) && !isRangeMode
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "hover:bg-background text-foreground"
-            )}
-          >
-            <span className={cn(
-              "text-[10px] font-medium leading-none",
-              isSameDay(day.date, selectedDate) && !isRangeMode 
-                ? "text-primary-foreground/80" 
-                : "text-muted-foreground"
-            )}>
-              {format(day.date, "EEE")}
-            </span>
-            <span className="text-sm font-semibold leading-none">
-              {format(day.date, "dd")}
-            </span>
-          </button>
-        ))}
-      </div>
       
       <Button 
         variant="ghost" 
