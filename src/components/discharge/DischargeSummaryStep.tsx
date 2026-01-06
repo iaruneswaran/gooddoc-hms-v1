@@ -189,6 +189,28 @@ export default function DischargeSummaryStep({
             </div>
           </div>
 
+          {/* At a Glance Pills */}
+          <div className="flex flex-wrap gap-2 mt-6 pt-4 border-t border-border/50">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              <Stethoscope className="h-3 w-3" />
+              {summary.diagnoses.primary.text}
+            </span>
+            {summary.procedures.length > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-green-50 text-green-700 border border-green-200">
+                <Activity className="h-3 w-3" />
+                {summary.procedures[0].name}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+              Disposition: Home
+            </span>
+            {clearance.followUps.followUpDate && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                <CalendarCheck className="h-3 w-3" />
+                Follow-up: {formatShortDate(clearance.followUps.followUpDate)}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Diagnoses Section */}
@@ -225,6 +247,30 @@ export default function DischargeSummaryStep({
           </div>
         </section>
 
+        {/* Known Allergies */}
+        {summary.allergies.length > 0 && (
+          <section className="border-b border-border">
+            <div className="bg-muted/50 px-6 py-3 border-b border-border/50">
+              <h3 className="flex items-center gap-2 font-semibold text-destructive">
+                <AlertTriangle className="h-5 w-5" />
+                Known Allergies
+              </h3>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-wrap gap-2">
+                {summary.allergies.map((allergy, idx) => (
+                  <span 
+                    key={idx} 
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full bg-red-50 text-red-700 border border-red-200"
+                  >
+                    <AlertTriangle className="h-3 w-3" />
+                    {allergy.substance} ({allergy.reaction})
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Hospital Course */}
         <section className="border-b border-border">
@@ -355,6 +401,23 @@ export default function DischargeSummaryStep({
               )}
             </div>
 
+            {/* Red Flags */}
+            {summary.instructions.returnPrecautions.length > 0 && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center gap-2 font-semibold text-red-700 mb-3">
+                  <AlertTriangle className="h-4 w-4" />
+                  SEEK IMMEDIATE MEDICAL ATTENTION IF YOU EXPERIENCE:
+                </div>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {summary.instructions.returnPrecautions.map((precaution, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-red-700">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                      {precaution}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </section>
 

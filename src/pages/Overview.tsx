@@ -54,10 +54,6 @@ const iconColors = {
   inventory: "text-gray-700",
 };
 
-interface PrimaryCardProps extends MetricCardProps {
-  bottomLabel?: string;
-}
-
 const PrimaryMetricCard = ({ 
   title, 
   count,
@@ -66,8 +62,7 @@ const PrimaryMetricCard = ({
   route, 
   iconColorClass,
   subMetrics = [],
-  bottomLabel,
-}: PrimaryCardProps) => {
+}: MetricCardProps) => {
   const navigate = useNavigate();
   
   const handleCardClick = () => {
@@ -78,8 +73,10 @@ const PrimaryMetricCard = ({
     e.stopPropagation();
     e.preventDefault();
     if (metric.route) {
+      // Direct navigation to route
       navigate(metric.route);
     } else if (metric.filterParam) {
+      // Build proper URL with filter
       const baseRoute = route.split('?')[0];
       const existingParams = route.includes('?') ? route.split('?')[1] : '';
       const newUrl = existingParams 
@@ -102,54 +99,69 @@ const PrimaryMetricCard = ({
         hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
         active:scale-[0.98]
         focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none
-        h-[140px] flex flex-col p-4
+        h-[180px] flex flex-col
       "
     >
-      {/* Header Row - Title left, Sub-metrics right */}
-      <div className="flex items-start justify-between">
-        {/* Left side - Icon + Title */}
-        <div className="flex items-center gap-2.5">
-          <Icon className={`w-5 h-5 ${iconColorClass}`} />
-          <p className="text-sm font-medium text-foreground">
-            {title}
-          </p>
+      {/* Top section - Main metric */}
+      <div className="flex-1 p-3 pb-2 flex flex-col">
+        <div className="flex items-start justify-between mb-1">
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-border shadow-sm">
+              <Icon className={`w-4 h-4 ${iconColorClass}`} />
+            </div>
+            <p className="text-sm font-semibold text-foreground">
+              {title}
+            </p>
+          </div>
+          <ChevronRight 
+            aria-hidden="true"
+            className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" 
+          />
         </div>
-        
-        {/* Right side - Sub-metrics stacked */}
-        <div className="flex flex-col items-end gap-1">
-          {subMetrics.map((metric, idx) => (
-            <span
-              key={idx}
-              role="button"
-              tabIndex={0}
-              onClick={(e) => handleSubMetricClick(e, metric)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric); }}
-              className={`
-                text-xs text-right px-2 py-0.5 rounded
-                ${metric.filterParam || metric.route ? 'hover:bg-primary/10 cursor-pointer' : 'cursor-default'}
-                transition-colors
-              `}
-              title={metric.filterParam ? `Filter: ${metric.label}` : metric.route ? `Open ${metric.label}` : undefined}
-            >
-              <span className="text-muted-foreground">{metric.label}</span>
-              <span className="font-semibold text-foreground ml-1">{metric.value}</span>
-            </span>
-          ))}
-        </div>
+        <p className="text-2xl font-bold text-foreground tracking-tight mt-auto">
+          {displayCount ? (
+            displayCount.includes('|') ? (
+              <>
+                {displayCount.split('|')[0].trim()}
+                <span className="text-[14px] font-medium text-muted-foreground">{displayCount.split('|').slice(1).join('|')}</span>
+              </>
+            ) : (
+              <>
+                {displayCount.split('/')[0]}
+                {displayCount.includes('/') && (
+                  <span className="text-sm font-medium text-muted-foreground">/{displayCount.split('/').slice(1).join('/')}</span>
+                )}
+              </>
+            )
+          ) : count.toLocaleString()}
+        </p>
       </div>
       
-      {/* Main Value - Large blue number */}
-      <p className="text-[32px] font-bold text-primary tracking-tight mt-auto">
-        {displayCount ? displayCount.split('/')[0].split('|')[0].trim() : count.toLocaleString()}
-      </p>
+      {/* Divider */}
+      <div className="h-px bg-border" />
       
-      {/* Bottom Label */}
-      {bottomLabel && (
-        <p className="text-xs text-muted-foreground mt-1">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-foreground/40 mr-1.5" />
-          {bottomLabel}
-        </p>
-      )}
+      {/* Bottom section - Sub-metrics grid */}
+      <div className={`px-2 py-3 grid ${subMetrics.length === 1 ? 'grid-cols-1' : subMetrics.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} text-xs`}>
+        {subMetrics.map((metric, idx) => (
+          <span
+            key={idx}
+            role="button"
+            tabIndex={0}
+            onClick={(e) => handleSubMetricClick(e, metric)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSubMetricClick(e as any, metric); }}
+            className={`
+              flex flex-col py-1.5 px-2 text-center rounded-md
+              ${idx > 0 ? 'border-l border-border' : ''}
+              ${metric.filterParam || metric.route ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : 'cursor-default'}
+              transition-colors
+            `}
+            title={metric.filterParam ? `Filter: ${metric.label}` : metric.route ? `Open ${metric.label}` : undefined}
+          >
+            <span className="text-muted-foreground text-[11px] leading-tight">{metric.label}</span>
+            <span className="font-semibold text-foreground mt-0.5">{metric.value}</span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 };
@@ -214,7 +226,7 @@ const StandardMetricCard = ({
 const Overview = () => {
   const navigate = useNavigate();
   
-  const primaryCards: PrimaryCardProps[] = [
+  const primaryCards: MetricCardProps[] = [
     {
       title: "OP Patients",
       count: 847,
@@ -222,33 +234,32 @@ const Overview = () => {
       route: "/patients/op?date=today",
       iconColorClass: iconColors.patients,
       isPrimary: true,
-      bottomLabel: "Patients",
       subMetrics: [
         { label: "Visit Completed", value: 282, filterParam: "visitStatus=Completed" },
-        { label: "Check in Pending", value: 56, filterParam: "visitStatus=In_Queue" },
+        { label: "Check In Pending", value: 56, filterParam: "visitStatus=In_Queue" },
       ],
     },
     {
       title: "IP Patients",
       count: 234,
+      displayCount: "234| - ICU 34 - Ward 200",
       icon: Hospital,
       route: "/patients/ip?status=admitted",
       iconColorClass: iconColors.patients,
       isPrimary: true,
-      bottomLabel: "ICU 34  •  Ward 200",
       subMetrics: [
-        { label: "New Admission", value: 19, filterParam: "admittedToday=true" },
+        { label: "New Admissions", value: 19, filterParam: "admittedToday=true" },
         { label: "Discharged", value: 45, route: "/patients/discharged?date=today" },
       ],
     },
     {
       title: "Diagnostics",
       count: 56,
+      displayCount: "56/Orders",
       icon: FlaskConical,
       route: "/diagnostics/orders",
       iconColorClass: iconColors.labs,
       isPrimary: true,
-      bottomLabel: "Orders",
       subMetrics: [
         { label: "Laboratory", value: 26, route: "/diagnostics/orders?type=Laboratory" },
         { label: "Radiology", value: 30, route: "/diagnostics/orders?type=Radiology" },
@@ -257,15 +268,14 @@ const Overview = () => {
     {
       title: "Revenue",
       count: 24,
-      displayCount: "24.4L",
+      displayCount: "24.4L/24 Bills Paid",
       icon: IndianRupee,
       route: "/reports/revenue?type=paid",
       iconColorClass: "text-green-600",
       isPrimary: true,
-      bottomLabel: "24 Bills Paid",
       subMetrics: [
         { label: "Outstanding Bills", value: "₹8.4L/12", route: "/reports/revenue?type=outstanding" },
-        { label: "Advance Collected", value: "₹5.7/12", route: "/reports/advance-payments" },
+        { label: "Advance Collected", value: "₹5.7L/12", route: "/reports/advance-payments" },
       ],
     },
   ];
