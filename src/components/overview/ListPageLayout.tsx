@@ -191,9 +191,9 @@ export function ListPageLayout<T>({
                 <div>
                   <div className="flex items-center gap-3">
                     <h1 className="text-h3 font-semibold text-foreground">{title}</h1>
-                    <Badge variant="secondary" className="text-lg px-3 py-1">
+                    <span className="text-[24px] font-bold text-foreground tracking-tight">
                       {activeUrlFilter ? activeUrlFilter.count.toLocaleString() : count.toLocaleString()}
-                    </Badge>
+                    </span>
                   </div>
                   <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
                 </div>
