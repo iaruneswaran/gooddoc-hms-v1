@@ -20,8 +20,8 @@ import iconChevronMenu from "@/assets/icons/icon-chevron-menu.svg";
 
 const menuItems = [
   { icon: iconOverview, label: "Overview", href: "/" },
-  { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
-  { icon: iconPharmacy, label: "Diagnostics", href: "/diagnostics" },
+  // Temporarily hidden: { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
+  // Temporarily hidden: { icon: iconPharmacy, label: "Diagnostics", href: "/diagnostics" },
   { icon: iconDiagnostics, label: "Doctors", href: "/doctors" },
   { icon: iconPatients, label: "Patients", href: "/patients" },
   { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog" },
