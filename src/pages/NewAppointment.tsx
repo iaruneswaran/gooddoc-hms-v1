@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -30,12 +30,16 @@ const mockPatients = [
 
 const NewAppointment = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [searchResults, setSearchResults] = useState<typeof mockPatients>([]);
   
   const fromSearch = searchParams.get("from") === "search";
   const patientSearchQuery = searchParams.get("q") || "";
   const patientIdFromSearch = searchParams.get("patientId");
+
+  // When coming from Overview "IP Admission" button, we persist the flow type
+  const flowType = location.state?.flowType; // "ip-admission"
 
   const handleBack = () => {
     if (fromSearch && patientSearchQuery) {
@@ -54,7 +58,7 @@ const NewAppointment = () => {
     const patient = mockPatients.find(p => p.id === patientId);
     // Generate visit ID for new appointments (not from patient insights)
     const visitId = generateVisitId();
-    navigate("/book-appointment", { state: { patient, visitId, fromSearch, patientSearchQuery } });
+    navigate("/book-appointment", { state: { patient, visitId, fromSearch, patientSearchQuery, flowType } });
   };
 
   const handleCreateNewRegistration = () => {
