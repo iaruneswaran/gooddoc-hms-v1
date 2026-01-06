@@ -253,9 +253,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                 <button
                   onClick={() => setLabTestType("health-packages")}
                   className={cn(
-                    "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                    "px-3 py-1.5 text-sm font-normal rounded-md transition-colors",
                     labTestType === "health-packages" 
-                      ? "bg-background text-foreground shadow-sm" 
+                      ? "bg-white text-foreground shadow-sm" 
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -264,9 +264,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                 <button
                   onClick={() => setLabTestType("individual-tests")}
                   className={cn(
-                    "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                    "px-3 py-1.5 text-sm font-normal rounded-md transition-colors",
                     labTestType === "individual-tests" 
-                      ? "bg-background text-foreground shadow-sm" 
+                      ? "bg-white text-foreground shadow-sm" 
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
