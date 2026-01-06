@@ -95,6 +95,7 @@ const NewAppointment = () => {
             <PatientResultsList
               patients={searchResults}
               onBookAppointment={handleBookAppointment}
+              flowType={flowType}
             />
 
             {searchResults.length > 0 && (
