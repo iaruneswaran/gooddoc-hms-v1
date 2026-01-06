@@ -43,13 +43,13 @@ interface MetricCardProps {
 }
 
 const iconColors = {
-  patients: "text-blue-600",
-  doctors: "text-indigo-600",
-  labs: "text-teal-600",
-  surgery: "text-purple-600",
-  emergency: "text-red-600",
-  pharmacy: "text-amber-600",
-  inventory: "text-gray-700",
+  patients: "text-foreground",
+  doctors: "text-foreground",
+  labs: "text-foreground",
+  surgery: "text-foreground",
+  emergency: "text-foreground",
+  pharmacy: "text-foreground",
+  inventory: "text-foreground",
 };
 
 const StandardMetricCard = ({ 
