@@ -207,7 +207,7 @@ export default function OutpatientAppointments() {
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Today's Appointments</h1>
-              <CalendarWidget />
+              <CalendarWidget pageKey="appointment-request" />
             </div>
           </Card>
 

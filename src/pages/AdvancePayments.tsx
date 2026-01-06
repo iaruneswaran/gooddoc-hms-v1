@@ -311,7 +311,7 @@ const AdvancePayments = () => {
                   </Badge>
                 </div>
               </div>
-              <CalendarWidget />
+              <CalendarWidget pageKey="advances" />
             </div>
           </Card>
 

@@ -442,7 +442,7 @@ const AppointmentRequests = () => {
                   </div>
                 </div>
               </div>
-              <CalendarWidget />
+              <CalendarWidget pageKey="scheduled-today" />
             </div>
           </Card>
 

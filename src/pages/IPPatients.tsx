@@ -221,7 +221,7 @@ const IPPatients = () => {
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
         hideExportPrint
-        customHeaderContent={<CalendarWidget />}
+        customHeaderContent={<CalendarWidget pageKey="ip-patients" />}
       />
 
       {selectedPatient && (
