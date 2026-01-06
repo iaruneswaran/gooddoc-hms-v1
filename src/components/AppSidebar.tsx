@@ -1,4 +1,4 @@
-import { LayoutDashboard, Stethoscope, Activity, Users, BriefcaseMedical, Settings, LogOut, Tag, Pill, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { Settings, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
@@ -6,15 +6,25 @@ import logoIcon from "@/assets/logo-icon.svg";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+// Import custom icons
+import iconOverview from "@/assets/icons/icon-overview.svg";
+import iconOutpatient from "@/assets/icons/icon-outpatient.svg";
+import iconDiagnostics from "@/assets/icons/icon-diagnostics.svg";
+import iconDoctors from "@/assets/icons/icon-doctors.svg";
+import iconPatients from "@/assets/icons/icon-patients.svg";
+import iconPricing from "@/assets/icons/icon-pricing.svg";
+import iconPharmacy from "@/assets/icons/icon-pharmacy.svg";
+import iconReports from "@/assets/icons/icon-reports.svg";
+
 const menuItems = [
-  { icon: LayoutDashboard, label: "Overview", href: "/" },
-  { icon: Stethoscope, label: "Outpatient", href: "/appointments/outpatient" },
-  { icon: Activity, label: "Diagnostics", href: "/diagnostics" },
-  { icon: BriefcaseMedical, label: "Doctors", href: "/doctors" },
-  { icon: Users, label: "Patients", href: "/patients" },
-  { icon: Tag, label: "Pricing Catalog", href: "/pricing-catalog" },
-  { icon: Pill, label: "Pharmacy", href: "/pharmacy" },
-  { icon: BarChart3, label: "Reports", href: "/reports" },
+  { icon: iconOverview, label: "Overview", href: "/" },
+  { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
+  { icon: iconDiagnostics, label: "Diagnostics", href: "/diagnostics" },
+  { icon: iconDoctors, label: "Doctors", href: "/doctors" },
+  { icon: iconPatients, label: "Patients", href: "/patients" },
+  { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog" },
+  { icon: iconPharmacy, label: "Pharmacy", href: "/pharmacy" },
+  { icon: iconReports, label: "Reports", href: "/reports" },
 ];
 
 export function AppSidebar() {
@@ -64,7 +74,6 @@ export function AppSidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-2">
         {menuItems.map((item) => {
-          const Icon = item.icon;
           const isActive = location.pathname === item.href || 
                           (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics"));
           
@@ -79,7 +88,12 @@ export function AppSidebar() {
                 isCollapsed && "justify-center px-2"
               )}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <img 
+                src={item.icon} 
+                alt="" 
+                className="w-5 h-5 shrink-0" 
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
               {!isCollapsed && (
                 <span className="flex-1 truncate">{item.label}</span>
               )}
