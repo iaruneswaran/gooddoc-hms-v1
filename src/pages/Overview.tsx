@@ -185,7 +185,7 @@ const Overview = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
               <div className="flex items-center gap-4">
-                <CalendarWidget />
+                <CalendarWidget pageKey="overview" showSubtext={true} />
                 <Button onClick={() => navigate("/new-appointment")} className="h-9">
                   <Plus className="w-4 h-4 mr-1" />
                   New Appointment

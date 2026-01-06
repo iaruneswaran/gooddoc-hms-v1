@@ -215,7 +215,7 @@ const OPPatientsToday = () => {
         searchPlaceholder="Search by MRN, name, Visit ID..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`)}
-        customHeaderContent={<CalendarWidget />}
+        customHeaderContent={<CalendarWidget pageKey="op-patients" />}
         hideExportPrint={true}
       />
 

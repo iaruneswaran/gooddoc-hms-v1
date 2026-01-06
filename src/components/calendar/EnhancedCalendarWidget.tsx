@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, CalendarIcon, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarIcon, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -9,18 +9,22 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { format, addDays, isSameDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, isSameMonth } from "date-fns";
+import { format, addDays, isSameDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { PageKey, getPageSubtext } from "@/lib/pageSubtextConfig";
+import { DateHeader } from "./DateHeader";
+import { PageKey } from "@/lib/pageSubtextConfig";
 
-interface CalendarWidgetProps {
+interface EnhancedCalendarWidgetProps {
   pageKey?: PageKey;
   selectedDate?: Date;
   selectedRange?: DateRange;
   onDateChange?: (date: Date) => void;
   onRangeChange?: (range: DateRange | undefined) => void;
   showSubtext?: boolean;
+  showQuickDays?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
   className?: string;
 }
 
@@ -31,38 +35,18 @@ const presets = [
   { label: "This Month", getValue: () => ({ from: startOfMonth(new Date()), to: endOfMonth(new Date()) }), isRange: true },
 ];
 
-/**
- * Format date as "EEE | dd MMM yyyy" (e.g., "Tue | 06 Jan 2026")
- */
-function formatDateHeader(date: Date): string {
-  return `${format(date, "EEE")} | ${format(date, "dd MMM yyyy")}`;
-}
-
-/**
- * Format range with smart month compression
- */
-function formatRangeHeader(from: Date, to: Date): string {
-  const startDay = format(from, "EEE dd");
-  const endDay = format(to, "EEE dd");
-  const endMonthYear = format(to, "MMM yyyy");
-  
-  if (isSameMonth(from, to)) {
-    return `${startDay} — ${endDay} ${endMonthYear}`;
-  }
-  
-  const startMonth = format(from, "MMM");
-  return `${startDay} ${startMonth} — ${endDay} ${endMonthYear}`;
-}
-
-export function CalendarWidget({
+export function EnhancedCalendarWidget({
   pageKey = "default",
   selectedDate: controlledDate,
   selectedRange: controlledRange,
   onDateChange,
   onRangeChange,
   showSubtext = true,
+  showQuickDays = true,
+  minDate,
+  maxDate = addMonths(new Date(), 12),
   className,
-}: CalendarWidgetProps) {
+}: EnhancedCalendarWidgetProps) {
   const [internalDate, setInternalDate] = useState<Date>(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [isRangeMode, setIsRangeMode] = useState(false);
@@ -78,9 +62,9 @@ export function CalendarWidget({
   // Generate quick day pills: yesterday, today, tomorrow
   const today = new Date();
   const quickDays = [
-    { date: subDays(today, 1), label: "Yesterday" },
-    { date: today, label: "Today" },
-    { date: addDays(today, 1), label: "Tomorrow" },
+    { date: subDays(today, 1), label: "Yesterday", short: "Y" },
+    { date: today, label: "Today", short: "T" },
+    { date: addDays(today, 1), label: "Tomorrow", short: "Tm" },
   ];
 
   const handleDateSelect = useCallback((date: Date | undefined) => {
@@ -98,6 +82,9 @@ export function CalendarWidget({
       setInternalRange(range);
     }
     onRangeChange?.(range);
+    if (range?.from && range?.to) {
+      // Optionally close on complete range
+    }
   }, [controlledRange, onRangeChange]);
 
   const handleQuickDayClick = (date: Date) => {
@@ -141,28 +128,6 @@ export function CalendarWidget({
     setIsOpen(false);
   };
 
-  // Get the formatted display text
-  const getDisplayText = () => {
-    if (isRangeMode && dateRange?.from && dateRange?.to) {
-      return formatRangeHeader(dateRange.from, dateRange.to);
-    }
-    if (isRangeMode && dateRange?.from) {
-      return `${format(dateRange.from, "EEE dd MMM")} — Select end`;
-    }
-    return formatDateHeader(selectedDate);
-  };
-
-  // Get dynamic subtext based on page and date
-  const subtext = showSubtext
-    ? getPageSubtext({
-        pageKey,
-        selectedDate: isRangeMode ? null : selectedDate,
-        selectedRange: isRangeMode
-          ? { from: dateRange?.from ?? null, to: dateRange?.to ?? null }
-          : undefined,
-      })
-    : null;
-
   const calendarClassNames = {
     months: "flex flex-col sm:flex-row gap-4",
     month: "space-y-3",
@@ -204,64 +169,64 @@ export function CalendarWidget({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      {/* Navigation arrows */}
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="h-8 w-8 shrink-0"
-        onClick={goToPreviousDay}
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-      
-      {/* Quick day pills: Yesterday, Today, Tomorrow */}
-      <div className="flex gap-1 items-center bg-muted/50 rounded-lg px-1.5 py-1">
-        {quickDays.map((day) => (
-          <button
-            key={day.label}
-            onClick={() => handleQuickDayClick(day.date)}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-md transition-all min-w-[40px]",
-              isSameDay(day.date, selectedDate) && !isRangeMode
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "hover:bg-background text-foreground"
-            )}
+      {/* Navigation arrows + Quick day pills */}
+      {showQuickDays && (
+        <>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 shrink-0"
+            onClick={goToPreviousDay}
           >
-            <span className={cn(
-              "text-[10px] font-medium leading-none",
-              isSameDay(day.date, selectedDate) && !isRangeMode 
-                ? "text-primary-foreground/80" 
-                : "text-muted-foreground"
-            )}>
-              {format(day.date, "EEE")}
-            </span>
-            <span className="text-sm font-semibold leading-none">
-              {format(day.date, "dd")}
-            </span>
-          </button>
-        ))}
-      </div>
-      
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="h-8 w-8 shrink-0"
-        onClick={goToNextDay}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex gap-1 items-center bg-muted/50 rounded-lg px-1.5 py-1">
+            {quickDays.map((day) => (
+              <button
+                key={day.label}
+                onClick={() => handleQuickDayClick(day.date)}
+                className={cn(
+                  "flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-md transition-all min-w-[40px]",
+                  isSameDay(day.date, selectedDate) && !isRangeMode
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "hover:bg-background text-foreground"
+                )}
+              >
+                <span className={cn(
+                  "text-[10px] font-medium leading-none",
+                  isSameDay(day.date, selectedDate) && !isRangeMode 
+                    ? "text-primary-foreground/80" 
+                    : "text-muted-foreground"
+                )}>
+                  {format(day.date, "EEE")}
+                </span>
+                <span className="text-sm font-semibold leading-none">
+                  {format(day.date, "dd")}
+                </span>
+              </button>
+            ))}
+          </div>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 shrink-0"
+            onClick={goToNextDay}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </>
+      )}
 
-      {/* Date Header: "Tue | 06 Jan 2026" with subtext */}
-      <div className="flex flex-col gap-0.5 min-w-[180px]">
-        <h2 className="text-[15px] font-semibold text-foreground tracking-tight">
-          {getDisplayText()}
-        </h2>
-        {subtext && (
-          <p className="text-xs text-muted-foreground leading-tight">
-            {subtext}
-          </p>
-        )}
-      </div>
+      {/* Date Header with formatted date and subtext */}
+      <DateHeader
+        pageKey={pageKey}
+        selectedDate={isRangeMode ? null : selectedDate}
+        selectedRange={isRangeMode ? { from: dateRange?.from ?? null, to: dateRange?.to ?? null } : undefined}
+        showSubtext={showSubtext}
+        className="min-w-[180px]"
+      />
 
       {/* Calendar Dropdown */}
       <Popover open={isOpen} onOpenChange={setIsOpen}>

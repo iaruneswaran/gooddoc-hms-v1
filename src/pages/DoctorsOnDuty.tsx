@@ -268,7 +268,7 @@ const DoctorsOnDuty = () => {
       emptyMessage="No doctors currently on duty."
       searchPlaceholder="Search by name, specialty, department..."
       getRowId={(row) => row.doctorName + row.contactPager}
-      customHeaderContent={<CalendarWidget />}
+      customHeaderContent={<CalendarWidget pageKey="doctors" />}
       hideExportPrint
     />
   );
