@@ -42,19 +42,22 @@ interface VisitDetailsTabsProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   patient: Patient;
+  isIPPatient?: boolean;
 }
 
-const tabs = [
-  { value: "appointments", label: "Appointments", icon: Calendar },
-  { value: "collect-payment", label: "Bills & Payments", icon: CreditCard },
-  { value: "payments", label: "Transaction History", icon: History },
-  { value: "documents", label: "Documents", icon: FolderOpen },
-  { value: "insurance", label: "Insurance", icon: Shield },
-  { value: "timeline", label: "Bed Transfers", icon: ArrowLeftRight },
-  { value: "patient-details", label: "Patient Details", icon: User },
+const allTabs = [
+  { value: "appointments", label: "Appointments", icon: Calendar, ipOnly: false },
+  { value: "collect-payment", label: "Bills & Payments", icon: CreditCard, ipOnly: false },
+  { value: "payments", label: "Transaction History", icon: History, ipOnly: false },
+  { value: "documents", label: "Documents", icon: FolderOpen, ipOnly: false },
+  { value: "insurance", label: "Insurance", icon: Shield, ipOnly: false },
+  { value: "timeline", label: "Bed Transfers", icon: ArrowLeftRight, ipOnly: true },
+  { value: "patient-details", label: "Patient Details", icon: User, ipOnly: false },
 ];
 
-export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patient }: VisitDetailsTabsProps) {
+export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patient, isIPPatient = false }: VisitDetailsTabsProps) {
+  const tabs = allTabs.filter(tab => !tab.ipOnly || isIPPatient);
+  
   return (
     <div className="h-full flex flex-col">
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex flex-col h-full">
