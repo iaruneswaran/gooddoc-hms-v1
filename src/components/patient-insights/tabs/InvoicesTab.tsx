@@ -9,6 +9,12 @@ interface InvoicesTabProps {
   selectedVisit: Visit | null;
 }
 
+// Format invoice number to shorter format (INV - XXXX)
+const formatInvoiceNo = (invoiceNo: string): string => {
+  const match = invoiceNo.match(/(\d{4})$/);
+  return match ? `INV - ${match[1]}` : invoiceNo;
+};
+
 const getStatusBadge = (status: Invoice["status"]) => {
   switch (status) {
     case "Paid":
@@ -76,7 +82,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
               {visitInvoices.map((invoice) => (
                 <tr key={invoice.id} className="hover:bg-muted/20 transition-colors">
                   <td className="p-3">
-                    <p className="text-sm font-medium text-primary">{invoice.invoiceNo}</p>
+                    <p className="text-sm font-medium text-primary">{formatInvoiceNo(invoice.invoiceNo)}</p>
                     <p className="text-[10px] font-mono text-muted-foreground">{invoice.serviceCode}</p>
                   </td>
                   <td className="p-3">
