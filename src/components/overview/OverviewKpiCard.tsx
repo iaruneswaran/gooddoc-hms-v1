@@ -50,8 +50,8 @@ export function OverviewKpiCard({
       }}
       aria-label={`Open ${title} (${kpiValue})`}
       className="
-        group relative w-full rounded-[20px] bg-white border border-[#E6E8ED]
-        p-6 cursor-pointer
+        group relative w-full rounded-[24px] bg-white border border-[#E6E8ED]
+        p-[18px] cursor-pointer
         transition-all duration-200 ease-out
         shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.04)]
         hover:shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.06)]
