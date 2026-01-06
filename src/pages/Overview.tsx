@@ -190,6 +190,10 @@ const Overview = () => {
                   <Plus className="w-4 h-4 mr-1" />
                   New Appointment
                 </Button>
+                <Button onClick={() => navigate("/new-appointment", { state: { flowType: "ip-admission" } })} variant="outline" className="h-9">
+                  <BedDouble className="w-4 h-4 mr-1" />
+                  IP Admission
+                </Button>
               </div>
             </div>
           </Card>
