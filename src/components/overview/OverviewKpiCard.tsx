@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { LucideIcon } from "lucide-react";
 
 interface ChipData {
   label: string;
@@ -14,7 +13,7 @@ interface BulletData {
 interface OverviewKpiCardProps {
   title: string;
   kpiValue: string;
-  icon: LucideIcon;
+  iconSrc: string;
   route: string;
   bullets: BulletData[];
   chips: ChipData[];
@@ -23,7 +22,7 @@ interface OverviewKpiCardProps {
 export function OverviewKpiCard({
   title,
   kpiValue,
-  icon: Icon,
+  iconSrc,
   route,
   bullets,
   chips,
@@ -66,9 +65,12 @@ export function OverviewKpiCard({
         <div className="flex flex-col min-w-0">
           {/* Header with icon and title */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#F7F8FA] border border-[#E6E8ED]">
-              <Icon className="w-4 h-4 text-[#0F172A]" strokeWidth={1.5} />
-            </div>
+            <img 
+              src={iconSrc} 
+              alt="" 
+              className="w-9 h-9 shrink-0"
+              style={{ width: '36px', height: '36px' }}
+            />
             <span
               className="text-lg font-semibold text-[#0F172A] tracking-[0]"
               style={{ fontSize: "18px", fontWeight: 600 }}
@@ -80,19 +82,22 @@ export function OverviewKpiCard({
           {/* KPI Number */}
           <p
             className="text-[#2A6AF7] mb-4 tabular-nums"
-            style={{ fontSize: "44px", fontWeight: 600, lineHeight: 1.1 }}
+            style={{ fontSize: "30px", fontWeight: 600, lineHeight: 1.1 }}
           >
             {kpiValue}
           </p>
 
-          {/* Bullets */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {/* Bullets as horizontal pills */}
+          <div className="flex flex-wrap items-center gap-2">
             {bullets.map((bullet, idx) => (
-              <div key={idx} className="flex items-center gap-2">
+              <div 
+                key={idx} 
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7F8FA] border border-[#E6E8ED]"
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#2A6AF7]" />
                 <span
                   className="text-[#0F172A]"
-                  style={{ fontSize: "14px", fontWeight: 500 }}
+                  style={{ fontSize: "13px", fontWeight: 500 }}
                 >
                   {bullet.text}
                 </span>
@@ -109,7 +114,7 @@ export function OverviewKpiCard({
               onClick={(e) => handleChipClick(e, chip)}
               className="
                 flex flex-col items-start px-4 py-3 min-h-[44px] min-w-[120px]
-                bg-white rounded-[14px] border border-[#E6E8ED]
+                bg-white rounded-[20px] border border-[#E6E8ED]
                 transition-colors duration-150
                 hover:border-[#D7DBE0]
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)]

@@ -7,20 +7,21 @@ import { Button } from "@/components/ui/button";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { OverviewKpiCard } from "@/components/overview/OverviewKpiCard";
 import { 
-  Users,
   BedDouble, 
   Stethoscope, 
   CalendarClock, 
-  FlaskConical,
   Scissors,
   AlertTriangle,
   Pill,
   PackageOpen,
   ChevronRight,
   Plus,
-  IndianRupee,
-  Hospital
 } from "lucide-react";
+
+import iconOpPatients from "@/assets/icon-op-patients.svg";
+import iconIpPatients from "@/assets/icon-ip-patients.svg";
+import iconDiagnostics from "@/assets/icon-diagnostics.svg";
+import iconRevenue from "@/assets/icon-revenue.svg";
 
 interface SubMetric {
   label: string;
@@ -198,7 +199,7 @@ const Overview = () => {
             <OverviewKpiCard
               title="OP Patients"
               kpiValue="847"
-              icon={Users}
+              iconSrc={iconOpPatients}
               route="/patients/op?date=today"
               bullets={[{ text: "Patients" }]}
               chips={[
@@ -209,7 +210,7 @@ const Overview = () => {
             <OverviewKpiCard
               title="IP Patients"
               kpiValue="234"
-              icon={Hospital}
+              iconSrc={iconIpPatients}
               route="/patients/ip?status=admitted"
               bullets={[{ text: "ICU 34" }, { text: "Ward 200" }]}
               chips={[
@@ -220,7 +221,7 @@ const Overview = () => {
             <OverviewKpiCard
               title="Diagnostics"
               kpiValue="56"
-              icon={FlaskConical}
+              iconSrc={iconDiagnostics}
               route="/diagnostics/orders"
               bullets={[{ text: "Orders" }]}
               chips={[
@@ -231,7 +232,7 @@ const Overview = () => {
             <OverviewKpiCard
               title="Revenue"
               kpiValue="24.4L"
-              icon={IndianRupee}
+              iconSrc={iconRevenue}
               route="/reports/revenue?type=paid"
               bullets={[{ text: "24 Bills Paid" }]}
               chips={[
