@@ -730,7 +730,7 @@ const BookAppointment = () => {
               </div>
 
               {/* Appointment Summary Sidebar - with top margin to align with content below buttons */}
-              <div className={cn(!isSingleAppointmentMode && !isFromScheduledRequests && "mt-[60px]")}>
+              <div className={cn(!isSingleAppointmentMode && !isFromScheduledRequests && !isIPAdmissionFlow && "mt-[60px]")}>
                 <AppointmentSummaryCard
                 patientName={requestData?.patient || "Siva Karthikeyan"}
                 patientId={`GDID - ${requestData?.gdid || "009"}`}
