@@ -122,11 +122,7 @@ const IPPatients = () => {
               <span className="font-medium">{formatINR(billAmount * 100)}</span>
             </div>
             <div className="flex justify-between gap-4">
-              <span className="text-muted-foreground">Advance:</span>
-              <span className="text-green-600">{formatINR(advance * 100)}</span>
-            </div>
-            <div className="flex justify-between gap-4">
-              <span className="text-muted-foreground">Balance:</span>
+              <span className="text-muted-foreground">Due:</span>
               <span className={balance > 0 ? "text-amber-600 font-medium" : "text-green-600"}>{formatINR(balance * 100)}</span>
             </div>
           </div>
