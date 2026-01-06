@@ -238,7 +238,20 @@ export const mockInvoices: Invoice[] = [
 
 // Transactions - payment records linked to invoices
 export const mockTransactions: Transaction[] = [
-  // V25-004 transactions
+  // V25-004 transactions - current active visit
+  {
+    id: "txn-040",
+    receiptNo: "RCP-8540",
+    invoiceNos: [],
+    date: "20-Dec-2025",
+    time: "09:15",
+    visitId: "V25-004",
+    type: "Advance",
+    methods: ["Cash"],
+    payer: "Harish Kalyan",
+    amount: 500000,
+    status: "Success",
+  },
   {
     id: "txn-041",
     receiptNo: "RCP-8545",
@@ -252,7 +265,33 @@ export const mockTransactions: Transaction[] = [
     amount: 40000,
     status: "Success",
   },
+  {
+    id: "txn-042",
+    receiptNo: "RCP-8548",
+    invoiceNos: ["INV-2025-001236", "INV-2025-001238"],
+    date: "20-Dec-2025",
+    time: "11:30",
+    visitId: "V25-004",
+    type: "Bill",
+    methods: ["UPI", "Cash"],
+    payer: "Harish Kalyan",
+    amount: 315000,
+    status: "Success",
+  },
   // V25-002 transactions - example with multiple invoices and split payment
+  {
+    id: "txn-020",
+    receiptNo: "RCP-8710",
+    invoiceNos: [],
+    date: "15-Dec-2025",
+    time: "08:45",
+    visitId: "V25-002",
+    type: "Advance",
+    methods: ["UPI"],
+    payer: "Harish Kalyan",
+    amount: 200000,
+    status: "Success",
+  },
   {
     id: "txn-021",
     receiptNo: "RCP-8712",
@@ -280,6 +319,19 @@ export const mockTransactions: Transaction[] = [
     status: "Success",
   },
   // V24-089 transactions - example with multiple invoices via insurance
+  {
+    id: "txn-890",
+    receiptNo: "RCP-7800",
+    invoiceNos: [],
+    date: "15-Nov-2025",
+    time: "09:00",
+    visitId: "V24-089",
+    type: "Advance",
+    methods: ["NEFT"],
+    payer: "Harish Kalyan",
+    amount: 100000,
+    status: "Success",
+  },
   {
     id: "txn-891",
     receiptNo: "RCP-7801",
