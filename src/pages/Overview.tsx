@@ -81,12 +81,12 @@ const StandardMetricCard = ({
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-2xl font-bold text-foreground tracking-tight">
+          <p className="text-foreground" style={{ fontSize: "22px", fontWeight: 600, letterSpacing: "-1.5px" }}>
             {displayCount ? (
               displayCount.includes('|') ? (
                 <>
                   {displayCount.split('|')[0].trim()}
-                  <span className="text-[14px] font-medium text-muted-foreground">{displayCount.split('|').slice(1).join('|')}</span>
+                  <span className="text-[14px] font-medium text-muted-foreground" style={{ fontWeight: 500, letterSpacing: "normal" }}>{displayCount.split('|').slice(1).join('|')}</span>
                 </>
               ) : displayCount
             ) : count.toLocaleString()}
