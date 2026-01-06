@@ -25,16 +25,12 @@ export interface Invoice {
 export interface Transaction {
   id: string;
   receiptNo: string;
-  invoiceNo: string;
+  invoiceNos: string[]; // Support multiple invoices per transaction
   date: string;
   time: string;
   visitId: string;
   type: TransactionType;
-  service: string;
-  doctor: string;
-  department: string;
-  method: PaymentMethod;
-  referenceNo?: string;
+  methods: PaymentMethod[]; // Support multiple payment methods (split payment)
   payer: string;
   amount: number;
   status: "Success" | "Pending" | "Failed" | "Refunded";
@@ -245,120 +241,67 @@ export const mockTransactions: Transaction[] = [
   // V25-004 transactions
   {
     id: "txn-041",
-    receiptNo: "RCP-2025-008845",
-    invoiceNo: "INV-2025-001237",
+    receiptNo: "RCP-8545",
+    invoiceNos: ["INV-2025-001237"],
     date: "20-Dec-2025",
     time: "10:45",
     visitId: "V25-004",
     type: "Bill",
-    service: "ECG Test",
-    doctor: "Dr. Meera Nair",
-    department: "Diagnostics",
-    method: "Card",
-    referenceNo: "HDFC-4521-8974",
+    methods: ["Card"],
     payer: "Harish Kalyan",
     amount: 40000,
     status: "Success",
   },
-  // V25-002 transactions
+  // V25-002 transactions - example with multiple invoices and split payment
   {
     id: "txn-021",
-    receiptNo: "RCP-2025-008712",
-    invoiceNo: "INV-2025-001240",
+    receiptNo: "RCP-8712",
+    invoiceNos: ["INV-2025-001240", "INV-2025-001241"],
     date: "15-Dec-2025",
     time: "09:15",
     visitId: "V25-002",
     type: "Bill",
-    service: "General Consultation",
-    doctor: "Dr. Priya Menon",
-    department: "General Medicine",
-    method: "UPI",
-    referenceNo: "GPay-789456123",
+    methods: ["UPI", "Cash"],
     payer: "Harish Kalyan",
-    amount: 150000,
-    status: "Success",
-  },
-  {
-    id: "txn-022",
-    receiptNo: "RCP-2025-008713",
-    invoiceNo: "INV-2025-001241",
-    date: "15-Dec-2025",
-    time: "09:45",
-    visitId: "V25-002",
-    type: "Bill",
-    service: "Blood Test - CBC",
-    doctor: "Dr. Priya Menon",
-    department: "Laboratory",
-    method: "UPI",
-    referenceNo: "GPay-789456124",
-    payer: "Harish Kalyan",
-    amount: 80000,
+    amount: 230000,
     status: "Success",
   },
   {
     id: "txn-023",
-    receiptNo: "RCP-2025-008714",
-    invoiceNo: "INV-2025-001242",
+    receiptNo: "RCP-8714",
+    invoiceNos: ["INV-2025-001242"],
     date: "15-Dec-2025",
     time: "10:00",
     visitId: "V25-002",
     type: "Bill",
-    service: "Lipid Profile",
-    doctor: "Dr. Priya Menon",
-    department: "Laboratory",
-    method: "Card",
-    referenceNo: "ICICI-8521-4563",
+    methods: ["Card"],
     payer: "Harish Kalyan",
     amount: 120000,
     status: "Success",
   },
-  // V24-089 transactions
+  // V24-089 transactions - example with multiple invoices via insurance
   {
     id: "txn-891",
-    receiptNo: "RCP-2024-007801",
-    invoiceNo: "INV-2024-001180",
+    receiptNo: "RCP-7801",
+    invoiceNos: ["INV-2024-001180", "INV-2024-001181"],
     date: "15-Nov-2025",
     time: "10:30",
     visitId: "V24-089",
     type: "Bill",
-    service: "Orthopedics Consultation",
-    doctor: "Dr. Arun Kumar",
-    department: "Orthopedics",
-    method: "Insurance",
-    referenceNo: "ICICI-CLM-001234",
+    methods: ["Insurance"],
     payer: "ICICI Lombard",
-    amount: 200000,
-    status: "Success",
-  },
-  {
-    id: "txn-892",
-    receiptNo: "RCP-2024-007802",
-    invoiceNo: "INV-2024-001181",
-    date: "15-Nov-2025",
-    time: "11:30",
-    visitId: "V24-089",
-    type: "Bill",
-    service: "MRI Spine",
-    doctor: "Dr. Vinod Kumar",
-    department: "Radiology",
-    method: "Insurance",
-    referenceNo: "ICICI-CLM-001235",
-    payer: "ICICI Lombard",
-    amount: 850000,
+    amount: 1050000,
     status: "Success",
   },
   {
     id: "txn-893",
-    receiptNo: "RCP-2024-007803",
-    invoiceNo: "INV-2024-001182",
+    receiptNo: "RCP-7803",
+    invoiceNos: ["INV-2024-001182"],
     date: "16-Nov-2025",
     time: "09:15",
     visitId: "V24-089",
     type: "Bill",
-    service: "Physiotherapy Session",
-    doctor: "Dr. Arun Kumar",
-    department: "Physiotherapy",
-    method: "Cash",
+    methods: ["Cash"],
     payer: "Harish Kalyan",
     amount: 100000,
     status: "Success",
@@ -367,7 +310,7 @@ export const mockTransactions: Transaction[] = [
 
 // Helper to get transactions for an invoice
 export const getTransactionsForInvoice = (invoiceNo: string): Transaction[] => {
-  return mockTransactions.filter((txn) => txn.invoiceNo === invoiceNo);
+  return mockTransactions.filter((txn) => txn.invoiceNos.includes(invoiceNo));
 };
 
 // Helper to get invoices for a visit
