@@ -60,7 +60,7 @@ export function OverviewKpiCard({
       "
       style={{ fontFamily: 'Inter, "SF Pro", "Segoe UI", system-ui, sans-serif' }}
     >
-      <div className="flex justify-between gap-6">
+      <div className="flex justify-between gap-4">
         {/* Left Column - Title, KPI, Bullets */}
         <div className="flex flex-col min-w-0">
           {/* Header with icon and title */}
@@ -106,15 +106,14 @@ export function OverviewKpiCard({
           </div>
         </div>
 
-        {/* Right Column - Chips */}
-        <div className="flex flex-col gap-3 shrink-0">
+        <div className="flex flex-col gap-2 shrink-0">
           {chips.map((chip, idx) => (
             <button
               key={idx}
               onClick={(e) => handleChipClick(e, chip)}
               className="
-                flex flex-col items-start px-4 py-3 min-h-[44px] min-w-[120px]
-                bg-white rounded-[20px] border border-[#E6E8ED]
+                flex flex-col items-start px-3 py-2 min-h-[38px] min-w-[110px]
+                bg-white rounded-[16px] border border-[#E6E8ED]
                 transition-colors duration-150
                 hover:border-[#D7DBE0]
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)]
