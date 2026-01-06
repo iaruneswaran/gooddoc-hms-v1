@@ -81,7 +81,7 @@ const StandardMetricCard = ({
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-[22px] font-semibold text-foreground" style={{ letterSpacing: "-1.5px" }}>
+          <p className="text-2xl font-bold text-foreground tracking-tight">
             {displayCount ? (
               displayCount.includes('|') ? (
                 <>
