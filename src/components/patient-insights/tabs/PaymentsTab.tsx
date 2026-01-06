@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Printer, Eye, CreditCard, Banknote, Building2, Smartphone, FileText } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
-import { getTransactionsForVisit, type Transaction } from "@/data/billing.mock";
+import { getTransactionsForVisit, type Transaction, type PaymentMethod } from "@/data/billing.mock";
 
 interface PaymentsTabProps {
   selectedVisit: Visit | null;
@@ -24,7 +24,7 @@ const getStatusBadge = (status: Transaction["status"]) => {
   }
 };
 
-const getMethodIcon = (method: Transaction["method"]) => {
+const getMethodIcon = (method: PaymentMethod) => {
   switch (method) {
     case "Card":
       return <CreditCard className="h-3.5 w-3.5" />;
@@ -54,6 +54,12 @@ const getTypeBadge = (type: Transaction["type"]) => {
     default:
       return <Badge variant="outline" className="text-xs">{type}</Badge>;
   }
+};
+
+// Format receipt number to shorter format (RCP - XXXX)
+const formatReceiptNo = (receiptNo: string): string => {
+  const match = receiptNo.match(/(\d{4})$/);
+  return match ? `RCP - ${match[1]}` : receiptNo;
 };
 
 export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
@@ -102,9 +108,8 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Receipt No.</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / Doctor</th>
                 <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Mode</th>
+                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
                 <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
                 <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
                 <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
@@ -114,28 +119,37 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
               {visitTransactions.map((txn) => (
                 <tr key={txn.id} className="hover:bg-muted/20 transition-colors">
                   <td className="p-3">
-                    <p className="text-sm font-medium text-primary">{txn.receiptNo}</p>
+                    <p className="text-sm font-medium text-primary">{formatReceiptNo(txn.receiptNo)}</p>
                   </td>
                   <td className="p-3">
                     <p className="text-sm text-foreground">{txn.date}</p>
                     <p className="text-xs text-muted-foreground">{txn.time}</p>
                   </td>
                   <td className="p-3">
-                    <p className="text-sm font-mono text-foreground">{txn.invoiceNo}</p>
-                  </td>
-                  <td className="p-3">
-                    <p className="text-sm font-medium text-foreground">{txn.service}</p>
-                    <p className="text-xs text-muted-foreground">{txn.doctor} • {txn.department}</p>
+                    {txn.invoiceNos.length === 1 ? (
+                      <p className="text-sm font-mono text-foreground">{txn.invoiceNos[0]}</p>
+                    ) : (
+                      <div className="space-y-0.5">
+                        {txn.invoiceNos.map((inv, idx) => (
+                          <p key={idx} className="text-sm font-mono text-foreground">{inv}</p>
+                        ))}
+                      </div>
+                    )}
                   </td>
                   <td className="p-3 text-center">
                     {getTypeBadge(txn.type)}
                   </td>
                   <td className="p-3">
                     <div className="flex justify-center">
-                      {txn.method ? (
+                      {txn.methods && txn.methods.length > 0 ? (
                         <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/40 rounded-md">
-                          {getMethodIcon(txn.method)}
-                          <span className="text-xs text-foreground">{txn.method}</span>
+                          {txn.methods.map((method, idx) => (
+                            <span key={idx} className="flex items-center gap-1">
+                              {getMethodIcon(method)}
+                              <span className="text-xs text-foreground">{method}</span>
+                              {idx < txn.methods.length - 1 && <span className="text-xs text-muted-foreground">,</span>}
+                            </span>
+                          ))}
                         </div>
                       ) : (
                         <span className="text-xs text-muted-foreground">—</span>
@@ -146,9 +160,6 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                     <p className={`text-sm font-semibold ${txn.type === "Refund" ? "text-blue-600" : "text-emerald-600"}`}>
                       {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
                     </p>
-                    {txn.referenceNo && (
-                      <p className="text-[10px] font-mono text-muted-foreground">{txn.referenceNo}</p>
-                    )}
                   </td>
                   <td className="p-3 text-center">
                     {getStatusBadge(txn.status)}
@@ -171,7 +182,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
             </tbody>
             <tfoot className="bg-muted/40 border-t-2">
               <tr>
-                <td colSpan={6} className="p-3 text-right">
+                <td colSpan={5} className="p-3 text-right">
                   <span className="text-sm font-semibold text-foreground">Total Collected:</span>
                 </td>
                 <td className="p-3 text-right">
