@@ -62,6 +62,12 @@ const formatReceiptNo = (receiptNo: string): string => {
   return match ? `RCP - ${match[1]}` : receiptNo;
 };
 
+// Format invoice number to shorter format (INV - XXXX)
+const formatInvoiceNo = (invoiceNo: string): string => {
+  const match = invoiceNo.match(/(\d{4})$/);
+  return match ? `INV - ${match[1]}` : invoiceNo;
+};
+
 export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
   if (!selectedVisit) {
     return (
@@ -129,10 +135,10 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                     {txn.invoiceNos.length === 0 ? (
                       <span className="text-xs text-muted-foreground">—</span>
                     ) : txn.invoiceNos.length === 1 ? (
-                      <p className="text-sm font-mono text-foreground">{txn.invoiceNos[0]}</p>
+                      <p className="text-sm font-mono text-foreground">{formatInvoiceNo(txn.invoiceNos[0])}</p>
                     ) : (
                       <p className="text-sm font-mono text-foreground">
-                        {txn.invoiceNos[0]} <span className="text-xs text-muted-foreground">+{txn.invoiceNos.length - 1}</span>
+                        {formatInvoiceNo(txn.invoiceNos[0])} <span className="text-xs text-muted-foreground">+{txn.invoiceNos.length - 1}</span>
                       </p>
                     )}
                   </td>
