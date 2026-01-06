@@ -6,7 +6,7 @@ import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, MoreVertical, Pencil, Eye, CalendarPlus, User, AlertTriangle, Loader2 } from "lucide-react";
+import { Download, MoreVertical, Pencil, Eye, CalendarPlus, User, AlertTriangle, Loader2, BedDouble } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -154,6 +154,10 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
 
   const handlePatient360 = (patient: Patient) => {
     navigate(`/patients/${patient.gdid}/360?from=patients`);
+  };
+
+  const handleIPAdmission = (patient: Patient) => {
+    navigate("/new-appointment", { state: { flowType: "ip-admission", patientId: patient.gdid } });
   };
 
   if (isLoading) {
@@ -360,6 +364,10 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
                       <DropdownMenuItem onClick={() => handleBookAppointment(patient)} className="gap-2 cursor-pointer">
                         <CalendarPlus className="w-4 h-4" />
                         Book Appointment
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleIPAdmission(patient)} className="gap-2 cursor-pointer">
+                        <BedDouble className="w-4 h-4" />
+                        IP Admission
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
