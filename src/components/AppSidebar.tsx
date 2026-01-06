@@ -19,11 +19,11 @@ import iconReports from "@/assets/icons/icon-reports.svg";
 const menuItems = [
   { icon: iconOverview, label: "Overview", href: "/" },
   { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
-  { icon: iconDiagnostics, label: "Diagnostics", href: "/diagnostics" },
-  { icon: iconDoctors, label: "Doctors", href: "/doctors" },
+  { icon: iconPharmacy, label: "Diagnostics", href: "/diagnostics" },
+  { icon: iconDiagnostics, label: "Doctors", href: "/doctors" },
   { icon: iconPatients, label: "Patients", href: "/patients" },
   { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog" },
-  { icon: iconPharmacy, label: "Pharmacy", href: "/pharmacy" },
+  { icon: iconDoctors, label: "Pharmacy", href: "/pharmacy" },
   { icon: iconReports, label: "Reports", href: "/reports" },
 ];
 
