@@ -421,18 +421,6 @@ const PatientAdvanceCollection = () => {
 
                 </div>
 
-                {/* New Balance Preview */}
-                <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide">New Balance After Collection</p>
-                      <p className="text-2xl font-bold text-primary mt-1">{formatINR(newBalance)}</p>
-                    </div>
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary text-lg">₹</span>
-                    </div>
-                  </div>
-                </div>
 
                 {/* Payer Details */}
                 <div className="space-y-3 pt-2 border-t border-border">
