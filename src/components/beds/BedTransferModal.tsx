@@ -1,0 +1,315 @@
+import { useState, useMemo } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, User, MapPin, ArrowRight } from 'lucide-react';
+import { TransferDateTimePicker } from '@/components/transfer/TransferDateTimePicker';
+import { BedMapItem } from '@/data/bed-map.mock';
+import { mockUnits, mockBeds, reasonLabels } from '@/data/transfer.mock';
+import { toast } from 'sonner';
+
+interface BedTransferModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  selectedBed?: BedMapItem;
+}
+
+// Mock IP patients for search
+const mockIPPatients = [
+  { id: 'MRN0100001', gdid: '001', name: 'Harish Kalyan', age: 44, gender: 'Male', ward: 'Ward A', room: 'Room 102', bed: 'WA-102-1', tariff: 3500 },
+  { id: 'MRN0100002', gdid: '002', name: 'Priya Sharma', age: 32, gender: 'Female', ward: 'Ward B', room: 'Room 201', bed: 'WB-201-2', tariff: 3000 },
+  { id: 'MRN0100003', gdid: '003', name: 'Rajesh Kumar', age: 56, gender: 'Male', ward: 'ICU', room: 'ICU Bay 1', bed: 'IC-02', tariff: 15000 },
+  { id: 'MRN0100004', gdid: '004', name: 'Anjali Menon', age: 28, gender: 'Female', ward: 'Step-Down Unit', room: 'SD Bay 1', bed: 'SD-02', tariff: 8000 },
+  { id: 'MRN0100005', gdid: '005', name: 'Suresh Nair', age: 61, gender: 'Male', ward: 'Private Wing', room: 'Suite 402', bed: 'PW-402', tariff: 12000 },
+];
+
+export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransferModalProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<typeof mockIPPatients[0] | null>(null);
+  const [selectedWard, setSelectedWard] = useState<string>('');
+  const [selectedRoom, setSelectedRoom] = useState<string>('');
+  const [reason, setReason] = useState<string>('');
+  const [transferDateTime, setTransferDateTime] = useState<Date>(new Date());
+  const [notes, setNotes] = useState('');
+
+  // Filter patients based on search
+  const filteredPatients = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.toLowerCase();
+    return mockIPPatients.filter(
+      p => p.name.toLowerCase().includes(query) || 
+           p.gdid.includes(query) || 
+           p.id.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
+  // Get available beds for selected ward
+  const availableBeds = useMemo(() => {
+    if (!selectedWard) return [];
+    return mockBeds.filter(b => b.unitId === selectedWard && b.status === 'available');
+  }, [selectedWard]);
+
+  // Get rooms for selected ward
+  const rooms = useMemo(() => {
+    if (!selectedWard) return [];
+    const uniqueRooms = new Map<string, { id: string; name: string; beds: typeof mockBeds }>();
+    availableBeds.forEach(bed => {
+      if (!uniqueRooms.has(bed.roomId)) {
+        uniqueRooms.set(bed.roomId, { id: bed.roomId, name: bed.roomName, beds: [] });
+      }
+      uniqueRooms.get(bed.roomId)!.beds.push(bed);
+    });
+    return Array.from(uniqueRooms.values());
+  }, [selectedWard, availableBeds]);
+
+  // Get beds for selected room
+  const bedsInRoom = useMemo(() => {
+    if (!selectedRoom) return [];
+    return availableBeds.filter(b => b.roomId === selectedRoom);
+  }, [selectedRoom, availableBeds]);
+
+  const handlePatientSelect = (patient: typeof mockIPPatients[0]) => {
+    setSelectedPatient(patient);
+    setSearchQuery('');
+  };
+
+  const handleConfirm = () => {
+    if (!selectedPatient) {
+      toast.error('Please select a patient');
+      return;
+    }
+    if (!selectedWard || !selectedRoom) {
+      toast.error('Please select destination ward and room');
+      return;
+    }
+    if (!reason) {
+      toast.error('Please select a reason for transfer');
+      return;
+    }
+
+    const destinationBed = bedsInRoom[0];
+    toast.success(`Transfer initiated for ${selectedPatient.name} to ${destinationBed?.bedName || 'selected bed'}`);
+    
+    // Reset and close
+    setSelectedPatient(null);
+    setSelectedWard('');
+    setSelectedRoom('');
+    setReason('');
+    setNotes('');
+    onOpenChange(false);
+  };
+
+  const handleCancel = () => {
+    setSelectedPatient(null);
+    setSearchQuery('');
+    setSelectedWard('');
+    setSelectedRoom('');
+    setReason('');
+    setNotes('');
+    onOpenChange(false);
+  };
+
+  const isScheduled = transferDateTime > new Date();
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold">Bed Transfer</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6 py-2">
+          {/* Patient Search */}
+          {!selectedPatient ? (
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Search IP Patient</Label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, GDID, or MRN..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              
+              {/* Search Results */}
+              {filteredPatients.length > 0 && (
+                <div className="border rounded-lg divide-y max-h-48 overflow-y-auto">
+                  {filteredPatients.map((patient) => (
+                    <button
+                      key={patient.id}
+                      onClick={() => handlePatientSelect(patient)}
+                      className="w-full p-3 text-left hover:bg-muted/50 transition-colors flex items-center gap-3"
+                    >
+                      <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm">{patient.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          GDID–{patient.gdid} • {patient.age}y • {patient.gender}
+                        </div>
+                      </div>
+                      <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                        {patient.ward} • {patient.bed}
+                      </Badge>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Transfer Location */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-medium text-foreground">Transfer Location</h3>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  {/* From */}
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">From</Label>
+                    <div className="p-3 bg-muted/50 rounded-lg border">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center">
+                          <User className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-sm">{selectedPatient.name}</div>
+                          <div className="text-xs text-muted-foreground">GDID–{selectedPatient.gdid}</div>
+                        </div>
+                      </div>
+                      <div className="space-y-1 text-sm">
+                        <div className="font-medium">{selectedPatient.ward}</div>
+                        <div className="text-muted-foreground">{selectedPatient.room}</div>
+                        <div className="text-muted-foreground">{selectedPatient.bed}</div>
+                        <div className="text-xs text-muted-foreground mt-2">
+                          Tariff: ₹{selectedPatient.tariff.toLocaleString('en-IN')}/day
+                        </div>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="mt-2 h-7 text-xs text-primary p-0"
+                        onClick={() => setSelectedPatient(null)}
+                      >
+                        Change patient
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* To */}
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">To</Label>
+                    <div className="p-3 bg-muted/30 rounded-lg border border-dashed space-y-3">
+                      <div className="text-sm text-muted-foreground">Select destination</div>
+                      
+                      <Select value={selectedWard} onValueChange={(v) => { setSelectedWard(v); setSelectedRoom(''); }}>
+                        <SelectTrigger className="h-9">
+                          <SelectValue placeholder="Select Ward / Unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockUnits.filter(u => u.availableBeds > 0).map((unit) => (
+                            <SelectItem key={unit.id} value={unit.id}>
+                              {unit.name} ({unit.availableBeds} available)
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <Select value={selectedRoom} onValueChange={setSelectedRoom} disabled={!selectedWard}>
+                        <SelectTrigger className="h-9">
+                          <SelectValue placeholder="Select Room & Bed" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {rooms.map((room) => (
+                            <SelectItem key={room.id} value={room.id}>
+                              {room.name} ({room.beds.length} beds)
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {selectedRoom && bedsInRoom.length > 0 && (
+                        <div className="text-xs text-muted-foreground">
+                          <span className="font-medium">Bed:</span> {bedsInRoom[0].bedName} • 
+                          <span className="ml-1">₹{bedsInRoom[0].tariff.toLocaleString('en-IN')}/day</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transfer Details */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-medium text-foreground">Transfer Details</h3>
+                
+                {/* Ordering Clinician - Read only for now */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Ordering Clinician</Label>
+                  <div className="flex items-center gap-2 p-2.5 bg-muted/50 rounded-lg border">
+                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="w-3.5 h-3.5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">Dr. Meera Nair</div>
+                      <div className="text-xs text-muted-foreground">Internal Medicine</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reason */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Reason for Transfer</Label>
+                  <Select value={reason} onValueChange={setReason}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select reason" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(reasonLabels).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>{label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Date & Time */}
+                <TransferDateTimePicker
+                  value={transferDateTime}
+                  onChange={setTransferDateTime}
+                  label="Transfer Date & Time"
+                />
+
+                {/* Notes */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Additional Notes</Label>
+                  <Textarea
+                    placeholder="Add any additional notes..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="resize-none h-20"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t">
+          <Button variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} disabled={!selectedPatient}>
+            Confirm Transfer
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
