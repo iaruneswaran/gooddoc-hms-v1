@@ -161,7 +161,6 @@ export function UPIPaymentFlow({
             {/* QR Code */}
             <QRCodeView
               qrPayload={state.qrPayload!}
-              deepLink={state.deepLink!}
               amount={intent.amount}
               payeeName="GoodDoc Hospital"
             />

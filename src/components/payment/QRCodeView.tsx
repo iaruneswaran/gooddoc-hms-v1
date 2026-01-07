@@ -1,26 +1,21 @@
 import { QRCodeSVG } from 'qrcode.react';
-import { Copy, ExternalLink, Check } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { UPI_APPS } from '@/types/payment-intent';
 
 interface QRCodeViewProps {
   qrPayload: string;
-  deepLink: string;
   amount: number;
   payeeName?: string;
   className?: string;
-  onAppClick?: (appId: string) => void;
 }
 
 export function QRCodeView({
   qrPayload,
-  deepLink,
   amount,
   payeeName = 'GoodDoc Hospital',
   className,
-  onAppClick,
 }: QRCodeViewProps) {
   const [copied, setCopied] = useState(false);
 
@@ -34,12 +29,6 @@ export function QRCodeView({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
-  };
-
-  const handleOpenApp = (appId: string) => {
-    onAppClick?.(appId);
-    // Try to open the deep link
-    window.location.href = deepLink;
   };
 
   return (
@@ -84,30 +73,9 @@ export function QRCodeView({
         )}
       </Button>
 
-      {/* UPI app buttons */}
-      <div className="w-full space-y-2">
-        <p className="text-xs text-center text-muted-foreground">
-          Or open directly in:
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {UPI_APPS.slice(0, 3).map(app => (
-            <Button
-              key={app.id}
-              variant="secondary"
-              size="sm"
-              onClick={() => handleOpenApp(app.id)}
-              className="gap-1.5 text-xs"
-            >
-              <ExternalLink className="w-3 h-3" />
-              {app.name}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       {/* Instructions */}
       <p className="text-xs text-center text-muted-foreground max-w-xs">
-        Scan this QR code with any UPI app on your phone, or tap a button above to open directly.
+        Scan this QR code with any UPI app to complete payment
       </p>
     </div>
   );
