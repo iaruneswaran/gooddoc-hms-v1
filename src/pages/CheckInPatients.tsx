@@ -11,7 +11,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Bed, MapPin, DollarSign, ArrowRightLeft } from "lucide-react";
+import { Bed, MapPin, DollarSign, ArrowRightLeft, LayoutGrid, Table } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BedMapView } from "@/components/beds";
+import { MainLayout } from "@/components/MainLayout";
 
 const statusStyles: Record<BedRecord["status"], string> = {
   "Available": "bg-green-100 text-green-700",
@@ -26,12 +29,15 @@ const bedTypeStyles: Record<BedRecord["bedType"], string> = {
   "Isolation": "bg-amber-100 text-amber-700",
 };
 
+type ViewMode = 'table' | 'map';
+
 const BedsAvailability = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const bedType = searchParams.get("bedType");
   const [selectedBed, setSelectedBed] = useState<BedRecord | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('map');
 
   const handleViewDetails = (row: BedRecord) => {
     setSelectedBed(row);
@@ -146,6 +152,55 @@ const BedsAvailability = () => {
     { label: "View Details", onClick: (row) => handleViewDetails(row) },
   ];
 
+  // View Toggle Button
+  const ViewToggle = () => (
+    <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+      <Button
+        variant={viewMode === 'table' ? 'secondary' : 'ghost'}
+        size="sm"
+        onClick={() => setViewMode('table')}
+        className="gap-1.5 h-8"
+      >
+        <Table className="w-4 h-4" />
+        Table
+      </Button>
+      <Button
+        variant={viewMode === 'map' ? 'secondary' : 'ghost'}
+        size="sm"
+        onClick={() => setViewMode('map')}
+        className="gap-1.5 h-8"
+      >
+        <LayoutGrid className="w-4 h-4" />
+        Map
+      </Button>
+    </div>
+  );
+
+  // If map view, render the BedMapView directly
+  if (viewMode === 'map') {
+    return (
+      <MainLayout>
+        <div className="p-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-muted-foreground mb-1">
+                Overview / Beds
+              </div>
+              <h1 className="text-2xl font-semibold text-foreground">
+                Beds Availability
+              </h1>
+            </div>
+            <ViewToggle />
+          </div>
+          
+          {/* Map View */}
+          <BedMapView />
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <>
       <ListPageLayout
@@ -173,7 +228,6 @@ const BedsAvailability = () => {
           
           {selectedBed && (
             <div className="space-y-4">
-              {/* Bed Info Header */}
               <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -187,7 +241,6 @@ const BedsAvailability = () => {
                 <Badge className={statusStyles[selectedBed.status]}>{selectedBed.status}</Badge>
               </div>
 
-              {/* Bed Type & Location */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-muted-foreground">Bed Type</p>
@@ -201,7 +254,6 @@ const BedsAvailability = () => {
 
               <Separator />
 
-              {/* Room & Bed Details */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-muted-foreground">Room</p>
@@ -215,7 +267,6 @@ const BedsAvailability = () => {
 
               <Separator />
 
-              {/* Pricing Details */}
               <div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg">
                 <div>
                   <p className="text-xs text-muted-foreground">Daily Rate</p>
@@ -227,7 +278,6 @@ const BedsAvailability = () => {
                 </div>
               </div>
 
-              {/* Transfer Details (if any) */}
               {selectedBed.transferPatient && (
                 <>
                   <Separator />
