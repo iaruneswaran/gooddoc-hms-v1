@@ -280,9 +280,9 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       {/* Right Panel - Payment Settlement */}
       <div className="w-[420px] flex flex-col bg-background shadow-lg rounded-xl border border-border mt-16 mb-6 mr-6 overflow-hidden">
         <div className="bg-primary px-5 py-4 rounded-t-xl">
-          <h2 className="billing-section-title text-primary-foreground">Payment Settlement</h2>
+          <h2 className="billing-section-title !text-white">Payment Settlement</h2>
           {selectedBills.length > 0 && (
-            <p className="billing-body text-primary-foreground/80 mt-0.5">
+            <p className="billing-body !text-white/80 mt-0.5">
               {selectedBills.length === 1
                 ? `Invoice: ${selectedBills[0].invoiceNo}`
                 : `${selectedBills.length} Invoices Selected`}
