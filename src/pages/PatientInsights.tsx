@@ -159,6 +159,13 @@ const PatientInsightsContent = () => {
   const tabParam = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState(tabParam || "appointments");
   
+  // Update tab when URL query param changes
+  useEffect(() => {
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
+  
   const { setVisits, selectedVisit: selectedVisitOption, selectedVisitId, setIsLoading } = useVisit();
 
   // Determine if this is an IP or OP patient based on the source page

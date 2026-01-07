@@ -69,6 +69,7 @@ const PatientServices = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
+  const [isGeneratingBill, setIsGeneratingBill] = useState(false);
   const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -124,9 +125,13 @@ const PatientServices = () => {
     setSelectedSubCategory("all");
   };
 
-  const handleGenerateBill = () => {
+  const handleGenerateBill = async () => {
+    setIsGeneratingBill(true);
     console.log("Generate bill for:", cart);
-    navigate(`/patient-insights/${patientId}/payments`);
+    // Simulate bill generation
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsGeneratingBill(false);
+    navigate(`/patient-insights/${patientId}?tab=payments`);
   };
 
   const handleBack = () => {
@@ -777,11 +782,20 @@ const PatientServices = () => {
                 <Button 
                   className="w-full h-11" 
                   size="lg"
-                  disabled={cart.length === 0}
+                  disabled={cart.length === 0 || isGeneratingBill}
                   onClick={handleGenerateBill}
                 >
-                  <Receipt className="w-4 h-4 mr-2" />
-                  Generate Bill
+                  {isGeneratingBill ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                      Generating Bill...
+                    </>
+                  ) : (
+                    <>
+                      <Receipt className="w-4 h-4 mr-2" />
+                      Generate Bill
+                    </>
+                  )}
                 </Button>
                 <Button 
                   variant="outline" 
