@@ -10,6 +10,9 @@ interface LegendItem {
 const legendItems: LegendItem[] = [
   { status: 'available', label: 'Available', bgClass: 'bg-emerald-50', borderClass: 'border-emerald-300' },
   { status: 'occupied', label: 'Occupied', bgClass: 'bg-red-50', borderClass: 'border-red-300' },
+  { status: 'reserved', label: 'Reserved', bgClass: 'bg-amber-50', borderClass: 'border-amber-300' },
+  { status: 'cleaning', label: 'Cleaning', bgClass: 'bg-blue-50', borderClass: 'border-blue-400 border-dashed' },
+  { status: 'maintenance', label: 'Maintenance', bgClass: 'bg-gray-100', borderClass: 'border-gray-400' },
 ];
 
 export function BedLegend() {
