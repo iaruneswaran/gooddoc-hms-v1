@@ -101,6 +101,13 @@ const Payment = () => {
       return;
     }
 
+    // If user chose a single method (Card/UPI) via dropdown, open the payment popup
+    if (splitRows.length === 1 && (splitRows[0].method === "card" || splitRows[0].method === "upi")) {
+      setSelectedPaymentMethod(splitRows[0].method);
+      setShowPaymentModal(true);
+      return;
+    }
+
     const cardUpiSteps = getCardUpiSteps();
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
@@ -685,7 +692,7 @@ const Payment = () => {
         patientName="Siva Karthikeyan"
         mrn="GDID-009"
         orderId="INV-2025-009"
-        totalAmount={payableAmount}
+        totalAmount={payableAmount * 100}
         purpose="settlement"
         steps={wizardSteps}
         onComplete={handleSplitWizardComplete}

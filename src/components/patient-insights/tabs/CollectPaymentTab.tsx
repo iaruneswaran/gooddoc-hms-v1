@@ -95,6 +95,13 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       return;
     }
 
+    // If user picked a single non-cash method, open the Card/UPI processing popup
+    if (splitRows.length === 1 && (splitRows[0].method === "card" || splitRows[0].method === "upi")) {
+      setSelectedPaymentMethod(splitRows[0].method);
+      setShowPaymentModal(true);
+      return;
+    }
+
     const cardUpiSteps = getCardUpiSteps();
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
@@ -460,7 +467,11 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
         </div>
 
         <div className="p-4 border-t border-border bg-muted/20">
-          <Button className="w-full h-11" disabled={selectedBills.length === 0 || amountToCollect === 0}>
+          <Button
+            className="w-full h-11"
+            disabled={selectedBills.length === 0 || amountToCollect === 0}
+            onClick={handleCollectPayment}
+          >
             Collect Payment
           </Button>
         </div>
@@ -492,7 +503,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           patientName={selectedVisit.doctor || "Patient"}
           mrn={selectedVisit.visitId || "VISIT-001"}
           orderId={selectedBills[0]?.invoiceNo || `INV-${Date.now()}`}
-          totalAmount={amountToCollect / 100}
+          totalAmount={amountToCollect}
           purpose="settlement"
           steps={wizardSteps}
           onComplete={handleSplitWizardComplete}
