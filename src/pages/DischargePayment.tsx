@@ -622,37 +622,11 @@ const DischargePayment = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-background border border-border z-50">
-                              <SelectItem value="cash">
-                                <span className="flex items-center gap-2">💵 Cash</span>
-                              </SelectItem>
-                              <SelectItem value="card">
-                                <span className="flex items-center gap-2">💳 Card</span>
-                              </SelectItem>
-                              <SelectItem value="upi">
-                                <span className="flex items-center gap-2">📱 UPI</span>
-                              </SelectItem>
+                              <SelectItem value="cash">Cash</SelectItem>
+                              <SelectItem value="card">Card</SelectItem>
+                              <SelectItem value="upi">UPI</SelectItem>
                             </SelectContent>
                           </Select>
-                          {(row.method === "card" || row.method === "upi") && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-10 px-3 border-primary text-primary hover:bg-primary/10"
-                              onClick={() => {
-                                if (row.amount > 0) {
-                                  setSelectedPaymentMethod(row.method as PaymentMethodType);
-                                  setShowPaymentModal(true);
-                                }
-                              }}
-                              disabled={row.amount <= 0}
-                            >
-                              {row.method === "card" ? (
-                                <CreditCard className="w-4 h-4" />
-                              ) : (
-                                <Smartphone className="w-4 h-4" />
-                              )}
-                            </Button>
-                          )}
                           {splitRows.length > 1 && (
                             <button
                               onClick={() => removeRow(row.id)}
