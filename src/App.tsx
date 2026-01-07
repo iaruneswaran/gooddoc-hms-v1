@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/contexts/SidebarContext";
+import { RealtimeProvider } from "@/contexts/RealtimeContext";
+import { ClockProvider } from "@/contexts/ClockContext";
 
 import Overview from "./pages/Overview";
 import NewAppointment from "./pages/NewAppointment";
@@ -64,12 +66,14 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <SidebarProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
+    <RealtimeProvider>
+      <ClockProvider>
+        <TooltipProvider>
+          <SidebarProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
             <Route path="/" element={<Overview />} />
             
             <Route path="/inbox" element={<Inbox />} />
@@ -132,6 +136,8 @@ const App = () => (
         </BrowserRouter>
       </SidebarProvider>
     </TooltipProvider>
+  </ClockProvider>
+  </RealtimeProvider>
   </QueryClientProvider>
 );
 
