@@ -209,11 +209,7 @@ export function BedMapView({
       <BedSummaryPanel
         selectedBeds={selectedBeds}
         onClear={handleClear}
-        onAssign={handleAssign}
-        onReserve={handleReserve}
         onTransfer={handleTransfer}
-        onMarkCleaning={() => toast.info('Mark for cleaning')}
-        onRelease={() => toast.info('Release beds')}
       />
 
       {/* Occupied Bed Sheet */}
