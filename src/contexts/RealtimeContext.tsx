@@ -25,7 +25,7 @@ interface RealtimeContextType {
   reconnect: () => void;
 }
 
-const RealtimeContext = createContext<RealtimeContextType | undefined>(undefined);
+export const RealtimeContext = createContext<RealtimeContextType | undefined>(undefined);
 
 const RECONNECT_DELAYS = [1000, 2000, 5000, 10000, 30000]; // Exponential backoff
 

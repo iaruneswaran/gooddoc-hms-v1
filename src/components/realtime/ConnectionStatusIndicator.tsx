@@ -1,6 +1,4 @@
-import React from 'react';
-import { useRealtime } from '@/contexts/RealtimeContext';
-import { useClock } from '@/contexts/ClockContext';
+import React, { useContext } from 'react';
 import { Wifi, WifiOff, RefreshCw, AlertCircle, Check } from 'lucide-react';
 import {
   Tooltip,
@@ -8,6 +6,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+
+// Import context directly to check if available
+import { RealtimeContext } from '@/contexts/RealtimeContext';
 
 interface ConnectionStatusIndicatorProps {
   className?: string;
@@ -20,8 +21,25 @@ export function ConnectionStatusIndicator({
   showLabel = false,
   size = 'sm'
 }: ConnectionStatusIndicatorProps) {
-  const { connectionStatus, lastSyncTime, isOnline, eventCount, reconnect } = useRealtime();
-  const { formatRelative } = useClock();
+  // Use context directly to avoid throwing if not available
+  const realtimeContext = useContext(RealtimeContext);
+  
+  // If context is not available, don't render anything
+  if (!realtimeContext) {
+    return null;
+  }
+  
+  const { connectionStatus, lastSyncTime, isOnline, eventCount, reconnect } = realtimeContext;
+  
+  // Simple relative time format without depending on ClockContext
+  const formatRelative = (date: Date | null) => {
+    if (!date) return 'never';
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 5) return 'just now';
+    if (seconds < 60) return `${seconds}s ago`;
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    return `${Math.floor(seconds / 3600)}h ago`;
+  };
 
   const iconSize = size === 'sm' ? 14 : 18;
   
@@ -130,7 +148,13 @@ export function ConnectionStatusIndicator({
 
 // Minimal dot indicator for tight spaces
 export function ConnectionDot({ className }: { className?: string }) {
-  const { connectionStatus, isOnline } = useRealtime();
+  const realtimeContext = useContext(RealtimeContext);
+  
+  if (!realtimeContext) {
+    return null;
+  }
+  
+  const { connectionStatus, isOnline } = realtimeContext;
 
   const getColor = () => {
     if (!isOnline) return 'bg-destructive';
