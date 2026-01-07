@@ -35,7 +35,7 @@ export const SAMPLE_PATIENT_SNAPSHOT: PatientSnapshot = {
 // Sample pending bills
 export const SAMPLE_PENDING_BILLS: PendingBill[] = [
   {
-    billNumber: "BILL-2025-001236",
+    billNumber: "BIL236",
     serviceDateFrom: "2025-12-18",
     serviceDateTo: "2025-12-22",
     payerType: "Self",
@@ -63,7 +63,7 @@ export const SAMPLE_PENDING_BILLS: PendingBill[] = [
     notes: "Patient requested itemized bill",
   },
   {
-    billNumber: "BILL-2025-001237",
+    billNumber: "BIL237",
     serviceDateFrom: "2025-12-21",
     serviceDateTo: "2025-12-21",
     payerType: "Self",

@@ -37,9 +37,9 @@ interface DischargeInvoiceProps {
 }
 
 const DischargeInvoice = ({
-  invoiceNo = "INV-2025-009",
+  invoiceNo = "INV009",
   invoiceDate = "21/12/2025",
-  admissionNo = "ADM-2025-0142",
+  admissionNo = "ADM142",
   patientName = "Siva Karthikeyan",
   uhid = "GDID-009",
   age = "35 Years",

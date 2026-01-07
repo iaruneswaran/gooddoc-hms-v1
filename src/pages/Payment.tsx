@@ -166,7 +166,7 @@ const Payment = () => {
                   <div className="grid grid-cols-3 gap-6 px-6 py-4 bg-muted/30 border-b border-border">
                     <div>
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Invoice No.</p>
-                      <p className="text-sm font-semibold text-foreground mt-1">INV-2025-009</p>
+                      <p className="text-sm font-semibold text-foreground mt-1">INV009</p>
                     </div>
                     <div>
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Invoice Date</p>
@@ -360,7 +360,7 @@ const Payment = () => {
                 {/* Header */}
                 <div className="bg-primary px-5 py-4">
                   <h3 className="text-base font-semibold text-primary-foreground">Payment Settlement</h3>
-                  <p className="text-xs text-primary-foreground/70 mt-0.5">Invoice: INV-2025-009</p>
+                  <p className="text-xs text-primary-foreground/70 mt-0.5">Invoice: INV009</p>
                 </div>
                 
                 <div className="p-5 space-y-5">
@@ -576,7 +576,7 @@ const Payment = () => {
         patientId={patientId || "P001"}
         patientName="Siva Karthikeyan"
         mrn="GDID-009"
-        orderId="INV-2025-009"
+        orderId="INV009"
         amount={payableAmount * 100}
         purpose="settlement"
         defaultMethod={selectedPaymentMethod}
@@ -591,7 +591,7 @@ const Payment = () => {
         patientId={patientId || "P001"}
         patientName="Siva Karthikeyan"
         mrn="GDID-009"
-        orderId="INV-2025-009"
+        orderId="INV009"
         totalAmount={payableAmount * 100}
         purpose="settlement"
         steps={wizardSteps}

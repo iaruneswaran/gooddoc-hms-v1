@@ -119,7 +119,7 @@ export function PaymentSummaryPanel({
   }
 
   // Get first invoice ID for display
-  const invoiceId = selectedInvoices[0]?.id || "INV-2025-001";
+  const invoiceId = selectedInvoices[0]?.id || "INV001";
 
   return (
     <Card className="overflow-hidden sticky top-6">

@@ -36,7 +36,7 @@ const Payments = () => {
   const fromSearch = searchParams.get("from") === "search";
   const patientSearchQuery = searchParams.get("q") || "";
   const actionType = searchParams.get("action");
-  const [selectedInvoices, setSelectedInvoices] = useState<string[]>(["INV-2025-001"]);
+  const [selectedInvoices, setSelectedInvoices] = useState<string[]>(["INV001"]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successType, setSuccessType] = useState<"payment" | "advance">("payment");
   const [dateRange, setDateRange] = useState("30d");
@@ -89,7 +89,7 @@ const Payments = () => {
   // Mock data - invoices in paise
   const invoices: Invoice[] = [
     {
-      id: "INV-2025-001",
+      id: "INV001",
       date: "15 Jun 2025",
       service: "Consultation",
       totalAmount: 150000,
@@ -98,7 +98,7 @@ const Payments = () => {
       status: "Pending",
     },
     {
-      id: "INV-2025-002",
+      id: "INV002",
       date: "20 May 2025",
       service: "Laboratory",
       totalAmount: 65000,
@@ -107,7 +107,7 @@ const Payments = () => {
       status: "Pending",
     },
     {
-      id: "INV-2025-003",
+      id: "INV003",
       date: "10 Apr 2025",
       service: "Imaging",
       totalAmount: 120000,
@@ -146,7 +146,7 @@ const Payments = () => {
   // Mock all transactions
   const allTransactions: TransactionRow[] = [
     {
-      id: "CLM-2025-001",
+      id: "CLM001",
       date: "18 Jun 2025",
       type: "insurance",
       category: "Insurance Claim",
@@ -157,7 +157,7 @@ const Payments = () => {
       status: "Success",
     },
     {
-      id: "INV-2025-001",
+      id: "INV001",
       date: "15 Jun 2025",
       type: "payment",
       category: "Bill Payment",
@@ -168,7 +168,7 @@ const Payments = () => {
       status: "Success",
     },
     {
-      id: "INV-2025-002",
+      id: "INV002",
       date: "20 May 2025",
       type: "payment",
       category: "Bill Payment",
@@ -179,7 +179,7 @@ const Payments = () => {
       status: "Success",
     },
     {
-      id: "INV-2025-003",
+      id: "INV003",
       date: "10 Apr 2025",
       type: "payment",
       category: "Bill Payment",

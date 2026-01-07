@@ -47,7 +47,7 @@ const PendingBillsCheck = ({
   // Mock data - In real app, this would come from an API
   const pendingInvoices: PendingInvoice[] = [
     {
-      invoiceNo: "INV-2025-001236",
+      invoiceNo: "INV236",
       serviceCode: "CONS-CARD-001",
       date: "20-Dec-2025",
       time: "09:00",
@@ -60,7 +60,7 @@ const PendingBillsCheck = ({
       status: "Unpaid",
     },
     {
-      invoiceNo: "INV-2025-001237",
+      invoiceNo: "INV237",
       serviceCode: "DIAG-ECG-001",
       date: "20-Dec-2025",
       time: "10:30",
@@ -73,7 +73,7 @@ const PendingBillsCheck = ({
       status: "Partial",
     },
     {
-      invoiceNo: "INV-2025-001238",
+      invoiceNo: "INV238",
       serviceCode: "LAB-BIO-003",
       date: "20-Dec-2025",
       time: "11:00",
