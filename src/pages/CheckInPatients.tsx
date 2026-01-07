@@ -6,7 +6,6 @@ import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { DateHeader } from "@/components/calendar/DateHeader";
 import { EnhancedCalendarWidget } from "@/components/calendar/EnhancedCalendarWidget";
 
 const BedsAvailability = () => {
@@ -38,16 +37,12 @@ const BedsAvailability = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <DateHeader
-                pageKey="beds"
-                selectedDate={selectedDate}
-                showSubtext={false}
-              />
               <EnhancedCalendarWidget
+                pageKey="beds"
                 selectedDate={selectedDate}
                 onDateChange={setSelectedDate}
                 showQuickDays={false}
-                showSubtext={false}
+                showSubtext={true}
               />
             </div>
           </div>
