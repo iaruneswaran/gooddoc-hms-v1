@@ -66,7 +66,7 @@ const PatientServices = () => {
   
   const [viewMode, setViewMode] = useState<ViewMode>('catalog');
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("Room");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
