@@ -655,33 +655,6 @@ const DischargePayment = () => {
                       Add Split Payment
                     </button>
 
-                    {/* Quick Payment Buttons */}
-                    <div className="grid grid-cols-2 gap-3 pt-2">
-                      <Button
-                        variant="outline"
-                        className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                        onClick={() => {
-                          setSelectedPaymentMethod("card");
-                          setShowPaymentModal(true);
-                        }}
-                        disabled={netPayable <= 0}
-                      >
-                        <CreditCard className="w-4 h-4 text-primary" />
-                        <span className="text-xs font-medium">Pay by Card</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                        onClick={() => {
-                          setSelectedPaymentMethod("upi");
-                          setShowPaymentModal(true);
-                        }}
-                        disabled={netPayable <= 0}
-                      >
-                        <Smartphone className="w-4 h-4 text-primary" />
-                        <span className="text-xs font-medium">Pay by UPI</span>
-                      </Button>
-                    </div>
                   </div>
 
                   {/* Payer Details */}
