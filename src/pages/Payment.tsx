@@ -1,5 +1,4 @@
 import { useState } from "react";
-import bainesLogo from "@/assets/baines-logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Download, Printer, Trash2, RotateCcw, AlertCircle } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -160,211 +159,179 @@ const Payment = () => {
             
             <div className="flex flex-col lg:flex-row gap-6">
               <div className="flex-1 space-y-4">
-                {/* Invoice Header */}
+                {/* Bill Documents Table */}
                 <Card className="p-0 overflow-hidden">
-                  {/* Hospital Header */}
-                  <div className="bg-primary/5 border-b border-border px-6 py-5">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <img src={bainesLogo} alt="Baines Hospital" className="h-9" />
-                      </div>
-                      <div className="text-right">
-                        <p className="billing-body text-muted-foreground">123 Healthcare Avenue, Medical District</p>
-                        <p className="billing-body text-muted-foreground">Phone: +91 98765 43210 | GSTIN: 29XXXXX1234X1Z5</p>
-                      </div>
-                    </div>
+                  <div className="px-6 py-4 bg-muted/30 border-b border-border">
+                    <h2 className="billing-section-title">Bill Documents</h2>
+                    <p className="billing-helper mt-1">Documents related to this visit</p>
                   </div>
-
-                  {/* Invoice Details Row */}
-                  <div className="grid grid-cols-3 gap-6 px-6 py-4 bg-muted/30 border-b border-border">
-                    <div>
-                      <p className="billing-label uppercase tracking-wide">Invoice No.</p>
-                      <p className="billing-value mt-1">INV009</p>
-                    </div>
-                    <div>
-                      <p className="billing-label uppercase tracking-wide">Invoice Date</p>
-                      <p className="billing-value mt-1">{paymentData?.date || "21/12/2025"}</p>
-                    </div>
-                    <div>
-                      <p className="billing-label uppercase tracking-wide">Admission No.</p>
-                      <p className="billing-value mt-1">ADM142</p>
-                    </div>
-                  </div>
-
-                  {/* Patient Details */}
-                  <div className="px-6 py-4 border-b border-border">
-                    <p className="billing-label uppercase tracking-wide mb-2">Patient Details</p>
-                    <div className="grid grid-cols-4 gap-4">
-                      <div>
-                        <p className="billing-value">Siva Karthikeyan</p>
-                        <p className="billing-helper">UHID: GDID-009</p>
-                      </div>
-                      <div>
-                        <p className="billing-helper">Age / Gender</p>
-                        <p className="billing-body">35 Years / Male</p>
-                      </div>
-                      <div>
-                        <p className="billing-helper">Admission Date</p>
-                        <p className="billing-body">05/10/2025</p>
-                      </div>
-                      <div>
-                        <p className="billing-helper">Discharge Date</p>
-                        <p className="billing-body">08/10/2025</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Doctor/Department Details */}
-                  <div className="px-6 py-4 border-b border-border">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <p className="billing-helper">Attending Physician</p>
-                        <p className="billing-value">Dr. Arun Kumar</p>
-                      </div>
-                      <div>
-                        <p className="billing-helper">Department</p>
-                        <p className="billing-body">Cardiology</p>
-                      </div>
-                      <div>
-                        <p className="billing-helper">Ward / Bed</p>
-                        <p className="billing-body">ICU-302 / Bed 4</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Invoice Table */}
-                  <div className="px-6 py-4">
+                  
+                  <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
-                        <TableRow className="hover:bg-transparent">
-                          <TableHead className="billing-label w-12">S.No</TableHead>
-                          <TableHead className="billing-label">Description</TableHead>
-                          <TableHead className="billing-label text-center">Qty</TableHead>
-                          <TableHead className="billing-label text-right">Unit Price</TableHead>
-                          <TableHead className="billing-label text-right">GST</TableHead>
-                          <TableHead className="billing-label text-right">Amount</TableHead>
+                        <TableRow className="hover:bg-transparent bg-muted/20">
+                          <TableHead className="billing-label">Document No.</TableHead>
+                          <TableHead className="billing-label">Document Name</TableHead>
+                          <TableHead className="billing-label">Date & Time</TableHead>
+                          <TableHead className="billing-label">Service</TableHead>
+                          <TableHead className="billing-label">Prepared / Verified By</TableHead>
+                          <TableHead className="billing-label text-center">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {/* Room Charges */}
                         <TableRow className="hover:bg-muted/30">
-                          <TableCell className="billing-body">1</TableCell>
                           <TableCell>
-                            <p className="billing-value">ICU Room Charges</p>
-                            <p className="billing-helper">ICU-302 (05/10 - 08/10)</p>
+                            <p className="billing-value text-primary">DOC-2025-004521</p>
                           </TableCell>
-                          <TableCell className="billing-body text-center">3 days</TableCell>
-                          <TableCell className="billing-value text-right">₹8,000.00</TableCell>
-                          <TableCell className="billing-body text-right">₹1,440.00</TableCell>
-                          <TableCell className="billing-value text-right">₹25,440.00</TableCell>
+                          <TableCell>
+                            <p className="billing-value">Cardiology Consultation Notes</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">10:45 AM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Cardiology OPD</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">Dr. Meera Nair</p>
+                            <p className="billing-helper">Dr. Meera Nair</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
                         </TableRow>
                         
-                        {/* Consultation */}
                         <TableRow className="hover:bg-muted/30">
-                          <TableCell className="billing-body">2</TableCell>
                           <TableCell>
-                            <p className="billing-value">Cardiology Consultation</p>
-                            <p className="billing-helper">Dr. Arun Kumar</p>
+                            <p className="billing-value text-primary">DOC-2025-004522</p>
                           </TableCell>
-                          <TableCell className="billing-body text-center">2</TableCell>
-                          <TableCell className="billing-value text-right">₹2,500.00</TableCell>
-                          <TableCell className="billing-body text-right">₹450.00</TableCell>
-                          <TableCell className="billing-value text-right">₹5,450.00</TableCell>
+                          <TableCell>
+                            <p className="billing-value">12-Lead ECG Report</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">11:15 AM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Cardiology Diagnostics</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">ECG Tech - Ramesh K</p>
+                            <p className="billing-helper">Dr. Meera Nair</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
                         </TableRow>
                         
-                        {/* Diagnostics */}
                         <TableRow className="hover:bg-muted/30">
-                          <TableCell className="billing-body">3</TableCell>
                           <TableCell>
-                            <p className="billing-value">Echocardiography</p>
-                            <p className="billing-helper">Diagnostic</p>
+                            <p className="billing-value text-primary">DOC-2025-004523</p>
                           </TableCell>
-                          <TableCell className="billing-body text-center">1</TableCell>
-                          <TableCell className="billing-value text-right">₹3,500.00</TableCell>
-                          <TableCell className="billing-body text-right">₹630.00</TableCell>
-                          <TableCell className="billing-value text-right">₹4,130.00</TableCell>
+                          <TableCell>
+                            <p className="billing-value">ECG Tracing Image</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">11:10 AM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Cardiology Diagnostics</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">ECG Tech - Ramesh K</p>
+                            <p className="billing-helper">—</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
                         </TableRow>
                         
-                        {/* Lab Tests */}
                         <TableRow className="hover:bg-muted/30">
-                          <TableCell className="billing-body">4</TableCell>
                           <TableCell>
-                            <p className="billing-value">Laboratory Tests</p>
-                            <p className="billing-helper">CBC, Lipid Profile, Troponin</p>
+                            <p className="billing-value text-primary">RX-2025-008845</p>
                           </TableCell>
-                          <TableCell className="billing-body text-center">1</TableCell>
-                          <TableCell className="billing-value text-right">₹2,200.00</TableCell>
-                          <TableCell className="billing-body text-right">₹396.00</TableCell>
-                          <TableCell className="billing-value text-right">₹2,596.00</TableCell>
+                          <TableCell>
+                            <p className="billing-value">Prescription</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">11:30 AM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Cardiology OPD</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">Dr. Meera Nair</p>
+                            <p className="billing-helper">—</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
                         </TableRow>
                         
-                        {/* Medications */}
                         <TableRow className="hover:bg-muted/30">
-                          <TableCell className="billing-body">5</TableCell>
                           <TableCell>
-                            <p className="billing-value">Medications</p>
-                            <p className="billing-helper">Cardiac medications, IV fluids</p>
+                            <p className="billing-value text-primary">LAB-2025-012456</p>
                           </TableCell>
-                          <TableCell className="billing-body text-center">1</TableCell>
-                          <TableCell className="billing-value text-right">₹5,500.00</TableCell>
-                          <TableCell className="billing-body text-right">₹660.00</TableCell>
-                          <TableCell className="billing-value text-right">₹6,160.00</TableCell>
+                          <TableCell>
+                            <p className="billing-value">Lipid Profile Report</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">12:00 PM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Clinical Biochemistry</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">Lab Tech - Anita S</p>
+                            <p className="billing-helper">Dr. Sunita Rao (Pathologist)</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
                   </div>
-
-                  {/* Invoice Summary */}
-                  <div className="px-6 py-4 bg-muted/30 border-t border-border">
-                    <div className="flex justify-end">
-                      <div className="w-72 space-y-2">
-                        <div className="flex justify-between">
-                          <span className="billing-label">Subtotal</span>
-                          <span className="billing-value">₹40,100.00</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="billing-label">GST (18%)</span>
-                          <span className="billing-value">₹3,576.00</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="billing-label">Discount</span>
-                          <span className="billing-amount-success">- ₹0.00</span>
-                        </div>
-                        <div className="border-t border-border pt-2 flex justify-between">
-                          <span className="billing-section-title">Grand Total</span>
-                          <span className="billing-amount-primary">₹44,000.00</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="billing-label">Advance Paid</span>
-                          <span className="billing-amount-success">- ₹38,000.00</span>
-                        </div>
-                        <div className="border-t border-primary/30 pt-2 flex justify-between bg-primary/5 -mx-3 px-3 py-2 rounded-lg">
-                          <span className="billing-section-title text-primary">Balance Due</span>
-                          <span className="billing-amount-primary text-primary">₹6,000.00</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="px-6 py-4 border-t border-border bg-background">
-                    <p className="billing-caption text-center">
-                      This is a computer-generated invoice and does not require a signature.
-                    </p>
-                  </div>
                 </Card>
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3">
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Download PDF
-                  </Button>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Printer className="w-4 h-4" />
-                    Print Invoice
-                  </Button>
-                </div>
               </div>
 
               {/* Collect Payment */}
