@@ -35,11 +35,14 @@ const BedsAvailability = () => {
               <h1 className="text-h3 font-semibold text-foreground">Beds Availability</h1>
             </div>
             <div className="flex items-center gap-3">
+              <DateHeader
+                pageKey="beds"
+                selectedDate={selectedDate}
+                showSubtext={true}
+              />
               <EnhancedCalendarWidget
                 selectedDate={selectedDate}
                 onDateChange={setSelectedDate}
-                showQuickDays={false}
-                showSubtext={false}
               />
             </div>
           </div>
