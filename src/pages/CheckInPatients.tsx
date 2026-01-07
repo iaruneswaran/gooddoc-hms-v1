@@ -31,10 +31,7 @@ const BedsAvailability = () => {
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <div>
-                <h1 className="text-h3 font-semibold text-foreground">Beds Availability</h1>
-                <p className="text-sm text-muted-foreground">Live bed availability across all floors</p>
-              </div>
+              <h1 className="text-h3 font-semibold text-foreground">Beds Availability</h1>
             </div>
             <div className="flex items-center gap-3">
               <EnhancedCalendarWidget
