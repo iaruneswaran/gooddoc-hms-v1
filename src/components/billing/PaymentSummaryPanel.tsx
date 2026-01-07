@@ -231,24 +231,12 @@ export function PaymentSummaryPanel({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border border-border shadow-lg z-50">
-                    <SelectItem value="cash">
-                      <span className="flex items-center gap-2">💵 Cash</span>
-                    </SelectItem>
-                    <SelectItem value="upi">
-                      <span className="flex items-center gap-2">📱 UPI</span>
-                    </SelectItem>
-                    <SelectItem value="card">
-                      <span className="flex items-center gap-2">💳 Card</span>
-                    </SelectItem>
-                    <SelectItem value="cheque">
-                      <span className="flex items-center gap-2">📝 Cheque</span>
-                    </SelectItem>
-                    <SelectItem value="neft">
-                      <span className="flex items-center gap-2">🏦 NEFT/RTGS</span>
-                    </SelectItem>
-                    <SelectItem value="insurance">
-                      <span className="flex items-center gap-2">🏥 Insurance</span>
-                    </SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="upi">UPI</SelectItem>
+                    <SelectItem value="card">Card</SelectItem>
+                    <SelectItem value="cheque">Cheque</SelectItem>
+                    <SelectItem value="neft">NEFT/RTGS</SelectItem>
+                    <SelectItem value="insurance">Insurance</SelectItem>
                   </SelectContent>
                 </Select>
                 {paymentLines.length > 1 && (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Banknote, Smartphone, CreditCard as CreditCardIcon, FileCheck, Building2, Shield } from "lucide-react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -25,12 +25,12 @@ interface SplitPayment {
 }
 
 const paymentMethods = [
-  { value: "cash", label: "Cash", emoji: "💵" },
-  { value: "upi", label: "UPI", emoji: "📱" },
-  { value: "card", label: "Card", emoji: "💳" },
-  { value: "cheque", label: "Cheque", emoji: "📝" },
-  { value: "neft", label: "NEFT/RTGS", emoji: "🏦" },
-  { value: "insurance", label: "Insurance", emoji: "🏥" },
+  { value: "cash", label: "Cash" },
+  { value: "upi", label: "UPI" },
+  { value: "card", label: "Card" },
+  { value: "cheque", label: "Cheque" },
+  { value: "neft", label: "NEFT/RTGS" },
+  { value: "insurance", label: "Insurance" },
 ];
 
 const Discharge = () => {

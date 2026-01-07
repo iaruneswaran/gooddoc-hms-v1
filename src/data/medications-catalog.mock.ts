@@ -36,18 +36,18 @@ export type MedicationCategory =
   | "Other";
 
 export const MEDICATION_CATEGORIES: { value: MedicationCategory; label: string; icon: string }[] = [
-  { value: "Cardiovascular", label: "Cardiovascular", icon: "❤️" },
-  { value: "Diabetes", label: "Diabetes", icon: "🩸" },
-  { value: "Antibiotics", label: "Antibiotics", icon: "💊" },
-  { value: "Pain & Fever", label: "Pain & Fever", icon: "🌡️" },
-  { value: "GI & Acid", label: "GI & Acid", icon: "🫁" },
-  { value: "Respiratory", label: "Respiratory", icon: "🌬️" },
-  { value: "Neurological", label: "Neurological", icon: "🧠" },
-  { value: "Vitamins & Supplements", label: "Vitamins", icon: "💉" },
-  { value: "Blood Thinners", label: "Blood Thinners", icon: "🩹" },
-  { value: "Hormones", label: "Hormones", icon: "⚗️" },
-  { value: "Anti-allergy", label: "Anti-allergy", icon: "🤧" },
-  { value: "Other", label: "Other", icon: "📦" },
+  { value: "Cardiovascular", label: "Cardiovascular", icon: "heart" },
+  { value: "Diabetes", label: "Diabetes", icon: "droplet" },
+  { value: "Antibiotics", label: "Antibiotics", icon: "pill" },
+  { value: "Pain & Fever", label: "Pain & Fever", icon: "thermometer" },
+  { value: "GI & Acid", label: "GI & Acid", icon: "activity" },
+  { value: "Respiratory", label: "Respiratory", icon: "wind" },
+  { value: "Neurological", label: "Neurological", icon: "brain" },
+  { value: "Vitamins & Supplements", label: "Vitamins", icon: "syringe" },
+  { value: "Blood Thinners", label: "Blood Thinners", icon: "bandage" },
+  { value: "Hormones", label: "Hormones", icon: "flask-conical" },
+  { value: "Anti-allergy", label: "Anti-allergy", icon: "shield" },
+  { value: "Other", label: "Other", icon: "package" },
 ];
 
 export const MEDICATIONS_CATALOG: MedicationCatalogItem[] = [
