@@ -68,6 +68,13 @@ export function PaymentMethodModal({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Sync selected method with defaultMethod when modal opens
+  useEffect(() => {
+    if (open && defaultMethod) {
+      setSelectedMethod(defaultMethod);
+    }
+  }, [open, defaultMethod]);
+
   // Create payment intent when modal opens
   useEffect(() => {
     if (open && !intent) {
