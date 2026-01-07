@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, Trash2, CreditCard, Smartphone, RotateCcw, AlertCircle } from "lucide-react";
+import { Download, Printer, Eye, Plus, Trash2, RotateCcw, AlertCircle } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
@@ -137,7 +137,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   if (!selectedVisit) {
     return (
       <div className="p-8 text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="billing-body text-muted-foreground">
           Select a visit to collect payment.
         </p>
       </div>
@@ -166,11 +166,11 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     <div className="flex">
       {/* Left Panel - Payable Bills */}
       <div className="flex-1 p-6 space-y-4">
-        <h3 className="text-[14px] font-semibold text-foreground">Payable Bills</h3>
+        <h3 className="billing-section-title">Payable Bills</h3>
 
         {visitBills.length === 0 ? (
           <div className="p-8 text-center border rounded-lg bg-muted/20">
-            <p className="text-sm text-muted-foreground">No pending bills for this visit.</p>
+            <p className="billing-body text-muted-foreground">No pending bills for this visit.</p>
           </div>
         ) : (
           <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
@@ -178,20 +178,20 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
               <table className="w-full">
                 <thead className="bg-muted/30">
                   <tr>
-                    <th className="text-center text-xs font-medium text-muted-foreground p-3 w-10">
+                    <th className="text-center billing-label p-3 w-10">
                       <Checkbox
                         checked={selectedBillIds.length === visitBills.length && visitBills.length > 0}
                         onCheckedChange={toggleSelectAll}
                       />
                     </th>
-                    <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice No.</th>
-                    <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
-                    <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / Doctor</th>
-                    <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
-                    <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Paid</th>
-                    <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Balance</th>
-                    <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
-                    <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap">Invoice No.</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap">Date & Time</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap">Service / Doctor</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap">Amount</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap">Paid</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap">Balance</th>
+                    <th className="text-center billing-label p-3 whitespace-nowrap">Status</th>
+                    <th className="text-center billing-label p-3 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -210,30 +210,30 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         />
                       </td>
                       <td className="p-3">
-                        <p className="text-sm font-medium text-primary">{bill.invoiceNo}</p>
-                        <p className="text-[10px] font-mono text-muted-foreground">{bill.serviceCode}</p>
+                        <p className="billing-value text-primary">{bill.invoiceNo}</p>
+                        <p className="billing-helper font-mono">{bill.serviceCode}</p>
                       </td>
                       <td className="p-3">
-                        <p className="text-sm text-foreground">{bill.date}</p>
-                        <p className="text-xs text-muted-foreground">{bill.time}</p>
+                        <p className="billing-body">{bill.date}</p>
+                        <p className="billing-helper">{bill.time}</p>
                       </td>
                       <td className="p-3">
-                        <p className="text-sm font-medium text-foreground">{bill.service}</p>
-                        <p className="text-xs text-muted-foreground">{bill.doctor} • {bill.department}</p>
+                        <p className="billing-value">{bill.service}</p>
+                        <p className="billing-helper">{bill.doctor} • {bill.department}</p>
                       </td>
                       <td className="p-3 text-right">
-                        <p className="text-sm font-semibold text-foreground">{formatINR(bill.totalAmount)}</p>
+                        <p className="billing-value">{formatINR(bill.totalAmount)}</p>
                         {bill.originalAmount !== bill.totalAmount && (
-                          <p className="text-xs text-muted-foreground line-through">{formatINR(bill.originalAmount)}</p>
+                          <p className="billing-helper line-through">{formatINR(bill.originalAmount)}</p>
                         )}
                       </td>
                       <td className="p-3 text-right">
-                        <p className={`text-sm font-medium ${bill.paidAmount > 0 ? "text-emerald-600" : "text-muted-foreground"}`}>
+                        <p className={bill.paidAmount > 0 ? "billing-amount-success" : "billing-amount-muted"}>
                           {bill.paidAmount > 0 ? formatINR(bill.paidAmount) : "—"}
                         </p>
                       </td>
                       <td className="p-3 text-right">
-                        <p className="text-sm font-medium text-red-600">{formatINR(bill.balance)}</p>
+                        <p className="billing-amount-negative">{formatINR(bill.balance)}</p>
                       </td>
                       <td className="p-3 text-center">
                         {getStatusBadge(bill.status)}
@@ -257,16 +257,16 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 <tfoot className="bg-muted/50 border-t border-border">
                   <tr>
                     <td colSpan={4} className="p-3 text-right">
-                      <span className="text-sm font-semibold text-foreground">Total:</span>
+                      <span className="billing-value">Total:</span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className="text-sm font-bold text-foreground">{formatINR(visitBills.reduce((sum, b) => sum + b.totalAmount, 0))}</span>
+                      <span className="billing-value">{formatINR(visitBills.reduce((sum, b) => sum + b.totalAmount, 0))}</span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className="text-sm font-bold text-emerald-600">{formatINR(visitBills.reduce((sum, b) => sum + b.paidAmount, 0))}</span>
+                      <span className="billing-amount-success">{formatINR(visitBills.reduce((sum, b) => sum + b.paidAmount, 0))}</span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className="text-sm font-bold text-red-600">{formatINR(visitBills.reduce((sum, b) => sum + b.balance, 0))}</span>
+                      <span className="billing-amount-negative">{formatINR(visitBills.reduce((sum, b) => sum + b.balance, 0))}</span>
                     </td>
                     <td colSpan={2}></td>
                   </tr>
@@ -280,9 +280,9 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       {/* Right Panel - Payment Settlement */}
       <div className="w-[420px] flex flex-col bg-background shadow-lg rounded-xl border border-border mt-16 mb-6 mr-6 overflow-hidden">
         <div className="bg-primary px-5 py-4 rounded-t-xl">
-          <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
+          <h2 className="billing-section-title text-primary-foreground">Payment Settlement</h2>
           {selectedBills.length > 0 && (
-            <p className="text-sm text-primary-foreground/80 mt-0.5">
+            <p className="billing-body text-primary-foreground/80 mt-0.5">
               {selectedBills.length === 1
                 ? `Invoice: ${selectedBills[0].invoiceNo}`
                 : `${selectedBills.length} Invoices Selected`}
@@ -293,7 +293,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
         <div className="flex-1 p-5">
           {selectedBills.length === 0 ? (
             <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-lg bg-muted/30">
-              <p className="text-sm text-muted-foreground text-center px-4">
+              <p className="billing-body text-muted-foreground text-center px-4">
                 Select bills from the left to collect payment
               </p>
             </div>
@@ -301,22 +301,22 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
             <div className="space-y-5">
               <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Gross Bill Amount</span>
-                  <span className="text-sm font-semibold text-foreground">{formatINR(totalOriginalAmount)}</span>
+                  <span className="billing-label">Gross Bill Amount</span>
+                  <span className="billing-value">{formatINR(totalOriginalAmount)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Discount Applied</span>
-                  <span className="text-sm font-medium text-emerald-600">- {formatINR(totalOriginalAmount - totalNetAmount)}</span>
+                  <span className="billing-label">Discount Applied</span>
+                  <span className="billing-amount-success">- {formatINR(totalOriginalAmount - totalNetAmount)}</span>
                 </div>
                 <div className="border-t border-border my-2" />
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-foreground">Net Bill Amount</span>
-                  <span className="text-base font-bold text-foreground">{formatINR(totalNetAmount)}</span>
+                  <span className="billing-section-title">Net Bill Amount</span>
+                  <span className="billing-amount-primary">{formatINR(totalNetAmount)}</span>
                 </div>
                 {totalPaidAmount > 0 && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Already Paid</span>
-                    <span className="text-sm font-medium text-emerald-600">- {formatINR(totalPaidAmount)}</span>
+                    <span className="billing-label">Already Paid</span>
+                    <span className="billing-amount-success">- {formatINR(totalPaidAmount)}</span>
                   </div>
                 )}
               </div>
@@ -325,13 +325,13 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-primary" />
-                    <span className="text-sm font-medium text-foreground">Patient Deposit</span>
+                    <span className="billing-label">Patient Deposit</span>
                   </div>
-                  <span className="text-lg font-bold text-emerald-600">{formatINR(patientDeposit)}</span>
+                  <span className="billing-amount-primary text-emerald-600">{formatINR(patientDeposit)}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Switch id="adjust-deposit" checked={adjustDeposit} onCheckedChange={setAdjustDeposit} />
-                  <Label htmlFor="adjust-deposit" className="text-sm text-muted-foreground cursor-pointer">
+                  <Label htmlFor="adjust-deposit" className="billing-control-label text-muted-foreground cursor-pointer">
                     Adjust deposit against this bill
                   </Label>
                 </div>
@@ -339,14 +339,14 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 {adjustDeposit && selectedBills.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-border space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Deposit Used</span>
-                      <span className="text-sm font-semibold text-red-500">
+                      <span className="billing-label">Deposit Used</span>
+                      <span className="billing-amount-negative">
                         - {formatINR(Math.min(patientDeposit, totalBalanceAmount))}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Remaining Deposit</span>
-                      <span className="text-sm font-semibold text-foreground">
+                      <span className="billing-label">Remaining Deposit</span>
+                      <span className="billing-value">
                         {formatINR(Math.max(0, patientDeposit - totalBalanceAmount))}
                       </span>
                     </div>
@@ -356,17 +356,17 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
 
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-foreground">Amount to Collect</span>
-                  <span className="text-xl font-bold text-primary">{formatINR(amountToCollect)}</span>
+                  <span className="billing-section-title">Amount to Collect</span>
+                  <span className="billing-amount-primary text-primary">{formatINR(amountToCollect)}</span>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-foreground">Split Payment</span>
+                  <span className="billing-section-title">Split Payment</span>
                   <button
                     onClick={resetDistribution}
-                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                    className="billing-link flex items-center gap-1"
                   >
                     <RotateCcw className="w-3 h-3" />
                     Reset
@@ -377,13 +377,13 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   <div key={row.id} className="flex items-center gap-3">
                     {/* Amount Input */}
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 billing-label">₹</span>
                       <Input
                         type="number"
                         placeholder="0.00"
                         value={row.amount || ""}
                         onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
-                        className="pl-7 h-10 bg-background border-border rounded-lg text-sm"
+                        className="pl-7 h-10 bg-background border-border rounded-lg billing-nums"
                         min={0}
                       />
                     </div>
@@ -417,7 +417,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
 
                 {/* Validation Error */}
                 {validationError && (
-                  <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                  <div className="flex items-center gap-2 billing-helper text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
                     <AlertCircle className="w-4 h-4" />
                     {validationError}
                   </div>
@@ -426,7 +426,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 {/* Add Split Payment Link */}
                 <button 
                   onClick={addRow}
-                  className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                  className="billing-link flex items-center gap-1.5"
                 >
                   <Plus className="h-4 w-4" />
                   Add Split Payment
@@ -435,14 +435,14 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
               </div>
 
               <div className="space-y-3">
-                <span className="text-sm font-semibold text-foreground">Payer Details</span>
+                <span className="billing-section-title">Payer Details</span>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Name</Label>
-                    <Input placeholder="Payer name" value={payerName} onChange={(e) => setPayerName(e.target.value)} className="h-9" />
+                    <Label className="billing-label">Name</Label>
+                    <Input placeholder="Payer name" value={payerName} onChange={(e) => setPayerName(e.target.value)} className="h-9 billing-body" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Relation</Label>
+                    <Label className="billing-label">Relation</Label>
                     <Select value={payerRelation} onValueChange={setPayerRelation}>
                       <SelectTrigger className="h-9">
                         <SelectValue />
@@ -458,25 +458,25 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Mobile Number</Label>
-                  <Input placeholder="+91" value={payerMobile} onChange={(e) => setPayerMobile(e.target.value)} className="h-9" />
+                  <Label className="billing-label">Mobile Number</Label>
+                  <Input placeholder="+91" value={payerMobile} onChange={(e) => setPayerMobile(e.target.value)} className="h-9 billing-body" />
                 </div>
               </div>
 
               <div className="space-y-3">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">After Payment</span>
+                <span className="billing-label uppercase tracking-wide">After Payment</span>
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Checkbox id="print" checked={printReceipt} onCheckedChange={(checked) => setPrintReceipt(!!checked)} />
-                    <Label htmlFor="print" className="text-sm text-foreground cursor-pointer">Print Receipt</Label>
+                    <Label htmlFor="print" className="billing-control-label cursor-pointer">Print Receipt</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Checkbox id="sms" checked={sendSms} onCheckedChange={(checked) => setSendSms(!!checked)} />
-                    <Label htmlFor="sms" className="text-sm text-foreground cursor-pointer">SMS</Label>
+                    <Label htmlFor="sms" className="billing-control-label cursor-pointer">SMS</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Checkbox id="email" checked={sendEmail} onCheckedChange={(checked) => setSendEmail(!!checked)} />
-                    <Label htmlFor="email" className="text-sm text-foreground cursor-pointer">Email</Label>
+                    <Label htmlFor="email" className="billing-control-label cursor-pointer">Email</Label>
                   </div>
                 </div>
               </div>
@@ -492,6 +492,10 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           >
             Collect Payment
           </Button>
+          <p className="billing-caption text-center mt-3 leading-relaxed">
+            By settling this bill, you confirm that payment has been received. 
+            A receipt will be generated automatically.
+          </p>
         </div>
       </div>
 

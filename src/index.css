@@ -404,3 +404,128 @@
     background-position: 200% 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BILLING TYPOGRAPHY SYSTEM
+   Unified typography for payment/billing screens
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Enable tabular numerals for all billing amounts */
+.billing-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Page Title: 24/32 700 */
+.billing-page-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Section Title: 16/24 600 */
+.billing-section-title {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+/* Type Scale - Label: 12/16 600 */
+.billing-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Type Scale - Body: 14/22 400 */
+.billing-body {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 400;
+  color: hsl(var(--foreground));
+}
+
+/* Type Scale - Helper: 12/18 400 */
+.billing-helper {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Type Scale - Value: 14/22 600 */
+.billing-value {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Amount Primary (key totals): 18/26 700 */
+.billing-amount-primary {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Amount Negative: 14/22 600 danger */
+.billing-amount-negative {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  color: hsl(var(--gd-error));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Amount Muted (zero/placeholder): 14/22 600 muted */
+.billing-amount-muted {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Amount Success: 14/22 600 success */
+.billing-amount-success {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  color: hsl(var(--gd-success));
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Type Scale - Link: 14/20 600 primary */
+.billing-link {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: hsl(var(--primary));
+  cursor: pointer;
+}
+.billing-link:hover,
+.billing-link:focus {
+  text-decoration: underline;
+}
+
+/* Type Scale - Control Label (checkbox/radio): 14/20 500 */
+.billing-control-label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+/* Type Scale - Caption Disclaimer: 12/18 400 secondary */
+.billing-caption {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+  color: hsl(var(--muted-foreground));
+}

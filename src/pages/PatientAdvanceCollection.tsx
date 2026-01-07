@@ -21,8 +21,6 @@ import {
   Printer,
   Trash2,
   User,
-  CreditCard,
-  Smartphone,
   RotateCcw,
   AlertCircle
 } from "lucide-react";
@@ -50,7 +48,7 @@ const mockPatient = {
 const advanceHistory = [
   {
     id: "ADV-2025-001",
-    receiptNo: "RCP-2025-001",
+    receiptNo: "RCP001",
     date: "07 Aug 2025",
     time: "11:30 AM",
     amount: 200000,
@@ -60,7 +58,7 @@ const advanceHistory = [
   },
   {
     id: "ADV-2025-002",
-    receiptNo: "RCP-2025-002",
+    receiptNo: "RCP002",
     date: "07 Aug 2025",
     time: "02:15 PM",
     amount: 120000,
@@ -120,7 +118,7 @@ const PatientAdvanceCollection = () => {
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
     setShowPaymentModal(false);
-    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    const receiptNo = `RCP${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
     toast.success("Advance collected successfully!", {
       description: `Receipt No: ${receiptNo}`,
     });
@@ -134,7 +132,7 @@ const PatientAdvanceCollection = () => {
     const upiAmount = steps.filter(s => s.method === 'upi' && s.status === 'succeeded')
       .reduce((sum, s) => sum + s.amount, 0);
     
-    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    const receiptNo = `RCP${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
     toast.success("Split payment collected successfully!", {
       description: `Card: ${formatINR(cardAmount)} + UPI: ${formatINR(upiAmount)} • Receipt: ${receiptNo}`,
     });
@@ -175,7 +173,7 @@ const PatientAdvanceCollection = () => {
   };
 
   const handleCashPaymentSuccess = () => {
-    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    const receiptNo = `RCP${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
     toast.success("Advance collected successfully!", {
       description: `Receipt No: ${receiptNo}`,
     });
@@ -223,8 +221,8 @@ const PatientAdvanceCollection = () => {
             </div>
             <div className="flex items-center gap-6">
               <div>
-                <p className="text-sm font-semibold text-foreground">{mockPatient.name}</p>
-                <p className="text-xs text-muted-foreground">{mockPatient.gdid} • {mockPatient.age}Y / {mockPatient.gender.charAt(0)}</p>
+                <p className="billing-value">{mockPatient.name}</p>
+                <p className="billing-helper">{mockPatient.gdid} • {mockPatient.age}Y / {mockPatient.gender.charAt(0)}</p>
               </div>
             </div>
           </div>
@@ -235,10 +233,10 @@ const PatientAdvanceCollection = () => {
             {/* Left Panel - Advance History Table */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Advance Deposits</h2>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>Balance:</span>
-                  <span className="font-semibold text-green-600">{formatINR(availableBalance)}</span>
+                <h2 className="billing-section-title">Advance Deposits</h2>
+                <div className="flex items-center gap-2">
+                  <span className="billing-label">Balance:</span>
+                  <span className="billing-amount-success">{formatINR(availableBalance)}</span>
                 </div>
               </div>
               
@@ -246,29 +244,29 @@ const PatientAdvanceCollection = () => {
                 <table className="w-full">
                   <thead className="bg-muted/50">
                     <tr>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Receipt No.</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Date & Time</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Reason</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Name</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
-                      <th className="text-right text-sm font-medium text-muted-foreground p-4">Amount</th>
-                      <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+                      <th className="text-left billing-label p-4">Receipt No.</th>
+                      <th className="text-left billing-label p-4">Date & Time</th>
+                      <th className="text-left billing-label p-4">Reason</th>
+                      <th className="text-left billing-label p-4">Name</th>
+                      <th className="text-left billing-label p-4">Method</th>
+                      <th className="text-right billing-label p-4">Amount</th>
+                      <th className="text-left billing-label p-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-background">
                     {advanceHistory.map((adv) => (
                       <tr key={adv.id} className="border-t hover:bg-muted/20 transition-colors">
                         <td className="p-4">
-                          <p className="text-sm font-medium">{adv.receiptNo}</p>
+                          <p className="billing-value">{adv.receiptNo}</p>
                         </td>
                         <td className="p-4">
-                          <p className="text-sm">{adv.date}</p>
-                          <p className="text-xs text-muted-foreground">{adv.time}</p>
+                          <p className="billing-body">{adv.date}</p>
+                          <p className="billing-helper">{adv.time}</p>
                         </td>
-                        <td className="p-4 text-sm">{adv.reason}</td>
-                        <td className="p-4 text-sm">{adv.payerName}</td>
-                        <td className="p-4 text-sm">{adv.method}</td>
-                        <td className="p-4 text-sm font-medium text-right text-green-600">{formatINR(adv.amount)}</td>
+                        <td className="p-4 billing-body">{adv.reason}</td>
+                        <td className="p-4 billing-body">{adv.payerName}</td>
+                        <td className="p-4 billing-body">{adv.method}</td>
+                        <td className="p-4 text-right billing-amount-success">{formatINR(adv.amount)}</td>
                         <td className="p-4">
                           <div className="flex gap-1">
                             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -286,20 +284,20 @@ const PatientAdvanceCollection = () => {
               </div>
 
               {/* Summary Footer */}
-              <div className="mt-4 pt-4 border-t flex items-center justify-end text-sm">
+              <div className="mt-4 pt-4 border-t flex items-center justify-end">
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Total Collected:</span>
-                  <span className="font-semibold">{formatINR(mockPatient.currentAdvance)}</span>
+                  <span className="billing-label">Total Collected:</span>
+                  <span className="billing-value">{formatINR(mockPatient.currentAdvance)}</span>
                 </div>
               </div>
             </Card>
 
-            {/* Right Panel - Collection Form (styled like PaymentSummaryPanel) */}
+            {/* Right Panel - Collection Form */}
             <Card className="overflow-hidden sticky top-6 h-fit">
               {/* Header */}
               <div className="bg-primary px-5 py-4">
-                <h3 className="text-base font-semibold text-primary-foreground">Collect Advance</h3>
-                <p className="text-xs text-primary-foreground/70 mt-0.5">
+                <h3 className="billing-section-title text-primary-foreground">Collect Advance</h3>
+                <p className="billing-helper text-primary-foreground/70 mt-0.5">
                   Record deposit from patient or attendant
                 </p>
               </div>
@@ -307,7 +305,7 @@ const PatientAdvanceCollection = () => {
               <div className="p-5 space-y-5">
                 {/* Reason Selection */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium">Reason for Advance</Label>
+                  <Label className="billing-label">Reason for Advance</Label>
                   <Select value={reason} onValueChange={setReason}>
                     <SelectTrigger className="h-11">
                       <SelectValue />
@@ -327,27 +325,27 @@ const PatientAdvanceCollection = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span className="text-sm font-medium">Current Advance Balance</span>
+                      <span className="billing-label">Current Advance Balance</span>
                     </div>
-                    <span className="text-sm font-semibold text-green-600">{formatINR(availableBalance)}</span>
+                    <span className="billing-amount-success">{formatINR(availableBalance)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Estimated Bill</span>
-                    <span>{formatINR(mockPatient.estimatedBill)}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="billing-helper">Estimated Bill</span>
+                    <span className="billing-value">{formatINR(mockPatient.estimatedBill)}</span>
                   </div>
                 </div>
 
                 {/* Amount to Collect */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium">Amount to Collect</Label>
+                  <Label className="billing-label">Amount to Collect</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 billing-label">₹</span>
                     <Input
                       type="number"
                       value={amountToCollect || ""}
                       onChange={(e) => setAmountToCollect(parseFloat(e.target.value) || 0)}
                       placeholder="0.00"
-                      className="pl-7 h-11 text-lg font-semibold"
+                      className="pl-7 h-11 billing-amount-primary"
                       min={0}
                     />
                   </div>
@@ -356,10 +354,10 @@ const PatientAdvanceCollection = () => {
                 {/* Split Payment */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">Split Payment</span>
+                    <span className="billing-section-title">Split Payment</span>
                     <button
                       onClick={resetDistribution}
-                      className="text-xs text-primary hover:underline flex items-center gap-1"
+                      className="billing-link flex items-center gap-1"
                     >
                       <RotateCcw className="w-3 h-3" />
                       Reset
@@ -369,13 +367,13 @@ const PatientAdvanceCollection = () => {
                   {splitRows.map((row) => (
                     <div key={row.id} className="flex items-center gap-3">
                       <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 billing-label">₹</span>
                         <Input
                           type="number"
                           value={row.amount || ""}
                           onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
                           placeholder="0.00"
-                          className="pl-7 h-10"
+                          className="pl-7 h-10 billing-nums"
                           min={0}
                         />
                       </div>
@@ -405,14 +403,14 @@ const PatientAdvanceCollection = () => {
 
                   {/* Validation Error */}
                   {validationError && (
-                    <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                    <div className="flex items-center gap-2 billing-helper text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
                       <AlertCircle className="w-4 h-4" />
                       {validationError}
                     </div>
                   )}
 
                   <button 
-                    className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                    className="billing-link flex items-center gap-1.5"
                     onClick={addRow}
                   >
                     <span className="text-lg leading-none">+</span> Add Split Payment
@@ -422,18 +420,18 @@ const PatientAdvanceCollection = () => {
 
                 {/* Payer Details */}
                 <div className="space-y-3 pt-2 border-t border-border">
-                  <span className="text-sm font-semibold text-foreground">Payer Details</span>
+                  <span className="billing-section-title">Payer Details</span>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
-                      <Label className="text-xs text-muted-foreground">Name</Label>
+                      <Label className="billing-label">Name</Label>
                       <Input
                         value={payerName}
                         onChange={(e) => setPayerName(e.target.value)}
-                        className="h-9"
+                        className="h-9 billing-body"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs text-muted-foreground">Relation</Label>
+                      <Label className="billing-label">Relation</Label>
                       <Select value={payerRelation} onValueChange={setPayerRelation}>
                         <SelectTrigger className="h-9">
                           <SelectValue />
@@ -449,19 +447,19 @@ const PatientAdvanceCollection = () => {
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                    <Label className="billing-label">Mobile Number</Label>
                     <Input
                       type="tel"
                       value={payerMobile}
                       onChange={(e) => setPayerMobile(e.target.value)}
-                      className="h-9"
+                      className="h-9 billing-body"
                     />
                   </div>
                 </div>
 
                 {/* After Payment */}
                 <div className="space-y-3">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">After Payment</span>
+                  <span className="billing-label uppercase tracking-wide">After Payment</span>
                   <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                       <Checkbox 
@@ -469,7 +467,7 @@ const PatientAdvanceCollection = () => {
                         checked={printReceipt}
                         onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
                       />
-                      <Label htmlFor="print-advance" className="text-sm text-foreground cursor-pointer">Print Receipt</Label>
+                      <Label htmlFor="print-advance" className="billing-control-label cursor-pointer">Print Receipt</Label>
                     </div>
                     <div className="flex items-center gap-2">
                       <Checkbox 
@@ -477,7 +475,7 @@ const PatientAdvanceCollection = () => {
                         checked={sendSms}
                         onCheckedChange={(checked) => setSendSms(checked as boolean)}
                       />
-                      <Label htmlFor="sms-advance" className="text-sm text-foreground cursor-pointer">SMS</Label>
+                      <Label htmlFor="sms-advance" className="billing-control-label cursor-pointer">SMS</Label>
                     </div>
                     <div className="flex items-center gap-2">
                       <Checkbox 
@@ -485,7 +483,7 @@ const PatientAdvanceCollection = () => {
                         checked={sendEmail}
                         onCheckedChange={(checked) => setSendEmail(checked as boolean)}
                       />
-                      <Label htmlFor="email-advance" className="text-sm text-foreground cursor-pointer">Email</Label>
+                      <Label htmlFor="email-advance" className="billing-control-label cursor-pointer">Email</Label>
                     </div>
                   </div>
                 </div>
@@ -500,7 +498,7 @@ const PatientAdvanceCollection = () => {
                 </Button>
 
                 {/* Footer Note */}
-                <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
+                <p className="billing-caption text-center leading-relaxed">
                   By collecting this advance, you confirm that payment has been received. 
                   A receipt will be generated automatically.
                 </p>
