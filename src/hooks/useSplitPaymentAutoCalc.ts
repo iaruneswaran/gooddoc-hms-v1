@@ -37,10 +37,9 @@ export function useSplitPaymentAutoCalc({
     if (initialRows && initialRows.length > 0) {
       return initialRows;
     }
-    // Default: Card = totalDue, UPI = 0
+    // Default: single Cash row with full amount
     return [
-      { id: generateRowId(), method: 'card', amount: totalDue, isUserEdited: false },
-      { id: generateRowId(), method: 'upi', amount: 0, isUserEdited: false },
+      { id: generateRowId(), method: 'cash', amount: totalDue, isUserEdited: false },
     ];
   });
 
