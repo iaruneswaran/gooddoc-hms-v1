@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PaymentMethodModal, CashPaymentModal } from "@/components/payment";
@@ -414,15 +416,10 @@ const Payment = () => {
                   </div>
 
                   {/* Amount Payable */}
-                  <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-4">
+                  <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
                     <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Amount to Collect</p>
-                        <p className="text-2xl font-bold text-primary mt-1">₹{payableAmount.toLocaleString()}</p>
-                      </div>
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <span className="text-primary text-lg">₹</span>
-                      </div>
+                      <span className="text-sm font-semibold text-foreground">Amount to Collect</span>
+                      <span className="text-xl font-bold text-primary">₹{payableAmount.toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -497,20 +494,20 @@ const Payment = () => {
 
                   {/* Payer Details */}
                   <div className="space-y-3 pt-2 border-t border-border">
-                    <p className="text-sm font-semibold">Payer Details</p>
+                    <span className="text-sm font-semibold text-foreground">Payer Details</span>
                     <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs text-muted-foreground">Payer Name</label>
-                        <input
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-muted-foreground">Name</Label>
+                        <Input 
                           type="text"
                           defaultValue="Siva Karthikeyan"
-                          className="w-full h-10 px-3 mt-1 text-sm bg-background border border-input rounded-lg"
+                          className="h-9"
                         />
                       </div>
-                      <div>
-                        <label className="text-xs text-muted-foreground">Relation</label>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-muted-foreground">Relation</Label>
                         <Select defaultValue="self">
-                          <SelectTrigger className="h-10 mt-1">
+                          <SelectTrigger className="h-9">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-popover border border-border shadow-lg z-50">
@@ -523,41 +520,42 @@ const Payment = () => {
                         </Select>
                       </div>
                     </div>
-                    <div>
-                      <label className="text-xs text-muted-foreground">Mobile Number</label>
-                      <input
+                    <div className="space-y-1.5">
+                      <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                      <Input
                         type="tel"
                         defaultValue="+91 98765 43210"
-                        className="w-full h-10 px-3 mt-1 text-sm bg-background border border-input rounded-lg"
+                        className="h-9"
                       />
                     </div>
                   </div>
 
-                  {/* Receipt Options */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" className="rounded" defaultChecked />
-                      <span>Print Receipt</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" className="rounded" defaultChecked />
-                      <span>Send SMS</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" className="rounded" />
-                      <span>Email</span>
-                    </label>
+                  {/* After Payment */}
+                  <div className="space-y-3">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">After Payment</span>
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-2">
+                        <Checkbox id="print" defaultChecked />
+                        <Label htmlFor="print" className="text-sm text-foreground cursor-pointer">Print Receipt</Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Checkbox id="sms" defaultChecked />
+                        <Label htmlFor="sms" className="text-sm text-foreground cursor-pointer">SMS</Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Checkbox id="email" />
+                        <Label htmlFor="email" className="text-sm text-foreground cursor-pointer">Email</Label>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Action Button */}
-                  <div className="pt-3">
-                    <Button 
-                      className="w-full h-12 bg-primary hover:bg-primary/90 font-semibold" 
-                      onClick={handlePayNow}
-                    >
-                      Collect Payment
-                    </Button>
-                  </div>
+                  <Button 
+                    className="w-full h-11" 
+                    onClick={handlePayNow}
+                  >
+                    Collect Payment
+                  </Button>
 
                   {/* Footer Note */}
                   <p className="text-[10px] text-muted-foreground text-center leading-relaxed">

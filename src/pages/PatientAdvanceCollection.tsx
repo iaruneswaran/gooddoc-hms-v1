@@ -354,9 +354,9 @@ const PatientAdvanceCollection = () => {
                 </div>
 
                 {/* Split Payment */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Split Payment</p>
+                    <span className="text-sm font-semibold text-foreground">Split Payment</span>
                     <button
                       onClick={resetDistribution}
                       className="text-xs text-primary hover:underline flex items-center gap-1"
@@ -367,41 +367,39 @@ const PatientAdvanceCollection = () => {
                   </div>
                   
                   {splitRows.map((row) => (
-                    <div key={row.id} className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
-                          <Input
-                            type="number"
-                            value={row.amount || ""}
-                            onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
-                            placeholder="0.00"
-                            className="pl-7 h-11"
-                            min={0}
-                          />
-                        </div>
-                        <Select
-                          value={row.method}
-                          onValueChange={(value) => updateRowMethod(row.id, value as SplitRow['method'])}
-                        >
-                          <SelectTrigger className={`w-[130px] h-11 ${row.method === "card" || row.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-popover border border-border shadow-lg z-50">
-                            <SelectItem value="cash">Cash</SelectItem>
-                            <SelectItem value="card">Card</SelectItem>
-                            <SelectItem value="upi">UPI</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {splitRows.length > 1 && (
-                          <button
-                            onClick={() => removeRow(row.id)}
-                            className="h-11 w-11 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        )}
+                    <div key={row.id} className="flex items-center gap-3">
+                      <div className="relative flex-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                        <Input
+                          type="number"
+                          value={row.amount || ""}
+                          onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
+                          placeholder="0.00"
+                          className="pl-7 h-10"
+                          min={0}
+                        />
                       </div>
+                      <Select
+                        value={row.method}
+                        onValueChange={(value) => updateRowMethod(row.id, value as SplitRow['method'])}
+                      >
+                        <SelectTrigger className={`w-[140px] h-10 ${row.method === "card" || row.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-popover border border-border shadow-lg z-50">
+                          <SelectItem value="cash">Cash</SelectItem>
+                          <SelectItem value="card">Card</SelectItem>
+                          <SelectItem value="upi">UPI</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {splitRows.length > 1 && (
+                        <button
+                          onClick={() => removeRow(row.id)}
+                          className="h-10 w-10 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center shrink-0 transition-colors"
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </button>
+                      )}
                     </div>
                   ))}
 
@@ -414,31 +412,30 @@ const PatientAdvanceCollection = () => {
                   )}
 
                   <button 
-                    className="text-sm text-primary font-medium hover:underline flex items-center gap-1"
+                    className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                     onClick={addRow}
                   >
                     <span className="text-lg leading-none">+</span> Add Split Payment
                   </button>
-
                 </div>
 
 
                 {/* Payer Details */}
                 <div className="space-y-3 pt-2 border-t border-border">
-                  <p className="text-sm font-semibold">Payer Details</p>
+                  <span className="text-sm font-semibold text-foreground">Payer Details</span>
                   <div className="grid grid-cols-2 gap-3">
-                    <div>
+                    <div className="space-y-1.5">
                       <Label className="text-xs text-muted-foreground">Name</Label>
                       <Input
                         value={payerName}
                         onChange={(e) => setPayerName(e.target.value)}
-                        className="h-10 mt-1"
+                        className="h-9"
                       />
                     </div>
-                    <div>
+                    <div className="space-y-1.5">
                       <Label className="text-xs text-muted-foreground">Relation</Label>
                       <Select value={payerRelation} onValueChange={setPayerRelation}>
-                        <SelectTrigger className="h-10 mt-1">
+                        <SelectTrigger className="h-9">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="bg-popover border border-border shadow-lg z-50">
@@ -451,48 +448,53 @@ const PatientAdvanceCollection = () => {
                       </Select>
                     </div>
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Mobile Number</Label>
                     <Input
                       type="tel"
                       value={payerMobile}
                       onChange={(e) => setPayerMobile(e.target.value)}
-                      className="h-10 mt-1"
+                      className="h-9"
                     />
                   </div>
                 </div>
 
-                {/* Receipt Options */}
-                <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-                  <p className="text-sm font-medium text-foreground mr-2">After Payment</p>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox 
-                      checked={printReceipt}
-                      onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
-                    />
-                    <span>Print Receipt</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox 
-                      checked={sendSms}
-                      onCheckedChange={(checked) => setSendSms(checked as boolean)}
-                    />
-                    <span>SMS</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox 
-                      checked={sendEmail}
-                      onCheckedChange={(checked) => setSendEmail(checked as boolean)}
-                    />
-                    <span>Email</span>
-                  </label>
+                {/* After Payment */}
+                <div className="space-y-3">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">After Payment</span>
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                      <Checkbox 
+                        id="print-advance"
+                        checked={printReceipt}
+                        onCheckedChange={(checked) => setPrintReceipt(checked as boolean)}
+                      />
+                      <Label htmlFor="print-advance" className="text-sm text-foreground cursor-pointer">Print Receipt</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox 
+                        id="sms-advance"
+                        checked={sendSms}
+                        onCheckedChange={(checked) => setSendSms(checked as boolean)}
+                      />
+                      <Label htmlFor="sms-advance" className="text-sm text-foreground cursor-pointer">SMS</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox 
+                        id="email-advance"
+                        checked={sendEmail}
+                        onCheckedChange={(checked) => setSendEmail(checked as boolean)}
+                      />
+                      <Label htmlFor="email-advance" className="text-sm text-foreground cursor-pointer">Email</Label>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Action Button */}
                 <Button 
                   onClick={handleCollectAdvance}
                   disabled={!canConfirm || isProcessing}
-                  className="w-full h-12 bg-primary hover:bg-primary/90 font-semibold"
+                  className="w-full h-11"
                 >
                   {isProcessing ? "Processing..." : "Collect Advance"}
                 </Button>
