@@ -400,15 +400,15 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
       {/* Table */}
       <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full table-fixed">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Document No.</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Document Name</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Prepared / Verified By</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[100px]">Document No.</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px]">Document Name</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[120px]">Date & Time</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[160px]">Service</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px]">Prepared / Verified By</th>
+                <th className="text-center text-xs font-medium text-muted-foreground p-3 w-[120px]">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
@@ -420,7 +420,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                   <td className="p-3">
                     <div className="flex items-center gap-2">
                       {getDocumentIcon(doc.type, doc.format)}
-                      <span className="text-sm font-medium text-foreground">{doc.name}</span>
+                      <span className="text-sm font-medium text-foreground truncate">{doc.name}</span>
                     </div>
                   </td>
                   <td className="p-3">
@@ -439,7 +439,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                     </div>
                   </td>
                   <td className="p-3">
-                    <div className="flex gap-1">
+                    <div className="flex justify-center gap-1">
                       <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="View">
                         <Eye className="h-4 w-4" />
                       </button>
