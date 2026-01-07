@@ -441,6 +441,34 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   <Plus className="h-4 w-4" />
                   Add Split Payment
                 </button>
+
+                {/* Quick Payment Buttons */}
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <Button
+                    variant="outline"
+                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                    onClick={() => {
+                      setSelectedPaymentMethod("card");
+                      setShowPaymentModal(true);
+                    }}
+                    disabled={selectedBills.length === 0 || amountToCollect === 0}
+                  >
+                    <CreditCard className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">Pay by Card</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                    onClick={() => {
+                      setSelectedPaymentMethod("upi");
+                      setShowPaymentModal(true);
+                    }}
+                    disabled={selectedBills.length === 0 || amountToCollect === 0}
+                  >
+                    <Smartphone className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">Pay by UPI</span>
+                  </Button>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -493,34 +521,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           )}
         </div>
 
-        <div className="p-4 border-t border-border bg-muted/20 space-y-3">
-          {/* Quick Payment Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-              onClick={() => {
-                setSelectedPaymentMethod("card");
-                setShowPaymentModal(true);
-              }}
-              disabled={selectedBills.length === 0 || amountToCollect === 0}
-            >
-              <CreditCard className="w-4 h-4 text-primary" />
-              <span className="text-xs font-medium">Pay by Card</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-              onClick={() => {
-                setSelectedPaymentMethod("upi");
-                setShowPaymentModal(true);
-              }}
-              disabled={selectedBills.length === 0 || amountToCollect === 0}
-            >
-              <Smartphone className="w-4 h-4 text-primary" />
-              <span className="text-xs font-medium">Pay by UPI</span>
-            </Button>
-          </div>
+        <div className="p-4 border-t border-border bg-muted/20">
           <Button className="w-full h-11" disabled={selectedBills.length === 0 || amountToCollect === 0}>
             Collect Payment
           </Button>
