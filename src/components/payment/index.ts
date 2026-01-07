@@ -4,6 +4,7 @@ export { SplitPaymentWizardModal } from './SplitPaymentWizardModal';
 export type { SplitPaymentStep } from './SplitPaymentWizardModal';
 export { CardPaymentFlow } from './CardPaymentFlow';
 export { UPIPaymentFlow } from './UPIPaymentFlow';
+export { CashPaymentModal } from './CashPaymentModal';
 export { PaymentProcessingIndicator } from './PaymentProcessingIndicator';
 export { PaymentStatusView } from './PaymentStatusView';
 export { QRCodeView } from './QRCodeView';

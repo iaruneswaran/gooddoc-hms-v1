@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import bainesLogo from "@/assets/baines-logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Download, Printer, CheckCircle2, Trash2, CreditCard, Smartphone, RotateCcw, AlertCircle } from "lucide-react";
+import { ChevronLeft, Download, Printer, Trash2, CreditCard, Smartphone, RotateCcw, AlertCircle } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PaymentMethodModal } from "@/components/payment";
+import { PaymentMethodModal, CashPaymentModal } from "@/components/payment";
 import { SplitPaymentWizardModal, type SplitPaymentStep } from "@/components/payment/SplitPaymentWizardModal";
 import { useSplitPaymentAutoCalc, type SplitRow } from "@/hooks/useSplitPaymentAutoCalc";
 import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
@@ -43,6 +43,7 @@ const Payment = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
   const [showSplitWizard, setShowSplitWizard] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
 
   const advanceAmount = 1000;
   const billAmount = 6000;
@@ -87,10 +88,14 @@ const Payment = () => {
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
     } else {
-      // Cash payment - no modal needed
-      toast.success("Payment collected successfully");
-      navigate("/");
+      // Cash payment - show cash modal
+      setShowCashModal(true);
     }
+  };
+
+  const handleCashPaymentSuccess = () => {
+    toast.success("Payment collected successfully");
+    navigate("/");
   };
 
 
@@ -594,6 +599,18 @@ const Payment = () => {
         steps={wizardSteps}
         onComplete={handleSplitWizardComplete}
         onCancel={() => setShowSplitWizard(false)}
+      />
+
+      {/* Cash Payment Modal */}
+      <CashPaymentModal
+        open={showCashModal}
+        onOpenChange={setShowCashModal}
+        patientName="Siva Karthikeyan"
+        mrn="GDID-009"
+        amount={payableAmount * 100}
+        purpose="settlement"
+        onSuccess={handleCashPaymentSuccess}
+        onCancel={() => setShowCashModal(false)}
       />
     </PageContent>
     </div>
