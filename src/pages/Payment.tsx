@@ -331,19 +331,19 @@ const Payment = () => {
                       </TableBody>
                     </Table>
                   </div>
-                  
-                  {/* Footer Actions */}
-                  <div className="px-6 py-4 border-t border-border flex justify-end gap-2">
-                    <Button variant="outline" size="sm">
-                      <Printer className="w-4 h-4 mr-2" />
-                      Print
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download PDF
-                    </Button>
-                  </div>
                 </Card>
+                
+                {/* Actions below the card */}
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" size="sm">
+                    <Printer className="w-4 h-4 mr-2" />
+                    Print
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download PDF
+                  </Button>
+                </div>
               </div>
 
               {/* Collect Payment */}
