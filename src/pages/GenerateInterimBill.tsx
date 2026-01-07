@@ -584,7 +584,7 @@ const GenerateInterimBill = () => {
                               <div className="border rounded-md overflow-hidden">
                                 <div className="overflow-x-auto max-h-60">
                                   <table className="w-full text-xs">
-                                    <thead className="bg-muted/50 sticky top-0">
+                                    <thead className="bg-muted sticky top-0 z-10">
                                       <tr>
                                         <th className="text-left py-2 px-3 font-medium">Document No.</th>
                                         <th className="text-left py-2 px-3 font-medium">Document Name</th>
