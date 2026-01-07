@@ -158,6 +158,41 @@
     --status-error-text: 0 70% 25%;
     --status-info-bg: var(--gd-info-light);
     --status-info-text: 201 90% 20%;
+    
+    /* ═══════════════════════════════════════════════════════════════
+       BED MAP STATUS COLORS
+       ═══════════════════════════════════════════════════════════════ */
+    
+    /* Available - Green */
+    --bed-available: 160 84% 39%;
+    --bed-available-bg: 160 76% 95%;
+    --bed-available-border: 160 84% 50%;
+    
+    /* Occupied - Red */
+    --bed-occupied: 0 84% 60%;
+    --bed-occupied-bg: 0 86% 97%;
+    --bed-occupied-border: 0 72% 51%;
+    
+    /* Reserved - Amber */
+    --bed-reserved: 38 92% 50%;
+    --bed-reserved-bg: 45 93% 94%;
+    --bed-reserved-border: 38 92% 45%;
+    
+    /* Cleaning - Blue */
+    --bed-cleaning: 217 91% 60%;
+    --bed-cleaning-bg: 214 100% 97%;
+    --bed-cleaning-border: 217 91% 50%;
+    
+    /* Maintenance/Blocked - Gray */
+    --bed-maintenance: 215 16% 47%;
+    --bed-maintenance-bg: 216 20% 91%;
+    --bed-maintenance-border: 215 16% 40%;
+    
+    /* Selection/Focus - Blue */
+    --bed-selected: 224 76% 48%;
+    --bed-selected-bg: 219 100% 95%;
+    --bed-selected-border: 224 76% 48%;
+    --bed-focus-ring: 213 97% 78%;
   }
 
   /* ═══════════════════════════════════════════════════════════════
