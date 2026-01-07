@@ -6,10 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, Trash2 } from "lucide-react";
+import { Download, Printer, Eye, Plus, Trash2, CreditCard, Smartphone } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
+import { PaymentMethodModal } from "@/components/payment";
+import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
+import { toast } from "sonner";
 
 interface CollectPaymentTabProps {
   selectedVisit: Visit | null;
@@ -53,6 +56,15 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   const [printReceipt, setPrintReceipt] = useState(true);
   const [sendSms, setSendSms] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+
+  const handlePaymentSuccess = (attempt: PaymentAttempt) => {
+    setShowPaymentModal(false);
+    toast.success("Payment collected successfully!", {
+      description: `Transaction ID: ${attempt.providerTxnId || attempt.id}`,
+    });
+  };
 
   // Mock patient deposit (in paise)
   const patientDeposit = 320000;
@@ -313,9 +325,37 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                 </div>
               </div>
 
+              {/* Quick Payment Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="outline"
+                  className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                  onClick={() => {
+                    setSelectedPaymentMethod("card");
+                    setShowPaymentModal(true);
+                  }}
+                  disabled={selectedBills.length === 0 || amountToCollect === 0}
+                >
+                  <CreditCard className="w-4 h-4 text-primary" />
+                  <span className="text-xs font-medium">Pay by Card</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                  onClick={() => {
+                    setSelectedPaymentMethod("upi");
+                    setShowPaymentModal(true);
+                  }}
+                  disabled={selectedBills.length === 0 || amountToCollect === 0}
+                >
+                  <Smartphone className="w-4 h-4 text-primary" />
+                  <span className="text-xs font-medium">Pay by UPI</span>
+                </Button>
+              </div>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-foreground">Payment Collection</span>
+                  <span className="text-sm font-semibold text-foreground">Manual Entry</span>
                   <span className="text-xs font-medium text-muted-foreground">Split Payment</span>
                 </div>
 
@@ -435,6 +475,23 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           </Button>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {selectedVisit && (
+        <PaymentMethodModal
+          open={showPaymentModal}
+          onOpenChange={setShowPaymentModal}
+          patientId={selectedVisit.id || "P001"}
+          patientName={selectedVisit.doctor || "Patient"}
+          mrn={selectedVisit.visitId || "VISIT-001"}
+          orderId={selectedBills[0]?.invoiceNo || `INV-${Date.now()}`}
+          amount={amountToCollect}
+          purpose="settlement"
+          defaultMethod={selectedPaymentMethod}
+          onSuccess={handlePaymentSuccess}
+          onCancel={() => setShowPaymentModal(false)}
+        />
+      )}
     </div>
   );
 }
