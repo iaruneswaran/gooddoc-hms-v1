@@ -23,6 +23,9 @@ interface CardPaymentFlowProps {
   onSuccess: (attempt: PaymentAttempt) => void;
   onCancel: () => void;
   onSwitchMethod: () => void;
+  hasNextPayment?: boolean;
+  nextPaymentLabel?: string;
+  onNextPayment?: () => void;
   className?: string;
 }
 
@@ -31,6 +34,9 @@ export function CardPaymentFlow({
   onSuccess,
   onCancel,
   onSwitchMethod,
+  hasNextPayment,
+  nextPaymentLabel,
+  onNextPayment,
   className,
 }: CardPaymentFlowProps) {
   const processingRef = useRef(false);
@@ -227,18 +233,26 @@ export function CardPaymentFlow({
 
       case 'succeeded':
         return (
-          <ReceiptView
-            patientName={intent.patientName}
-            mrn={intent.mrn}
-            amount={intent.amount}
-            orderId={intent.orderId}
-            attempt={state.currentAttempt!}
-            onDownload={() => console.log('Download receipt')}
-            onPrint={() => window.print()}
-            onEmail={() => console.log('Email receipt')}
-            onSMS={() => console.log('SMS receipt')}
-            onDone={onCancel}
-          />
+          <div className="space-y-4">
+            <ReceiptView
+              patientName={intent.patientName}
+              mrn={intent.mrn}
+              amount={intent.amount}
+              orderId={intent.orderId}
+              attempt={state.currentAttempt!}
+              onDownload={() => console.log('Download receipt')}
+              onPrint={() => window.print()}
+              onEmail={() => console.log('Email receipt')}
+              onSMS={() => console.log('SMS receipt')}
+              onDone={hasNextPayment ? undefined : onCancel}
+            />
+            {hasNextPayment && onNextPayment && (
+              <Button onClick={onNextPayment} className="w-full gap-2">
+                {nextPaymentLabel || 'Next Payment'}
+                <span className="text-xs opacity-70">→</span>
+              </Button>
+            )}
+          </div>
         );
 
       case 'failed':

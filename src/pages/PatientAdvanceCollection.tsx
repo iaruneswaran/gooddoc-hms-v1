@@ -330,13 +330,7 @@ const PatientAdvanceCollection = () => {
                           value={line.method}
                           onValueChange={(value) => {
                             updatePaymentLine(line.id, { method: value as PaymentLine["method"] });
-                            // If selecting Card or UPI, open the payment modal
-                            if (value === "card" || value === "upi") {
-                              if (line.amount > 0) {
-                                setSelectedPaymentMethod(value as PaymentMethodType);
-                                setShowPaymentModal(true);
-                              }
-                            }
+                            // No auto-open - user must click the action button
                           }}
                         >
                           <SelectTrigger className={`w-[130px] h-11 ${line.method === "card" || line.method === "upi" ? "border-primary bg-primary/5" : ""}`}>

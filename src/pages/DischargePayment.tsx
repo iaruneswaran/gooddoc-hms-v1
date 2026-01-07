@@ -590,13 +590,7 @@ const DischargePayment = () => {
                             value={payment.method}
                             onValueChange={(value) => {
                               updateSplitPayment(payment.id, "method", value);
-                              // If selecting Card or UPI, open the payment modal
-                              if (value === "card" || value === "upi") {
-                                if (payment.amount && parseFloat(payment.amount) > 0) {
-                                  setSelectedPaymentMethod(value as PaymentMethodType);
-                                  setShowPaymentModal(true);
-                                }
-                              }
+                              // No auto-open - user must click the action button
                             }}
                           >
                             <SelectTrigger className={`w-[120px] bg-background ${payment.method === "card" || payment.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
