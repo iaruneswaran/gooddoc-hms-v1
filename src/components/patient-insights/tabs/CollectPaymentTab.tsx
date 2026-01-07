@@ -373,29 +373,81 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       />
                     </div>
 
-                    {/* Payment Method Dropdown */}
-                    <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
-                      <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
-                        {paymentMethods.map((method) => {
-                          const isSelected = payment.method === method.id;
-                          return (
-                            <SelectItem 
-                              key={method.id} 
-                              value={method.id}
-                              className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
-                            >
-                              <div className="flex items-center gap-2">
-                                <span>{method.emoji}</span>
-                                <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
-                              </div>
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                    {/* Payment Method - Card/UPI buttons or Dropdown */}
+                    {payment.method === "card" || payment.method === "upi" ? (
+                      <Button
+                        variant="outline"
+                        className="w-[140px] h-10 border-primary bg-primary/5 text-primary font-medium"
+                        onClick={() => {
+                          setSelectedPaymentMethod(payment.method as PaymentMethodType);
+                          setShowPaymentModal(true);
+                        }}
+                        disabled={!payment.amount || parseFloat(payment.amount) <= 0}
+                      >
+                        {payment.method === "card" ? (
+                          <>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Card
+                          </>
+                        ) : (
+                          <>
+                            <Smartphone className="w-4 h-4 mr-2" />
+                            UPI
+                          </>
+                        )}
+                      </Button>
+                    ) : (
+                      <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
+                        <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
+                          {paymentMethods.map((method) => {
+                            const isSelected = payment.method === method.id;
+                            return (
+                              <SelectItem 
+                                key={method.id} 
+                                value={method.id}
+                                className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span>{method.emoji}</span>
+                                  <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
+                                </div>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    )}
+
+                    {/* Method Picker for Card/UPI when not selected */}
+                    {payment.method !== "card" && payment.method !== "upi" && (
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-10 w-10 hover:bg-primary/10"
+                          onClick={() => {
+                            updateSplitPayment(payment.id, "method", "card");
+                          }}
+                          title="Switch to Card"
+                        >
+                          <CreditCard className="w-4 h-4 text-muted-foreground" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-10 w-10 hover:bg-primary/10"
+                          onClick={() => {
+                            updateSplitPayment(payment.id, "method", "upi");
+                          }}
+                          title="Switch to UPI"
+                        >
+                          <Smartphone className="w-4 h-4 text-muted-foreground" />
+                        </Button>
+                      </div>
+                    )}
 
                     {/* Remove Button */}
                     {splitPayments.length > 1 && (
