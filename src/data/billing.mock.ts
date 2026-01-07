@@ -41,7 +41,7 @@ export const mockInvoices: Invoice[] = [
   // V25-004 invoices (Active visit - Cardiology follow-up)
   {
     id: "inv-041",
-    invoiceNo: "INV-2025-001236",
+    invoiceNo: "INV236",
     date: "20-Dec-2025",
     time: "09:00",
     visitId: "V25-004",
@@ -57,7 +57,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-042",
-    invoiceNo: "INV-2025-001237",
+    invoiceNo: "INV237",
     date: "20-Dec-2025",
     time: "10:30",
     visitId: "V25-004",
@@ -73,7 +73,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-043",
-    invoiceNo: "INV-2025-001238",
+    invoiceNo: "INV238",
     date: "20-Dec-2025",
     time: "11:00",
     visitId: "V25-004",
@@ -90,7 +90,7 @@ export const mockInvoices: Invoice[] = [
   // V25-002 invoices (General Medicine checkup)
   {
     id: "inv-021",
-    invoiceNo: "INV-2025-001240",
+    invoiceNo: "INV240",
     date: "15-Dec-2025",
     time: "09:00",
     visitId: "V25-002",
@@ -106,7 +106,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-022",
-    invoiceNo: "INV-2025-001241",
+    invoiceNo: "INV241",
     date: "15-Dec-2025",
     time: "09:30",
     visitId: "V25-002",
@@ -122,7 +122,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-023",
-    invoiceNo: "INV-2025-001242",
+    invoiceNo: "INV242",
     date: "15-Dec-2025",
     time: "09:45",
     visitId: "V25-002",
@@ -139,7 +139,7 @@ export const mockInvoices: Invoice[] = [
   // V25-001 invoices (Cardiology - Chest pain)
   {
     id: "inv-011",
-    invoiceNo: "INV-2025-001230",
+    invoiceNo: "INV230",
     date: "01-Dec-2025",
     time: "14:00",
     visitId: "V25-001",
@@ -155,7 +155,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-012",
-    invoiceNo: "INV-2025-001231",
+    invoiceNo: "INV231",
     date: "01-Dec-2025",
     time: "14:30",
     visitId: "V25-001",
@@ -171,7 +171,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-013",
-    invoiceNo: "INV-2025-001232",
+    invoiceNo: "INV232",
     date: "01-Dec-2025",
     time: "15:00",
     visitId: "V25-001",
@@ -188,7 +188,7 @@ export const mockInvoices: Invoice[] = [
   // V24-089 invoices (Orthopedics - Back pain)
   {
     id: "inv-891",
-    invoiceNo: "INV-2024-001180",
+    invoiceNo: "INV180",
     date: "15-Nov-2025",
     time: "10:00",
     visitId: "V24-089",
@@ -204,7 +204,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-892",
-    invoiceNo: "INV-2024-001181",
+    invoiceNo: "INV181",
     date: "15-Nov-2025",
     time: "11:00",
     visitId: "V24-089",
@@ -220,7 +220,7 @@ export const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-893",
-    invoiceNo: "INV-2024-001182",
+    invoiceNo: "INV182",
     date: "16-Nov-2025",
     time: "09:00",
     visitId: "V24-089",
@@ -241,7 +241,7 @@ export const mockTransactions: Transaction[] = [
   // V25-004 transactions - current active visit
   {
     id: "txn-040",
-    receiptNo: "RCP-8540",
+    receiptNo: "RCP540",
     invoiceNos: [],
     date: "20-Dec-2025",
     time: "09:15",
@@ -254,8 +254,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-041",
-    receiptNo: "RCP-8545",
-    invoiceNos: ["INV-2025-001237"],
+    receiptNo: "RCP545",
+    invoiceNos: ["INV237"],
     date: "20-Dec-2025",
     time: "10:45",
     visitId: "V25-004",
@@ -267,8 +267,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-042",
-    receiptNo: "RCP-8548",
-    invoiceNos: ["INV-2025-001236", "INV-2025-001238"],
+    receiptNo: "RCP548",
+    invoiceNos: ["INV236", "INV238"],
     date: "20-Dec-2025",
     time: "11:30",
     visitId: "V25-004",
@@ -281,7 +281,7 @@ export const mockTransactions: Transaction[] = [
   // V25-002 transactions - example with multiple invoices and split payment
   {
     id: "txn-020",
-    receiptNo: "RCP-8710",
+    receiptNo: "RCP710",
     invoiceNos: [],
     date: "15-Dec-2025",
     time: "08:45",
@@ -294,8 +294,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-021",
-    receiptNo: "RCP-8712",
-    invoiceNos: ["INV-2025-001240", "INV-2025-001241"],
+    receiptNo: "RCP712",
+    invoiceNos: ["INV240", "INV241"],
     date: "15-Dec-2025",
     time: "09:15",
     visitId: "V25-002",
@@ -307,8 +307,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-023",
-    receiptNo: "RCP-8714",
-    invoiceNos: ["INV-2025-001242"],
+    receiptNo: "RCP714",
+    invoiceNos: ["INV242"],
     date: "15-Dec-2025",
     time: "10:00",
     visitId: "V25-002",
@@ -321,7 +321,7 @@ export const mockTransactions: Transaction[] = [
   // V24-089 transactions - example with multiple invoices via insurance
   {
     id: "txn-890",
-    receiptNo: "RCP-7800",
+    receiptNo: "RCP800",
     invoiceNos: [],
     date: "15-Nov-2025",
     time: "09:00",
@@ -334,8 +334,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-891",
-    receiptNo: "RCP-7801",
-    invoiceNos: ["INV-2024-001180", "INV-2024-001181"],
+    receiptNo: "RCP801",
+    invoiceNos: ["INV180", "INV181"],
     date: "15-Nov-2025",
     time: "10:30",
     visitId: "V24-089",
@@ -347,8 +347,8 @@ export const mockTransactions: Transaction[] = [
   },
   {
     id: "txn-893",
-    receiptNo: "RCP-7803",
-    invoiceNos: ["INV-2024-001182"],
+    receiptNo: "RCP803",
+    invoiceNos: ["INV182"],
     date: "16-Nov-2025",
     time: "09:15",
     visitId: "V24-089",

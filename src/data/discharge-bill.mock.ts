@@ -19,7 +19,7 @@ export const SAMPLE_DISCHARGE_BILL: DischargeBill = {
     registrationId: "REG-TN-HOSP-2024-001",
   },
   invoice: {
-    number: "INV-2025-009",
+    number: "INV009",
     issueDate: "2025-12-21T10:15:00Z",
     dueDate: "2025-12-21",
     currency: "INR",

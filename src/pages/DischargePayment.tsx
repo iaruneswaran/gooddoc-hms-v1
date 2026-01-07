@@ -89,7 +89,7 @@ const visitHistoryData = {
     advancePaid: 20000,
     amountCollected: 31700,
     paymentMode: "Cash",
-    receiptNo: "RCP-2025-004521",
+    receiptNo: "RCP521",
     paymentDate: "22/12/2025",
     paymentTime: "02:30 PM",
   },
@@ -159,7 +159,7 @@ const DischargePayment = () => {
     setShowPaymentModal(false);
     toast({
       title: "Payment Collected Successfully",
-      description: `${formatINR(netPayable * 100)} received. Receipt No: RCP-2025-004521`,
+      description: `${formatINR(netPayable * 100)} received. Receipt No: RCP521`,
     });
     setPaymentCompleted(true);
   };
@@ -196,7 +196,7 @@ const DischargePayment = () => {
     } else {
       toast({
         title: "Payment Collected Successfully",
-        description: `${formatINR(netPayable * 100)} received. Receipt No: RCP-2025-004521`,
+        description: `${formatINR(netPayable * 100)} received. Receipt No: RCP521`,
       });
       setPaymentCompleted(true);
     }
@@ -549,7 +549,7 @@ const DischargePayment = () => {
               <Card className="p-0 overflow-hidden">
                 <div className="bg-primary px-4 py-3 rounded-t-lg">
                   <h2 className="text-base font-semibold text-primary-foreground">Payment Settlement</h2>
-                  <p className="text-xs text-primary-foreground/80 mt-0.5">INV-2025-009</p>
+                  <p className="text-xs text-primary-foreground/80 mt-0.5">INV009</p>
                 </div>
                 
                 <div className="p-4 space-y-4">
