@@ -41,27 +41,6 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const subscribersRef = useRef<Map<EntityType, Set<(event: RealtimeEvent) => void>>>(new Map());
 
-  // Online/offline detection
-  useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      reconnect();
-    };
-    
-    const handleOffline = () => {
-      setIsOnline(false);
-      setConnectionStatus('disconnected');
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
   // Publish event to subscribers
   const publishEvent = useCallback((event: RealtimeEvent) => {
     const subscribers = subscribersRef.current.get(event.entityType);
@@ -120,6 +99,47 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
     // Publish to subscribers
     publishEvent(event);
   }, [queryClient, publishEvent]);
+
+  // Subscribe to entity changes
+  const subscribe = useCallback((
+    entityType: EntityType,
+    callback: (event: RealtimeEvent) => void
+  ): (() => void) => {
+    if (!subscribersRef.current.has(entityType)) {
+      subscribersRef.current.set(entityType, new Set());
+    }
+    
+    subscribersRef.current.get(entityType)!.add(callback);
+
+    // Return unsubscribe function
+    return () => {
+      const subscribers = subscribersRef.current.get(entityType);
+      if (subscribers) {
+        subscribers.delete(callback);
+      }
+    };
+  }, []);
+
+  // Setup and reconnection logic with refs to avoid circular dependencies
+  const setupChannelRef = useRef<() => void>(() => {});
+  
+  const scheduleReconnect = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+
+    const delay = RECONNECT_DELAYS[Math.min(reconnectAttemptRef.current, RECONNECT_DELAYS.length - 1)];
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Realtime] Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptRef.current + 1})`);
+    }
+
+    reconnectTimeoutRef.current = setTimeout(() => {
+      reconnectAttemptRef.current++;
+      setConnectionStatus('reconnecting');
+      setupChannelRef.current();
+    }, delay);
+  }, []);
 
   // Setup realtime channel
   const setupChannel = useCallback(() => {
@@ -192,25 +212,11 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
       });
 
     channelRef.current = channel;
-  }, [handleChange]);
+  }, [handleChange, scheduleReconnect]);
 
-  // Schedule reconnection with exponential backoff
-  const scheduleReconnect = useCallback(() => {
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-    }
-
-    const delay = RECONNECT_DELAYS[Math.min(reconnectAttemptRef.current, RECONNECT_DELAYS.length - 1)];
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[Realtime] Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptRef.current + 1})`);
-    }
-
-    reconnectTimeoutRef.current = setTimeout(() => {
-      reconnectAttemptRef.current++;
-      setConnectionStatus('reconnecting');
-      setupChannel();
-    }, delay);
+  // Keep ref in sync with the latest setupChannel
+  useEffect(() => {
+    setupChannelRef.current = setupChannel;
   }, [setupChannel]);
 
   // Manual reconnect
@@ -219,23 +225,26 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
     setupChannel();
   }, [setupChannel]);
 
-  // Subscribe to entity changes
-  const subscribe = useCallback((
-    entityType: EntityType,
-    callback: (event: RealtimeEvent) => void
-  ): (() => void) => {
-    if (!subscribersRef.current.has(entityType)) {
-      subscribersRef.current.set(entityType, new Set());
-    }
+  // Online/offline detection
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      // Use ref to avoid stale closure
+      reconnectAttemptRef.current = 0;
+      setupChannelRef.current();
+    };
     
-    subscribersRef.current.get(entityType)!.add(callback);
+    const handleOffline = () => {
+      setIsOnline(false);
+      setConnectionStatus('disconnected');
+    };
 
-    // Return unsubscribe function
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
     return () => {
-      const subscribers = subscribersRef.current.get(entityType);
-      if (subscribers) {
-        subscribers.delete(callback);
-      }
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
