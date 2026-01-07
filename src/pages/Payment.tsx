@@ -459,17 +459,11 @@ const Payment = () => {
                               <SelectItem value="Cash">
                                 <span className="flex items-center gap-2">💵 Cash</span>
                               </SelectItem>
-                              <SelectItem value="UPI">
-                                <span className="flex items-center gap-2">📱 UPI</span>
-                              </SelectItem>
                               <SelectItem value="Card">
                                 <span className="flex items-center gap-2">💳 Card</span>
                               </SelectItem>
-                              <SelectItem value="Cheque">
-                                <span className="flex items-center gap-2">📝 Cheque</span>
-                              </SelectItem>
-                              <SelectItem value="NEFT">
-                                <span className="flex items-center gap-2">🏦 NEFT/RTGS</span>
+                              <SelectItem value="UPI">
+                                <span className="flex items-center gap-2">📱 UPI</span>
                               </SelectItem>
                             </SelectContent>
                           </Select>

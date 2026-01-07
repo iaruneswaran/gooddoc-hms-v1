@@ -23,13 +23,11 @@ interface SplitPayment {
   method: string;
 }
 
-const paymentMethods = [
+// Split payment only supports Cash, Card, UPI
+const splitPaymentMethods = [
   { value: "cash", label: "Cash", emoji: "💵" },
-  { value: "upi", label: "UPI", emoji: "📱" },
   { value: "card", label: "Card", emoji: "💳" },
-  { value: "cheque", label: "Cheque", emoji: "📝" },
-  { value: "neft", label: "NEFT/RTGS", emoji: "🏦" },
-  { value: "insurance", label: "Insurance", emoji: "🏥" },
+  { value: "upi", label: "UPI", emoji: "📱" },
 ];
 
 // Mock visit history data
@@ -590,16 +588,25 @@ const DischargePayment = () => {
                           />
                           <Select
                             value={payment.method}
-                            onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}
+                            onValueChange={(value) => {
+                              updateSplitPayment(payment.id, "method", value);
+                              // If selecting Card or UPI, open the payment modal
+                              if (value === "card" || value === "upi") {
+                                if (payment.amount && parseFloat(payment.amount) > 0) {
+                                  setSelectedPaymentMethod(value as PaymentMethodType);
+                                  setShowPaymentModal(true);
+                                }
+                              }
+                            }}
                           >
-                            <SelectTrigger className="w-[120px] bg-background">
+                            <SelectTrigger className={`w-[120px] bg-background ${payment.method === "card" || payment.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
                               <SelectValue>
-                                {paymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
-                                {paymentMethods.find(m => m.value === payment.method)?.label}
+                                {splitPaymentMethods.find(m => m.value === payment.method)?.emoji}{" "}
+                                {splitPaymentMethods.find(m => m.value === payment.method)?.label}
                               </SelectValue>
                             </SelectTrigger>
                             <SelectContent className="bg-background border border-border z-50">
-                              {paymentMethods.map((method) => (
+                              {splitPaymentMethods.map((method) => (
                                 <SelectItem key={method.value} value={method.value}>
                                   <span className="flex items-center gap-2">
                                     <span>{method.emoji}</span>
@@ -609,6 +616,26 @@ const DischargePayment = () => {
                               ))}
                             </SelectContent>
                           </Select>
+                          {(payment.method === "card" || payment.method === "upi") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 px-3 border-primary text-primary hover:bg-primary/10"
+                              onClick={() => {
+                                if (payment.amount && parseFloat(payment.amount) > 0) {
+                                  setSelectedPaymentMethod(payment.method as PaymentMethodType);
+                                  setShowPaymentModal(true);
+                                }
+                              }}
+                              disabled={!payment.amount || parseFloat(payment.amount) <= 0}
+                            >
+                              {payment.method === "card" ? (
+                                <CreditCard className="w-4 h-4" />
+                              ) : (
+                                <Smartphone className="w-4 h-4" />
+                              )}
+                            </Button>
+                          )}
                           {splitPayments.length > 1 && (
                             <button
                               onClick={() => removeSplitPayment(payment.id)}
