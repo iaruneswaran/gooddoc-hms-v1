@@ -463,8 +463,6 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   </Button>
                 </div>
               </div>
-                </div>
-              </div>
 
               <div className="space-y-3">
                 <span className="text-sm font-semibold text-foreground">Payer Details</span>
@@ -527,42 +525,33 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       {selectedVisit && (
         <PaymentMethodModal
           open={showPaymentModal}
-          onOpenChange={(open) => {
-            setShowPaymentModal(open);
-            if (!open) {
-              setSplitPaymentFlowIndex(null);
-              setSplitPaymentAmount(0);
-            }
-          }}
+          onOpenChange={setShowPaymentModal}
           patientId={selectedVisit.id || "P001"}
           patientName={selectedVisit.doctor || "Patient"}
           mrn={selectedVisit.visitId || "VISIT-001"}
           orderId={selectedBills[0]?.invoiceNo || `INV-${Date.now()}`}
-          amount={splitPaymentFlowIndex !== null ? splitPaymentAmount : amountToCollect}
+          amount={amountToCollect}
           purpose="settlement"
           defaultMethod={selectedPaymentMethod}
-          hasNextPayment={splitPaymentFlowIndex !== null && (() => {
-            const remainingSplitPayments = splitPayments.slice(splitPaymentFlowIndex + 1);
-            return remainingSplitPayments.some(
-              (p) => (p.method === "card" || p.method === "upi") && parseFloat(p.amount) > 0
-            );
-          })()}
-          nextPaymentLabel={splitPaymentFlowIndex !== null ? (() => {
-            const remainingSplitPayments = splitPayments.slice(splitPaymentFlowIndex + 1);
-            const nextPayment = remainingSplitPayments.find(
-              (p) => (p.method === "card" || p.method === "upi") && parseFloat(p.amount) > 0
-            );
-            if (nextPayment) {
-              return `Next: ${nextPayment.method === "card" ? "Card" : "UPI"} ₹${nextPayment.amount}`;
-            }
-            return undefined;
-          })() : undefined}
           onSuccess={handlePaymentSuccess}
-          onCancel={() => {
-            setShowPaymentModal(false);
-            setSplitPaymentFlowIndex(null);
-            setSplitPaymentAmount(0);
-          }}
+          onCancel={() => setShowPaymentModal(false)}
+        />
+      )}
+
+      {/* Split Payment Wizard Modal */}
+      {selectedVisit && (
+        <SplitPaymentWizardModal
+          open={showSplitWizard}
+          onOpenChange={setShowSplitWizard}
+          patientId={selectedVisit.id || "P001"}
+          patientName={selectedVisit.doctor || "Patient"}
+          mrn={selectedVisit.visitId || "VISIT-001"}
+          orderId={selectedBills[0]?.invoiceNo || `INV-${Date.now()}`}
+          totalAmount={amountToCollect / 100}
+          purpose="settlement"
+          steps={wizardSteps}
+          onComplete={handleSplitWizardComplete}
+          onCancel={() => setShowSplitWizard(false)}
         />
       )}
     </div>
