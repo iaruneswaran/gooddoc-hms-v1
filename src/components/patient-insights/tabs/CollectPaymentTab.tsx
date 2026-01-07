@@ -10,7 +10,7 @@ import { Download, Printer, Eye, Plus, Trash2, CreditCard, Smartphone, RotateCcw
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
-import { PaymentMethodModal } from "@/components/payment";
+import { PaymentMethodModal, CashPaymentModal } from "@/components/payment";
 import { SplitPaymentWizardModal, type SplitPaymentStep } from "@/components/payment/SplitPaymentWizardModal";
 import { useSplitPaymentAutoCalc, type SplitRow } from "@/hooks/useSplitPaymentAutoCalc";
 import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
@@ -43,6 +43,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
   const [showSplitWizard, setShowSplitWizard] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
 
   // Mock patient deposit (in paise)
   const patientDeposit = 320000;
@@ -95,6 +96,12 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       return;
     }
 
+    // If user picked a single cash method, open the Cash processing popup
+    if (splitRows.length === 1 && splitRows[0].method === "cash") {
+      setShowCashModal(true);
+      return;
+    }
+
     // If user picked a single non-cash method, open the Card/UPI processing popup
     if (splitRows.length === 1 && (splitRows[0].method === "card" || splitRows[0].method === "upi")) {
       setSelectedPaymentMethod(splitRows[0].method);
@@ -106,8 +113,19 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
     } else {
-      toast.success("Payment collected successfully!");
+      // All cash - show cash modal
+      const hasCash = splitRows.some(row => row.method === "cash");
+      if (hasCash) {
+        setShowCashModal(true);
+      } else {
+        toast.success("Payment collected successfully!");
+      }
     }
+  };
+
+  const handleCashSuccess = () => {
+    setShowCashModal(false);
+    toast.success("Cash payment collected successfully!");
   };
 
   // Wizard steps
@@ -508,6 +526,20 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           steps={wizardSteps}
           onComplete={handleSplitWizardComplete}
           onCancel={() => setShowSplitWizard(false)}
+        />
+      )}
+
+      {/* Cash Payment Modal */}
+      {selectedVisit && (
+        <CashPaymentModal
+          open={showCashModal}
+          onOpenChange={setShowCashModal}
+          patientName={selectedVisit.doctor || "Patient"}
+          mrn={selectedVisit.visitId || "VISIT-001"}
+          amount={amountToCollect}
+          purpose="settlement"
+          onSuccess={handleCashSuccess}
+          onCancel={() => setShowCashModal(false)}
         />
       )}
     </div>
