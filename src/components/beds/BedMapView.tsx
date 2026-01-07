@@ -142,60 +142,38 @@ export function BedMapView({
 
   return (
     <div className="space-y-4">
-      {/* Top Bar: Search, Stats, Legend */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        {/* Search */}
-        <div className="relative w-full lg:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search bed, ward, patient..."
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        
-        {/* Stats and Legend */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <BedStatsChips {...filteredStats} />
-          <div className="hidden xl:block border-l border-border pl-4 ml-2">
-            <BedLegend />
-          </div>
-        </div>
-      </div>
-
-      {/* Legend for smaller screens */}
-      <div className="xl:hidden">
-        <BedLegend />
-      </div>
-
-      {/* Floor Tabs */}
+      {/* Floor Tabs with Legend on right */}
       <Tabs value={activeFloor} onValueChange={setActiveFloor}>
-        <TabsList className="h-auto p-1 gap-1 flex-wrap justify-start">
-          {bedMapData.map((floor) => {
-            const floorData = filteredFloors.find(f => f.id === floor.id);
-            const bedCount = floorData?.wards.reduce((sum, w) => sum + w.beds.length, 0) || 0;
-            
-            return (
-              <TabsTrigger
-                key={floor.id}
-                value={floor.id}
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4 py-2"
-                disabled={bedCount === 0}
-              >
-                <span className="font-medium">{floor.id}</span>
-                <span className="ml-1.5 text-xs opacity-75">
-                  {floor.name}
-                </span>
-                {bedCount > 0 && (
-                  <span className="ml-2 text-[10px] bg-white/20 px-1.5 py-0.5 rounded">
-                    {bedCount}
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <TabsList className="h-auto p-1 gap-1 flex-wrap justify-start">
+            {bedMapData.map((floor) => {
+              const floorData = filteredFloors.find(f => f.id === floor.id);
+              const bedCount = floorData?.wards.reduce((sum, w) => sum + w.beds.length, 0) || 0;
+              
+              return (
+                <TabsTrigger
+                  key={floor.id}
+                  value={floor.id}
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4 py-2"
+                  disabled={bedCount === 0}
+                >
+                  <span className="font-medium">{floor.id}</span>
+                  <span className="ml-1.5 text-xs opacity-75">
+                    {floor.name}
                   </span>
-                )}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
+                  {bedCount > 0 && (
+                    <span className="ml-2 text-[10px] bg-white/20 px-1.5 py-0.5 rounded">
+                      {bedCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+          
+          {/* Legend on right */}
+          <BedLegend />
+        </div>
 
         {/* Floor Content */}
         {bedMapData.map((floor) => (
