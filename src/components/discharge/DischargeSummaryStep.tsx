@@ -117,26 +117,65 @@ export default function DischargeSummaryStep({
 
   return (
     <div className="space-y-6">
+      {/* Basic Discharge Details Card */}
+      <div className="bg-card border border-border rounded-lg p-5">
+        <div className="grid grid-cols-4 gap-6">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Admission Date</p>
+            <p className="text-sm font-medium">18 Dec 2025, 10:30 AM</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Discharge Date</p>
+            <p className="text-sm font-medium">22 Dec 2025, 02:45 PM</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Length of Stay</p>
+            <p className="text-sm font-medium">4 Days</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Condition at Discharge</p>
+            <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/30">
+              {summary.conditionAtDischarge}
+            </Badge>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Primary Diagnosis</p>
+            <p className="text-sm font-medium">{summary.diagnoses.primary.text}</p>
+            <p className="text-xs text-muted-foreground">{summary.diagnoses.primary.code}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Attending Physician</p>
+            <p className="text-sm font-medium">{summary.header.attending}</p>
+            <p className="text-xs text-muted-foreground">{summary.header.service}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Ward / Bed</p>
+            <p className="text-sm font-medium">Cardiac ICU • C-302</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Follow-up Date</p>
+            <p className="text-sm font-medium">29 Dec 2025</p>
+          </div>
+        </div>
+      </div>
+
       {/* Toolbar */}
       <div className="flex items-center justify-between bg-card border border-border rounded-lg p-4 print:hidden">
         <div className="flex items-center gap-3">
           <FileText className="h-5 w-5 text-primary" />
           <div>
-            <h2 className="font-semibold text-foreground">Discharge Summary</h2>
-            <p className="text-xs text-muted-foreground">Bill documents for this encounter</p>
+            <h2 className="font-semibold text-foreground">Discharge Documents</h2>
+            <p className="text-xs text-muted-foreground">All documents for this encounter</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/30">
-            {summary.conditionAtDischarge}
-          </Badge>
           <Button variant="outline" size="sm" onClick={handlePrint}>
             <Printer className="h-4 w-4 mr-2" />
-            Print
+            Print All
           </Button>
           <Button variant="outline" size="sm" onClick={handleDownloadPDF}>
             <Download className="h-4 w-4 mr-2" />
-            Download PDF
+            Download All
           </Button>
         </div>
       </div>
