@@ -99,6 +99,8 @@ const PatientAdvanceCollection = () => {
     removeRow,
     resetDistribution,
     getCardUpiSteps,
+    getAllSteps,
+    hasMixedPayment,
   } = useSplitPaymentAutoCalc({ totalDue: amountToCollect });
 
   const [reason, setReason] = useState("Additional Deposit");
@@ -160,11 +162,21 @@ const PatientAdvanceCollection = () => {
       return;
     }
 
-    // Check if there are Card/UPI splits that need wizard
-    const cardUpiSteps = getCardUpiSteps();
-    
-    if (cardUpiSteps.length > 0) {
-      // Open split payment wizard for Card/UPI
+    // If single cash payment, show cash modal
+    if (splitRows.length === 1 && splitRows[0].method === "cash") {
+      setShowCashModal(true);
+      return;
+    }
+
+    // If single Card/UPI payment, show payment modal
+    if (splitRows.length === 1 && (splitRows[0].method === "card" || splitRows[0].method === "upi")) {
+      setSelectedPaymentMethod(splitRows[0].method);
+      setShowPaymentModal(true);
+      return;
+    }
+
+    // For mixed payments (Cash + Card/UPI), show the wizard
+    if (hasMixedPayment() || getCardUpiSteps().length > 0) {
       setShowSplitWizard(true);
     } else {
       // Only cash - open cash modal
@@ -186,11 +198,16 @@ const PatientAdvanceCollection = () => {
 
   const canConfirm = payerName.trim() !== "" && amountToCollect > 0 && isValid;
 
-  // Get wizard steps for split payment
-  const wizardSteps: SplitPaymentStep[] = getCardUpiSteps().map(step => ({
-    ...step,
-    status: 'pending' as const,
-  }));
+  // Get wizard steps for split payment - include all methods when mixed
+  const wizardSteps: SplitPaymentStep[] = hasMixedPayment() 
+    ? getAllSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }))
+    : getCardUpiSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }));
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">

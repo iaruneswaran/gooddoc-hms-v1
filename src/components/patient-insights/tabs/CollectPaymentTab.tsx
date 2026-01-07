@@ -70,6 +70,8 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     removeRow,
     resetDistribution,
     getCardUpiSteps,
+    getAllSteps,
+    hasMixedPayment,
   } = useSplitPaymentAutoCalc({ totalDue: amountToCollect / 100 }); // Convert to rupees
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
@@ -109,17 +111,12 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       return;
     }
 
-    const cardUpiSteps = getCardUpiSteps();
-    if (cardUpiSteps.length > 0) {
+    // For mixed payments (Cash + Card/UPI), show the wizard
+    if (hasMixedPayment() || getCardUpiSteps().length > 0) {
       setShowSplitWizard(true);
     } else {
       // All cash - show cash modal
-      const hasCash = splitRows.some(row => row.method === "cash");
-      if (hasCash) {
-        setShowCashModal(true);
-      } else {
-        toast.success("Payment collected successfully!");
-      }
+      setShowCashModal(true);
     }
   };
 
@@ -128,11 +125,16 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
     toast.success("Cash payment collected successfully!");
   };
 
-  // Wizard steps
-  const wizardSteps: SplitPaymentStep[] = getCardUpiSteps().map(step => ({
-    ...step,
-    status: 'pending' as const,
-  }));
+  // Wizard steps - include all payment methods when mixed
+  const wizardSteps: SplitPaymentStep[] = hasMixedPayment() 
+    ? getAllSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }))
+    : getCardUpiSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }));
 
   if (!selectedVisit) {
     return (

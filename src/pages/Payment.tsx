@@ -64,18 +64,31 @@ const Payment = () => {
     removeRow,
     resetDistribution,
     getCardUpiSteps,
+    getAllSteps,
+    hasMixedPayment,
   } = useSplitPaymentAutoCalc({ totalDue: payableAmount });
 
-  // Wizard steps
-  const wizardSteps: SplitPaymentStep[] = getCardUpiSteps().map(step => ({
-    ...step,
-    status: 'pending' as const,
-  }));
+  // Wizard steps - include all payment methods when mixed
+  const wizardSteps: SplitPaymentStep[] = hasMixedPayment() 
+    ? getAllSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }))
+    : getCardUpiSteps().map(step => ({
+        ...step,
+        status: 'pending' as const,
+      }));
 
 
   const handlePayNow = () => {
     if (!isValid) {
       toast.error(validationError || "Please check split amounts");
+      return;
+    }
+
+    // If user chose a single cash method, open cash modal
+    if (splitRows.length === 1 && splitRows[0].method === "cash") {
+      setShowCashModal(true);
       return;
     }
 
@@ -86,11 +99,11 @@ const Payment = () => {
       return;
     }
 
-    const cardUpiSteps = getCardUpiSteps();
-    if (cardUpiSteps.length > 0) {
+    // For mixed payments (Cash + Card/UPI), show the wizard
+    if (hasMixedPayment() || getCardUpiSteps().length > 0) {
       setShowSplitWizard(true);
     } else {
-      // Cash payment - show cash modal
+      // All cash - show cash modal
       setShowCashModal(true);
     }
   };

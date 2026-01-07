@@ -1,7 +1,7 @@
 // Payment Intent Types - Good Doc Payment System
 // These types model the complete payment flow for Card and UPI payments
 
-export type PaymentMethod = 'card' | 'upi';
+export type PaymentMethod = 'cash' | 'card' | 'upi';
 export type PaymentPurpose = 'settlement' | 'advance' | 'dues' | 'refund';
 
 export type PaymentIntentStatus = 
