@@ -59,17 +59,17 @@ export function WardSection({
         </div>
       </div>
       
-      {/* Bed Grid - Theater style with aisle gaps */}
-      <div className="space-y-2">
+      {/* Bed Grid - Theater style with increased spacing */}
+      <div className="space-y-4">
         {rows.map((row, rowIdx) => (
-          <div key={rowIdx} className="flex items-center gap-1.5">
+          <div key={rowIdx} className="flex items-center gap-3">
             {/* Row label */}
             <span className="w-4 text-[10px] font-medium text-muted-foreground text-right">
               {String.fromCharCode(65 + rowIdx)}
             </span>
             
             {/* Beds with aisle gap in the middle */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-3">
               {row.slice(0, 3).map((bed) => (
                 <BedTile
                   key={bed.id}
@@ -82,7 +82,7 @@ export function WardSection({
               
               {/* Aisle gap */}
               {row.length > 3 && (
-                <div className="w-3" aria-hidden="true" />
+                <div className="w-6" aria-hidden="true" />
               )}
               
               {row.slice(3).map((bed) => (
