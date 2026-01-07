@@ -1,27 +1,18 @@
 import { BedMapItem } from '@/data/bed-map.mock';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { X, UserPlus, CalendarCheck, ArrowRightLeft, Sparkles, Unlock } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { X, ArrowRightLeft } from 'lucide-react';
 
 interface BedSummaryPanelProps {
   selectedBeds: BedMapItem[];
   onClear: () => void;
-  onAssign: () => void;
-  onReserve: () => void;
   onTransfer?: () => void;
-  onMarkCleaning?: () => void;
-  onRelease?: () => void;
 }
 
 export function BedSummaryPanel({
   selectedBeds,
   onClear,
-  onAssign,
-  onReserve,
   onTransfer,
-  onMarkCleaning,
-  onRelease,
 }: BedSummaryPanelProps) {
   if (selectedBeds.length === 0) return null;
 
@@ -81,65 +72,18 @@ export function BedSummaryPanel({
 
           {/* Right: Actions */}
           <div className="flex items-center gap-2">
-            {/* Primary actions */}
-            <Button 
-              size="sm" 
-              onClick={onAssign}
-              className="gap-1.5"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span className="hidden sm:inline">Assign Patient</span>
-              <span className="sm:hidden">Assign</span>
-            </Button>
-            
-            <Button 
-              size="sm" 
-              variant="outline"
-              onClick={onReserve}
-              className="gap-1.5"
-            >
-              <CalendarCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">Reserve</span>
-            </Button>
-
-            {/* Secondary actions */}
-            <div className="hidden lg:flex items-center gap-2 border-l border-border pl-2 ml-1">
-              {onTransfer && (
-                <Button 
-                  size="sm" 
-                  variant="ghost"
-                  onClick={onTransfer}
-                  className="gap-1.5 text-muted-foreground"
-                >
-                  <ArrowRightLeft className="w-4 h-4" />
-                  Transfer
-                </Button>
-              )}
-              
-              {onMarkCleaning && (
-                <Button 
-                  size="sm" 
-                  variant="ghost"
-                  onClick={onMarkCleaning}
-                  className="gap-1.5 text-muted-foreground"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Cleaning
-                </Button>
-              )}
-              
-              {onRelease && (
-                <Button 
-                  size="sm" 
-                  variant="ghost"
-                  onClick={onRelease}
-                  className="gap-1.5 text-muted-foreground"
-                >
-                  <Unlock className="w-4 h-4" />
-                  Release
-                </Button>
-              )}
-            </div>
+            {/* Primary action */}
+            {onTransfer && (
+              <Button 
+                size="sm" 
+                onClick={onTransfer}
+                className="gap-1.5"
+              >
+                <ArrowRightLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">Bed Transfer</span>
+                <span className="sm:hidden">Transfer</span>
+              </Button>
+            )}
             
             {/* Clear */}
             <Button
