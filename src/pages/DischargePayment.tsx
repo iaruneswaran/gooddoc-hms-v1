@@ -740,15 +740,6 @@ const DischargePayment = () => {
                       <Input placeholder="+91" />
                     </div>
                   </div>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-muted-foreground">Mobile Number</label>
-                      <Input placeholder="+91" />
-                    </div>
-                  </div>
 
                   {/* Action Buttons */}
                   <div className="pt-2 space-y-2">
@@ -849,11 +840,26 @@ const DischargePayment = () => {
           patientName={visitHistoryData.patient.name}
           mrn={visitHistoryData.patient.uhid}
           orderId={visitHistoryData.admission.admissionNo}
-          amount={netPayable * 100} // Convert to paise
+          amount={netPayable * 100}
           purpose="settlement"
           defaultMethod={selectedPaymentMethod}
           onSuccess={handlePaymentSuccess}
           onCancel={() => setShowPaymentModal(false)}
+        />
+
+        {/* Split Payment Wizard Modal */}
+        <SplitPaymentWizardModal
+          open={showSplitWizard}
+          onOpenChange={setShowSplitWizard}
+          patientId={patientId || "P001"}
+          patientName={visitHistoryData.patient.name}
+          mrn={visitHistoryData.patient.uhid}
+          orderId={visitHistoryData.admission.admissionNo}
+          totalAmount={netPayable / 100}
+          purpose="settlement"
+          steps={wizardSteps}
+          onComplete={handleSplitWizardComplete}
+          onCancel={() => setShowSplitWizard(false)}
         />
       </div>
     </div>

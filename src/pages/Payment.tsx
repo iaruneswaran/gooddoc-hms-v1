@@ -138,8 +138,6 @@ const Payment = () => {
     setCountdown(9);
     setPrintingStatus("printing");
   };
-    setPrintingStatus("printing");
-  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -725,11 +723,26 @@ const Payment = () => {
         patientName="Siva Karthikeyan"
         mrn="GDID-009"
         orderId="INV-2025-009"
-        amount={payableAmount * 100} // Convert to paise
+        amount={payableAmount * 100}
         purpose="settlement"
         defaultMethod={selectedPaymentMethod}
         onSuccess={handlePaymentSuccess}
         onCancel={() => setShowPaymentModal(false)}
+      />
+
+      {/* Split Payment Wizard Modal */}
+      <SplitPaymentWizardModal
+        open={showSplitWizard}
+        onOpenChange={setShowSplitWizard}
+        patientId={patientId || "P001"}
+        patientName="Siva Karthikeyan"
+        mrn="GDID-009"
+        orderId="INV-2025-009"
+        totalAmount={payableAmount}
+        purpose="settlement"
+        steps={wizardSteps}
+        onComplete={handleSplitWizardComplete}
+        onCancel={() => setShowSplitWizard(false)}
       />
     </PageContent>
     </div>
