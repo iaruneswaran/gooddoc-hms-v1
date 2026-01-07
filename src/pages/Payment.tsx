@@ -580,20 +580,13 @@ const Payment = () => {
                     </label>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 pt-3">
+                  {/* Action Button */}
+                  <div className="pt-3">
                     <Button 
-                      variant="outline" 
-                      className="flex-1 h-12" 
-                      onClick={handlePayLater}
-                    >
-                      Pay Later
-                    </Button>
-                    <Button 
-                      className="flex-1 h-12 bg-primary hover:bg-primary/90 font-semibold" 
+                      className="w-full h-12 bg-primary hover:bg-primary/90 font-semibold" 
                       onClick={handlePayNow}
                     >
-                      Settle Bill
+                      Collect Payment
                     </Button>
                   </div>
 
