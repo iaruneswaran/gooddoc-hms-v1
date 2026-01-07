@@ -46,6 +46,9 @@ export function BedMapView({
       wards: floor.wards.map(ward => ({
         ...ward,
         beds: ward.beds.filter(bed => {
+          // Only show available and occupied beds
+          if (bed.status !== 'available' && bed.status !== 'occupied') return false;
+          
           // Search filter
           if (localSearch) {
             const query = localSearch.toLowerCase();
