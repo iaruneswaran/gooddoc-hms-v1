@@ -18,6 +18,7 @@ export type PageKey =
   | "surgeries"
   | "emergency"
   | "scheduled-today"
+  | "beds"
   | "default";
 
 interface SubtextParams {
@@ -69,6 +70,7 @@ function getNoDateSubtext(pageKey: PageKey): string {
     "surgeries": "Pick a date to see scheduled surgeries",
     "emergency": "Select a date to filter emergency cases",
     "scheduled-today": "Pick a date to view scheduled requests",
+    "beds": "Select a date to view bed availability",
     "default": "Select a date to filter results",
   };
   
@@ -168,6 +170,11 @@ function getSingleDateSubtext(pageKey: PageKey, date: Date, now: Date): string {
       if (isPast) return `Requests from ${formattedDate}`;
       return `Scheduled requests for ${formattedDate}`;
     },
+    "beds": () => {
+      if (isToday) return "Live bed availability across all floors";
+      if (isPast) return `Bed occupancy on ${formattedDate}`;
+      return `Projected availability for ${formattedDate}`;
+    },
     "default": () => {
       if (isToday) return "Showing today's data";
       return `Filtered to ${formattedDate}`;
@@ -201,6 +208,7 @@ function getRangeSubtext(pageKey: PageKey, from: Date, to: Date, now: Date): str
     "surgeries": `Surgery log: ${days} days`,
     "emergency": `ER cases: ${fromStr} — ${toStr}`,
     "scheduled-today": `Requests: ${fromStr} — ${toStr}`,
+    "beds": `Bed availability: ${fromStr} — ${toStr}`,
     "default": `Showing ${days}-day range`,
   };
   
