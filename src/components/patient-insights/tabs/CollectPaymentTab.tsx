@@ -90,18 +90,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
 
   const handleSplitPaymentMethodChange = (paymentId: string, newMethod: string) => {
     updateSplitPayment(paymentId, "method", newMethod);
-    
-    // If selecting Card or UPI, open the payment modal
-    if (newMethod === "card" || newMethod === "upi") {
-      const payment = splitPayments.find((p) => p.id === paymentId);
-      if (payment && payment.amount && parseFloat(payment.amount) > 0) {
-        const paymentIndex = splitPayments.findIndex((p) => p.id === paymentId);
-        setSplitPaymentFlowIndex(paymentIndex);
-        setSplitPaymentAmount(parseFloat(payment.amount) * 100);
-        setSelectedPaymentMethod(newMethod as PaymentMethodType);
-        setShowPaymentModal(true);
-      }
-    }
+    // No auto-open - user must click the action button
   };
 
   const startSplitPaymentFlow = (startIndex: number) => {

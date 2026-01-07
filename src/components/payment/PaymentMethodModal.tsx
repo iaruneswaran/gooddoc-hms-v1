@@ -225,6 +225,9 @@ export function PaymentMethodModal({
                     onSuccess={handleSuccess}
                     onCancel={closeModal}
                     onSwitchMethod={handleSwitchMethod}
+                    hasNextPayment={hasNextPayment}
+                    nextPaymentLabel={nextPaymentLabel}
+                    onNextPayment={() => onSuccess?.(intent.attempts?.[0] || { id: '', intentId: intent.id, method: 'card', provider: 'pos', status: 'succeeded', startedAt: new Date().toISOString() } as PaymentAttempt)}
                   />
                 )}
               </TabsContent>
@@ -236,6 +239,9 @@ export function PaymentMethodModal({
                     onSuccess={handleSuccess}
                     onCancel={closeModal}
                     onSwitchMethod={handleSwitchMethod}
+                    hasNextPayment={hasNextPayment}
+                    nextPaymentLabel={nextPaymentLabel}
+                    onNextPayment={() => onSuccess?.(intent.attempts?.[0] || { id: '', intentId: intent.id, method: 'upi', provider: 'upi_generic', status: 'succeeded', startedAt: new Date().toISOString() } as PaymentAttempt)}
                   />
                 )}
               </TabsContent>
