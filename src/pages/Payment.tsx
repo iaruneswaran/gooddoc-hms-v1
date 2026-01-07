@@ -181,7 +181,7 @@ const Payment = () => {
                       <TableBody>
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">DOC-2025-004521</p>
+                            <p className="billing-value text-primary">DOC521</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-value">Cardiology Consultation Notes</p>
@@ -211,7 +211,7 @@ const Payment = () => {
                         
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">DOC-2025-004522</p>
+                            <p className="billing-value text-primary">DOC522</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-value">12-Lead ECG Report</p>
@@ -241,7 +241,7 @@ const Payment = () => {
                         
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">DOC-2025-004523</p>
+                            <p className="billing-value text-primary">DOC523</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-value">ECG Tracing Image</p>
@@ -271,7 +271,7 @@ const Payment = () => {
                         
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">RX-2025-008845</p>
+                            <p className="billing-value text-primary">RXN845</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-value">Prescription</p>
@@ -301,7 +301,7 @@ const Payment = () => {
                         
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">LAB-2025-012456</p>
+                            <p className="billing-value text-primary">LAB456</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-value">Lipid Profile Report</p>

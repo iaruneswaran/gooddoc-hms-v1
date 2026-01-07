@@ -30,9 +30,9 @@ export function ReportsTab() {
 
   // Mock denials data
   const denials = [
-    { claimNo: "CLM-2025-789", payer: "Star Health", reason: "Incomplete documentation", amount: 450000, daysSince: 15, attempts: 2 },
-    { claimNo: "CLM-2025-754", payer: "HDFC ERGO", reason: "Pre-existing condition", amount: 280000, daysSince: 8, attempts: 1 },
-    { claimNo: "CLM-2025-698", payer: "National Insurance", reason: "Out of network", amount: 325000, daysSince: 22, attempts: 3 },
+    { claimNo: "CLM789", payer: "Star Health", reason: "Incomplete documentation", amount: 450000, daysSince: 15, attempts: 2 },
+    { claimNo: "CLM754", payer: "HDFC ERGO", reason: "Pre-existing condition", amount: 280000, daysSince: 8, attempts: 1 },
+    { claimNo: "CLM698", payer: "National Insurance", reason: "Out of network", amount: 325000, daysSince: 22, attempts: 3 },
   ];
 
   // Mock A/R aging data

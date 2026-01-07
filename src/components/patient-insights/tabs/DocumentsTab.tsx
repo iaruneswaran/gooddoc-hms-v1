@@ -74,7 +74,7 @@ const allDocuments: Document[] = [
   // V25-004 documents (Active visit - Cardiology follow-up)
   {
     id: "doc-041",
-    documentNo: "DOC-2025-004521",
+    documentNo: "DOC521",
     name: "Cardiology Consultation Notes",
     type: "report",
     date: "20 Dec 2025",
@@ -91,7 +91,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-042",
-    documentNo: "DOC-2025-004522",
+    documentNo: "DOC522",
     name: "12-Lead ECG Report",
     type: "report",
     date: "20 Dec 2025",
@@ -108,7 +108,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-043",
-    documentNo: "DOC-2025-004523",
+    documentNo: "DOC523",
     name: "ECG Tracing Image",
     type: "image",
     date: "20 Dec 2025",
@@ -124,7 +124,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-044",
-    documentNo: "RX-2025-008845",
+    documentNo: "RXN845",
     name: "Prescription",
     type: "prescription",
     date: "20 Dec 2025",
@@ -140,7 +140,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-045",
-    documentNo: "LAB-2025-012456",
+    documentNo: "LAB456",
     name: "Lipid Profile Report",
     type: "lab",
     date: "20 Dec 2025",
@@ -158,7 +158,7 @@ const allDocuments: Document[] = [
   // V25-002 documents (General Medicine checkup)
   {
     id: "doc-021",
-    documentNo: "DOC-2025-004412",
+    documentNo: "DOC412",
     name: "Health Checkup Report",
     type: "report",
     date: "15 Dec 2025",
@@ -175,7 +175,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-022",
-    documentNo: "LAB-2025-012234",
+    documentNo: "LAB234",
     name: "Complete Blood Count (CBC)",
     type: "lab",
     date: "15 Dec 2025",
@@ -192,7 +192,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-023",
-    documentNo: "LAB-2025-012235",
+    documentNo: "LAB235",
     name: "Lipid Profile Report",
     type: "lab",
     date: "15 Dec 2025",
@@ -209,7 +209,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-024",
-    documentNo: "RX-2025-008712",
+    documentNo: "RXN712",
     name: "Prescription",
     type: "prescription",
     date: "15 Dec 2025",
@@ -226,7 +226,7 @@ const allDocuments: Document[] = [
   // V25-001 documents (Cardiology - Chest pain)
   {
     id: "doc-011",
-    documentNo: "DOC-2025-004201",
+    documentNo: "DOC201",
     name: "Cardiology Consultation Notes",
     type: "report",
     date: "01 Dec 2025",
@@ -243,7 +243,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-012",
-    documentNo: "DOC-2025-004202",
+    documentNo: "DOC202",
     name: "12-Lead ECG Report",
     type: "report",
     date: "01 Dec 2025",
@@ -260,7 +260,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-013",
-    documentNo: "RAD-2025-003456",
+    documentNo: "RAD456",
     name: "Chest X-Ray (PA View)",
     type: "image",
     date: "01 Dec 2025",
@@ -277,7 +277,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-014",
-    documentNo: "RX-2025-008456",
+    documentNo: "RXN456",
     name: "Prescription",
     type: "prescription",
     date: "01 Dec 2025",
@@ -294,7 +294,7 @@ const allDocuments: Document[] = [
   // V24-089 documents (Orthopedics - Back pain)
   {
     id: "doc-891",
-    documentNo: "DOC-2025-003890",
+    documentNo: "DOC890",
     name: "Orthopedics Consultation Notes",
     type: "report",
     date: "15 Nov 2025",
@@ -311,7 +311,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-892",
-    documentNo: "RAD-2025-003234",
+    documentNo: "RAD234",
     name: "MRI Lumbar Spine",
     type: "image",
     date: "15 Nov 2025",
@@ -328,7 +328,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-893",
-    documentNo: "DOC-2025-003891",
+    documentNo: "DOC891",
     name: "Physiotherapy Treatment Plan",
     type: "report",
     date: "16 Nov 2025",
@@ -344,7 +344,7 @@ const allDocuments: Document[] = [
   },
   {
     id: "doc-894",
-    documentNo: "RX-2025-008234",
+    documentNo: "RXN234",
     name: "Prescription",
     type: "prescription",
     date: "15 Nov 2025",
