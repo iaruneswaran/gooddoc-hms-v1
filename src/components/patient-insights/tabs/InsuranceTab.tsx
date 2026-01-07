@@ -72,7 +72,7 @@ const mockClaims: Claim[] = [
   // V25-004 claims (Active visit - Cardiology follow-up)
   {
     id: "clm-041",
-    claimNo: "CLM-2025-004521",
+    claimNo: "CLM521",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -95,7 +95,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-042",
-    claimNo: "CLM-2025-004522",
+    claimNo: "CLM522",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -118,7 +118,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-043",
-    claimNo: "CLM-2025-004523",
+    claimNo: "CLM523",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -142,7 +142,7 @@ const mockClaims: Claim[] = [
   // V25-002 claims (General Medicine checkup)
   {
     id: "clm-021",
-    claimNo: "CLM-2025-004312",
+    claimNo: "CLM312",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -166,7 +166,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-022",
-    claimNo: "CLM-2025-004313",
+    claimNo: "CLM313",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -191,7 +191,7 @@ const mockClaims: Claim[] = [
   // V25-001 claims (Cardiology - Chest pain)
   {
     id: "clm-011",
-    claimNo: "CLM-2025-004101",
+    claimNo: "CLM101",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -215,7 +215,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-012",
-    claimNo: "CLM-2025-004102",
+    claimNo: "CLM102",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -239,7 +239,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-013",
-    claimNo: "CLM-2025-004103",
+    claimNo: "CLM103",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -263,7 +263,7 @@ const mockClaims: Claim[] = [
   // V24-089 claims (Orthopedics - Back pain)
   {
     id: "clm-891",
-    claimNo: "CLM-2025-003891",
+    claimNo: "CLM891",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -288,7 +288,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-892",
-    claimNo: "CLM-2025-003892",
+    claimNo: "CLM892",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",
@@ -313,7 +313,7 @@ const mockClaims: Claim[] = [
   },
   {
     id: "clm-893",
-    claimNo: "CLM-2025-003893",
+    claimNo: "CLM893",
     policyNo: "ICICI-HLT-789456123",
     insurerName: "ICICI Lombard",
     tpaName: "Medi Assist",

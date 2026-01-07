@@ -1,78 +1,121 @@
 /**
- * Format an invoice ID in the standard format: INV + 3 digits
- * @param sequence - The sequence number (1-999)
- * @returns Formatted invoice ID string (e.g., "INV123")
+ * Billing ID Utilities
+ * Standard format: 3 letters + 3 digits (e.g., INV001, RCP456, DOC789)
  */
+
+type IdPrefix = 'INV' | 'RCP' | 'BIL' | 'DOC' | 'CLM' | 'ORD' | 'LAB' | 'RX' | 'ADM' | 'TXN';
+
+/**
+ * Generic ID formatter: PREFIX + 3 digits
+ */
+export function formatId(prefix: IdPrefix, sequence: number): string {
+  const seq = String(Math.abs(sequence) % 1000).padStart(3, '0');
+  return `${prefix}${seq}`;
+}
+
+/**
+ * Generic ID generator
+ */
+export function generateId(prefix: IdPrefix): string {
+  const sequence = Math.floor(1 + Math.random() * 999);
+  return formatId(prefix, sequence);
+}
+
+// Invoice IDs
 export function formatInvoiceId(sequence: number): string {
-  const seq = String(sequence).padStart(3, '0');
-  return `INV${seq}`;
+  return formatId('INV', sequence);
 }
-
-/**
- * Format a receipt ID in the standard format: RCP + 3 digits
- * @param sequence - The sequence number (1-999)
- * @returns Formatted receipt ID string (e.g., "RCP456")
- */
-export function formatReceiptId(sequence: number): string {
-  const seq = String(sequence).padStart(3, '0');
-  return `RCP${seq}`;
-}
-
-/**
- * Format a bill ID in the standard format: BIL + 3 digits
- * @param sequence - The sequence number (1-999)
- * @returns Formatted bill ID string (e.g., "BIL789")
- */
-export function formatBillId(sequence: number): string {
-  const seq = String(sequence).padStart(3, '0');
-  return `BIL${seq}`;
-}
-
-/**
- * Generate a random invoice ID
- * @returns Generated invoice ID string (e.g., "INV847")
- */
 export function generateInvoiceId(): string {
-  const sequence = Math.floor(1 + Math.random() * 999);
-  return formatInvoiceId(sequence);
+  return generateId('INV');
 }
 
-/**
- * Generate a random receipt ID
- * @returns Generated receipt ID string (e.g., "RCP234")
- */
+// Receipt IDs
+export function formatReceiptId(sequence: number): string {
+  return formatId('RCP', sequence);
+}
 export function generateReceiptId(): string {
-  const sequence = Math.floor(1 + Math.random() * 999);
-  return formatReceiptId(sequence);
+  return generateId('RCP');
 }
 
-/**
- * Generate a random bill ID
- * @returns Generated bill ID string (e.g., "BIL567")
- */
+// Bill IDs
+export function formatBillId(sequence: number): string {
+  return formatId('BIL', sequence);
+}
 export function generateBillId(): string {
-  const sequence = Math.floor(1 + Math.random() * 999);
-  return formatBillId(sequence);
+  return generateId('BIL');
+}
+
+// Document IDs
+export function formatDocumentId(sequence: number): string {
+  return formatId('DOC', sequence);
+}
+export function generateDocumentId(): string {
+  return generateId('DOC');
+}
+
+// Claim IDs (Insurance)
+export function formatClaimId(sequence: number): string {
+  return formatId('CLM', sequence);
+}
+export function generateClaimId(): string {
+  return generateId('CLM');
+}
+
+// Order IDs
+export function formatOrderId(sequence: number): string {
+  return formatId('ORD', sequence);
+}
+export function generateOrderId(): string {
+  return generateId('ORD');
+}
+
+// Lab Order IDs
+export function formatLabId(sequence: number): string {
+  return formatId('LAB', sequence);
+}
+export function generateLabId(): string {
+  return generateId('LAB');
+}
+
+// Prescription IDs
+export function formatPrescriptionId(sequence: number): string {
+  return formatId('RX', sequence);
+}
+export function generatePrescriptionId(): string {
+  return generateId('RX');
+}
+
+// Admission IDs
+export function formatAdmissionId(sequence: number): string {
+  return formatId('ADM', sequence);
+}
+export function generateAdmissionId(): string {
+  return generateId('ADM');
+}
+
+// Transaction IDs
+export function formatTransactionId(sequence: number): string {
+  return formatId('TXN', sequence);
+}
+export function generateTransactionId(): string {
+  return generateId('TXN');
 }
 
 /**
- * Parse an invoice ID string into its sequence number
- * @param invoiceId - The invoice ID string (e.g., "INV123")
- * @returns The sequence number, or null if invalid
+ * Parse any standard ID into its sequence number
  */
+export function parseId(id: string): { prefix: string; sequence: number } | null {
+  const match = id.match(/^([A-Z]{2,3})(\d{3})$/);
+  if (!match) return null;
+  return { prefix: match[1], sequence: parseInt(match[2], 10) };
+}
+
 export function parseInvoiceId(invoiceId: string): number | null {
-  const match = invoiceId.match(/^INV(\d{3})$/);
-  if (!match) return null;
-  return parseInt(match[1], 10);
+  const result = parseId(invoiceId);
+  return result?.prefix === 'INV' ? result.sequence : null;
 }
 
-/**
- * Parse a receipt ID string into its sequence number
- * @param receiptId - The receipt ID string (e.g., "RCP456")
- * @returns The sequence number, or null if invalid
- */
 export function parseReceiptId(receiptId: string): number | null {
-  const match = receiptId.match(/^RCP(\d{3})$/);
-  if (!match) return null;
-  return parseInt(match[1], 10);
+  const result = parseId(receiptId);
+  return result?.prefix === 'RCP' ? result.sequence : null;
 }
