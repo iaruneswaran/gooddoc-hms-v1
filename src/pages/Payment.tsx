@@ -358,8 +358,8 @@ const Payment = () => {
               <Card className="w-full lg:w-[420px] h-fit self-start overflow-hidden">
                 {/* Header */}
                 <div className="bg-primary px-5 py-4">
-                  <h3 className="billing-section-title text-primary-foreground">Payment Settlement</h3>
-                  <p className="billing-helper text-primary-foreground/70 mt-0.5">Invoice: INV009</p>
+                  <h3 className="billing-section-title !text-white">Payment Settlement</h3>
+                  <p className="billing-helper !text-white/70 mt-0.5">Invoice: INV009</p>
                 </div>
                 
                 <div className="p-5 space-y-5">

@@ -296,8 +296,8 @@ const PatientAdvanceCollection = () => {
             <Card className="overflow-hidden sticky top-6 h-fit">
               {/* Header */}
               <div className="bg-primary px-5 py-4">
-                <h3 className="billing-section-title text-primary-foreground">Collect Advance</h3>
-                <p className="billing-helper text-primary-foreground/70 mt-0.5">
+                <h3 className="billing-section-title !text-white">Collect Advance</h3>
+                <p className="billing-helper !text-white/70 mt-0.5">
                   Record deposit from patient or attendant
                 </p>
               </div>
