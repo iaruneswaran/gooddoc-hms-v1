@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import bainesLogo from "@/assets/baines-logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Download, Printer, CheckCircle2, Trash2, CreditCard, Smartphone } from "lucide-react";
+import { ChevronLeft, Download, Printer, CheckCircle2, Trash2, CreditCard, Smartphone, RotateCcw, AlertCircle } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -9,10 +9,15 @@ import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PaymentMethodModal } from "@/components/payment";
+import { SplitPaymentWizardModal, type SplitPaymentStep } from "@/components/payment/SplitPaymentWizardModal";
+import { useSplitPaymentAutoCalc, type SplitRow } from "@/hooks/useSplitPaymentAutoCalc";
 import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
+import { formatINR } from "@/utils/currency";
+import { toast } from "sonner";
 
 interface InvoiceItem {
   name: string;
@@ -35,22 +40,43 @@ const Payment = () => {
   const patientId = paymentData?.patientId;
   
   const [useAdvance, setUseAdvance] = useState(false);
-  const [paymentAmount, setPaymentAmount] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [showSuccess, setShowSuccess] = useState(false);
   const [paymentType, setPaymentType] = useState<"now" | "later">("now");
   const [countdown, setCountdown] = useState(9);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
-  const [paymentRows, setPaymentRows] = useState([{ id: 1, amount: "", method: "Cash" }]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+  const [showSplitWizard, setShowSplitWizard] = useState(false);
+
+  const advanceAmount = 1000;
+  const billAmount = 6000;
+  const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
+  const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
+  const payableAmount = Math.max(0, billAmount - usedAdvance);
+
+  // Use auto-calc split payment hook
+  const {
+    rows: splitRows,
+    isValid,
+    validationError,
+    updateRowAmount,
+    updateRowMethod,
+    addRow,
+    removeRow,
+    resetDistribution,
+    getCardUpiSteps,
+  } = useSplitPaymentAutoCalc({ totalDue: payableAmount });
+
+  // Wizard steps
+  const wizardSteps: SplitPaymentStep[] = getCardUpiSteps().map(step => ({
+    ...step,
+    status: 'pending' as const,
+  }));
 
   useEffect(() => {
     if (showSuccess) {
-      // First show "printing" for 2 seconds
       const printingTimer = setTimeout(() => {
         setPrintingStatus("success");
-        // Then show "success" for 2 seconds
         const successTimer = setTimeout(() => {
           setPrintingStatus("done");
         }, 2000);
@@ -70,10 +96,20 @@ const Payment = () => {
   }, [showSuccess, printingStatus, countdown, navigate]);
 
   const handlePayNow = () => {
-    setPaymentType("now");
-    setShowSuccess(true);
-    setCountdown(9);
-    setPrintingStatus("printing");
+    if (!isValid) {
+      toast.error(validationError || "Please check split amounts");
+      return;
+    }
+
+    const cardUpiSteps = getCardUpiSteps();
+    if (cardUpiSteps.length > 0) {
+      setShowSplitWizard(true);
+    } else {
+      setPaymentType("now");
+      setShowSuccess(true);
+      setCountdown(9);
+      setPrintingStatus("printing");
+    }
   };
 
   const handlePayLater = () => {
@@ -82,37 +118,26 @@ const Payment = () => {
     setCountdown(9);
     setPrintingStatus("printing");
   };
-  
-  const advanceAmount = 1000;
-  const billAmount = 6000; // Grand total from invoice (Doctor Consultation + Laboratory only)
-  const usedAdvance = useAdvance ? Math.min(advanceAmount, billAmount) : 0;
-  const remainingBalance = useAdvance ? Math.max(0, advanceAmount - billAmount) : advanceAmount;
-  const payableAmount = Math.max(0, billAmount - usedAdvance);
 
-  const addPaymentRow = () => {
-    const newId = Math.max(...paymentRows.map(r => r.id)) + 1;
-    setPaymentRows([...paymentRows, { id: newId, amount: "", method: "Cash" }]);
-  };
-
-  const removePaymentRow = (id: number) => {
-    setPaymentRows(paymentRows.filter(row => row.id !== id));
-  };
-
-  const updatePaymentRow = (id: number, field: 'amount' | 'method', value: string) => {
-    // If selecting Card or UPI, open the payment modal
-    if (field === 'method' && (value === 'Card' || value === 'UPI')) {
-      setSelectedPaymentMethod(value.toLowerCase() as PaymentMethodType);
-      setShowPaymentModal(true);
-    }
-    setPaymentRows(paymentRows.map(row => 
-      row.id === id ? { ...row, [field]: value } : row
-    ));
+  const handleSplitWizardComplete = (steps: SplitPaymentStep[]) => {
+    const cardAmount = steps.filter(s => s.method === 'card' && s.status === 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    const upiAmount = steps.filter(s => s.method === 'upi' && s.status === 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    
+    toast.success(`Split payment collected: Card ${formatINR(cardAmount)} + UPI ${formatINR(upiAmount)}`);
+    setPaymentType("now");
+    setShowSuccess(true);
+    setCountdown(9);
+    setPrintingStatus("printing");
   };
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
     setShowPaymentModal(false);
     setShowSuccess(true);
     setCountdown(9);
+    setPrintingStatus("printing");
+  };
     setPrintingStatus("printing");
   };
 
@@ -427,49 +452,75 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  {/* Payment Collection */}
+                  {/* Split Payment */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold">Manual Entry</p>
-                      <span className="text-xs text-muted-foreground">Split Payment</span>
+                      <p className="text-sm font-semibold">Split Payment</p>
+                      <button
+                        onClick={resetDistribution}
+                        className="text-xs text-primary hover:underline flex items-center gap-1"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        Reset
+                      </button>
                     </div>
                     
-                    {paymentRows.map((row, index) => (
+                    {splitRows.map((row) => (
                       <div key={row.id} className="space-y-2">
                         <div className="flex items-center gap-2">
                           <div className="flex-1 relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
-                            <input
-                              type="text"
-                              value={index === 0 ? payableAmount.toLocaleString() : row.amount}
-                              onChange={(e) => updatePaymentRow(row.id, 'amount', e.target.value)}
-                              readOnly={index === 0}
+                            <Input
+                              type="number"
+                              value={row.amount || ""}
+                              onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
                               placeholder="0.00"
-                              className="w-full h-11 pl-7 pr-4 text-sm font-semibold bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                              className="pl-7 h-11"
+                              min={0}
                             />
                           </div>
                           <Select 
                             value={row.method} 
-                            onValueChange={(value) => updatePaymentRow(row.id, 'method', value)}
+                            onValueChange={(value) => updateRowMethod(row.id, value as SplitRow['method'])}
                           >
-                            <SelectTrigger className="w-[130px] h-11">
+                            <SelectTrigger className={`w-[130px] h-11 ${row.method === "card" || row.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-popover border border-border shadow-lg z-50">
-                              <SelectItem value="Cash">
+                              <SelectItem value="cash">
                                 <span className="flex items-center gap-2">💵 Cash</span>
                               </SelectItem>
-                              <SelectItem value="Card">
+                              <SelectItem value="card">
                                 <span className="flex items-center gap-2">💳 Card</span>
                               </SelectItem>
-                              <SelectItem value="UPI">
+                              <SelectItem value="upi">
                                 <span className="flex items-center gap-2">📱 UPI</span>
                               </SelectItem>
                             </SelectContent>
                           </Select>
-                          {paymentRows.length > 1 && (
+                          {(row.method === "card" || row.method === "upi") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-11 px-3 border-primary text-primary hover:bg-primary/10"
+                              onClick={() => {
+                                if (row.amount > 0) {
+                                  setSelectedPaymentMethod(row.method as PaymentMethodType);
+                                  setShowPaymentModal(true);
+                                }
+                              }}
+                              disabled={row.amount <= 0}
+                            >
+                              {row.method === "card" ? (
+                                <CreditCard className="w-4 h-4" />
+                              ) : (
+                                <Smartphone className="w-4 h-4" />
+                              )}
+                            </Button>
+                          )}
+                          {splitRows.length > 1 && (
                             <button
-                              onClick={() => removePaymentRow(row.id)}
+                              onClick={() => removeRow(row.id)}
                               className="h-11 w-11 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -479,9 +530,17 @@ const Payment = () => {
                       </div>
                     ))}
 
+                    {/* Validation Error */}
+                    {validationError && (
+                      <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                        <AlertCircle className="w-4 h-4" />
+                        {validationError}
+                      </div>
+                    )}
+
                     <button 
                       className="text-sm text-primary font-medium hover:underline flex items-center gap-1"
-                      onClick={addPaymentRow}
+                      onClick={addRow}
                     >
                       <span className="text-lg leading-none">+</span> Add Split Payment
                     </button>
@@ -495,6 +554,7 @@ const Payment = () => {
                           setSelectedPaymentMethod("card");
                           setShowPaymentModal(true);
                         }}
+                        disabled={payableAmount <= 0}
                       >
                         <CreditCard className="w-5 h-5 text-primary" />
                         <span className="text-xs font-medium">Pay by Card</span>
@@ -506,6 +566,7 @@ const Payment = () => {
                           setSelectedPaymentMethod("upi");
                           setShowPaymentModal(true);
                         }}
+                        disabled={payableAmount <= 0}
                       >
                         <Smartphone className="w-5 h-5 text-primary" />
                         <span className="text-xs font-medium">Pay by UPI</span>
