@@ -7,7 +7,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -23,19 +22,16 @@ import {
   Trash2,
   User,
   CreditCard,
-  Smartphone
+  Smartphone,
+  RotateCcw,
+  AlertCircle
 } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { toast } from "sonner";
 import { PaymentMethodModal } from "@/components/payment";
+import { SplitPaymentWizardModal, type SplitPaymentStep } from "@/components/payment/SplitPaymentWizardModal";
+import { useSplitPaymentAutoCalc, type SplitRow } from "@/hooks/useSplitPaymentAutoCalc";
 import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
-
-interface PaymentLine {
-  id: number;
-  method: "cash" | "card" | "upi" | "neft" | "cheque";
-  amount: number;
-  reference?: string;
-}
 
 // Mock patient data
 const mockPatient = {
@@ -90,9 +86,23 @@ const PatientAdvanceCollection = () => {
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
 
-  const [paymentLines, setPaymentLines] = useState<PaymentLine[]>([
-    { id: 1, method: "cash", amount: 0 },
-  ]);
+  // Amount to collect (editable input)
+  const [amountToCollect, setAmountToCollect] = useState(5000); // Default ₹5,000
+
+  // Use the auto-calc split payment hook
+  const {
+    rows: splitRows,
+    totalEntered,
+    isValid,
+    validationError,
+    updateRowAmount,
+    updateRowMethod,
+    addRow,
+    removeRow,
+    resetDistribution,
+    getCardUpiSteps,
+  } = useSplitPaymentAutoCalc({ totalDue: amountToCollect });
+
   const [reason, setReason] = useState("Additional Deposit");
   const [payerName, setPayerName] = useState(mockPatient.name);
   const [payerRelation, setPayerRelation] = useState("self");
@@ -101,8 +111,11 @@ const PatientAdvanceCollection = () => {
   const [sendSms, setSendSms] = useState(true);
   const [sendEmail, setSendEmail] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Payment modals
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+  const [showSplitWizard, setShowSplitWizard] = useState(false);
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
     setShowPaymentModal(false);
@@ -110,55 +123,75 @@ const PatientAdvanceCollection = () => {
     toast.success("Advance collected successfully!", {
       description: `Receipt No: ${receiptNo}`,
     });
-    setPaymentLines([{ id: 1, method: "cash", amount: 0 }]);
+    // Reset amount
+    setAmountToCollect(0);
   };
 
-  const totalAmount = paymentLines.reduce((sum, line) => sum + line.amount, 0);
+  const handleSplitWizardComplete = (steps: SplitPaymentStep[]) => {
+    const cardAmount = steps.filter(s => s.method === 'card' && s.status === 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    const upiAmount = steps.filter(s => s.method === 'upi' && s.status === 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    
+    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    toast.success("Split payment collected successfully!", {
+      description: `Card: ${formatINR(cardAmount)} + UPI: ${formatINR(upiAmount)} • Receipt: ${receiptNo}`,
+    });
+    // Reset
+    setAmountToCollect(0);
+  };
+
+  const handleSplitWizardPartial = (steps: SplitPaymentStep[]) => {
+    const completedAmount = steps.filter(s => s.status === 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    const pendingAmount = steps.filter(s => s.status !== 'succeeded')
+      .reduce((sum, s) => sum + s.amount, 0);
+    
+    toast.warning("Partial payment collected", {
+      description: `Collected: ${formatINR(completedAmount)} • Pending: ${formatINR(pendingAmount)}`,
+    });
+  };
+
   const availableBalance = mockPatient.currentAdvance - mockPatient.usedAdvance;
-  const newBalance = availableBalance + totalAmount * 100; // Convert to paise
-
-  const addPaymentLine = () => {
-    const newId = Math.max(...paymentLines.map((l) => l.id)) + 1;
-    setPaymentLines([...paymentLines, { id: newId, method: "cash", amount: 0 }]);
-  };
-
-  const removePaymentLine = (id: number) => {
-    if (paymentLines.length > 1) {
-      setPaymentLines(paymentLines.filter((line) => line.id !== id));
-    }
-  };
-
-  const updatePaymentLine = (id: number, updates: Partial<PaymentLine>) => {
-    setPaymentLines(
-      paymentLines.map((line) => (line.id === id ? { ...line, ...updates } : line))
-    );
-  };
+  const newBalance = availableBalance + amountToCollect * 100; // Convert to paise
 
   const handleCollectAdvance = () => {
-    if (totalAmount <= 0) {
-      toast.error("Please enter a valid amount");
+    if (amountToCollect <= 0 || !isValid) {
+      toast.error("Please enter a valid amount and ensure split is correct");
       return;
     }
 
-    setIsProcessing(true);
+    // Check if there are Card/UPI splits that need wizard
+    const cardUpiSteps = getCardUpiSteps();
     
-    // Simulate API call
-    setTimeout(() => {
-      const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
-      setIsProcessing(false);
-      toast.success("Advance collected successfully!", {
-        description: `Receipt No: ${receiptNo}`,
-      });
-      // Reset form
-      setPaymentLines([{ id: 1, method: "cash", amount: 0 }]);
-    }, 1500);
+    if (cardUpiSteps.length > 0) {
+      // Open split payment wizard for Card/UPI
+      setShowSplitWizard(true);
+    } else {
+      // Only cash - process directly
+      setIsProcessing(true);
+      setTimeout(() => {
+        const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+        setIsProcessing(false);
+        toast.success("Advance collected successfully!", {
+          description: `Receipt No: ${receiptNo}`,
+        });
+        setAmountToCollect(0);
+      }, 1500);
+    }
   };
 
   const handleBack = () => {
     navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`);
   };
 
-  const canConfirm = payerName.trim() !== "" && totalAmount > 0;
+  const canConfirm = payerName.trim() !== "" && amountToCollect > 0 && isValid;
+
+  // Get wizard steps for split payment
+  const wizardSteps: SplitPaymentStep[] = getCardUpiSteps().map(step => ({
+    ...step,
+    status: 'pending' as const,
+  }));
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -303,37 +336,54 @@ const PatientAdvanceCollection = () => {
                   </div>
                 </div>
 
-                {/* Payment Collection */}
+                {/* Amount to Collect */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Amount to Collect</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
+                    <Input
+                      type="number"
+                      value={amountToCollect || ""}
+                      onChange={(e) => setAmountToCollect(parseFloat(e.target.value) || 0)}
+                      placeholder="0.00"
+                      className="pl-7 h-11 text-lg font-semibold"
+                      min={0}
+                    />
+                  </div>
+                </div>
+
+                {/* Split Payment */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Manual Entry</p>
-                    <span className="text-xs text-muted-foreground">Split Payment</span>
+                    <p className="text-sm font-semibold">Split Payment</p>
+                    <button
+                      onClick={resetDistribution}
+                      className="text-xs text-primary hover:underline flex items-center gap-1"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      Reset
+                    </button>
                   </div>
                   
-                  {paymentLines.map((line, index) => (
-                    <div key={line.id} className="space-y-2">
+                  {splitRows.map((row) => (
+                    <div key={row.id} className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="flex-1 relative">
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₹</span>
                           <Input
                             type="number"
-                            value={line.amount || ""}
-                            onChange={(e) =>
-                              updatePaymentLine(line.id, { amount: parseInt(e.target.value) || 0 })
-                            }
+                            value={row.amount || ""}
+                            onChange={(e) => updateRowAmount(row.id, parseFloat(e.target.value) || 0)}
                             placeholder="0.00"
                             className="pl-7 h-11"
                             min={0}
                           />
                         </div>
                         <Select
-                          value={line.method}
-                          onValueChange={(value) => {
-                            updatePaymentLine(line.id, { method: value as PaymentLine["method"] });
-                            // No auto-open - user must click the action button
-                          }}
+                          value={row.method}
+                          onValueChange={(value) => updateRowMethod(row.id, value as SplitRow['method'])}
                         >
-                          <SelectTrigger className={`w-[130px] h-11 ${line.method === "card" || line.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
+                          <SelectTrigger className={`w-[130px] h-11 ${row.method === "card" || row.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-popover border border-border shadow-lg z-50">
@@ -348,29 +398,29 @@ const PatientAdvanceCollection = () => {
                             </SelectItem>
                           </SelectContent>
                         </Select>
-                        {(line.method === "card" || line.method === "upi") && (
+                        {(row.method === "card" || row.method === "upi") && (
                           <Button
                             variant="outline"
                             size="sm"
                             className="h-11 px-3 border-primary text-primary hover:bg-primary/10"
                             onClick={() => {
-                              if (line.amount > 0) {
-                                setSelectedPaymentMethod(line.method as PaymentMethodType);
+                              if (row.amount > 0) {
+                                setSelectedPaymentMethod(row.method as PaymentMethodType);
                                 setShowPaymentModal(true);
                               }
                             }}
-                            disabled={line.amount <= 0}
+                            disabled={row.amount <= 0}
                           >
-                            {line.method === "card" ? (
+                            {row.method === "card" ? (
                               <CreditCard className="w-4 h-4" />
                             ) : (
                               <Smartphone className="w-4 h-4" />
                             )}
                           </Button>
                         )}
-                        {paymentLines.length > 1 && (
+                        {splitRows.length > 1 && (
                           <button
-                            onClick={() => removePaymentLine(line.id)}
+                            onClick={() => removeRow(row.id)}
                             className="h-11 w-11 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -380,9 +430,17 @@ const PatientAdvanceCollection = () => {
                     </div>
                   ))}
 
+                  {/* Validation Error */}
+                  {validationError && (
+                    <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                      <AlertCircle className="w-4 h-4" />
+                      {validationError}
+                    </div>
+                  )}
+
                   <button 
                     className="text-sm text-primary font-medium hover:underline flex items-center gap-1"
-                    onClick={addPaymentLine}
+                    onClick={addRow}
                   >
                     <span className="text-lg leading-none">+</span> Add Split Payment
                   </button>
@@ -396,7 +454,7 @@ const PatientAdvanceCollection = () => {
                         setSelectedPaymentMethod("card");
                         setShowPaymentModal(true);
                       }}
-                      disabled={totalAmount <= 0}
+                      disabled={amountToCollect <= 0}
                     >
                       <CreditCard className="w-4 h-4 text-primary" />
                       <span className="text-xs font-medium">Pay by Card</span>
@@ -408,7 +466,7 @@ const PatientAdvanceCollection = () => {
                         setSelectedPaymentMethod("upi");
                         setShowPaymentModal(true);
                       }}
-                      disabled={totalAmount <= 0}
+                      disabled={amountToCollect <= 0}
                     >
                       <Smartphone className="w-4 h-4 text-primary" />
                       <span className="text-xs font-medium">Pay by UPI</span>
@@ -513,7 +571,7 @@ const PatientAdvanceCollection = () => {
           </div>
         </main>
 
-        {/* Payment Modal */}
+        {/* Single Payment Modal */}
         <PaymentMethodModal
           open={showPaymentModal}
           onOpenChange={setShowPaymentModal}
@@ -521,11 +579,27 @@ const PatientAdvanceCollection = () => {
           patientName={mockPatient.name}
           mrn={mockPatient.gdid}
           orderId={`ADV-${Date.now()}`}
-          amount={totalAmount * 100} // Convert to paise
+          amount={amountToCollect * 100} // Convert to paise
           purpose="advance"
           defaultMethod={selectedPaymentMethod}
           onSuccess={handlePaymentSuccess}
           onCancel={() => setShowPaymentModal(false)}
+        />
+
+        {/* Split Payment Wizard Modal */}
+        <SplitPaymentWizardModal
+          open={showSplitWizard}
+          onOpenChange={setShowSplitWizard}
+          patientId={patientId || "P001"}
+          patientName={mockPatient.name}
+          mrn={mockPatient.gdid}
+          orderId={`ADV-${Date.now()}`}
+          totalAmount={amountToCollect * 100} // Convert to paise
+          purpose="advance"
+          steps={wizardSteps}
+          onComplete={handleSplitWizardComplete}
+          onPartialComplete={handleSplitWizardPartial}
+          onCancel={() => setShowSplitWizard(false)}
         />
       </PageContent>
     </div>
