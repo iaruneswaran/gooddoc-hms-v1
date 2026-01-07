@@ -328,31 +328,52 @@ const PatientAdvanceCollection = () => {
                         </div>
                         <Select
                           value={line.method}
-                          onValueChange={(value) =>
-                            updatePaymentLine(line.id, { method: value as PaymentLine["method"] })
-                          }
+                          onValueChange={(value) => {
+                            updatePaymentLine(line.id, { method: value as PaymentLine["method"] });
+                            // If selecting Card or UPI, open the payment modal
+                            if (value === "card" || value === "upi") {
+                              if (line.amount > 0) {
+                                setSelectedPaymentMethod(value as PaymentMethodType);
+                                setShowPaymentModal(true);
+                              }
+                            }
+                          }}
                         >
-                          <SelectTrigger className="w-[130px] h-11">
+                          <SelectTrigger className={`w-[130px] h-11 ${line.method === "card" || line.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-popover border border-border shadow-lg z-50">
                             <SelectItem value="cash">
                               <span className="flex items-center gap-2">💵 Cash</span>
                             </SelectItem>
-                            <SelectItem value="upi">
-                              <span className="flex items-center gap-2">📱 UPI</span>
-                            </SelectItem>
                             <SelectItem value="card">
                               <span className="flex items-center gap-2">💳 Card</span>
                             </SelectItem>
-                            <SelectItem value="cheque">
-                              <span className="flex items-center gap-2">📝 Cheque</span>
-                            </SelectItem>
-                            <SelectItem value="neft">
-                              <span className="flex items-center gap-2">🏦 NEFT/RTGS</span>
+                            <SelectItem value="upi">
+                              <span className="flex items-center gap-2">📱 UPI</span>
                             </SelectItem>
                           </SelectContent>
                         </Select>
+                        {(line.method === "card" || line.method === "upi") && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-11 px-3 border-primary text-primary hover:bg-primary/10"
+                            onClick={() => {
+                              if (line.amount > 0) {
+                                setSelectedPaymentMethod(line.method as PaymentMethodType);
+                                setShowPaymentModal(true);
+                              }
+                            }}
+                            disabled={line.amount <= 0}
+                          >
+                            {line.method === "card" ? (
+                              <CreditCard className="w-4 h-4" />
+                            ) : (
+                              <Smartphone className="w-4 h-4" />
+                            )}
+                          </Button>
+                        )}
                         {paymentLines.length > 1 && (
                           <button
                             onClick={() => removePaymentLine(line.id)}

@@ -39,6 +39,9 @@ interface PaymentMethodModalProps {
   purpose: PaymentPurpose;
   // Optional: pre-selected method
   defaultMethod?: PaymentMethod;
+  // Split payment flow - show "Next" button after success if true
+  hasNextPayment?: boolean;
+  nextPaymentLabel?: string; // e.g., "Next: UPI ₹2,000"
   // Callbacks
   onSuccess?: (attempt: PaymentAttempt) => void;
   onCancel?: () => void;
@@ -54,6 +57,8 @@ export function PaymentMethodModal({
   amount,
   purpose,
   defaultMethod,
+  hasNextPayment,
+  nextPaymentLabel,
   onSuccess,
   onCancel,
 }: PaymentMethodModalProps) {

@@ -35,13 +35,11 @@ const getStatusBadge = (status: Invoice["status"]) => {
   }
 };
 
-const paymentMethods = [
+// Split payment only supports Cash, Card, UPI
+const splitPaymentMethods = [
   { id: "cash", label: "Cash", emoji: "💵" },
-  { id: "upi", label: "UPI", emoji: "📱" },
   { id: "card", label: "Card", emoji: "💳" },
-  { id: "cheque", label: "Cheque", emoji: "📄" },
-  { id: "neft", label: "NEFT/RTGS", emoji: "🏦" },
-  { id: "insurance", label: "Insurance", emoji: "🏥" },
+  { id: "upi", label: "UPI", emoji: "📱" },
 ];
 
 export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
@@ -58,12 +56,62 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   const [sendEmail, setSendEmail] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+  const [splitPaymentFlowIndex, setSplitPaymentFlowIndex] = useState<number | null>(null);
+  const [splitPaymentAmount, setSplitPaymentAmount] = useState<number>(0);
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
+    // Check if we're in split payment flow and have more card/upi payments pending
+    if (splitPaymentFlowIndex !== null) {
+      const remainingSplitPayments = splitPayments.slice(splitPaymentFlowIndex + 1);
+      const nextCardUpiIndex = remainingSplitPayments.findIndex(
+        (p) => (p.method === "card" || p.method === "upi") && parseFloat(p.amount) > 0
+      );
+
+      if (nextCardUpiIndex !== -1) {
+        const actualIndex = splitPaymentFlowIndex + 1 + nextCardUpiIndex;
+        const nextPayment = splitPayments[actualIndex];
+        setSplitPaymentFlowIndex(actualIndex);
+        setSplitPaymentAmount(parseFloat(nextPayment.amount) * 100);
+        setSelectedPaymentMethod(nextPayment.method as PaymentMethodType);
+        toast.success("Payment successful! Proceeding to next payment...", {
+          description: `Transaction ID: ${attempt.providerTxnId || attempt.id}`,
+        });
+        return;
+      }
+    }
+
     setShowPaymentModal(false);
+    setSplitPaymentFlowIndex(null);
+    setSplitPaymentAmount(0);
     toast.success("Payment collected successfully!", {
       description: `Transaction ID: ${attempt.providerTxnId || attempt.id}`,
     });
+  };
+
+  const handleSplitPaymentMethodChange = (paymentId: string, newMethod: string) => {
+    updateSplitPayment(paymentId, "method", newMethod);
+    
+    // If selecting Card or UPI, open the payment modal
+    if (newMethod === "card" || newMethod === "upi") {
+      const payment = splitPayments.find((p) => p.id === paymentId);
+      if (payment && payment.amount && parseFloat(payment.amount) > 0) {
+        const paymentIndex = splitPayments.findIndex((p) => p.id === paymentId);
+        setSplitPaymentFlowIndex(paymentIndex);
+        setSplitPaymentAmount(parseFloat(payment.amount) * 100);
+        setSelectedPaymentMethod(newMethod as PaymentMethodType);
+        setShowPaymentModal(true);
+      }
+    }
+  };
+
+  const startSplitPaymentFlow = (startIndex: number) => {
+    const payment = splitPayments[startIndex];
+    if (payment && (payment.method === "card" || payment.method === "upi") && parseFloat(payment.amount) > 0) {
+      setSplitPaymentFlowIndex(startIndex);
+      setSplitPaymentAmount(parseFloat(payment.amount) * 100);
+      setSelectedPaymentMethod(payment.method as PaymentMethodType);
+      setShowPaymentModal(true);
+    }
   };
 
   // Mock patient deposit (in paise)
@@ -116,7 +164,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
   };
 
   const getMethodEmoji = (methodId: string) => {
-    const method = paymentMethods.find((m) => m.id === methodId);
+    const method = splitPaymentMethods.find((m) => m.id === methodId);
     return method ? method.emoji : "💵";
   };
 
@@ -345,81 +393,50 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       />
                     </div>
 
-                    {/* Payment Method - Card/UPI buttons or Dropdown */}
-                    {payment.method === "card" || payment.method === "upi" ? (
+                    {/* Payment Method Dropdown */}
+                    <Select 
+                      value={payment.method} 
+                      onValueChange={(value) => handleSplitPaymentMethodChange(payment.id, value)}
+                    >
+                      <SelectTrigger className={`w-[140px] h-10 bg-background border-border rounded-lg ${payment.method === "card" || payment.method === "upi" ? "border-primary bg-primary/5" : ""}`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
+                        {splitPaymentMethods.map((method) => {
+                          const isSelected = payment.method === method.id;
+                          return (
+                            <SelectItem 
+                              key={method.id} 
+                              value={method.id}
+                              className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span>{method.emoji}</span>
+                                <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+
+                    {/* Process Button for Card/UPI */}
+                    {(payment.method === "card" || payment.method === "upi") && (
                       <Button
                         variant="outline"
-                        className="w-[140px] h-10 border-primary bg-primary/5 text-primary font-medium"
-                        onClick={() => {
-                          setSelectedPaymentMethod(payment.method as PaymentMethodType);
-                          setShowPaymentModal(true);
-                        }}
+                        size="sm"
+                        className="h-10 px-3 border-primary text-primary hover:bg-primary/10"
+                        onClick={() => startSplitPaymentFlow(index)}
                         disabled={!payment.amount || parseFloat(payment.amount) <= 0}
                       >
                         {payment.method === "card" ? (
-                          <>
-                            <CreditCard className="w-4 h-4 mr-2" />
-                            Card
-                          </>
+                          <CreditCard className="w-4 h-4" />
                         ) : (
-                          <>
-                            <Smartphone className="w-4 h-4 mr-2" />
-                            UPI
-                          </>
+                          <Smartphone className="w-4 h-4" />
                         )}
                       </Button>
-                    ) : (
-                      <Select value={payment.method} onValueChange={(value) => updateSplitPayment(payment.id, "method", value)}>
-                        <SelectTrigger className="w-[140px] h-10 bg-background border-border rounded-lg">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
-                          {paymentMethods.map((method) => {
-                            const isSelected = payment.method === method.id;
-                            return (
-                              <SelectItem 
-                                key={method.id} 
-                                value={method.id}
-                                className={`cursor-pointer rounded-md my-0.5 ${isSelected ? 'bg-primary/10' : ''}`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span>{method.emoji}</span>
-                                  <span className={isSelected ? 'text-primary font-medium' : ''}>{method.label}</span>
-                                </div>
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
                     )}
 
-                    {/* Method Picker for Card/UPI when not selected */}
-                    {payment.method !== "card" && payment.method !== "upi" && (
-                      <div className="flex gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-10 w-10 hover:bg-primary/10"
-                          onClick={() => {
-                            updateSplitPayment(payment.id, "method", "card");
-                          }}
-                          title="Switch to Card"
-                        >
-                          <CreditCard className="w-4 h-4 text-muted-foreground" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-10 w-10 hover:bg-primary/10"
-                          onClick={() => {
-                            updateSplitPayment(payment.id, "method", "upi");
-                          }}
-                          title="Switch to UPI"
-                        >
-                          <Smartphone className="w-4 h-4 text-muted-foreground" />
-                        </Button>
-                      </div>
-                    )}
 
                     {/* Remove Button */}
                     {splitPayments.length > 1 && (
@@ -532,16 +549,42 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       {selectedVisit && (
         <PaymentMethodModal
           open={showPaymentModal}
-          onOpenChange={setShowPaymentModal}
+          onOpenChange={(open) => {
+            setShowPaymentModal(open);
+            if (!open) {
+              setSplitPaymentFlowIndex(null);
+              setSplitPaymentAmount(0);
+            }
+          }}
           patientId={selectedVisit.id || "P001"}
           patientName={selectedVisit.doctor || "Patient"}
           mrn={selectedVisit.visitId || "VISIT-001"}
           orderId={selectedBills[0]?.invoiceNo || `INV-${Date.now()}`}
-          amount={amountToCollect}
+          amount={splitPaymentFlowIndex !== null ? splitPaymentAmount : amountToCollect}
           purpose="settlement"
           defaultMethod={selectedPaymentMethod}
+          hasNextPayment={splitPaymentFlowIndex !== null && (() => {
+            const remainingSplitPayments = splitPayments.slice(splitPaymentFlowIndex + 1);
+            return remainingSplitPayments.some(
+              (p) => (p.method === "card" || p.method === "upi") && parseFloat(p.amount) > 0
+            );
+          })()}
+          nextPaymentLabel={splitPaymentFlowIndex !== null ? (() => {
+            const remainingSplitPayments = splitPayments.slice(splitPaymentFlowIndex + 1);
+            const nextPayment = remainingSplitPayments.find(
+              (p) => (p.method === "card" || p.method === "upi") && parseFloat(p.amount) > 0
+            );
+            if (nextPayment) {
+              return `Next: ${nextPayment.method === "card" ? "Card" : "UPI"} ₹${nextPayment.amount}`;
+            }
+            return undefined;
+          })() : undefined}
           onSuccess={handlePaymentSuccess}
-          onCancel={() => setShowPaymentModal(false)}
+          onCancel={() => {
+            setShowPaymentModal(false);
+            setSplitPaymentFlowIndex(null);
+            setSplitPaymentAmount(0);
+          }}
         />
       )}
     </div>
