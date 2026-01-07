@@ -372,39 +372,11 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-popover border border-border shadow-lg rounded-lg z-50">
-                        <SelectItem value="cash">
-                          <span className="flex items-center gap-2">💵 Cash</span>
-                        </SelectItem>
-                        <SelectItem value="card">
-                          <span className="flex items-center gap-2">💳 Card</span>
-                        </SelectItem>
-                        <SelectItem value="upi">
-                          <span className="flex items-center gap-2">📱 UPI</span>
-                        </SelectItem>
+                        <SelectItem value="cash">Cash</SelectItem>
+                        <SelectItem value="card">Card</SelectItem>
+                        <SelectItem value="upi">UPI</SelectItem>
                       </SelectContent>
                     </Select>
-
-                    {/* Process Button for Card/UPI */}
-                    {(row.method === "card" || row.method === "upi") && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 px-3 border-primary text-primary hover:bg-primary/10"
-                        onClick={() => {
-                          if (row.amount > 0) {
-                            setSelectedPaymentMethod(row.method as PaymentMethodType);
-                            setShowPaymentModal(true);
-                          }
-                        }}
-                        disabled={row.amount <= 0}
-                      >
-                        {row.method === "card" ? (
-                          <CreditCard className="w-4 h-4" />
-                        ) : (
-                          <Smartphone className="w-4 h-4" />
-                        )}
-                      </Button>
-                    )}
 
                     {/* Remove Button */}
                     {splitRows.length > 1 && (
