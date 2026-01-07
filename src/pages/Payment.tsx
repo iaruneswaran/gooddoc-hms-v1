@@ -427,32 +427,6 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  {/* Quick Payment Buttons */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      variant="outline"
-                      className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                      onClick={() => {
-                        setSelectedPaymentMethod("card");
-                        setShowPaymentModal(true);
-                      }}
-                    >
-                      <CreditCard className="w-5 h-5 text-primary" />
-                      <span className="text-xs font-medium">Pay by Card</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                      onClick={() => {
-                        setSelectedPaymentMethod("upi");
-                        setShowPaymentModal(true);
-                      }}
-                    >
-                      <Smartphone className="w-5 h-5 text-primary" />
-                      <span className="text-xs font-medium">Pay by UPI</span>
-                    </Button>
-                  </div>
-
                   {/* Payment Collection */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -508,20 +482,6 @@ const Payment = () => {
                             </button>
                           )}
                         </div>
-                        {index === 0 && row.method === "UPI" && (
-                          <input
-                            type="text"
-                            placeholder="UPI Transaction ID"
-                            className="w-full h-9 px-3 text-xs bg-muted/50 border border-input rounded-md"
-                          />
-                        )}
-                        {index === 0 && row.method === "Card" && (
-                          <input
-                            type="text"
-                            placeholder="Last 4 digits of card / Approval code"
-                            className="w-full h-9 px-3 text-xs bg-muted/50 border border-input rounded-md"
-                          />
-                        )}
                       </div>
                     ))}
 
@@ -531,6 +491,32 @@ const Payment = () => {
                     >
                       <span className="text-lg leading-none">+</span> Add Split Payment
                     </button>
+
+                    {/* Quick Payment Buttons */}
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <Button
+                        variant="outline"
+                        className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                        onClick={() => {
+                          setSelectedPaymentMethod("card");
+                          setShowPaymentModal(true);
+                        }}
+                      >
+                        <CreditCard className="w-5 h-5 text-primary" />
+                        <span className="text-xs font-medium">Pay by Card</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                        onClick={() => {
+                          setSelectedPaymentMethod("upi");
+                          setShowPaymentModal(true);
+                        }}
+                      >
+                        <Smartphone className="w-5 h-5 text-primary" />
+                        <span className="text-xs font-medium">Pay by UPI</span>
+                      </Button>
+                    </div>
                   </div>
 
                   {/* Payer Details */}

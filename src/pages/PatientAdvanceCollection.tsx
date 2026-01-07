@@ -303,34 +303,6 @@ const PatientAdvanceCollection = () => {
                   </div>
                 </div>
 
-                {/* Quick Payment Buttons */}
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    variant="outline"
-                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                    onClick={() => {
-                      setSelectedPaymentMethod("card");
-                      setShowPaymentModal(true);
-                    }}
-                    disabled={totalAmount <= 0}
-                  >
-                    <CreditCard className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-medium">Pay by Card</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                    onClick={() => {
-                      setSelectedPaymentMethod("upi");
-                      setShowPaymentModal(true);
-                    }}
-                    disabled={totalAmount <= 0}
-                  >
-                    <Smartphone className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-medium">Pay by UPI</span>
-                  </Button>
-                </div>
-
                 {/* Payment Collection */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -390,20 +362,6 @@ const PatientAdvanceCollection = () => {
                           </button>
                         )}
                       </div>
-                      {index === 0 && line.method === "upi" && (
-                        <Input
-                          type="text"
-                          placeholder="UPI Transaction ID"
-                          className="h-9 text-xs bg-muted/50"
-                        />
-                      )}
-                      {index === 0 && line.method === "card" && (
-                        <Input
-                          type="text"
-                          placeholder="Last 4 digits of card / Approval code"
-                          className="h-9 text-xs bg-muted/50"
-                        />
-                      )}
                     </div>
                   ))}
 
@@ -413,6 +371,34 @@ const PatientAdvanceCollection = () => {
                   >
                     <span className="text-lg leading-none">+</span> Add Split Payment
                   </button>
+
+                  {/* Quick Payment Buttons */}
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <Button
+                      variant="outline"
+                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("card");
+                        setShowPaymentModal(true);
+                      }}
+                      disabled={totalAmount <= 0}
+                    >
+                      <CreditCard className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-medium">Pay by Card</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("upi");
+                        setShowPaymentModal(true);
+                      }}
+                      disabled={totalAmount <= 0}
+                    >
+                      <Smartphone className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-medium">Pay by UPI</span>
+                    </Button>
+                  </div>
                 </div>
 
                 {/* New Balance Preview */}

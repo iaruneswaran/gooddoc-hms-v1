@@ -572,32 +572,6 @@ const DischargePayment = () => {
                     )}
                   </div>
 
-                  {/* Quick Payment Buttons */}
-                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border">
-                    <Button
-                      variant="outline"
-                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                      onClick={() => {
-                        setSelectedPaymentMethod("card");
-                        setShowPaymentModal(true);
-                      }}
-                    >
-                      <CreditCard className="w-4 h-4 text-primary" />
-                      <span className="text-xs font-medium">Pay by Card</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
-                      onClick={() => {
-                        setSelectedPaymentMethod("upi");
-                        setShowPaymentModal(true);
-                      }}
-                    >
-                      <Smartphone className="w-4 h-4 text-primary" />
-                      <span className="text-xs font-medium">Pay by UPI</span>
-                    </Button>
-                  </div>
-
                   {/* Payment Collection with Split */}
                   <div className="space-y-3 pt-2 border-t border-border">
                     <div className="flex items-center justify-between">
@@ -654,6 +628,32 @@ const DischargePayment = () => {
                       <Plus className="w-4 h-4" />
                       Add Split Payment
                     </button>
+
+                    {/* Quick Payment Buttons */}
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <Button
+                        variant="outline"
+                        className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                        onClick={() => {
+                          setSelectedPaymentMethod("card");
+                          setShowPaymentModal(true);
+                        }}
+                      >
+                        <CreditCard className="w-4 h-4 text-primary" />
+                        <span className="text-xs font-medium">Pay by Card</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                        onClick={() => {
+                          setSelectedPaymentMethod("upi");
+                          setShowPaymentModal(true);
+                        }}
+                      >
+                        <Smartphone className="w-4 h-4 text-primary" />
+                        <span className="text-xs font-medium">Pay by UPI</span>
+                      </Button>
+                    </div>
                   </div>
 
                   {/* Payer Details */}
