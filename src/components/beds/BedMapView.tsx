@@ -5,6 +5,7 @@ import { BedLegend } from './BedLegend';
 import { BedStatsChips } from './BedStatsChips';
 import { BedSummaryPanel } from './BedSummaryPanel';
 import { OccupiedBedSheet } from './OccupiedBedSheet';
+import { BedTransferModal } from './BedTransferModal';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,7 @@ export function BedMapView({
   const [occupiedBed, setOccupiedBed] = useState<BedMapItem | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState(searchQuery);
+  const [transferModalOpen, setTransferModalOpen] = useState(false);
 
   // Filter floors based on filters
   const filteredFloors = useMemo(() => {
@@ -134,7 +136,7 @@ export function BedMapView({
   };
 
   const handleTransfer = () => {
-    toast.info('Transfer initiated');
+    setTransferModalOpen(true);
     setSheetOpen(false);
   };
 
@@ -222,6 +224,13 @@ export function BedMapView({
         onOpenChange={setSheetOpen}
         onTransfer={handleTransfer}
         onRelease={handleRelease}
+      />
+
+      {/* Bed Transfer Modal */}
+      <BedTransferModal
+        open={transferModalOpen}
+        onOpenChange={setTransferModalOpen}
+        selectedBed={selectedBeds[0]}
       />
 
       {/* Spacer for bottom panel */}
