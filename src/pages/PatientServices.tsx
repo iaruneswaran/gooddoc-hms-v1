@@ -131,7 +131,7 @@ const PatientServices = () => {
     // Simulate bill generation
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsGeneratingBill(false);
-    navigate(`/patient-insights/${patientId}?tab=payments`);
+    navigate(`/patient-insights/${patientId}?tab=collect-payment`);
   };
 
   const handleBack = () => {
