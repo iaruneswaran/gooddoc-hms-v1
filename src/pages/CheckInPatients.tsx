@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BedMapView } from "@/components/beds";
 import { MainLayout } from "@/components/MainLayout";
+import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -14,6 +15,9 @@ const BedsAvailability = () => {
 
   return (
     <MainLayout>
+      {/* Top Header with Breadcrumbs and Search */}
+      <AppHeader breadcrumbs={["Overview", "Beds Availability"]} />
+      
       <div className="p-6 space-y-4">
         {/* Header Card */}
         <Card className="p-6">
