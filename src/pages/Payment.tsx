@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import bainesLogo from "@/assets/baines-logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Download, Printer, CheckCircle2, Trash2 } from "lucide-react";
+import { ChevronLeft, Download, Printer, CheckCircle2, Trash2, CreditCard, Smartphone } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -11,6 +11,8 @@ import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { PaymentMethodModal } from "@/components/payment";
+import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
 
 interface InvoiceItem {
   name: string;
@@ -40,6 +42,8 @@ const Payment = () => {
   const [countdown, setCountdown] = useState(9);
   const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
   const [paymentRows, setPaymentRows] = useState([{ id: 1, amount: "", method: "Cash" }]);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
 
   useEffect(() => {
     if (showSuccess) {
@@ -95,9 +99,21 @@ const Payment = () => {
   };
 
   const updatePaymentRow = (id: number, field: 'amount' | 'method', value: string) => {
+    // If selecting Card or UPI, open the payment modal
+    if (field === 'method' && (value === 'Card' || value === 'UPI')) {
+      setSelectedPaymentMethod(value.toLowerCase() as PaymentMethodType);
+      setShowPaymentModal(true);
+    }
     setPaymentRows(paymentRows.map(row => 
       row.id === id ? { ...row, [field]: value } : row
     ));
+  };
+
+  const handlePaymentSuccess = (attempt: PaymentAttempt) => {
+    setShowPaymentModal(false);
+    setShowSuccess(true);
+    setCountdown(9);
+    setPrintingStatus("printing");
   };
 
   return (
@@ -411,10 +427,36 @@ const Payment = () => {
                     </div>
                   </div>
 
+                  {/* Quick Payment Buttons */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button
+                      variant="outline"
+                      className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("card");
+                        setShowPaymentModal(true);
+                      }}
+                    >
+                      <CreditCard className="w-5 h-5 text-primary" />
+                      <span className="text-xs font-medium">Pay by Card</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-14 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("upi");
+                        setShowPaymentModal(true);
+                      }}
+                    >
+                      <Smartphone className="w-5 h-5 text-primary" />
+                      <span className="text-xs font-medium">Pay by UPI</span>
+                    </Button>
+                  </div>
+
                   {/* Payment Collection */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold">Payment Collection</p>
+                      <p className="text-sm font-semibold">Manual Entry</p>
                       <span className="text-xs text-muted-foreground">Split Payment</span>
                     </div>
                     
@@ -633,6 +675,21 @@ const Payment = () => {
           </div>
         </div>
       )}
+
+      {/* Payment Method Modal */}
+      <PaymentMethodModal
+        open={showPaymentModal}
+        onOpenChange={setShowPaymentModal}
+        patientId={patientId || "P001"}
+        patientName="Siva Karthikeyan"
+        mrn="GDID-009"
+        orderId="INV-2025-009"
+        amount={payableAmount * 100} // Convert to paise
+        purpose="settlement"
+        defaultMethod={selectedPaymentMethod}
+        onSuccess={handlePaymentSuccess}
+        onCancel={() => setShowPaymentModal(false)}
+      />
     </PageContent>
     </div>
   );
