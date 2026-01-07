@@ -149,7 +149,7 @@ const DischargePayment = () => {
     removeRow,
     resetDistribution,
     getCardUpiSteps,
-  } = useSplitPaymentAutoCalc({ totalDue: netPayable / 100 }); // Convert to rupees
+  } = useSplitPaymentAutoCalc({ totalDue: netPayable });
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
@@ -159,7 +159,7 @@ const DischargePayment = () => {
     setShowPaymentModal(false);
     toast({
       title: "Payment Collected Successfully",
-      description: `${formatINR(netPayable)} received. Receipt No: RCP-2025-004521`,
+      description: `${formatINR(netPayable * 100)} received. Receipt No: RCP-2025-004521`,
     });
     setPaymentCompleted(true);
   };
@@ -183,13 +183,20 @@ const DischargePayment = () => {
       return;
     }
 
+    // If user chose a single method (Card/UPI) via dropdown, open the payment popup
+    if (splitRows.length === 1 && (splitRows[0].method === "card" || splitRows[0].method === "upi")) {
+      setSelectedPaymentMethod(splitRows[0].method);
+      setShowPaymentModal(true);
+      return;
+    }
+
     const cardUpiSteps = getCardUpiSteps();
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
     } else {
       toast({
         title: "Payment Collected Successfully",
-        description: `${formatINR(netPayable)} received. Receipt No: RCP-2025-004521`,
+        description: `${formatINR(netPayable * 100)} received. Receipt No: RCP-2025-004521`,
       });
       setPaymentCompleted(true);
     }
@@ -802,7 +809,7 @@ const DischargePayment = () => {
           patientName={visitHistoryData.patient.name}
           mrn={visitHistoryData.patient.uhid}
           orderId={visitHistoryData.admission.admissionNo}
-          totalAmount={netPayable / 100}
+          totalAmount={netPayable * 100}
           purpose="settlement"
           steps={wizardSteps}
           onComplete={handleSplitWizardComplete}
