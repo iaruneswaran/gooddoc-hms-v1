@@ -46,6 +46,8 @@ const BedsAvailability = () => {
               <EnhancedCalendarWidget
                 selectedDate={selectedDate}
                 onDateChange={setSelectedDate}
+                showQuickDays={false}
+                showSubtext={false}
               />
             </div>
           </div>
