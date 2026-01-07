@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Check, CreditCard, Smartphone, AlertTriangle, ChevronRight } from 'lucide-react';
+import { Check, CreditCard, Smartphone, AlertTriangle, ChevronRight, Banknote } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -28,7 +28,7 @@ import type { PaymentIntent, PaymentMethod, PaymentPurpose, PaymentAttempt } fro
 
 export interface SplitPaymentStep {
   id: string;
-  method: 'card' | 'upi';
+  method: 'cash' | 'card' | 'upi';
   amount: number; // in paise
   status: 'pending' | 'processing' | 'succeeded' | 'failed';
   attempt?: PaymentAttempt;
@@ -258,8 +258,10 @@ export function SplitPaymentWizardModal({
                         <div className="flex items-center gap-1.5">
                           {step.method === 'card' ? (
                             <CreditCard className="w-3.5 h-3.5" />
-                          ) : (
+                          ) : step.method === 'upi' ? (
                             <Smartphone className="w-3.5 h-3.5" />
+                          ) : (
+                            <Banknote className="w-3.5 h-3.5" />
                           )}
                           <span className="text-xs font-medium capitalize">{step.method}</span>
                         </div>
@@ -292,7 +294,7 @@ export function SplitPaymentWizardModal({
                     Step {currentStepIndex + 1}: {formatINR(currentStep?.amount || 0)}
                   </p>
                   <Badge variant="outline" className="text-xs capitalize mt-1">
-                    {currentStep?.method === 'card' ? '💳 Card' : '📱 UPI'}
+                    {currentStep?.method === 'card' ? 'Card' : currentStep?.method === 'upi' ? 'UPI' : 'Cash'}
                   </Badge>
                 </div>
               </div>
@@ -321,7 +323,7 @@ export function SplitPaymentWizardModal({
                     }
                     onNextPayment={handleNext}
                   />
-                ) : (
+                ) : currentStep.method === 'upi' ? (
                   <UPIPaymentFlow
                     intent={{ ...intent, amount: currentStep.amount }}
                     onSuccess={handleStepSuccess}
@@ -335,6 +337,50 @@ export function SplitPaymentWizardModal({
                     }
                     onNextPayment={handleNext}
                   />
+                ) : (
+                  // Cash step - simple confirmation UI
+                  <div className="space-y-6">
+                    <div className="text-center py-6">
+                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                        <Banknote className="w-8 h-8 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-semibold">Collect Cash</h3>
+                      <p className="text-2xl font-bold text-primary mt-2">
+                        {formatINR(currentStep.amount)}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Collect cash from patient and confirm receipt
+                      </p>
+                    </div>
+                    
+                    {!isCurrentStepSucceeded && (
+                      <Button 
+                        onClick={() => {
+                          const mockAttempt: PaymentAttempt = {
+                            id: `cash_${Date.now()}`,
+                            intentId: intent.id,
+                            method: 'cash',
+                            provider: 'pos',
+                            status: 'succeeded',
+                            startedAt: new Date().toISOString(),
+                            completedAt: new Date().toISOString(),
+                          };
+                          handleStepSuccess(mockAttempt);
+                        }}
+                        className="w-full"
+                        size="lg"
+                      >
+                        Confirm Cash Received
+                      </Button>
+                    )}
+                    
+                    {isCurrentStepSucceeded && (
+                      <div className="flex items-center justify-center gap-2 p-4 bg-green-50 text-green-700 rounded-lg">
+                        <Check className="w-5 h-5" />
+                        <span className="font-medium">Cash collected successfully</span>
+                      </div>
+                    )}
+                  </div>
                 )}
               </>
             ) : null}

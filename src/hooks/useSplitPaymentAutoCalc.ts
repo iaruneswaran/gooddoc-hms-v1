@@ -24,6 +24,8 @@ interface UseSplitPaymentAutoCalcReturn {
   removeRow: (rowId: string) => void;
   resetDistribution: () => void;
   getCardUpiSteps: () => { id: string; method: 'card' | 'upi'; amount: number }[];
+  getAllSteps: () => { id: string; method: 'cash' | 'card' | 'upi'; amount: number }[];
+  hasMixedPayment: () => boolean;
 }
 
 let rowIdCounter = 0;
@@ -163,6 +165,25 @@ export function useSplitPaymentAutoCalc({
       }));
   }, [rows]);
 
+  const getAllSteps = useCallback(() => {
+    // Return all rows with amount > 0, in order
+    return rows
+      .filter(row => row.amount > 0)
+      .map(row => ({
+        id: row.id,
+        method: row.method,
+        amount: Math.round(row.amount * 100), // Convert to paise
+      }));
+  }, [rows]);
+
+  const hasMixedPayment = useCallback(() => {
+    // Check if there's a mix of Cash with Card/UPI (needs wizard)
+    const methodsWithAmount = rows.filter(row => row.amount > 0).map(r => r.method);
+    const hasCash = methodsWithAmount.includes('cash');
+    const hasCardOrUpi = methodsWithAmount.includes('card') || methodsWithAmount.includes('upi');
+    return hasCash && hasCardOrUpi;
+  }, [rows]);
+
   return {
     rows,
     setRows,
@@ -175,5 +196,7 @@ export function useSplitPaymentAutoCalc({
     removeRow,
     resetDistribution,
     getCardUpiSteps,
+    getAllSteps,
+    hasMixedPayment,
   };
 }
