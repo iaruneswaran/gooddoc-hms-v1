@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,10 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, User, MapPin, ArrowRight } from 'lucide-react';
+import { Search, User } from 'lucide-react';
 import { TransferDateTimePicker } from '@/components/transfer/TransferDateTimePicker';
 import { BedMapItem } from '@/data/bed-map.mock';
-import { mockUnits, mockBeds, reasonLabels } from '@/data/transfer.mock';
+import { reasonLabels } from '@/data/transfer.mock';
 import { toast } from 'sonner';
 
 interface BedTransferModalProps {
@@ -30,11 +30,20 @@ const mockIPPatients = [
 export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransferModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<typeof mockIPPatients[0] | null>(null);
-  const [selectedWard, setSelectedWard] = useState<string>('');
-  const [selectedRoom, setSelectedRoom] = useState<string>('');
   const [reason, setReason] = useState<string>('');
   const [transferDateTime, setTransferDateTime] = useState<Date>(new Date());
   const [notes, setNotes] = useState('');
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (open) {
+      setSearchQuery('');
+      setSelectedPatient(null);
+      setReason('');
+      setNotes('');
+      setTransferDateTime(new Date());
+    }
+  }, [open]);
 
   // Filter patients based on search
   const filteredPatients = useMemo(() => {
@@ -47,31 +56,6 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
     );
   }, [searchQuery]);
 
-  // Get available beds for selected ward
-  const availableBeds = useMemo(() => {
-    if (!selectedWard) return [];
-    return mockBeds.filter(b => b.unitId === selectedWard && b.status === 'available');
-  }, [selectedWard]);
-
-  // Get rooms for selected ward
-  const rooms = useMemo(() => {
-    if (!selectedWard) return [];
-    const uniqueRooms = new Map<string, { id: string; name: string; beds: typeof mockBeds }>();
-    availableBeds.forEach(bed => {
-      if (!uniqueRooms.has(bed.roomId)) {
-        uniqueRooms.set(bed.roomId, { id: bed.roomId, name: bed.roomName, beds: [] });
-      }
-      uniqueRooms.get(bed.roomId)!.beds.push(bed);
-    });
-    return Array.from(uniqueRooms.values());
-  }, [selectedWard, availableBeds]);
-
-  // Get beds for selected room
-  const bedsInRoom = useMemo(() => {
-    if (!selectedRoom) return [];
-    return availableBeds.filter(b => b.roomId === selectedRoom);
-  }, [selectedRoom, availableBeds]);
-
   const handlePatientSelect = (patient: typeof mockIPPatients[0]) => {
     setSelectedPatient(patient);
     setSearchQuery('');
@@ -82,8 +66,8 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
       toast.error('Please select a patient');
       return;
     }
-    if (!selectedWard || !selectedRoom) {
-      toast.error('Please select destination ward and room');
+    if (!selectedBed) {
+      toast.error('No destination bed selected');
       return;
     }
     if (!reason) {
@@ -91,13 +75,10 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
       return;
     }
 
-    const destinationBed = bedsInRoom[0];
-    toast.success(`Transfer initiated for ${selectedPatient.name} to ${destinationBed?.bedName || 'selected bed'}`);
+    toast.success(`Transfer initiated for ${selectedPatient.name} to ${selectedBed.bedNumber}`);
     
     // Reset and close
     setSelectedPatient(null);
-    setSelectedWard('');
-    setSelectedRoom('');
     setReason('');
     setNotes('');
     onOpenChange(false);
@@ -106,14 +87,10 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
   const handleCancel = () => {
     setSelectedPatient(null);
     setSearchQuery('');
-    setSelectedWard('');
-    setSelectedRoom('');
     setReason('');
     setNotes('');
     onOpenChange(false);
   };
-
-  const isScheduled = transferDateTime > new Date();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -139,7 +116,7 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
               
               {/* Search Results */}
               {filteredPatients.length > 0 && (
-                <div className="border rounded-lg divide-y max-h-48 overflow-y-auto">
+                <div className="border rounded-lg divide-y max-h-48 overflow-y-auto bg-card">
                   {filteredPatients.map((patient) => (
                     <button
                       key={patient.id}
@@ -202,45 +179,28 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
                     </div>
                   </div>
 
-                  {/* To */}
+                  {/* To - Pre-filled from selectedBed */}
                   <div className="space-y-2">
                     <Label className="text-xs text-muted-foreground">To</Label>
-                    <div className="p-3 bg-muted/30 rounded-lg border border-dashed space-y-3">
-                      <div className="text-sm text-muted-foreground">Select destination</div>
-                      
-                      <Select value={selectedWard} onValueChange={(v) => { setSelectedWard(v); setSelectedRoom(''); }}>
-                        <SelectTrigger className="h-9">
-                          <SelectValue placeholder="Select Ward / Unit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {mockUnits.filter(u => u.availableBeds > 0).map((unit) => (
-                            <SelectItem key={unit.id} value={unit.id}>
-                              {unit.name} ({unit.availableBeds} available)
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                      <Select value={selectedRoom} onValueChange={setSelectedRoom} disabled={!selectedWard}>
-                        <SelectTrigger className="h-9">
-                          <SelectValue placeholder="Select Room & Bed" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {rooms.map((room) => (
-                            <SelectItem key={room.id} value={room.id}>
-                              {room.name} ({room.beds.length} beds)
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                      {selectedRoom && bedsInRoom.length > 0 && (
-                        <div className="text-xs text-muted-foreground">
-                          <span className="font-medium">Bed:</span> {bedsInRoom[0].bedName} • 
-                          <span className="ml-1">₹{bedsInRoom[0].tariff.toLocaleString('en-IN')}/day</span>
+                    {selectedBed ? (
+                      <div className="p-3 bg-primary/5 rounded-lg border border-primary/20">
+                        <div className="space-y-1 text-sm">
+                          <div className="font-medium">{selectedBed.wardName}</div>
+                          <div className="text-muted-foreground">{selectedBed.roomNumber}</div>
+                          <div className="text-muted-foreground">{selectedBed.bedNumber}</div>
+                          <div className="text-xs text-muted-foreground mt-2">
+                            Tariff: ₹{selectedBed.pricePerDay.toLocaleString('en-IN')}/day
+                          </div>
                         </div>
-                      )}
-                    </div>
+                        <Badge variant="secondary" className="mt-2 text-xs bg-emerald-50 text-emerald-700">
+                          {selectedBed.type}
+                        </Badge>
+                      </div>
+                    ) : (
+                      <div className="p-3 bg-muted/30 rounded-lg border border-dashed">
+                        <div className="text-sm text-muted-foreground">No bed selected</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -270,7 +230,7 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
                     <SelectTrigger>
                       <SelectValue placeholder="Select reason" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-popover">
                       {Object.entries(reasonLabels).map(([value, label]) => (
                         <SelectItem key={value} value={value}>{label}</SelectItem>
                       ))}
@@ -305,7 +265,7 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button onClick={handleConfirm} disabled={!selectedPatient}>
+          <Button onClick={handleConfirm} disabled={!selectedPatient || !selectedBed}>
             Confirm Transfer
           </Button>
         </div>
