@@ -17,19 +17,21 @@ interface BedTileProps {
   disabled?: boolean;
 }
 
-// Minimalist gray-only styling - occupied beds have solid gray background
+// Very light green for available, very light red for occupied
 const getStatusStyles = (status: BedStatus, isSelected: boolean) => {
   if (isSelected) {
-    return 'bg-gray-200 border-gray-500';
+    return 'bg-emerald-200 border-emerald-500';
   }
   
   switch (status) {
     case 'occupied':
-      return 'bg-gray-200 border-gray-300';
+      return 'bg-red-50 border-red-200';
+    case 'reserved':
+      return 'bg-amber-50 border-amber-200';
     case 'maintenance':
       return 'bg-gray-100 border-gray-300 opacity-50';
-    default:
-      return 'bg-white border-gray-200 hover:border-gray-400';
+    default: // available
+      return 'bg-emerald-50 border-emerald-200 hover:border-emerald-400';
   }
 };
 
