@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard, CheckCircle2, Calendar, Clock, Stethoscope, Building2, Bed, Activity, FlaskConical, Syringe, Heart } from "lucide-react";
+import { ChevronLeft, Printer, Download, FileText, Pill, Receipt, ClipboardList, Plus, Trash2, User, CreditCard, CheckCircle2, Calendar, Clock, Stethoscope, Building2, Bed, Activity, FlaskConical, Syringe, Heart, Smartphone } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import BainesPoweredLogo from "@/assets/baines-powered-logo.svg";
+import { PaymentMethodModal } from "@/components/payment";
+import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
 
 interface SplitPayment {
   id: string;
@@ -149,6 +151,18 @@ const DischargePayment = () => {
   const depositUsed = depositExpanded ? Math.min(patientDeposit, totalBill) : 0;
   const remainingDeposit = patientDeposit - depositUsed;
   const netPayable = depositExpanded ? Math.max(0, totalBill - depositUsed) : totalBill;
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+
+  const handlePaymentSuccess = (attempt: PaymentAttempt) => {
+    setShowPaymentModal(false);
+    toast({
+      title: "Payment Collected Successfully",
+      description: `₹${netPayable.toLocaleString()} received. Receipt No: RCP-2025-004521`,
+    });
+    setPaymentCompleted(true);
+  };
 
   const handleCollectPayment = () => {
     toast({
@@ -558,10 +572,36 @@ const DischargePayment = () => {
                     )}
                   </div>
 
+                  {/* Quick Payment Buttons */}
+                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border">
+                    <Button
+                      variant="outline"
+                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("card");
+                        setShowPaymentModal(true);
+                      }}
+                    >
+                      <CreditCard className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-medium">Pay by Card</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                      onClick={() => {
+                        setSelectedPaymentMethod("upi");
+                        setShowPaymentModal(true);
+                      }}
+                    >
+                      <Smartphone className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-medium">Pay by UPI</span>
+                    </Button>
+                  </div>
+
                   {/* Payment Collection with Split */}
                   <div className="space-y-3 pt-2 border-t border-border">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-foreground">Payment Collection</p>
+                      <p className="text-sm font-medium text-foreground">Manual Entry</p>
                       <span className="text-xs text-muted-foreground">Split Payment</span>
                     </div>
 
@@ -737,6 +777,21 @@ const DischargePayment = () => {
             </div>
           </div>
         </main>
+
+        {/* Payment Modal */}
+        <PaymentMethodModal
+          open={showPaymentModal}
+          onOpenChange={setShowPaymentModal}
+          patientId={patientId || "P001"}
+          patientName={visitHistoryData.patient.name}
+          mrn={visitHistoryData.patient.uhid}
+          orderId={visitHistoryData.admission.admissionNo}
+          amount={netPayable * 100} // Convert to paise
+          purpose="settlement"
+          defaultMethod={selectedPaymentMethod}
+          onSuccess={handlePaymentSuccess}
+          onCancel={() => setShowPaymentModal(false)}
+        />
       </div>
     </div>
   );

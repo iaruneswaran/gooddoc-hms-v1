@@ -21,10 +21,14 @@ import {
   Download,
   Printer,
   Trash2,
-  User
+  User,
+  CreditCard,
+  Smartphone
 } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { toast } from "sonner";
+import { PaymentMethodModal } from "@/components/payment";
+import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
 
 interface PaymentLine {
   id: number;
@@ -97,6 +101,17 @@ const PatientAdvanceCollection = () => {
   const [sendSms, setSendSms] = useState(true);
   const [sendEmail, setSendEmail] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
+
+  const handlePaymentSuccess = (attempt: PaymentAttempt) => {
+    setShowPaymentModal(false);
+    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    toast.success("Advance collected successfully!", {
+      description: `Receipt No: ${receiptNo}`,
+    });
+    setPaymentLines([{ id: 1, method: "cash", amount: 0 }]);
+  };
 
   const totalAmount = paymentLines.reduce((sum, line) => sum + line.amount, 0);
   const availableBalance = mockPatient.currentAdvance - mockPatient.usedAdvance;
@@ -288,10 +303,38 @@ const PatientAdvanceCollection = () => {
                   </div>
                 </div>
 
+                {/* Quick Payment Buttons */}
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                    onClick={() => {
+                      setSelectedPaymentMethod("card");
+                      setShowPaymentModal(true);
+                    }}
+                    disabled={totalAmount <= 0}
+                  >
+                    <CreditCard className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">Pay by Card</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-12 flex flex-col items-center justify-center gap-1 border-2 hover:border-primary hover:bg-primary/5"
+                    onClick={() => {
+                      setSelectedPaymentMethod("upi");
+                      setShowPaymentModal(true);
+                    }}
+                    disabled={totalAmount <= 0}
+                  >
+                    <Smartphone className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">Pay by UPI</span>
+                  </Button>
+                </div>
+
                 {/* Payment Collection */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Payment Collection</p>
+                    <p className="text-sm font-semibold">Manual Entry</p>
                     <span className="text-xs text-muted-foreground">Split Payment</span>
                   </div>
                   
@@ -468,6 +511,21 @@ const PatientAdvanceCollection = () => {
             </Card>
           </div>
         </main>
+
+        {/* Payment Modal */}
+        <PaymentMethodModal
+          open={showPaymentModal}
+          onOpenChange={setShowPaymentModal}
+          patientId={patientId || "P001"}
+          patientName={mockPatient.name}
+          mrn={mockPatient.gdid}
+          orderId={`ADV-${Date.now()}`}
+          amount={totalAmount * 100} // Convert to paise
+          purpose="advance"
+          defaultMethod={selectedPaymentMethod}
+          onSuccess={handlePaymentSuccess}
+          onCancel={() => setShowPaymentModal(false)}
+        />
       </PageContent>
     </div>
   );
