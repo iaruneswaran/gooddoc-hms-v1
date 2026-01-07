@@ -40,10 +40,6 @@ const Payment = () => {
   const patientId = paymentData?.patientId;
   
   const [useAdvance, setUseAdvance] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [paymentType, setPaymentType] = useState<"now" | "later">("now");
-  const [countdown, setCountdown] = useState(9);
-  const [printingStatus, setPrintingStatus] = useState<"printing" | "success" | "done">("printing");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
   const [showSplitWizard, setShowSplitWizard] = useState(false);
@@ -73,27 +69,6 @@ const Payment = () => {
     status: 'pending' as const,
   }));
 
-  useEffect(() => {
-    if (showSuccess) {
-      const printingTimer = setTimeout(() => {
-        setPrintingStatus("success");
-        const successTimer = setTimeout(() => {
-          setPrintingStatus("done");
-        }, 2000);
-        return () => clearTimeout(successTimer);
-      }, 2000);
-      return () => clearTimeout(printingTimer);
-    }
-  }, [showSuccess]);
-
-  useEffect(() => {
-    if (showSuccess && printingStatus === "done" && countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (countdown === 0) {
-      navigate("/");
-    }
-  }, [showSuccess, printingStatus, countdown, navigate]);
 
   const handlePayNow = () => {
     if (!isValid) {
@@ -112,19 +87,12 @@ const Payment = () => {
     if (cardUpiSteps.length > 0) {
       setShowSplitWizard(true);
     } else {
-      setPaymentType("now");
-      setShowSuccess(true);
-      setCountdown(9);
-      setPrintingStatus("printing");
+      // Cash payment - no modal needed
+      toast.success("Payment collected successfully");
+      navigate("/");
     }
   };
 
-  const handlePayLater = () => {
-    setPaymentType("later");
-    setShowSuccess(true);
-    setCountdown(9);
-    setPrintingStatus("printing");
-  };
 
   const handleSplitWizardComplete = (steps: SplitPaymentStep[]) => {
     const cardAmount = steps.filter(s => s.method === 'card' && s.status === 'succeeded')
@@ -133,17 +101,13 @@ const Payment = () => {
       .reduce((sum, s) => sum + s.amount, 0);
     
     toast.success(`Split payment collected: Card ${formatINR(cardAmount)} + UPI ${formatINR(upiAmount)}`);
-    setPaymentType("now");
-    setShowSuccess(true);
-    setCountdown(9);
-    setPrintingStatus("printing");
+    navigate("/");
   };
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
     setShowPaymentModal(false);
-    setShowSuccess(true);
-    setCountdown(9);
-    setPrintingStatus("printing");
+    toast.success("Payment collected successfully");
+    navigate("/");
   };
 
   return (
@@ -601,66 +565,6 @@ const Payment = () => {
           </div>
         </main>
 
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className="fixed bottom-6 right-6 w-[320px] bg-background rounded-lg p-6 shadow-2xl animate-in slide-in-from-bottom-5 z-50 border border-border">
-          <div className="flex flex-col items-center text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-primary" />
-            </div>
-            
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold text-foreground">
-                {paymentType === "now" ? "Payment Successful" : "Payment Scheduled"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                Your booking has been confirmed & Your payment has been {paymentType === "now" ? "processed successfully" : "scheduled for later"}.
-              </p>
-            </div>
-
-            {printingStatus !== "done" && (
-              <div className="py-4 w-full">
-                <div className="flex items-center justify-center gap-2">
-                  {printingStatus === "printing" && (
-                    <>
-                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                      <p className="text-sm text-muted-foreground">Sending to printer...</p>
-                    </>
-                  )}
-                  {printingStatus === "success" && (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                      <p className="text-sm text-foreground font-medium">Receipt printed successfully</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {printingStatus === "done" && (
-              <>
-                <div className="py-2">
-                  <p className="text-xs text-muted-foreground mb-1">
-                    You will be redirected to the Home Page in
-                  </p>
-                  <div className="text-3xl font-bold text-primary">
-                    {countdown}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">seconds...</p>
-                </div>
-
-                <Button 
-                  onClick={() => navigate("/")}
-                  size="sm"
-                  className="w-full"
-                >
-                  Back to Home
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Payment Method Modal */}
       <PaymentMethodModal
