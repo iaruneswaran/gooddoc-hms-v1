@@ -577,32 +577,62 @@ const GenerateInterimBill = () => {
                             </Badge>
                           </div>
                           
-                          {/* Charges table */}
+                          {/* Bill Documents Table */}
                           {previewData.lines.length > 0 && (
-                            <div className="border rounded-md overflow-hidden">
-                              <div className="overflow-x-auto max-h-60">
-                                <table className="w-full text-xs">
-                                  <thead className="bg-muted/50 sticky top-0">
-                                    <tr>
-                                      <th className="text-left py-2 px-3 font-medium">Date</th>
-                                      <th className="text-left py-2 px-3 font-medium">Department</th>
-                                      <th className="text-left py-2 px-3 font-medium">Item</th>
-                                      <th className="text-right py-2 px-3 font-medium">Qty</th>
-                                      <th className="text-right py-2 px-3 font-medium">Amount</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {previewData.lines.map((line) => (
-                                      <tr key={line.id} className="border-t border-border/50">
-                                        <td className="py-2 px-3 text-muted-foreground whitespace-nowrap">{line.date}</td>
-                                        <td className="py-2 px-3">{line.department}</td>
-                                        <td className="py-2 px-3">{line.itemName}</td>
-                                        <td className="py-2 px-3 text-right">{line.qty}</td>
-                                        <td className="py-2 px-3 text-right tabular-nums font-medium">{formatCurrency(line.amount)}</td>
+                            <div className="space-y-2">
+                              <Label className="text-xs font-medium text-muted-foreground">Bill Documents</Label>
+                              <div className="border rounded-md overflow-hidden">
+                                <div className="overflow-x-auto max-h-60">
+                                  <table className="w-full text-xs">
+                                    <thead className="bg-muted/50 sticky top-0">
+                                      <tr>
+                                        <th className="text-left py-2 px-3 font-medium">Document No.</th>
+                                        <th className="text-left py-2 px-3 font-medium">Document Name</th>
+                                        <th className="text-left py-2 px-3 font-medium">Date & Time</th>
+                                        <th className="text-left py-2 px-3 font-medium">Service</th>
+                                        <th className="text-left py-2 px-3 font-medium">Prepared / Verified By</th>
+                                        <th className="text-center py-2 px-3 font-medium">Actions</th>
                                       </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
+                                    </thead>
+                                    <tbody>
+                                      {previewData.lines.map((line, index) => {
+                                        const docPrefix = line.department === "Laboratory" ? "LAB" : 
+                                                         line.department === "Radiology" ? "RAD" :
+                                                         line.department === "Pharmacy" ? "RX" : "DOC";
+                                        const docNo = `${docPrefix}${String(100 + index).padStart(3, '0')}`;
+                                        return (
+                                          <tr key={line.id} className="border-t border-border/50">
+                                            <td className="py-2 px-3 font-mono text-primary">{docNo}</td>
+                                            <td className="py-2 px-3">{line.itemName}</td>
+                                            <td className="py-2 px-3">
+                                              <div className="flex flex-col">
+                                                <span>{line.date}</span>
+                                                <span className="text-muted-foreground text-[10px]">10:00 AM</span>
+                                              </div>
+                                            </td>
+                                            <td className="py-2 px-3">{line.department}</td>
+                                            <td className="py-2 px-3">
+                                              <div className="flex flex-col">
+                                                <span>Dr. Arun Kumar</span>
+                                                <span className="text-muted-foreground text-[10px]">Dr. Arun Kumar</span>
+                                              </div>
+                                            </td>
+                                            <td className="py-2 px-3">
+                                              <div className="flex items-center justify-center gap-1">
+                                                <Button variant="ghost" size="icon" className="h-6 w-6">
+                                                  <FileText className="h-3 w-3" />
+                                                </Button>
+                                                <Button variant="ghost" size="icon" className="h-6 w-6">
+                                                  <Printer className="h-3 w-3" />
+                                                </Button>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </table>
+                                </div>
                               </div>
                             </div>
                           )}
