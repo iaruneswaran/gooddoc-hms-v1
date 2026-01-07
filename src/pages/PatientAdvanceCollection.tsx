@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import { formatINR } from "@/utils/currency";
 import { toast } from "sonner";
-import { PaymentMethodModal } from "@/components/payment";
+import { PaymentMethodModal, CashPaymentModal } from "@/components/payment";
 import { SplitPaymentWizardModal, type SplitPaymentStep } from "@/components/payment/SplitPaymentWizardModal";
 import { useSplitPaymentAutoCalc, type SplitRow } from "@/hooks/useSplitPaymentAutoCalc";
 import type { PaymentMethod as PaymentMethodType, PaymentAttempt } from "@/types/payment-intent";
@@ -116,6 +116,7 @@ const PatientAdvanceCollection = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>("card");
   const [showSplitWizard, setShowSplitWizard] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
 
   const handlePaymentSuccess = (attempt: PaymentAttempt) => {
     setShowPaymentModal(false);
@@ -168,17 +169,17 @@ const PatientAdvanceCollection = () => {
       // Open split payment wizard for Card/UPI
       setShowSplitWizard(true);
     } else {
-      // Only cash - process directly
-      setIsProcessing(true);
-      setTimeout(() => {
-        const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
-        setIsProcessing(false);
-        toast.success("Advance collected successfully!", {
-          description: `Receipt No: ${receiptNo}`,
-        });
-        setAmountToCollect(0);
-      }, 1500);
+      // Only cash - open cash modal
+      setShowCashModal(true);
     }
+  };
+
+  const handleCashPaymentSuccess = () => {
+    const receiptNo = `RCP-2025-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+    toast.success("Advance collected successfully!", {
+      description: `Receipt No: ${receiptNo}`,
+    });
+    setAmountToCollect(0);
   };
 
   const handleBack = () => {
@@ -535,6 +536,18 @@ const PatientAdvanceCollection = () => {
           onComplete={handleSplitWizardComplete}
           onPartialComplete={handleSplitWizardPartial}
           onCancel={() => setShowSplitWizard(false)}
+        />
+
+        {/* Cash Payment Modal */}
+        <CashPaymentModal
+          open={showCashModal}
+          onOpenChange={setShowCashModal}
+          patientName={mockPatient.name}
+          mrn={mockPatient.gdid}
+          amount={amountToCollect * 100} // Convert to paise
+          purpose="advance"
+          onSuccess={handleCashPaymentSuccess}
+          onCancel={() => setShowCashModal(false)}
         />
       </PageContent>
     </div>
