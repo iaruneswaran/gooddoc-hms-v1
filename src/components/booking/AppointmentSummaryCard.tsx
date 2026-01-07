@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Trash2 } from "lucide-react";
+import { Trash2, Calendar, User, Building2 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/lib/pricingEngine";
 import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
@@ -310,15 +310,15 @@ export function AppointmentSummaryCard({
 
                       <div className="space-y-2 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          <span>📅</span>
+                          <Calendar className="h-3 w-3" />
                           <span>{format(ipdAdmissionData.date, "dd MMM yyyy")} • {ipdAdmissionData.time}</span>
                         </div>
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          <span>👨‍⚕️</span>
+                          <User className="h-3 w-3" />
                           <span>{ipdAdmissionData.attendingDoctor}</span>
                         </div>
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          <span>🏥</span>
+                          <Building2 className="h-3 w-3" />
                           <span>{ipdAdmissionData.ward} • {ipdAdmissionData.bed}</span>
                         </div>
 
