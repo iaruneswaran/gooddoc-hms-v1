@@ -200,12 +200,9 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                   {visitBills.map((bill) => (
                     <tr
                       key={bill.id}
-                      className={`hover:bg-muted/20 transition-colors cursor-pointer ${
-                        selectedBillIds.includes(bill.id) ? "bg-primary/5 border-l-2 border-l-primary" : ""
-                      }`}
-                      onClick={() => toggleBillSelection(bill.id)}
+                      className="hover:bg-muted/20 transition-colors"
                     >
-                      <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
+                      <td className="p-3 text-center">
                         <Checkbox
                           checked={selectedBillIds.includes(bill.id)}
                           onCheckedChange={() => toggleBillSelection(bill.id)}
@@ -213,7 +210,6 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       </td>
                       <td className="p-3">
                         <p className="billing-value text-primary">{bill.invoiceNo}</p>
-                        <p className="billing-helper font-mono">{bill.serviceCode}</p>
                       </td>
                       <td className="p-3">
                         <p className="billing-body">{bill.date}</p>
@@ -240,7 +236,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       <td className="p-3 text-center">
                         {getStatusBadge(bill.status)}
                       </td>
-                      <td className="p-3" onClick={(e) => e.stopPropagation()}>
+                      <td className="p-3">
                         <div className="flex justify-center gap-1">
                           <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                             <Eye className="h-3.5 w-3.5" />
