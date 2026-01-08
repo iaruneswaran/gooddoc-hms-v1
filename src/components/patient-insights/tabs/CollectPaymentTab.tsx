@@ -192,7 +192,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                     <th className="text-right billing-label p-3 whitespace-nowrap">Amount</th>
                     <th className="text-right billing-label p-3 whitespace-nowrap">Paid</th>
                     <th className="text-right billing-label p-3 whitespace-nowrap">Balance</th>
-                    <th className="text-center billing-label p-3 whitespace-nowrap">Status</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap">Status</th>
                     <th className="text-center billing-label p-3 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
@@ -233,7 +233,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       <td className="p-3 text-right">
                         <p className="billing-value">{formatINR(bill.balance)}</p>
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3 text-left">
                         {getStatusBadge(bill.status)}
                       </td>
                       <td className="p-3">
