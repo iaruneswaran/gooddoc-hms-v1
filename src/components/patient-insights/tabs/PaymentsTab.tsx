@@ -117,15 +117,15 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Receipt No.</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / Doctor</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
-                <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">RECEIPT NO.</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">DATE & TIME</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">INVOICE</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">SERVICE / DOCTOR</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">TYPE</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PAYMENT MODE</th>
+                <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">AMOUNT</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y">
