@@ -432,11 +432,11 @@
   color: hsl(var(--foreground));
 }
 
-/* Type Scale - Label: 12/16 600 */
+/* Type Scale - Label: 12/16 500 */
 .billing-label {
   font-size: 0.75rem;
   line-height: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   color: hsl(var(--muted-foreground));
 }
 
