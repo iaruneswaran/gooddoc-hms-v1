@@ -78,13 +78,17 @@ const TransfersList = () => {
       key: "priority",
       label: "Priority",
       sortable: true,
-      render: (row) => <Badge className={priorityStyles[row.priority]}>{row.priority}</Badge>,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => <Badge className={`${priorityStyles[row.priority]} min-w-[70px] justify-center`}>{row.priority}</Badge>,
     },
     {
       key: "transferType",
       label: "Transfer Type",
       sortable: true,
-      render: (row) => <Badge className={transferTypeStyles[row.transferType]}>{row.transferType}</Badge>,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => <Badge className={`${transferTypeStyles[row.transferType]} min-w-[100px] justify-center`}>{row.transferType}</Badge>,
     },
     {
       key: "fromWard",
@@ -104,7 +108,9 @@ const TransfersList = () => {
     {
       key: "fromBedClass",
       label: "From Bed Class",
-      render: (row) => <Badge className={bedClassStyles[row.fromBedClass]}>{row.fromBedClass}</Badge>,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => <Badge className={`${bedClassStyles[row.fromBedClass]} min-w-[70px] justify-center`}>{row.fromBedClass}</Badge>,
     },
     {
       key: "toWard",
@@ -128,8 +134,10 @@ const TransfersList = () => {
     {
       key: "toBedClass",
       label: "To Bed Class",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={`${bedClassStyles[row.toBedClass]} ${row.toBedClass === "ICU" ? "ring-2 ring-red-300" : ""}`}>
+        <Badge className={`${bedClassStyles[row.toBedClass]} min-w-[70px] justify-center ${row.toBedClass === "ICU" ? "ring-2 ring-red-300" : ""}`}>
           {row.toBedClass}
         </Badge>
       ),
@@ -141,7 +149,9 @@ const TransfersList = () => {
       key: "status",
       label: "Status",
       sortable: true,
-      render: (row) => <Badge className={statusStyles[row.status]}>{row.status}</Badge>,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => <Badge className={`${statusStyles[row.status]} min-w-[100px] justify-center`}>{row.status}</Badge>,
     },
     { 
       key: "requestedAt", 
@@ -204,8 +214,10 @@ const TransfersList = () => {
     {
       key: "isolationRequired",
       label: "Isolation Required",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => row.isolationRequired ? (
-        <Badge className="bg-yellow-500 text-white">Yes</Badge>
+        <Badge className="bg-yellow-500 text-white min-w-[50px] justify-center">Yes</Badge>
       ) : <span className="text-muted-foreground">No</span>,
     },
     { key: "transportTeam", label: "Transport Team/Porter", render: (row) => row.transportTeam || "—" },

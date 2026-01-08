@@ -82,8 +82,10 @@ const EmergencyCases = () => {
       key: "disposition",
       label: "Disposition",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={dispositionStyles[row.disposition]}>{row.disposition}</Badge>
+        <Badge className={`${dispositionStyles[row.disposition]} min-w-[90px] justify-center`}>{row.disposition}</Badge>
       ),
     },
   ];

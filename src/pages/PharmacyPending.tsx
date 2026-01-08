@@ -91,8 +91,10 @@ const MedicineOrdersToday = () => {
       key: "paymentStatus",
       label: "Payment Status",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={paymentStatusStyles[row.paymentStatus]}>{row.paymentStatus}</Badge>
+        <Badge className={`${paymentStatusStyles[row.paymentStatus]} min-w-[100px] justify-center`}>{row.paymentStatus}</Badge>
       ),
     },
     { 
