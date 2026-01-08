@@ -215,7 +215,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
   return (
     <div className="px-6 pt-6 pb-4">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-foreground">Transfer History</h3>
+        <h3 className="text-[14px] font-semibold text-foreground">Transfer History</h3>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">

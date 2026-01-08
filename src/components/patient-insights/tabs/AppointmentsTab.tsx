@@ -177,15 +177,15 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Visit ID</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Date</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Time</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Type</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Doctor</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Ordered By</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Status</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Token</th>
-                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">Actions</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Visit ID</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Date</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Time</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Type</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Doctor</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Ordered By</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Status</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Token</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
