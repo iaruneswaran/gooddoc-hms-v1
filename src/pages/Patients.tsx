@@ -6,7 +6,7 @@ import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, MoreVertical, Pencil, Eye, CalendarPlus, User, AlertTriangle, Loader2, BedDouble } from "lucide-react";
+import { Download, MoreVertical, Pencil, CalendarPlus, User, AlertTriangle, Loader2, BedDouble } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -358,7 +358,6 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
                         Patient 360
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handlePatientInsight(patient)} className="gap-2 cursor-pointer">
-                        <Eye className="w-4 h-4" />
                         Patient Insight
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleBookAppointment(patient)} className="gap-2 cursor-pointer">

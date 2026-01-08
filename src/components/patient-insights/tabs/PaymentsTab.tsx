@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, Printer, Eye, CreditCard, Banknote, Building2, Smartphone, FileText } from "lucide-react";
+import { Download, Printer, CreditCard, Banknote, Building2, Smartphone, FileText } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getTransactionsForVisit, type Transaction, type PaymentMethod } from "@/data/billing.mock";
@@ -166,9 +166,6 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                   </td>
                   <td className="p-3">
                     <div className="flex justify-center gap-1">
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
-                        <Eye className="h-3.5 w-3.5" />
-                      </Button>
                       <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                         <Download className="h-3.5 w-3.5" />
                       </Button>

@@ -1,4 +1,4 @@
-import { Download, Printer, Trash2, Upload, Eye, FileText, Image, FileSpreadsheet, File } from "lucide-react";
+import { Download, Printer, Trash2, Upload, FileText, Image, FileSpreadsheet, File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Visit } from "../VisitListItem";
@@ -440,9 +440,6 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                   </td>
                   <td className="p-3">
                     <div className="flex justify-center gap-1">
-                      <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="View">
-                        <Eye className="h-4 w-4" />
-                      </button>
                       <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="Download">
                         <Download className="h-4 w-4" />
                       </button>

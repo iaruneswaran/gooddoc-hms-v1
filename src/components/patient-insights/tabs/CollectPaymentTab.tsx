@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Printer, Eye, Plus, Trash2, RotateCcw, AlertCircle } from "lucide-react";
+import { Download, Printer, Plus, Trash2, RotateCcw, AlertCircle } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
@@ -238,9 +238,6 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                       </td>
                       <td className="p-3">
                         <div className="flex justify-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
                           <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                             <Download className="h-3.5 w-3.5" />
                           </Button>
