@@ -288,7 +288,7 @@ export default function DoctorForm() {
             {/* Step 1 - Basic Info */}
             {currentStep === 1 && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Basic Information</h2>
+                <h2 className="text-sm font-semibold">Basic Information</h2>
                 
                 <div className="grid gap-4">
                   <div>
@@ -500,7 +500,7 @@ export default function DoctorForm() {
             {currentStep === 2 && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Weekly Schedule</h2>
+                  <h2 className="text-sm font-semibold">Weekly Schedule</h2>
                 </div>
 
                 {/* Week Grid */}

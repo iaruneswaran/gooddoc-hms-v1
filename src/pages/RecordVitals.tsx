@@ -335,7 +335,7 @@ export default function RecordVitals() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Body Measurements */}
             <Card className="p-6">
-              <h2 className="text-base font-semibold text-foreground mb-4">Body Measurements</h2>
+              <h2 className="text-sm font-semibold text-foreground mb-4">Body Measurements</h2>
               <div className="space-y-4">
                 <div>
                   <Label className="text-sm font-medium text-foreground">
@@ -394,7 +394,7 @@ export default function RecordVitals() {
 
             {/* Vital Signs */}
             <Card className="p-6">
-              <h2 className="text-base font-semibold text-foreground mb-4">Vital Signs</h2>
+              <h2 className="text-sm font-semibold text-foreground mb-4">Vital Signs</h2>
               <div className="space-y-4">
                 <div>
                   <Label className="text-sm font-medium text-foreground">Temperature</Label>
@@ -534,7 +534,7 @@ export default function RecordVitals() {
 
             {/* Measurement Context */}
             <Card className="p-6">
-              <h2 className="text-base font-semibold text-foreground mb-4">
+              <h2 className="text-sm font-semibold text-foreground mb-4">
                 Measurement Context
               </h2>
               <div className="space-y-4">
