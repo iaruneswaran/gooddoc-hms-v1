@@ -164,8 +164,10 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                       ) : (
                         <div>
                           <p className="text-sm text-foreground">{serviceDetails[0].service}</p>
-                          <p className="text-xs text-muted-foreground">{serviceDetails[0].doctor} • {serviceDetails[0].department}</p>
-                          <p className="text-xs text-primary mt-0.5">+{serviceDetails.length - 1} more</p>
+                          <p className="text-xs text-muted-foreground">
+                            {serviceDetails[0].doctor} • {serviceDetails[0].department}
+                            <span className="text-primary ml-1.5">+{serviceDetails.length - 1} more</span>
+                          </p>
                         </div>
                       )}
                     </td>
