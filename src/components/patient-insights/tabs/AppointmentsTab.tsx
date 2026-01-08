@@ -183,7 +183,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">TYPE</th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">DOCTOR</th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">ORDERED BY</th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">STATUS</th>
+                <th className="text-center text-xs font-medium text-muted-foreground px-4 py-3 uppercase">STATUS</th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">TOKEN</th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">ACTIONS</th>
               </tr>
@@ -227,7 +227,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                     </td>
                     
                     {/* Status */}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-center">
                       <Badge className={getStatusBadgeVariant(appointment.status)} variant="secondary">
                         {appointment.status}
                       </Badge>

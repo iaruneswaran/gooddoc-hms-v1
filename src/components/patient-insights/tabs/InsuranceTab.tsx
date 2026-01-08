@@ -438,7 +438,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                   <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">APPROVED</th>
                   <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PAID</th>
                   <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PATIENT DUE</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
+                  <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
                   <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">ACTIONS</th>
                 </tr>
               </thead>
@@ -485,8 +485,8 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                         ₹{claim.patientLiability.toLocaleString()}
                       </span>
                     </td>
-                    <td className="p-3">
-                      <div className="space-y-1">
+                    <td className="p-3 text-center">
+                      <div className="inline-flex flex-col items-center space-y-1">
                         {getStatusBadge(claim.status)}
                         {claim.settledDate && (
                           <p className="text-[10px] text-muted-foreground">Settled: {claim.settledDate}</p>

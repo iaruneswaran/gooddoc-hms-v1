@@ -124,7 +124,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">TYPE</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PAYMENT MODE</th>
                 <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">AMOUNT</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
+                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">ACTIONS</th>
               </tr>
             </thead>
@@ -194,7 +194,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                         {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
                       </p>
                     </td>
-                    <td className="p-3 text-left">
+                    <td className="p-3 text-center">
                       {getStatusBadge(txn.status)}
                     </td>
                     <td className="p-3 text-left">
