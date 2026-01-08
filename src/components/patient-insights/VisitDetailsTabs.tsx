@@ -50,8 +50,8 @@ const allTabs = [
   { value: "collect-payment", label: "Bills & Payments", icon: CreditCard, ipOnly: false },
   { value: "payments", label: "Transaction History", icon: History, ipOnly: false },
   { value: "documents", label: "Documents", icon: FolderOpen, ipOnly: false },
-  { value: "insurance", label: "Insurance", icon: Shield, ipOnly: false },
   { value: "timeline", label: "Bed Transfers", icon: ArrowLeftRight, ipOnly: true },
+  { value: "insurance", label: "Insurance", icon: Shield, ipOnly: false },
   { value: "patient-details", label: "Patient Details", icon: User, ipOnly: false },
 ];
 
