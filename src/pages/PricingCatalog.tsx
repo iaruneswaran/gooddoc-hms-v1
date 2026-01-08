@@ -294,32 +294,32 @@ const PricingCatalog = () => {
                 <table className="w-full">
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Item Name
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        ITEM NAME
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Category
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        CATEGORY
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Department
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        DEPARTMENT
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Code
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        CODE
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Unit
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        UNIT
                       </th>
-                      <th className="text-right text-xs font-medium text-muted-foreground p-3">
-                        Base Price
+                      <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
+                        BASE PRICE
                       </th>
-                      <th className="text-right text-xs font-medium text-muted-foreground p-3">
-                        Net Price
+                      <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
+                        NET PRICE
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Status
+                      <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
+                        STATUS
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                        Actions
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        ACTIONS
                       </th>
                     </tr>
                   </thead>
@@ -349,7 +349,7 @@ const PricingCatalog = () => {
                         <td className="p-3 text-right text-sm font-semibold">
                           {formatINR(item.pricing.netPrice)}
                         </td>
-                        <td className="p-3">
+                        <td className="p-3 text-center">
                           <Badge variant="outline" className={getStatusColor(item.status)}>
                             {item.status}
                           </Badge>

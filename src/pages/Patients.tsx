@@ -274,18 +274,18 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
 
           <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
             <div className="grid grid-cols-[0.7fr_1.2fr_0.4fr_0.5fr_0.9fr_0.9fr_0.6fr_0.5fr_0.8fr_0.8fr_0.5fr_0.4fr] gap-3 px-4 py-3 border-b border-border bg-muted/30 w-full">
-              <div className="text-xs font-medium text-muted-foreground">GDID</div>
-              <div className="text-xs font-medium text-muted-foreground">Patient Name</div>
-              <div className="text-xs font-medium text-muted-foreground">Age</div>
-              <div className="text-xs font-medium text-muted-foreground">Gender</div>
-              <div className="text-xs font-medium text-muted-foreground">Phone</div>
-              <div className="text-xs font-medium text-muted-foreground">Department</div>
-              <div className="text-xs font-medium text-muted-foreground">City</div>
-              <div className="text-xs font-medium text-muted-foreground">Blood</div>
-              <div className="text-xs font-medium text-muted-foreground">Registered</div>
-              <div className="text-xs font-medium text-muted-foreground">Last Visit</div>
-              <div className="text-xs font-medium text-muted-foreground">Last Visit Type</div>
-              <div className="text-xs font-medium text-muted-foreground text-right">Action</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">GDID</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">PATIENT NAME</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">AGE</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">GENDER</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">PHONE</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">DEPARTMENT</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">CITY</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">BLOOD</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">REGISTERED</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase">LAST VISIT</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase text-center">LAST VISIT TYPE</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase text-right">ACTION</div>
             </div>
             {filteredPatients.map((patient) => (
               <div
@@ -333,7 +333,7 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
                 <div className="text-sm text-foreground truncate">
                   {patient.last_visit_date ? formatDate(patient.last_visit_date) : "-"}
                 </div>
-                <div>
+                <div className="text-center">
                   <Badge
                     variant="secondary"
                     className={getStatusBadgeStyle(patient.status)}

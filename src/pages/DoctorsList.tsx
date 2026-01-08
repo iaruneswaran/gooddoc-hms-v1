@@ -426,14 +426,14 @@ export default function DoctorsList() {
             </div>
           ) : (
             <div className="bg-card rounded-lg border border-border overflow-hidden w-full">
-              <div className="grid grid-cols-[2fr_2fr_1.5fr_1.2fr_1.2fr_0.8fr_0.6fr] gap-4 px-4 py-4 border-b border-border bg-muted/30 w-full">
-                <div className="text-xs font-medium text-muted-foreground">Doctor</div>
-                <div className="text-xs font-medium text-muted-foreground">Department / Specialty</div>
-                <div className="text-xs font-medium text-muted-foreground">Availability</div>
-                <div className="text-xs font-medium text-muted-foreground">Locations</div>
-                <div className="text-xs font-medium text-muted-foreground">Fee</div>
-                <div className="text-xs font-medium text-muted-foreground">Status</div>
-                <div className="text-xs font-medium text-muted-foreground">Action</div>
+            <div className="grid grid-cols-[2fr_2fr_1.5fr_1.2fr_1.2fr_0.8fr_0.6fr] gap-4 px-4 py-4 border-b border-border bg-muted/30 w-full">
+                <div className="text-xs font-medium text-muted-foreground uppercase">DOCTOR</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase">DEPARTMENT / SPECIALTY</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase">AVAILABILITY</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase">LOCATIONS</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase">FEE</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase text-center">STATUS</div>
+                <div className="text-xs font-medium text-muted-foreground uppercase">ACTION</div>
               </div>
 
               {filteredDoctors.map((doctor) => (
@@ -477,7 +477,7 @@ export default function DoctorsList() {
 
                   <div className="text-sm text-foreground">₹{doctor.fee.toLocaleString('en-IN')}</div>
 
-                  <div>
+                  <div className="text-center">
                     <Badge variant={getStatusVariant(doctor.status)}>
                       {doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}
                     </Badge>
