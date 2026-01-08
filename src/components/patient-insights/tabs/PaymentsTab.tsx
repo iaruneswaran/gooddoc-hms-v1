@@ -110,7 +110,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
+                <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
               </tr>
@@ -154,7 +154,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
                   </td>
-                  <td className="p-3 text-left">
+                  <td className="p-3 text-right">
                     <p className={`text-sm font-semibold ${txn.type === "Refund" ? "text-blue-600" : "text-emerald-600"}`}>
                       {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
                     </p>
