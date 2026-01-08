@@ -194,7 +194,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                   <tr key={appointment.id} className="border-t hover:bg-muted/20 transition-colors">
                     {/* Visit ID */}
                     <td className="px-4 py-3">
-                      <p className="text-sm font-mono font-medium text-foreground">{appointment.visitId}</p>
+                      <p className="text-sm font-mono text-foreground">{appointment.visitId}</p>
                     </td>
                     
                     {/* Date */}

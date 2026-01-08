@@ -415,7 +415,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
               {visitDocuments.map((doc) => (
                 <tr key={doc.id} className="border-t hover:bg-muted/20 transition-colors">
                   <td className="p-3">
-                    <p className="text-sm font-mono font-medium text-primary">{doc.documentNo}</p>
+                    <p className="text-sm font-mono text-primary">{doc.documentNo}</p>
                   </td>
                   <td className="p-3">
                     <div className="flex items-center gap-2">

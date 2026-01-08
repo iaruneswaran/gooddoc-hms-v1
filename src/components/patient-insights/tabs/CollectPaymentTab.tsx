@@ -209,7 +209,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         />
                       </td>
                       <td className="p-3">
-                        <p className="billing-value text-primary">{bill.invoiceNo}</p>
+                        <p className="billing-body text-primary">{bill.invoiceNo}</p>
                       </td>
                       <td className="p-3">
                         <p className="billing-body">{bill.date}</p>
