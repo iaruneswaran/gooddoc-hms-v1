@@ -11,7 +11,7 @@ import {
   ChevronDown,
   Edit,
   Copy,
-  Archive,
+  Trash2,
   Eye,
   MoreVertical,
   Tag,
@@ -65,7 +65,7 @@ const PricingCatalog = () => {
   };
 
   const handleEdit = (item: PricingItem) => {
-    navigate(`/pricing-catalog/edit/${item.id}`);
+    navigate(`/pricing-catalog/new`, { state: { editItem: item } });
   };
 
   const handleDuplicate = (item: PricingItem) => {
@@ -85,13 +85,9 @@ const PricingCatalog = () => {
     toast.success(`"${item.name}" duplicated successfully`);
   };
 
-  const handleArchive = (item: PricingItem) => {
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === item.id ? { ...i, status: "Archived" as PricingStatus } : i
-      )
-    );
-    toast.success(`"${item.name}" archived successfully`);
+  const handleDelete = (item: PricingItem) => {
+    setItems((prev) => prev.filter((i) => i.id !== item.id));
+    toast.success(`"${item.name}" deleted successfully`);
   };
 
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -389,10 +385,10 @@ const PricingCatalog = () => {
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 className="gap-2 text-destructive cursor-pointer"
-                                onClick={() => handleArchive(item)}
+                                onClick={() => handleDelete(item)}
                               >
-                                <Archive className="h-4 w-4" />
-                                Archive
+                                <Trash2 className="h-4 w-4" />
+                                Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
