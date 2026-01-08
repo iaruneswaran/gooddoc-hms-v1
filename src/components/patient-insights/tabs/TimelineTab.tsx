@@ -238,7 +238,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
                   <p className="text-sm text-foreground">{transfer.visitId}</p>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm text-foreground">
                     {format(new Date(transfer.transferDate), "dd MMM yyyy")}
                   </div>
                   <div className="text-xs text-muted-foreground">
@@ -246,7 +246,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
                   </div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm font-medium text-foreground">{transfer.fromWard}</div>
+                  <div className="text-sm text-foreground">{transfer.fromWard}</div>
                   {(transfer.fromRoom || transfer.fromBed) && (
                     <div className="text-xs text-muted-foreground">
                       {transfer.fromRoom && transfer.fromBed 
@@ -256,7 +256,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
                   )}
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="text-sm font-medium text-foreground">{transfer.toWard}</div>
+                  <div className="text-sm text-foreground">{transfer.toWard}</div>
                   {(transfer.toRoom || transfer.toBed) && (
                     <div className="text-xs text-muted-foreground">
                       {transfer.toRoom && transfer.toBed 

@@ -94,16 +94,16 @@ export function ClaimInvoicesList() {
                     aria-label={`Select invoice ${invoice.id}`}
                   />
                 </td>
-                <td className="p-4 text-sm font-medium">{invoice.id}</td>
+                <td className="p-4 text-sm">{invoice.id}</td>
                 <td className="p-4 text-sm">{invoice.date}</td>
                 <td className="p-4 text-sm">{invoice.service}</td>
-                <td className="p-4 text-sm font-medium text-primary">
+                <td className="p-4 text-sm">
                   {formatINR(invoice.totalAmount)}
                 </td>
                 <td className="p-4 text-sm text-muted-foreground">
                   {formatINR(invoice.partiallyPaid)}
                 </td>
-                <td className="p-4 text-sm font-semibold text-primary">
+                <td className="p-4 text-sm">
                   {formatINR(invoice.balance)}
                 </td>
                 <td className="p-4 text-sm">

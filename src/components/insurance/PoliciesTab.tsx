@@ -130,10 +130,10 @@ export function PoliciesTab() {
           <TableBody>
             {mockPolicies.map((policy) => (
               <TableRow key={policy.id}>
-                <TableCell className="font-medium">{policy.policyNo}</TableCell>
+                <TableCell className="text-sm">{policy.policyNo}</TableCell>
                 <TableCell>
                   <div>
-                    <div className="font-medium">{policy.patient.name}</div>
+                    <div className="text-sm">{policy.patient.name}</div>
                     <div className="text-sm text-muted-foreground">{policy.patient.phone}</div>
                   </div>
                 </TableCell>
