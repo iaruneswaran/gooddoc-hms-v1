@@ -231,7 +231,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                         </p>
                       </td>
                       <td className="p-3 text-right">
-                        <p className="billing-amount-negative">{formatINR(bill.balance)}</p>
+                        <p className="text-sm text-foreground">{formatINR(bill.balance)}</p>
                       </td>
                       <td className="p-3 text-center">
                         {getStatusBadge(bill.status)}
