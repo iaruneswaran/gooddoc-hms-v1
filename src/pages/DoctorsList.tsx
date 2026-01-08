@@ -118,22 +118,32 @@ export default function DoctorsList() {
       if (error) throw error;
 
       // First, map basic doctor data without availability
-      const basicDoctors: DoctorDisplay[] = (doctorsData as DoctorRow[]).map((doc) => ({
-        id: doc.id,
-        displayName: doc.name,
-        degrees: doc.degrees || '',
-        department: DEPARTMENT_MAP[doc.department_id || ''] || doc.department_id || 'General',
-        specialty: SPECIALTY_MAP[doc.specialty_id || ''] || doc.specialty_id || '',
-        avatar: doc.avatar_url,
-        availability: 'Loading...',
-        availabilityStatus: 'no_schedule' as const,
-        nextAvailableTime: undefined,
-        leaveUntil: undefined,
-        locations: ['Main Clinic'],
-        duration: doc.default_duration,
-        fee: 1500,
-        status: doc.status as DoctorDisplay['status'],
-      }));
+      const basicDoctors: DoctorDisplay[] = (doctorsData as DoctorRow[]).map((doc) => {
+        const department = DEPARTMENT_MAP[doc.department_id || ''] || doc.department_id || 'General';
+        const ward = department === 'Cardiology' ? 'Ward A' :
+                     department === 'Orthopedics' ? 'Ward B' :
+                     department === 'Neurology' ? 'Ward C' :
+                     department === 'Pediatrics' ? 'Ward D' :
+                     department === 'Endocrinology' ? 'Ward E' :
+                     'Ward F';
+        
+        return {
+          id: doc.id,
+          displayName: doc.name,
+          degrees: doc.degrees || '',
+          department,
+          specialty: SPECIALTY_MAP[doc.specialty_id || ''] || doc.specialty_id || '',
+          avatar: doc.avatar_url,
+          availability: 'Loading...',
+          availabilityStatus: 'no_schedule' as const,
+          nextAvailableTime: undefined,
+          leaveUntil: undefined,
+          locations: [ward, department],
+          duration: doc.default_duration,
+          fee: 1500,
+          status: doc.status as DoctorDisplay['status'],
+        };
+      });
 
       // Set doctors immediately so UI shows
       setDoctors(basicDoctors);
@@ -460,8 +470,9 @@ export default function DoctorsList() {
 
                   <div>{getAvailabilityBadge(doctor)}</div>
 
-                  <div className="text-sm text-foreground">
-                    {doctor.locations.join(", ")}
+                  <div className="text-sm">
+                    <div className="text-foreground">{doctor.locations[0]}</div>
+                    <div className="text-xs text-muted-foreground">{doctor.locations[1]}</div>
                   </div>
 
                   <div className="text-sm text-foreground">₹{doctor.fee.toLocaleString('en-IN')}</div>
