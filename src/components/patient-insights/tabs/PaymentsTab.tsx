@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Printer, CreditCard, Banknote, Building2, Smartphone, FileText } from "lucide-react";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
-import { getTransactionsForVisit, type Transaction, type PaymentMethod } from "@/data/billing.mock";
+import { getTransactionsForVisit, getInvoicesForVisit, type Transaction, type PaymentMethod, type Invoice } from "@/data/billing.mock";
 
 interface PaymentsTabProps {
   selectedVisit: Visit | null;
@@ -62,6 +62,17 @@ const formatReceiptNo = (receiptNo: string): string => {
   return match ? `RCP - ${match[1]}` : receiptNo;
 };
 
+// Get service details from invoice numbers
+const getServiceDetails = (invoiceNos: string[], invoices: Invoice[]): { service: string; doctor: string; department: string }[] => {
+  return invoiceNos.map(invNo => {
+    const invoice = invoices.find(inv => inv.invoiceNo === invNo);
+    if (invoice) {
+      return { service: invoice.service, doctor: invoice.doctor, department: invoice.department };
+    }
+    return { service: "", doctor: "", department: "" };
+  }).filter(detail => detail.service);
+};
+
 export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
   if (!selectedVisit) {
     return (
@@ -74,6 +85,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
   }
 
   const visitTransactions = getTransactionsForVisit(selectedVisit.visitId);
+  const visitInvoices = getInvoicesForVisit(selectedVisit.visitId);
 
   if (visitTransactions.length === 0) {
     return (
@@ -108,6 +120,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Receipt No.</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / Doctor</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
                 <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
@@ -116,68 +129,89 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {visitTransactions.map((txn) => (
-                <tr key={txn.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="p-3 text-left">
-                    <p className="text-sm text-foreground">{formatReceiptNo(txn.receiptNo)}</p>
-                  </td>
-                  <td className="p-3 text-left">
-                    <p className="text-sm text-foreground">{txn.date}</p>
-                    <p className="text-xs text-muted-foreground">{txn.time}</p>
-                  </td>
-                  <td className="p-3 text-left">
-                    {txn.invoiceNos.length === 0 ? (
-                      <span className="text-xs text-muted-foreground">—</span>
-                    ) : txn.invoiceNos.length === 1 ? (
-                      <p className="text-sm font-mono text-foreground">{txn.invoiceNos[0]}</p>
-                    ) : (
-                      <p className="text-sm font-mono text-foreground">
-                        {txn.invoiceNos[0]} <span className="text-xs text-muted-foreground">+{txn.invoiceNos.length - 1}</span>
+              {visitTransactions.map((txn) => {
+                const serviceDetails = getServiceDetails(txn.invoiceNos, visitInvoices);
+                return (
+                  <tr key={txn.id} className="hover:bg-muted/20 transition-colors">
+                    <td className="p-3 text-left">
+                      <p className="text-sm text-foreground">{formatReceiptNo(txn.receiptNo)}</p>
+                    </td>
+                    <td className="p-3 text-left">
+                      <p className="text-sm text-foreground">{txn.date}</p>
+                      <p className="text-xs text-muted-foreground">{txn.time}</p>
+                    </td>
+                    <td className="p-3 text-left">
+                      {txn.invoiceNos.length === 0 ? (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      ) : txn.invoiceNos.length === 1 ? (
+                        <p className="text-sm text-foreground">{txn.invoiceNos[0]}</p>
+                      ) : (
+                        <p className="text-sm text-foreground">
+                          {txn.invoiceNos[0]} <span className="text-xs text-muted-foreground">+{txn.invoiceNos.length - 1}</span>
+                        </p>
+                      )}
+                    </td>
+                    <td className="p-3 text-left">
+                      {txn.type === "Advance" ? (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      ) : serviceDetails.length === 0 ? (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      ) : serviceDetails.length === 1 ? (
+                        <div>
+                          <p className="text-sm text-foreground">{serviceDetails[0].service}</p>
+                          <p className="text-xs text-muted-foreground">{serviceDetails[0].doctor} • {serviceDetails[0].department}</p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-sm text-foreground">{serviceDetails[0].service}</p>
+                          <p className="text-xs text-muted-foreground">{serviceDetails[0].doctor} • {serviceDetails[0].department}</p>
+                          <p className="text-xs text-primary mt-0.5">+{serviceDetails.length - 1} more</p>
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-3 text-left">
+                      {getTypeBadge(txn.type)}
+                    </td>
+                    <td className="p-3 text-left">
+                      {txn.methods && txn.methods.length > 0 ? (
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/40 rounded-md w-fit">
+                          {txn.methods.map((method, idx) => (
+                            <span key={idx} className="flex items-center gap-1">
+                              {getMethodIcon(method)}
+                              <span className="text-xs text-foreground">{method}</span>
+                              {idx < txn.methods.length - 1 && <span className="text-xs text-muted-foreground">,</span>}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    <td className="p-3 text-right">
+                      <p className={`text-sm ${txn.type === "Refund" ? "text-blue-600" : "text-emerald-600"}`}>
+                        {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
                       </p>
-                    )}
-                  </td>
-                  <td className="p-3 text-left">
-                    {getTypeBadge(txn.type)}
-                  </td>
-                  <td className="p-3 text-left">
-                    {txn.methods && txn.methods.length > 0 ? (
-                      <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/40 rounded-md w-fit">
-                        {txn.methods.map((method, idx) => (
-                          <span key={idx} className="flex items-center gap-1">
-                            {getMethodIcon(method)}
-                            <span className="text-xs text-foreground">{method}</span>
-                            {idx < txn.methods.length - 1 && <span className="text-xs text-muted-foreground">,</span>}
-                          </span>
-                        ))}
+                    </td>
+                    <td className="p-3 text-left">
+                      {getStatusBadge(txn.status)}
+                    </td>
+                    <td className="p-3 text-left">
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                          <Download className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                          <Printer className="h-3.5 w-3.5" />
+                        </Button>
                       </div>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">—</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-right">
-                    <p className={`text-sm font-semibold ${txn.type === "Refund" ? "text-blue-600" : "text-emerald-600"}`}>
-                      {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
-                    </p>
-                  </td>
-                  <td className="p-3 text-left">
-                    {getStatusBadge(txn.status)}
-                  </td>
-                  <td className="p-3 text-left">
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
-                        <Download className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
-                        <Printer className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
             <tfoot className="bg-muted/50 border-t border-border">
               <tr>
-                <td colSpan={5} className="p-3 text-right">
+                <td colSpan={6} className="p-3 text-right">
                   <span className="text-xs text-muted-foreground">Total ({visitTransactions.filter(t => t.status === "Success").length} {visitTransactions.filter(t => t.status === "Success").length === 1 ? 'Transaction' : 'Transactions'})</span>
                 </td>
                 <td className="p-3 text-right">
