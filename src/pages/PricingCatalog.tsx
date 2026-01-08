@@ -15,6 +15,7 @@ import {
   Eye,
   MoreVertical,
   Tag,
+  X,
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -36,11 +37,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MOCK_PRICING_ITEMS } from "@/data/pricing-catalog.mock";
 import { PricingItem, PricingCategory, PricingStatus } from "@/types/pricing-catalog";
 import { formatINR } from "@/utils/currency";
 import { useDebounce } from "@/hooks/useDebounce";
+import { toast } from "sonner";
 
 const PricingCatalog = () => {
   const navigate = useNavigate();
@@ -49,17 +57,53 @@ const PricingCatalog = () => {
   const [statusFilter, setStatusFilter] = useState<PricingStatus | "All">("All");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("name");
+  const [viewItem, setViewItem] = useState<PricingItem | null>(null);
+  const [items, setItems] = useState<PricingItem[]>(MOCK_PRICING_ITEMS);
+
+  const handleViewDetails = (item: PricingItem) => {
+    setViewItem(item);
+  };
+
+  const handleEdit = (item: PricingItem) => {
+    navigate(`/pricing-catalog/edit/${item.id}`);
+  };
+
+  const handleDuplicate = (item: PricingItem) => {
+    const duplicatedItem: PricingItem = {
+      ...item,
+      id: `${item.id}-copy-${Date.now()}`,
+      name: `${item.name} (Copy)`,
+      codes: {
+        ...item.codes,
+        internal: `${item.codes.internal}-COPY`,
+      },
+      status: "Draft" as PricingStatus,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setItems((prev) => [duplicatedItem, ...prev]);
+    toast.success(`"${item.name}" duplicated successfully`);
+  };
+
+  const handleArchive = (item: PricingItem) => {
+    setItems((prev) =>
+      prev.map((i) =>
+        i.id === item.id ? { ...i, status: "Archived" as PricingStatus } : i
+      )
+    );
+    toast.success(`"${item.name}" archived successfully`);
+  };
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
   // Filter and sort items
   const filteredItems = useMemo(() => {
-    let items = [...MOCK_PRICING_ITEMS];
+    let filtered = [...items];
 
     // Search filter
     if (debouncedSearch) {
       const query = debouncedSearch.toLowerCase();
-      items = items.filter(
+      filtered = filtered.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
           item.codes.internal.toLowerCase().includes(query) ||
@@ -70,16 +114,16 @@ const PricingCatalog = () => {
 
     // Category filter
     if (categoryFilter !== "All") {
-      items = items.filter((item) => item.category === categoryFilter);
+      filtered = filtered.filter((item) => item.category === categoryFilter);
     }
 
     // Status filter
     if (statusFilter !== "All") {
-      items = items.filter((item) => item.status === statusFilter);
+      filtered = filtered.filter((item) => item.status === statusFilter);
     }
 
     // Sort
-    items.sort((a, b) => {
+    filtered.sort((a, b) => {
       switch (sortBy) {
         case "name":
           return a.name.localeCompare(b.name);
@@ -96,8 +140,8 @@ const PricingCatalog = () => {
       }
     });
 
-    return items;
-  }, [debouncedSearch, categoryFilter, statusFilter, sortBy]);
+    return filtered;
+  }, [items, debouncedSearch, categoryFilter, statusFilter, sortBy]);
 
   const toggleItem = (itemId: string) => {
     setSelectedItems((prev) =>
@@ -321,20 +365,32 @@ const PricingCatalog = () => {
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem className="gap-2">
+                            <DropdownMenuContent align="end" className="bg-background z-50">
+                              <DropdownMenuItem 
+                                className="gap-2 cursor-pointer"
+                                onClick={() => handleViewDetails(item)}
+                              >
                                 <Eye className="h-4 w-4" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="gap-2">
+                              <DropdownMenuItem 
+                                className="gap-2 cursor-pointer"
+                                onClick={() => handleEdit(item)}
+                              >
                                 <Edit className="h-4 w-4" />
                                 Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="gap-2">
+                              <DropdownMenuItem 
+                                className="gap-2 cursor-pointer"
+                                onClick={() => handleDuplicate(item)}
+                              >
                                 <Copy className="h-4 w-4" />
                                 Duplicate
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="gap-2 text-destructive">
+                              <DropdownMenuItem 
+                                className="gap-2 text-destructive cursor-pointer"
+                                onClick={() => handleArchive(item)}
+                              >
                                 <Archive className="h-4 w-4" />
                                 Archive
                               </DropdownMenuItem>
@@ -349,6 +405,155 @@ const PricingCatalog = () => {
             </Card>
           )}
         </main>
+
+        {/* View Details Dialog */}
+        <Dialog open={!!viewItem} onOpenChange={(open) => !open && setViewItem(null)}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                {viewItem?.name}
+                {viewItem && (
+                  <Badge variant="outline" className={getStatusColor(viewItem.status)}>
+                    {viewItem.status}
+                  </Badge>
+                )}
+              </DialogTitle>
+            </DialogHeader>
+            
+            {viewItem && (
+              <div className="space-y-6">
+                {/* Basic Info */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Category</p>
+                    <p className="text-sm font-medium">{viewItem.category}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Department</p>
+                    <p className="text-sm font-medium">{viewItem.department}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Unit</p>
+                    <p className="text-sm font-medium capitalize">{viewItem.unit}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Availability</p>
+                    <p className="text-sm font-medium">{viewItem.availability}</p>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Description</p>
+                  <p className="text-sm">{viewItem.description}</p>
+                </div>
+
+                {/* Codes */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2">Codes</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary" className="font-mono">
+                      Internal: {viewItem.codes.internal}
+                    </Badge>
+                    {viewItem.codes.cpt && (
+                      <Badge variant="secondary" className="font-mono">
+                        CPT: {viewItem.codes.cpt}
+                      </Badge>
+                    )}
+                    {viewItem.codes.icd && (
+                      <Badge variant="secondary" className="font-mono">
+                        ICD: {viewItem.codes.icd}
+                      </Badge>
+                    )}
+                    {viewItem.codes.hcpcs && (
+                      <Badge variant="secondary" className="font-mono">
+                        HCPCS: {viewItem.codes.hcpcs}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {/* Pricing */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2">Pricing Details</p>
+                  <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Cost</p>
+                      <p className="text-sm font-medium">{formatINR(viewItem.pricing.cost)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Base Price</p>
+                      <p className="text-sm font-medium">{formatINR(viewItem.pricing.basePrice)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Net Price</p>
+                      <p className="text-sm font-semibold text-primary">{formatINR(viewItem.pricing.netPrice)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Markup</p>
+                      <p className="text-sm font-medium">{viewItem.pricing.markupPct}%</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Discount</p>
+                      <p className="text-sm font-medium">{viewItem.pricing.discountPct}%</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Tax</p>
+                      <p className="text-sm font-medium">{viewItem.pricing.taxPct}%</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tier Pricing */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2">Tier Pricing</p>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="p-3 border rounded-lg">
+                      <p className="text-xs text-muted-foreground">Cash</p>
+                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.cash)}</p>
+                    </div>
+                    <div className="p-3 border rounded-lg">
+                      <p className="text-xs text-muted-foreground">Insurance</p>
+                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.insurance)}</p>
+                    </div>
+                    <div className="p-3 border rounded-lg">
+                      <p className="text-xs text-muted-foreground">Corporate</p>
+                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.corporate)}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {viewItem.tags.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">Tags</p>
+                    <div className="flex flex-wrap gap-2">
+                      {viewItem.tags.map((tag) => (
+                        <Badge key={tag} variant="outline">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex justify-end gap-2 pt-4 border-t">
+                  <Button variant="outline" onClick={() => setViewItem(null)}>
+                    Close
+                  </Button>
+                  <Button onClick={() => {
+                    setViewItem(null);
+                    handleEdit(viewItem);
+                  }}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Item
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </PageContent>
     </div>
   );
