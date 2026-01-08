@@ -25,13 +25,13 @@ export function AdvanceTransactionsTable({
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Transaction ID</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Date</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Reason</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Payer</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Amount</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Status</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Actions</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">TRANSACTION ID</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">DATE</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">REASON</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">PAYER</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">AMOUNT</th>
+              <th className="text-center text-xs font-medium text-muted-foreground p-4 uppercase">STATUS</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">ACTIONS</th>
             </tr>
           </thead>
           <tbody className="bg-background">
@@ -45,7 +45,7 @@ export function AdvanceTransactionsTable({
                   {txn.amount >= 0 ? "+" : ""}
                   {formatINR(Math.abs(txn.amount))}
                 </td>
-                <td className="p-4 text-sm">
+                <td className="p-4 text-sm text-center">
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
                       txn.status === "Success"

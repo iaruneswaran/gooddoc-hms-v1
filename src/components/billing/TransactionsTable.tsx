@@ -107,16 +107,16 @@ export function TransactionsTable({
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Transaction ID</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Date</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Type</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Category</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Service/Reason</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Method</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Party</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Amount</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Status</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4">Actions</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">TRANSACTION ID</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">DATE</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">TYPE</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">CATEGORY</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">SERVICE/REASON</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">METHOD</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">PARTY</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">AMOUNT</th>
+              <th className="text-center text-xs font-medium text-muted-foreground p-4 uppercase">STATUS</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">ACTIONS</th>
             </tr>
           </thead>
           <tbody className="bg-background">
@@ -142,7 +142,7 @@ export function TransactionsTable({
                       {formatINR(Math.abs(txn.amount))}
                     </span>
                   </td>
-                  <td className="p-4 text-sm">
+                  <td className="p-4 text-sm text-center">
                     <span
                       className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
                         txn.status === "Success"
