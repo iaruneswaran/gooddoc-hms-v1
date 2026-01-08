@@ -260,11 +260,11 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                     </td>
                     <td className="p-3 text-right">
                       <p className="text-xs text-muted-foreground">Paid</p>
-                      <span className="text-sm text-foreground">{formatINR(visitBills.reduce((sum, b) => sum + b.paidAmount, 0))}</span>
+                      <span className="text-sm font-medium text-emerald-600">{formatINR(visitBills.reduce((sum, b) => sum + b.paidAmount, 0))}</span>
                     </td>
                     <td className="p-3 text-right">
                       <p className="text-xs text-muted-foreground">Balance</p>
-                      <span className="text-sm font-medium text-foreground">{formatINR(visitBills.reduce((sum, b) => sum + b.balance, 0))}</span>
+                      <span className="text-sm font-medium text-red-600">{formatINR(visitBills.reduce((sum, b) => sum + b.balance, 0))}</span>
                     </td>
                     <td colSpan={2}></td>
                   </tr>
