@@ -108,24 +108,24 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Receipt No.</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Date & Time</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Invoice</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
-                <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Payment Mode</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Amount</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {visitTransactions.map((txn) => (
                 <tr key={txn.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="p-3">
+                  <td className="p-3 text-left">
                     <p className="text-sm font-medium text-primary">{formatReceiptNo(txn.receiptNo)}</p>
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 text-left">
                     <p className="text-sm text-foreground">{txn.date}</p>
                     <p className="text-xs text-muted-foreground">{txn.time}</p>
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 text-left">
                     {txn.invoiceNos.length === 0 ? (
                       <span className="text-xs text-muted-foreground">—</span>
                     ) : txn.invoiceNos.length === 1 ? (
@@ -136,36 +136,34 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                       </p>
                     )}
                   </td>
-                  <td className="p-3 text-center">
+                  <td className="p-3 text-left">
                     {getTypeBadge(txn.type)}
                   </td>
-                  <td className="p-3">
-                    <div className="flex justify-center">
-                      {txn.methods && txn.methods.length > 0 ? (
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/40 rounded-md">
-                          {txn.methods.map((method, idx) => (
-                            <span key={idx} className="flex items-center gap-1">
-                              {getMethodIcon(method)}
-                              <span className="text-xs text-foreground">{method}</span>
-                              {idx < txn.methods.length - 1 && <span className="text-xs text-muted-foreground">,</span>}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">—</span>
-                      )}
-                    </div>
+                  <td className="p-3 text-left">
+                    {txn.methods && txn.methods.length > 0 ? (
+                      <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/40 rounded-md w-fit">
+                        {txn.methods.map((method, idx) => (
+                          <span key={idx} className="flex items-center gap-1">
+                            {getMethodIcon(method)}
+                            <span className="text-xs text-foreground">{method}</span>
+                            {idx < txn.methods.length - 1 && <span className="text-xs text-muted-foreground">,</span>}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
                   </td>
-                  <td className="p-3 text-right">
+                  <td className="p-3 text-left">
                     <p className={`text-sm font-semibold ${txn.type === "Refund" ? "text-blue-600" : "text-emerald-600"}`}>
                       {txn.type === "Refund" ? "-" : ""}{formatINR(txn.amount)}
                     </p>
                   </td>
-                  <td className="p-3 text-center">
+                  <td className="p-3 text-left">
                     {getStatusBadge(txn.status)}
                   </td>
-                  <td className="p-3">
-                    <div className="flex justify-center gap-1">
+                  <td className="p-3 text-left">
+                    <div className="flex gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                         <Download className="h-3.5 w-3.5" />
                       </Button>
