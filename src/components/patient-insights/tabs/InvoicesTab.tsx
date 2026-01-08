@@ -90,11 +90,11 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
                     <p className="text-xs text-muted-foreground">{invoice.time}</p>
                   </td>
                   <td className="p-3">
-                    <p className="text-sm font-medium text-foreground">{invoice.service}</p>
+                    <p className="text-sm text-foreground">{invoice.service}</p>
                     <p className="text-xs text-muted-foreground">{invoice.doctor} • {invoice.department}</p>
                   </td>
                   <td className="p-3 text-right">
-                    <p className="text-sm font-semibold text-foreground">{formatINR(invoice.totalAmount)}</p>
+                    <p className="text-sm text-foreground">{formatINR(invoice.totalAmount)}</p>
                     {invoice.originalAmount !== invoice.totalAmount && (
                       <p className="text-xs text-muted-foreground line-through">{formatINR(invoice.originalAmount)}</p>
                     )}

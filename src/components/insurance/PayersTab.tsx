@@ -131,11 +131,11 @@ export function PayersTab() {
           <TableBody>
             {mockPayers.map((payer) => (
               <TableRow key={payer.id}>
-                <TableCell className="font-medium">{payer.name}</TableCell>
+                <TableCell className="text-sm">{payer.name}</TableCell>
                 <TableCell>
                   <Badge className={getTypeColor(payer.type)}>{payer.type}</Badge>
                 </TableCell>
-                <TableCell className="font-mono text-sm">{payer.code}</TableCell>
+                <TableCell className="text-sm">{payer.code}</TableCell>
                 <TableCell>{payer.submission}</TableCell>
                 <TableCell>{payer.tat} days</TableCell>
                 <TableCell className="text-sm">{payer.contact}</TableCell>

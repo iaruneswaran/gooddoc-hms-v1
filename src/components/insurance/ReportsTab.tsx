@@ -172,8 +172,8 @@ export function ReportsTab() {
             <TableBody>
               {denials.map((denial) => (
                 <TableRow key={denial.claimNo}>
-                  <TableCell className="font-medium">{denial.claimNo}</TableCell>
-                  <TableCell>{denial.payer}</TableCell>
+                  <TableCell className="text-sm">{denial.claimNo}</TableCell>
+                  <TableCell className="text-sm">{denial.payer}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <AlertCircle className="h-4 w-4 text-red-600" />
@@ -221,9 +221,9 @@ export function ReportsTab() {
                 const percentage = ((bucket.amount / total) * 100).toFixed(1);
                 return (
                   <TableRow key={bucket.range}>
-                    <TableCell className="font-medium">{bucket.range}</TableCell>
-                    <TableCell>{bucket.count}</TableCell>
-                    <TableCell className="font-medium">{formatINR(bucket.amount)}</TableCell>
+                    <TableCell className="text-sm">{bucket.range}</TableCell>
+                    <TableCell className="text-sm">{bucket.count}</TableCell>
+                    <TableCell className="text-sm">{formatINR(bucket.amount)}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">

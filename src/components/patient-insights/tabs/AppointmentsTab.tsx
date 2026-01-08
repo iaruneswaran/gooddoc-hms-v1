@@ -237,7 +237,7 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
                     <td className="px-4 py-3">
                       {appointment.tokenNo ? (
                         <div>
-                          <p className="text-sm font-mono font-medium text-foreground">{appointment.tokenNo}</p>
+                          <p className="text-sm text-foreground">{appointment.tokenNo}</p>
                           <p className="text-xs text-muted-foreground">{appointment.tokenTime}</p>
                         </div>
                       ) : (

@@ -105,19 +105,19 @@ export function ClaimsTable({
 
               return (
                 <TableRow key={claim.id} className="hover:bg-muted/30">
-                  <TableCell className="font-medium">{claim.claimNo}</TableCell>
+                  <TableCell className="text-sm">{claim.claimNo}</TableCell>
                   <TableCell className="text-sm">{dateOfService}</TableCell>
                   <TableCell className="text-sm">
                     {claim.patient?.name || "—"}
                   </TableCell>
                   <TableCell className="text-sm">{primaryService}</TableCell>
-                  <TableCell className="text-right font-medium">
+                  <TableCell className="text-right text-sm">
                     {formatINR(claim.amounts.billed)}
                   </TableCell>
-                  <TableCell className="text-right font-medium text-green-600">
+                  <TableCell className="text-right text-sm text-emerald-600">
                     {formatINR(claim.amounts.insurancePaid)}
                   </TableCell>
-                  <TableCell className="text-right font-medium text-orange-600">
+                  <TableCell className="text-right text-sm text-orange-600">
                     {formatINR(claim.amounts.balance)}
                   </TableCell>
                   <TableCell>

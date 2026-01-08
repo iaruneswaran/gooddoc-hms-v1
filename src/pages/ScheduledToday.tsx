@@ -200,7 +200,7 @@ const AppointmentRequests = () => {
                     <span className="text-muted-foreground text-xs">{row.preferredDate}</span>
                   </div>
                 </TableCell>
-                <TableCell className="font-medium">{requestId}</TableCell>
+                <TableCell className="text-sm">{requestId}</TableCell>
                 <TableCell>{row.preferredProvider || "Any"}</TableCell>
                 <TableCell>{row.department}</TableCell>
                 <TableCell>
@@ -284,7 +284,7 @@ const AppointmentRequests = () => {
                 <span className="text-muted-foreground text-xs">{row.email}</span>
               </div>
             </TableCell>
-            <TableCell className="font-medium">{row.orderId}</TableCell>
+            <TableCell className="text-sm">{row.orderId}</TableCell>
             <TableCell>{row.testType}</TableCell>
             <TableCell>{row.orderedBy}</TableCell>
             <TableCell>
@@ -372,7 +372,7 @@ const AppointmentRequests = () => {
                 <span className="text-muted-foreground text-xs">{row.email}</span>
               </div>
             </TableCell>
-            <TableCell className="font-medium">{row.appointmentId}</TableCell>
+            <TableCell className="text-sm">{row.appointmentId}</TableCell>
             <TableCell>
               <div className="flex flex-col">
                 <span>{row.scheduledTime}</span>

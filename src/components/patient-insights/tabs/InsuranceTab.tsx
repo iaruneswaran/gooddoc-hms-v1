@@ -459,8 +459,8 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                       <div className="text-xs text-muted-foreground">{claim.submissionTime}</div>
                     </td>
                     <td className="p-3">
-                      <div className="text-sm font-medium text-foreground">{claim.service}</div>
-                      <div className="text-xs text-muted-foreground font-mono">{claim.icdCode}</div>
+                      <div className="text-sm text-foreground">{claim.service}</div>
+                      <div className="text-xs text-muted-foreground">{claim.icdCode}</div>
                     </td>
                     <td className="p-3">
                       <span className="text-sm text-foreground max-w-[150px] truncate block" title={claim.diagnosis}>
@@ -468,20 +468,20 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                       </span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className="text-sm font-medium text-foreground">₹{claim.billedAmount.toLocaleString()}</span>
+                      <span className="text-sm text-foreground">₹{claim.billedAmount.toLocaleString()}</span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className={`text-sm font-medium ${claim.approvedAmount > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
+                      <span className={`text-sm ${claim.approvedAmount > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
                         {claim.approvedAmount > 0 ? `₹${claim.approvedAmount.toLocaleString()}` : '—'}
                       </span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className={`text-sm font-medium ${claim.paidAmount > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+                      <span className={`text-sm ${claim.paidAmount > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
                         {claim.paidAmount > 0 ? `₹${claim.paidAmount.toLocaleString()}` : '—'}
                       </span>
                     </td>
                     <td className="p-3 text-right">
-                      <span className={`text-sm font-medium ${claim.patientLiability > 0 ? 'text-orange-600' : 'text-muted-foreground'}`}>
+                      <span className={`text-sm ${claim.patientLiability > 0 ? 'text-orange-600' : 'text-muted-foreground'}`}>
                         ₹{claim.patientLiability.toLocaleString()}
                       </span>
                     </td>

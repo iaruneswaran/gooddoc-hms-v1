@@ -420,7 +420,7 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
                   <td className="p-3">
                     <div className="flex items-center gap-2">
                       {getDocumentIcon(doc.type, doc.format)}
-                      <span className="text-sm font-medium text-foreground truncate">{doc.name}</span>
+                      <span className="text-sm text-foreground truncate">{doc.name}</span>
                     </div>
                   </td>
                   <td className="p-3">

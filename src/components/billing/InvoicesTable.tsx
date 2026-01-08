@@ -24,21 +24,21 @@ export function InvoicesTable({
       <table className="w-full">
         <thead className="bg-muted/50">
           <tr>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4 w-12">
+            <th className="text-left text-xs font-medium text-muted-foreground p-4 w-12">
               <Checkbox
                 checked={allSelected}
                 onCheckedChange={onToggleAll}
                 aria-label="Select all invoices"
               />
             </th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Invoice No</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Service</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Total Amount</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Partially Paid</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Balance</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
-            <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Invoice No</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Date</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Service</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Total Amount</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Partially Paid</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Balance</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Status</th>
+            <th className="text-left text-xs font-medium text-muted-foreground p-4">Actions</th>
           </tr>
         </thead>
         <tbody className="bg-background">
@@ -51,16 +51,16 @@ export function InvoicesTable({
                   aria-label={`Select invoice ${invoice.id}`}
                 />
               </td>
-              <td className="p-4 text-sm font-medium">{invoice.id}</td>
+              <td className="p-4 text-sm">{invoice.id}</td>
               <td className="p-4 text-sm">{invoice.date}</td>
               <td className="p-4 text-sm">{invoice.service}</td>
-              <td className="p-4 text-sm font-medium text-primary">
+              <td className="p-4 text-sm">
                 {formatINR(invoice.totalAmount)}
               </td>
               <td className="p-4 text-sm text-muted-foreground">
                 {formatINR(invoice.partiallyPaid)}
               </td>
-              <td className="p-4 text-sm font-semibold text-primary">
+              <td className="p-4 text-sm text-foreground">
                 {formatINR(invoice.balance)}
               </td>
               <td className="p-4 text-sm">

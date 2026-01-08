@@ -107,16 +107,16 @@ export function TransactionsTable({
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Transaction ID</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Date</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Type</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Category</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Service/Reason</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Method</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Party</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Amount</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Status</th>
-              <th className="text-left text-sm font-medium text-muted-foreground p-4">Actions</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Transaction ID</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Date</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Type</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Category</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Service/Reason</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Method</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Party</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Amount</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Status</th>
+              <th className="text-left text-xs font-medium text-muted-foreground p-4">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-background">
@@ -129,15 +129,15 @@ export function TransactionsTable({
             ) : (
               filteredTransactions.map((txn) => (
                 <tr key={txn.id} className="border-t hover:bg-muted/20 transition-colors">
-                  <td className="p-4 text-sm font-medium">{txn.id}</td>
+                  <td className="p-4 text-sm">{txn.id}</td>
                   <td className="p-4 text-sm">{txn.date}</td>
                   <td className="p-4 text-sm capitalize">{txn.type}</td>
                   <td className="p-4 text-sm">{txn.category}</td>
                   <td className="p-4 text-sm">{txn.serviceOrReason}</td>
                   <td className="p-4 text-sm capitalize">{txn.method}</td>
                   <td className="p-4 text-sm">{txn.party}</td>
-                  <td className="p-4 text-sm font-semibold">
-                    <span className={txn.amount >= 0 ? "text-green-600" : "text-red-600"}>
+                  <td className="p-4 text-sm">
+                    <span className={txn.amount >= 0 ? "text-emerald-600" : "text-red-600"}>
                       {txn.amount >= 0 ? "+" : "-"}
                       {formatINR(Math.abs(txn.amount))}
                     </span>
