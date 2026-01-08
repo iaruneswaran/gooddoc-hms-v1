@@ -235,7 +235,7 @@ export function TimelineTab({ selectedVisit }: TimelineTabProps) {
             {visitTransfers.map((transfer) => (
               <TableRow key={transfer.id} className="hover:bg-muted/30">
                 <TableCell className="py-3">
-                  <p className="text-sm font-mono text-foreground">{transfer.visitId}</p>
+                  <p className="text-sm text-foreground">{transfer.visitId}</p>
                 </TableCell>
                 <TableCell className="py-3">
                   <div className="text-sm font-medium text-foreground">

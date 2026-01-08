@@ -83,7 +83,7 @@ export function InvoicesTab({ selectedVisit }: InvoicesTabProps) {
                 <tr key={invoice.id} className="hover:bg-muted/20 transition-colors">
                   <td className="p-3">
                     <p className="text-sm text-primary">{formatInvoiceNo(invoice.invoiceNo)}</p>
-                    <p className="text-xs font-mono text-muted-foreground">{invoice.serviceCode}</p>
+                    <p className="text-xs text-muted-foreground">{invoice.serviceCode}</p>
                   </td>
                   <td className="p-3">
                     <p className="text-sm text-foreground">{invoice.date}</p>
