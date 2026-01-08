@@ -177,15 +177,15 @@ export function AppointmentsTab({ selectedVisit, patient }: AppointmentsTabProps
           <table className="w-full">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">VISIT ID</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">DATE</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">TIME</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">TYPE</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">DOCTOR</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">ORDERED BY</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">STATUS</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">TOKEN</th>
-                <th className="text-left text-xs font-normal text-muted-foreground px-4 py-3 uppercase">ACTIONS</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">VISIT ID</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">DATE</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">TIME</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">TYPE</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">DOCTOR</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">ORDERED BY</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">STATUS</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">TOKEN</th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3 uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">

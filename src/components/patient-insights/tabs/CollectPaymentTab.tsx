@@ -180,20 +180,20 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
               <table className="w-full">
                 <thead className="bg-muted/30">
                   <tr>
-                    <th className="text-center text-xs font-normal text-muted-foreground p-3 w-10">
+                    <th className="text-center billing-label p-3 w-10">
                       <Checkbox
                         checked={selectedBillIds.length === visitBills.length && visitBills.length > 0}
                         onCheckedChange={toggleSelectAll}
                       />
                     </th>
-                    <th className="text-left text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">INVOICE NO.</th>
-                    <th className="text-left text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">DATE & TIME</th>
-                    <th className="text-left text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">SERVICE / DOCTOR</th>
-                    <th className="text-right text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">AMOUNT</th>
-                    <th className="text-right text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">PAID</th>
-                    <th className="text-right text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">BALANCE</th>
-                    <th className="text-center text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
-                    <th className="text-center text-xs font-normal text-muted-foreground p-3 whitespace-nowrap uppercase">ACTIONS</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap uppercase">INVOICE NO.</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap uppercase">DATE & TIME</th>
+                    <th className="text-left billing-label p-3 whitespace-nowrap uppercase">SERVICE / DOCTOR</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap uppercase">AMOUNT</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap uppercase">PAID</th>
+                    <th className="text-right billing-label p-3 whitespace-nowrap uppercase">BALANCE</th>
+                    <th className="text-center billing-label p-3 whitespace-nowrap uppercase">STATUS</th>
+                    <th className="text-center billing-label p-3 whitespace-nowrap uppercase">ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
