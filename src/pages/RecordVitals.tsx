@@ -89,7 +89,14 @@ export default function RecordVitals() {
   // Patient selection state
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Filter patients based on search query
+  const filteredPatients = samplePatients.filter(patient =>
+    patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    patient.gdid.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -250,56 +257,63 @@ export default function RecordVitals() {
 
             {/* Patient Selection */}
             <Card className="p-6 mb-6">
+              <Label className="text-sm font-medium text-foreground mb-3 block">Select Patient</Label>
               <div className="relative" ref={searchRef}>
-                <Command shouldFilter={true} className="border rounded-lg">
-                  <CommandInput 
-                    placeholder="Search and select a patient..." 
-                    className="h-12"
-                    onFocus={() => setOpen(true)}
-                  />
-                  {open && (
-                    <div className="absolute top-full left-0 right-0 z-50 mt-1 border rounded-lg bg-popover shadow-md">
-                      <CommandEmpty className="py-6 text-center text-sm">No patient found.</CommandEmpty>
-                      <CommandGroup className="max-h-[300px] overflow-auto p-2">
-                        {samplePatients.map((patient) => (
-                          <CommandItem
+                <Input
+                  placeholder="Search patient by name or GDID..."
+                  className="h-10"
+                  onFocus={() => setOpen(true)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                />
+                {open && (
+                  <div className="absolute top-full left-0 right-0 z-50 mt-1 border rounded-lg bg-popover shadow-md max-h-[320px] overflow-auto">
+                    {filteredPatients.length === 0 ? (
+                      <div className="py-6 text-center text-sm text-muted-foreground">No patient found.</div>
+                    ) : (
+                      <div className="divide-y">
+                        {filteredPatients.map((patient) => (
+                          <div
                             key={patient.id}
-                            value={`${patient.name} GDID${patient.gdid} ${patient.age} ${patient.gender}`}
-                            keywords={[patient.name, patient.gdid, patient.age.toString(), patient.gender]}
-                            onSelect={() => {
+                            onClick={() => {
                               setSelectedPatient({
                                 ...patient,
                                 visitId: generateVisitId(),
                               });
                               setOpen(false);
+                              setSearchQuery("");
                             }}
-                            className="cursor-pointer rounded-md"
+                            className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50 transition-colors"
                           >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                selectedPatient?.id === patient.id ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            <div className="flex-1">
-                              <div className="text-sm font-medium">{patient.name}</div>
+                            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                              <span className="text-xs font-medium text-muted-foreground">
+                                {patient.name.charAt(0)}
+                              </span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-primary">{patient.name}</div>
                               <div className="text-xs text-muted-foreground">
-                                GDID-{patient.gdid} • {patient.age} | {patient.gender}
+                                GDID-{patient.gdid} • {patient.age}y • {patient.gender === "M" ? "Male" : "Female"}
                               </div>
                             </div>
-                          </CommandItem>
+                          </div>
                         ))}
-                      </CommandGroup>
-                    </div>
-                  )}
-                </Command>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
                 {selectedPatient && (
-                  <div className="mt-3 p-3 bg-muted/50 rounded-lg flex items-center justify-between">
-                    <div>
-                      <div className="text-sm font-medium">{selectedPatient.name}</div>
+                  <div className="mt-3 p-3 bg-muted/50 rounded-lg flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <span className="text-xs font-medium text-primary">
+                        {selectedPatient.name.charAt(0)}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-primary">{selectedPatient.name}</div>
                       <div className="text-xs text-muted-foreground">
-                        GDID-{selectedPatient.gdid} • {selectedPatient.age} | {selectedPatient.gender}
+                        GDID-{selectedPatient.gdid} • {selectedPatient.age}y • {selectedPatient.gender === "M" ? "Male" : "Female"}
                       </div>
                     </div>
                     <Button
