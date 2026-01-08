@@ -383,7 +383,7 @@ export default function DoctorsList() {
         
         <main className="p-6">
           {/* Header */}
-          <Card className="p-6 mb-8">
+          <Card className="p-6 mb-6">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Doctors</h1>
               <div className="flex gap-3 items-center">
