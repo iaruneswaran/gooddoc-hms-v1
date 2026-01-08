@@ -155,7 +155,7 @@ const TransferPatient = () => {
         ]} />
         
         {/* Fixed Header */}
-        <div className="h-[72px] bg-background border-b border-border flex-shrink-0 flex items-center justify-between px-6">
+        <div className="h-[72px] bg-background border-b border-border flex-shrink-0 flex items-center px-6">
           {/* Back Button */}
           <button
             onClick={handleCancel}
@@ -164,19 +164,6 @@ const TransferPatient = () => {
             <ChevronLeft className="h-4 w-4" />
             <span className="font-semibold">Back to Patient</span>
           </button>
-
-          {/* Patient Info */}
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">{patient.name}</p>
-              <p className="text-xs text-muted-foreground">
-                GDID-{patient.gdid} • {patient.age}Y / {patient.gender.charAt(0)}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Main Content */}
