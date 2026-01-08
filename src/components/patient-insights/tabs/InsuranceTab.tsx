@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Download, Printer, Eye, FileText, AlertCircle, CheckCircle2, Clock, XCircle, RefreshCw, ExternalLink } from "lucide-react";
+import { Download, Printer, FileText, AlertCircle, CheckCircle2, Clock, XCircle, RefreshCw, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Visit } from "../VisitListItem";
@@ -495,9 +495,6 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                     </td>
                     <td className="p-3">
                       <div className="flex gap-1">
-                        <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="View Details">
-                          <Eye className="h-4 w-4" />
-                        </button>
                         <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="Download">
                           <Download className="h-4 w-4" />
                         </button>

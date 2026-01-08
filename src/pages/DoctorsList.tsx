@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, MoreVertical, Eye, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock, Stethoscope } from "lucide-react";
+import { Plus, MoreVertical, Edit, Calendar, Ban, CheckCircle, PlusCircle, ChevronRight, Users, UserCheck, Clock, Stethoscope } from "lucide-react";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import {
   DropdownMenu,
@@ -481,7 +481,6 @@ export default function DoctorsList() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleView(doctor)}>
-                          <Eye className="w-4 h-4 mr-2" />
                           View
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEdit(doctor.id)}>
