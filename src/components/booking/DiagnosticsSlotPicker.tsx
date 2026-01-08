@@ -167,16 +167,12 @@ export function DiagnosticsSlotPicker({
                       variant={isSelected ? "default" : "outline"}
                       size="sm"
                       className={cn(
-                        "h-auto py-2 px-3 flex flex-col items-start gap-0.5 min-w-[100px]",
+                        "h-8 px-3",
                         isSelected && "ring-2 ring-primary ring-offset-2"
                       )}
                       onClick={() => onTimeSelect(slot.time)}
                     >
                       <span className="font-medium">{slot.displayTime}</span>
-                      <span className="text-[10px] opacity-70 flex items-center gap-1">
-                        <MapPin className="h-2.5 w-2.5" />
-                        {locationName}
-                      </span>
                     </Button>
                   );
                 })}
