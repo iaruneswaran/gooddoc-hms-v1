@@ -175,13 +175,14 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-muted/40 border-t-2">
+            <tfoot className="bg-muted/50 border-t border-border">
               <tr>
                 <td colSpan={5} className="p-3 text-right">
-                  <span className="text-sm font-semibold text-foreground">Total Collected:</span>
+                  <span className="text-xs text-muted-foreground">Total ({visitTransactions.filter(t => t.status === "Success").length} {visitTransactions.filter(t => t.status === "Success").length === 1 ? 'Transaction' : 'Transactions'})</span>
                 </td>
                 <td className="p-3 text-right">
-                  <span className="text-sm font-semibold text-emerald-600">{formatINR(totalPaid)}</span>
+                  <p className="text-xs text-muted-foreground">Collected</p>
+                  <span className="billing-amount-success">{formatINR(totalPaid)}</span>
                 </td>
                 <td colSpan={2}></td>
               </tr>
