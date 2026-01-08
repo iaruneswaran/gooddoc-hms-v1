@@ -117,10 +117,8 @@ const MedicineOrdersToday = () => {
       label: "Payment Status",
       value: "all",
       options: [
-        { value: "Paid", label: "Paid" },
         { value: "Pending", label: "Pending" },
         { value: "Partially Paid", label: "Partially Paid" },
-        { value: "Waived", label: "Waived" },
       ],
     },
   ];
@@ -129,8 +127,12 @@ const MedicineOrdersToday = () => {
     { label: "View Order Summary", onClick: (row) => handleViewSummary(row) },
   ];
 
-  // Sort by priority (Stat first), then order time
-  const sortedOrders = [...medicineOrders].sort((a, b) => {
+  // Filter to only show Pending and Partially Paid, then sort by priority (Stat first), then order time
+  const filteredOrders = medicineOrders.filter(
+    (order) => order.paymentStatus === "Pending" || order.paymentStatus === "Partially Paid"
+  );
+
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
     if (a.priority === "Stat" && b.priority !== "Stat") return -1;
     if (a.priority !== "Stat" && b.priority === "Stat") return 1;
     return new Date(b.orderTime).getTime() - new Date(a.orderTime).getTime();
@@ -140,7 +142,7 @@ const MedicineOrdersToday = () => {
     <>
       <ListPageLayout
         title="Medicine Orders Today"
-        count={medicineOrders.length}
+        count={filteredOrders.length}
         breadcrumbs={["Overview", "Medicine Orders Today"]}
         columns={columns}
         data={sortedOrders}
