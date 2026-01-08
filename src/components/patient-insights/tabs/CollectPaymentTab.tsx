@@ -191,8 +191,8 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                     <th className="text-left billing-label p-3 whitespace-nowrap">Service / Doctor</th>
                     <th className="text-right billing-label p-3 whitespace-nowrap">Amount</th>
                     <th className="text-right billing-label p-3 whitespace-nowrap">Paid</th>
-                    <th className="text-right billing-label p-3 whitespace-nowrap">Balance</th>
-                    <th className="text-center billing-label p-3 whitespace-nowrap">Status</th>
+                    <th className="text-right billing-label p-3 pr-6 whitespace-nowrap">Balance</th>
+                    <th className="text-left billing-label p-3 pl-6 whitespace-nowrap">Status</th>
                     <th className="text-center billing-label p-3 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
@@ -230,10 +230,10 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
                           {bill.paidAmount > 0 ? formatINR(bill.paidAmount) : "—"}
                         </p>
                       </td>
-                      <td className="p-3 text-right">
+                      <td className="p-3 pr-6 text-right">
                         <p className="billing-value">{formatINR(bill.balance)}</p>
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3 pl-6 text-left">
                         {getStatusBadge(bill.status)}
                       </td>
                       <td className="p-3">
