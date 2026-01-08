@@ -84,15 +84,15 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border">
-              <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-              <th className="text-left py-2 font-medium text-muted-foreground">Code</th>
-              <th className="text-left py-2 font-medium text-muted-foreground">Description</th>
-              <th className="text-left py-2 font-medium text-muted-foreground">Clinician</th>
-              <th className="text-right py-2 font-medium text-muted-foreground">Qty</th>
-              <th className="text-left py-2 font-medium text-muted-foreground">UOM</th>
-              <th className="text-right py-2 font-medium text-muted-foreground">Rate</th>
-              <th className="text-right py-2 font-medium text-muted-foreground">Tax</th>
-              <th className="text-right py-2 font-medium text-muted-foreground">Total</th>
+              <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">DATE</th>
+              <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">CODE</th>
+              <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">DESCRIPTION</th>
+              <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">CLINICIAN</th>
+              <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">QTY</th>
+              <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">UOM</th>
+              <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">RATE</th>
+              <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">TAX</th>
+              <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">TOTAL</th>
             </tr>
           </thead>
           <tbody>
@@ -261,13 +261,13 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Ward/Room</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Room Type</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Bed Type</th>
-                    <th className="text-right py-2 font-medium text-muted-foreground">Days</th>
-                    <th className="text-right py-2 font-medium text-muted-foreground">Rate</th>
-                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">DATE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">WARD/ROOM</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">ROOM TYPE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">BED TYPE</th>
+                    <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">DAYS</th>
+                    <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">RATE</th>
+                    <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -308,10 +308,10 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Type</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Reason</th>
-                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">DATE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">TYPE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">REASON</th>
+                    <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -335,11 +335,11 @@ const InterimBill = ({ onProceedToPayment }: InterimBillProps) => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Method</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Reference</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Remarks</th>
-                    <th className="text-right py-2 font-medium text-muted-foreground">Amount</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">DATE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">METHOD</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">REFERENCE</th>
+                    <th className="text-left py-2 text-xs font-semibold text-muted-foreground uppercase">REMARKS</th>
+                    <th className="text-right py-2 text-xs font-semibold text-muted-foreground uppercase">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody>
