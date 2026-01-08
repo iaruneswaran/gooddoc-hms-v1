@@ -5,7 +5,7 @@ import { MainLayout } from "@/components/MainLayout";
 import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { EnhancedCalendarWidget } from "@/components/calendar/EnhancedCalendarWidget";
 
 const BedsAvailability = () => {
@@ -41,6 +41,10 @@ const BedsAvailability = () => {
                 showQuickDays={false}
                 showSubtext={true}
               />
+              <Button onClick={() => navigate("/beds/add")}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Beds
+              </Button>
             </div>
           </div>
         </Card>
