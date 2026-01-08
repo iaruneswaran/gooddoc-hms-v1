@@ -18,13 +18,20 @@ interface BedTransferModalProps {
   selectedBed?: BedMapItem;
 }
 
-// Mock IP patients for search
+// Mock IP patients list
 const mockIPPatients = [
   { id: 'MRN0100001', gdid: '001', name: 'Harish Kalyan', age: 44, gender: 'Male', ward: 'Ward A', room: 'Room 102', bed: 'WA-102-1', tariff: 3500 },
   { id: 'MRN0100002', gdid: '002', name: 'Priya Sharma', age: 32, gender: 'Female', ward: 'Ward B', room: 'Room 201', bed: 'WB-201-2', tariff: 3000 },
   { id: 'MRN0100003', gdid: '003', name: 'Rajesh Kumar', age: 56, gender: 'Male', ward: 'ICU', room: 'ICU Bay 1', bed: 'IC-02', tariff: 15000 },
   { id: 'MRN0100004', gdid: '004', name: 'Anjali Menon', age: 28, gender: 'Female', ward: 'Step-Down Unit', room: 'SD Bay 1', bed: 'SD-02', tariff: 8000 },
   { id: 'MRN0100005', gdid: '005', name: 'Suresh Nair', age: 61, gender: 'Male', ward: 'Private Wing', room: 'Suite 402', bed: 'PW-402', tariff: 12000 },
+  { id: 'MRN0100006', gdid: '006', name: 'Lakshmi Devi', age: 72, gender: 'Female', ward: 'Ward A', room: 'Room 105', bed: 'WA-105-2', tariff: 3500 },
+  { id: 'MRN0100007', gdid: '007', name: 'Vikram Singh', age: 38, gender: 'Male', ward: 'Ward B', room: 'Room 203', bed: 'WB-203-1', tariff: 3000 },
+  { id: 'MRN0100008', gdid: '008', name: 'Meena Kumari', age: 55, gender: 'Female', ward: 'ICU', room: 'ICU Bay 2', bed: 'IC-04', tariff: 15000 },
+  { id: 'MRN0100009', gdid: '009', name: 'Arjun Reddy', age: 29, gender: 'Male', ward: 'Emergency', room: 'ER Bay 3', bed: 'ER-06', tariff: 2500 },
+  { id: 'MRN0100010', gdid: '010', name: 'Kavitha Rao', age: 48, gender: 'Female', ward: 'Private Wing', room: 'Suite 405', bed: 'PW-405', tariff: 12000 },
+  { id: 'MRN0100011', gdid: '011', name: 'Mohammed Ali', age: 65, gender: 'Male', ward: 'Ward A', room: 'Room 108', bed: 'WA-108-1', tariff: 3500 },
+  { id: 'MRN0100012', gdid: '012', name: 'Sunita Patel', age: 41, gender: 'Female', ward: 'Step-Down Unit', room: 'SD Bay 2', bed: 'SD-04', tariff: 8000 },
 ];
 
 export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransferModalProps) {
@@ -45,9 +52,9 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
     }
   }, [open]);
 
-  // Filter patients based on search
+  // Filter patients based on search (show all if no search query)
   const filteredPatients = useMemo(() => {
-    if (!searchQuery.trim()) return [];
+    if (!searchQuery.trim()) return mockIPPatients;
     const query = searchQuery.toLowerCase();
     return mockIPPatients.filter(
       p => p.name.toLowerCase().includes(query) || 
@@ -114,10 +121,10 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
                 />
               </div>
               
-              {/* Search Results */}
-              {filteredPatients.length > 0 && (
-                <div className="border rounded-lg divide-y max-h-48 overflow-y-auto bg-card">
-                  {filteredPatients.map((patient) => (
+              {/* Patient List */}
+              <div className="border rounded-lg divide-y max-h-64 overflow-y-auto bg-card">
+                {filteredPatients.length > 0 ? (
+                  filteredPatients.map((patient) => (
                     <button
                       key={patient.id}
                       onClick={() => handlePatientSelect(patient)}
@@ -136,9 +143,13 @@ export function BedTransferModal({ open, onOpenChange, selectedBed }: BedTransfe
                         {patient.ward} • {patient.bed}
                       </Badge>
                     </button>
-                  ))}
-                </div>
-              )}
+                  ))
+                ) : (
+                  <div className="p-4 text-center text-sm text-muted-foreground">
+                    No patients found
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <>
