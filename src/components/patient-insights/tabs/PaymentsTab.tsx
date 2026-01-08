@@ -119,7 +119,7 @@ export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
               {visitTransactions.map((txn) => (
                 <tr key={txn.id} className="hover:bg-muted/20 transition-colors">
                   <td className="p-3 text-left">
-                    <p className="text-sm text-primary">{formatReceiptNo(txn.receiptNo)}</p>
+                    <p className="text-sm text-foreground">{formatReceiptNo(txn.receiptNo)}</p>
                   </td>
                   <td className="p-3 text-left">
                     <p className="text-sm text-foreground">{txn.date}</p>
