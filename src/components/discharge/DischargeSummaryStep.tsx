@@ -186,12 +186,12 @@ export default function DischargeSummaryStep({
           <table className="w-full text-sm">
             <thead className="bg-muted/50">
               <tr>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DOCUMENT NO.</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DOCUMENT NAME</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DATE & TIME</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">SERVICE</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">PREPARED / VERIFIED BY</th>
-                <th className="text-center py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">ACTIONS</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NO.</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NAME</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase">DATE & TIME</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase">SERVICE</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase">PREPARED / VERIFIED BY</th>
+                <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody>
