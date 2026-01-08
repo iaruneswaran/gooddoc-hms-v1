@@ -246,7 +246,7 @@ export default function RecordVitals() {
               <span className="font-semibold">Patients</span>
             </button>
 
-            <h1 className="text-lg font-semibold text-foreground mb-6">Record Vitals</h1>
+            
 
             {/* Patient Selection */}
             <Card className="p-6 mb-6">
