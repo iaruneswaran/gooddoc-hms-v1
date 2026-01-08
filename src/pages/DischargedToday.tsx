@@ -117,7 +117,9 @@ const DischargedToday = () => {
     {
       key: "status",
       label: "Status",
-      render: () => <Badge className="bg-green-100 text-green-700">Settled</Badge>,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: () => <Badge className="bg-green-100 text-green-700 min-w-[80px] justify-center">Settled</Badge>,
     },
   ];
 

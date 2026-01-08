@@ -30,8 +30,10 @@ const LabOrdersToday = () => {
       key: "status",
       label: "Status",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={`${statusStyles[row.status]} min-w-[90px] justify-center`}>{row.status}</Badge>
       ),
     },
     { key: "specimenType", label: "Specimen Type" },
@@ -53,8 +55,10 @@ const LabOrdersToday = () => {
     {
       key: "criticalResult",
       label: "Critical Result",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => row.criticalResult ? (
-        <Badge className="bg-red-100 text-red-700">Yes</Badge>
+        <Badge className="bg-red-100 text-red-700 min-w-[50px] justify-center">Yes</Badge>
       ) : (
         <span className="text-muted-foreground">No</span>
       ),

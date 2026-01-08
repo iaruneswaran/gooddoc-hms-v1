@@ -59,8 +59,10 @@ const RadiologyOrdersToday = () => {
       key: "modality",
       label: "Modality",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={modalityStyles[row.modality]}>{row.modality}</Badge>
+        <Badge className={`${modalityStyles[row.modality]} min-w-[70px] justify-center`}>{row.modality}</Badge>
       ),
     },
     { key: "exam", label: "Exam" },
@@ -68,8 +70,10 @@ const RadiologyOrdersToday = () => {
       key: "status",
       label: "Status",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={`${statusStyles[row.status]} min-w-[90px] justify-center`}>{row.status}</Badge>
       ),
     },
     { 
@@ -91,8 +95,10 @@ const RadiologyOrdersToday = () => {
     {
       key: "contrast",
       label: "Contrast",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => row.contrast ? (
-        <Badge className="bg-amber-100 text-amber-700">Yes</Badge>
+        <Badge className="bg-amber-100 text-amber-700 min-w-[50px] justify-center">Yes</Badge>
       ) : (
         <span className="text-muted-foreground">No</span>
       ),

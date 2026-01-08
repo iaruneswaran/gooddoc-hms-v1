@@ -48,11 +48,13 @@ const IPPatients = () => {
       key: "ipStatus",
       label: "Status",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
         <Badge 
-          className={row.ipStatus === "admitted" 
+          className={`min-w-[100px] justify-center ${row.ipStatus === "admitted" 
             ? "bg-green-100 text-green-700 border-green-200" 
-            : "bg-gray-100 text-gray-700 border-gray-200"}
+            : "bg-gray-100 text-gray-700 border-gray-200"}`}
         >
           {row.ipStatus === "admitted" ? "Admitted" : "Discharged"}
         </Badge>

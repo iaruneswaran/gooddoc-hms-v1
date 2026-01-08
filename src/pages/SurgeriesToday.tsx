@@ -56,8 +56,10 @@ const SurgeriesToday = () => {
       label: "Status",
       sortable: true,
       width: "130px",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={`${statusStyles[row.status]} min-w-[100px] justify-center`}>{row.status}</Badge>
       ),
     },
     { key: "anesthesiaType", label: "Anesthesia Type" },
