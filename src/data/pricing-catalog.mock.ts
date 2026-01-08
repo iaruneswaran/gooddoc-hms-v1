@@ -354,7 +354,7 @@ export const MOCK_PRICING_ITEMS: PricingItem[] = [
       effectiveTo: null,
     },
     branchOverrides: [],
-    status: "Draft",
+    status: "Published",
     tags: ["surgery", "appendix", "laparoscopic"],
     turnaroundTime: "N/A",
     requiresDoctorOrder: true,
