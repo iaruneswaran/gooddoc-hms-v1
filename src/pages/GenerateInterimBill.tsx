@@ -582,16 +582,16 @@ const GenerateInterimBill = () => {
                             <div className="space-y-2">
                               <Label className="text-xs font-medium text-muted-foreground">Bill Documents</Label>
                               <div className="border rounded-md overflow-hidden">
-                                <div className="overflow-x-auto max-h-60">
-                                  <table className="w-full min-w-[800px] text-xs">
+                                <div className="max-h-60 overflow-y-auto">
+                                  <table className="w-full text-xs table-fixed">
                                     <thead className="bg-muted sticky top-0 z-10">
                                       <tr>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DOCUMENT NO.</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DOCUMENT NAME</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DATE & TIME</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">SERVICE</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">PREPARED / VERIFIED BY</th>
-                                        <th className="text-center py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">ACTIONS</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase w-[100px]">DOCUMENT NO.</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NAME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase w-[100px]">DATE & TIME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase w-[110px]">SERVICE</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase w-[140px]">PREPARED BY</th>
+                                        <th className="text-center py-2 px-3 text-xs font-medium text-muted-foreground uppercase w-[80px]">ACTIONS</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -603,20 +603,15 @@ const GenerateInterimBill = () => {
                                         return (
                                           <tr key={line.id} className="border-t border-border/50">
                                             <td className="py-2 px-3 text-foreground">{docNo}</td>
-                                            <td className="py-2 px-3">{line.itemName}</td>
+                                            <td className="py-2 px-3 truncate">{line.itemName}</td>
                                             <td className="py-2 px-3">
                                               <div className="flex flex-col">
-                                                <span>{line.date}</span>
+                                                <span>{line.date.split(',')[0]}</span>
                                                 <span className="text-muted-foreground text-[10px]">10:00 AM</span>
                                               </div>
                                             </td>
-                                            <td className="py-2 px-3">{line.department}</td>
-                                            <td className="py-2 px-3">
-                                              <div className="flex flex-col">
-                                                <span>Dr. Arun Kumar</span>
-                                                <span className="text-muted-foreground text-[10px]">Dr. Arun Kumar</span>
-                                              </div>
-                                            </td>
+                                            <td className="py-2 px-3 truncate">{line.department}</td>
+                                            <td className="py-2 px-3 truncate">Dr. Arun Kumar</td>
                                             <td className="py-2 px-3">
                                               <div className="flex items-center justify-center gap-1">
                                                 <Button variant="ghost" size="icon" className="h-6 w-6">
