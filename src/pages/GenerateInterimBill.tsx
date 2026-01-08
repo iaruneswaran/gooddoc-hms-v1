@@ -583,15 +583,15 @@ const GenerateInterimBill = () => {
                               <Label className="text-xs font-medium text-muted-foreground">Bill Documents</Label>
                               <div className="border rounded-md overflow-hidden">
                                 <div className="overflow-x-auto max-h-60">
-                                  <table className="w-full text-xs">
+                                  <table className="w-full min-w-[800px] text-xs">
                                     <thead className="bg-muted sticky top-0 z-10">
                                       <tr>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NO.</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NAME</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DATE & TIME</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">SERVICE</th>
-                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">PREPARED / VERIFIED BY</th>
-                                        <th className="text-center py-2 px-3 text-xs font-medium text-muted-foreground uppercase">ACTIONS</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DOCUMENT NO.</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DOCUMENT NAME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">DATE & TIME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">SERVICE</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">PREPARED / VERIFIED BY</th>
+                                        <th className="text-center py-2 px-3 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">ACTIONS</th>
                                       </tr>
                                     </thead>
                                     <tbody>
