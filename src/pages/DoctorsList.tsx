@@ -388,7 +388,7 @@ export default function DoctorsList() {
               <h1 className="text-lg font-semibold text-foreground">Doctors</h1>
               <div className="flex gap-3 items-center">
                 <CalendarWidget />
-                <Button onClick={() => navigate("/doctors/new")} className="mb-6">
+                <Button onClick={() => navigate("/doctors/new")}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Doctor
                 </Button>
