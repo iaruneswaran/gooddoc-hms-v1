@@ -429,17 +429,17 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
             <table className="w-full">
               <thead className="bg-muted/30">
                 <tr>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Claim No.</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Type</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Submitted</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Service / ICD</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Diagnosis</th>
-                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Billed</th>
-                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Approved</th>
-                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Paid</th>
-                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Patient Due</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Status</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap">Actions</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">CLAIM NO.</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">TYPE</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">SUBMITTED</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">SERVICE / ICD</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">DIAGNOSIS</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">BILLED</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">APPROVED</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PAID</th>
+                  <th className="text-right text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">PATIENT DUE</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">STATUS</th>
+                  <th className="text-left text-xs font-medium text-muted-foreground p-3 whitespace-nowrap uppercase">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-card">

@@ -403,12 +403,12 @@ export function DocumentsTab({ selectedVisit }: DocumentsTabProps) {
           <table className="w-full table-fixed">
             <thead className="bg-muted/30">
               <tr>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[100px]">Document No.</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px]">Document Name</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[120px]">Date & Time</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[160px]">Service</th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px]">Prepared / Verified By</th>
-                <th className="text-center text-xs font-medium text-muted-foreground p-3 w-[120px]">Actions</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[100px] uppercase">DOCUMENT NO.</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px] uppercase">DOCUMENT NAME</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[120px] uppercase">DATE & TIME</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[160px] uppercase">SERVICE</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 w-[200px] uppercase">PREPARED / VERIFIED BY</th>
+                <th className="text-center text-xs font-medium text-muted-foreground p-3 w-[120px] uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-card">
