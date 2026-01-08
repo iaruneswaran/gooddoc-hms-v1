@@ -446,7 +446,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                 {visitClaims.map((claim) => (
                   <tr key={claim.id} className="border-t hover:bg-muted/20 transition-colors">
                     <td className="p-3">
-                      <p className="text-sm font-mono text-primary">{claim.claimNo}</p>
+                      <p className="text-sm text-primary">{claim.claimNo}</p>
                       {claim.preAuthNo && (
                         <p className="text-xs text-muted-foreground mt-0.5">PA: {claim.preAuthNo}</p>
                       )}
