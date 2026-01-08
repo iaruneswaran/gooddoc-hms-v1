@@ -586,12 +586,12 @@ const GenerateInterimBill = () => {
                                   <table className="w-full text-xs">
                                     <thead className="bg-muted sticky top-0 z-10">
                                       <tr>
-                                        <th className="text-left py-2 px-3 font-medium">Document No.</th>
-                                        <th className="text-left py-2 px-3 font-medium">Document Name</th>
-                                        <th className="text-left py-2 px-3 font-medium">Date & Time</th>
-                                        <th className="text-left py-2 px-3 font-medium">Service</th>
-                                        <th className="text-left py-2 px-3 font-medium">Prepared / Verified By</th>
-                                        <th className="text-center py-2 px-3 font-medium">Actions</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NO.</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DOCUMENT NAME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DATE & TIME</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">SERVICE</th>
+                                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">PREPARED / VERIFIED BY</th>
+                                        <th className="text-center py-2 px-3 text-xs font-medium text-muted-foreground uppercase">ACTIONS</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -602,7 +602,7 @@ const GenerateInterimBill = () => {
                                         const docNo = `${docPrefix}${String(100 + index).padStart(3, '0')}`;
                                         return (
                                           <tr key={line.id} className="border-t border-border/50">
-                                            <td className="py-2 px-3 font-mono text-primary">{docNo}</td>
+                                            <td className="py-2 px-3 text-foreground">{docNo}</td>
                                             <td className="py-2 px-3">{line.itemName}</td>
                                             <td className="py-2 px-3">
                                               <div className="flex flex-col">
@@ -645,9 +645,9 @@ const GenerateInterimBill = () => {
                                 <table className="w-full text-xs">
                                   <thead className="bg-muted/50">
                                     <tr>
-                                      <th className="text-left py-2 px-3 font-medium">Location</th>
-                                      <th className="text-right py-2 px-3 font-medium">Duration</th>
-                                      <th className="text-right py-2 px-3 font-medium">Amount</th>
+                                      <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">LOCATION</th>
+                                      <th className="text-right py-2 px-3 text-xs font-medium text-muted-foreground uppercase">DURATION</th>
+                                      <th className="text-right py-2 px-3 text-xs font-medium text-muted-foreground uppercase">AMOUNT</th>
                                     </tr>
                                   </thead>
                                   <tbody>
