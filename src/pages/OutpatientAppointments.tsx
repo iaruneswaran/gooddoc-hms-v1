@@ -275,14 +275,14 @@ export default function OutpatientAppointments() {
             <TabsContent value="scheduled">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className={`${gridClasses} border-b border-border bg-muted/30`}>
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
-                  <div className="text-xs font-medium text-muted-foreground">Department</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">PATIENT INFO</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONTACT DETAILS</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONSULTING DOCTOR</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">DEPARTMENT</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONSULTATION TYPE</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">VITALS STATUS</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">TOKEN & TIME</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">ACTION</div>
                 </div>
                 {scheduledAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">
@@ -297,14 +297,14 @@ export default function OutpatientAppointments() {
             <TabsContent value="visited">
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className={`${gridClasses} border-b border-border bg-muted/30`}>
-                  <div className="text-xs font-medium text-muted-foreground">Patient Info</div>
-                  <div className="text-xs font-medium text-muted-foreground">Contact Details</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consulting Doctor</div>
-                  <div className="text-xs font-medium text-muted-foreground">Department</div>
-                  <div className="text-xs font-medium text-muted-foreground">Consultation Type</div>
-                  <div className="text-xs font-medium text-muted-foreground">Vitals Status</div>
-                  <div className="text-xs font-medium text-muted-foreground">Token & Time</div>
-                  <div className="text-xs font-medium text-muted-foreground">Action</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">PATIENT INFO</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONTACT DETAILS</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONSULTING DOCTOR</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">DEPARTMENT</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">CONSULTATION TYPE</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">VITALS STATUS</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">TOKEN & TIME</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase">ACTION</div>
                 </div>
                 {visitedAppointments.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground text-sm">

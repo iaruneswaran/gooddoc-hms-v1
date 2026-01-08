@@ -61,17 +61,17 @@ export function BranchOverrides() {
           <table className="w-full">
             <thead className="bg-muted/50">
               <tr>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                  Branch
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                  BRANCH
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                  Base Price (₹)
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                  BASE PRICE (₹)
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                  Tax (%)
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                  TAX (%)
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground p-3">
-                  Net Price (₹)
+                <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                  NET PRICE (₹)
                 </th>
                 <th className="w-12 p-3"></th>
               </tr>

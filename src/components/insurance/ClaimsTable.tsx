@@ -84,15 +84,15 @@ export function ClaimsTable({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="font-semibold">Claim No</TableHead>
-              <TableHead className="font-semibold">Date of Service</TableHead>
-              <TableHead className="font-semibold">Patient</TableHead>
-              <TableHead className="font-semibold">Service</TableHead>
-              <TableHead className="font-semibold text-right">Billed</TableHead>
-              <TableHead className="font-semibold text-right">Insurance Paid</TableHead>
-              <TableHead className="font-semibold text-right">Balance</TableHead>
-              <TableHead className="font-semibold">Status</TableHead>
-              <TableHead className="font-semibold text-center">Actions</TableHead>
+              <TableHead>CLAIM NO</TableHead>
+              <TableHead>DATE OF SERVICE</TableHead>
+              <TableHead>PATIENT</TableHead>
+              <TableHead>SERVICE</TableHead>
+              <TableHead className="text-right">BILLED</TableHead>
+              <TableHead className="text-right">INSURANCE PAID</TableHead>
+              <TableHead className="text-right">BALANCE</TableHead>
+              <TableHead className="text-center">STATUS</TableHead>
+              <TableHead className="text-center">ACTIONS</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
