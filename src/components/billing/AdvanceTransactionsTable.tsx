@@ -25,13 +25,14 @@ export function AdvanceTransactionsTable({
         <table className="w-full">
           <thead className="bg-muted/50">
             <tr>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">TRANSACTION ID</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">DATE</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">REASON</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">PAYER</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">AMOUNT</th>
-              <th className="text-center text-xs font-medium text-muted-foreground p-4 uppercase">STATUS</th>
-              <th className="text-left text-xs font-medium text-muted-foreground p-4 uppercase">ACTIONS</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground p-4 uppercase">RECEIPT NO.</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground p-4 uppercase">DATE & TIME</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground p-4 uppercase">REASON</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground p-4 uppercase">NAME</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground p-4 uppercase">METHOD</th>
+              <th className="text-right text-xs font-semibold text-muted-foreground p-4 uppercase">AMOUNT</th>
+              <th className="text-center text-xs font-semibold text-muted-foreground p-4 uppercase">STATUS</th>
+              <th className="text-center text-xs font-semibold text-muted-foreground p-4 uppercase">ACTIONS</th>
             </tr>
           </thead>
           <tbody className="bg-background">

@@ -186,19 +186,19 @@ export default function DischargeSummaryStep({
           <table className="w-full text-sm">
             <thead className="bg-muted/50">
               <tr>
-                <th className="text-left py-3 px-4 font-medium text-muted-foreground">Document No.</th>
-                <th className="text-left py-3 px-4 font-medium text-muted-foreground">Document Name</th>
-                <th className="text-left py-3 px-4 font-medium text-muted-foreground">Date & Time</th>
-                <th className="text-left py-3 px-4 font-medium text-muted-foreground">Service</th>
-                <th className="text-left py-3 px-4 font-medium text-muted-foreground">Prepared / Verified By</th>
-                <th className="text-center py-3 px-4 font-medium text-muted-foreground">Actions</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DOCUMENT NO.</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DOCUMENT NAME</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">DATE & TIME</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">SERVICE</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">PREPARED / VERIFIED BY</th>
+                <th className="text-center py-3 px-4 text-xs font-semibold text-muted-foreground uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               {DISCHARGE_DOCUMENTS.map((doc) => (
                 <tr key={doc.id} className="border-t border-border/50 hover:bg-muted/30">
-                  <td className="py-3 px-4 font-mono text-primary">{doc.docNo}</td>
-                  <td className="py-3 px-4 font-medium">{doc.name}</td>
+                  <td className="py-3 px-4 text-foreground">{doc.docNo}</td>
+                  <td className="py-3 px-4">{doc.name}</td>
                   <td className="py-3 px-4">
                     <div className="flex flex-col">
                       <span>{doc.date}</span>
