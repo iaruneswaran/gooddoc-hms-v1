@@ -62,6 +62,7 @@ import AdvancePayments from "./pages/AdvancePayments";
 import DiagnosticsList from "./pages/DiagnosticsList";
 import PatientAdvanceCollection from "./pages/PatientAdvanceCollection";
 import GenerateInterimBill from "./pages/GenerateInterimBill";
+import AddBed from "./pages/AddBed";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -114,6 +115,7 @@ const App = () => (
             <Route path="/patients/op" element={<OPPatientsToday />} />
             <Route path="/patients/ip" element={<IPPatients />} />
             <Route path="/patients/check-in" element={<CheckInPatients />} />
+            <Route path="/beds/add" element={<AddBed />} />
             <Route path="/patients/discharged" element={<DischargedToday />} />
             <Route path="/doctors/on-duty" element={<DoctorsOnDuty />} />
             <Route path="/schedule/today" element={<ScheduledToday />} />
