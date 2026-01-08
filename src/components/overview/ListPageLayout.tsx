@@ -49,6 +49,8 @@ export interface Column<T> {
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
   width?: string;
+  headerClassName?: string;
+  cellClassName?: string;
 }
 
 export interface Filter {
@@ -307,11 +309,11 @@ export function ListPageLayout<T>({
                       {columns.map((col) => (
                         <TableHead
                           key={String(col.key)}
-                          className={col.sortable ? "cursor-pointer select-none" : ""}
+                          className={`${col.sortable ? "cursor-pointer select-none" : ""} ${col.headerClassName || ""}`}
                           style={col.width ? { width: col.width, minWidth: col.width } : undefined}
                           onClick={() => col.sortable && handleSort(String(col.key))}
                         >
-                          <div className="flex items-center gap-1">
+                          <div className={`flex items-center gap-1 ${col.headerClassName?.includes("text-center") ? "justify-center" : ""}`}>
                             {col.label}
                             {col.sortable && (
                               <ArrowUpDown className="w-3 h-3 text-muted-foreground" />
@@ -336,7 +338,7 @@ export function ListPageLayout<T>({
                         }}
                       >
                         {columns.map((col) => (
-                          <TableCell key={String(col.key)} style={col.width ? { width: col.width, minWidth: col.width } : undefined}>
+                          <TableCell key={String(col.key)} className={col.cellClassName} style={col.width ? { width: col.width, minWidth: col.width } : undefined}>
                             {col.render
                               ? col.render(row)
                               : String((row as any)[col.key] ?? "-")}
