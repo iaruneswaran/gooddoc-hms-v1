@@ -110,8 +110,10 @@ const OPPatientsToday = () => {
       key: "status",
       label: "Status",
       sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={statusStyles[row.status]}>{row.status}</Badge>
+        <Badge className={`${statusStyles[row.status]} min-w-[120px] justify-center`}>{row.status}</Badge>
       ),
     },
     { 
