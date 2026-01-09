@@ -131,7 +131,7 @@ export function PaymentSettlementModal({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-5xl min-h-[520px] p-0 gap-0 border-0">
+        <DialogContent className="max-w-5xl min-h-[520px] p-0 gap-0 border-0 flex flex-col">
           {/* Header */}
           <div className="bg-primary px-6 h-20 flex flex-col justify-center rounded-t-lg">
             <h2 className="text-base font-semibold text-white">Payment Settlement</h2>
@@ -143,7 +143,7 @@ export function PaymentSettlementModal({
           </div>
 
           {/* Horizontal Layout Content */}
-          <div className="flex divide-x divide-border">
+          <div className="flex divide-x divide-border flex-1">
             {/* Left Section - Bill Summary */}
             <div className="flex-1 p-6 flex flex-col">
               <div className="space-y-2.5">
@@ -210,8 +210,8 @@ export function PaymentSettlementModal({
             </div>
 
             {/* Middle Section - Split Payment */}
-            <div className="flex-1 p-6 space-y-4">
-              <div className="flex items-center justify-between">
+            <div className="flex-1 p-6 flex flex-col">
+              <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-medium">Split Payment</span>
                 <button
                   onClick={resetDistribution}
@@ -278,7 +278,7 @@ export function PaymentSettlementModal({
                 </button>
               </div>
 
-              <div className="space-y-3 pt-4 border-t border-border">
+              <div className="space-y-3 pt-4 border-t border-border mt-auto">
                 <span className="text-sm font-medium">Payer Details</span>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
