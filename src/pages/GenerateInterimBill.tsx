@@ -240,7 +240,12 @@ const GenerateInterimBill = () => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-lg font-semibold">Generate Interim Bill</h1>
+            <div>
+              <h1 className="text-lg font-semibold">Generate Interim Bill</h1>
+              <p className="text-sm text-muted-foreground">
+                Admission: {admissionId} • Patient: {patientName}
+              </p>
+            </div>
           </div>
         </div>
         
