@@ -30,18 +30,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { 
   Search, 
-  Download, 
-  Printer, 
   X, 
   ChevronLeft, 
   ChevronRight,
   MoreHorizontal,
-  LayoutGrid,
-  TableIcon,
   ArrowUpDown,
   RefreshCw,
   ArrowLeft
 } from "lucide-react";
+import { CalendarWidget } from "@/components/CalendarWidget";
 
 export interface Column<T> {
   key: keyof T | string;
@@ -93,7 +90,6 @@ interface ListPageLayoutProps<T> {
   getRowId: (row: T) => string;
   urlParamFilters?: UrlParamFilter[];
   customHeaderContent?: React.ReactNode;
-  hideExportPrint?: boolean;
 }
 
 export function ListPageLayout<T>({
@@ -115,7 +111,6 @@ export function ListPageLayout<T>({
   getRowId,
   urlParamFilters = [],
   customHeaderContent,
-  hideExportPrint = false,
 }: ListPageLayoutProps<T>) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -199,18 +194,7 @@ export function ListPageLayout<T>({
               </div>
               <div className="flex items-center gap-4">
                 {customHeaderContent}
-                {!hideExportPrint && (
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Download className="w-4 h-4" />
-                      Export CSV
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Printer className="w-4 h-4" />
-                      Print List
-                    </Button>
-                  </div>
-                )}
+                <CalendarWidget showSubtext={true} />
               </div>
             </div>
           </Card>

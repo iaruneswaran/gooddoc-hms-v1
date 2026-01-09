@@ -1,6 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
-import { CalendarWidget } from "@/components/CalendarWidget";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { doctorsOnDuty, opDoctors, ipDoctors, otherDoctors, DoctorOnDutyRecord } from "@/data/overview.mock";
@@ -268,8 +267,6 @@ const DoctorsOnDuty = () => {
       emptyMessage="No doctors currently on duty."
       searchPlaceholder="Search by name, specialty, department..."
       getRowId={(row) => row.doctorName + row.contactPager}
-      customHeaderContent={<CalendarWidget pageKey="doctors" />}
-      hideExportPrint
     />
   );
 };

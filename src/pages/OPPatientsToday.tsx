@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ListPageLayout, Column, Filter, RowAction, UrlParamFilter } from "@/components/overview/ListPageLayout";
-import { CalendarWidget } from "@/components/CalendarWidget";
 import { Badge } from "@/components/ui/badge";
 import { PatientCell } from "@/components/overview/PatientCell";
 import { opPatients as initialOpPatients, opCompleted, opCheckedIn, opPendingCheckIn, OPPatientRecord } from "@/data/overview.mock";
@@ -217,8 +216,6 @@ const OPPatientsToday = () => {
         searchPlaceholder="Search by MRN, name, Visit ID..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`)}
-        customHeaderContent={<CalendarWidget pageKey="op-patients" />}
-        hideExportPrint={true}
       />
 
       {selectedPatient && (
