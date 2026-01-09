@@ -73,7 +73,7 @@ const RadiologyOrdersToday = () => {
       headerClassName: "text-center",
       cellClassName: "text-center",
       render: (row) => (
-        <Badge className={`${statusStyles[row.status]} min-w-[90px] justify-center`}>{row.status}</Badge>
+        <Badge className={`${statusStyles[row.status]} min-w-[120px] justify-center`}>{row.status}</Badge>
       ),
     },
     { 

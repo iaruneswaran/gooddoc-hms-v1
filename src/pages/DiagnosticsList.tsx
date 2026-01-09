@@ -155,8 +155,10 @@ export default function DiagnosticsList() {
     {
       key: "status",
       label: "Status",
+      headerClassName: "text-center",
+      cellClassName: "text-center",
       render: (row) => (
-        <Badge className={statusStyles[row.status] || "bg-gray-100 text-gray-700"}>
+        <Badge className={`${statusStyles[row.status] || "bg-gray-100 text-gray-700"} min-w-[120px] justify-center`}>
           {row.status}
         </Badge>
       ),
