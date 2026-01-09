@@ -113,7 +113,7 @@ export function OverviewKpiCard({
               key={idx}
               onClick={(e) => handleChipClick(e, chip)}
               className="
-                group/chip flex items-center justify-between px-3 py-2 min-h-[38px] w-[144px]
+                group/chip flex items-end justify-between px-3 py-2 min-h-[38px] w-[144px]
                 bg-white rounded-[16px] border border-[#E6E8ED]
                 transition-colors duration-150
                 hover:border-[#D7DBE0]
@@ -135,7 +135,7 @@ export function OverviewKpiCard({
                 </span>
               </div>
               <ChevronRight 
-                className="w-4 h-4 text-[#9CA3AF] opacity-0 group-hover/chip:opacity-100 transition-opacity duration-150" 
+                className="w-4 h-4 text-[#9CA3AF] opacity-0 group-hover/chip:opacity-100 transition-opacity duration-150 mb-0.5" 
               />
             </button>
           ))}
