@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+const DAY_SIZE = 43;
+
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
@@ -26,10 +28,15 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse",
         head_row: "flex justify-between",
-        head_cell: "text-muted-foreground rounded-md flex-1 text-center font-normal text-[0.8rem]",
+        head_cell: `text-muted-foreground rounded-md w-[${DAY_SIZE}px] text-center font-normal text-[0.8rem]`,
         row: "flex w-full justify-between mt-2",
-        cell: "h-[43px] w-[43px] text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-        day: "h-[43px] w-[43px] p-0 font-normal rounded-md hover:bg-accent hover:text-accent-foreground aria-selected:opacity-100 inline-flex items-center justify-center",
+        cell: `h-[${DAY_SIZE}px] w-[${DAY_SIZE}px] text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20`,
+        day: cn(
+          // Intentionally NOT using buttonVariants to avoid w-9/h-9 conflict
+          "p-0 font-normal rounded-md aria-selected:opacity-100 inline-flex items-center justify-center",
+          "hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          `w-[${DAY_SIZE}px] h-[${DAY_SIZE}px]`
+        ),
         day_range_end: "day-range-end",
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
@@ -40,6 +47,10 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
         ...classNames,
+      }}
+      styles={{
+        day: { width: DAY_SIZE, height: DAY_SIZE, padding: 0 },
+        head_cell: { width: DAY_SIZE },
       }}
       components={{
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
