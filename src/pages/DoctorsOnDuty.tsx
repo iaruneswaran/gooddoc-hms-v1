@@ -267,6 +267,7 @@ const DoctorsOnDuty = () => {
       emptyMessage="No doctors currently on duty."
       searchPlaceholder="Search by name, specialty, department..."
       getRowId={(row) => row.doctorName + row.contactPager}
+      pageKey="doctors"
     />
   );
 };

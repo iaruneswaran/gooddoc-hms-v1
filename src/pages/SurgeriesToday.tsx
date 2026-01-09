@@ -117,6 +117,7 @@ const SurgeriesToday = () => {
       searchPlaceholder="Search by Case ID, patient, procedure, surgeon..."
       getRowId={(row) => row.caseId}
       onRowClick={(row) => navigate(`/patient-insights/${row.caseId}?from=surgeries`)}
+      pageKey="surgeries"
     />
   );
 };

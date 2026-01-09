@@ -257,6 +257,7 @@ export default function DiagnosticsList() {
         breadcrumbs={["Overview", title]}
         emptyMessage="No diagnostics orders found"
         getRowId={(row) => row.id}
+        pageKey="diagnostics"
       />
 
       {selectedOrder && (

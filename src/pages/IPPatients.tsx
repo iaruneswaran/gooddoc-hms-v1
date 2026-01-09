@@ -221,6 +221,7 @@ const IPPatients = () => {
         searchPlaceholder="Search by MRN, name, ward, bed..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
+        pageKey="ip-patients"
       />
 
       {selectedPatient && (

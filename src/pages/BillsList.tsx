@@ -196,6 +196,7 @@ const BillsList = () => {
       searchPlaceholder="Search by Invoice No, patient name, Visit ID..."
       getRowId={(row) => row.billId}
       onRowClick={(row) => console.log("View bill details", row.billId)}
+      pageKey="billing"
     />
   );
 };
