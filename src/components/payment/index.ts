@@ -1,5 +1,6 @@
 // Payment components barrel export
 export { PaymentMethodModal } from './PaymentMethodModal';
+export { PaymentSettlementModal } from './PaymentSettlementModal';
 export { SplitPaymentWizardModal } from './SplitPaymentWizardModal';
 export type { SplitPaymentStep } from './SplitPaymentWizardModal';
 export { CardPaymentFlow } from './CardPaymentFlow';
