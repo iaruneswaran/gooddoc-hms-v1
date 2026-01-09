@@ -5,7 +5,6 @@ import { PatientCell } from "@/components/overview/PatientCell";
 import { ipPatients, newAdmissions, erCasesToday, IPPatientRecord } from "@/data/overview.mock";
 import { Badge } from "@/components/ui/badge";
 import { formatINR } from "@/utils/currency";
-import { CalendarWidget } from "@/components/CalendarWidget";
 import { PaymentDetailsPopup } from "@/components/billing/PaymentDetailsPopup";
 
 const IPPatients = () => {
@@ -222,8 +221,6 @@ const IPPatients = () => {
         searchPlaceholder="Search by MRN, name, ward, bed..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=ip-patients`)}
-        hideExportPrint
-        customHeaderContent={<CalendarWidget pageKey="ip-patients" />}
       />
 
       {selectedPatient && (
