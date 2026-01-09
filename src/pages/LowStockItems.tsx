@@ -121,6 +121,7 @@ const LowStock = () => {
       emptyMessage="No low stock items."
       searchPlaceholder="Search by item name, category, supplier..."
       getRowId={(row) => row.itemName}
+      pageKey="pharmacy"
     />
   );
 };

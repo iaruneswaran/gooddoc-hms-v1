@@ -39,6 +39,7 @@ import {
   ArrowLeft
 } from "lucide-react";
 import { CalendarWidget } from "@/components/CalendarWidget";
+import { PageKey } from "@/lib/pageSubtextConfig";
 
 export interface Column<T> {
   key: keyof T | string;
@@ -90,6 +91,7 @@ interface ListPageLayoutProps<T> {
   getRowId: (row: T) => string;
   urlParamFilters?: UrlParamFilter[];
   customHeaderContent?: React.ReactNode;
+  pageKey?: PageKey;
 }
 
 export function ListPageLayout<T>({
@@ -111,6 +113,7 @@ export function ListPageLayout<T>({
   getRowId,
   urlParamFilters = [],
   customHeaderContent,
+  pageKey = "default",
 }: ListPageLayoutProps<T>) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -194,7 +197,7 @@ export function ListPageLayout<T>({
               </div>
               <div className="flex items-center gap-4">
                 {customHeaderContent}
-                <CalendarWidget showSubtext={true} />
+                <CalendarWidget pageKey={pageKey} showSubtext={true} />
               </div>
             </div>
           </Card>

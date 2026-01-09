@@ -159,6 +159,7 @@ const RadiologyOrdersToday = () => {
       searchPlaceholder="Search by Order ID, patient name, exam..."
       getRowId={(row) => row.orderId}
       onRowClick={(row) => navigate(`/diagnostics/radiology/${row.orderId}`)}
+      pageKey="radiology"
     />
   );
 };

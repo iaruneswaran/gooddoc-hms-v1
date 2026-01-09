@@ -99,6 +99,7 @@ const LabOrdersToday = () => {
       searchPlaceholder="Search by Order ID, patient name, test..."
       getRowId={(row) => row.orderId}
       onRowClick={(row) => navigate(`/diagnostics/lab/${row.orderId}`)}
+      pageKey="lab-results"
     />
   );
 };

@@ -211,6 +211,7 @@ const DischargedToday = () => {
         searchPlaceholder="Search by MRN, name, ward..."
         getRowId={(row) => row.mrn}
         onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=discharged`)}
+        pageKey="discharge"
       />
 
       <Dialog open={showSummary} onOpenChange={setShowSummary}>

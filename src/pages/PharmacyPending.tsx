@@ -154,6 +154,7 @@ const MedicineOrdersToday = () => {
         searchPlaceholder="Search by Order ID, patient name..."
         getRowId={(row) => row.orderId}
         onRowClick={(row) => navigate(`/patient-insights/${row.orderId}?from=pharmacy`)}
+        pageKey="pharmacy"
       />
 
       <Dialog open={showSummary} onOpenChange={setShowSummary}>

@@ -141,6 +141,7 @@ const EmergencyCases = () => {
       searchPlaceholder="Search by MRN, patient name, chief complaint..."
       getRowId={(row) => row.mrn}
       onRowClick={(row) => navigate(`/patient-insights/${row.mrn}?from=emergency`)}
+      pageKey="emergency"
     />
   );
 };
