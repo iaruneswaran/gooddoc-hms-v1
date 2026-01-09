@@ -15,7 +15,7 @@ export interface OPPatientRecord {
   department: string;
   provider: string;
   visitReason: string;
-  status: "Scheduled" | "Pending Check-in" | "Checked-in" | "With Doctor" | "Awaiting Billing" | "Completed" | "No-show" | "Canceled";
+  status: "Scheduled" | "Pending" | "Checked-in" | "With Doctor" | "Awaiting Billing" | "Completed" | "No-show" | "Canceled";
   checkInTime?: string;
   waitingTime?: string;
   tokenQueueNo?: string;
@@ -312,13 +312,13 @@ const now = new Date();
 const today = format(now, "yyyy-MM-dd");
 
 function generateOPPatient(index: number, statusOverride?: OPPatientRecord["status"]): OPPatientRecord {
-  const statuses: OPPatientRecord["status"][] = ["Scheduled", "Pending Check-in", "Checked-in", "With Doctor", "Awaiting Billing", "Completed", "No-show", "Canceled"];
+  const statuses: OPPatientRecord["status"][] = ["Scheduled", "Pending", "Checked-in", "With Doctor", "Awaiting Billing", "Completed", "No-show", "Canceled"];
   const status = statusOverride || statuses[index % statuses.length];
   const appointmentHour = 8 + Math.floor(index / 50);
   const appointmentDate = new Date(now);
   appointmentDate.setHours(appointmentHour, (index * 7) % 60, 0, 0);
   
-  const checkInDate = status !== "Scheduled" && status !== "Pending Check-in" && status !== "No-show" && status !== "Canceled" 
+  const checkInDate = status !== "Scheduled" && status !== "Pending" && status !== "No-show" && status !== "Canceled" 
     ? subMinutes(appointmentDate, Math.floor(Math.random() * 15)) 
     : undefined;
   
@@ -326,8 +326,8 @@ function generateOPPatient(index: number, statusOverride?: OPPatientRecord["stat
     ? Math.floor(Math.random() * 45) + 5 
     : undefined;
 
-  // Token only assigned after check-in (not for Scheduled, Pending Check-in, No-show, Canceled)
-  const hasToken = status !== "Scheduled" && status !== "Pending Check-in" && status !== "No-show" && status !== "Canceled";
+  // Token only assigned after check-in (not for Scheduled, Pending, No-show, Canceled)
+  const hasToken = status !== "Scheduled" && status !== "Pending" && status !== "No-show" && status !== "Canceled";
 
   return {
     mrn: generateMRN(index),
@@ -364,7 +364,7 @@ export const opPatients: OPPatientRecord[] = Array.from({ length: 847 }, (_, i) 
 // Filtered sublists
 export const opCompleted = opPatients.filter(p => p.status === "Completed");
 export const opCheckedIn = opPatients.filter(p => ["Checked-in", "With Doctor", "Awaiting Billing"].includes(p.status));
-export const opPendingCheckIn = opPatients.filter(p => p.status === "Pending Check-in" || p.status === "Checked-in");
+export const opPendingCheckIn = opPatients.filter(p => p.status === "Pending" || p.status === "Checked-in");
 
 // ============== IP PATIENTS ==============
 

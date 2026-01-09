@@ -9,7 +9,7 @@ import { formatINR } from "@/utils/currency";
 import { PaymentDetailsPopup } from "@/components/billing/PaymentDetailsPopup";
 
 const statusStyles: Record<string, string> = {
-  "Pending Check-in": "bg-amber-100 text-amber-700",
+  "Pending": "bg-amber-100 text-amber-700",
   "Checked-in": "bg-blue-100 text-blue-700",
   "Completed": "bg-green-100 text-green-700",
 };
@@ -22,7 +22,7 @@ const OPPatientsToday = () => {
   const [selectedPatient, setSelectedPatient] = useState<OPPatientRecord | null>(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
 
-  const allowedStatuses = ["Pending Check-in", "Checked-in", "Completed"];
+  const allowedStatuses = ["Pending", "Checked-in", "Completed"];
   const filteredByStatus = opPatientsData.filter(p => allowedStatuses.includes(p.status));
 
   let data = filteredByStatus;
@@ -183,7 +183,7 @@ const OPPatientsToday = () => {
       label: "Status",
       value: "all",
       options: [
-        { value: "Pending Check-in", label: "Pending Check-in" },
+        { value: "Pending", label: "Pending" },
         { value: "Checked-in", label: "Checked-in" },
         { value: "Completed", label: "Completed" },
       ],
@@ -197,7 +197,7 @@ const OPPatientsToday = () => {
 
   const rowActions: RowAction<OPPatientRecord>[] = [
     { label: "Patient Insight", onClick: (row) => navigate(`/patient-insights/${row.mrn}?from=op-patients`) },
-    { label: "Check In", onClick: (row) => handleCheckIn(row), hidden: (row) => row.status !== "Pending Check-in" },
+    { label: "Check In", onClick: (row) => handleCheckIn(row), hidden: (row) => row.status !== "Pending" },
     { label: "Payment Details", onClick: (row) => handlePaymentDetails(row) },
   ];
 
