@@ -183,20 +183,22 @@ export function PaymentSettlementModal({
                   </Label>
                 </div>
 
-                <div className={`mt-4 pt-4 border-t border-border space-y-2 ${adjustDeposit ? 'visible' : 'invisible'}`}>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Deposit Used</span>
-                    <span className="text-sm text-red-600">
-                      - {formatINR(Math.min(patientDeposit, totalBalanceAmount))}
-                    </span>
+                {adjustDeposit && (
+                  <div className="mt-4 pt-4 border-t border-border space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Deposit Used</span>
+                      <span className="text-sm text-red-600">
+                        - {formatINR(Math.min(patientDeposit, totalBalanceAmount))}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Remaining Deposit</span>
+                      <span className="text-sm text-foreground">
+                        {formatINR(Math.max(0, patientDeposit - totalBalanceAmount))}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Remaining Deposit</span>
-                    <span className="text-sm text-foreground">
-                      {formatINR(Math.max(0, patientDeposit - totalBalanceAmount))}
-                    </span>
-                  </div>
-                </div>
+                )}
               </div>
 
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
