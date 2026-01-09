@@ -145,7 +145,7 @@ export function PaymentSettlementModal({
           {/* Horizontal Layout Content */}
           <div className="flex divide-x divide-border">
             {/* Left Section - Bill Summary */}
-            <div className="flex-1 p-6 space-y-4">
+            <div className="flex-1 p-6 flex flex-col">
               <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">Gross Bill Amount</span>
@@ -168,7 +168,7 @@ export function PaymentSettlementModal({
                 )}
               </div>
 
-              <div className="bg-muted/30 rounded-lg p-4 border border-border">
+              <div className="bg-muted/30 rounded-lg p-4 border border-border mt-4">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-primary" />
@@ -201,7 +201,7 @@ export function PaymentSettlementModal({
                 )}
               </div>
 
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-auto">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Amount to Collect</span>
                   <span className="text-lg font-semibold text-primary">{formatINR(amountToCollect)}</span>
