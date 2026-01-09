@@ -131,9 +131,9 @@ export function PaymentSettlementModal({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-5xl min-h-[520px] p-0 gap-0">
+        <DialogContent className="max-w-5xl min-h-[520px] p-0 gap-0 border-0">
           {/* Header */}
-          <div className="bg-primary px-6 py-4 rounded-t-lg">
+          <div className="bg-primary px-6 h-20 flex flex-col justify-center rounded-t-lg">
             <h2 className="text-base font-semibold text-white">Payment Settlement</h2>
             <p className="text-sm text-white/80 mt-0.5">
               {selectedBills.length === 1
