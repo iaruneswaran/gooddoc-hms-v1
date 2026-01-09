@@ -70,7 +70,7 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
           disabled={selectedBills.length === 0}
           size="sm"
         >
-          Proceed
+          Payment
         </Button>
       </div>
 
