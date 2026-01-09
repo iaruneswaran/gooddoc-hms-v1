@@ -433,14 +433,7 @@ const AppointmentRequests = () => {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
-                <div>
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-h3 font-semibold text-foreground">Appointment Requests</h1>
-                    <Badge variant="secondary" className="text-lg px-3 py-1">
-                      {getTabCount().toLocaleString()}
-                    </Badge>
-                  </div>
-                </div>
+                <h1 className="text-h3 font-semibold text-foreground">Appointment Requests</h1>
               </div>
               <CalendarWidget pageKey="scheduled-today" />
             </div>
