@@ -10,6 +10,7 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { toast } from "sonner";
 import PendingBillStep from "@/components/discharge/PendingBillStep";
 import DischargeSummaryStep from "@/components/discharge/DischargeSummaryStep";
+import { DischargeConfirmationModal } from "@/components/discharge/DischargeConfirmationModal";
 import {
   SAMPLE_PENDING_BILLS,
   SAMPLE_PATIENT_SNAPSHOT,
@@ -47,6 +48,7 @@ export default function DischargeFlow() {
     2: "pending",
   });
   const [isDirty, setIsDirty] = useState(false);
+  const [showDischargeModal, setShowDischargeModal] = useState(false);
 
   const patient = SAMPLE_PATIENT_SNAPSHOT;
   const config = DEFAULT_DISCHARGE_CONFIG;
@@ -161,17 +163,26 @@ export default function DischargeFlow() {
             )}
             <Button 
               className="h-9"
-              disabled={stepStatuses[1] !== "cleared"}
-              onClick={() => {
-                setStepStatuses(p => ({...p, 2: "finalized"}));
-                toast.success("Patient discharged successfully!");
-                setTimeout(() => navigate(`/patient-insights/${patientId}?from=ip-patients`), 1500);
-              }}
+              onClick={() => setShowDischargeModal(true)}
             >
               Proceed to Discharge
             </Button>
           </div>
         </div>
+
+        {/* Discharge Confirmation Modal */}
+        <DischargeConfirmationModal
+          open={showDischargeModal}
+          onOpenChange={setShowDischargeModal}
+          onConfirm={() => {
+            setStepStatuses(p => ({...p, 2: "finalized"}));
+            toast.success("Patient discharged successfully!");
+            setTimeout(() => navigate(`/patient-insights/${patientId}?from=ip-patients`), 1500);
+          }}
+          patientName={patient.name}
+          mrn={patient.mrn}
+          encounterId="V25-004"
+        />
 
         {/* Step Content */}
         <main className="p-6">
