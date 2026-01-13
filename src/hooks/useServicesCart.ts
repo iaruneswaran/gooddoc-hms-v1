@@ -26,6 +26,7 @@ export function useServicesCart(baseCharge: number = 0) {
           taxPct: service.taxPct,
           qty: 1,
           discountPct: 0,
+          addedAt: new Date().toISOString(),
         },
       ];
     });

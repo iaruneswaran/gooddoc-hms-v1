@@ -70,7 +70,7 @@ const PatientServices = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const [isGeneratingBill, setIsGeneratingBill] = useState(false);
-  const { cart, totals, addToCart, updateQty, removeFromCart } = useServicesCart();
+  const { cart, totals, addToCart, updateQty, updateDiscount, removeFromCart } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -677,6 +677,8 @@ const PatientServices = () => {
                 <div className="p-3 space-y-2">
                   {cart.map((item) => {
                     const Icon = getCategoryIcon(item.category);
+                    const addedDate = new Date(item.addedAt);
+                    const lineTotal = item.unitPrice * item.qty * (1 - (item.discountPct || 0) / 100);
                     return (
                       <Card key={item.itemId} className="shadow-sm border-border">
                         <CardContent className="p-3">
@@ -691,7 +693,14 @@ const PatientServices = () => {
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0">
                                   <p className="text-sm font-medium truncate">{item.name}</p>
-                                  <p className="text-xs text-muted-foreground">{item.code}</p>
+                                  <div className="flex items-center gap-2 mt-0.5">
+                                    <p className="text-xs text-muted-foreground">{item.code}</p>
+                                    <span className="text-muted-foreground">•</span>
+                                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                      <Clock className="w-3 h-3" />
+                                      {format(addedDate, 'dd MMM, HH:mm')}
+                                    </div>
+                                  </div>
                                 </div>
                                 <Button
                                   size="icon"
@@ -702,34 +711,63 @@ const PatientServices = () => {
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </Button>
                               </div>
-                              <div className="flex items-center justify-between mt-2">
-                                <div className="flex items-center gap-1 bg-muted rounded p-0.5">
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-6 w-6"
-                                    onClick={() => updateQty(item.itemId, item.qty - 1)}
-                                    disabled={item.qty <= 1}
-                                  >
-                                    <Minus className="w-3 h-3" />
-                                  </Button>
-                                  <span className="text-xs font-medium w-6 text-center">{item.qty}</span>
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-6 w-6"
-                                    onClick={() => updateQty(item.itemId, item.qty + 1)}
-                                  >
-                                    <Plus className="w-3 h-3" />
-                                  </Button>
+                              
+                              {/* Qty controls and discount */}
+                              <div className="flex items-center justify-between mt-3 pt-2 border-t border-border/50">
+                                <div className="flex items-center gap-3">
+                                  {/* Quantity */}
+                                  <div className="flex items-center gap-1 bg-muted rounded p-0.5">
+                                    <Button
+                                      size="icon"
+                                      variant="ghost"
+                                      className="h-6 w-6"
+                                      onClick={() => updateQty(item.itemId, item.qty - 1)}
+                                      disabled={item.qty <= 1}
+                                    >
+                                      <Minus className="w-3 h-3" />
+                                    </Button>
+                                    <span className="text-xs font-medium w-6 text-center">{item.qty}</span>
+                                    <Button
+                                      size="icon"
+                                      variant="ghost"
+                                      className="h-6 w-6"
+                                      onClick={() => updateQty(item.itemId, item.qty + 1)}
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                    </Button>
+                                  </div>
+                                  
+                                  {/* Discount */}
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-xs text-muted-foreground">Disc:</span>
+                                    <Input
+                                      type="number"
+                                      min="0"
+                                      max="100"
+                                      defaultValue={item.discountPct || 0}
+                                      onBlur={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        if (!isNaN(val) && val >= 0 && val <= 100) {
+                                          updateDiscount(item.itemId, val);
+                                        }
+                                      }}
+                                      className="h-6 w-12 px-1.5 text-xs text-center"
+                                    />
+                                    <span className="text-xs text-muted-foreground">%</span>
+                                  </div>
                                 </div>
+                                
+                                {/* Price */}
                                 <div className="text-right">
                                   <span className="text-sm font-semibold">
-                                    {formatPrice(item.unitPrice * item.qty)}
+                                    {formatPrice(lineTotal)}
                                   </span>
-                                  {item.qty > 1 && (
+                                  {(item.qty > 1 || (item.discountPct && item.discountPct > 0)) && (
                                     <p className="text-xs text-muted-foreground">
                                       {formatPrice(item.unitPrice)} × {item.qty}
+                                      {item.discountPct && item.discountPct > 0 && (
+                                        <span className="text-green-600 ml-1">-{item.discountPct}%</span>
+                                      )}
                                     </p>
                                   )}
                                 </div>
