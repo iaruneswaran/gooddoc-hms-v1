@@ -179,12 +179,13 @@ const Payment = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
+                        {/* OP Consultation */}
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">DOC521</p>
+                            <p className="billing-value text-primary">INV001</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Cardiology Consultation Notes</p>
+                            <p className="billing-value">OP Consultation Invoice</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-body">20 Dec 2025</p>
@@ -194,67 +195,7 @@ const Payment = () => {
                             <p className="billing-body">Cardiology OPD</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Dr. Meera Nair</p>
-                            <p className="billing-helper">Dr. Meera Nair</p>
-                          </TableCell>
-                          <TableCell className="text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Download className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Printer className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                        
-                        <TableRow className="hover:bg-muted/30">
-                          <TableCell>
-                            <p className="billing-value text-primary">DOC522</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">12-Lead ECG Report</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-body">20 Dec 2025</p>
-                            <p className="billing-helper">11:15 AM</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-body">Cardiology Diagnostics</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">ECG Tech - Ramesh K</p>
-                            <p className="billing-helper">Dr. Meera Nair</p>
-                          </TableCell>
-                          <TableCell className="text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Download className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Printer className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                        
-                        <TableRow className="hover:bg-muted/30">
-                          <TableCell>
-                            <p className="billing-value text-primary">DOC523</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">ECG Tracing Image</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-body">20 Dec 2025</p>
-                            <p className="billing-helper">11:10 AM</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-body">Cardiology Diagnostics</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">ECG Tech - Ramesh K</p>
+                            <p className="billing-value">Billing Desk</p>
                             <p className="billing-helper">—</p>
                           </TableCell>
                           <TableCell className="text-center">
@@ -269,22 +210,23 @@ const Payment = () => {
                           </TableCell>
                         </TableRow>
                         
+                        {/* Laboratory */}
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">RXN845</p>
+                            <p className="billing-value text-primary">INV002</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Prescription</p>
+                            <p className="billing-value">Laboratory Invoice</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-body">20 Dec 2025</p>
                             <p className="billing-helper">11:30 AM</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-body">Cardiology OPD</p>
+                            <p className="billing-body">Clinical Biochemistry</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Dr. Meera Nair</p>
+                            <p className="billing-value">Billing Desk</p>
                             <p className="billing-helper">—</p>
                           </TableCell>
                           <TableCell className="text-center">
@@ -299,23 +241,55 @@ const Payment = () => {
                           </TableCell>
                         </TableRow>
                         
+                        {/* Radiology */}
                         <TableRow className="hover:bg-muted/30">
                           <TableCell>
-                            <p className="billing-value text-primary">LAB456</p>
+                            <p className="billing-value text-primary">INV003</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Lipid Profile Report</p>
+                            <p className="billing-value">Radiology Invoice</p>
                           </TableCell>
                           <TableCell>
                             <p className="billing-body">20 Dec 2025</p>
-                            <p className="billing-helper">12:00 PM</p>
+                            <p className="billing-helper">12:15 PM</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-body">Clinical Biochemistry</p>
+                            <p className="billing-body">Radiology</p>
                           </TableCell>
                           <TableCell>
-                            <p className="billing-value">Lab Tech - Anita S</p>
-                            <p className="billing-helper">Dr. Sunita Rao (Pathologist)</p>
+                            <p className="billing-value">Billing Desk</p>
+                            <p className="billing-helper">—</p>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Printer className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                        
+                        {/* Services */}
+                        <TableRow className="hover:bg-muted/30">
+                          <TableCell>
+                            <p className="billing-value text-primary">INV004</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">Services Invoice</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">20 Dec 2025</p>
+                            <p className="billing-helper">01:00 PM</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-body">Nursing Services</p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="billing-value">Billing Desk</p>
+                            <p className="billing-helper">—</p>
                           </TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-2">
