@@ -37,6 +37,7 @@ export interface CartItem {
   qty: number;
   discountPct?: number; // 0–100
   description?: string;
+  addedAt: string; // ISO8601 timestamp when added to cart
 }
 
 export interface Totals {
