@@ -174,7 +174,6 @@ const Payment = () => {
                           <TableHead className="billing-label">Document Name</TableHead>
                           <TableHead className="billing-label">Date & Time</TableHead>
                           <TableHead className="billing-label">Service</TableHead>
-                          <TableHead className="billing-label">Prepared / Verified By</TableHead>
                           <TableHead className="billing-label text-center">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -193,10 +192,6 @@ const Payment = () => {
                           </TableCell>
                           <TableCell>
                             <p className="billing-body">Cardiology OPD</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">Billing Desk</p>
-                            <p className="billing-helper">—</p>
                           </TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-2">
@@ -225,10 +220,6 @@ const Payment = () => {
                           <TableCell>
                             <p className="billing-body">Clinical Biochemistry</p>
                           </TableCell>
-                          <TableCell>
-                            <p className="billing-value">Billing Desk</p>
-                            <p className="billing-helper">—</p>
-                          </TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -256,10 +247,6 @@ const Payment = () => {
                           <TableCell>
                             <p className="billing-body">Radiology</p>
                           </TableCell>
-                          <TableCell>
-                            <p className="billing-value">Billing Desk</p>
-                            <p className="billing-helper">—</p>
-                          </TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -286,10 +273,6 @@ const Payment = () => {
                           </TableCell>
                           <TableCell>
                             <p className="billing-body">Nursing Services</p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="billing-value">Billing Desk</p>
-                            <p className="billing-helper">—</p>
                           </TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-2">
