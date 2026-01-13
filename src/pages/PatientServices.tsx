@@ -465,7 +465,7 @@ const PatientServices = () => {
                                   )}
                                 </div>
                                 
-                                {/* Price */}
+                              {/* Price */}
                                 <div className="text-right flex-shrink-0">
                                   <p className="text-sm font-bold text-foreground">
                                     {formatPrice(ps.service.price * ps.quantity)}
@@ -474,9 +474,6 @@ const PatientServices = () => {
                                     <p className="text-xs text-muted-foreground">
                                       {formatPrice(ps.service.price)} × {ps.quantity}
                                     </p>
-                                  )}
-                                  {ps.service.taxPct > 0 && (
-                                    <p className="text-xs text-muted-foreground">+{ps.service.taxPct}% GST</p>
                                   )}
                                 </div>
                               </div>
@@ -596,9 +593,6 @@ const PatientServices = () => {
                             <div className="flex items-center gap-4">
                               <div className="text-right">
                                 <p className="text-sm font-bold text-foreground">{formatPrice(service.price)}</p>
-                                {service.taxPct > 0 && (
-                                  <p className="text-xs text-muted-foreground">+{service.taxPct}% GST</p>
-                                )}
                               </div>
                               
                               {inCart && cartItem ? (
@@ -793,13 +787,9 @@ const PatientServices = () => {
                   <span className="text-muted-foreground">Discount</span>
                   <span className="font-medium text-green-600">- {formatPrice(totals.discountTotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Tax (GST)</span>
-                  <span className="font-medium">{formatPrice(totals.taxTotal)}</span>
-                </div>
                 <div className="flex justify-between pt-3 border-t border-border">
                   <span className="text-base font-semibold">Total Amount</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(totals.netPayable)}</span>
+                  <span className="text-lg font-bold text-primary">{formatPrice(totals.subtotal)}</span>
                 </div>
               </div>
               
