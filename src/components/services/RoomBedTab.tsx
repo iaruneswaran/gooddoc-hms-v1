@@ -206,7 +206,6 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
           <Table>
             <TableHeader className="sticky top-0 bg-background z-10">
               <TableRow>
-                <TableHead>From Location</TableHead>
                 <TableHead>To Location</TableHead>
                 <TableHead>Start</TableHead>
                 <TableHead>End</TableHead>
@@ -228,18 +227,6 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                     key={transfer.id}
                     className={cn(inCart && "bg-primary/5")}
                   >
-                    {/* From Location with Bed below */}
-                    <TableCell>
-                      {transfer.fromLocationName ? (
-                        <div>
-                          <div className="text-sm font-medium">{transfer.fromLocationName}</div>
-                          <div className="text-xs text-muted-foreground">{transfer.fromBedNumber || 'No bed'}</div>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground italic">No ward</span>
-                      )}
-                    </TableCell>
-
                     {/* To Location with Bed below */}
                     <TableCell>
                       <div>
