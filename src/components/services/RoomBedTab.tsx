@@ -209,6 +209,7 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                 <TableHead>To Location</TableHead>
                 <TableHead>Start</TableHead>
                 <TableHead>End</TableHead>
+                <TableHead>Last Billed</TableHead>
                 <TableHead>Duration</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Charge</TableHead>
@@ -260,6 +261,22 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
                         <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200">
                           Ongoing
                         </Badge>
+                      )}
+                    </TableCell>
+
+                    {/* Last Billed */}
+                    <TableCell>
+                      {transfer.lastBilledAt ? (
+                        <>
+                          <div className="text-sm">
+                            {format(new Date(transfer.lastBilledAt), 'dd-MMM-yyyy')}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {format(new Date(transfer.lastBilledAt), 'HH:mm')}
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </TableCell>
 
