@@ -20,6 +20,7 @@ export interface TransferHistoryRecord {
   // Time
   startAt: string; // ISO8601
   endAt: string | null; // null = ongoing
+  lastBilledAt: string | null; // Last billed date
   // Charge info
   dailyRate: number;
   chargeCode?: string;
@@ -79,6 +80,7 @@ export const MOCK_TRANSFER_HISTORY: TransferHistoryRecord[] = [
     // Time
     startAt: '2026-01-02T09:00:00',
     endAt: '2026-01-03T14:30:00',
+    lastBilledAt: '2026-01-03T14:30:00',
     // Rate
     dailyRate: 2500,
     chargeCode: 'BED-WARD-A',
@@ -104,6 +106,7 @@ export const MOCK_TRANSFER_HISTORY: TransferHistoryRecord[] = [
     // Time
     startAt: '2026-01-03T14:30:00',
     endAt: '2026-01-04T10:10:00',
+    lastBilledAt: '2026-01-04T10:10:00',
     // Rate
     dailyRate: 8500,
     chargeCode: 'BED-ICU',
@@ -129,6 +132,7 @@ export const MOCK_TRANSFER_HISTORY: TransferHistoryRecord[] = [
     // Time - ongoing
     startAt: '2026-01-04T10:10:00',
     endAt: null,
+    lastBilledAt: '2026-01-10T00:00:00',
     // Rate
     dailyRate: 5500,
     chargeCode: 'BED-PRIVATE',
