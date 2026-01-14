@@ -4,7 +4,7 @@ import { calcTotals } from "@/utils/billing/totals";
 
 export function useServicesCart(baseCharge: number = 0) {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [globalDiscountPct, setGlobalDiscountPct] = useState<number>(0);
+  const [globalDiscountAmt, setGlobalDiscountAmt] = useState<number>(0);
 
   const addToCart = useCallback((service: ServiceItem) => {
     setCart((prev) => {
@@ -67,26 +67,27 @@ export function useServicesCart(baseCharge: number = 0) {
     setCart([]);
   }, []);
 
-  const updateGlobalDiscount = useCallback((discountPct: number) => {
-    setGlobalDiscountPct(Math.min(100, Math.max(0, discountPct)));
+  const updateGlobalDiscount = useCallback((discountAmt: number) => {
+    setGlobalDiscountAmt(Math.max(0, discountAmt));
   }, []);
 
   const baseTotals: Totals = calcTotals(cart, baseCharge);
   
   // Apply global discount to the totals
   const totals: Totals = useMemo(() => {
-    const globalDiscountAmount = (baseTotals.subtotal * globalDiscountPct) / 100;
+    // Clamp discount amount to not exceed subtotal
+    const clampedDiscount = Math.min(globalDiscountAmt, baseTotals.subtotal);
     return {
       ...baseTotals,
-      discountTotal: baseTotals.discountTotal + globalDiscountAmount,
-      netPayable: baseTotals.subtotal - baseTotals.discountTotal - globalDiscountAmount,
+      discountTotal: baseTotals.discountTotal + clampedDiscount,
+      netPayable: baseTotals.subtotal - baseTotals.discountTotal - clampedDiscount,
     };
-  }, [baseTotals, globalDiscountPct]);
+  }, [baseTotals, globalDiscountAmt]);
 
   return {
     cart,
     totals,
-    globalDiscountPct,
+    globalDiscountAmt,
     addToCart,
     updateQty,
     updateDiscount,
