@@ -4,7 +4,7 @@ import {
   ChevronLeft, Search, Plus, Minus, Trash2, Receipt, User, 
   Stethoscope, FlaskConical, ScanLine, Pill, HeartPulse, BedDouble, 
   UserRound, Package, Clock, FileText, AlertCircle, CheckCircle2,
-  ClipboardList, Square, CheckSquare, ShoppingCart, ArrowRightLeft
+  ClipboardList, Square, CheckSquare, ShoppingCart, ArrowRightLeft, CalendarDays
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -16,6 +16,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useServicesCart } from "@/hooks/useServicesCart";
 import { searchServices, SERVICE_CATEGORIES, getSubCategories, getServicesByCategory } from "@/data/services.mock";
 import { getPendingServicesForPatient, PendingService } from "@/data/pending-services.mock";
@@ -26,7 +28,7 @@ import { ServiceCategory, ServiceItem } from "@/types/booking/ipAdmission";
 import { useDebounce } from "@/hooks/useDebounce";
 import { RoomBedTab } from "@/components/services/RoomBedTab";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 
 const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
@@ -70,7 +72,7 @@ const PatientServices = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const [isGeneratingBill, setIsGeneratingBill] = useState(false);
-  const { cart, totals, addToCart, updateQty, updateDiscount, removeFromCart } = useServicesCart();
+  const { cart, totals, globalDiscountPct, addToCart, updateQty, updateDiscount, updateAddedAt, removeFromCart, updateGlobalDiscount } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -690,10 +692,29 @@ const PatientServices = () => {
                                   <div className="flex items-center gap-2 mt-0.5">
                                     <p className="text-xs text-muted-foreground">{item.code}</p>
                                     <span className="text-muted-foreground">•</span>
-                                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                      <Clock className="w-3 h-3" />
-                                      {format(addedDate, 'dd MMM, HH:mm')}
-                                    </div>
+                                    <Popover>
+                                      <PopoverTrigger asChild>
+                                        <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                                          <CalendarDays className="w-3 h-3" />
+                                          {format(addedDate, 'dd MMM, HH:mm')}
+                                        </button>
+                                      </PopoverTrigger>
+                                      <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                          mode="single"
+                                          selected={addedDate}
+                                          onSelect={(date) => {
+                                            if (date) {
+                                              // Preserve the original time
+                                              const newDate = setMinutes(setHours(date, addedDate.getHours()), addedDate.getMinutes());
+                                              updateAddedAt(item.itemId, newDate.toISOString());
+                                            }
+                                          }}
+                                          initialFocus
+                                          className="p-3 pointer-events-auto"
+                                        />
+                                      </PopoverContent>
+                                    </Popover>
                                   </div>
                                 </div>
                                 <Button
@@ -783,13 +804,29 @@ const PatientServices = () => {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-medium">{formatPrice(totals.subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">Discount</span>
-                  <span className="font-medium text-green-600">- {formatPrice(totals.discountTotal)}</span>
+                  <div className="flex items-center gap-1.5">
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={globalDiscountPct}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value);
+                        if (!isNaN(val) && val >= 0 && val <= 100) {
+                          updateGlobalDiscount(val);
+                        }
+                      }}
+                      className="h-6 w-14 px-1.5 text-xs text-center"
+                    />
+                    <span className="text-xs text-muted-foreground">%</span>
+                    <span className="font-medium text-green-600 ml-2">- {formatPrice(totals.discountTotal)}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between pt-3 border-t border-border">
                   <span className="text-base font-semibold">Total Amount</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(totals.subtotal)}</span>
+                  <span className="text-lg font-bold text-primary">{formatPrice(totals.subtotal - totals.discountTotal)}</span>
                 </div>
               </div>
               
