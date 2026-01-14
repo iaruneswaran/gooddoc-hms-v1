@@ -360,7 +360,7 @@ const AdvancePayments = () => {
                   <TableHead className="text-right">Amount</TableHead>
                   <TableHead className="text-right">Used</TableHead>
                   <TableHead className="text-right">Balance</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="text-center w-[120px]">Status</TableHead>
                   <TableHead className="w-[60px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -404,8 +404,8 @@ const AdvancePayments = () => {
                         {formatINR(payment.amount - payment.usedAmount)}
                       </p>
                     </TableCell>
-                    <TableCell>
-                      <Badge className={`${statusStyles[payment.status]} text-xs`}>
+                    <TableCell className="text-center">
+                      <Badge className={`${statusStyles[payment.status]} text-xs w-[100px] justify-center`}>
                         {payment.status}
                       </Badge>
                     </TableCell>
