@@ -72,7 +72,7 @@ const PatientServices = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const [isGeneratingBill, setIsGeneratingBill] = useState(false);
-  const { cart, totals, globalDiscountPct, addToCart, updateQty, updateDiscount, updateAddedAt, removeFromCart, updateGlobalDiscount } = useServicesCart();
+  const { cart, totals, globalDiscountAmt, addToCart, updateQty, updateDiscount, updateAddedAt, removeFromCart, updateGlobalDiscount } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -807,21 +807,23 @@ const PatientServices = () => {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">Discount</span>
                   <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-muted-foreground">₹</span>
                     <Input
                       type="number"
                       min="0"
-                      max="100"
-                      value={globalDiscountPct}
+                      max={totals.subtotal}
+                      value={globalDiscountAmt || ''}
                       onChange={(e) => {
                         const val = parseFloat(e.target.value);
-                        if (!isNaN(val) && val >= 0 && val <= 100) {
-                          updateGlobalDiscount(val);
+                        if (!isNaN(val) && val >= 0) {
+                          updateGlobalDiscount(Math.min(val, totals.subtotal));
+                        } else if (e.target.value === '') {
+                          updateGlobalDiscount(0);
                         }
                       }}
-                      className="h-6 w-14 px-1.5 text-xs text-center"
+                      className="h-6 w-20 px-1.5 text-xs text-right"
+                      placeholder="0"
                     />
-                    <span className="text-xs text-muted-foreground">%</span>
-                    <span className="font-medium text-green-600 ml-2">- {formatPrice(totals.discountTotal)}</span>
                   </div>
                 </div>
                 <div className="flex justify-between pt-3 border-t border-border">
