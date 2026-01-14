@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Trash2, Calendar, User, Building2 } from "lucide-react";
+import { Trash2, Calendar, User, Building2, CalendarDays, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/lib/pricingEngine";
 import { LineItemPriceEditor } from "@/components/pricing/LineItemPriceEditor";
@@ -125,7 +125,7 @@ export function AppointmentSummaryCard({
 
                         <div className="space-y-2 text-xs">
                           <div className="flex items-center gap-2 text-muted-foreground">
-                            <span>📅</span>
+                            <CalendarDays className="w-3.5 h-3.5" />
                             <span>{format(laboratoryData.laboratoryDate, "dd MMM yyyy")} • {laboratoryData.laboratoryTime}</span>
                           </div>
 
@@ -204,7 +204,7 @@ export function AppointmentSummaryCard({
 
                         <div className="space-y-2 text-xs">
                           <div className="flex items-center gap-2 text-muted-foreground">
-                            <span>📅</span>
+                            <CalendarDays className="w-3.5 h-3.5" />
                             <span>{format(laboratoryData.radiologyDate, "dd MMM yyyy")} • {laboratoryData.radiologyTime}</span>
                           </div>
 
@@ -261,7 +261,7 @@ export function AppointmentSummaryCard({
 
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <span>📅</span>
+                        <CalendarDays className="w-3.5 h-3.5" />
                         <span>
                           {consultationData.selectedSlot 
                             ? `${format(new Date(consultationData.selectedSlot.start), "dd MMM yyyy")} • ${format(new Date(consultationData.selectedSlot.start), "h:mm a")}`
@@ -269,7 +269,7 @@ export function AppointmentSummaryCard({
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <span>👨‍⚕️</span>
+                        <Stethoscope className="w-3.5 h-3.5" />
                         <span>{consultationData.doctorName || "Any available doctor"}</span>
                       </div>
 
