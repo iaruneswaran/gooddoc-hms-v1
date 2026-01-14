@@ -105,16 +105,6 @@ const OPPatientsToday = () => {
         </div>
       )
     },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      headerClassName: "text-center",
-      cellClassName: "text-center",
-      render: (row) => (
-        <Badge className={`${statusStyles[row.status]} min-w-[120px] justify-center`}>{row.status}</Badge>
-      ),
-    },
     { 
       key: "checkInTime", 
       label: "Check-in Time", 
@@ -128,6 +118,16 @@ const OPPatientsToday = () => {
           </div>
         );
       }
+    },
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => (
+        <Badge className={`${statusStyles[row.status]} min-w-[120px] justify-center`}>{row.status}</Badge>
+      ),
     },
     {
       key: "billAmount",
