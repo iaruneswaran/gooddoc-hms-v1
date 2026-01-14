@@ -405,7 +405,7 @@ const AdvancePayments = () => {
                       </p>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge className={`${statusStyles[payment.status]} text-xs w-[100px] justify-center`}>
+                      <Badge className={`${statusStyles[payment.status]} text-xs min-w-[110px] justify-center whitespace-nowrap`}>
                         {payment.status}
                       </Badge>
                     </TableCell>
