@@ -186,10 +186,11 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
           </Button>
         </div>
 
-        {/* Results count */}
-        <div className="text-xs text-muted-foreground">
-          Showing <span className="font-medium text-foreground">{filteredTransfers.length}</span> of {allTransfers.length} transfers
-        </div>
+      </div>
+
+      {/* Results count */}
+      <div className="px-4 py-2 border-t border-border text-xs text-muted-foreground">
+        Showing <span className="font-medium text-foreground">{filteredTransfers.length}</span> of {allTransfers.length} transfers
       </div>
 
       {/* Table */}
