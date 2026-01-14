@@ -4,7 +4,7 @@ import {
   ChevronLeft, Search, Plus, Minus, Trash2, Receipt, User, 
   Stethoscope, FlaskConical, ScanLine, Pill, HeartPulse, BedDouble, 
   UserRound, Package, Clock, FileText, AlertCircle, CheckCircle2,
-  ClipboardList, Square, CheckSquare, ShoppingCart, ArrowRightLeft
+  ClipboardList, Square, CheckSquare, ShoppingCart, ArrowRightLeft, Percent
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -70,6 +70,8 @@ const PatientServices = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const [isGeneratingBill, setIsGeneratingBill] = useState(false);
+  const [globalDiscountType, setGlobalDiscountType] = useState<'flat' | 'percent'>('percent');
+  const [globalDiscountValue, setGlobalDiscountValue] = useState<number>(0);
   const { cart, totals, addToCart, updateQty, updateDiscount, removeFromCart } = useServicesCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -778,49 +780,104 @@ const PatientServices = () => {
             
             {/* Totals & Actions */}
             <div className="p-4 border-t border-border bg-background">
+              {/* Global Discount */}
+              <div className="mb-4 p-3 bg-muted/50 rounded-lg border border-border">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Global Discount</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 bg-background rounded border border-border p-0.5">
+                    <button
+                      onClick={() => setGlobalDiscountType('percent')}
+                      className={cn(
+                        "px-2 py-1 rounded text-xs font-medium transition-colors",
+                        globalDiscountType === 'percent'
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <Percent className="w-3 h-3" />
+                    </button>
+                    <button
+                      onClick={() => setGlobalDiscountType('flat')}
+                      className={cn(
+                        "px-2 py-1 rounded text-xs font-medium transition-colors",
+                        globalDiscountType === 'flat'
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      ₹
+                    </button>
+                  </div>
+                  <Input
+                    type="number"
+                    min="0"
+                    max={globalDiscountType === 'percent' ? 100 : totals.subtotal}
+                    value={globalDiscountValue || ''}
+                    onChange={(e) => setGlobalDiscountValue(parseFloat(e.target.value) || 0)}
+                    placeholder="0"
+                    className="h-8 w-20 text-sm text-center"
+                  />
+                  <span className="text-xs text-muted-foreground">
+                    {globalDiscountType === 'percent' ? '%' : 'flat'}
+                  </span>
+                </div>
+              </div>
+
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-medium">{formatPrice(totals.subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Discount</span>
+                  <span className="text-muted-foreground">Line Discounts</span>
                   <span className="font-medium text-green-600">- {formatPrice(totals.discountTotal)}</span>
                 </div>
+                {globalDiscountValue > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Global Discount</span>
+                    <span className="font-medium text-green-600">
+                      - {formatPrice(
+                        globalDiscountType === 'percent'
+                          ? (totals.subtotal - totals.discountTotal) * (globalDiscountValue / 100)
+                          : globalDiscountValue
+                      )}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between pt-3 border-t border-border">
                   <span className="text-base font-semibold">Total Amount</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(totals.subtotal)}</span>
+                  <span className="text-lg font-bold text-primary">
+                    {formatPrice(
+                      Math.max(0, (totals.subtotal - totals.discountTotal) - (
+                        globalDiscountType === 'percent'
+                          ? (totals.subtotal - totals.discountTotal) * (globalDiscountValue / 100)
+                          : globalDiscountValue
+                      ))
+                    )}
+                  </span>
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <Button 
-                  className="w-full h-11" 
-                  size="lg"
-                  disabled={cart.length === 0 || isGeneratingBill}
-                  onClick={handleGenerateBill}
-                >
-                  {isGeneratingBill ? (
-                    <>
-                      <div className="w-4 h-4 mr-2 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Generating Bill...
-                    </>
-                  ) : (
-                    <>
-                      <Receipt className="w-4 h-4 mr-2" />
-                      Generate Bill
-                    </>
-                  )}
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  disabled={cart.length === 0}
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  Save as Draft
-                </Button>
-              </div>
+              <Button 
+                className="w-full h-11" 
+                size="lg"
+                disabled={cart.length === 0 || isGeneratingBill}
+                onClick={handleGenerateBill}
+              >
+                {isGeneratingBill ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                    Generating Bill...
+                  </>
+                ) : (
+                  <>
+                    <Receipt className="w-4 h-4 mr-2" />
+                    Generate Bill
+                  </>
+                )}
+              </Button>
             </div>
           </div>
         </div>
