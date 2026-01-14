@@ -812,14 +812,6 @@ const PatientServices = () => {
                     </>
                   )}
                 </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  disabled={cart.length === 0}
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  Save as Draft
-                </Button>
               </div>
             </div>
           </div>
