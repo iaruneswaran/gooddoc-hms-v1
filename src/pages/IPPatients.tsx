@@ -43,22 +43,6 @@ const IPPatients = () => {
       render: (row) => <PatientCell name={row.patient} gdid={row.mrn} ageSex={row.ageSex} patientId={row.mrn} fromPage="ip-patients" />
     },
     { key: "visitId", label: "Visit ID" },
-    {
-      key: "ipStatus",
-      label: "Status",
-      sortable: true,
-      headerClassName: "text-center",
-      cellClassName: "text-center",
-      render: (row) => (
-        <Badge 
-          className={`min-w-[100px] justify-center ${row.ipStatus === "admitted" 
-            ? "bg-green-100 text-green-700 border-green-200" 
-            : "bg-gray-100 text-gray-700 border-gray-200"}`}
-        >
-          {row.ipStatus === "admitted" ? "Admitted" : "Discharged"}
-        </Badge>
-      )
-    },
     { 
       key: "admitDateTime", 
       label: "Admit/Discharged Date", 
@@ -96,6 +80,22 @@ const IPPatients = () => {
           <span>{row.attendingDoctor}</span>
           <span className="text-muted-foreground text-xs">{row.primaryDiagnosis}</span>
         </div>
+      )
+    },
+    {
+      key: "ipStatus",
+      label: "Status",
+      sortable: true,
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+      render: (row) => (
+        <Badge 
+          className={`min-w-[100px] justify-center ${row.ipStatus === "admitted" 
+            ? "bg-green-100 text-green-700 border-green-200" 
+            : "bg-gray-100 text-gray-700 border-gray-200"}`}
+        >
+          {row.ipStatus === "admitted" ? "Admitted" : "Discharged"}
+        </Badge>
       )
     },
     {
