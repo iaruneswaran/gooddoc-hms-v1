@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { CartItem, ServiceItem, Totals } from "@/types/booking/ipAdmission";
 import { calcTotals } from "@/utils/billing/totals";
 
 export function useServicesCart(baseCharge: number = 0) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [globalDiscountPct, setGlobalDiscountPct] = useState<number>(0);
 
   const addToCart = useCallback((service: ServiceItem) => {
     setCart((prev) => {
@@ -50,6 +51,14 @@ export function useServicesCart(baseCharge: number = 0) {
     );
   }, []);
 
+  const updateAddedAt = useCallback((itemId: string, addedAt: string) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.itemId === itemId ? { ...item, addedAt } : item
+      )
+    );
+  }, []);
+
   const removeFromCart = useCallback((itemId: string) => {
     setCart((prev) => prev.filter((item) => item.itemId !== itemId));
   }, []);
@@ -58,15 +67,32 @@ export function useServicesCart(baseCharge: number = 0) {
     setCart([]);
   }, []);
 
-  const totals: Totals = calcTotals(cart, baseCharge);
+  const updateGlobalDiscount = useCallback((discountPct: number) => {
+    setGlobalDiscountPct(Math.min(100, Math.max(0, discountPct)));
+  }, []);
+
+  const baseTotals: Totals = calcTotals(cart, baseCharge);
+  
+  // Apply global discount to the totals
+  const totals: Totals = useMemo(() => {
+    const globalDiscountAmount = (baseTotals.subtotal * globalDiscountPct) / 100;
+    return {
+      ...baseTotals,
+      discountTotal: baseTotals.discountTotal + globalDiscountAmount,
+      netPayable: baseTotals.subtotal - baseTotals.discountTotal - globalDiscountAmount,
+    };
+  }, [baseTotals, globalDiscountPct]);
 
   return {
     cart,
     totals,
+    globalDiscountPct,
     addToCart,
     updateQty,
     updateDiscount,
+    updateAddedAt,
     removeFromCart,
     clearCart,
+    updateGlobalDiscount,
   };
 }
