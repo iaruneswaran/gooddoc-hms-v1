@@ -97,8 +97,9 @@ export default function Auth() {
             }
           }}
         />
-        {/* Overlay with branding */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        {/* Overlay gradients for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
         <div className="absolute bottom-8 left-8 right-8">
           <h2 className="text-2xl font-semibold text-white mb-2">
             Hospital Management Simplified
