@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '@/lib/auth';
 import { LoginForm } from '@/components/auth/LoginForm';
-import { SignupForm } from '@/components/auth/SignupForm';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
 // Import the logo
@@ -11,7 +9,6 @@ import logoSvg from '@/assets/baines-logo-full.svg';
 
 export default function Auth() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -30,7 +27,7 @@ export default function Auth() {
     <div className="min-h-screen flex">
       {/* Left Column - Auth Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-16 xl:px-24 bg-background">
-        <div className="mx-auto w-full max-w-sm">
+        <div className="mx-auto w-full max-w-md">
           {/* Logo */}
           <div className="mb-8">
             <img 
@@ -43,41 +40,15 @@ export default function Auth() {
           {/* Title */}
           <div className="mb-8">
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-              {activeTab === 'login' ? 'Welcome back to GoodDoc' : 'Create your GoodDoc account'}
+              Welcome back to GoodDoc
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {activeTab === 'login'
-                ? 'Sign in to continue'
-                : 'Get started with your hospital management'}
+              Sign in to continue
             </p>
           </div>
 
-          {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'login' | 'signup')}>
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login" className="mt-0">
-              <LoginForm onForgotPassword={handleForgotPassword} />
-            </TabsContent>
-
-            <TabsContent value="signup" className="mt-0">
-              <SignupForm />
-            </TabsContent>
-          </Tabs>
-
-          {/* Demo credentials hint */}
-          {import.meta.env.VITE_AUTH_DEMO !== 'false' && (
-            <div className="mt-8 p-4 rounded-lg bg-muted/50 border border-border">
-              <p className="text-xs text-muted-foreground text-center">
-                <span className="font-medium">Demo credentials:</span>{' '}
-                <code className="px-1.5 py-0.5 bg-muted rounded text-foreground">gooddoc</code> /{' '}
-                <code className="px-1.5 py-0.5 bg-muted rounded text-foreground">123456</code>
-              </p>
-            </div>
-          )}
+          {/* Login Form */}
+          <LoginForm onForgotPassword={handleForgotPassword} />
         </div>
       </div>
 
