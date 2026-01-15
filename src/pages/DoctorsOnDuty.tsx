@@ -261,12 +261,7 @@ const DoctorsOnDuty = () => {
       icon: <Pencil className="w-4 h-4" />,
       onClick: (row) => navigate(`/doctors/${getDoctorSlug(row.doctorName)}/edit`) 
     },
-    { 
-      label: "Edit", 
-      icon: <Pencil className="w-4 h-4" />,
-      onClick: (row) => navigate(`/doctors/${getDoctorSlug(row.doctorName)}/edit`) 
-    },
-    { 
+    {
       label: "View Calendar", 
       icon: <CalendarDays className="w-4 h-4" />,
       onClick: (row) => navigate(`/doctors/${getDoctorSlug(row.doctorName)}/calendar`) 
