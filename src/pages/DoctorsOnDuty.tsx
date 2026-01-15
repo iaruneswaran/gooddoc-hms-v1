@@ -257,9 +257,9 @@ const DoctorsOnDuty = () => {
 
   const rowActions: RowAction<DoctorOnDutyRecord>[] = [
     { 
-      label: "View", 
-      icon: <Eye className="w-4 h-4" />,
-      onClick: (row) => navigate(`/doctors/${getDoctorSlug(row.doctorName)}`) 
+      label: "Edit", 
+      icon: <Pencil className="w-4 h-4" />,
+      onClick: (row) => navigate(`/doctors/${getDoctorSlug(row.doctorName)}/edit`) 
     },
     { 
       label: "Edit", 
