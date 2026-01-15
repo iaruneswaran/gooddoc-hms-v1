@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { doctorsOnDuty, opDoctors, ipDoctors, otherDoctors, DoctorOnDutyRecord } from "@/data/overview.mock";
 import { Stethoscope, Eye, Pencil, CalendarDays, PlusCircle, Ban } from "lucide-react";
+import { DoctorSlotsPopover } from "@/components/doctors/DoctorSlotsPopover";
 
 const roleStyles: Record<DoctorOnDutyRecord["role"], string> = {
   "Onsite": "bg-green-100 text-green-700",
@@ -204,9 +205,11 @@ const DoctorsOnDuty = () => {
           const index = data.findIndex(d => d.doctorName === row.doctorName && d.contactPager === row.contactPager);
           const { total, completed } = getAppointmentData(index);
           return (
-            <Badge className="bg-primary/10 text-primary">
-              {completed}/{total} Completed
-            </Badge>
+            <DoctorSlotsPopover
+              doctorName={row.doctorName}
+              totalSlots={total}
+              completedSlots={completed}
+            />
           );
         }
       },
