@@ -1,9 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
 import logoIcon from "@/assets/logo-icon.svg";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { logout } from "@/lib/auth";
+import { toast } from "sonner";
 
 // Import custom icons
 import iconOverview from "@/assets/icons/icon-overview.svg";
@@ -31,7 +33,14 @@ const menuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isCollapsed, toggleSidebar } = useSidebarContext();
+
+  const handleSignOut = () => {
+    logout();
+    toast.success('Signed out successfully');
+    navigate('/auth', { replace: true });
+  };
 
   return (
     <aside 
@@ -140,7 +149,7 @@ export function AppSidebar() {
             </Tooltip>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <button className="w-full flex items-center justify-center px-2 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
+                <button onClick={handleSignOut} className="w-full flex items-center justify-center px-2 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
                   <img src={iconSignout} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
                 </button>
               </TooltipTrigger>
@@ -158,7 +167,7 @@ export function AppSidebar() {
               <img src={iconSettings} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
               <span>Settings</span>
             </Link>
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
+            <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm hover:bg-sidebar-accent/50 transition-colors">
               <img src={iconSignout} alt="" className="w-4 h-4" style={{ filter: "brightness(0) invert(1)" }} />
               <span>Sign Out</span>
             </button>
