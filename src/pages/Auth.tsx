@@ -25,8 +25,8 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Column - Auth Form (70%) */}
-      <div className="w-full lg:w-[70%] flex flex-col justify-center px-6 py-12 lg:px-16 xl:px-24 bg-background">
+      {/* Left Column - Auth Form */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-16 xl:px-24 bg-background">
         <div className="mx-auto w-full max-w-md">
           {/* Logo */}
           <div className="mb-8">
@@ -52,8 +52,8 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* Right Column - Image (30%) */}
-      <div className="hidden lg:block lg:w-[30%] relative">
+      {/* Right Column - Image */}
+      <div className="hidden lg:block lg:w-1/2 relative">
         <img
           src="/images/auth-side.jpg"
           alt="GoodDoc preview"
