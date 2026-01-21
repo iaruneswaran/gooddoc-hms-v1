@@ -135,134 +135,112 @@ export default function Settings() {
 
   const passwordStrength = getPasswordStrength(newPassword);
 
-  const renderSectionNav = () => (
-    <div className="flex gap-1 mb-6">
-      {settingsSections.map((section) => {
-        const Icon = section.icon;
-        const isActive = activeSection === section.id;
-        return (
-          <button
-            key={section.id}
-            onClick={() => setActiveSection(section.id)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-              isActive
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            <span>{section.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-
   const renderProfileSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Profile Information</CardTitle>
-        <CardDescription>
-          Update your personal information and how others see you.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Avatar */}
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16">
-            <AvatarImage src={avatarUrl} alt={displayName} />
-            <AvatarFallback className="text-lg">
-              {getInitials(displayName || "U")}
-            </AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Upload className="h-4 w-4" />
-              Upload Photo
-            </Button>
-            <p className="text-xs text-muted-foreground">
-              JPG, PNG or WebP. Max 2MB.
-            </p>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile Information</CardTitle>
+          <CardDescription>
+            Update your personal information and how others see you.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Avatar */}
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={avatarUrl} alt={displayName} />
+              <AvatarFallback className="text-lg">
+                {getInitials(displayName || "U")}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Upload className="h-4 w-4" />
+                Upload Photo
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                JPG, PNG or WebP. Max 2MB.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <Separator />
+          <Separator />
 
-        {/* Form fields */}
-        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Form fields */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="displayName">Display Name</Label>
+              <Input
+                id="displayName"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Your name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="username"
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <Label htmlFor="displayName">Display Name</Label>
-            <Input
-              id="displayName"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Your name"
-            />
+            <Label htmlFor="email">Email Address</Label>
+            <div className="flex gap-2">
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                className="flex-1"
+              />
+              <Button variant="outline" size="sm">
+                Verify
+              </Button>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="username"
-            />
-          </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <div className="flex gap-2">
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className="flex-1"
+          <div className="space-y-2">
+            <Label htmlFor="timezone">Timezone</Label>
+            <Select value={timezone} onValueChange={setTimezone}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select timezone" />
+              </SelectTrigger>
+              <SelectContent>
+                {timezones.map((tz) => (
+                  <SelectItem key={tz.value} value={tz.value}>
+                    {tz.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell us about yourself..."
+              rows={3}
             />
-            <Button variant="outline" size="sm">
-              Verify
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline">Cancel</Button>
+            <Button onClick={handleProfileSave} disabled={profileSaving}>
+              {profileSaving ? "Saving..." : "Save Changes"}
             </Button>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="timezone">Timezone</Label>
-          <Select value={timezone} onValueChange={setTimezone}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select timezone" />
-            </SelectTrigger>
-            <SelectContent>
-              {timezones.map((tz) => (
-                <SelectItem key={tz.value} value={tz.value}>
-                  {tz.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="bio">Bio</Label>
-          <Textarea
-            id="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="Tell us about yourself..."
-            rows={3}
-          />
-        </div>
-
-        <div className="flex justify-end gap-2 pt-2">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleProfileSave} disabled={profileSaving}>
-            {profileSaving ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 
   const renderSecuritySection = () => (
@@ -449,26 +427,45 @@ export default function Settings() {
   );
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
-      <div className="flex-1 flex flex-col">
-        <AppHeader breadcrumbs={["Settings"]} />
-        <PageContent>
-          <div className="mb-4">
-            <h1 className="text-xl font-semibold text-foreground">User Settings</h1>
-            <p className="text-sm text-muted-foreground">
-              Manage your account settings and preferences
-            </p>
-          </div>
 
-          {renderSectionNav()}
-          
-          <div className="max-w-2xl">
+      <PageContent>
+        <AppHeader breadcrumbs={["Settings"]} />
+
+        <main className="p-6">
+          {/* Header Card with Tabs */}
+          <Card className="p-6 mb-6">
+            <div className="flex items-center justify-center gap-2">
+              {settingsSections.map((section) => {
+                const Icon = section.icon;
+                const isActive = activeSection === section.id;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{section.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Card>
+
+          {/* Content */}
+          <div className="max-w-2xl mx-auto">
             {activeSection === "profile" && renderProfileSection()}
             {activeSection === "security" && renderSecuritySection()}
           </div>
-        </PageContent>
-      </div>
+        </main>
+      </PageContent>
     </div>
   );
 }
