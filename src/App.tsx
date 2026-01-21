@@ -13,7 +13,6 @@ import Overview from "./pages/Overview";
 import NewAppointment from "./pages/NewAppointment";
 import Registration from "./pages/Registration";
 import BookAppointment from "./pages/BookAppointment";
-import Inbox from "./pages/Inbox";
 import Payment from "./pages/Payment";
 import PatientInsights from "./pages/PatientInsights";
 import PatientTimeline from "./pages/PatientTimeline";
@@ -87,9 +86,8 @@ const App = () => (
                 {/* Public route - Auth */}
                 <Route path="/auth" element={<Auth />} />
                 
-                {/* Protected routes */}
+{/* Protected routes */}
                 <Route path="/" element={<Protected><Overview /></Protected>} />
-                <Route path="/inbox" element={<Protected><Inbox /></Protected>} />
                 <Route path="/new-appointment" element={<Protected><NewAppointment /></Protected>} />
                 <Route path="/registration" element={<Protected><Registration /></Protected>} />
                 <Route path="/book-appointment" element={<Protected><BookAppointment /></Protected>} />

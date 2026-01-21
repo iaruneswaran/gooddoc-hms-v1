@@ -528,9 +528,9 @@ const BookAppointment = () => {
       description: "The appointment has been scheduled successfully.",
     });
     
-    // Navigate to appointment details or back to inbox
+// Navigate to appointment details or back to schedule
     setTimeout(() => {
-      navigate(isSingleAppointmentMode ? "/inbox" : "/");
+      navigate(isSingleAppointmentMode ? "/schedule/today" : "/");
     }, 1000);
   };
 
@@ -614,9 +614,7 @@ const BookAppointment = () => {
                     navigate(`/patients/search?q=${patientSearchQuery}`);
                   } else if (fromPatients) {
                     navigate("/patients");
-                  } else if (isSingleAppointmentMode) {
-                    navigate("/inbox");
-                  } else if (isFromScheduledRequests) {
+} else if (isSingleAppointmentMode || isFromScheduledRequests) {
                     navigate("/schedule/today");
                   } else {
                     navigate("/registration");
@@ -626,7 +624,7 @@ const BookAppointment = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span className="font-semibold">
-                  {fromPatientInsights ? "Patient Insight" : (fromSearch ? "Search Results" : (fromPatients ? "Patients" : (isSingleAppointmentMode ? "Inbox" : (isFromScheduledRequests ? "Appointments" : "Registration"))))}
+                  {fromPatientInsights ? "Patient Insight" : (fromSearch ? "Search Results" : (fromPatients ? "Patients" : ((isSingleAppointmentMode || isFromScheduledRequests) ? "Appointments" : "Registration")))}
                 </span>
               </button>
             </div>

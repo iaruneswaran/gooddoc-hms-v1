@@ -162,9 +162,9 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
+<DropdownMenuItem
                   className="justify-center text-primary cursor-pointer"
-                  onClick={() => navigate("/inbox")}
+                  onClick={() => navigate("/schedule/today")}
                 >
                   View all notifications
                 </DropdownMenuItem>
