@@ -354,7 +354,7 @@ const PatientServices = () => {
             ) : viewMode === 'pending' ? (
               <>
                 {/* Pending Services Header */}
-                <div className="h-[75px] px-4 border-b border-border bg-background flex items-center justify-between">
+                <div className="p-4 border-b border-border bg-background flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={selectAllPending}
@@ -374,7 +374,7 @@ const PatientServices = () => {
                     )}
                   </div>
                   {selectedPendingIds.size > 0 && (
-                    <Button size="sm" onClick={addSelectedToCart} className="gap-1.5">
+                    <Button onClick={addSelectedToCart} className="h-10 gap-1.5">
                       <ShoppingCart className="w-3.5 h-3.5" />
                       Add to Bill ({selectedPendingIds.size})
                     </Button>
