@@ -365,16 +365,15 @@ const Registration = () => {
                       />
                     </div>
                   ))}
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="otherConditions">Other</Label>
-                  <Input
-                    id="otherConditions"
-                    placeholder="Please specify any other medical conditions, allergies, or relevant health information..."
-                    {...register("otherConditions")}
-                    className="w-full"
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="otherConditions">Other</Label>
+                    <Input
+                      id="otherConditions"
+                      placeholder="Other conditions..."
+                      {...register("otherConditions")}
+                    />
+                  </div>
                 </div>
               </div>
 
