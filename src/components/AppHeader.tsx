@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, User, Search, Settings, LogOut, Calendar, FileText } from "lucide-react";
+import { Bell, User, Search, LogOut } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ConnectionStatusIndicator } from "@/components/realtime/ConnectionStatusIndicator";
@@ -198,27 +198,6 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             >
               <User className="mr-2 h-4 w-4" />
               Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => navigate("/settings")}
-            >
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => navigate("/doctors/calendar")}
-            >
-              <Calendar className="mr-2 h-4 w-4" />
-              My Calendar
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => navigate("/reports")}
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Reports
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
