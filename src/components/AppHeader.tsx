@@ -127,7 +127,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
               )}
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80 bg-popover">
+<DropdownMenuContent align="end" className="w-80 max-h-80 overflow-y-auto bg-popover">
             <DropdownMenuLabel className="flex items-center justify-between">
               <span>Notifications</span>
               {unreadCount > 0 && (
@@ -161,13 +161,6 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
                     </div>
                   </DropdownMenuItem>
                 ))}
-                <DropdownMenuSeparator />
-<DropdownMenuItem
-                  className="justify-center text-primary cursor-pointer"
-                  onClick={() => navigate("/schedule/today")}
-                >
-                  View all notifications
-                </DropdownMenuItem>
               </>
             ) : (
               <div className="p-4 text-center text-sm text-muted-foreground">
