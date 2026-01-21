@@ -491,29 +491,6 @@ const PatientServices = () => {
                       className="pl-9 h-10"
                     />
                   </div>
-                  
-                  {/* Sub-category Pills */}
-                  {subCategories.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      <Badge
-                        variant={selectedSubCategory === "all" ? "default" : "outline"}
-                        className="cursor-pointer transition-colors"
-                        onClick={() => setSelectedSubCategory("all")}
-                      >
-                        All
-                      </Badge>
-                      {subCategories.map((sub) => (
-                        <Badge
-                          key={sub}
-                          variant={selectedSubCategory === sub ? "default" : "outline"}
-                          className="cursor-pointer transition-colors"
-                          onClick={() => setSelectedSubCategory(sub)}
-                        >
-                          {sub}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
                 </div>
                 
                 {/* Results Header */}
