@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format, parse, isValid } from "date-fns";
-import { CalendarIcon, ChevronLeft } from "lucide-react";
+import { CalendarIcon, ChevronLeft, Check, ChevronsUpDown } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -26,8 +26,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+
+const insuranceCompanies = [
+  { value: "star-health", label: "Star Health Insurance" },
+  { value: "hdfc-ergo", label: "HDFC ERGO Health Insurance" },
+  { value: "icici-lombard", label: "ICICI Lombard Health Insurance" },
+  { value: "bajaj-allianz", label: "Bajaj Allianz Health Insurance" },
+  { value: "max-bupa", label: "Max Bupa Health Insurance" },
+  { value: "new-india", label: "New India Assurance" },
+  { value: "oriental", label: "Oriental Insurance" },
+  { value: "united-india", label: "United India Insurance" },
+  { value: "national", label: "National Insurance Company" },
+  { value: "care-health", label: "Care Health Insurance" },
+  { value: "aditya-birla", label: "Aditya Birla Health Insurance" },
+  { value: "tata-aig", label: "Tata AIG Health Insurance" },
+  { value: "religare", label: "Religare Health Insurance" },
+  { value: "manipal-cigna", label: "ManipalCigna Health Insurance" },
+  { value: "sbi-health", label: "SBI Health Insurance" },
+];
 
 const registrationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -386,10 +412,55 @@ const Registration = () => {
                 <div className="grid grid-cols-4 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="insuranceFunder">Insurance Funder</Label>
-                    <Input
-                      id="insuranceFunder"
-                      placeholder="Funder name"
-                      {...register("insuranceFunder")}
+                    <Controller
+                      control={control}
+                      name="insuranceFunder"
+                      render={({ field }) => (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? insuranceCompanies.find((company) => company.value === field.value)?.label
+                                : "Select insurance"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[300px] p-0 bg-popover z-50" align="start">
+                            <Command>
+                              <CommandInput placeholder="Search insurance..." />
+                              <CommandList>
+                                <CommandEmpty>No insurance found.</CommandEmpty>
+                                <CommandGroup>
+                                  {insuranceCompanies.map((company) => (
+                                    <CommandItem
+                                      key={company.value}
+                                      value={company.label}
+                                      onSelect={() => {
+                                        field.onChange(company.value);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          field.value === company.value ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      {company.label}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      )}
                     />
                   </div>
 
