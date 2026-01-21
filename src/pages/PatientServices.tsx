@@ -231,35 +231,33 @@ const PatientServices = () => {
           {/* Left Side - View Mode & Category Sidebar */}
           <div className="w-[220px] border-r border-border bg-muted/30 flex flex-col">
             {/* View Mode Toggle */}
-            <div className="px-3 py-2 border-b border-border flex flex-col gap-1">
-              <div className="flex gap-1 bg-muted rounded-lg p-1 w-full">
+            <div className="p-3 border-b border-border">
+              <div className="flex bg-muted/60 rounded-md p-0.5">
                 <button
                   onClick={() => setViewMode('catalog')}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
+                    "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded text-sm font-medium transition-all",
                     viewMode === 'catalog'
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <Package className="w-3.5 h-3.5" />
                   Catalog
                 </button>
                 <button
                   onClick={() => setViewMode('pending')}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors",
+                    "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded text-sm font-medium transition-all",
                     viewMode === 'pending'
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <ClipboardList className="w-3.5 h-3.5" />
                   Pending
                   {totalPendingCount > 0 && (
-                    <Badge variant="destructive" className="h-4 px-1 text-[10px]">
+                    <span className="ml-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold">
                       {totalPendingCount}
-                    </Badge>
+                    </span>
                   )}
                 </button>
               </div>
@@ -305,9 +303,9 @@ const PatientServices = () => {
                           <Icon className="w-4 h-4" />
                           <span className="flex-1 text-left">{cat.name}</span>
                           <span className={cn(
-                            "text-xs px-1.5 py-0.5 rounded font-semibold",
+                            "min-w-[22px] h-[22px] flex items-center justify-center rounded-full text-[11px] font-medium",
                             isRoom 
-                              ? "bg-red-100 text-red-600"
+                              ? "bg-destructive/10 text-destructive"
                               : selectedCategory === cat.id 
                                 ? "bg-primary-foreground/20 text-primary-foreground" 
                                 : "bg-muted text-muted-foreground"
