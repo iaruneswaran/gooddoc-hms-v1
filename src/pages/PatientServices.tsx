@@ -456,16 +456,35 @@ const PatientServices = () => {
                                   )}
                                 </div>
                                 
-                              {/* Price */}
-                                <div className="text-right flex-shrink-0">
-                                  <p className="text-sm font-bold text-foreground">
-                                    {formatPrice(ps.service.price * ps.quantity)}
-                                  </p>
-                                  {ps.quantity > 1 && (
-                                    <p className="text-xs text-muted-foreground">
-                                      {formatPrice(ps.service.price)} × {ps.quantity}
+                              {/* Price & Add Button */}
+                                <div className="flex items-center gap-3 flex-shrink-0">
+                                  <div className="text-right">
+                                    <p className="text-sm font-bold text-foreground">
+                                      {formatPrice(ps.service.price * ps.quantity)}
                                     </p>
-                                  )}
+                                    {ps.quantity > 1 && (
+                                      <p className="text-xs text-muted-foreground">
+                                        {formatPrice(ps.service.price)} × {ps.quantity}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <Button
+                                    size="sm"
+                                    variant={inCart ? "secondary" : "default"}
+                                    disabled={inCart}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (!inCart) {
+                                        addToCart(ps.service);
+                                        if (ps.quantity > 1) {
+                                          updateQty(ps.service.id, ps.quantity);
+                                        }
+                                      }
+                                    }}
+                                    className="h-8 px-3"
+                                  >
+                                    {inCart ? "Added" : "Add"}
+                                  </Button>
                                 </div>
                               </div>
                             );
