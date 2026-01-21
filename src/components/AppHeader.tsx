@@ -28,7 +28,6 @@ const notifications = [
     description: "Dr. Sharma has a new appointment request",
     time: "5 min ago",
     unread: true,
-    link: "/inbox",
   },
   {
     id: 2,
@@ -36,7 +35,6 @@ const notifications = [
     description: "Patient Rajesh Kumar's lab results are ready",
     time: "1 hour ago",
     unread: false,
-    link: "/laboratory/results",
   },
   {
     id: 3,
@@ -44,7 +42,6 @@ const notifications = [
     description: "Patient Priya Patel has been discharged",
     time: "2 hours ago",
     unread: false,
-    link: "/discharged-today",
   },
 ];
 
@@ -143,7 +140,6 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
                   <DropdownMenuItem
                     key={notification.id}
                     className="flex flex-col items-start gap-1 p-3 cursor-pointer"
-                    onClick={() => navigate(notification.link)}
                   >
                     <div className="flex items-start gap-2 w-full">
                       {notification.unread && (
