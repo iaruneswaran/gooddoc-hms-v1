@@ -190,8 +190,12 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
       </div>
 
       {/* Results count */}
-      <div className="text-xs text-muted-foreground px-4 border-y border-border bg-muted/30 flex items-center" style={{ height: '32.8px' }}>
-        Showing <span className="font-medium text-foreground">{filteredTransfers.length}</span> of {allTransfers.length} transfers
+      <div className="text-xs text-muted-foreground px-4 border-y border-border bg-muted/30 flex items-center gap-1" style={{ height: '32.8px' }}>
+        <span>Showing</span>
+        <span className="font-medium text-foreground">{filteredTransfers.length}</span>
+        <span>of</span>
+        <span>{allTransfers.length}</span>
+        <span>transfers</span>
       </div>
 
       {/* Table */}
