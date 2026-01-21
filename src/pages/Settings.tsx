@@ -3,14 +3,19 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { cn } from "@/lib/utils";
-import { getCurrentUser, validatePassword } from "@/lib/auth";
+import { getCurrentUser, validatePassword, logout } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { 
   User, 
   Shield, 
   Eye, 
   EyeOff,
   Upload,
+  AlertTriangle,
+  Trash2,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +32,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const settingsSections = [
   { id: "profile", label: "Profile", icon: User },
@@ -45,6 +66,7 @@ const timezones = [
 ];
 
 export default function Settings() {
+  const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const [activeSection, setActiveSection] = useState("profile");
   
@@ -57,6 +79,13 @@ export default function Settings() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [profileSaving, setProfileSaving] = useState(false);
   
+  // Email verification state
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  
   // Security state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -66,6 +95,10 @@ export default function Settings() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [securitySaving, setSecuritySaving] = useState(false);
+  
+  // Delete account state
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -74,6 +107,48 @@ export default function Settings() {
       .join("")
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const handleSendOtp = () => {
+    setOtpSending(true);
+    // Simulate sending OTP
+    setTimeout(() => {
+      setOtpSending(false);
+      setShowOtpInput(true);
+      toast({
+        title: "OTP Sent",
+        description: `A verification code has been sent to ${email}`,
+      });
+    }, 1500);
+  };
+
+  const handleVerifyOtp = () => {
+    if (otpValue.length !== 6) {
+      toast({
+        title: "Invalid OTP",
+        description: "Please enter a valid 6-digit OTP",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setOtpVerifying(true);
+    // Simulate OTP verification (accept any 6-digit code for demo)
+    setTimeout(() => {
+      setOtpVerifying(false);
+      setEmailVerified(true);
+      setShowOtpInput(false);
+      setOtpValue("");
+      toast({
+        title: "Email Verified",
+        description: "Your email address has been verified successfully.",
+      });
+    }, 1500);
+  };
+
+  const handleCancelOtp = () => {
+    setShowOtpInput(false);
+    setOtpValue("");
   };
 
   const handleProfileSave = () => {
@@ -118,6 +193,35 @@ export default function Settings() {
         description: "Your password has been changed successfully.",
       });
     }, 1000);
+  };
+
+  const handleDeleteAccount = () => {
+    if (deleteConfirmText !== "DELETE") {
+      toast({
+        title: "Confirmation required",
+        description: "Please type DELETE to confirm account deletion.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsDeleting(true);
+    setTimeout(() => {
+      setIsDeleting(false);
+      logout();
+      toast({
+        title: "Account deleted",
+        description: "Your account has been permanently deleted.",
+      });
+      navigate("/auth");
+    }, 2000);
+  };
+
+  const handleSignOutAllSessions = () => {
+    toast({
+      title: "Sessions terminated",
+      description: "All other sessions have been signed out.",
+    });
   };
 
   const getPasswordStrength = (password: string) => {
@@ -190,19 +294,90 @@ export default function Settings() {
 
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <Input
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailVerified(false);
+                  setShowOtpInput(false);
+                }}
                 placeholder="your@email.com"
                 className="flex-1"
               />
-              <Button variant="outline" size="sm">
-                Verify
-              </Button>
+              {emailVerified ? (
+                <div className="flex items-center gap-1 text-success text-sm">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>Verified</span>
+                </div>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleSendOtp}
+                  disabled={otpSending || !email}
+                >
+                  {otpSending ? "Sending..." : "Verify"}
+                </Button>
+              )}
             </div>
+            
+            {/* OTP Input */}
+            {showOtpInput && !emailVerified && (
+              <div className="mt-4 p-4 border rounded-lg bg-muted/30 space-y-4">
+                <div className="space-y-2">
+                  <Label>Enter Verification Code</Label>
+                  <p className="text-xs text-muted-foreground">
+                    We've sent a 6-digit code to {email}
+                  </p>
+                </div>
+                <div className="flex justify-center">
+                  <InputOTP
+                    maxLength={6}
+                    value={otpValue}
+                    onChange={(value) => setOtpValue(value)}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+                <div className="flex justify-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleCancelOtp}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={handleVerifyOtp}
+                    disabled={otpVerifying || otpValue.length !== 6}
+                  >
+                    {otpVerifying ? "Verifying..." : "Verify Code"}
+                  </Button>
+                </div>
+                <div className="text-center">
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    className="text-xs"
+                    onClick={handleSendOtp}
+                    disabled={otpSending}
+                  >
+                    Didn't receive code? Resend
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -392,7 +567,15 @@ export default function Settings() {
             </div>
             <Switch
               checked={twoFactorEnabled}
-              onCheckedChange={setTwoFactorEnabled}
+              onCheckedChange={(checked) => {
+                setTwoFactorEnabled(checked);
+                toast({
+                  title: checked ? "2FA Enabled" : "2FA Disabled",
+                  description: checked 
+                    ? "Two-factor authentication has been enabled for your account."
+                    : "Two-factor authentication has been disabled.",
+                });
+              }}
             />
           </div>
         </CardContent>
@@ -418,9 +601,82 @@ export default function Settings() {
             </div>
             <span className="text-xs text-muted-foreground">Current</span>
           </div>
-          <Button variant="outline" size="sm" className="mt-4">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-4"
+            onClick={handleSignOutAllSessions}
+          >
             Sign out all other sessions
           </Button>
+        </CardContent>
+      </Card>
+
+      {/* Danger Zone - Delete Account */}
+      <Card className="border-destructive/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-5 w-5" />
+            Danger Zone
+          </CardTitle>
+          <CardDescription>
+            Irreversible and destructive actions.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium">Delete Account</p>
+              <p className="text-xs text-muted-foreground">
+                Permanently delete your account and all associated data.
+              </p>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" className="gap-2">
+                  <Trash2 className="h-4 w-4" />
+                  Delete Account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-destructive" />
+                    Delete Account
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="space-y-4">
+                    <p>
+                      This action cannot be undone. This will permanently delete your
+                      account and remove all your data from our servers.
+                    </p>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-foreground">
+                        Type <span className="font-bold">DELETE</span> to confirm:
+                      </p>
+                      <Input
+                        value={deleteConfirmText}
+                        onChange={(e) => setDeleteConfirmText(e.target.value)}
+                        placeholder="Type DELETE to confirm"
+                        className="font-mono"
+                      />
+                    </div>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => setDeleteConfirmText("")}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    disabled={deleteConfirmText !== "DELETE" || isDeleting}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isDeleting ? "Deleting..." : "Delete Account"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </CardContent>
       </Card>
     </div>
@@ -434,30 +690,28 @@ export default function Settings() {
         <AppHeader breadcrumbs={["Settings"]} />
 
         <main className="p-6">
-          {/* Header Card with Tabs */}
-          <Card className="p-6 mb-6">
-            <div className="flex items-center justify-center gap-2">
-              {settingsSections.map((section) => {
-                const Icon = section.icon;
-                const isActive = activeSection === section.id;
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{section.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </Card>
+          {/* Section Tabs - No card wrapper */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            {settingsSections.map((section) => {
+              const Icon = section.icon;
+              const isActive = activeSection === section.id;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{section.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Content */}
           <div className="max-w-2xl mx-auto">
