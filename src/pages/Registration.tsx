@@ -383,8 +383,8 @@ const Registration = () => {
               <div className="bg-card rounded-lg border border-border p-6 space-y-6">
                 <h3 className="text-base font-semibold text-foreground">Insurance</h3>
                 
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2 col-span-1">
                     <Label htmlFor="insuranceFunder">Insurance Funder</Label>
                     <Input
                       id="insuranceFunder"
@@ -402,7 +402,7 @@ const Registration = () => {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 col-span-1">
                     <Label htmlFor="relationshipToPolicyHolder">Relationship To Policy Holder</Label>
                     <Controller
                       control={control}
@@ -423,7 +423,9 @@ const Registration = () => {
                       )}
                     />
                   </div>
+                </div>
 
+                <div className="grid grid-cols-4 gap-4">
                   <div className="space-y-2">
                     <Label>Effective Date</Label>
                     <Controller
