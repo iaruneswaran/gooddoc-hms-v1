@@ -405,7 +405,6 @@ const PatientServices = () => {
                         <>
                           {pendingServices.map((ps) => {
                             const isSelected = selectedPendingIds.has(ps.id);
-                            const Icon = getCategoryIcon(ps.service.category);
                             const inCart = isInCart(ps.service.id);
                             
                             return (
@@ -424,14 +423,6 @@ const PatientServices = () => {
                                   onCheckedChange={() => togglePendingSelection(ps.id)}
                                   className="mt-1"
                                 />
-                                
-                                {/* Service Icon */}
-                                <div className={cn(
-                                  "w-10 h-10 rounded-lg flex items-center justify-center border flex-shrink-0",
-                                  getCategoryColor(ps.service.category)
-                                )}>
-                                  <Icon className="w-5 h-5" />
-                                </div>
                                 
                                 {/* Service Info */}
                                 <div className="flex-1 min-w-0">
@@ -552,7 +543,6 @@ const PatientServices = () => {
                       {results.map((service) => {
                         const inCart = isInCart(service.id);
                         const cartItem = getCartItem(service.id);
-                        const Icon = getCategoryIcon(service.category);
                         
                         return (
                           <div 
@@ -562,13 +552,6 @@ const PatientServices = () => {
                               inCart ? "bg-primary/5" : "hover:bg-muted/50"
                             )}
                           >
-                            {/* Service Icon */}
-                            <div className={cn(
-                              "w-10 h-10 rounded-lg flex items-center justify-center border",
-                              getCategoryColor(service.category)
-                            )}>
-                              <Icon className="w-5 h-5" />
-                            </div>
                             
                             {/* Service Info */}
                             <div className="flex-1 min-w-0">
