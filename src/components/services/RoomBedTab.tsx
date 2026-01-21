@@ -161,13 +161,13 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
               placeholder="Search by location or bed..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9"
+              className="pl-9 h-10"
             />
           </div>
 
           {/* Status Filter */}
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[140px] h-9">
+            <SelectTrigger className="w-[140px] h-10">
               <Filter className="w-3.5 h-3.5 mr-2" />
               <SelectValue placeholder="All Statuses" />
             </SelectTrigger>
@@ -180,11 +180,12 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
           </Select>
 
           {/* Date Range - placeholder */}
-          <Button variant="outline" size="sm" className="h-9" data-testid="room-bed-filter-date-range">
+          <Button variant="outline" size="sm" className="h-10" data-testid="room-bed-filter-date-range">
             <Clock className="w-3.5 h-3.5 mr-2" />
             Current Admission
           </Button>
         </div>
+
 
       </div>
 
