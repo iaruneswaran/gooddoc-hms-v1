@@ -483,6 +483,7 @@ const PatientServices = () => {
                                     }}
                                     className="h-8 px-3"
                                   >
+                                    <Plus className="w-3.5 h-3.5" />
                                     {inCart ? "Added" : "Add"}
                                   </Button>
                                 </div>
