@@ -284,7 +284,7 @@ export default function Inbox() {
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <PageContent className="flex flex-col min-h-screen">
-        <AppHeader breadcrumbs={[]} />
+        <AppHeader breadcrumbs={[{ label: "Overview", onClick: () => navigate("/") }, "Appointment Requests"]} />
         <main className="flex-1 p-6 space-y-6">
           {/* Header */}
           <Card className="p-6 mb-8">
