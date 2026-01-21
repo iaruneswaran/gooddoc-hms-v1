@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format, parse, isValid } from "date-fns";
-import { ChevronLeft } from "lucide-react";
+import { CalendarIcon, ChevronLeft } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
@@ -12,6 +12,13 @@ import { BookingSteps } from "@/components/BookingSteps";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -31,7 +38,27 @@ const registrationSchema = z.object({
   mobileNumber: z.string().regex(/^\d{10}$/, "Mobile number must be 10 digits"),
   email: z.string().email("Invalid email address").max(255),
   bloodGroup: z.string().min(1, "Blood group is required"),
-  street: z.string().min(5, "Street address is required").max(200),
+  // Medical Info
+  allergic: z.enum(["yes", "no"]).optional(),
+  highBloodPressure: z.enum(["yes", "no"]).optional(),
+  diabetes: z.enum(["yes", "no"]).optional(),
+  kidneyDisease: z.enum(["yes", "no"]).optional(),
+  asthma: z.enum(["yes", "no"]).optional(),
+  pregnant: z.enum(["yes", "no"]).optional(),
+  breastFeeding: z.enum(["yes", "no"]).optional(),
+  otherConditions: z.string().optional(),
+  // Insurance
+  insuranceFunder: z.string().optional(),
+  policyNumber: z.string().optional(),
+  relationshipToPolicyHolder: z.string().optional(),
+  effectiveDate: z.date().optional(),
+  coverageStartDate: z.date().optional(),
+  schemeName: z.string().optional(),
+  policyHolderName: z.string().optional(),
+  memberId: z.string().optional(),
+  expiryDate: z.date().optional(),
+  coverageEndDate: z.date().optional(),
+  // Address
   pinCode: z.string().regex(/^\d{6}$/, "Pin code must be 6 digits"),
   city: z.string().min(2, "City is required").max(100),
   state: z.string().min(2, "State is required").max(100),
@@ -298,6 +325,266 @@ const Registration = () => {
                   </div>
                 </div>
 
+              </div>
+
+              {/* Medical Info */}
+              <div className="bg-card rounded-lg border border-border p-6 space-y-6">
+                <h3 className="text-base font-semibold text-foreground">Medical Info</h3>
+                
+                <div className="grid grid-cols-4 gap-x-6 gap-y-4">
+                  {[
+                    { name: "allergic" as const, label: "Allergic" },
+                    { name: "highBloodPressure" as const, label: "High Blood Pressure" },
+                    { name: "diabetes" as const, label: "Diabetes" },
+                    { name: "kidneyDisease" as const, label: "Kidney Disease" },
+                    { name: "asthma" as const, label: "Asthma" },
+                    { name: "pregnant" as const, label: "Pregnant" },
+                    { name: "breastFeeding" as const, label: "Breast feeding" },
+                  ].map((condition) => (
+                    <div key={condition.name} className="space-y-2">
+                      <Label className="text-sm">{condition.label}</Label>
+                      <Controller
+                        control={control}
+                        name={condition.name}
+                        render={({ field }) => (
+                          <RadioGroup
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            className="flex gap-4"
+                          >
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem value="yes" id={`${condition.name}-yes`} />
+                              <Label htmlFor={`${condition.name}-yes`} className="font-normal cursor-pointer">Yes</Label>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem value="no" id={`${condition.name}-no`} />
+                              <Label htmlFor={`${condition.name}-no`} className="font-normal cursor-pointer">No</Label>
+                            </div>
+                          </RadioGroup>
+                        )}
+                      />
+                    </div>
+                  ))}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="otherConditions">Other</Label>
+                    <Input
+                      id="otherConditions"
+                      placeholder="Other conditions..."
+                      {...register("otherConditions")}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Insurance */}
+              <div className="bg-card rounded-lg border border-border p-6 space-y-6">
+                <h3 className="text-base font-semibold text-foreground">Insurance</h3>
+                
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="insuranceFunder">Insurance Funder</Label>
+                    <Input
+                      id="insuranceFunder"
+                      placeholder="Funder name"
+                      {...register("insuranceFunder")}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="policyNumber">Policy Number</Label>
+                    <Input
+                      id="policyNumber"
+                      placeholder="Policy number"
+                      {...register("policyNumber")}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="relationshipToPolicyHolder">Relationship To Policy Holder</Label>
+                    <Controller
+                      control={control}
+                      name="relationshipToPolicyHolder"
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="self">Self</SelectItem>
+                            <SelectItem value="spouse">Spouse</SelectItem>
+                            <SelectItem value="child">Child</SelectItem>
+                            <SelectItem value="parent">Parent</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Effective Date</Label>
+                    <Controller
+                      control={control}
+                      name="effectiveDate"
+                      render={({ field }) => (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? format(field.value, "dd/MM/yyyy") : "DD/MM/YYYY"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <Label>Coverage Start Date</Label>
+                    <Controller
+                      control={control}
+                      name="coverageStartDate"
+                      render={({ field }) => (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? format(field.value, "dd/MM/yyyy") : "DD/MM/YYYY"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="schemeName">Scheme Name</Label>
+                    <Input
+                      id="schemeName"
+                      placeholder="Scheme name"
+                      {...register("schemeName")}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="policyHolderName">Policy Holder Name</Label>
+                    <Input
+                      id="policyHolderName"
+                      placeholder="Policy holder name"
+                      {...register("policyHolderName")}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="memberId">Member ID</Label>
+                    <Input
+                      id="memberId"
+                      placeholder="Member ID"
+                      {...register("memberId")}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <Label>Expiry Date</Label>
+                    <Controller
+                      control={control}
+                      name="expiryDate"
+                      render={({ field }) => (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? format(field.value, "dd/MM/yyyy") : "DD/MM/YYYY"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Coverage End Date</Label>
+                    <Controller
+                      control={control}
+                      name="coverageEndDate"
+                      render={({ field }) => (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? format(field.value, "dd/MM/yyyy") : "DD/MM/YYYY"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Address Details */}
