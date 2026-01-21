@@ -26,7 +26,7 @@ export function useServicesCart(baseCharge: number = 0) {
           unitPrice: service.price,
           taxPct: service.taxPct,
           qty: 1,
-          discountPct: 0,
+          discountAmt: 0,
           addedAt: new Date().toISOString(),
         },
       ];
@@ -41,13 +41,15 @@ export function useServicesCart(baseCharge: number = 0) {
     );
   }, []);
 
-  const updateDiscount = useCallback((itemId: string, discountPct: number) => {
+  const updateDiscount = useCallback((itemId: string, discountAmt: number) => {
     setCart((prev) =>
-      prev.map((item) =>
-        item.itemId === itemId
-          ? { ...item, discountPct: Math.min(100, Math.max(0, discountPct)) }
-          : item
-      )
+      prev.map((item) => {
+        if (item.itemId === itemId) {
+          const maxDiscount = item.unitPrice * item.qty;
+          return { ...item, discountAmt: Math.min(maxDiscount, Math.max(0, discountAmt)) };
+        }
+        return item;
+      })
     );
   }, []);
 
