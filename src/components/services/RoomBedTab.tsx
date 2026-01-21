@@ -190,7 +190,7 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
       </div>
 
       {/* Results count */}
-      <div className="text-xs text-muted-foreground py-2 px-4 border-y border-border bg-muted/30">
+      <div className="text-xs text-muted-foreground px-4 border-y border-border bg-muted/30 flex items-center" style={{ height: '32.8px' }}>
         Showing <span className="font-medium text-foreground">{filteredTransfers.length}</span> of {allTransfers.length} transfers
       </div>
 
