@@ -330,19 +330,17 @@ export function RoomBedTab({ patientId, onAddToCart, isInCart }: RoomBedTabProps
 
                     {/* Action */}
                     <TableCell className="text-center">
-                      {inCart ? (
-                        <Badge variant="secondary" className="text-xs">
-                          In Cart
-                        </Badge>
-                      ) : canAdd ? (
+                      {canAdd ? (
                         <Button
                           size="sm"
-                          className="h-8 gap-1"
+                          variant={inCart ? "secondary" : "default"}
+                          disabled={inCart}
                           onClick={() => handleAddToCart(transfer)}
                           data-testid={`room-bed-add-to-cart-${transfer.id}`}
+                          className="h-8 px-3"
                         >
-                          <Plus className="w-4 h-4" />
-                          Add
+                          <Plus className="w-3.5 h-3.5" />
+                          {inCart ? "Added" : "Add"}
                         </Button>
                       ) : (
                         <TooltipProvider>
