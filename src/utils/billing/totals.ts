@@ -4,7 +4,8 @@ import { CartItem, Totals } from "@/types/booking/ipAdmission";
  * Calculate net amount for a single cart item (before tax)
  */
 export function calcLineNet(item: CartItem): number {
-  return item.unitPrice * item.qty * (1 - (item.discountPct || 0) / 100);
+  const lineSubtotal = item.unitPrice * item.qty;
+  return lineSubtotal - (item.discountAmt || 0);
 }
 
 /**
@@ -31,7 +32,7 @@ export function calcTotals(items: CartItem[], baseCharge: number = 0): Totals {
     sum + (item.unitPrice * item.qty), 0) + baseCharge;
   
   const discountTotal = items.reduce((sum, item) => 
-    sum + (item.unitPrice * item.qty * (item.discountPct || 0) / 100), 0);
+    sum + (item.discountAmt || 0), 0);
   
   const subtotal = subtotalBeforeDiscount - discountTotal;
   

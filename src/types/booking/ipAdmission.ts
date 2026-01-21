@@ -35,7 +35,7 @@ export interface CartItem {
   unitPrice: number;
   taxPct: number;
   qty: number;
-  discountPct?: number; // 0–100
+  discountAmt?: number; // flat amount discount
   description?: string;
   addedAt: string; // ISO8601 timestamp when added to cart
 }

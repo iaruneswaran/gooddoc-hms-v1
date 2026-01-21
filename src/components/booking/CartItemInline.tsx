@@ -9,12 +9,12 @@ import { useState } from "react";
 interface CartItemInlineProps {
   item: CartItem;
   onUpdateQty: (itemId: string, qty: number) => void;
-  onUpdateDiscount: (itemId: string, discountPct: number) => void;
+  onUpdateDiscount: (itemId: string, discountAmt: number) => void;
   onRemove: (itemId: string) => void;
 }
 
 export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }: CartItemInlineProps) {
-  const [discountInput, setDiscountInput] = useState(item.discountPct?.toString() || "0");
+  const [discountInput, setDiscountInput] = useState(item.discountAmt?.toString() || "0");
   
   const handleQtyChange = (delta: number) => {
     const newQty = Math.max(1, item.qty + delta);
@@ -23,10 +23,11 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
   
   const handleDiscountBlur = () => {
     const value = parseFloat(discountInput);
-    if (!isNaN(value) && value >= 0 && value <= 100) {
+    const maxDiscount = item.unitPrice * item.qty;
+    if (!isNaN(value) && value >= 0 && value <= maxDiscount) {
       onUpdateDiscount(item.itemId, value);
     } else {
-      setDiscountInput(item.discountPct?.toString() || "0");
+      setDiscountInput(item.discountAmt?.toString() || "0");
     }
   };
   
@@ -79,16 +80,18 @@ export function CartItemInline({ item, onUpdateQty, onUpdateDiscount, onRemove }
           
           <div className="flex items-center gap-1">
             <span className="text-muted-foreground">Disc:</span>
-            <Input
-              type="number"
-              min="0"
-              max="100"
-              value={discountInput}
-              onChange={(e) => setDiscountInput(e.target.value)}
-              onBlur={handleDiscountBlur}
-              className="h-6 w-12 px-1 text-xs"
-            />
-            <span className="text-muted-foreground">%</span>
+            <div className="relative flex items-center">
+              <span className="absolute left-2 text-xs text-muted-foreground pointer-events-none">₹</span>
+              <Input
+                type="number"
+                min="0"
+                max={item.unitPrice * item.qty}
+                value={discountInput}
+                onChange={(e) => setDiscountInput(e.target.value)}
+                onBlur={handleDiscountBlur}
+                className="h-6 w-16 pl-5 pr-1 text-xs text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
           </div>
           
           <div className="ml-auto font-medium text-foreground">

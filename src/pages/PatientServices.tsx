@@ -656,7 +656,8 @@ const PatientServices = () => {
                 <div className="p-3 space-y-2">
                   {cart.map((item) => {
                     const addedDate = new Date(item.addedAt);
-                    const lineTotal = item.unitPrice * item.qty * (1 - (item.discountPct || 0) / 100);
+                    const lineSubtotal = item.unitPrice * item.qty;
+                    const lineTotal = lineSubtotal - (item.discountAmt || 0);
                     return (
                       <Card key={item.itemId} className="shadow-sm border-border">
                         <CardContent className="p-3">
@@ -731,20 +732,22 @@ const PatientServices = () => {
                                   {/* Discount */}
                                   <div className="flex items-center gap-1">
                                     <span className="text-xs text-muted-foreground">Disc:</span>
-                                    <Input
-                                      type="number"
-                                      min="0"
-                                      max="100"
-                                      defaultValue={item.discountPct || 0}
-                                      onBlur={(e) => {
-                                        const val = parseFloat(e.target.value);
-                                        if (!isNaN(val) && val >= 0 && val <= 100) {
-                                          updateDiscount(item.itemId, val);
-                                        }
-                                      }}
-                                      className="h-6 w-12 px-1.5 text-xs text-center"
-                                    />
-                                    <span className="text-xs text-muted-foreground">%</span>
+                                    <div className="relative flex items-center">
+                                      <span className="absolute left-2 text-xs text-muted-foreground pointer-events-none">₹</span>
+                                      <Input
+                                        type="number"
+                                        min="0"
+                                        max={lineSubtotal}
+                                        defaultValue={item.discountAmt || 0}
+                                        onBlur={(e) => {
+                                          const val = parseFloat(e.target.value);
+                                          if (!isNaN(val) && val >= 0 && val <= lineSubtotal) {
+                                            updateDiscount(item.itemId, val);
+                                          }
+                                        }}
+                                        className="h-6 w-16 pl-5 pr-1.5 text-xs text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                                 
@@ -753,11 +756,11 @@ const PatientServices = () => {
                                   <span className="text-sm font-semibold">
                                     {formatPrice(lineTotal)}
                                   </span>
-                                  {(item.qty > 1 || (item.discountPct && item.discountPct > 0)) && (
+                                  {(item.qty > 1 || (item.discountAmt && item.discountAmt > 0)) && (
                                     <p className="text-xs text-muted-foreground">
                                       {formatPrice(item.unitPrice)} × {item.qty}
-                                      {item.discountPct && item.discountPct > 0 && (
-                                        <span className="text-green-600 ml-1">-{item.discountPct}%</span>
+                                      {item.discountAmt && item.discountAmt > 0 && (
+                                        <span className="text-green-600 ml-1">-{formatPrice(item.discountAmt)}</span>
                                       )}
                                     </p>
                                   )}
