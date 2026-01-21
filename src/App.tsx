@@ -65,6 +65,7 @@ import DiagnosticsList from "./pages/DiagnosticsList";
 import PatientAdvanceCollection from "./pages/PatientAdvanceCollection";
 import GenerateInterimBill from "./pages/GenerateInterimBill";
 import AddBed from "./pages/AddBed";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -143,6 +144,7 @@ const App = () => (
                 <Route path="/reports/revenue" element={<Protected><BillsList /></Protected>} />
                 <Route path="/reports/advance-payments" element={<Protected><AdvancePayments /></Protected>} />
                 <Route path="/settings/bed-charges" element={<Protected><BedCharges /></Protected>} />
+                <Route path="/settings" element={<Protected><Settings /></Protected>} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
