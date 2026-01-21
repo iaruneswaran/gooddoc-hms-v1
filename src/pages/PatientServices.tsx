@@ -782,8 +782,8 @@ const PatientServices = () => {
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">Discount</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-muted-foreground">₹</span>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-2.5 text-xs font-medium text-muted-foreground pointer-events-none">₹</span>
                     <Input
                       type="number"
                       min="0"
@@ -797,8 +797,8 @@ const PatientServices = () => {
                           updateGlobalDiscount(0);
                         }
                       }}
-                      className="h-6 w-20 px-1.5 text-xs text-right"
-                      placeholder="0"
+                      className="h-8 w-24 pl-6 pr-2 text-sm text-right font-medium border-dashed focus:border-solid focus:border-primary transition-colors"
+                      placeholder="0.00"
                     />
                   </div>
                 </div>
