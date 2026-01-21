@@ -797,7 +797,7 @@ const PatientServices = () => {
                           updateGlobalDiscount(0);
                         }
                       }}
-                      className="h-8 w-24 pl-6 pr-2 text-sm text-right font-medium border-dashed focus:border-solid focus:border-primary transition-colors"
+                      className="h-8 w-24 pl-6 pr-2 text-sm text-right font-medium border-dashed focus:border-solid focus:border-primary transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       placeholder="0.00"
                     />
                   </div>
