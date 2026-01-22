@@ -177,6 +177,7 @@ export interface AppointmentRequestRecord {
   insuranceVerified: boolean;
   status: "New" | "Pending" | "Scheduled" | "Rejected";
   createdAt: string;
+  clinicalInfo?: string;
 }
 
 export interface LabOrderRecord {
@@ -668,6 +669,20 @@ export const transfers: TransferRecord[] = Array.from({ length: 10 }, (_, i) => 
 
 // ============== APPOINTMENT REQUESTS ==============
 
+// Clinical information samples for appointment requests
+const clinicalInfoSamples = [
+  "Patient reports persistent chest discomfort for the past 3 days, worsening with physical activity. No previous cardiac history. Family history of heart disease (father had MI at 55).",
+  "Experiencing recurring headaches, predominantly in the frontal region, lasting 4-6 hours. Associated with nausea but no visual disturbances. Taking OTC painkillers with partial relief.",
+  "Follow-up for Type 2 Diabetes diagnosed 5 years ago. Currently on Metformin 500mg BD. Recent HbA1c was 7.8%. Reports occasional hypoglycemic episodes in the morning.",
+  "Chronic lower back pain for 2 months, radiating to left leg. MRI pending. No bowel/bladder dysfunction. Pain score 6/10. Taking physiotherapy sessions twice weekly.",
+  "Post-operative follow-up after appendectomy performed 2 weeks ago. Wound healing well. No fever or discharge. Bowel movements regular. Requesting clearance for return to work.",
+  "New patient referral for hypertension management. BP readings at home averaging 150/95 mmHg. Currently not on any antihypertensive medications. Non-smoker, occasional alcohol.",
+  "Presenting with skin rash on both arms for 1 week. Itchy, raised red patches. No new medications or dietary changes. No known allergies. Applied calamine lotion with no improvement.",
+  "Annual health checkup requested. No current complaints. Last checkup was 18 months ago. Interested in comprehensive blood work and cardiac assessment.",
+  "Symptoms of seasonal allergies - sneezing, runny nose, watery eyes. Symptoms worse in morning. Previous year managed with antihistamines. Seeking prescription renewal.",
+  "Pediatric consultation for 8-year-old child with recurrent ear infections. Third episode in 6 months. Currently on antibiotics. Parents concerned about hearing impact.",
+];
+
 function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const createdDate = subHours(now, Math.floor(Math.random() * 8));
   const preferredDate = addDays(now, 1 + Math.floor(Math.random() * 7));
@@ -677,6 +692,11 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
   const emailName = patientName.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z.]/g, '');
   const ageSex = generateAgeSex(index + 400);
   const visitTypes = ["OP", "IP", "Emergency", "Follow-up"] as const;
+  
+  // Generate clinical info for most requests (80%)
+  const hasClinicalInfo = Math.random() > 0.2;
+  const clinicalInfo = hasClinicalInfo ? clinicalInfoSamples[index % clinicalInfoSamples.length] : undefined;
+  
   return {
     requestId: `REQ${today.replace(/-/g, "")}${String(index).padStart(4, "0")}`,
     patient: patientName,
@@ -694,6 +714,7 @@ function generateAppointmentRequest(index: number): AppointmentRequestRecord {
     insuranceVerified: Math.random() > 0.3,
     status: (["New", "Pending", "Scheduled", "Rejected"] as const)[index % 4],
     createdAt: formatDateTime(createdDate),
+    clinicalInfo,
   };
 }
 

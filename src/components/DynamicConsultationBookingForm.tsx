@@ -68,11 +68,11 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
       if (initialData.type) setConsultationType(initialData.type);
       if (initialData.department) setDepartment(initialData.department);
       if (initialData.doctorId) setSelectedDoctorId(initialData.doctorId);
-      if (initialData.clinicalInfo) setClinicalInfo(initialData.clinicalInfo);
+      if (initialData.clinicalInfo !== undefined) setClinicalInfo(initialData.clinicalInfo);
       if (initialData.selectedSlot) setSelectedSlot(initialData.selectedSlot);
       if (initialData.holdId) setHoldId(initialData.holdId);
     }
-  }, [initialData?.doctorId, initialData?.department, initialData?.type]);
+  }, [initialData?.doctorId, initialData?.department, initialData?.type, initialData?.clinicalInfo]);
 
   // Fetch doctor summaries when doctors or filters change
   useEffect(() => {
