@@ -108,7 +108,11 @@ const AppointmentRequests = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>("outpatient");
   const [selectedRequest, setSelectedRequest] = useState<AppointmentRequestRecord | null>(null);
+  const [selectedLabRequest, setSelectedLabRequest] = useState<LaboratoryRecord | null>(null);
+  const [selectedScheduledRequest, setSelectedScheduledRequest] = useState<ScheduledAppointment | null>(null);
   const [showSummary, setShowSummary] = useState(false);
+  const [showLabSummary, setShowLabSummary] = useState(false);
+  const [showScheduledSummary, setShowScheduledSummary] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [visitTypeFilter, setVisitTypeFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
@@ -128,6 +132,16 @@ const AppointmentRequests = () => {
   const handleViewSummary = (row: AppointmentRequestRecord) => {
     setSelectedRequest(row);
     setShowSummary(true);
+  };
+
+  const handleViewLabSummary = (row: LaboratoryRecord) => {
+    setSelectedLabRequest(row);
+    setShowLabSummary(true);
+  };
+
+  const handleViewScheduledSummary = (row: ScheduledAppointment) => {
+    setSelectedScheduledRequest(row);
+    setShowScheduledSummary(true);
   };
 
   const getTabCount = () => {
@@ -335,7 +349,7 @@ const AppointmentRequests = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
                   <DropdownMenuItem onClick={() => navigate(`/patient-insights/${row.gdid}?from=scheduled`)}>Patient Insight</DropdownMenuItem>
-                  <DropdownMenuItem>View Summary</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleViewLabSummary(row)}>View Summary</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -402,7 +416,7 @@ const AppointmentRequests = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-popover border shadow-md z-50">
                   <DropdownMenuItem onClick={() => navigate(`/patient-insights/${row.gdid}?from=scheduled`)}>Patient Insight</DropdownMenuItem>
-                  <DropdownMenuItem>View Summary</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleViewScheduledSummary(row)}>View Summary</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -557,10 +571,11 @@ const AppointmentRequests = () => {
         </main>
       </PageContent>
 
+      {/* Outpatient Request Summary Modal */}
       <Dialog open={showSummary} onOpenChange={setShowSummary}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">Appointment Summary</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">Patient Request Summary</DialogTitle>
           </DialogHeader>
           
           {selectedRequest && (
@@ -574,8 +589,190 @@ const AppointmentRequests = () => {
                   <p className="font-semibold text-foreground">{selectedRequest.patient}</p>
                   <p className="text-sm text-muted-foreground">GDID - {selectedRequest.requestId.slice(-3)} • {selectedRequest.ageSex}</p>
                 </div>
-                <Badge className={`ml-auto ${selectedRequest.status === "New" ? "bg-amber-100 text-amber-700" : selectedRequest.status === "Pending" ? "bg-blue-100 text-blue-700" : selectedRequest.status === "Scheduled" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                  {selectedRequest.status === "New" ? "Pending Check-in" : selectedRequest.status}
+                <Badge className="ml-auto bg-amber-100 text-amber-700">
+                  Pending Confirmation
+                </Badge>
+              </div>
+
+              {/* Request Details */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Request ID</p>
+                      <p className="text-sm font-medium">REQ{selectedRequest.requestId.slice(-3)}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
+                      <p className="text-sm font-medium">{selectedRequest.preferredDate} {selectedRequest.preferredTime}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Preferred Doctor</p>
+                      <p className="text-sm font-medium">{selectedRequest.preferredProvider || "Any Available"}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Department</p>
+                      <p className="text-sm font-medium">{selectedRequest.department}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Visit Type</p>
+                      <p className="text-sm font-medium">{getVisitTypeLabel(selectedRequest.visitType)}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Request Status</p>
+                      <p className="text-sm font-medium">Awaiting Confirmation</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Clinical Information */}
+              <div className="p-3 border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
+                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Laboratory Request Summary Modal */}
+      <Dialog open={showLabSummary} onOpenChange={setShowLabSummary}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Patient Request Summary</DialogTitle>
+          </DialogHeader>
+          
+          {selectedLabRequest && (
+            <div className="space-y-4">
+              {/* Patient Info */}
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${selectedLabRequest.ageSex.includes('F') ? 'bg-pink-100' : 'bg-blue-100'}`}>
+                  <User className={`w-5 h-5 ${selectedLabRequest.ageSex.includes('F') ? 'text-pink-600' : 'text-blue-600'}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{selectedLabRequest.patient}</p>
+                  <p className="text-sm text-muted-foreground">GDID - {selectedLabRequest.gdid} • {selectedLabRequest.ageSex}</p>
+                </div>
+                <Badge className="ml-auto bg-amber-100 text-amber-700">
+                  Pending Confirmation
+                </Badge>
+              </div>
+
+              {/* Request Details */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Order ID</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.orderId}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.preferredDate} {selectedLabRequest.preferredTime}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Test Type</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.testType}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Department</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.department}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Visit Type</p>
+                      <Badge variant="outline" className={`${selectedLabRequest.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}`}>
+                        {selectedLabRequest.visitType}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Ordered By</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.orderedBy}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Clinical Information */}
+              <div className="p-3 border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
+                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Scheduled Appointment Summary Modal */}
+      <Dialog open={showScheduledSummary} onOpenChange={setShowScheduledSummary}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Appointment Summary</DialogTitle>
+          </DialogHeader>
+          
+          {selectedScheduledRequest && (
+            <div className="space-y-4">
+              {/* Patient Info */}
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${selectedScheduledRequest.ageSex.includes('F') ? 'bg-pink-100' : 'bg-blue-100'}`}>
+                  <User className={`w-5 h-5 ${selectedScheduledRequest.ageSex.includes('F') ? 'text-pink-600' : 'text-blue-600'}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{selectedScheduledRequest.patient}</p>
+                  <p className="text-sm text-muted-foreground">GDID - {selectedScheduledRequest.gdid} • {selectedScheduledRequest.ageSex}</p>
+                </div>
+                <Badge className="ml-auto bg-amber-100 text-amber-700">
+                  Pending Check-in
                 </Badge>
               </div>
 
@@ -586,7 +783,7 @@ const AppointmentRequests = () => {
                     <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="text-xs text-muted-foreground">Visit ID</p>
-                      <p className="text-sm font-medium">V25-{selectedRequest.requestId.slice(-3)}</p>
+                      <p className="text-sm font-medium">V25-{selectedScheduledRequest.gdid}</p>
                     </div>
                   </div>
                   
@@ -594,7 +791,7 @@ const AppointmentRequests = () => {
                     <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="text-xs text-muted-foreground">Appointment Time</p>
-                      <p className="text-sm font-medium">{selectedRequest.preferredDate} {selectedRequest.preferredTime}</p>
+                      <p className="text-sm font-medium">{selectedScheduledRequest.scheduledDate} {selectedScheduledRequest.scheduledTime}</p>
                     </div>
                   </div>
                 </div>
@@ -621,8 +818,8 @@ const AppointmentRequests = () => {
                   <div className="flex items-start gap-2">
                     <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Doctor</p>
-                      <p className="text-sm font-medium">{selectedRequest.preferredProvider || "Any"}</p>
+                      <p className="text-xs text-muted-foreground">{selectedScheduledRequest.appointmentFor === "Laboratory" ? "Test" : "Doctor"}</p>
+                      <p className="text-sm font-medium">{selectedScheduledRequest.doctorOrTest}</p>
                     </div>
                   </div>
 
@@ -630,7 +827,7 @@ const AppointmentRequests = () => {
                     <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="text-xs text-muted-foreground">Department</p>
-                      <p className="text-sm font-medium">{selectedRequest.department}</p>
+                      <p className="text-sm font-medium">{selectedScheduledRequest.department}</p>
                     </div>
                   </div>
                 </div>
