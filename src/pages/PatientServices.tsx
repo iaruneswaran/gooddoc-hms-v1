@@ -371,12 +371,14 @@ const PatientServices = () => {
                       </Badge>
                     )}
                   </div>
-                  {selectedPendingIds.size > 0 && (
-                    <Button onClick={addSelectedToCart} className="h-10 gap-1.5">
-                      <ShoppingCart className="w-3.5 h-3.5" />
-                      Add to Bill ({selectedPendingIds.size})
-                    </Button>
-                  )}
+                  <Button 
+                    onClick={addSelectedToCart} 
+                    className="h-10 gap-1.5"
+                    disabled={!allSelected || totalPendingCount === 0}
+                  >
+                    <ShoppingCart className="w-3.5 h-3.5" />
+                    Add to Bill ({selectedPendingIds.size})
+                  </Button>
                 </div>
 
                 {/* Pending Services List */}
