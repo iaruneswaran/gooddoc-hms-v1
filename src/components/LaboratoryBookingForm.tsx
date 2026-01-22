@@ -6,12 +6,15 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
 import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
+import { LAB_MASTER_CATALOG, HEALTH_PACKAGES } from "@/data/lab-master-catalog";
 
 export interface LabTest {
   id: string;
+  code: string;
   name: string;
   category: string;
   price: number;
+  department?: string;
 }
 
 export interface RadiologyTest {
@@ -23,9 +26,11 @@ export interface RadiologyTest {
 
 export interface HealthPackage {
   id: string;
+  code: string;
   name: string;
   includes: string;
   price: number;
+  discountedPrice?: number;
 }
 
 export interface LaboratoryData {
@@ -46,67 +51,27 @@ interface LaboratoryBookingFormProps {
   hideMode?: boolean;
 }
 
-const healthPackages: HealthPackage[] = [
-  {
-    id: "1",
-    name: "Executive Health Checkup",
-    includes: "CBC, ESR, Lipid Profile, LFT, KFT, Thyroid Profile (T3, T4, TSH), HbA1c, Urine Routine, Chest X-Ray",
-    price: 3499,
-  },
-  {
-    id: "2",
-    name: "Comprehensive Metabolic Panel",
-    includes: "Glucose Fasting, BUN, Creatinine, Electrolytes (Na, K, Cl), Calcium, Total Protein, Albumin, Bilirubin, ALP, AST, ALT",
-    price: 1299,
-  },
-  {
-    id: "3",
-    name: "Cardiac Risk Profile",
-    includes: "Lipid Profile, hs-CRP, Homocysteine, Lipoprotein(a), Apolipoprotein A1/B, HbA1c",
-    price: 2499,
-  },
-  {
-    id: "4",
-    name: "Thyroid Function Panel",
-    includes: "T3, T4, TSH, Free T3, Free T4, Anti-TPO Antibodies",
-    price: 1199,
-  },
-  {
-    id: "5",
-    name: "Diabetes Screening Panel",
-    includes: "Fasting Glucose, Post-Prandial Glucose, HbA1c, Fructosamine, Insulin Fasting, HOMA-IR",
-    price: 1599,
-  },
-  {
-    id: "6",
-    name: "Anemia Profile",
-    includes: "CBC, Reticulocyte Count, Iron Studies (Serum Iron, TIBC, Ferritin), Vitamin B12, Folate",
-    price: 1899,
-  },
-];
+// Convert catalog health packages to the booking form format
+const healthPackages: HealthPackage[] = HEALTH_PACKAGES.map((pkg) => ({
+  id: pkg.code,
+  code: pkg.code,
+  name: pkg.name,
+  includes: pkg.description,
+  price: pkg.mrp,
+  discountedPrice: pkg.discountPct ? Math.round(pkg.mrp * (1 - pkg.discountPct / 100)) : undefined,
+}));
 
-const individualTests: LabTest[] = [
-  { id: "1", name: "Complete Blood Count (CBC) with ESR", category: "Hematology", price: 350 },
-  { id: "2", name: "Hemoglobin A1c (HbA1c)", category: "Diabetes", price: 450 },
-  { id: "3", name: "Lipid Profile (Cholesterol, HDL, LDL, Triglycerides, VLDL)", category: "Cardiac", price: 550 },
-  { id: "4", name: "Liver Function Test (LFT) - 11 Parameters", category: "Hepatic", price: 650 },
-  { id: "5", name: "Kidney Function Test (KFT/RFT)", category: "Renal", price: 550 },
-  { id: "6", name: "Thyroid Stimulating Hormone (TSH)", category: "Endocrine", price: 350 },
-  { id: "7", name: "Fasting Blood Glucose", category: "Diabetes", price: 100 },
-  { id: "8", name: "Post-Prandial Blood Glucose (PPBS)", category: "Diabetes", price: 100 },
-  { id: "9", name: "Urine Routine & Microscopy", category: "Urinalysis", price: 150 },
-  { id: "10", name: "Serum Creatinine", category: "Renal", price: 200 },
-  { id: "11", name: "Blood Urea Nitrogen (BUN)", category: "Renal", price: 180 },
-  { id: "12", name: "Serum Uric Acid", category: "Metabolic", price: 200 },
-  { id: "13", name: "Vitamin D (25-OH)", category: "Vitamins", price: 1200 },
-  { id: "14", name: "Vitamin B12", category: "Vitamins", price: 750 },
-  { id: "15", name: "Iron Studies (Serum Iron, TIBC, Ferritin)", category: "Hematology", price: 850 },
-  { id: "16", name: "C-Reactive Protein (CRP) Quantitative", category: "Inflammation", price: 450 },
-  { id: "17", name: "Erythrocyte Sedimentation Rate (ESR)", category: "Hematology", price: 100 },
-  { id: "18", name: "Prothrombin Time (PT/INR)", category: "Coagulation", price: 350 },
-  { id: "19", name: "Activated Partial Thromboplastin Time (aPTT)", category: "Coagulation", price: 400 },
-  { id: "20", name: "Serum Electrolytes (Na, K, Cl)", category: "Metabolic", price: 450 },
-];
+// Convert catalog tests to the booking form format (orderable tests only)
+const individualTests: LabTest[] = LAB_MASTER_CATALOG
+  .filter((test) => test.orderable && (test.type === "single_test" || test.type === "panel"))
+  .map((test) => ({
+    id: test.code,
+    code: test.code,
+    name: test.name,
+    category: test.department,
+    department: test.department,
+    price: test.mrp,
+  }));
 
 const radiologyTests: RadiologyTest[] = [
   { id: "r1", name: "X-Ray Chest PA View", category: "X-Ray", price: 350 },
@@ -323,12 +288,22 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{pkg.code}</span>
                           <h4 className="text-sm font-semibold text-primary">{pkg.name}</h4>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">
-                          Includes: {pkg.includes}
+                          {pkg.includes}
                         </p>
-                        <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
+                        <div className="flex items-center gap-2">
+                          {pkg.discountedPrice ? (
+                            <>
+                              <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.discountedPrice)}</p>
+                              <p className="text-xs text-muted-foreground line-through">{formatCurrency(pkg.price)}</p>
+                            </>
+                          ) : (
+                            <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
+                          )}
+                        </div>
                       </div>
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
@@ -355,7 +330,10 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     onClick={() => handleTestToggle(test)}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
+                      <div className="flex-1 pr-2">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{test.code}</span>
+                        <h4 className="text-sm font-semibold text-primary mt-1">{test.name}</h4>
+                      </div>
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
                         isSelected ? "border-primary bg-primary" : "border-muted-foreground"

@@ -131,17 +131,17 @@ const BookAppointment = () => {
         setSelectedTypes(['laboratory']);
         
         // Find the test based on testType code
-        const testCodeToTest: Record<string, { id: string; name: string; category: string; price: number }> = {
-          'CBC001': { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
-          'LIP001': { id: "2", name: "Lipid Profile", category: "Biochemistry", price: 300 },
-          'LFT001': { id: "3", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
-          'KFT001': { id: "4", name: "Kidney Function Test (KFT)", category: "Biochemistry", price: 350 },
-          'THY001': { id: "5", name: "Thyroid Profile", category: "Endocrinology", price: 450 },
-          'HBA001': { id: "6", name: "HbA1c", category: "Diabetes", price: 350 },
-          'URI001': { id: "7", name: "Urinalysis", category: "Urology", price: 150 },
-          'VIT001': { id: "8", name: "Vitamin D", category: "Biochemistry", price: 600 },
-          'VIT002': { id: "9", name: "Vitamin B12", category: "Biochemistry", price: 500 },
-          'IRO001': { id: "10", name: "Iron Studies", category: "Hematology", price: 400 },
+        const testCodeToTest: Record<string, { id: string; code: string; name: string; category: string; price: number }> = {
+          'HEM001': { id: "HEM001", code: "HEM001", name: "Complete Blood Count", category: "Hematology", price: 450 },
+          'BIO030': { id: "BIO030", code: "BIO030", name: "Lipid Profile", category: "Biochemistry", price: 550 },
+          'BIO010': { id: "BIO010", code: "BIO010", name: "Liver Function Test", category: "Biochemistry", price: 650 },
+          'BIO020': { id: "BIO020", code: "BIO020", name: "Renal Function Test", category: "Biochemistry", price: 550 },
+          'END011': { id: "END011", code: "END011", name: "Thyroid Profile Extended", category: "Endocrine", price: 1200 },
+          'BIO040C': { id: "BIO040C", code: "BIO040C", name: "HbA1c", category: "Biochemistry", price: 400 },
+          'URN001': { id: "URN001", code: "URN001", name: "Urine Routine & Microscopy", category: "Urinalysis", price: 200 },
+          'BIO090A': { id: "BIO090A", code: "BIO090A", name: "25-OH Vitamin D", category: "Biochemistry", price: 1400 },
+          'BIO090E': { id: "BIO090E", code: "BIO090E", name: "Vitamin B12", category: "Biochemistry", price: 700 },
+          'BIO050': { id: "BIO050", code: "BIO050", name: "Iron Studies", category: "Biochemistry", price: 800 },
         };
         
         const selectedTest = testCodeToTest[requestData.testType];
@@ -339,8 +339,8 @@ const BookAppointment = () => {
       setLaboratoryData({
         mode: "laboratory",
         selectedTests: [
-          { id: "1", name: "Complete Blood Count (CBC)", category: "Hematology", price: 200 },
-          { id: "2", name: "Liver Function Test (LFT)", category: "Biochemistry", price: 400 },
+          { id: "HEM001", code: "HEM001", name: "Complete Blood Count", category: "Hematology", price: 450 },
+          { id: "BIO010", code: "BIO010", name: "Liver Function Test", category: "Biochemistry", price: 650 },
         ],
         selectedPackages: [],
         selectedRadiologyTests: [],
