@@ -156,9 +156,49 @@ export function ListPageLayout<T>({
     setSearchQuery("");
   };
 
-  // Pagination
-  const totalPages = Math.ceil(data.length / pageSize);
-  const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  // Filter data based on active filters and search query
+  const filteredData = useMemo(() => {
+    return data.filter((row) => {
+      // Apply dropdown filters
+      for (const [filterKey, filterValue] of Object.entries(activeFilters)) {
+        if (filterValue && filterValue !== "all") {
+          const rowValue = (row as any)[filterKey];
+          if (rowValue !== filterValue) {
+            return false;
+          }
+        }
+      }
+      
+      // Apply search query (search across all string fields)
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const rowValues = Object.values(row as object);
+        const matchesSearch = rowValues.some((value) => {
+          if (typeof value === "string") {
+            return value.toLowerCase().includes(query);
+          }
+          if (typeof value === "number") {
+            return value.toString().includes(query);
+          }
+          return false;
+        });
+        if (!matchesSearch) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+  }, [data, activeFilters, searchQuery]);
+
+  // Pagination using filtered data
+  const totalPages = Math.ceil(filteredData.length / pageSize);
+  const paginatedData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilters, searchQuery]);
 
   const handleSort = (key: string) => {
     if (sortKey === key) {
@@ -195,7 +235,7 @@ export function ListPageLayout<T>({
                     {activeUrlFilter ? activeUrlFilter.label : title}
                   </h1>
                   <span className="text-h3 font-semibold text-primary">
-                    {data.length}
+                    {filteredData.length}
                   </span>
                 </div>
               </div>
@@ -285,7 +325,7 @@ export function ListPageLayout<T>({
                   Retry
                 </Button>
               </div>
-            ) : data.length === 0 ? (
+            ) : filteredData.length === 0 ? (
               <div className="p-12 text-center">
                 <p className="text-muted-foreground mb-4">{emptyMessage}</p>
                 {emptyCta && (
@@ -371,7 +411,7 @@ export function ListPageLayout<T>({
                 <div className="flex items-center justify-between px-4 py-3 border-t">
                   <p className="text-small text-muted-foreground">
                     Showing {((currentPage - 1) * pageSize) + 1} to{" "}
-                    {Math.min(currentPage * pageSize, data.length)} of {data.length} results
+                    {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length} results
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
