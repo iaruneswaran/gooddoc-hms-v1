@@ -113,13 +113,17 @@ const BookAppointment = () => {
           'Gastroenterology': 'gastroenterology',
         };
         
+        // Use doctor details from database if available
+        const doctorDetails = requestData.doctorDetails;
+        const doctorDepartment = doctorDetails?.department_id || departmentMap[requestData.department] || "";
+        
         setConsultationData({
           mode: "in_person",
           type: consultationTypeMap[requestData.visitType] || "first_visit",
-          department: departmentMap[requestData.department] || "",
-          doctorId: null,
-          doctorName: requestData.preferredDoctor || "Any available doctor",
-          clinicalInfo: "",
+          department: doctorDepartment,
+          doctorId: requestData.doctorId || null,
+          doctorName: doctorDetails?.name || requestData.preferredDoctor || "Any available doctor",
+          clinicalInfo: requestData.clinicalInfo || "",
           selectedSlot: null,
           holdId: null,
         });
