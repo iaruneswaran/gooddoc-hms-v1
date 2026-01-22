@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
 import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
+import { LAB_MASTER_CATALOG, HEALTH_PACKAGES } from "@/data/lab-master-catalog";
 
 export interface LabTest {
   id: string;
@@ -46,67 +47,23 @@ interface LaboratoryBookingFormProps {
   hideMode?: boolean;
 }
 
-const healthPackages: HealthPackage[] = [
-  {
-    id: "1",
-    name: "Executive Health Checkup",
-    includes: "CBC, ESR, Lipid Profile, LFT, KFT, Thyroid Profile (T3, T4, TSH), HbA1c, Urine Routine, Chest X-Ray",
-    price: 3499,
-  },
-  {
-    id: "2",
-    name: "Comprehensive Metabolic Panel",
-    includes: "Glucose Fasting, BUN, Creatinine, Electrolytes (Na, K, Cl), Calcium, Total Protein, Albumin, Bilirubin, ALP, AST, ALT",
-    price: 1299,
-  },
-  {
-    id: "3",
-    name: "Cardiac Risk Profile",
-    includes: "Lipid Profile, hs-CRP, Homocysteine, Lipoprotein(a), Apolipoprotein A1/B, HbA1c",
-    price: 2499,
-  },
-  {
-    id: "4",
-    name: "Thyroid Function Panel",
-    includes: "T3, T4, TSH, Free T3, Free T4, Anti-TPO Antibodies",
-    price: 1199,
-  },
-  {
-    id: "5",
-    name: "Diabetes Screening Panel",
-    includes: "Fasting Glucose, Post-Prandial Glucose, HbA1c, Fructosamine, Insulin Fasting, HOMA-IR",
-    price: 1599,
-  },
-  {
-    id: "6",
-    name: "Anemia Profile",
-    includes: "CBC, Reticulocyte Count, Iron Studies (Serum Iron, TIBC, Ferritin), Vitamin B12, Folate",
-    price: 1899,
-  },
-];
+// Convert master catalog to booking form format
+const healthPackages: HealthPackage[] = HEALTH_PACKAGES.map(pkg => ({
+  id: pkg.code,
+  name: pkg.name,
+  includes: pkg.includedCodes.join(", "),
+  price: pkg.mrp,
+}));
 
-const individualTests: LabTest[] = [
-  { id: "1", name: "Complete Blood Count (CBC) with ESR", category: "Hematology", price: 350 },
-  { id: "2", name: "Hemoglobin A1c (HbA1c)", category: "Diabetes", price: 450 },
-  { id: "3", name: "Lipid Profile (Cholesterol, HDL, LDL, Triglycerides, VLDL)", category: "Cardiac", price: 550 },
-  { id: "4", name: "Liver Function Test (LFT) - 11 Parameters", category: "Hepatic", price: 650 },
-  { id: "5", name: "Kidney Function Test (KFT/RFT)", category: "Renal", price: 550 },
-  { id: "6", name: "Thyroid Stimulating Hormone (TSH)", category: "Endocrine", price: 350 },
-  { id: "7", name: "Fasting Blood Glucose", category: "Diabetes", price: 100 },
-  { id: "8", name: "Post-Prandial Blood Glucose (PPBS)", category: "Diabetes", price: 100 },
-  { id: "9", name: "Urine Routine & Microscopy", category: "Urinalysis", price: 150 },
-  { id: "10", name: "Serum Creatinine", category: "Renal", price: 200 },
-  { id: "11", name: "Blood Urea Nitrogen (BUN)", category: "Renal", price: 180 },
-  { id: "12", name: "Serum Uric Acid", category: "Metabolic", price: 200 },
-  { id: "13", name: "Vitamin D (25-OH)", category: "Vitamins", price: 1200 },
-  { id: "14", name: "Vitamin B12", category: "Vitamins", price: 750 },
-  { id: "15", name: "Iron Studies (Serum Iron, TIBC, Ferritin)", category: "Hematology", price: 850 },
-  { id: "16", name: "C-Reactive Protein (CRP) Quantitative", category: "Inflammation", price: 450 },
-  { id: "17", name: "Erythrocyte Sedimentation Rate (ESR)", category: "Hematology", price: 100 },
-  { id: "18", name: "Prothrombin Time (PT/INR)", category: "Coagulation", price: 350 },
-  { id: "19", name: "Activated Partial Thromboplastin Time (aPTT)", category: "Coagulation", price: 400 },
-  { id: "20", name: "Serum Electrolytes (Na, K, Cl)", category: "Metabolic", price: 450 },
-];
+// Convert lab tests from master catalog - filter for orderable panels and single tests
+const individualTests: LabTest[] = LAB_MASTER_CATALOG
+  .filter(test => test.orderable && (test.type === "single_test" || test.type === "panel"))
+  .map(test => ({
+    id: test.code,
+    name: test.name,
+    category: test.department,
+    price: test.mrp,
+  }));
 
 const radiologyTests: RadiologyTest[] = [
   { id: "r1", name: "X-Ray Chest PA View", category: "X-Ray", price: 350 },
