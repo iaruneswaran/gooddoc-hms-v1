@@ -150,7 +150,7 @@ export function BedMapView({
       {/* Floor Tabs with Legend on right */}
       <Tabs value={activeFloor} onValueChange={setActiveFloor}>
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <TabsList className="h-auto p-1 gap-1 flex-wrap justify-start">
+          <TabsList className="h-11 bg-muted/50 p-1 gap-0.5 rounded-md justify-start w-auto inline-flex">
             {bedMapData.map((floor) => {
               const floorData = filteredFloors.find(f => f.id === floor.id);
               const bedCount = floorData?.wards.reduce((sum, w) => sum + w.beds.length, 0) || 0;
@@ -159,15 +159,15 @@ export function BedMapView({
                 <TabsTrigger
                   key={floor.id}
                   value={floor.id}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4 py-2"
+                  className="gap-2 text-sm px-4 h-9 rounded-sm data-[state=active]:bg-card data-[state=active]:shadow-sm"
                   disabled={bedCount === 0}
                 >
                   <span className="font-medium">{floor.id}</span>
-                  <span className="ml-1.5 text-xs opacity-75">
+                  <span className="text-xs text-muted-foreground">
                     {floor.name}
                   </span>
                   {bedCount > 0 && (
-                    <span className="ml-2 text-[10px] bg-white/20 px-1.5 py-0.5 rounded">
+                    <span className="ml-1 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
                       {bedCount}
                     </span>
                   )}
