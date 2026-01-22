@@ -280,6 +280,7 @@ const AppointmentRequests = () => {
                   preferredDoctor: row.preferredProvider || '',
                   department: row.department,
                   visitType: row.visitType,
+                  clinicalInfo: row.clinicalInfo,
                 })}
               >
                 <TableCell style={{ width: "220px", minWidth: "220px" }}>
@@ -323,6 +324,7 @@ const AppointmentRequests = () => {
                         preferredDoctor: row.preferredProvider || '',
                         department: row.department,
                         visitType: row.visitType,
+                        clinicalInfo: row.clinicalInfo,
                       });
                     }}
                   >
@@ -1068,7 +1070,11 @@ const AppointmentRequests = () => {
               {/* Clinical Information */}
               <div className="p-3 border rounded-lg">
                 <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
-                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+                {confirmationData.clinicalInfo ? (
+                  <p className="text-sm text-foreground">{confirmationData.clinicalInfo}</p>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+                )}
               </div>
             </div>
           )}
