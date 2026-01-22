@@ -193,7 +193,12 @@ const PatientAdvanceCollection = () => {
   };
 
   const handleBack = () => {
-    navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`);
+    const visitId = searchParams.get("visitId");
+    const params = new URLSearchParams();
+    if (visitId) params.set("visitId", visitId);
+    if (fromPage) params.set("from", fromPage);
+    const queryString = params.toString();
+    navigate(`/patient-insights/${patientId}${queryString ? `?${queryString}` : ''}`);
   };
 
   const canConfirm = payerName.trim() !== "" && amountToCollect > 0 && isValid;
