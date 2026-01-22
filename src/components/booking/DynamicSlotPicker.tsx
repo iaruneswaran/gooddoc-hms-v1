@@ -22,6 +22,7 @@ interface DynamicSlotPickerProps {
   selectedSlot?: TimeSlot | null;
   appointmentDuration?: number;
   locationId?: string;
+  autoSelectFirstSlot?: boolean;
 }
 
 export function DynamicSlotPicker({ 
@@ -32,11 +33,13 @@ export function DynamicSlotPicker({
   selectedSlot,
   appointmentDuration,
   locationId,
+  autoSelectFirstSlot = false,
 }: DynamicSlotPickerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [availability, setAvailability] = useState<AvailabilityResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [weekStart, setWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
   
   const { getAvailability } = useDoctorAvailability();
   const { 
@@ -169,6 +172,20 @@ export function DynamicSlotPicker({
       fetchAvailability();
     }
   };
+
+  // Auto-select first available slot when autoSelectFirstSlot is true
+  useEffect(() => {
+    if (autoSelectFirstSlot && availability && selectedDate && !hasAutoSelected && !selectedSlot) {
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      const dayData = availability.days.find(d => d.date === dateStr);
+      if (dayData?.status === 'available' && dayData.slots.length > 0) {
+        const firstSlot = dayData.slots[0];
+        // Auto-select the first slot
+        handleSlotClick(firstSlot);
+        setHasAutoSelected(true);
+      }
+    }
+  }, [autoSelectFirstSlot, availability, selectedDate, hasAutoSelected, selectedSlot]);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
