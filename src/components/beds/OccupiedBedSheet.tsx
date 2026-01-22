@@ -3,14 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   User, 
-  Phone, 
   Calendar, 
-  Stethoscope, 
   ArrowRightLeft, 
-  Unlock,
-  AlertTriangle 
+  BedDouble
 } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 
@@ -22,19 +20,11 @@ interface OccupiedBedSheetProps {
   onRelease?: () => void;
 }
 
-const acuityColors = {
-  Low: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  Medium: 'bg-amber-50 text-amber-700 border-amber-200',
-  High: 'bg-orange-50 text-orange-700 border-orange-200',
-  Critical: 'bg-red-50 text-red-700 border-red-200',
-};
-
 export function OccupiedBedSheet({
   bed,
   open,
   onOpenChange,
   onTransfer,
-  onRelease,
 }: OccupiedBedSheetProps) {
   if (!bed || !bed.occupant) return null;
 
@@ -49,7 +39,7 @@ export function OccupiedBedSheet({
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
-              <User className="w-4 h-4 text-red-600" />
+              <BedDouble className="w-4 h-4 text-red-600" />
             </div>
             <span>Occupied Bed Details</span>
           </SheetTitle>
@@ -82,45 +72,17 @@ export function OccupiedBedSheet({
 
           {/* Patient Info */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-              Patient Information
-            </h4>
-            
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-semibold text-primary">
-                    {occupant.name.split(' ').map(n => n[0]).join('')}
-                  </span>
-                </div>
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src="" alt="Priya Sharma" />
+                  <AvatarFallback className="bg-pink-100 text-pink-700">PS</AvatarFallback>
+                </Avatar>
                 <div>
-                  <p className="font-semibold">{occupant.name}</p>
-                  <p className="text-sm text-muted-foreground">{occupant.mrn}</p>
+                  <p className="font-semibold">Priya Sharma</p>
+                  <p className="text-sm text-muted-foreground">GDID - 001 • 61 | F</p>
                 </div>
               </div>
-
-              {/* Acuity */}
-              {occupant.acuity && (
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Acuity:</span>
-                  <Badge 
-                    variant="outline" 
-                    className={acuityColors[occupant.acuity]}
-                  >
-                    {occupant.acuity}
-                  </Badge>
-                </div>
-              )}
-
-              {/* Diagnosis */}
-              {occupant.diagnosis && (
-                <div className="flex items-center gap-2">
-                  <Stethoscope className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Diagnosis:</span>
-                  <span className="text-sm font-medium">{occupant.diagnosis}</span>
-                </div>
-              )}
 
               {/* Attending Doctor */}
               {occupant.attendingDoctor && (
@@ -149,24 +111,6 @@ export function OccupiedBedSheet({
             </div>
           </div>
 
-          <Separator />
-
-          {/* Amenities */}
-          {bed.amenities.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                Amenities
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {bed.amenities.map((amenity) => (
-                  <Badge key={amenity} variant="secondary" className="text-xs">
-                    {amenity}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Actions */}
           <div className="flex gap-2 pt-4">
             <Button 
@@ -176,14 +120,6 @@ export function OccupiedBedSheet({
             >
               <ArrowRightLeft className="w-4 h-4" />
               Transfer
-            </Button>
-            <Button 
-              variant="outline" 
-              className="flex-1 gap-2"
-              onClick={onRelease}
-            >
-              <Unlock className="w-4 h-4" />
-              Discharge
             </Button>
           </div>
         </div>
