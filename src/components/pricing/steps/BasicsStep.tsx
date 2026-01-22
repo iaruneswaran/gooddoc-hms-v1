@@ -15,8 +15,8 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PricingItemFormData } from "@/types/pricing-item";
-import { useDepartments, useCategories } from "@/api/pricingApi";
-import { checkInternalCodeUnique } from "@/api/pricingApi";
+import { useDepartments } from "@/api/pricingApi";
+import { checkInternalCodeUnique, LAB_ITEM_TYPES, SPECIMEN_TYPES, CONTAINER_TYPES } from "@/api/pricingApi";
 import { generateInternalCode } from "@/lib/priceUtils";
 import { useDebounce } from "@/hooks/useDebounce";
 
@@ -29,7 +29,6 @@ export function BasicsStep() {
   } = useFormContext<PricingItemFormData>();
 
   const { data: departments, isLoading: deptLoading } = useDepartments();
-  const { data: categories, isLoading: catLoading } = useCategories();
 
   const [tags, setTags] = useState<string[]>(watch("tags") || []);
   const [tagInput, setTagInput] = useState("");
@@ -88,38 +87,47 @@ export function BasicsStep() {
     setValue("tags", newTags);
   };
 
+  // Filter departments based on category
+  const labDepartments = departments?.filter(dept => 
+    ["Hematology", "Biochemistry", "Microbiology", "Immunology", "Pathology", "Urinalysis", "Coagulation", "Endocrine", "Molecular Diagnostics", "Blood Bank"].includes(dept)
+  );
+
+  const isLabTest = category === "Lab Test";
+
   return (
     <div className="space-y-6">
+      {/* Item Type Selector - Lab specific */}
+      <Card className="p-6">
+        <h3 className="text-sm font-semibold mb-4">Item Type</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {LAB_ITEM_TYPES.map((type) => (
+            <button
+              key={type.value}
+              type="button"
+              onClick={() => {
+                setValue("category", type.value === "package" ? "Package" : "Lab Test");
+                // Store item type in tags for now
+                const currentTags = watch("tags") || [];
+                const filteredTags = currentTags.filter(t => !LAB_ITEM_TYPES.some(lt => lt.value === t));
+                setValue("tags", [...filteredTags, type.value]);
+              }}
+              className={`p-3 rounded-lg border text-left transition-all ${
+                (watch("tags") || []).includes(type.value)
+                  ? "border-primary bg-primary/5 ring-1 ring-primary"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <div className="text-sm font-medium">{type.label}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{type.description}</div>
+            </button>
+          ))}
+        </div>
+      </Card>
+
       <Card className="p-6">
         <h3 className="text-sm font-semibold mb-4">Basic Information</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Category */}
-          <div>
-            <Label htmlFor="category">
-              Category <span className="text-destructive">*</span>
-            </Label>
-            <Select
-              value={category}
-              onValueChange={(value) => setValue("category", value as any)}
-              disabled={catLoading}
-            >
-              <SelectTrigger id="category" className="mt-1">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories?.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.category && (
-              <p className="text-xs text-destructive mt-1">{errors.category.message}</p>
-            )}
-          </div>
-
           {/* Department */}
           <div>
             <Label htmlFor="department">
@@ -134,7 +142,7 @@ export function BasicsStep() {
                 <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>
-                {departments?.map((dept) => (
+                {(labDepartments || departments)?.map((dept) => (
                   <SelectItem key={dept} value={dept}>
                     {dept}
                   </SelectItem>
@@ -146,51 +154,17 @@ export function BasicsStep() {
             )}
           </div>
 
-          {/* Item Name */}
-          <div className="md:col-span-2">
-            <Label htmlFor="name">
-              Item Name <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="name"
-              {...register("name")}
-              placeholder="e.g., Complete Blood Count (CBC)"
-              className="mt-1"
-            />
-            {errors.name && (
-              <p className="text-xs text-destructive mt-1">{errors.name.message}</p>
-            )}
-          </div>
-
-          {/* Description */}
-          <div className="md:col-span-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              {...register("description")}
-              placeholder="Brief description of the service or item"
-              className="mt-1"
-              rows={3}
-            />
-          </div>
-        </div>
-      </Card>
-
-      <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Codes & Classification</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Internal Code */}
           <div>
             <Label htmlFor="internal-code">
-              Internal Code <span className="text-destructive">*</span>
+              Test Code <span className="text-destructive">*</span>
             </Label>
             <div className="relative mt-1">
               <Input
                 id="internal-code"
                 {...register("codes.internal")}
-                placeholder="AUTO-GENERATED"
-                className="uppercase"
+                placeholder="e.g., HEM001, BIO010"
+                className="uppercase font-mono"
               />
               {checkingCode && (
                 <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
@@ -205,143 +179,163 @@ export function BasicsStep() {
             {errors.codes?.internal && (
               <p className="text-xs text-destructive mt-1">{errors.codes.internal.message}</p>
             )}
-            <p className="text-xs text-muted-foreground mt-1">
-              Auto-generated, can be edited
-            </p>
           </div>
 
-          {/* CPT Code */}
+          {/* Item Name */}
           <div>
-            <Label htmlFor="cpt-code">CPT Code</Label>
-            <Input
-              id="cpt-code"
-              {...register("codes.cpt")}
-              placeholder="e.g., 85025"
-              className="mt-1"
-            />
-          </div>
-
-          {/* ICD Code */}
-          <div>
-            <Label htmlFor="icd-code">ICD Code</Label>
-            <Input
-              id="icd-code"
-              {...register("codes.icd")}
-              placeholder="e.g., Z00.00"
-              className="mt-1"
-            />
-          </div>
-
-          {/* HCPCS Code */}
-          <div>
-            <Label htmlFor="hcpcs-code">HCPCS Code</Label>
-            <Input
-              id="hcpcs-code"
-              {...register("codes.hcpcs")}
-              placeholder="e.g., G0001"
-              className="mt-1"
-            />
-          </div>
-
-          {/* Unit */}
-          <div>
-            <Label htmlFor="unit">
-              Unit <span className="text-destructive">*</span>
+            <Label htmlFor="name">
+              Test Name <span className="text-destructive">*</span>
             </Label>
-            <Select
-              value={watch("unit")}
-              onValueChange={(value) => setValue("unit", value as any)}
-            >
-              <SelectTrigger id="unit" className="mt-1">
-                <SelectValue placeholder="Select unit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="each">Each</SelectItem>
-                <SelectItem value="test">Test</SelectItem>
-                <SelectItem value="session">Session</SelectItem>
-                <SelectItem value="day">Day</SelectItem>
-                <SelectItem value="package">Package</SelectItem>
-                <SelectItem value="procedure">Procedure</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.unit && (
-              <p className="text-xs text-destructive mt-1">{errors.unit.message}</p>
+            <Input
+              id="name"
+              {...register("name")}
+              placeholder="e.g., Complete Blood Count"
+              className="mt-1"
+            />
+            {errors.name && (
+              <p className="text-xs text-destructive mt-1">{errors.name.message}</p>
             )}
           </div>
 
-          {/* Tags */}
-          <div className="md:col-span-2">
-            <Label htmlFor="tags">Tags</Label>
-            <div className="flex gap-2 mt-1">
-              <Input
-                id="tags"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddTag();
-                  }
-                }}
-                placeholder="Add tags (press Enter)"
-              />
-            </div>
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="gap-1">
-                    {tag}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTag(tag)}
-                      className="ml-1 hover:text-destructive"
-                    >
-                      ×
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
+          {/* Short Name */}
+          <div>
+            <Label htmlFor="shortName">Short Name / Print Name</Label>
+            <Input
+              id="shortName"
+              {...register("description")}
+              placeholder="e.g., CBC, LFT"
+              className="mt-1"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Used on reports and labels</p>
           </div>
+
+          {/* LOINC Code */}
+          <div>
+            <Label htmlFor="loinc-code">LOINC Code</Label>
+            <Input
+              id="loinc-code"
+              {...register("codes.cpt")}
+              placeholder="e.g., 718-7, 2345-7"
+              className="mt-1"
+            />
+          </div>
+
+          {/* Unit - Hidden, defaulting to test */}
+          <input type="hidden" {...register("unit")} value="test" />
         </div>
       </Card>
 
+      {/* Specimen & Collection */}
       <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Visibility & Patient Information</h3>
+        <h3 className="text-sm font-semibold mb-4">Specimen & Collection</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Specimen Type */}
+          <div>
+            <Label htmlFor="specimen-type">Specimen Type</Label>
+            <Select
+              onValueChange={(value) => {
+                const currentTags = watch("tags") || [];
+                const filteredTags = currentTags.filter(t => !SPECIMEN_TYPES.includes(t));
+                setValue("tags", [...filteredTags, `specimen:${value}`]);
+              }}
+            >
+              <SelectTrigger id="specimen-type" className="mt-1">
+                <SelectValue placeholder="Select specimen" />
+              </SelectTrigger>
+              <SelectContent>
+                {SPECIMEN_TYPES.map((specimen) => (
+                  <SelectItem key={specimen} value={specimen}>
+                    {specimen}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Container Type */}
+          <div>
+            <Label htmlFor="container-type">Container</Label>
+            <Select
+              onValueChange={(value) => {
+                const currentTags = watch("tags") || [];
+                const filteredTags = currentTags.filter(t => !t.startsWith("container:"));
+                setValue("tags", [...filteredTags, `container:${value}`]);
+              }}
+            >
+              <SelectTrigger id="container-type" className="mt-1">
+                <SelectValue placeholder="Select container" />
+              </SelectTrigger>
+              <SelectContent>
+                {CONTAINER_TYPES.map((container) => (
+                  <SelectItem key={container.value} value={container.value}>
+                    {container.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Minimum Volume */}
+          <div>
+            <Label htmlFor="min-volume">Min Volume (mL)</Label>
+            <Input
+              id="min-volume"
+              type="number"
+              step="0.5"
+              min="0"
+              placeholder="e.g., 2.0"
+              className="mt-1"
+              onChange={(e) => {
+                const currentTags = watch("tags") || [];
+                const filteredTags = currentTags.filter(t => !t.startsWith("volume:"));
+                if (e.target.value) {
+                  setValue("tags", [...filteredTags, `volume:${e.target.value}mL`]);
+                }
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Patient Preparation */}
+        <div className="mt-4">
+          <Label htmlFor="patient-prep">Patient Preparation</Label>
+          <Textarea
+            id="patient-prep"
+            {...register("prepInstructions")}
+            placeholder="e.g., 10-12 hr fasting required, Avoid biotin supplements for 48 hrs"
+            className="mt-1"
+            rows={2}
+          />
+        </div>
+      </Card>
+
+      {/* Visibility & Ordering */}
+      <Card className="p-6">
+        <h3 className="text-sm font-semibold mb-4">Visibility & Ordering</h3>
 
         <div className="space-y-4">
           {/* Visibility */}
           <div>
-            <Label>
-              Visibility <span className="text-destructive">*</span>
-            </Label>
+            <Label>Visibility</Label>
             <RadioGroup
               value={visibility}
               onValueChange={(value) => setValue("visibility", value as any)}
-              className="mt-2"
+              className="mt-2 flex gap-6"
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="admin" id="vis-admin" />
-                <Label htmlFor="vis-admin" className="font-normal cursor-pointer">
-                  Admin Only
-                </Label>
-              </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="staff" id="vis-staff" />
                 <Label htmlFor="vis-staff" className="font-normal cursor-pointer">
-                  Staff (Internal)
+                  Staff Only
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="portal" id="vis-portal" />
                 <Label htmlFor="vis-portal" className="font-normal cursor-pointer">
-                  Patient Portal (Public)
+                  Patient Portal
                 </Label>
               </div>
             </RadioGroup>
-            {errors.visibility && (
-              <p className="text-xs text-destructive mt-1">{errors.visibility.message}</p>
-            )}
           </div>
 
           {/* Patient Description - shown only if visibility is portal */}
@@ -355,18 +349,53 @@ export function BasicsStep() {
                 {...register("patientDescription")}
                 placeholder="Clear, patient-friendly description (min 20 characters)"
                 className="mt-1"
-                rows={4}
+                rows={3}
               />
               {errors.patientDescription && (
                 <p className="text-xs text-destructive mt-1">
                   {errors.patientDescription.message}
                 </p>
               )}
-              <p className="text-xs text-muted-foreground mt-1">
-                This will be visible to patients on the portal
-              </p>
             </div>
           )}
+
+          {/* Clinical Keywords */}
+          <div>
+            <Label htmlFor="tags">Clinical Keywords / Synonyms</Label>
+            <div className="flex gap-2 mt-1">
+              <Input
+                id="tags"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddTag();
+                  }
+                }}
+                placeholder="e.g., anemia, infection, blood count (press Enter)"
+              />
+            </div>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.filter(t => !t.includes(":") && !LAB_ITEM_TYPES.some(lt => lt.value === t)).map((tag) => (
+                  <Badge key={tag} variant="secondary" className="gap-1">
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTag(tag)}
+                      className="ml-1 hover:text-destructive"
+                    >
+                      ×
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">
+              Add synonyms and clinical keywords to improve searchability
+            </p>
+          </div>
         </div>
       </Card>
     </div>

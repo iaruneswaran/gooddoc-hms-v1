@@ -1,18 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { PricingItemFormData } from "@/types/pricing-item";
+import { LAB_DEPARTMENTS } from "@/data/lab-master-catalog";
 
-// Mock data
-const MOCK_DEPARTMENTS = [
-  "Cardiology",
-  "Pathology",
-  "Radiology",
-  "General Medicine",
-  "Surgery",
-  "Orthopedics",
-  "Pediatrics",
-  "Preventive Care",
-  "Critical Care",
-];
+// Mock data - Use lab departments from the catalog
+const MOCK_DEPARTMENTS = [...LAB_DEPARTMENTS, "General Medicine", "Surgery", "Orthopedics", "Pediatrics", "Critical Care", "Cardiology"];
 
 const MOCK_BRANCHES = [
   { id: "branch-001", name: "Main Hospital" },
@@ -28,6 +19,45 @@ const MOCK_CATEGORIES = [
   "Room",
   "Pharmacy",
   "Package",
+];
+
+// Lab Item Types
+export const LAB_ITEM_TYPES = [
+  { value: "single_test", label: "Single Test", description: "Individual orderable analyte" },
+  { value: "panel", label: "Panel/Profile", description: "Bundle of sub-tests (e.g., LFT, CBC)" },
+  { value: "microbiology", label: "Microbiology/Culture", description: "Culture & sensitivity tests" },
+  { value: "molecular", label: "Molecular/RT-PCR", description: "PCR and molecular diagnostics" },
+  { value: "package", label: "Health Package", description: "Marketing bundle of tests" },
+  { value: "pathology", label: "Pathology/Cytology", description: "Histopathology and cytology" },
+  { value: "blood_bank", label: "Blood Bank", description: "Transfusion services" },
+];
+
+// Specimen Types
+export const SPECIMEN_TYPES = [
+  "Serum",
+  "Plasma-EDTA",
+  "Whole Blood-EDTA",
+  "Citrate Plasma",
+  "Urine",
+  "Stool",
+  "Sputum",
+  "Swab",
+  "CSF",
+  "Tissue",
+  "Fluid",
+];
+
+// Container Types
+export const CONTAINER_TYPES = [
+  { value: "SST (Gold)", label: "SST (Gold/Red)" },
+  { value: "EDTA (Lavender)", label: "EDTA (Lavender)" },
+  { value: "Citrate (Blue)", label: "Citrate (Blue)" },
+  { value: "Fluoride (Gray)", label: "Fluoride (Gray)" },
+  { value: "Heparin (Green)", label: "Heparin (Green)" },
+  { value: "Urine Cup", label: "Urine Cup" },
+  { value: "Stool Container", label: "Stool Container" },
+  { value: "Swab", label: "Swab" },
+  { value: "Sterile Container", label: "Sterile Container" },
 ];
 
 // Store used codes in memory
