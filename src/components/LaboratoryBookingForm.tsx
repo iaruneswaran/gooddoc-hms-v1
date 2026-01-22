@@ -330,9 +330,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     onClick={() => handleTestToggle(test)}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1 pr-2">
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{test.code}</span>
-                        <h4 className="text-sm font-semibold text-primary mt-1">{test.name}</h4>
+                      <div className="flex items-center gap-2 flex-1 pr-2">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">{test.code}</span>
+                        <h4 className="text-sm font-semibold text-primary">{test.name}</h4>
                       </div>
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
