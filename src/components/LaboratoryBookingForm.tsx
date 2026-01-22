@@ -298,7 +298,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                           {pkg.includedCodes.map((code) => (
                             <span 
                               key={code} 
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
                             >
                               {code}
                             </span>
