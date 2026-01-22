@@ -323,7 +323,7 @@ const PatientInsightsContent = () => {
                         variant="ghost" 
                         size="sm"
                         className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                        onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                        onClick={() => navigate(`/patient-insights/${patientId}/payments?visitId=${selectedVisit?.visitId || ''}&from=${fromPage || 'ip-patients'}`)}
                       >
                         Collect Advance
                       </Button>
@@ -385,7 +385,7 @@ const PatientInsightsContent = () => {
                         variant="ghost" 
                         size="sm"
                         className="text-white/90 hover:bg-white/15 hover:text-white h-8 px-3 text-sm"
-                        onClick={() => navigate(`/patient-insights/${patientId}/payments`)}
+                        onClick={() => navigate(`/patient-insights/${patientId}/payments?from=${fromPage || ''}`)}
                       >
                         Collect Advance
                       </Button>
