@@ -265,8 +265,8 @@ const PatientServices = () => {
 
             {viewMode === 'catalog' && (
               <>
-                <div className="p-3 border-b border-border">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Categories</p>
+                <div className="p-2 border-b border-border">
+                  <p className="text-xs font-semibold text-muted-foreground tracking-wider">Categories</p>
                 </div>
                 <ScrollArea className="flex-1">
                   <div className="p-2 space-y-1">
