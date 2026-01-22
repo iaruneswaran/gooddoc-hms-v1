@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,13 @@ import { appointmentRequests, AppointmentRequestRecord } from "@/data/overview.m
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
+import { useSchedulingData } from "@/hooks/useSchedulingData";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -37,7 +39,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Hash, Search, MoreHorizontal, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Hash, Search, MoreHorizontal, ArrowLeft, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 // Mock data for Laboratory tab - appointment requests for lab tests
 interface LaboratoryRecord {
@@ -104,8 +106,44 @@ const scheduledAppointments: ScheduledAppointment[] = [
 
 type TabType = "outpatient" | "laboratory" | "scheduled";
 
+// Confirmation modal data types
+interface OutpatientConfirmData {
+  type: 'outpatient';
+  requestId: string;
+  patient: string;
+  gdid: string;
+  ageSex: string;
+  contact: string;
+  email: string;
+  preferredDate: string;
+  preferredTime: string;
+  preferredDoctor: string;
+  department: string;
+  visitType: string;
+  clinicalInfo?: string;
+}
+
+interface LaboratoryConfirmData {
+  type: 'laboratory';
+  orderId: string;
+  patient: string;
+  gdid: string;
+  ageSex: string;
+  contact: string;
+  email: string;
+  testType: string;
+  orderedBy: string;
+  preferredDate: string;
+  preferredTime: string;
+  visitType: string;
+  clinicalInfo?: string;
+}
+
+type ConfirmData = OutpatientConfirmData | LaboratoryConfirmData;
+
 const AppointmentRequests = () => {
   const navigate = useNavigate();
+  const { doctors } = useSchedulingData();
   const [activeTab, setActiveTab] = useState<TabType>("outpatient");
   const [selectedRequest, setSelectedRequest] = useState<AppointmentRequestRecord | null>(null);
   const [selectedLabRequest, setSelectedLabRequest] = useState<LaboratoryRecord | null>(null);
@@ -118,6 +156,55 @@ const AppointmentRequests = () => {
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 25;
+
+  // Confirmation modal state
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationData, setConfirmationData] = useState<ConfirmData | null>(null);
+
+  // Get doctor details from database by name
+  const getDoctorByName = (doctorName: string) => {
+    return doctors.find(d => d.name.toLowerCase().includes(doctorName.toLowerCase().replace('dr. ', '')));
+  };
+
+  // Handle Schedule Now click - show confirmation first
+  const handleScheduleNowClick = (data: ConfirmData) => {
+    setConfirmationData(data);
+    setShowConfirmation(true);
+  };
+
+  // Handle confirmation - navigate to booking page with data
+  const handleConfirmSchedule = () => {
+    if (!confirmationData) return;
+
+    if (confirmationData.type === 'outpatient') {
+      const doctor = getDoctorByName(confirmationData.preferredDoctor);
+      navigate(`/book-appointment?type=consultation`, {
+        state: {
+          requestData: {
+            ...confirmationData,
+            doctorId: doctor?.id,
+            doctorDetails: doctor ? {
+              id: doctor.id,
+              name: doctor.name,
+              department_id: doctor.department_id,
+              specialty_id: doctor.specialty_id,
+              degrees: doctor.degrees,
+            } : undefined,
+          },
+          isFromScheduledRequests: true,
+        }
+      });
+    } else {
+      navigate(`/book-appointment?type=laboratory`, {
+        state: {
+          requestData: confirmationData,
+          isFromScheduledRequests: true,
+        }
+      });
+    }
+    setShowConfirmation(false);
+    setConfirmationData(null);
+  };
 
   const getVisitTypeLabel = (visitType: string): string => {
     return visitType === "Follow-up" ? "Follow up" : "First Visit";
@@ -180,23 +267,19 @@ const AppointmentRequests = () => {
               <TableRow 
                 key={row.requestId} 
                 className="cursor-pointer hover:bg-muted/50"
-                onClick={() => navigate(`/book-appointment?type=consultation`, {
-                  state: {
-                    requestData: {
-                      type: 'outpatient',
-                      requestId,
-                      patient: row.patient,
-                      gdid: gdidNumber,
-                      ageSex: row.ageSex,
-                      contact: row.contact,
-                      email: row.email,
-                      preferredDate: row.preferredDate,
-                      preferredTime: row.preferredTime,
-                      preferredDoctor: row.preferredProvider,
-                      department: row.department,
-                      visitType: row.visitType,
-                    }
-                  }
+                onClick={() => handleScheduleNowClick({
+                  type: 'outpatient',
+                  requestId,
+                  patient: row.patient,
+                  gdid: gdidNumber,
+                  ageSex: row.ageSex,
+                  contact: row.contact,
+                  email: row.email || '',
+                  preferredDate: row.preferredDate,
+                  preferredTime: row.preferredTime,
+                  preferredDoctor: row.preferredProvider || '',
+                  department: row.department,
+                  visitType: row.visitType,
                 })}
               >
                 <TableCell style={{ width: "220px", minWidth: "220px" }}>
@@ -227,23 +310,19 @@ const AppointmentRequests = () => {
                     size="sm" 
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/book-appointment?type=consultation`, {
-                        state: {
-                          requestData: {
-                            type: 'outpatient',
-                            requestId,
-                            patient: row.patient,
-                            gdid: gdidNumber,
-                            ageSex: row.ageSex,
-                            contact: row.contact,
-                            email: row.email,
-                            preferredDate: row.preferredDate,
-                            preferredTime: row.preferredTime,
-                            preferredDoctor: row.preferredProvider,
-                            department: row.department,
-                            visitType: row.visitType,
-                          }
-                        }
+                      handleScheduleNowClick({
+                        type: 'outpatient',
+                        requestId,
+                        patient: row.patient,
+                        gdid: gdidNumber,
+                        ageSex: row.ageSex,
+                        contact: row.contact,
+                        email: row.email || '',
+                        preferredDate: row.preferredDate,
+                        preferredTime: row.preferredTime,
+                        preferredDoctor: row.preferredProvider || '',
+                        department: row.department,
+                        visitType: row.visitType,
                       });
                     }}
                   >
@@ -317,23 +396,19 @@ const AppointmentRequests = () => {
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/book-appointment?type=laboratory`, {
-                    state: {
-                      requestData: {
-                        type: 'laboratory',
-                        orderId: row.orderId,
-                        patient: row.patient,
-                        gdid: row.gdid,
-                        ageSex: row.ageSex,
-                        contact: row.contact,
-                        email: row.email,
-                        testType: row.testType,
-                        orderedBy: row.orderedBy,
-                        preferredDate: row.preferredDate,
-                        preferredTime: row.preferredTime,
-                        visitType: row.visitType,
-                      }
-                    }
+                  handleScheduleNowClick({
+                    type: 'laboratory',
+                    orderId: row.orderId,
+                    patient: row.patient,
+                    gdid: row.gdid,
+                    ageSex: row.ageSex,
+                    contact: row.contact,
+                    email: row.email,
+                    testType: row.testType,
+                    orderedBy: row.orderedBy,
+                    preferredDate: row.preferredDate,
+                    preferredTime: row.preferredTime,
+                    visitType: row.visitType,
                   });
                 }}
               >
@@ -840,6 +915,173 @@ const AppointmentRequests = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Confirmation Modal */}
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">
+              {confirmationData?.type === 'outpatient' ? 'Appointment Request Summary' : 'Laboratory Request Summary'}
+            </DialogTitle>
+          </DialogHeader>
+          
+          {confirmationData && (
+            <div className="space-y-4">
+              {/* Patient Info */}
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${confirmationData.ageSex.includes('F') ? 'bg-pink-100' : 'bg-blue-100'}`}>
+                  <User className={`w-5 h-5 ${confirmationData.ageSex.includes('F') ? 'text-pink-600' : 'text-blue-600'}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{confirmationData.patient}</p>
+                  <p className="text-sm text-muted-foreground">GDID - {confirmationData.gdid} • {confirmationData.ageSex}</p>
+                </div>
+                <Badge className="ml-auto bg-amber-100 text-amber-700">
+                  Pending Confirmation
+                </Badge>
+              </div>
+
+              {/* Request Details */}
+              {confirmationData.type === 'outpatient' ? (
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Request ID</p>
+                        <p className="text-sm font-medium">{confirmationData.requestId}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-2">
+                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
+                        <p className="text-sm font-medium">{confirmationData.preferredDate} {confirmationData.preferredTime}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Preferred Doctor</p>
+                        <p className="text-sm font-medium">{confirmationData.preferredDoctor || "Any Available"}</p>
+                        {confirmationData.preferredDoctor && getDoctorByName(confirmationData.preferredDoctor) && (
+                          <p className="text-xs text-muted-foreground">
+                            {getDoctorByName(confirmationData.preferredDoctor)?.degrees}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Department</p>
+                        <p className="text-sm font-medium">{confirmationData.department}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Visit Type</p>
+                        <p className="text-sm font-medium">{getVisitTypeLabel(confirmationData.visitType)}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Contact</p>
+                        <p className="text-sm font-medium">{confirmationData.contact}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Order ID</p>
+                        <p className="text-sm font-medium">{confirmationData.orderId}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-2">
+                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
+                        <p className="text-sm font-medium">{confirmationData.preferredDate} {confirmationData.preferredTime}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Test Type</p>
+                        <p className="text-sm font-medium">{confirmationData.testType}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Ordered By</p>
+                        <p className="text-sm font-medium">{confirmationData.orderedBy}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Visit Type</p>
+                        <Badge variant="outline" className={`${confirmationData.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}`}>
+                          {confirmationData.visitType}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Contact</p>
+                        <p className="text-sm font-medium">{confirmationData.contact}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Clinical Information */}
+              <div className="p-3 border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
+                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setShowConfirmation(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmSchedule} className="gap-2">
+              <CheckCircle className="w-4 h-4" />
+              Confirm & Schedule
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
