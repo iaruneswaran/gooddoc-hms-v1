@@ -267,7 +267,7 @@ const AppointmentRequests = () => {
           <TableHead>Test Type</TableHead>
           <TableHead>Ordered By</TableHead>
           <TableHead>Preferred Date/Time</TableHead>
-          <TableHead>Visit Type</TableHead>
+          <TableHead className="text-center" style={{ width: "120px" }}>Visit Type</TableHead>
           <TableHead style={{ width: "140px" }}></TableHead>
           <TableHead style={{ width: "80px" }}>Actions</TableHead>
         </TableRow>
@@ -293,8 +293,8 @@ const AppointmentRequests = () => {
                 <span className="text-muted-foreground text-xs">{row.preferredDate}</span>
               </div>
             </TableCell>
-            <TableCell>
-              <Badge variant="outline" className={row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}>
+            <TableCell className="text-center" style={{ width: "120px" }}>
+              <Badge variant="outline" className={`min-w-[100px] justify-center ${row.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}`}>
                 {row.visitType}
               </Badge>
             </TableCell>
