@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import iconOpPatients from "@/assets/icon-op-patients.svg";
-import iconIpPatients from "@/assets/icon-ip-patients.svg";
+import iconIpPatients from "@/assets/icons/icon-ip-patients.svg";
 import iconDiagnostics from "@/assets/icon-diagnostics.svg";
 import iconRevenue from "@/assets/icon-revenue.svg";
 
