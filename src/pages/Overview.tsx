@@ -128,7 +128,7 @@ const Overview = () => {
     {
       title: "Beds Availability",
       count: 67,
-      displayCount: "67| ICU: 37 • Ward: 30",
+      displayCount: "67",
       iconSrc: iconBeds,
       route: "/patients/check-in?date=today",
     },
