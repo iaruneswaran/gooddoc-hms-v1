@@ -83,6 +83,7 @@ const PatientAdvanceCollection = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromPage = searchParams.get("from");
+  const visitId = searchParams.get("visitId");
 
   // Amount to collect (editable input)
   const [amountToCollect, setAmountToCollect] = useState(5000); // Default ₹5,000
@@ -193,7 +194,11 @@ const PatientAdvanceCollection = () => {
   };
 
   const handleBack = () => {
-    navigate(`/patient-insights/${patientId}${fromPage ? `?from=${fromPage}` : ''}`);
+    const params = new URLSearchParams();
+    if (fromPage) params.set("from", fromPage);
+    if (visitId) params.set("visitId", visitId);
+    const queryString = params.toString();
+    navigate(`/patient-insights/${patientId}${queryString ? `?${queryString}` : ''}`);
   };
 
   const canConfirm = payerName.trim() !== "" && amountToCollect > 0 && isValid;
