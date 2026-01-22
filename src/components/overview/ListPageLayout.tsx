@@ -190,11 +190,13 @@ export function ListPageLayout<T>({
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
-                <div>
+                <div className="flex items-center gap-3">
                   <h1 className="text-h3 font-semibold text-foreground">
                     {activeUrlFilter ? activeUrlFilter.label : title}
                   </h1>
-                  <p className="text-small text-muted-foreground mt-1">{subtitle}</p>
+                  <span className="text-h3 font-semibold text-primary">
+                    {activeUrlFilter ? activeUrlFilter.count : count}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-4">
