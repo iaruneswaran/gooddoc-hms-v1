@@ -42,6 +42,11 @@ import {
 import { User, Calendar, Clock, Stethoscope, MapPin, FileText, Hash, Search, MoreHorizontal, ArrowLeft, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 // Mock data for Laboratory tab - appointment requests for lab tests
+interface LabTestItem {
+  code: string;
+  name: string;
+}
+
 interface LaboratoryRecord {
   id: string;
   orderId: string;
@@ -50,25 +55,152 @@ interface LaboratoryRecord {
   ageSex: string;
   contact: string;
   email: string;
-  testType: string;
+  tests: LabTestItem[];
   orderedBy: string;
   department: string;
   preferredDate: string;
   preferredTime: string;
   visitType: "In-patient" | "Home";
+  clinicalInfo?: string;
 }
 
+// Lab-specific clinical reasons
+const labClinicalReasons = [
+  "Routine annual health checkup. Patient requests fasting lipid profile and complete metabolic panel for preventive screening.",
+  "Follow-up for elevated liver enzymes detected in previous visit. Monitoring hepatic function after medication adjustment.",
+  "Suspected thyroid dysfunction. Patient reports fatigue, weight gain, and cold intolerance for the past 3 months.",
+  "Diabetic patient requiring quarterly HbA1c monitoring. Current on Metformin 500mg BD. Last HbA1c was 7.2%.",
+  "Pre-operative workup for scheduled knee replacement surgery. Requires CBC, coagulation profile, and kidney function tests.",
+  "Anemia evaluation. Patient presents with persistent fatigue, pallor, and shortness of breath on exertion.",
+  "Monitoring renal function in patient with chronic kidney disease Stage 3. Currently on ACE inhibitor therapy.",
+  "Suspected urinary tract infection. Patient reports dysuria, frequency, and lower abdominal discomfort for 3 days.",
+  "Vitamin D deficiency follow-up. Patient on supplementation therapy for 3 months. Reassessment needed.",
+  "Comprehensive metabolic panel for newly diagnosed hypertensive patient before initiating medication.",
+];
+
 const laboratoryData: LaboratoryRecord[] = [
-  { id: "LAB001", orderId: "ORD001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", contact: "9876543210", email: "ravi.sharma@email.com", testType: "CBC001", orderedBy: "Dr. Rajesh Kumar", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
-  { id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", contact: "9876543211", email: "priya.menon@email.com", testType: "LIP001", orderedBy: "Priya Menon", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient" },
-  { id: "LAB003", orderId: "ORD003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", contact: "9876543212", email: "anil.kapoor@email.com", testType: "LFT001", orderedBy: "Dr. Anita Singh", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "10:30 AM", visitType: "Home" },
-  { id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", contact: "9876543213", email: "sunita.rao@email.com", testType: "KFT001", orderedBy: "Sunita Rao", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient" },
-  { id: "LAB005", orderId: "ORD005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", contact: "9876543214", email: "mohan.iyer@email.com", testType: "THY001", orderedBy: "Dr. Prakash Shah", department: "Endocrinology", preferredDate: "21 Dec 2025", preferredTime: "11:30 AM", visitType: "Home" },
-  { id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", contact: "9876543215", email: "kavitha.nair@email.com", testType: "HBA001", orderedBy: "Kavitha Nair", department: "Diabetes", preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home" },
-  { id: "LAB007", orderId: "ORD007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", contact: "9876543216", email: "vikram.singh@email.com", testType: "URI001", orderedBy: "Dr. Arun Bhat", department: "Urology", preferredDate: "21 Dec 2025", preferredTime: "02:30 PM", visitType: "In-patient" },
-  { id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", contact: "9876543217", email: "deepa.k@email.com", testType: "VIT001", orderedBy: "Deepa Krishnan", department: "Biochemistry", preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient" },
-  { id: "LAB009", orderId: "ORD009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", contact: "9876543218", email: "raj.prasad@email.com", testType: "VIT002", orderedBy: "Dr. Meera Nair", department: "Biochemistry", preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", visitType: "Home" },
-  { id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", contact: "9876543219", email: "lakshmi.d@email.com", testType: "IRO001", orderedBy: "Lakshmi Devi", department: "Hematology", preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home" },
+  { 
+    id: "LAB001", orderId: "ORD001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", 
+    contact: "9876543210", email: "ravi.sharma@email.com", 
+    tests: [
+      { code: "CBC001", name: "Complete Blood Count" },
+      { code: "LIP001", name: "Lipid Profile" },
+      { code: "CMP001", name: "Comprehensive Metabolic Panel" },
+      { code: "HBA001", name: "HbA1c" },
+      { code: "TFT001", name: "Thyroid Function Test" }
+    ],
+    orderedBy: "Dr. Rajesh Kumar", department: "Biochemistry", 
+    preferredDate: "21 Dec 2025", preferredTime: "09:30 AM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[0]
+  },
+  { 
+    id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", 
+    contact: "9876543211", email: "priya.menon@email.com", 
+    tests: [
+      { code: "LFT001", name: "Liver Function Test" },
+      { code: "GGT001", name: "Gamma-GT" }
+    ],
+    orderedBy: "Dr. Anita Singh", department: "Biochemistry", 
+    preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient",
+    clinicalInfo: labClinicalReasons[1]
+  },
+  { 
+    id: "LAB003", orderId: "ORD003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", 
+    contact: "9876543212", email: "anil.kapoor@email.com", 
+    tests: [
+      { code: "TFT001", name: "Thyroid Function Test" },
+      { code: "TSH001", name: "TSH" },
+      { code: "T3001", name: "Free T3" },
+      { code: "T4001", name: "Free T4" }
+    ],
+    orderedBy: "Dr. Prakash Shah", department: "Endocrinology", 
+    preferredDate: "21 Dec 2025", preferredTime: "10:30 AM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[2]
+  },
+  { 
+    id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", 
+    contact: "9876543213", email: "sunita.rao@email.com", 
+    tests: [
+      { code: "HBA001", name: "HbA1c" },
+      { code: "FBS001", name: "Fasting Blood Sugar" },
+      { code: "PPBS001", name: "Post-Prandial Blood Sugar" }
+    ],
+    orderedBy: "Dr. Meera Nair", department: "Diabetes", 
+    preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient",
+    clinicalInfo: labClinicalReasons[3]
+  },
+  { 
+    id: "LAB005", orderId: "ORD005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", 
+    contact: "9876543214", email: "mohan.iyer@email.com", 
+    tests: [
+      { code: "CBC001", name: "Complete Blood Count" },
+      { code: "PT001", name: "Prothrombin Time" },
+      { code: "APTT001", name: "aPTT" },
+      { code: "KFT001", name: "Kidney Function Test" },
+      { code: "ECG001", name: "ECG" }
+    ],
+    orderedBy: "Dr. Sunil Reddy", department: "Surgery", 
+    preferredDate: "21 Dec 2025", preferredTime: "11:30 AM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[4]
+  },
+  { 
+    id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", 
+    contact: "9876543215", email: "kavitha.nair@email.com", 
+    tests: [
+      { code: "CBC001", name: "Complete Blood Count" },
+      { code: "IRO001", name: "Serum Iron" },
+      { code: "FER001", name: "Ferritin" },
+      { code: "TIBC001", name: "TIBC" },
+      { code: "B12001", name: "Vitamin B12" }
+    ],
+    orderedBy: "Dr. Priya Menon", department: "Hematology", 
+    preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[5]
+  },
+  { 
+    id: "LAB007", orderId: "ORD007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", 
+    contact: "9876543216", email: "vikram.singh@email.com", 
+    tests: [
+      { code: "KFT001", name: "Kidney Function Test" },
+      { code: "ELY001", name: "Electrolytes" }
+    ],
+    orderedBy: "Dr. Arun Bhat", department: "Nephrology", 
+    preferredDate: "21 Dec 2025", preferredTime: "02:30 PM", visitType: "In-patient",
+    clinicalInfo: labClinicalReasons[6]
+  },
+  { 
+    id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", 
+    contact: "9876543217", email: "deepa.k@email.com", 
+    tests: [
+      { code: "URI001", name: "Urine Routine" },
+      { code: "UCS001", name: "Urine Culture & Sensitivity" }
+    ],
+    orderedBy: "Dr. Rajesh Kumar", department: "Urology", 
+    preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient",
+    clinicalInfo: labClinicalReasons[7]
+  },
+  { 
+    id: "LAB009", orderId: "ORD009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", 
+    contact: "9876543218", email: "raj.prasad@email.com", 
+    tests: [
+      { code: "VITD001", name: "Vitamin D (25-OH)" }
+    ],
+    orderedBy: "Dr. Meera Nair", department: "Biochemistry", 
+    preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[8]
+  },
+  { 
+    id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", 
+    contact: "9876543219", email: "lakshmi.d@email.com", 
+    tests: [
+      { code: "CMP001", name: "Comprehensive Metabolic Panel" },
+      { code: "LIP001", name: "Lipid Profile" },
+      { code: "KFT001", name: "Kidney Function Test" }
+    ],
+    orderedBy: "Dr. Anita Singh", department: "Cardiology", 
+    preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home",
+    clinicalInfo: labClinicalReasons[9]
+  },
 ];
 
 // Mock data for Scheduled tab - combined outpatient and laboratory scheduled appointments
@@ -131,8 +263,9 @@ interface LaboratoryConfirmData {
   ageSex: string;
   contact: string;
   email: string;
-  testType: string;
+  tests: LabTestItem[];
   orderedBy: string;
+  department: string;
   preferredDate: string;
   preferredTime: string;
   visitType: string;
@@ -380,7 +513,14 @@ const AppointmentRequests = () => {
               </div>
             </TableCell>
             <TableCell className="text-sm">{row.orderId}</TableCell>
-            <TableCell>{row.testType}</TableCell>
+            <TableCell>
+              <div className="flex flex-col">
+                <span className="font-medium">{row.tests.length} Test{row.tests.length > 1 ? 's' : ''}</span>
+                <span className="text-muted-foreground text-xs truncate max-w-[180px]" title={row.tests.map(t => t.name).join(', ')}>
+                  {row.tests.slice(0, 2).map(t => t.code).join(', ')}{row.tests.length > 2 ? ` +${row.tests.length - 2}` : ''}
+                </span>
+              </div>
+            </TableCell>
             <TableCell>{row.orderedBy}</TableCell>
             <TableCell>
               <div className="flex flex-col">
@@ -406,11 +546,13 @@ const AppointmentRequests = () => {
                     ageSex: row.ageSex,
                     contact: row.contact,
                     email: row.email,
-                    testType: row.testType,
+                    tests: row.tests,
                     orderedBy: row.orderedBy,
+                    department: row.department,
                     preferredDate: row.preferredDate,
                     preferredTime: row.preferredTime,
                     visitType: row.visitType,
+                    clinicalInfo: row.clinicalInfo,
                   });
                 }}
               >
@@ -761,6 +903,19 @@ const AppointmentRequests = () => {
                 </Badge>
               </div>
 
+              {/* Requested Tests */}
+              <div className="p-3 border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-2">Requested Tests ({selectedLabRequest.tests.length})</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedLabRequest.tests.map((test, idx) => (
+                    <Badge key={idx} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      <span className="font-mono text-xs mr-1">{test.code}</span>
+                      <span className="text-xs">{test.name}</span>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
               {/* Request Details */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-3">
@@ -783,18 +938,18 @@ const AppointmentRequests = () => {
 
                 <div className="space-y-3">
                   <div className="flex items-start gap-2">
-                    <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Test Type</p>
-                      <p className="text-sm font-medium">{selectedLabRequest.testType}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
                     <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="text-xs text-muted-foreground">Department</p>
                       <p className="text-sm font-medium">{selectedLabRequest.department}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Ordered By</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.orderedBy}</p>
                     </div>
                   </div>
                 </div>
@@ -811,10 +966,10 @@ const AppointmentRequests = () => {
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Ordered By</p>
-                      <p className="text-sm font-medium">{selectedLabRequest.orderedBy}</p>
+                      <p className="text-xs text-muted-foreground">Contact</p>
+                      <p className="text-sm font-medium">{selectedLabRequest.contact}</p>
                     </div>
                   </div>
                 </div>
@@ -823,7 +978,11 @@ const AppointmentRequests = () => {
               {/* Clinical Information */}
               <div className="p-3 border rounded-lg">
                 <p className="text-xs text-muted-foreground mb-1">Clinical Information</p>
-                <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+                {selectedLabRequest.clinicalInfo ? (
+                  <p className="text-sm text-foreground">{selectedLabRequest.clinicalInfo}</p>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">No clinical information available.</p>
+                )}
               </div>
             </div>
           )}
@@ -1008,63 +1167,78 @@ const AppointmentRequests = () => {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Order ID</p>
-                        <p className="text-sm font-medium">{confirmationData.orderId}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-2">
-                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
-                        <p className="text-sm font-medium">{confirmationData.preferredDate} {confirmationData.preferredTime}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <Stethoscope className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Test Type</p>
-                        <p className="text-sm font-medium">{confirmationData.testType}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2">
-                      <User className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Ordered By</p>
-                        <p className="text-sm font-medium">{confirmationData.orderedBy}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Visit Type</p>
-                        <Badge variant="outline" className={`${confirmationData.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}`}>
-                          {confirmationData.visitType}
+                <>
+                  {/* Requested Tests */}
+                  <div className="p-3 border rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-2">Requested Tests ({confirmationData.tests.length})</p>
+                    <div className="flex flex-wrap gap-2">
+                      {confirmationData.tests.map((test, idx) => (
+                        <Badge key={idx} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          <span className="font-mono text-xs mr-1">{test.code}</span>
+                          <span className="text-xs">{test.name}</span>
                         </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2">
+                        <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Order ID</p>
+                          <p className="text-sm font-medium">{confirmationData.orderId}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-2">
+                        <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Preferred Date/Time</p>
+                          <p className="text-sm font-medium">{confirmationData.preferredDate} {confirmationData.preferredTime}</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-2">
-                      <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Contact</p>
-                        <p className="text-sm font-medium">{confirmationData.contact}</p>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Department</p>
+                          <p className="text-sm font-medium">{confirmationData.department}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2">
+                        <User className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Ordered By</p>
+                          <p className="text-sm font-medium">{confirmationData.orderedBy}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2">
+                        <Hash className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Visit Type</p>
+                          <Badge variant="outline" className={`${confirmationData.visitType === "In-patient" ? "bg-purple-100 text-purple-700" : "bg-teal-100 text-teal-700"}`}>
+                            {confirmationData.visitType}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2">
+                        <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Contact</p>
+                          <p className="text-sm font-medium">{confirmationData.contact}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </>
               )}
 
               {/* Clinical Information */}
