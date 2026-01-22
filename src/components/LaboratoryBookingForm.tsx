@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Minus, Search, FlaskConical, Trash2 } from "lucide-react";
+import { Check, Search, FlaskConical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -188,7 +188,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
   return (
     <Card className="overflow-hidden">
       {/* Header */}
-      <div className="bg-blue-600 dark:bg-blue-700 px-5 py-4 flex items-center justify-between">
+      <div className="bg-primary dark:bg-primary px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
             <FlaskConical className="w-4 h-4 text-white" />
@@ -265,64 +265,90 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
             </div>
             
             <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-              <TabsContent value="health-packages" className="space-y-3 mt-0">
+              <TabsContent value="health-packages" className="grid grid-cols-2 gap-3 mt-0">
               {filteredPackages.map((pkg) => {
                 const isSelected = selectedPackages.some(p => p.id === pkg.id);
                 return (
-                  <Card
+                  <div
                     key={pkg.id}
-                    className={cn(
-                      "p-4 cursor-pointer transition-all hover:border-primary",
-                      isSelected && "border-primary bg-primary/5"
-                    )}
                     onClick={() => handlePackageToggle(pkg)}
+                    className={cn(
+                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "border bg-gradient-to-br from-background to-muted/30",
+                      isSelected 
+                        ? "border-primary ring-2 ring-primary/20 shadow-md" 
+                        : "border-border hover:border-primary/50 hover:shadow-sm"
+                    )}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-sm font-semibold text-primary">{pkg.name}</h4>
-                        </div>
-                        <p className="text-xs text-muted-foreground mb-2">
-                          Includes: {pkg.includes}
-                        </p>
-                        <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
-                      </div>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    {/* Selection indicator */}
+                    <div className={cn(
+                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      isSelected 
+                        ? "border-primary bg-primary" 
+                        : "border-muted-foreground/40"
+                    )}>
+                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
                     </div>
-                  </Card>
+                    
+                    {/* Content */}
+                    <div className="flex-1 pr-6">
+                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                        {pkg.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {pkg.includes}
+                      </p>
+                    </div>
+                    
+                    {/* Price */}
+                    <div className="mt-auto pt-2 border-t border-border/50">
+                      <span className="text-sm font-bold text-primary">{formatCurrency(pkg.price)}</span>
+                    </div>
+                  </div>
                 );
               })}
             </TabsContent>
 
-            <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3">
+            <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 mt-0">
               {filteredTests.map((test) => {
                 const isSelected = selectedTests.some(t => t.id === test.id);
                 return (
-                  <Card
+                  <div
                     key={test.id}
-                    className={cn(
-                      "p-4 cursor-pointer transition-all hover:border-primary",
-                      isSelected && "border-primary bg-primary/5"
-                    )}
                     onClick={() => handleTestToggle(test)}
+                    className={cn(
+                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "border bg-gradient-to-br from-background to-muted/30",
+                      isSelected 
+                        ? "border-primary ring-2 ring-primary/20 shadow-md" 
+                        : "border-border hover:border-primary/50 hover:shadow-sm"
+                    )}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    {/* Selection indicator */}
+                    <div className={cn(
+                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      isSelected 
+                        ? "border-primary bg-primary" 
+                        : "border-muted-foreground/40"
+                    )}>
+                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
-                  </Card>
+                    
+                    {/* Content */}
+                    <div className="flex-1 pr-6">
+                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                        {test.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        {test.category}
+                      </p>
+                    </div>
+                    
+                    {/* Price */}
+                    <div className="mt-auto pt-2 border-t border-border/50">
+                      <span className="text-sm font-bold text-primary">{formatCurrency(test.price)}</span>
+                    </div>
+                  </div>
                 );
               })}
             </TabsContent>
@@ -347,26 +373,42 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
               {filteredRadiologyTests.map((test) => {
                 const isSelected = selectedRadiologyTests.some(t => t.id === test.id);
                 return (
-                  <Card
+                  <div
                     key={test.id}
-                    className={cn(
-                      "p-4 cursor-pointer transition-all hover:border-primary",
-                      isSelected && "border-primary bg-primary/5"
-                    )}
                     onClick={() => handleRadiologyTestToggle(test)}
+                    className={cn(
+                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "border bg-gradient-to-br from-background to-muted/30",
+                      isSelected 
+                        ? "border-primary ring-2 ring-primary/20 shadow-md" 
+                        : "border-border hover:border-primary/50 hover:shadow-sm"
+                    )}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    {/* Selection indicator */}
+                    <div className={cn(
+                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      isSelected 
+                        ? "border-primary bg-primary" 
+                        : "border-muted-foreground/40"
+                    )}>
+                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
-                  </Card>
+                    
+                    {/* Content */}
+                    <div className="flex-1 pr-6">
+                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                        {test.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        {test.category}
+                      </p>
+                    </div>
+                    
+                    {/* Price */}
+                    <div className="mt-auto pt-2 border-t border-border/50">
+                      <span className="text-sm font-bold text-primary">{formatCurrency(test.price)}</span>
+                    </div>
+                  </div>
                 );
               })}
             </div>
