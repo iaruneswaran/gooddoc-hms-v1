@@ -273,7 +273,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     key={pkg.id}
                     onClick={() => handlePackageToggle(pkg)}
                     className={cn(
-                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "relative p-3 rounded-xl cursor-pointer transition-all duration-200 h-[100px] flex flex-col",
                       "border bg-gradient-to-br from-background to-muted/30",
                       isSelected 
                         ? "border-primary ring-2 ring-primary/20 shadow-md" 
@@ -282,27 +282,24 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                   >
                     {/* Selection indicator */}
                     <div className={cn(
-                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      "absolute top-2.5 right-2.5 w-4 h-4 rounded border-2 flex items-center justify-center transition-all",
                       isSelected 
                         ? "border-primary bg-primary" 
                         : "border-muted-foreground/40"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+                      {isSelected && <Check className="w-2.5 h-2.5 text-primary-foreground" />}
                     </div>
                     
                     {/* Content */}
-                    <div className="flex-1 pr-6">
-                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                    <div className="flex-1 pr-5">
+                      <h4 className="text-sm font-medium text-foreground leading-tight line-clamp-2">
                         {pkg.name}
                       </h4>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {pkg.includes}
-                      </p>
                     </div>
                     
                     {/* Price */}
-                    <div className="mt-auto pt-2 border-t border-border/50">
-                      <span className="text-sm font-bold text-primary">{formatCurrency(pkg.price)}</span>
+                    <div className="mt-auto">
+                      <span className="text-sm font-semibold text-primary">{formatCurrency(pkg.price)}</span>
                     </div>
                   </div>
                 );
@@ -317,7 +314,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     key={test.id}
                     onClick={() => handleTestToggle(test)}
                     className={cn(
-                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "relative p-3 rounded-xl cursor-pointer transition-all duration-200 h-[100px] flex flex-col",
                       "border bg-gradient-to-br from-background to-muted/30",
                       isSelected 
                         ? "border-primary ring-2 ring-primary/20 shadow-md" 
@@ -326,27 +323,25 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                   >
                     {/* Selection indicator */}
                     <div className={cn(
-                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      "absolute top-2.5 right-2.5 w-4 h-4 rounded border-2 flex items-center justify-center transition-all",
                       isSelected 
                         ? "border-primary bg-primary" 
                         : "border-muted-foreground/40"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+                      {isSelected && <Check className="w-2.5 h-2.5 text-primary-foreground" />}
                     </div>
                     
                     {/* Content */}
-                    <div className="flex-1 pr-6">
-                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                    <div className="flex-1 pr-5">
+                      <p className="text-[10px] font-medium text-muted-foreground mb-0.5">{test.id}</p>
+                      <h4 className="text-sm font-medium text-foreground leading-tight line-clamp-2">
                         {test.name}
                       </h4>
-                      <p className="text-xs text-muted-foreground">
-                        {test.category}
-                      </p>
                     </div>
                     
                     {/* Price */}
-                    <div className="mt-auto pt-2 border-t border-border/50">
-                      <span className="text-sm font-bold text-primary">{formatCurrency(test.price)}</span>
+                    <div className="mt-auto">
+                      <span className="text-sm font-semibold text-primary">{formatCurrency(test.price)}</span>
                     </div>
                   </div>
                 );
@@ -377,7 +372,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     key={test.id}
                     onClick={() => handleRadiologyTestToggle(test)}
                     className={cn(
-                      "relative p-4 rounded-xl cursor-pointer transition-all duration-200 h-[140px] flex flex-col",
+                      "relative p-3 rounded-xl cursor-pointer transition-all duration-200 h-[100px] flex flex-col",
                       "border bg-gradient-to-br from-background to-muted/30",
                       isSelected 
                         ? "border-primary ring-2 ring-primary/20 shadow-md" 
@@ -386,27 +381,25 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                   >
                     {/* Selection indicator */}
                     <div className={cn(
-                      "absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                      "absolute top-2.5 right-2.5 w-4 h-4 rounded border-2 flex items-center justify-center transition-all",
                       isSelected 
                         ? "border-primary bg-primary" 
                         : "border-muted-foreground/40"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+                      {isSelected && <Check className="w-2.5 h-2.5 text-primary-foreground" />}
                     </div>
                     
                     {/* Content */}
-                    <div className="flex-1 pr-6">
-                      <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 mb-1">
+                    <div className="flex-1 pr-5">
+                      <p className="text-[10px] font-medium text-muted-foreground mb-0.5">{test.category}</p>
+                      <h4 className="text-sm font-medium text-foreground leading-tight line-clamp-2">
                         {test.name}
                       </h4>
-                      <p className="text-xs text-muted-foreground">
-                        {test.category}
-                      </p>
                     </div>
                     
                     {/* Price */}
-                    <div className="mt-auto pt-2 border-t border-border/50">
-                      <span className="text-sm font-bold text-primary">{formatCurrency(test.price)}</span>
+                    <div className="mt-auto">
+                      <span className="text-sm font-semibold text-primary">{formatCurrency(test.price)}</span>
                     </div>
                   </div>
                 );
