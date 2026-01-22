@@ -288,39 +288,29 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     )}
                     onClick={() => handlePackageToggle(pkg)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{pkg.code}</span>
-                          <h4 className="text-sm font-semibold text-primary">{pkg.name}</h4>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 mb-2">
-                          {pkg.includedCodes.map((code) => (
-                            <span 
-                              key={code} 
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
-                            >
-                              {code}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {pkg.discountedPrice ? (
-                            <>
-                              <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.discountedPrice)}</p>
-                              <p className="text-xs text-muted-foreground line-through">{formatCurrency(pkg.price)}</p>
-                            </>
-                          ) : (
-                            <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
-                          )}
-                        </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{pkg.code}</span>
+                      <h4 className="text-sm font-semibold text-primary flex-1">{pkg.name}</h4>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {pkg.discountedPrice ? (
+                          <>
+                            <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.discountedPrice)}</p>
+                            <p className="text-xs text-muted-foreground line-through">{formatCurrency(pkg.price)}</p>
+                          </>
+                        ) : (
+                          <p className="text-sm font-semibold text-foreground">{formatCurrency(pkg.price)}</p>
+                        )}
                       </div>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {pkg.includedCodes.map((code) => (
+                        <span 
+                          key={code} 
+                          className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
+                        >
+                          {code}
+                        </span>
+                      ))}
                     </div>
                   </Card>
                 );
@@ -342,11 +332,9 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">{test.code}</span>
                       <h4 className="text-sm font-semibold text-primary flex-1">{test.name}</h4>
+                      <p className="text-sm font-semibold text-foreground shrink-0">{formatCurrency(test.price)}</p>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground">{test.category}</p>
-                      <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
-                    </div>
+                    <p className="text-xs text-muted-foreground">{test.category}</p>
                   </Card>
                 );
               })}
