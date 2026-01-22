@@ -195,7 +195,7 @@ export function ListPageLayout<T>({
                     {activeUrlFilter ? activeUrlFilter.label : title}
                   </h1>
                   <span className="text-h3 font-semibold text-primary">
-                    {activeUrlFilter ? activeUrlFilter.count : count}
+                    {data.length}
                   </span>
                 </div>
               </div>
