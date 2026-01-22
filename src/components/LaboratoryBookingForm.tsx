@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { cn, formatCurrency } from "@/lib/utils";
 import { DiagnosticsSlotPicker } from "@/components/booking/DiagnosticsSlotPicker";
 import { LAB_MASTER_CATALOG, HEALTH_PACKAGES } from "@/data/lab-master-catalog";
+import type { HealthPackage as CatalogHealthPackage } from "@/types/lab-catalog";
 
 export interface LabTest {
   id: string;
@@ -29,6 +30,7 @@ export interface HealthPackage {
   code: string;
   name: string;
   includes: string;
+  includedCodes: string[];
   price: number;
   discountedPrice?: number;
 }
@@ -52,11 +54,12 @@ interface LaboratoryBookingFormProps {
 }
 
 // Convert catalog health packages to the booking form format
-const healthPackages: HealthPackage[] = HEALTH_PACKAGES.map((pkg) => ({
+const healthPackages: HealthPackage[] = HEALTH_PACKAGES.map((pkg: CatalogHealthPackage) => ({
   id: pkg.code,
   code: pkg.code,
   name: pkg.name,
   includes: pkg.description,
+  includedCodes: pkg.includedCodes,
   price: pkg.mrp,
   discountedPrice: pkg.discountPct ? Math.round(pkg.mrp * (1 - pkg.discountPct / 100)) : undefined,
 }));
@@ -291,9 +294,16 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{pkg.code}</span>
                           <h4 className="text-sm font-semibold text-primary">{pkg.name}</h4>
                         </div>
-                        <p className="text-xs text-muted-foreground mb-2">
-                          {pkg.includes}
-                        </p>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {pkg.includedCodes.map((code) => (
+                            <span 
+                              key={code} 
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
+                            >
+                              {code}
+                            </span>
+                          ))}
+                        </div>
                         <div className="flex items-center gap-2">
                           {pkg.discountedPrice ? (
                             <>
@@ -329,20 +339,14 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     )}
                     onClick={() => handleTestToggle(test)}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1 pr-2">
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{test.code}</span>
-                        <h4 className="text-sm font-semibold text-primary mt-1">{test.name}</h4>
-                      </div>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">{test.code}</span>
+                      <h4 className="text-sm font-semibold text-primary flex-1">{test.name}</h4>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground">{test.category}</p>
+                      <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
+                    </div>
                   </Card>
                 );
               })}
