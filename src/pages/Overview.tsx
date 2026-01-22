@@ -8,12 +8,6 @@ import { CalendarWidget } from "@/components/CalendarWidget";
 import { OverviewKpiCard } from "@/components/overview/OverviewKpiCard";
 import { 
   BedDouble, 
-  Stethoscope, 
-  CalendarClock, 
-  Scissors,
-  AlertTriangle,
-  Pill,
-  PackageOpen,
   ChevronRight,
   Plus,
 } from "lucide-react";
@@ -22,6 +16,15 @@ import iconOpPatients from "@/assets/icon-op-patients.svg";
 import iconIpPatients from "@/assets/icon-ip-patients.svg";
 import iconDiagnostics from "@/assets/icon-diagnostics.svg";
 import iconRevenue from "@/assets/icon-revenue.svg";
+
+// New metric card icons
+import iconAppointmentRequest from "@/assets/icons/icon-appointment-request.svg";
+import iconDoctorsDuty from "@/assets/icons/icon-doctors-duty.svg";
+import iconMedicineOrders from "@/assets/icons/icon-medicine-orders.svg";
+import iconBeds from "@/assets/icons/icon-beds.svg";
+import iconSurgeries from "@/assets/icons/icon-surgeries.svg";
+import iconEmergency from "@/assets/icons/icon-emergency.svg";
+import iconLowStock from "@/assets/icons/icon-low-stock.svg";
 
 interface SubMetric {
   label: string;
@@ -34,31 +37,17 @@ interface MetricCardProps {
   title: string;
   count: number;
   displayCount?: string;
-  icon: React.ElementType;
+  iconSrc: string;
   route: string;
-  iconColorClass: string;
-  isPrimary?: boolean;
-  subMetrics?: SubMetric[];
   badge?: string;
 }
-
-const iconColors = {
-  patients: "text-foreground",
-  doctors: "text-foreground",
-  labs: "text-foreground",
-  surgery: "text-foreground",
-  emergency: "text-foreground",
-  pharmacy: "text-foreground",
-  inventory: "text-foreground",
-};
 
 const StandardMetricCard = ({ 
   title, 
   count,
   displayCount,
-  icon: Icon, 
+  iconSrc, 
   route, 
-  iconColorClass,
   badge,
 }: MetricCardProps) => {
   const navigate = useNavigate();
@@ -76,9 +65,11 @@ const StandardMetricCard = ({
         h-[90px] px-4 flex items-center gap-3
       "
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-border shadow-sm shrink-0">
-        <Icon className={`w-5 h-5 ${iconColorClass}`} />
-      </div>
+      <img 
+        src={iconSrc} 
+        alt="" 
+        className="w-11 h-11 shrink-0"
+      />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-foreground" style={{ fontSize: "22px", fontWeight: 600, letterSpacing: "-1.5px" }}>
@@ -92,7 +83,7 @@ const StandardMetricCard = ({
             ) : count.toLocaleString()}
           </p>
           {badge && (
-            <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-xs font-semibold shadow-sm">
+            <span className="px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-xs font-semibold shadow-sm">
               {badge}
             </span>
           )}
@@ -118,32 +109,28 @@ const Overview = () => {
       title: "Appointment request received",
       count: 342,
       displayCount: "342",
-      icon: CalendarClock,
+      iconSrc: iconAppointmentRequest,
       route: "/schedule/today?date=today",
-      iconColorClass: iconColors.doctors,
       badge: "12new",
     },
     {
       title: "Doctors on Duty",
       count: 89,
-      icon: Stethoscope,
+      iconSrc: iconDoctorsDuty,
       route: "/doctors/on-duty?shift=current",
-      iconColorClass: iconColors.doctors,
     },
     {
       title: "Total medicine orders",
       count: 89,
-      icon: Pill,
+      iconSrc: iconMedicineOrders,
       route: "/pharmacy/pending?status=pending",
-      iconColorClass: iconColors.pharmacy,
     },
     {
       title: "Beds Availability",
       count: 67,
       displayCount: "67| ICU: 37 • Ward: 30",
-      icon: BedDouble,
+      iconSrc: iconBeds,
       route: "/patients/check-in?date=today",
-      iconColorClass: iconColors.patients,
     },
   ];
 
@@ -152,23 +139,20 @@ const Overview = () => {
     {
       title: "Surgeries",
       count: 24,
-      icon: Scissors,
+      iconSrc: iconSurgeries,
       route: "/or/surgeries?date=today",
-      iconColorClass: iconColors.surgery,
     },
     {
       title: "Emergency Cases",
       count: 15,
-      icon: AlertTriangle,
+      iconSrc: iconEmergency,
       route: "/er/cases?status=active",
-      iconColorClass: iconColors.emergency,
     },
     {
       title: "Low Stock",
       count: 34,
-      icon: PackageOpen,
+      iconSrc: iconLowStock,
       route: "/inventory/low-stock",
-      iconColorClass: iconColors.inventory,
     },
   ];
 
