@@ -189,7 +189,7 @@ const Overview = () => {
               kpiValue="847"
               iconSrc={iconOpPatients}
               route="/patients/op?date=today"
-              bullets={[{ text: "Patients" }]}
+              bullets={[{ text: "Consultation" }]}
               chips={[
                 { label: "Visit Completed", value: "282", route: "/patients/op?date=today&visitStatus=Completed" },
                 { label: "Check in Pending", value: "56", route: "/patients/op?date=today&visitStatus=In_Queue" },
@@ -200,7 +200,7 @@ const Overview = () => {
               kpiValue="234"
               iconSrc={iconIpPatients}
               route="/patients/ip?status=admitted"
-              bullets={[{ text: "ICU 34" }, { text: "Ward 200" }]}
+              bullets={[{ text: "Patients" }]}
               chips={[
                 { label: "New Admission", value: "19", route: "/patients/ip?status=admitted&admittedToday=true" },
                 { label: "Discharged", value: "45", route: "/patients/discharged?date=today" },
@@ -222,7 +222,7 @@ const Overview = () => {
               kpiValue="24.4L"
               iconSrc={iconRevenue}
               route="/reports/revenue?type=paid"
-              bullets={[{ text: "24 Bills Paid" }]}
+              bullets={[{ text: "From 24 Bills" }]}
               chips={[
                 { label: "Outstanding Bills", value: "₹8.4L/12", route: "/reports/revenue?type=outstanding" },
                 { label: "Advance Amount", value: "₹5.7/12", route: "/reports/advance-payments" },
