@@ -304,7 +304,10 @@ const AdvancePayments = () => {
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
-                <h1 className="text-h3 font-semibold text-foreground">Advance Payments</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-h3 font-semibold text-foreground">Advance Payments</h1>
+                  <span className="text-h3 font-semibold text-primary">{filteredData.length}</span>
+                </div>
               </div>
               <CalendarWidget pageKey="advances" />
             </div>
