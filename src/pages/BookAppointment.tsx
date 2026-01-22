@@ -702,6 +702,7 @@ const BookAppointment = () => {
                                 onUpdate={handleConsultationUpdate}
                                 initialData={consultationData}
                                 onAddAnother={isSingleAppointmentMode || isFromScheduledRequests ? undefined : handleAddAnotherConsultation}
+                                autoSelectSlot={isFromScheduledRequests && !!requestData?.doctorId}
                               />
                               {additionalConsultations.map((consultation) => (
                                 <DynamicConsultationBookingForm

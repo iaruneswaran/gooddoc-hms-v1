@@ -18,6 +18,7 @@ interface DynamicConsultationBookingFormProps {
   onUpdate: (data: DynamicConsultationData) => void;
   initialData?: DynamicConsultationData;
   onAddAnother?: () => void;
+  autoSelectSlot?: boolean;
 }
 
 export interface DynamicConsultationData {
@@ -47,7 +48,7 @@ const consultationTypes = [
   { id: "second_opinion", name: "Second Opinion", duration: 45 },
 ];
 
-export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData, onAddAnother }: DynamicConsultationBookingFormProps) {
+export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData, onAddAnother, autoSelectSlot = false }: DynamicConsultationBookingFormProps) {
   const [mode, setMode] = useState<ScheduleMode>(initialData?.mode || "in_person");
   const [consultationType, setConsultationType] = useState(initialData?.type || "first_visit");
   const [department, setDepartment] = useState(initialData?.department || "");
@@ -293,6 +294,7 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
             onSlotSelect={handleSlotSelect}
             selectedSlot={selectedSlot}
             appointmentDuration={selectedTypeDuration}
+            autoSelectFirstSlot={autoSelectSlot}
           />
         ) : (
           <div className="border rounded-lg p-8 text-center bg-muted/30">
