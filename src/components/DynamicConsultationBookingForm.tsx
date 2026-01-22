@@ -57,14 +57,13 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(initialData?.selectedSlot || null);
   const [holdId, setHoldId] = useState<string | null>(initialData?.holdId || null);
   const [doctorSummaries, setDoctorSummaries] = useState<DoctorAvailabilitySummary[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const { doctors, loading: dataLoading } = useSchedulingData();
   const { getDoctorsSummary, loading: summaryLoading } = useDoctorAvailability();
 
   // Sync state with initialData when it changes (for pre-filling from request data)
   useEffect(() => {
-    if (initialData && !isInitialized) {
+    if (initialData) {
       if (initialData.mode) setMode(initialData.mode);
       if (initialData.type) setConsultationType(initialData.type);
       if (initialData.department) setDepartment(initialData.department);
@@ -72,9 +71,8 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
       if (initialData.clinicalInfo) setClinicalInfo(initialData.clinicalInfo);
       if (initialData.selectedSlot) setSelectedSlot(initialData.selectedSlot);
       if (initialData.holdId) setHoldId(initialData.holdId);
-      setIsInitialized(true);
     }
-  }, [initialData, isInitialized]);
+  }, [initialData?.doctorId, initialData?.department, initialData?.type]);
 
   // Fetch doctor summaries when doctors or filters change
   useEffect(() => {
