@@ -23,6 +23,7 @@ interface DynamicSlotPickerProps {
   appointmentDuration?: number;
   locationId?: string;
   autoSelectFirstSlot?: boolean;
+  label?: string;
 }
 
 export function DynamicSlotPicker({ 
@@ -34,6 +35,7 @@ export function DynamicSlotPicker({
   appointmentDuration,
   locationId,
   autoSelectFirstSlot = false,
+  label,
 }: DynamicSlotPickerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [availability, setAvailability] = useState<AvailabilityResponse | null>(null);
@@ -211,7 +213,8 @@ export function DynamicSlotPicker({
     <div className="space-y-4">
       {/* Header with label and date picker inline */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {label && <label className="text-sm font-medium text-foreground">{label}</label>}
           {isHolding && (
             <Badge variant="outline" className="gap-1 animate-pulse">
               <Clock className="h-3 w-3" />
@@ -259,14 +262,6 @@ export function DynamicSlotPicker({
           </Popover>
         </div>
       </div>
-
-      {/* Today indicator */}
-      {selectedDate && isToday(selectedDate) && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4" />
-          <span>Today</span>
-        </div>
-      )}
 
       {/* Leave Banner */}
       {currentLeaveInfo && (
@@ -426,7 +421,7 @@ function SlotChip({
       variant={selected ? "default" : held ? "secondary" : "outline"}
       size="sm"
       className={cn(
-        "gap-1.5 transition-all",
+        "h-8 px-3 gap-1.5 transition-all",
         selected && "ring-2 ring-primary ring-offset-2",
         held && !selected && "border-primary/50",
         isDisabled && "opacity-50 cursor-not-allowed"
@@ -434,19 +429,8 @@ function SlotChip({
       onClick={onClick}
       disabled={isDisabled || loading}
     >
-      {loading ? (
-        <Loader2 className="h-3 w-3 animate-spin" />
-      ) : slot.mode === 'telehealth' ? (
-        <Video className="h-3 w-3" />
-      ) : (
-        <MapPin className="h-3 w-3" />
-      )}
-      {time}
-      {slot.locationName && slot.mode === 'in_person' && (
-        <span className="text-[10px] text-muted-foreground ml-1 hidden sm:inline">
-          {slot.locationName}
-        </span>
-      )}
+      {loading && <Loader2 className="h-3 w-3 animate-spin" />}
+      <span className="font-medium">{time}</span>
     </Button>
   );
 }
