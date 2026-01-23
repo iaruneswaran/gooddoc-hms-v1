@@ -209,10 +209,9 @@ export function DynamicSlotPicker({
 
   return (
     <div className="space-y-4">
-      {/* Date Picker with availability indicators */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium">Select Date</label>
+      {/* Header with label and date picker inline */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           {isHolding && (
             <Badge variant="outline" className="gap-1 animate-pulse">
               <Clock className="h-3 w-3" />
@@ -220,55 +219,54 @@ export function DynamicSlotPicker({
             </Badge>
           )}
         </div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button 
-              variant="outline" 
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !selectedDate && "text-muted-foreground"
-              )}
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <CalendarIcon className="mr-2 h-4 w-4" />
-              )}
-              {selectedDate ? (
-                <>
-                  <span className="font-medium mr-2">{getDateLabel(selectedDate)}</span>
-                  <span className="text-muted-foreground">{format(selectedDate, "MMM d, yyyy")}</span>
-                </>
-              ) : (
-                "Pick a date"
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              disabled={disabledDays}
-              modifiers={{ 
-                available: (date) => !disabledDays(date),
-                leave: (date) => {
-                  if (!availability) return false;
-                  const dateStr = format(date, 'yyyy-MM-dd');
-                  const dayData = availability.days.find(d => d.date === dateStr);
-                  return dayData?.status === 'leave';
-                }
-              }}
-              modifiersClassNames={{ 
-                available: "bg-green-50 dark:bg-green-900/20 font-medium",
-                leave: "bg-orange-50 dark:bg-orange-900/20 text-orange-600"
-              }}
-              className="pointer-events-auto"
-            />
-          </PopoverContent>
-        </Popover>
+        <div className="flex items-center gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-2" disabled={loading}>
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <CalendarIcon className="h-4 w-4" />
+                )}
+                <span className="font-medium">
+                  {selectedDate ? format(selectedDate, "MMM d, yyyy") : "Pick a date"}
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 bg-popover border shadow-lg z-50" align="end">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                disabled={disabledDays}
+                modifiers={{ 
+                  available: (date) => !disabledDays(date),
+                  leave: (date) => {
+                    if (!availability) return false;
+                    const dateStr = format(date, 'yyyy-MM-dd');
+                    const dayData = availability.days.find(d => d.date === dateStr);
+                    return dayData?.status === 'leave';
+                  }
+                }}
+                modifiersClassNames={{ 
+                  available: "bg-green-50 dark:bg-green-900/20 font-medium",
+                  leave: "bg-orange-50 dark:bg-orange-900/20 text-orange-600"
+                }}
+                initialFocus
+                className="p-3 pointer-events-auto"
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
+
+      {/* Today indicator */}
+      {selectedDate && isToday(selectedDate) && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Clock className="h-4 w-4" />
+          <span>Today</span>
+        </div>
+      )}
 
       {/* Leave Banner */}
       {currentLeaveInfo && (
