@@ -276,7 +276,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
             </div>
             
             <Tabs value={labTestType} onValueChange={(v) => setLabTestType(v as any)}>
-              <TabsContent value="health-packages" className="space-y-3 mt-0">
+              <TabsContent value="health-packages" className="space-y-3 mt-0 max-h-[340px] overflow-y-auto pr-1">
               {filteredPackages.map((pkg) => {
                 const isSelected = selectedPackages.some(p => p.id === pkg.id);
                 return (
@@ -308,7 +308,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
               })}
             </TabsContent>
 
-            <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3">
+            <TabsContent value="individual-tests" className="grid grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1">
               {filteredTests.map((test) => {
                 const isSelected = selectedTests.some(t => t.id === test.id);
                 return (
