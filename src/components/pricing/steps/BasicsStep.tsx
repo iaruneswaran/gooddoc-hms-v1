@@ -223,6 +223,9 @@ export function BasicsStep() {
         </div>
       </Card>
 
+      {/* Package Builder - shown only for Package category */}
+      {category === "Package" && <PackageBuilder />}
+
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <h3 className="text-sm font-semibold">Codes & Classification</h3>
@@ -727,10 +730,6 @@ export function BasicsStep() {
           </div>
         </Card>
       )}
-
-
-      {/* Package Builder - shown only for Package category */}
-      {category === "Package" && <PackageBuilder />}
     </div>
   );
 }

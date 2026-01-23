@@ -201,13 +201,8 @@ export function PackageBuilder() {
         
         {/* Right Panel - Selected Items */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Selected Items
-            </div>
-            <Badge variant="secondary" className="text-xs">
-              {inclusions.length} items
-            </Badge>
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Selected Items
           </div>
           
           {/* Selected Items List */}
