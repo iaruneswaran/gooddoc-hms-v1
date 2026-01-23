@@ -61,31 +61,11 @@ const PricingCatalog = () => {
   const [viewItem, setViewItem] = useState<PricingItem | null>(null);
   const [items, setItems] = useState<PricingItem[]>(MOCK_PRICING_ITEMS);
 
-  // Get unique departments from items, filtered by selected category
+  // Get unique departments from items
   const departments = useMemo(() => {
-    let filteredItems = items;
-    
-    // If a category is selected, only show departments from that category
-    if (categoryFilter !== "All") {
-      filteredItems = items.filter(item => item.category === categoryFilter);
-    }
-    
-    const deptSet = new Set(filteredItems.map(item => item.department));
+    const deptSet = new Set(items.map(item => item.department));
     return Array.from(deptSet).sort();
-  }, [items, categoryFilter]);
-  
-  // Reset department filter when category changes and department is not in new list
-  const handleCategoryChange = (value: PricingCategory | "All") => {
-    setCategoryFilter(value);
-    // Reset department filter if current department is not in the new category
-    if (value !== "All") {
-      const categoryItems = items.filter(item => item.category === value);
-      const categoryDepts = new Set(categoryItems.map(item => item.department));
-      if (departmentFilter !== "All" && !categoryDepts.has(departmentFilter)) {
-        setDepartmentFilter("All");
-      }
-    }
-  };
+  }, [items]);
 
   const handleViewDetails = (item: PricingItem) => {
     setViewItem(item);
@@ -248,7 +228,7 @@ const PricingCatalog = () => {
               {/* Category Filter */}
               <Select
                 value={categoryFilter}
-                onValueChange={(value) => handleCategoryChange(value as PricingCategory | "All")}
+                onValueChange={(value) => setCategoryFilter(value as PricingCategory | "All")}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Categories" />
