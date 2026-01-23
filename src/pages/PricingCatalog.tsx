@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   ChevronDown,
   Edit,
+  Copy,
   Trash2,
   Eye,
   MoreVertical,
@@ -48,8 +49,6 @@ import { PricingItem, PricingCategory, PricingStatus } from "@/types/pricing-cat
 import { formatINR } from "@/utils/currency";
 import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
-import { CodePrefixLegend } from "@/components/pricing/CodePrefixLegend";
-import { CodePrefixList } from "@/components/pricing/CodePrefixList";
 
 const PricingCatalog = () => {
   const navigate = useNavigate();
@@ -67,6 +66,23 @@ const PricingCatalog = () => {
 
   const handleEdit = (item: PricingItem) => {
     navigate(`/pricing-catalog/new`, { state: { editItem: item } });
+  };
+
+  const handleDuplicate = (item: PricingItem) => {
+    const duplicatedItem: PricingItem = {
+      ...item,
+      id: `${item.id}-copy-${Date.now()}`,
+      name: `${item.name} (Copy)`,
+      codes: {
+        ...item.codes,
+        internal: `${item.codes.internal}-COPY`,
+      },
+      status: "Draft" as PricingStatus,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setItems((prev) => [duplicatedItem, ...prev]);
+    toast.success(`"${item.name}" duplicated successfully`);
   };
 
   const handleDelete = (item: PricingItem) => {
@@ -161,10 +177,7 @@ const PricingCatalog = () => {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
-                <CodePrefixLegend />
-              </div>
+              <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
               <div className="flex gap-3">
                 <Button variant="outline">
                   <Upload className="w-4 h-4 mr-2" />
@@ -256,140 +269,130 @@ const PricingCatalog = () => {
             </div>
           </div>
 
-          {/* Main Content with Sidebar */}
-          <div className="flex gap-6">
-            {/* Table Section */}
-            <div className="flex-1 min-w-0">
-              {filteredItems.length === 0 ? (
-                <Card className="p-12 text-center">
-                  <div className="max-w-md mx-auto">
-                    <Tag className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-20" />
-                    <h3 className="text-lg font-semibold mb-2">No items found</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {searchQuery || categoryFilter !== "All" || statusFilter !== "All"
-                        ? "Try adjusting your filters"
-                        : "Get started by adding your first pricing item"}
-                    </p>
-                    {!searchQuery && categoryFilter === "All" && statusFilter === "All" && (
-                      <Button className="gap-2" onClick={() => navigate("/pricing-catalog/new")}>
-                        <Plus className="h-4 w-4" />
-                        Add First Item
-                      </Button>
-                    )}
-                  </div>
-                </Card>
-              ) : (
-                <Card className="overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-muted/50 sticky top-0">
-                        <tr>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            ITEM NAME
-                          </th>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            CATEGORY
-                          </th>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            DEPARTMENT
-                          </th>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            CODE
-                          </th>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            UNIT
-                          </th>
-                          <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
-                            BASE PRICE
-                          </th>
-                          <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
-                            NET PRICE
-                          </th>
-                          <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
-                            STATUS
-                          </th>
-                          <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
-                            ACTIONS
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredItems.map((item) => (
-                          <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
-                            <td className="p-3">
-                              <div className="font-medium text-sm">{item.name}</div>
-                              <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                                {item.description}
-                              </div>
-                            </td>
-                            <td className="p-3 text-sm">{item.category}</td>
-                            <td className="p-3 text-sm">{item.department}</td>
-                            <td className="p-3">
-                              <div className="text-sm font-mono">{item.codes.internal}</div>
-                              {item.codes.cpt && (
-                                <div className="text-xs text-muted-foreground">
-                                  CPT: {item.codes.cpt}
-                                </div>
-                              )}
-                            </td>
-                            <td className="p-3 text-sm capitalize">{item.unit}</td>
-                            <td className="p-3 text-right text-sm font-medium">
-                              {formatINR(item.pricing.basePrice)}
-                            </td>
-                            <td className="p-3 text-right text-sm font-semibold">
-                              {formatINR(item.pricing.netPrice)}
-                            </td>
-                            <td className="p-3 text-center">
-                              <Badge variant="outline" className={getStatusColor(item.status)}>
-                                {item.status}
-                              </Badge>
-                            </td>
-                            <td className="p-4">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                                    <MoreVertical className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-background z-50">
-                                  <DropdownMenuItem 
-                                    className="gap-2 cursor-pointer"
-                                    onClick={() => handleViewDetails(item)}
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                    View Details
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem 
-                                    className="gap-2 cursor-pointer"
-                                    onClick={() => handleEdit(item)}
-                                  >
-                                    <Edit className="h-4 w-4" />
-                                    Edit
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem 
-                                    className="gap-2 text-destructive cursor-pointer"
-                                    onClick={() => handleDelete(item)}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </Card>
-              )}
-            </div>
-
-            {/* Code Prefix List Sidebar */}
-            <div className="w-80 shrink-0 hidden lg:block">
-              <CodePrefixList />
-            </div>
-          </div>
+          {/* Table */}
+          {filteredItems.length === 0 ? (
+            <Card className="p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <Tag className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-20" />
+                <h3 className="text-lg font-semibold mb-2">No items found</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {searchQuery || categoryFilter !== "All" || statusFilter !== "All"
+                    ? "Try adjusting your filters"
+                    : "Get started by adding your first pricing item"}
+                </p>
+                {!searchQuery && categoryFilter === "All" && statusFilter === "All" && (
+                  <Button className="gap-2" onClick={() => navigate("/pricing-catalog/new")}>
+                    <Plus className="h-4 w-4" />
+                    Add First Item
+                  </Button>
+                )}
+              </div>
+            </Card>
+          ) : (
+            <Card className="overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-muted/50 sticky top-0">
+                    <tr>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        ITEM NAME
+                      </th>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        CATEGORY
+                      </th>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        DEPARTMENT
+                      </th>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        CODE
+                      </th>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        UNIT
+                      </th>
+                      <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
+                        BASE PRICE
+                      </th>
+                      <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
+                        NET PRICE
+                      </th>
+                      <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
+                        STATUS
+                      </th>
+                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                        ACTIONS
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredItems.map((item) => (
+                      <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
+                        <td className="p-3">
+                          <div className="font-medium text-sm">{item.name}</div>
+                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                            {item.description}
+                          </div>
+                        </td>
+                        <td className="p-3 text-sm">{item.category}</td>
+                        <td className="p-3 text-sm">{item.department}</td>
+                        <td className="p-3">
+                          <div className="text-sm font-mono">{item.codes.internal}</div>
+                          {item.codes.cpt && (
+                            <div className="text-xs text-muted-foreground">
+                              CPT: {item.codes.cpt}
+                            </div>
+                          )}
+                        </td>
+                        <td className="p-3 text-sm capitalize">{item.unit}</td>
+                        <td className="p-3 text-right text-sm font-medium">
+                          {formatINR(item.pricing.basePrice)}
+                        </td>
+                        <td className="p-3 text-right text-sm font-semibold">
+                          {formatINR(item.pricing.netPrice)}
+                        </td>
+                        <td className="p-3 text-center">
+                          <Badge variant="outline" className={getStatusColor(item.status)}>
+                            {item.status}
+                          </Badge>
+                        </td>
+                        <td className="p-4">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="bg-background z-50">
+                              <DropdownMenuItem 
+                                className="gap-2 cursor-pointer"
+                                onClick={() => handleViewDetails(item)}
+                              >
+                                <Eye className="h-4 w-4" />
+                                View Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="gap-2 cursor-pointer"
+                                onClick={() => handleEdit(item)}
+                              >
+                                <Edit className="h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="gap-2 text-destructive cursor-pointer"
+                                onClick={() => handleDelete(item)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          )}
         </main>
 
         {/* View Details Dialog */}
