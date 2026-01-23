@@ -3,10 +3,8 @@ import { useFormContext } from "react-hook-form";
 import { CheckCircle, AlertCircle, Info } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -22,8 +20,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PricingItemFormData, PricingCategory } from "@/types/pricing-item";
-import { CATEGORY_CONFIG, PricingCategory as ConfigCategory } from "@/config/pricing-categories";
-import { cn } from "@/lib/utils";
 
 export function PricingStep() {
   const {
@@ -37,12 +33,7 @@ export function PricingStep() {
   const basePrice = watch("pricing.basePrice") || 0;
   const discountPct = watch("pricing.discountPct") || 0;
   const category = watch("category") as PricingCategory;
-  const requiresDoctorOrder = watch("requiresDoctorOrder");
-  const availability = watch("availability");
   const packageComponents = watch("attributes.inclusions") || [];
-
-  // Get config for selected category
-  const categoryConfig = category ? CATEGORY_CONFIG[category as ConfigCategory] : null;
 
   // Calculate standard price (final price after discount)
   const standardPrice = basePrice - (basePrice * discountPct / 100);
@@ -207,88 +198,6 @@ export function PricingStep() {
         </Card>
       )}
 
-      {/* Operational Details */}
-      <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Operational Details</h3>
-
-        <div className="space-y-6">
-          {/* Turnaround Time - show for relevant categories */}
-          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT") && (
-            <div>
-              <Label htmlFor="turnaroundTime">Turnaround Time</Label>
-              <Input
-                id="turnaroundTime"
-                {...register("turnaroundTime")}
-                placeholder="e.g., 24 hours, 2-3 days, Same day"
-                className="mt-1"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Expected time to complete or deliver this service
-              </p>
-            </div>
-          )}
-
-          {/* Requires Doctor Order */}
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="requiresDoctorOrder">Requires Doctor Order?</Label>
-              <p className="text-xs text-muted-foreground">
-                Does this service require a doctor's prescription or order?
-              </p>
-            </div>
-            <Switch
-              id="requiresDoctorOrder"
-              checked={requiresDoctorOrder}
-              onCheckedChange={(checked) => setValue("requiresDoctorOrder", checked)}
-            />
-          </div>
-
-          {/* Availability */}
-          <div>
-            <Label htmlFor="availability">Availability Status</Label>
-            <Select
-              value={availability}
-              onValueChange={(value) => setValue("availability", value as any)}
-            >
-              <SelectTrigger id="availability" className="mt-1">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="In Stock">In Stock / Available</SelectItem>
-                <SelectItem value="Out of Stock">Out of Stock / Unavailable</SelectItem>
-                <SelectItem value="N/A">Not Applicable</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* SLA Notes */}
-          <div>
-            <Label htmlFor="slaNote">SLA / Service Level Notes</Label>
-            <Textarea
-              id="slaNote"
-              {...register("slaNote")}
-              placeholder="Any service level agreements or commitments"
-              className="mt-1"
-              rows={2}
-            />
-          </div>
-
-          {/* Prep Instructions - show for relevant categories */}
-          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT" || category === "Package") && (
-            <div>
-              <Label htmlFor="prepInstructions">Preparation Instructions</Label>
-              <Textarea
-                id="prepInstructions"
-                {...register("prepInstructions")}
-                placeholder="Patient preparation or pre-procedure instructions"
-                className="mt-1"
-                rows={3}
-              />
-            </div>
-          )}
-        </div>
-      </Card>
-
       {/* Review Summary */}
       <Card className="p-6">
         <h3 className="text-sm font-semibold mb-4">Review Summary</h3>
@@ -366,22 +275,6 @@ export function PricingStep() {
               <span className="font-semibold">Standard Price:</span>
               <span className="font-bold text-primary">{currencySymbol}{standardPrice.toFixed(2)}</span>
             </div>
-          </div>
-        </div>
-
-        {/* Operational Summary */}
-        <div className="mt-6 pt-4 border-t">
-          <h4 className="font-medium text-muted-foreground text-sm mb-3">Operational</h4>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant={formData.requiresDoctorOrder ? "default" : "secondary"}>
-              {formData.requiresDoctorOrder ? "Requires Order" : "No Order Required"}
-            </Badge>
-            <Badge variant={formData.availability === "In Stock" ? "default" : "secondary"}>
-              {formData.availability}
-            </Badge>
-            {formData.turnaroundTime && (
-              <Badge variant="outline">TAT: {formData.turnaroundTime}</Badge>
-            )}
           </div>
         </div>
       </Card>
