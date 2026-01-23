@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Minus, Search, FlaskConical, Trash2 } from "lucide-react";
+import { Search, FlaskConical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ export interface LabTest {
 
 export interface RadiologyTest {
   id: string;
+  code: string;
   name: string;
   category: string;
   price: number;
@@ -76,23 +77,29 @@ const individualTests: LabTest[] = LAB_MASTER_CATALOG
     price: test.mrp,
   }));
 
+// Radiology tests from hospital services catalog - X-Ray, Ultrasound, CT, MRI, Doppler
 const radiologyTests: RadiologyTest[] = [
-  { id: "r1", name: "X-Ray Chest PA View", category: "X-Ray", price: 350 },
-  { id: "r2", name: "X-Ray Chest Lateral View", category: "X-Ray", price: 350 },
-  { id: "r3", name: "X-Ray Cervical Spine AP/Lateral", category: "X-Ray", price: 500 },
-  { id: "r4", name: "X-Ray Lumbar Spine AP/Lateral", category: "X-Ray", price: 550 },
-  { id: "r5", name: "X-Ray Abdomen (KUB)", category: "X-Ray", price: 400 },
-  { id: "r6", name: "X-Ray Pelvis AP", category: "X-Ray", price: 400 },
-  { id: "r7", name: "X-Ray Knee Joint (Both)", category: "X-Ray", price: 600 },
-  { id: "r8", name: "X-Ray Shoulder Joint", category: "X-Ray", price: 400 },
-  { id: "r9", name: "USG Abdomen & Pelvis", category: "Ultrasound", price: 1200 },
-  { id: "r10", name: "USG Whole Abdomen", category: "Ultrasound", price: 1000 },
-  { id: "r11", name: "USG Thyroid", category: "Ultrasound", price: 800 },
-  { id: "r12", name: "USG KUB (Kidney, Ureter, Bladder)", category: "Ultrasound", price: 900 },
-  { id: "r13", name: "2D Echocardiography", category: "Cardiac Imaging", price: 1800 },
-  { id: "r14", name: "ECG (12-Lead)", category: "Cardiac Imaging", price: 200 },
-  { id: "r15", name: "TMT (Treadmill Test)", category: "Cardiac Imaging", price: 1500 },
-  { id: "r16", name: "Doppler - Carotid Arteries", category: "Vascular", price: 2000 },
+  // X-Ray
+  { id: "XR001", code: "XR001", name: "Chest X-Ray – PA View", category: "X-Ray", price: 300 },
+  { id: "XR002", code: "XR002", name: "Chest X-Ray – Lateral View", category: "X-Ray", price: 300 },
+  { id: "XR030", code: "XR030", name: "Cervical Spine – AP + Lateral", category: "X-Ray", price: 500 },
+  { id: "XR033", code: "XR033", name: "Lumbosacral Spine – AP + Lateral", category: "X-Ray", price: 500 },
+  { id: "XR013", code: "XR013", name: "KUB (Kidney–Ureter–Bladder)", category: "X-Ray", price: 400 },
+  { id: "XR040", code: "XR040", name: "Pelvis – AP", category: "X-Ray", price: 400 },
+  { id: "XR052", code: "XR052", name: "Both Knees – Weight-bearing AP", category: "X-Ray", price: 600 },
+  { id: "XR086", code: "XR086", name: "Shoulder – AP + Axillary", category: "X-Ray", price: 500 },
+  // Ultrasound
+  { id: "US006", code: "US006", name: "USG Abdomen + Pelvis", category: "Ultrasound", price: 1200 },
+  { id: "US002", code: "US002", name: "USG Whole Abdomen", category: "Ultrasound", price: 1000 },
+  { id: "US020", code: "US020", name: "USG Thyroid", category: "Ultrasound", price: 800 },
+  { id: "US003", code: "US003", name: "USG KUB", category: "Ultrasound", price: 700 },
+  // Cardiac
+  { id: "CAR003", code: "CAR003", name: "2D Echo with Doppler", category: "Cardiac Imaging", price: 2500 },
+  { id: "CAR001", code: "CAR001", name: "ECG 12-lead", category: "Cardiac Imaging", price: 300 },
+  { id: "CAR002", code: "CAR002", name: "TMT (Stress Test)", category: "Cardiac Imaging", price: 1500 },
+  // Doppler
+  { id: "DOP001", code: "DOP001", name: "Carotid & Vertebral Doppler", category: "Doppler", price: 2500 },
+  { id: "DOP003", code: "DOP003", name: "Lower Limb Venous Doppler – Bilateral", category: "Doppler", price: 2500 },
 ];
 
 
@@ -347,7 +354,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
               />
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1">
               {filteredRadiologyTests.map((test) => {
                 const isSelected = selectedRadiologyTests.some(t => t.id === test.id);
                 return (
@@ -359,17 +366,12 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                     )}
                     onClick={() => handleRadiologyTestToggle(test)}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-primary flex-1 pr-2">{test.name}</h4>
-                      <div className={cn(
-                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                        isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                      )}>
-                        {isSelected ? <Check className="w-3 h-3 text-primary-foreground" /> : <Minus className="w-3 h-3 text-muted-foreground" />}
-                      </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">{test.code}</span>
+                      <h4 className="text-sm font-semibold text-primary flex-1">{test.name}</h4>
+                      <p className="text-sm font-semibold text-foreground shrink-0">{formatCurrency(test.price)}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">{test.category}</p>
-                    <p className="text-sm font-semibold text-foreground">{formatCurrency(test.price)}</p>
+                    <p className="text-xs text-muted-foreground">{test.category}</p>
                   </Card>
                 );
               })}
