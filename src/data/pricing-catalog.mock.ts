@@ -26,7 +26,7 @@ const mapCategoryToPricingCategory = (category: string): PricingCategory => {
 
 // Convert lab catalog to pricing items
 const labPricingItems: PricingItem[] = LAB_MASTER_CATALOG.map((test) => ({
-  id: `price-${test.code}`,
+  id: `lab-${test.code}`,
   name: test.name,
   category: "Lab Test" as const,
   department: test.department,
@@ -70,7 +70,7 @@ const labPricingItems: PricingItem[] = LAB_MASTER_CATALOG.map((test) => ({
 
 // Convert packages to pricing items
 const packagePricingItems: PricingItem[] = HEALTH_PACKAGES.map((pkg) => ({
-  id: `price-${pkg.code}`,
+  id: `pkg-${pkg.code}`,
   name: pkg.name,
   category: "Package" as const,
   department: "Preventive Care",
@@ -115,7 +115,7 @@ const packagePricingItems: PricingItem[] = HEALTH_PACKAGES.map((pkg) => ({
 
 // Convert hospital services to pricing items
 const hospitalServicePricingItems: PricingItem[] = ALL_HOSPITAL_SERVICES.map((service: HospitalService) => ({
-  id: `price-${service.code}`,
+  id: `svc-${service.code}`,
   name: service.name,
   category: mapCategoryToPricingCategory(service.category),
   department: service.department,
