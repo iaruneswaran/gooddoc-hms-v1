@@ -338,6 +338,7 @@ export const IPDAdmissionBookingForm = ({ onRemove, onUpdate, onServicesChange }
             selectedSlot={selectedSlot}
             onSlotSelect={handleSlotSelect}
             mode="in_person"
+            label="Admission Date & Time"
           />
         )}
         
