@@ -256,12 +256,8 @@ export function BasicsStep() {
                 <SelectValue placeholder="Select unit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="each">Each</SelectItem>
                 <SelectItem value="test">Test</SelectItem>
-                <SelectItem value="session">Session</SelectItem>
-                <SelectItem value="day">Day</SelectItem>
                 <SelectItem value="package">Package</SelectItem>
-                <SelectItem value="procedure">Procedure</SelectItem>
               </SelectContent>
             </Select>
             {errors.unit && (
