@@ -116,47 +116,6 @@ export function PackageBuilder() {
             Search & Add Items
           </div>
           
-          {/* Category Filter */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs mb-1.5 block">Category</Label>
-              <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-                <SelectTrigger className="h-9">
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Categories</SelectItem>
-                  {availableCategories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Department Filter */}
-            <div>
-              <Label className="text-xs mb-1.5 block">Department</Label>
-              <Select 
-                value={departmentFilter} 
-                onValueChange={setDepartmentFilter}
-                disabled={categoryFilter === "All" || availableDepartments.length === 0}
-              >
-                <SelectTrigger className="h-9">
-                  <SelectValue placeholder="All Departments" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Departments</SelectItem>
-                  {availableDepartments.map((dept) => (
-                    <SelectItem key={dept} value={dept}>
-                      {dept}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
           
           {/* Search Input */}
           <div className="relative">
