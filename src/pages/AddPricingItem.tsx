@@ -11,11 +11,13 @@ import { PricingItemFormData } from "@/types/pricing-item";
 const categoryMapping: Record<string, PricingItemFormData["category"]> = {
   "Lab Test": "Lab Test",
   "Doctor Fee": "Consultation",
-  "Procedure": "Procedure/OT",
-  "Imaging": "Radiology/Imaging",
-  "Room": "Room/Bed",
-  "Pharmacy": "Service/Consumable",
+  "Procedure": "Procedure",
+  "Imaging": "Imaging",
+  "Room": "Room",
+  "Pharmacy": "Pharmacy",
   "Package": "Package",
+  "Nursing": "Nursing",
+  "Consultation": "Consultation",
 };
 
 // Map old units to new ones

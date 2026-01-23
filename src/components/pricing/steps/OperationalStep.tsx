@@ -35,7 +35,7 @@ export function OperationalStep() {
 
         <div className="space-y-6">
           {/* Turnaround Time - show for relevant categories */}
-          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT") && (
+          {(category === "Lab Test" || category === "Imaging" || category === "Procedure") && (
             <div>
               <Label htmlFor="turnaroundTime">Turnaround Time</Label>
               <Input
@@ -96,7 +96,7 @@ export function OperationalStep() {
           </div>
 
           {/* Prep Instructions - show for relevant categories */}
-          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT" || category === "Package") && (
+          {(category === "Lab Test" || category === "Imaging" || category === "Procedure" || category === "Package") && (
             <div>
               <Label htmlFor="prepInstructions">Preparation Instructions</Label>
               <Textarea

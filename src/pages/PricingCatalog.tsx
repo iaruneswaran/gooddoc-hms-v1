@@ -54,11 +54,18 @@ const PricingCatalog = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<PricingCategory | "All">("All");
+  const [departmentFilter, setDepartmentFilter] = useState<string>("All");
   const [statusFilter, setStatusFilter] = useState<PricingStatus | "All">("All");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("name");
   const [viewItem, setViewItem] = useState<PricingItem | null>(null);
   const [items, setItems] = useState<PricingItem[]>(MOCK_PRICING_ITEMS);
+
+  // Get unique departments from items
+  const departments = useMemo(() => {
+    const deptSet = new Set(items.map(item => item.department));
+    return Array.from(deptSet).sort();
+  }, [items]);
 
   const handleViewDetails = (item: PricingItem) => {
     setViewItem(item);
@@ -113,6 +120,11 @@ const PricingCatalog = () => {
       filtered = filtered.filter((item) => item.category === categoryFilter);
     }
 
+    // Department filter
+    if (departmentFilter !== "All") {
+      filtered = filtered.filter((item) => item.department === departmentFilter);
+    }
+
     // Status filter
     if (statusFilter !== "All") {
       filtered = filtered.filter((item) => item.status === statusFilter);
@@ -137,7 +149,7 @@ const PricingCatalog = () => {
     });
 
     return filtered;
-  }, [items, debouncedSearch, categoryFilter, statusFilter, sortBy]);
+  }, [items, debouncedSearch, categoryFilter, departmentFilter, statusFilter, sortBy]);
 
   const toggleItem = (itemId: string) => {
     setSelectedItems((prev) =>
@@ -201,7 +213,7 @@ const PricingCatalog = () => {
 
           {/* Filters Bar */}
           <div className="mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {/* Search */}
               <div className="md:col-span-2 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -224,12 +236,29 @@ const PricingCatalog = () => {
                 <SelectContent>
                   <SelectItem value="All">All Categories</SelectItem>
                   <SelectItem value="Lab Test">Lab Test</SelectItem>
-                  <SelectItem value="Doctor Fee">Doctor Fee</SelectItem>
-                  <SelectItem value="Procedure">Procedure</SelectItem>
                   <SelectItem value="Imaging">Imaging</SelectItem>
+                  <SelectItem value="Procedure">Procedure</SelectItem>
+                  <SelectItem value="Consultation">Consultation</SelectItem>
+                  <SelectItem value="Nursing">Nursing</SelectItem>
                   <SelectItem value="Room">Room</SelectItem>
                   <SelectItem value="Pharmacy">Pharmacy</SelectItem>
                   <SelectItem value="Package">Package</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Department Filter */}
+              <Select
+                value={departmentFilter}
+                onValueChange={(value) => setDepartmentFilter(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All Departments" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All Departments</SelectItem>
+                  {departments.map((dept) => (
+                    <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 

@@ -122,7 +122,7 @@ export function BasicsStep() {
     const defaultUnit = categoryConfig.defaultUnit;
     const relatedUnits = ALL_UNITS.filter(u => 
       u.value === defaultUnit || 
-      (category === "Nursing Service" && (u.value === "event" || u.value === "hour"))
+      (category === "Nursing" && (u.value === "event" || u.value === "hour"))
     );
     
     return relatedUnits.length > 0 ? relatedUnits : [ALL_UNITS.find(u => u.value === defaultUnit)!];
@@ -370,13 +370,13 @@ export function BasicsStep() {
         <Card className="p-6">
           <h3 className="text-sm font-semibold mb-4">
             {category === "Lab Test" && "Lab Test Details"}
-            {category === "Radiology/Imaging" && "Imaging Details"}
-            {category === "Procedure/OT" && "Procedure Details"}
-            {category === "Nursing Service" && "Service Details"}
-            {category === "Room/Bed" && "Room Details"}
+            {category === "Imaging" && "Imaging Details"}
+            {category === "Procedure" && "Procedure Details"}
+            {category === "Nursing" && "Nursing Service Details"}
+            {category === "Room" && "Room Details"}
             {category === "Consultation" && "Consultation Details"}
             {category === "Package" && "Package Details"}
-            {category === "Service/Consumable" && "Service Details"}
+            {category === "Pharmacy" && "Pharmacy Details"}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

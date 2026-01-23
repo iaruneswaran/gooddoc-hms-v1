@@ -1,8 +1,9 @@
 export type PricingCategory = 
   | "Lab Test"
-  | "Doctor Fee"
-  | "Procedure"
   | "Imaging"
+  | "Procedure"
+  | "Consultation"
+  | "Nursing"
   | "Room"
   | "Pharmacy"
   | "Package";
