@@ -728,69 +728,6 @@ export function BasicsStep() {
         </Card>
       )}
 
-      <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Visibility & Patient Information</h3>
-
-        <div className="space-y-4">
-          {/* Visibility */}
-          <div>
-            <Label>
-              Visibility <span className="text-destructive">*</span>
-            </Label>
-            <RadioGroup
-              value={visibility}
-              onValueChange={(value) => setValue("visibility", value as any)}
-              className="mt-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="admin" id="vis-admin" />
-                <Label htmlFor="vis-admin" className="font-normal cursor-pointer">
-                  Admin Only
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="staff" id="vis-staff" />
-                <Label htmlFor="vis-staff" className="font-normal cursor-pointer">
-                  Staff (Internal)
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="portal" id="vis-portal" />
-                <Label htmlFor="vis-portal" className="font-normal cursor-pointer">
-                  Patient Portal (Public)
-                </Label>
-              </div>
-            </RadioGroup>
-            {errors.visibility && (
-              <p className="text-xs text-destructive mt-1">{errors.visibility.message}</p>
-            )}
-          </div>
-
-          {/* Patient Description - shown only if visibility is portal */}
-          {visibility === "portal" && (
-            <div>
-              <Label htmlFor="patient-description">
-                Patient-Facing Description <span className="text-destructive">*</span>
-              </Label>
-              <Textarea
-                id="patient-description"
-                {...register("patientDescription")}
-                placeholder="Clear, patient-friendly description (min 20 characters)"
-                className="mt-1"
-                rows={4}
-              />
-              {errors.patientDescription && (
-                <p className="text-xs text-destructive mt-1">
-                  {errors.patientDescription.message}
-                </p>
-              )}
-              <p className="text-xs text-muted-foreground mt-1">
-                This will be visible to patients on the portal
-              </p>
-            </div>
-          )}
-        </div>
-      </Card>
 
       {/* Package Builder - shown only for Package category */}
       {category === "Package" && <PackageBuilder />}
