@@ -147,7 +147,7 @@ export function PricingStep() {
             </div>
           </div>
 
-          {/* Standard Price (calculated) */}
+          {/* Standard Price (calculated - read only) */}
           <div>
             <Label className="flex items-center gap-1">
               Standard Price
@@ -162,10 +162,17 @@ export function PricingStep() {
                 </Tooltip>
               </TooltipProvider>
             </Label>
-            <div className="mt-1">
-              <Badge variant="secondary" className="text-base px-4 py-2 font-semibold">
-                {currencySymbol}{standardPrice.toFixed(2)}
-              </Badge>
+            <div className="relative mt-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                {currencySymbol}
+              </span>
+              <Input
+                type="text"
+                value={standardPrice.toFixed(2)}
+                readOnly
+                disabled
+                className="pl-7 bg-muted cursor-not-allowed"
+              />
             </div>
           </div>
         </div>
