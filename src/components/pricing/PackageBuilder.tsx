@@ -200,36 +200,50 @@ export function PackageBuilder() {
         </div>
         
         {/* Right Panel - Selected Items */}
-        <div className="space-y-4">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        <div className="flex flex-col h-full">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-4">
             Selected Items
           </div>
           
           {/* Selected Items as Tags */}
-          {inclusions.length === 0 ? (
-            <div className="border-2 border-dashed rounded-md p-8 text-center text-muted-foreground h-[200px] flex flex-col items-center justify-center">
-              <Package className="h-10 w-10 mb-3 opacity-30" />
-              <p className="text-sm font-medium">No items added yet</p>
-              <p className="text-xs mt-1">Search and add items from the left panel</p>
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-2 min-h-[100px] p-3 border rounded-md bg-muted/20">
-              {inclusions.map((item) => (
-                <Badge
-                  key={item.itemId}
-                  variant="secondary"
-                  className="h-7 pl-3 pr-1.5 gap-1.5 text-sm font-normal"
-                >
-                  {item.itemName}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveComponent(item.itemId)}
-                    className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20 transition-colors"
+          <div className="flex-1">
+            {inclusions.length === 0 ? (
+              <div className="border-2 border-dashed rounded-md p-8 text-center text-muted-foreground h-[200px] flex flex-col items-center justify-center">
+                <Package className="h-10 w-10 mb-3 opacity-30" />
+                <p className="text-sm font-medium">No items added yet</p>
+                <p className="text-xs mt-1">Search and add items from the left panel</p>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 min-h-[100px] p-3 border rounded-md bg-muted/20">
+                {inclusions.map((item) => (
+                  <Badge
+                    key={item.itemId}
+                    variant="secondary"
+                    className="h-7 pl-3 pr-1.5 gap-1.5 text-sm font-normal"
                   >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
+                    {item.itemName}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveComponent(item.itemId)}
+                      className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20 transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Price Summary - Fixed at bottom */}
+          {inclusions.length > 0 && (
+            <div className="mt-4 pt-3 border-t flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">
+                {inclusions.length} item{inclusions.length !== 1 ? 's' : ''} selected
+              </span>
+              <span className="text-sm font-semibold">
+                Total: {formatCurrency(componentTotal)}
+              </span>
             </div>
           )}
         </div>
