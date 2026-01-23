@@ -302,16 +302,7 @@ export const LaboratoryBookingForm = ({ onRemove, onUpdate, initialData, hideMod
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {pkg.includedCodes.map((code) => (
-                        <span 
-                          key={code} 
-                          className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
-                        >
-                          {code}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="text-xs text-muted-foreground">{pkg.includes}</p>
                   </Card>
                 );
               })}
