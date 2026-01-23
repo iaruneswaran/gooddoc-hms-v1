@@ -84,10 +84,10 @@ export default function AddPricingItem() {
             {/* Back Button */}
             <button
               onClick={() => navigate("/pricing-catalog")}
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors mb-6"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span>Back to Catalog</span>
+              <span className="font-semibold">Pricing Catalog</span>
             </button>
 
 

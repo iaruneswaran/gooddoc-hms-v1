@@ -284,7 +284,7 @@ const [departmentFilter, setDepartmentFilter] = useState("all");
               <div className="text-xs font-medium text-muted-foreground uppercase">BLOOD</div>
               <div className="text-xs font-medium text-muted-foreground uppercase">REGISTERED</div>
               <div className="text-xs font-medium text-muted-foreground uppercase">LAST VISIT</div>
-              <div className="text-xs font-medium text-muted-foreground uppercase text-center">LAST VISIT TYPE</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase text-center">LAST VISIT</div>
               <div className="text-xs font-medium text-muted-foreground uppercase text-right">ACTION</div>
             </div>
             {filteredPatients.map((patient) => (
