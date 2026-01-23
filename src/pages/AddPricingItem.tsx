@@ -5,6 +5,28 @@ import { AppHeader } from "@/components/AppHeader";
 import { PageContent } from "@/components/PageContent";
 import { AddItemForm } from "@/components/pricing/AddItemForm";
 import { PricingItem } from "@/types/pricing-catalog";
+import { PricingItemFormData } from "@/types/pricing-item";
+
+// Map old categories to new ones
+const categoryMapping: Record<string, PricingItemFormData["category"]> = {
+  "Lab Test": "Lab Test",
+  "Doctor Fee": "Consultation",
+  "Procedure": "Procedure/OT",
+  "Imaging": "Radiology/Imaging",
+  "Room": "Room/Bed",
+  "Pharmacy": "Service/Consumable",
+  "Package": "Package",
+};
+
+// Map old units to new ones
+const unitMapping: Record<string, PricingItemFormData["unit"]> = {
+  "each": "item",
+  "test": "test",
+  "session": "visit",
+  "day": "day",
+  "package": "package",
+  "procedure": "procedure",
+};
 
 export default function AddPricingItem() {
   const navigate = useNavigate();
@@ -15,19 +37,24 @@ export default function AddPricingItem() {
   const isEditMode = !!editItem;
 
   // Transform PricingItem to form data format
-  const initialData = editItem ? {
+  const initialData: Partial<PricingItemFormData> | undefined = editItem ? {
     name: editItem.name,
-    category: editItem.category,
+    category: categoryMapping[editItem.category] || "Lab Test",
     department: editItem.department,
     description: editItem.description,
     patientDescription: editItem.description,
-    codes: editItem.codes,
-    unit: editItem.unit as "day" | "each" | "package" | "procedure" | "session" | "test",
+    codes: {
+      internal: editItem.codes.internal,
+      cpt: editItem.codes.cpt,
+      icd: editItem.codes.icd,
+      hcpcs: editItem.codes.hcpcs,
+    },
+    unit: unitMapping[editItem.unit] || "test",
     visibility: editItem.visibility,
     status: editItem.status,
     pricing: {
       currency: editItem.pricing.currency,
-      cost: editItem.pricing.cost / 100, // Convert from paise to rupees
+      cost: editItem.pricing.cost / 100,
       basePrice: editItem.pricing.basePrice / 100,
       markupPct: editItem.pricing.markupPct,
       discountPct: editItem.pricing.discountPct,

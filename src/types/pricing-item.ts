@@ -1,23 +1,39 @@
 import { z } from "zod";
 
+// Updated category enum with clean list
 export const PricingCategoryEnum = z.enum([
   "Lab Test",
-  "Doctor Fee",
-  "Procedure",
-  "Imaging",
-  "Room",
-  "Pharmacy",
+  "Radiology/Imaging",
+  "Procedure/OT",
+  "Nursing Service",
+  "Room/Bed",
+  "Consultation",
+  "Service/Consumable",
   "Package",
 ]);
 
 export const PricingStatusEnum = z.enum(["Draft", "Published", "Archived"]);
 
-export const UnitEnum = z.enum(["each", "test", "session", "day", "package", "procedure"]);
+// Updated unit enum with context-aware options
+export const UnitEnum = z.enum([
+  "test",
+  "study",
+  "procedure",
+  "event",
+  "hour",
+  "day",
+  "visit",
+  "item",
+  "package",
+]);
 
 export const VisibilityEnum = z.enum(["admin", "staff", "portal"]);
 
 export const CurrencyEnum = z.enum(["INR", "USD", "EUR"]);
 
+export const PriceModeEnum = z.enum(["bundled", "itemized"]);
+
+// Extended codes schema with LOINC
 export const CodesSchema = z.object({
   internal: z
     .string()
@@ -26,6 +42,7 @@ export const CodesSchema = z.object({
   cpt: z.string().optional(),
   icd: z.string().optional(),
   hcpcs: z.string().optional(),
+  loinc: z.string().optional(),
 });
 
 export const PriceTierSchema = z.object({
@@ -75,6 +92,56 @@ export const PricingDetailsSchema = z.object({
   effectiveTo: z.string().nullable().optional(),
 });
 
+// Package component schema
+export const PackageComponentSchema = z.object({
+  itemId: z.string(),
+  itemName: z.string(),
+  category: z.string(),
+  quantity: z.number().min(1).default(1),
+  unitPrice: z.number().min(0).optional(),
+});
+
+// Category-specific attributes schema
+export const CategoryAttributesSchema = z.object({
+  // Lab Test attributes
+  specimenType: z.string().optional(),
+  fastingRequired: z.boolean().optional(),
+  tat: z.string().optional(),
+  method: z.string().optional(),
+  
+  // Radiology attributes
+  modality: z.string().optional(),
+  bodyPart: z.string().optional(),
+  contrast: z.boolean().optional(),
+  laterality: z.string().optional(),
+  
+  // Procedure attributes
+  anesthesiaType: z.string().optional(),
+  estimatedDuration: z.string().optional(),
+  location: z.string().optional(),
+  
+  // Nursing attributes
+  billingBasis: z.enum(["event", "hour"]).optional(),
+  staffLevel: z.string().optional(),
+  
+  // Room attributes
+  wardClass: z.string().optional(),
+  mealsIncluded: z.boolean().optional(),
+  maxOccupancy: z.number().optional(),
+  
+  // Consultation attributes
+  providerType: z.string().optional(),
+  followUpWindowDays: z.number().optional(),
+  
+  // Package attributes
+  packageType: z.string().optional(),
+  priceMode: PriceModeEnum.optional(),
+  multiVisitAllowed: z.boolean().optional(),
+  sampleSessions: z.array(z.string()).optional(),
+  inclusions: z.array(PackageComponentSchema).optional(),
+  exclusionNotes: z.string().optional(),
+});
+
 export const PricingItemSchema = z
   .object({
     // Step 1: Basics
@@ -87,6 +154,9 @@ export const PricingItemSchema = z
     unit: UnitEnum,
     visibility: VisibilityEnum,
     patientDescription: z.string().optional(),
+    
+    // Category-specific attributes
+    attributes: CategoryAttributesSchema.optional().default({}),
 
     // Step 2: Pricing
     pricing: PricingDetailsSchema,
@@ -138,3 +208,6 @@ export type Codes = z.infer<typeof CodesSchema>;
 export type PriceTier = z.infer<typeof PriceTierSchema>;
 export type BranchOverride = z.infer<typeof BranchOverrideSchema>;
 export type PricingDetails = z.infer<typeof PricingDetailsSchema>;
+export type PriceMode = z.infer<typeof PriceModeEnum>;
+export type PackageComponent = z.infer<typeof PackageComponentSchema>;
+export type CategoryAttributes = z.infer<typeof CategoryAttributesSchema>;

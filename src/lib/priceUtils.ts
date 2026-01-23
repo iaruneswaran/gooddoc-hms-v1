@@ -2,6 +2,12 @@
  * Price calculation utilities for hospital pricing catalog
  */
 
+import { PricingCategory } from "@/types/pricing-item";
+import { 
+  generateCategoryCode, 
+  PricingCategory as ConfigCategory 
+} from "@/config/pricing-categories";
+
 export interface PriceCalculation {
   basePrice: number;
   markupPct?: number;
@@ -89,24 +95,20 @@ export function getPriceBreakdown(calc: PriceCalculation): string[] {
 
 /**
  * Generate a unique internal code suggestion
+ * @deprecated Use generateCategoryCode from pricing-categories.ts instead
  */
 export function generateInternalCode(category: string, department: string): string {
-  const categoryPrefix = category
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
+  // Map old category names to new ones for backward compatibility
+  const categoryMap: Record<string, ConfigCategory> = {
+    "Lab Test": "Lab Test",
+    "Doctor Fee": "Consultation",
+    "Procedure": "Procedure/OT",
+    "Imaging": "Radiology/Imaging",
+    "Room": "Room/Bed",
+    "Pharmacy": "Service/Consumable",
+    "Package": "Package",
+  };
   
-  const deptPrefix = department
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 3);
-  
-  const sequence = Math.floor(Math.random() * 9999)
-    .toString()
-    .padStart(4, "0");
-  
-  return `${categoryPrefix}${deptPrefix}-${sequence}`;
+  const mappedCategory = categoryMap[category] || (category as ConfigCategory);
+  return generateCategoryCode(mappedCategory, department);
 }

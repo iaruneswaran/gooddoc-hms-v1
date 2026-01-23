@@ -11,7 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { PricingItemFormData } from "@/types/pricing-item";
+import { PricingItemFormData, PricingCategory } from "@/types/pricing-item";
+import { CATEGORY_CONFIG, PricingCategory as ConfigCategory } from "@/config/pricing-categories";
+import { PackageBuilder } from "../PackageBuilder";
 
 export function OperationalStep() {
   const {
@@ -20,28 +22,39 @@ export function OperationalStep() {
     setValue,
   } = useFormContext<PricingItemFormData>();
 
+  const category = watch("category") as PricingCategory;
   const requiresDoctorOrder = watch("requiresDoctorOrder");
   const availability = watch("availability");
+  
+  // Get config for selected category
+  const categoryConfig = category ? CATEGORY_CONFIG[category as ConfigCategory] : null;
 
   return (
     <div className="space-y-6">
+      {/* Package Builder - shown only for Package category */}
+      {categoryConfig?.fields.showPackageBuilder && (
+        <PackageBuilder />
+      )}
+      
       <Card className="p-6">
         <h3 className="text-sm font-semibold mb-4">Operational Details</h3>
 
         <div className="space-y-6">
-          {/* Turnaround Time */}
-          <div>
-            <Label htmlFor="turnaroundTime">Turnaround Time</Label>
-            <Input
-              id="turnaroundTime"
-              {...register("turnaroundTime")}
-              placeholder="e.g., 24 hours, 2-3 days, Same day"
-              className="mt-1"
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Expected time to complete or deliver this service
-            </p>
-          </div>
+          {/* Turnaround Time - show for relevant categories */}
+          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT") && (
+            <div>
+              <Label htmlFor="turnaroundTime">Turnaround Time</Label>
+              <Input
+                id="turnaroundTime"
+                {...register("turnaroundTime")}
+                placeholder="e.g., 24 hours, 2-3 days, Same day"
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Expected time to complete or deliver this service
+              </p>
+            </div>
+          )}
 
           {/* Requires Doctor Order */}
           <div className="flex items-center justify-between">
@@ -88,20 +101,22 @@ export function OperationalStep() {
             />
           </div>
 
-          {/* Prep Instructions */}
-          <div>
-            <Label htmlFor="prepInstructions">Preparation Instructions</Label>
-            <Textarea
-              id="prepInstructions"
-              {...register("prepInstructions")}
-              placeholder="Patient preparation or pre-procedure instructions (e.g., Fasting required, Bring previous reports)"
-              className="mt-1"
-              rows={4}
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Instructions for patients or staff before the service
-            </p>
-          </div>
+          {/* Prep Instructions - show for relevant categories */}
+          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT" || category === "Package") && (
+            <div>
+              <Label htmlFor="prepInstructions">Preparation Instructions</Label>
+              <Textarea
+                id="prepInstructions"
+                {...register("prepInstructions")}
+                placeholder="Patient preparation or pre-procedure instructions (e.g., Fasting required, Bring previous reports)"
+                className="mt-1"
+                rows={4}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Instructions for patients or staff before the service
+              </p>
+            </div>
+          )}
         </div>
       </Card>
 
