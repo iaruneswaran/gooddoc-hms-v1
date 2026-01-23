@@ -82,11 +82,11 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
   }, [doctors, mode, department]);
 
   const fetchDoctorSummaries = async () => {
-    const filteredDoctors = department 
+    const deptFilteredDoctors = department 
       ? doctors.filter(d => d.department_id === department)
       : doctors;
     
-    const doctorIds = filteredDoctors.map(d => d.id);
+    const doctorIds = deptFilteredDoctors.map(d => d.id);
     const summaries = await getDoctorsSummary(doctorIds, { mode });
     setDoctorSummaries(summaries);
   };
@@ -96,6 +96,17 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
     if (!department) return doctors;
     return doctors.filter(d => d.department_id === department);
   }, [doctors, department]);
+
+  // Auto-select first available doctor when autoSelectSlot is true and no doctor selected
+  useEffect(() => {
+    if (autoSelectSlot && !selectedDoctorId && filteredDoctors.length > 0 && !dataLoading) {
+      // Select the first available doctor for demo purposes
+      const firstDoctor = filteredDoctors[0];
+      if (firstDoctor) {
+        setSelectedDoctorId(firstDoctor.id);
+      }
+    }
+  }, [autoSelectSlot, selectedDoctorId, filteredDoctors, dataLoading]);
 
   // Get selected doctor details
   const selectedDoctor = useMemo(() => {
