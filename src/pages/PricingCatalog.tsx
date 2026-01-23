@@ -305,7 +305,17 @@ const PricingCatalog = () => {
           ) : (
             <Card className="overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full table-fixed">
+                  <colgroup>
+                    <col className="w-[280px]" />
+                    <col className="w-[120px]" />
+                    <col className="w-[140px]" />
+                    <col className="w-[100px]" />
+                    <col className="w-[80px]" />
+                    <col className="w-[110px]" />
+                    <col className="w-[110px]" />
+                    <col className="w-[70px]" />
+                  </colgroup>
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
                       <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
@@ -329,7 +339,7 @@ const PricingCatalog = () => {
                       <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
                         NET PRICE
                       </th>
-                      <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
+                      <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
                         ACTIONS
                       </th>
                     </tr>
@@ -338,29 +348,24 @@ const PricingCatalog = () => {
                     {filteredItems.map((item) => (
                       <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
                         <td className="p-3">
-                          <div className="font-medium text-sm">{item.name}</div>
-                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          <div className="font-medium text-sm truncate">{item.name}</div>
+                          <div className="text-xs text-muted-foreground mt-0.5 truncate">
                             {item.description}
                           </div>
                         </td>
-                        <td className="p-3 text-sm">{item.category}</td>
-                        <td className="p-3 text-sm">{item.department}</td>
+                        <td className="p-3 text-sm truncate">{item.category}</td>
+                        <td className="p-3 text-sm truncate">{item.department}</td>
                         <td className="p-3">
-                          <div className="text-sm font-mono">{item.codes.internal}</div>
-                          {item.codes.cpt && (
-                            <div className="text-xs text-muted-foreground">
-                              CPT: {item.codes.cpt}
-                            </div>
-                          )}
+                          <div className="text-sm font-mono truncate">{item.codes.internal}</div>
                         </td>
-                        <td className="p-3 text-sm capitalize">{item.unit}</td>
+                        <td className="p-3 text-sm capitalize truncate">{item.unit}</td>
                         <td className="p-3 text-right text-sm font-medium">
                           {formatINR(item.pricing.basePrice)}
                         </td>
                         <td className="p-3 text-right text-sm font-semibold">
                           {formatINR(item.pricing.netPrice)}
                         </td>
-                        <td className="p-4">
+                        <td className="p-3 text-center">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon" className="h-8 w-8">
