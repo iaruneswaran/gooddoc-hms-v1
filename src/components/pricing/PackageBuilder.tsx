@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Search, Plus, Minus, Trash2, AlertTriangle, Package } from "lucide-react";
+import { Search, Plus, X, Package, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -205,82 +205,31 @@ export function PackageBuilder() {
             Selected Items
           </div>
           
-          {/* Selected Items List */}
+          {/* Selected Items as Tags */}
           {inclusions.length === 0 ? (
-            <div className="border-2 border-dashed rounded-md p-8 text-center text-muted-foreground h-[320px] flex flex-col items-center justify-center">
+            <div className="border-2 border-dashed rounded-md p-8 text-center text-muted-foreground h-[200px] flex flex-col items-center justify-center">
               <Package className="h-10 w-10 mb-3 opacity-30" />
               <p className="text-sm font-medium">No items added yet</p>
               <p className="text-xs mt-1">Search and add items from the left panel</p>
             </div>
           ) : (
-            <ScrollArea className="h-[320px] border rounded-md">
-              <div className="p-2 space-y-2">
-                {inclusions.map((item) => (
-                  <div
-                    key={item.itemId}
-                    className="flex items-center justify-between p-3 bg-muted/40 rounded-md border"
+            <div className="flex flex-wrap gap-2 min-h-[100px] p-3 border rounded-md bg-muted/20">
+              {inclusions.map((item) => (
+                <Badge
+                  key={item.itemId}
+                  variant="secondary"
+                  className="h-7 pl-3 pr-1.5 gap-1.5 text-sm font-normal"
+                >
+                  {item.itemName}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveComponent(item.itemId)}
+                    className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20 transition-colors"
                   >
-                    <div className="flex-1 min-w-0 mr-3">
-                      <p className="text-sm font-medium truncate">{item.itemName}</p>
-                      <Badge variant="outline" className="text-[10px] mt-1 px-1.5 py-0">
-                        {item.category}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      {/* Quantity Controls */}
-                      <div className="flex items-center gap-1">
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="outline"
-                          className="h-6 w-6"
-                          onClick={() => handleQuantityChange(item.itemId, -1)}
-                          disabled={item.quantity <= 1}
-                        >
-                          <Minus className="h-3 w-3" />
-                        </Button>
-                        <span className="w-6 text-center text-sm font-medium">
-                          {item.quantity}
-                        </span>
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="outline"
-                          className="h-6 w-6"
-                          onClick={() => handleQuantityChange(item.itemId, 1)}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </div>
-                      
-                      {/* Price */}
-                      <span className="text-sm font-medium w-16 text-right">
-                        {formatCurrency((item.unitPrice || 0) * item.quantity)}
-                      </span>
-                      
-                      {/* Remove */}
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant="ghost"
-                        className="h-6 w-6 text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => handleRemoveComponent(item.itemId)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          )}
-          
-          {/* Component Total */}
-          {inclusions.length > 0 && (
-            <div className="flex justify-between items-center pt-3 border-t">
-              <span className="text-sm text-muted-foreground">Components Total</span>
-              <span className="text-lg font-semibold">{formatCurrency(componentTotal)}</span>
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
             </div>
           )}
         </div>
