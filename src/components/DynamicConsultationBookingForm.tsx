@@ -269,23 +269,6 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
 
       {/* Date & Time Slot Picker */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-foreground">Consultation Date & Time</label>
-          <div className="flex items-center gap-2">
-            {selectedDoctor && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleSwitchDoctor}
-                className="text-xs text-muted-foreground"
-              >
-                <Users className="h-3 w-3 mr-1" />
-                See other doctors
-              </Button>
-            )}
-          </div>
-        </div>
-
         {selectedDoctorId ? (
           <DynamicSlotPicker
             doctorId={selectedDoctorId}
@@ -295,6 +278,7 @@ export function DynamicConsultationBookingForm({ onRemove, onUpdate, initialData
             selectedSlot={selectedSlot}
             appointmentDuration={selectedTypeDuration}
             autoSelectFirstSlot={autoSelectSlot}
+            label="Consultation Date & Time"
           />
         ) : (
           <div className="border rounded-lg p-8 text-center bg-muted/30">
