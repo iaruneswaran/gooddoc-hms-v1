@@ -232,6 +232,14 @@ export function PackageBuilder() {
               ))}
             </div>
           )}
+          
+          {/* Component Total */}
+          {inclusions.length > 0 && (
+            <div className="flex justify-between items-center pt-3 border-t">
+              <span className="text-sm text-muted-foreground">Components Total</span>
+              <span className="text-lg font-semibold">{formatCurrency(componentTotal)}</span>
+            </div>
+          )}
         </div>
       </div>
       
