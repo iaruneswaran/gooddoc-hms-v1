@@ -83,11 +83,11 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB001", orderId: "ORD001", patient: "Ravi Sharma", gdid: "001", ageSex: "45 | M", 
     contact: "9876543210", email: "ravi.sharma@email.com", 
     tests: [
-      { code: "CBC001", name: "Complete Blood Count" },
-      { code: "LIP001", name: "Lipid Profile" },
-      { code: "CMP001", name: "Comprehensive Metabolic Panel" },
-      { code: "HBA001", name: "HbA1c" },
-      { code: "TFT001", name: "Thyroid Function Test" }
+      { code: "HEM001", name: "Complete Blood Count" },
+      { code: "BIO030", name: "Lipid Profile" },
+      { code: "BIO010", name: "Comprehensive Metabolic Panel" },
+      { code: "BIO040C", name: "HbA1c" },
+      { code: "END011", name: "Thyroid Profile Extended" }
     ],
     orderedBy: "Dr. Rajesh Kumar", department: "Biochemistry", 
     preferredDate: "21 Dec 2025", preferredTime: "09:30 AM", visitType: "Home",
@@ -97,8 +97,8 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB002", orderId: "ORD002", patient: "Priya Menon", gdid: "002", ageSex: "32 | F", 
     contact: "9876543211", email: "priya.menon@email.com", 
     tests: [
-      { code: "LFT001", name: "Liver Function Test" },
-      { code: "GGT001", name: "Gamma-GT" }
+      { code: "BIO010", name: "Liver Function Test" },
+      { code: "BIO013", name: "Gamma-GT" }
     ],
     orderedBy: "Dr. Anita Singh", department: "Biochemistry", 
     preferredDate: "21 Dec 2025", preferredTime: "10:00 AM", visitType: "In-patient",
@@ -108,10 +108,10 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB003", orderId: "ORD003", patient: "Anil Kapoor", gdid: "003", ageSex: "58 | M", 
     contact: "9876543212", email: "anil.kapoor@email.com", 
     tests: [
-      { code: "TFT001", name: "Thyroid Function Test" },
-      { code: "TSH001", name: "TSH" },
-      { code: "T3001", name: "Free T3" },
-      { code: "T4001", name: "Free T4" }
+      { code: "END011", name: "Thyroid Profile Extended" },
+      { code: "END001", name: "TSH" },
+      { code: "END003", name: "Free T3" },
+      { code: "END004", name: "Free T4" }
     ],
     orderedBy: "Dr. Prakash Shah", department: "Endocrinology", 
     preferredDate: "21 Dec 2025", preferredTime: "10:30 AM", visitType: "Home",
@@ -121,9 +121,9 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB004", orderId: "ORD004", patient: "Sunita Rao", gdid: "004", ageSex: "41 | F", 
     contact: "9876543213", email: "sunita.rao@email.com", 
     tests: [
-      { code: "HBA001", name: "HbA1c" },
-      { code: "FBS001", name: "Fasting Blood Sugar" },
-      { code: "PPBS001", name: "Post-Prandial Blood Sugar" }
+      { code: "BIO040C", name: "HbA1c" },
+      { code: "BIO040A", name: "Fasting Blood Sugar" },
+      { code: "BIO040B", name: "Post-Prandial Blood Sugar" }
     ],
     orderedBy: "Dr. Meera Nair", department: "Diabetes", 
     preferredDate: "21 Dec 2025", preferredTime: "11:00 AM", visitType: "In-patient",
@@ -133,11 +133,10 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB005", orderId: "ORD005", patient: "Mohan Iyer", gdid: "005", ageSex: "65 | M", 
     contact: "9876543214", email: "mohan.iyer@email.com", 
     tests: [
-      { code: "CBC001", name: "Complete Blood Count" },
-      { code: "PT001", name: "Prothrombin Time" },
-      { code: "APTT001", name: "aPTT" },
-      { code: "KFT001", name: "Kidney Function Test" },
-      { code: "ECG001", name: "ECG" }
+      { code: "HEM001", name: "Complete Blood Count" },
+      { code: "COA001", name: "Prothrombin Time" },
+      { code: "COA002", name: "aPTT" },
+      { code: "BIO020", name: "Renal Function Test" }
     ],
     orderedBy: "Dr. Sunil Reddy", department: "Surgery", 
     preferredDate: "21 Dec 2025", preferredTime: "11:30 AM", visitType: "Home",
@@ -147,11 +146,9 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB006", orderId: "ORD006", patient: "Kavitha Nair", gdid: "006", ageSex: "29 | F", 
     contact: "9876543215", email: "kavitha.nair@email.com", 
     tests: [
-      { code: "CBC001", name: "Complete Blood Count" },
-      { code: "IRO001", name: "Serum Iron" },
-      { code: "FER001", name: "Ferritin" },
-      { code: "TIBC001", name: "TIBC" },
-      { code: "B12001", name: "Vitamin B12" }
+      { code: "HEM001", name: "Complete Blood Count" },
+      { code: "BIO050", name: "Iron Studies" },
+      { code: "BIO090E", name: "Vitamin B12" }
     ],
     orderedBy: "Dr. Priya Menon", department: "Hematology", 
     preferredDate: "21 Dec 2025", preferredTime: "02:00 PM", visitType: "Home",
@@ -161,8 +158,8 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB007", orderId: "ORD007", patient: "Vikram Singh", gdid: "007", ageSex: "52 | M", 
     contact: "9876543216", email: "vikram.singh@email.com", 
     tests: [
-      { code: "KFT001", name: "Kidney Function Test" },
-      { code: "ELY001", name: "Electrolytes" }
+      { code: "BIO020", name: "Renal Function Test" },
+      { code: "BIO022", name: "Electrolytes" }
     ],
     orderedBy: "Dr. Arun Bhat", department: "Nephrology", 
     preferredDate: "21 Dec 2025", preferredTime: "02:30 PM", visitType: "In-patient",
@@ -172,8 +169,8 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB008", orderId: "ORD008", patient: "Deepa Krishnan", gdid: "008", ageSex: "38 | F", 
     contact: "9876543217", email: "deepa.k@email.com", 
     tests: [
-      { code: "URI001", name: "Urine Routine" },
-      { code: "UCS001", name: "Urine Culture & Sensitivity" }
+      { code: "URN001", name: "Urine Routine & Microscopy" },
+      { code: "MIC030", name: "Urine Culture & Sensitivity" }
     ],
     orderedBy: "Dr. Rajesh Kumar", department: "Urology", 
     preferredDate: "21 Dec 2025", preferredTime: "03:00 PM", visitType: "In-patient",
@@ -183,7 +180,7 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB009", orderId: "ORD009", patient: "Rajendra Prasad", gdid: "009", ageSex: "60 | M", 
     contact: "9876543218", email: "raj.prasad@email.com", 
     tests: [
-      { code: "VITD001", name: "Vitamin D (25-OH)" }
+      { code: "BIO090A", name: "25-OH Vitamin D" }
     ],
     orderedBy: "Dr. Meera Nair", department: "Biochemistry", 
     preferredDate: "22 Dec 2025", preferredTime: "09:00 AM", visitType: "Home",
@@ -193,9 +190,9 @@ const laboratoryData: LaboratoryRecord[] = [
     id: "LAB010", orderId: "ORD010", patient: "Lakshmi Devi", gdid: "010", ageSex: "48 | F", 
     contact: "9876543219", email: "lakshmi.d@email.com", 
     tests: [
-      { code: "CMP001", name: "Comprehensive Metabolic Panel" },
-      { code: "LIP001", name: "Lipid Profile" },
-      { code: "KFT001", name: "Kidney Function Test" }
+      { code: "BIO010", name: "Liver Function Test" },
+      { code: "BIO030", name: "Lipid Profile" },
+      { code: "BIO020", name: "Renal Function Test" }
     ],
     orderedBy: "Dr. Anita Singh", department: "Cardiology", 
     preferredDate: "22 Dec 2025", preferredTime: "09:30 AM", visitType: "Home",

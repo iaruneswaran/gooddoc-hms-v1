@@ -130,29 +130,47 @@ const BookAppointment = () => {
       } else if (requestData.type === 'laboratory') {
         setSelectedTypes(['laboratory']);
         
-        // Find the test based on testType code
+        // Map test codes to full test objects with pricing
         const testCodeToTest: Record<string, { id: string; code: string; name: string; category: string; price: number }> = {
           'HEM001': { id: "HEM001", code: "HEM001", name: "Complete Blood Count", category: "Hematology", price: 450 },
           'BIO030': { id: "BIO030", code: "BIO030", name: "Lipid Profile", category: "Biochemistry", price: 550 },
           'BIO010': { id: "BIO010", code: "BIO010", name: "Liver Function Test", category: "Biochemistry", price: 650 },
           'BIO020': { id: "BIO020", code: "BIO020", name: "Renal Function Test", category: "Biochemistry", price: 550 },
           'END011': { id: "END011", code: "END011", name: "Thyroid Profile Extended", category: "Endocrine", price: 1200 },
+          'END001': { id: "END001", code: "END001", name: "TSH", category: "Endocrine", price: 350 },
+          'END003': { id: "END003", code: "END003", name: "Free T3", category: "Endocrine", price: 400 },
+          'END004': { id: "END004", code: "END004", name: "Free T4", category: "Endocrine", price: 400 },
           'BIO040C': { id: "BIO040C", code: "BIO040C", name: "HbA1c", category: "Biochemistry", price: 400 },
+          'BIO040A': { id: "BIO040A", code: "BIO040A", name: "Fasting Blood Sugar", category: "Biochemistry", price: 80 },
+          'BIO040B': { id: "BIO040B", code: "BIO040B", name: "Post-Prandial Blood Sugar", category: "Biochemistry", price: 80 },
           'URN001': { id: "URN001", code: "URN001", name: "Urine Routine & Microscopy", category: "Urinalysis", price: 200 },
           'BIO090A': { id: "BIO090A", code: "BIO090A", name: "25-OH Vitamin D", category: "Biochemistry", price: 1400 },
           'BIO090E': { id: "BIO090E", code: "BIO090E", name: "Vitamin B12", category: "Biochemistry", price: 700 },
           'BIO050': { id: "BIO050", code: "BIO050", name: "Iron Studies", category: "Biochemistry", price: 800 },
+          'COA001': { id: "COA001", code: "COA001", name: "Prothrombin Time", category: "Coagulation", price: 350 },
+          'COA002': { id: "COA002", code: "COA002", name: "aPTT", category: "Coagulation", price: 400 },
+          'BIO013': { id: "BIO013", code: "BIO013", name: "Gamma-GT", category: "Biochemistry", price: 250 },
+          'BIO022': { id: "BIO022", code: "BIO022", name: "Electrolytes", category: "Biochemistry", price: 450 },
+          'MIC030': { id: "MIC030", code: "MIC030", name: "Urine Culture & Sensitivity", category: "Microbiology", price: 600 },
         };
         
-        const selectedTest = testCodeToTest[requestData.testType];
+        // Map all tests from the request to full test objects
+        const selectedTests = requestData.tests
+          ? requestData.tests.map((test: { code: string; name: string }) => 
+              testCodeToTest[test.code] || { id: test.code, code: test.code, name: test.name, category: "Laboratory", price: 500 }
+            )
+          : [];
+        
+        // Auto-select first available time slot (9:30 AM)
+        const autoSelectedTime = "09:30";
         
         setLaboratoryData({
           mode: "laboratory",
-          selectedTests: selectedTest ? [selectedTest] : [],
+          selectedTests,
           selectedPackages: [],
           selectedRadiologyTests: [],
           laboratoryDate: new Date(),
-          laboratoryTime: "",
+          laboratoryTime: autoSelectedTime,
           radiologyDate: new Date(),
           radiologyTime: "",
         });
