@@ -4,7 +4,6 @@ import { ServiceItem, CartItem } from "@/types/booking/ipAdmission";
 import { searchServices } from "@/data/services.mock";
 import { ServiceRow } from "./ServiceRow";
 import { Search } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDebounce } from "@/hooks/useDebounce";
 
 interface ServicesPanelProps {
@@ -45,24 +44,22 @@ export function ServicesPanel({
       </div>
       
       {/* Results */}
-      <div className="border rounded-lg">
-        <ScrollArea className="h-[450px]">
-          {results.length === 0 ? (
-            <div className="flex items-center justify-center h-[450px] text-sm text-muted-foreground">
-              No services found
-            </div>
-          ) : (
-            <div className="divide-y">
-              {results.map((service) => (
-                <ServiceRow
-                  key={service.id}
-                  service={service}
-                  onAdd={onAddToCart}
-                />
-              ))}
-            </div>
-          )}
-        </ScrollArea>
+      <div className="max-h-[340px] overflow-y-auto pr-1">
+        {results.length === 0 ? (
+          <div className="flex items-center justify-center h-[200px] text-sm text-muted-foreground">
+            No services found
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {results.map((service) => (
+              <ServiceRow
+                key={service.id}
+                service={service}
+                onAdd={onAddToCart}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
