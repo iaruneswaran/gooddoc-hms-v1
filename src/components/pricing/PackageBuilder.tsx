@@ -235,8 +235,8 @@ export function PackageBuilder() {
         </div>
       </div>
       
-      {/* Bottom Section: Price Mode & Notes - Fixed at bottom */}
-      <div className="sticky bottom-0 bg-background grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 pt-6 border-t">
+      {/* Bottom Section: Price Mode & Notes */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 pt-6 border-t">
         {/* Price Mode */}
         <div>
           <Label className="mb-3 block">Price Mode</Label>
