@@ -116,75 +116,23 @@ export function PackageBuilder() {
             Search & Add Items
           </div>
           
-          {/* Category Filter */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs mb-1.5 block">Category</Label>
-              <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-                <SelectTrigger className="h-9">
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Categories</SelectItem>
-                  {availableCategories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Department Filter */}
-            <div>
-              <Label className="text-xs mb-1.5 block">Department</Label>
-              <Select 
-                value={departmentFilter} 
-                onValueChange={setDepartmentFilter}
-                disabled={categoryFilter === "All" || availableDepartments.length === 0}
-              >
-                <SelectTrigger className="h-9">
-                  <SelectValue placeholder="All Departments" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Departments</SelectItem>
-                  {availableDepartments.map((dept) => (
-                    <SelectItem key={dept} value={dept}>
-                      {dept}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          {/* Search Input */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search items by name or code..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9"
-            />
-          </div>
-          
           {/* Search Results */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label className="text-xs text-muted-foreground">
-                {searchQuery ? `Results (${searchResults?.length || 0})` : "Start typing to search"}
-              </Label>
-            </div>
-            
-            <ScrollArea className="h-[320px] border rounded-md bg-muted/20">
-              {!searchQuery ? (
-                <div className="p-8 text-center text-muted-foreground">
-                  <Search className="h-8 w-8 mx-auto mb-2 opacity-40" />
-                  <p className="text-sm">Search for items to add</p>
-                  <p className="text-xs mt-1">Filter by category and department first</p>
+          <ScrollArea className="h-[380px] border rounded-md bg-muted/20">
+            {!searchQuery ? (
+              <div className="p-8 text-center text-muted-foreground flex flex-col items-center justify-center h-full">
+                <Search className="h-8 w-8 mx-auto mb-3 opacity-40" />
+                <p className="text-sm font-medium mb-3">Search for items to add</p>
+                <div className="relative w-full max-w-xs">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name or code..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 h-9"
+                  />
                 </div>
-              ) : isLoading ? (
+              </div>
+            ) : isLoading ? (
                 <div className="p-8 text-center text-muted-foreground">
                   <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2" />
                   <p className="text-sm">Searching...</p>
@@ -237,7 +185,6 @@ export function PackageBuilder() {
                 </div>
               )}
             </ScrollArea>
-          </div>
         </div>
         
         {/* Right Panel - Selected Items */}
