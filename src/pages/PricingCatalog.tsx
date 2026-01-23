@@ -262,6 +262,21 @@ const PricingCatalog = () => {
                 </SelectContent>
               </Select>
 
+              {/* Status Filter */}
+              <Select
+                value={statusFilter}
+                onValueChange={(value) => setStatusFilter(value as PricingStatus | "All")}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All Statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All Statuses</SelectItem>
+                  <SelectItem value="Published">Published</SelectItem>
+                  <SelectItem value="Draft">Draft</SelectItem>
+                  <SelectItem value="Archived">Archived</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Active Filters */}
@@ -307,14 +322,14 @@ const PricingCatalog = () => {
               <div className="overflow-x-auto">
                 <table className="w-full table-fixed">
                   <colgroup>
-                    <col className="w-[280px]" />
-                    <col className="w-[120px]" />
-                    <col className="w-[140px]" />
-                    <col className="w-[100px]" />
-                    <col className="w-[80px]" />
-                    <col className="w-[110px]" />
-                    <col className="w-[110px]" />
-                    <col className="w-[70px]" />
+                    <col style={{ width: '25%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '14%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '8%' }} />
+                    <col style={{ width: '12%' }} />
+                    <col style={{ width: '12%' }} />
+                    <col style={{ width: '9%' }} />
                   </colgroup>
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
@@ -334,10 +349,10 @@ const PricingCatalog = () => {
                         UNIT
                       </th>
                       <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
-                        BASE PRICE
-                      </th>
-                      <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
                         NET PRICE
+                      </th>
+                      <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
+                        STATUS
                       </th>
                       <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
                         ACTIONS
@@ -359,11 +374,13 @@ const PricingCatalog = () => {
                           <div className="text-sm font-mono truncate">{item.codes.internal}</div>
                         </td>
                         <td className="p-3 text-sm capitalize truncate">{item.unit}</td>
-                        <td className="p-3 text-right text-sm font-medium">
-                          {formatINR(item.pricing.basePrice)}
-                        </td>
                         <td className="p-3 text-right text-sm font-semibold">
                           {formatINR(item.pricing.netPrice)}
+                        </td>
+                        <td className="p-3 text-center">
+                          <Badge variant="outline" className={`min-w-[90px] ${getStatusColor(item.status)}`}>
+                            {item.status}
+                          </Badge>
                         </td>
                         <td className="p-3 text-center">
                           <DropdownMenu>
