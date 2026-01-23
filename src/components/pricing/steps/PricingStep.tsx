@@ -117,19 +117,7 @@ export function PricingStep() {
 
           {/* Discount % */}
           <div>
-            <Label htmlFor="discountPct" className="flex items-center gap-1">
-              Discount %
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-3 w-3 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs">Percentage discount applied to base price</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Label>
+            <Label htmlFor="discountPct">Discount %</Label>
             <div className="relative mt-1">
               <Input
                 id="discountPct"
@@ -161,9 +149,6 @@ export function PricingStep() {
                 className="pl-7 bg-muted cursor-not-allowed"
               />
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Base Price − Discount
-            </p>
           </div>
         </div>
       </Card>
@@ -236,7 +221,9 @@ export function PricingStep() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Category:</span>
-              <Badge variant="secondary">{formData.category || "-"}</Badge>
+              <code className="font-mono text-xs bg-muted px-2 py-1 rounded">
+                {formData.category || "-"}
+              </code>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Department:</span>
