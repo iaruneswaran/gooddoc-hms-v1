@@ -419,119 +419,56 @@ const PricingCatalog = () => {
             {viewItem && (
               <div className="space-y-6">
                 {/* Basic Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Category</p>
-                    <p className="text-sm font-medium">{viewItem.category}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Department</p>
-                    <p className="text-sm font-medium">{viewItem.department}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Unit</p>
-                    <p className="text-sm font-medium capitalize">{viewItem.unit}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Availability</p>
-                    <p className="text-sm font-medium">{viewItem.availability}</p>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Basic Information</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Category</p>
+                      <p className="text-sm font-medium">{viewItem.category}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Department</p>
+                      <p className="text-sm font-medium">{viewItem.department}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Internal Code</p>
+                      <code className="font-mono text-xs bg-muted px-2 py-1 rounded">
+                        {viewItem.codes.internal}
+                      </code>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Unit</p>
+                      <p className="text-sm font-medium capitalize">{viewItem.unit}</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Description */}
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Description</p>
-                  <p className="text-sm">{viewItem.description}</p>
-                </div>
-
-                {/* Codes */}
-                <div>
-                  <p className="text-xs text-muted-foreground mb-2">Codes</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="font-mono">
-                      Internal: {viewItem.codes.internal}
-                    </Badge>
-                    {viewItem.codes.cpt && (
-                      <Badge variant="secondary" className="font-mono">
-                        CPT: {viewItem.codes.cpt}
-                      </Badge>
-                    )}
-                    {viewItem.codes.icd && (
-                      <Badge variant="secondary" className="font-mono">
-                        ICD: {viewItem.codes.icd}
-                      </Badge>
-                    )}
-                    {viewItem.codes.hcpcs && (
-                      <Badge variant="secondary" className="font-mono">
-                        HCPCS: {viewItem.codes.hcpcs}
-                      </Badge>
-                    )}
+                {viewItem.description && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Description</p>
+                    <p className="text-sm">{viewItem.description}</p>
                   </div>
-                </div>
+                )}
 
                 {/* Pricing */}
                 <div>
-                  <p className="text-xs text-muted-foreground mb-2">Pricing Details</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Pricing</p>
                   <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Cost</p>
-                      <p className="text-sm font-medium">{formatINR(viewItem.pricing.cost)}</p>
-                    </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Base Price</p>
                       <p className="text-sm font-medium">{formatINR(viewItem.pricing.basePrice)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Net Price</p>
-                      <p className="text-sm font-semibold text-primary">{formatINR(viewItem.pricing.netPrice)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Markup</p>
-                      <p className="text-sm font-medium">{viewItem.pricing.markupPct}%</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Discount</p>
                       <p className="text-sm font-medium">{viewItem.pricing.discountPct}%</p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Tax</p>
-                      <p className="text-sm font-medium">{viewItem.pricing.taxPct}%</p>
+                      <p className="text-xs text-muted-foreground">Standard Price</p>
+                      <p className="text-sm font-semibold text-primary">{formatINR(viewItem.pricing.netPrice)}</p>
                     </div>
                   </div>
                 </div>
-
-                {/* Tier Pricing */}
-                <div>
-                  <p className="text-xs text-muted-foreground mb-2">Tier Pricing</p>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="p-3 border rounded-lg">
-                      <p className="text-xs text-muted-foreground">Cash</p>
-                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.cash)}</p>
-                    </div>
-                    <div className="p-3 border rounded-lg">
-                      <p className="text-xs text-muted-foreground">Insurance</p>
-                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.insurance)}</p>
-                    </div>
-                    <div className="p-3 border rounded-lg">
-                      <p className="text-xs text-muted-foreground">Corporate</p>
-                      <p className="text-sm font-semibold">{formatINR(viewItem.pricing.tiers.corporate)}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Tags */}
-                {viewItem.tags.length > 0 && (
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-2">Tags</p>
-                    <div className="flex flex-wrap gap-2">
-                      {viewItem.tags.map((tag) => (
-                        <Badge key={tag} variant="outline">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* Actions */}
                 <div className="flex justify-end gap-2 pt-4 border-t">
