@@ -98,17 +98,7 @@ export function getPriceBreakdown(calc: PriceCalculation): string[] {
  * @deprecated Use generateCategoryCode from pricing-categories.ts instead
  */
 export function generateInternalCode(category: string, department: string): string {
-  // Map old category names to new ones for backward compatibility
-  const categoryMap: Record<string, ConfigCategory> = {
-    "Lab Test": "Lab Test",
-    "Doctor Fee": "Consultation",
-    "Procedure": "Procedure/OT",
-    "Imaging": "Radiology/Imaging",
-    "Room": "Room/Bed",
-    "Pharmacy": "Service/Consumable",
-    "Package": "Package",
-  };
-  
-  const mappedCategory = categoryMap[category] || (category as ConfigCategory);
+  // Map category names for code generation
+  const mappedCategory = category as ConfigCategory;
   return generateCategoryCode(mappedCategory, department);
 }

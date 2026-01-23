@@ -1,20 +1,20 @@
 import { z } from "zod";
 
-// Updated category enum with clean list
+// Updated category enum matching pricing-catalog.ts
 export const PricingCategoryEnum = z.enum([
   "Lab Test",
-  "Radiology/Imaging",
-  "Procedure/OT",
-  "Nursing Service",
-  "Room/Bed",
+  "Imaging",
+  "Procedure",
   "Consultation",
-  "Service/Consumable",
+  "Nursing",
+  "Room",
+  "Pharmacy",
   "Package",
 ]);
 
 export const PricingStatusEnum = z.enum(["Draft", "Published", "Archived"]);
 
-// Updated unit enum with context-aware options
+// Updated unit enum with all available options
 export const UnitEnum = z.enum([
   "test",
   "study",
@@ -25,6 +25,13 @@ export const UnitEnum = z.enum([
   "visit",
   "item",
   "package",
+  "dose",
+  "unit",
+  "session",
+  "case",
+  "trip",
+  "copy",
+  "certificate",
 ]);
 
 export const VisibilityEnum = z.enum(["admin", "staff", "portal"]);

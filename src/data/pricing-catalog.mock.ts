@@ -1,14 +1,14 @@
-import { PricingItem } from "@/types/pricing-catalog";
+import { PricingItem, PricingCategory } from "@/types/pricing-catalog";
 import { LAB_MASTER_CATALOG, HEALTH_PACKAGES } from "./lab-master-catalog";
 import { ALL_HOSPITAL_SERVICES, HospitalService } from "./hospital-services-catalog";
 
 // Map hospital service categories to pricing categories
-const mapCategoryToPricingCategory = (category: string): "Lab Test" | "Doctor Fee" | "Procedure" | "Imaging" | "Room" | "Pharmacy" | "Package" => {
+const mapCategoryToPricingCategory = (category: string): PricingCategory => {
   switch (category) {
     case "Lab Test":
       return "Lab Test";
     case "Consultation":
-      return "Doctor Fee";
+      return "Consultation";
     case "Room":
       return "Room";
     case "Pharmacy":
@@ -17,6 +17,8 @@ const mapCategoryToPricingCategory = (category: string): "Lab Test" | "Doctor Fe
       return "Package";
     case "Imaging":
       return "Imaging";
+    case "Nursing":
+      return "Nursing";
     default:
       return "Procedure";
   }

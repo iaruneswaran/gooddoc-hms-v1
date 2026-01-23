@@ -5,15 +5,15 @@
 
 export type PricingCategory =
   | "Lab Test"
-  | "Radiology/Imaging"
-  | "Procedure/OT"
-  | "Nursing Service"
-  | "Room/Bed"
+  | "Imaging"
+  | "Procedure"
   | "Consultation"
-  | "Service/Consumable"
+  | "Nursing"
+  | "Room"
+  | "Pharmacy"
   | "Package";
 
-export type PricingUnit = "test" | "study" | "procedure" | "event" | "hour" | "day" | "visit" | "item" | "package";
+export type PricingUnit = "test" | "study" | "procedure" | "event" | "hour" | "day" | "visit" | "item" | "package" | "dose" | "unit" | "session" | "case" | "trip" | "copy" | "certificate";
 
 export interface CategoryConfig {
   label: string;
@@ -79,18 +79,15 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
     },
     helperText: "LOINC = standard lab test code (optional)",
   },
-  "Radiology/Imaging": {
-    label: "Radiology/Imaging",
+  "Imaging": {
+    label: "Imaging",
     departments: [
-      "X-ray",
-      "CT",
-      "MRI",
-      "Ultrasound",
-      "Mammography",
+      "Radiology",
       "Nuclear Medicine",
+      "Dental",
     ],
     defaultUnit: "study",
-    codePrefix: "RAD",
+    codePrefix: "IMG",
     fields: {
       showCpt: true,
       requireCpt: false,
@@ -99,65 +96,54 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
       showContrast: true,
       showLaterality: true,
     },
-    helperText: "CPT = billing code (if applicable in your country)",
+    helperText: "CPT = billing code (if applicable)",
   },
-  "Procedure/OT": {
-    label: "Procedure/OT",
+  "Procedure": {
+    label: "Procedure",
     departments: [
-      "General Surgery",
-      "Orthopedics",
+      "Surgery",
+      "Orthopaedics",
       "ENT",
-      "Gynecology",
+      "Obstetrics & Gynaecology",
       "Urology",
       "Ophthalmology",
-      "Dental",
+      "Cardiology",
+      "Gastroenterology",
+      "Pulmonology",
+      "Neurology",
+      "Nephrology",
+      "Anaesthesia",
+      "Dermatology",
+      "ICU",
+      "Emergency",
+      "Physiotherapy",
+      "Audiology",
+      "Speech Therapy",
+      "Dietetics",
+      "Vaccination",
+      "CSSD",
+      "Transport",
+      "Home Care",
+      "Mortuary",
+      "Medical Records",
+      "Hospital Services",
+      "Administration",
     ],
     defaultUnit: "procedure",
     codePrefix: "PROC",
     fields: {
       showCpt: true,
-      requireCpt: true,
+      requireCpt: false,
       showAnesthesiaType: true,
       showEstimatedDuration: true,
       showLocation: true,
     },
-    helperText: "CPT or ICD-10-PCS required for procedures",
-  },
-  "Nursing Service": {
-    label: "Nursing Service",
-    departments: ["Nursing", "Day Care"],
-    defaultUnit: "event",
-    codePrefix: "NRS",
-    fields: {
-      showHcpcs: true,
-      showBillingBasis: true,
-      showStaffLevel: true,
-    },
-    helperText: "HCPCS optional if payer requires",
-  },
-  "Room/Bed": {
-    label: "Room/Bed",
-    departments: [
-      "General Ward",
-      "Semi-Private",
-      "Private",
-      "ICU",
-      "NICU",
-      "PICU",
-    ],
-    defaultUnit: "day",
-    codePrefix: "ROOM",
-    fields: {
-      showWardClass: true,
-      showMealsIncluded: true,
-      showMaxOccupancy: true,
-    },
-    helperText: "Per-day billing for room charges",
+    helperText: "CPT or ICD-10-PCS for procedures",
   },
   "Consultation": {
     label: "Consultation",
     departments: [
-      "OPD",
+      "General Medicine",
       "Cardiology",
       "Endocrinology",
       "Neurology",
@@ -167,9 +153,13 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
       "Nephrology",
       "Rheumatology",
       "Oncology",
+      "Anaesthesia",
+      "Physiotherapy",
+      "Dietetics",
+      "Home Care",
     ],
     defaultUnit: "visit",
-    codePrefix: "CONS",
+    codePrefix: "CON",
     fields: {
       showCpt: true,
       showProviderType: true,
@@ -177,17 +167,48 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
     },
     helperText: "E&M CPT codes optional",
   },
-  "Service/Consumable": {
-    label: "Service/Consumable",
-    departments: ["Pharmacy/Stores", "Physiotherapy", "Equipment Use"],
-    defaultUnit: "item",
-    codePrefix: "SRV",
+  "Nursing": {
+    label: "Nursing",
+    departments: [
+      "Nursing",
+      "Home Care",
+    ],
+    defaultUnit: "event",
+    codePrefix: "NRS",
     fields: {
       showHcpcs: true,
       showBillingBasis: true,
-      showEstimatedDuration: true,
+      showStaffLevel: true,
     },
-    helperText: "HCPCS if billable supply",
+    helperText: "HCPCS optional if payer requires",
+  },
+  "Room": {
+    label: "Room",
+    departments: [
+      "Inpatient",
+      "ICU",
+    ],
+    defaultUnit: "day",
+    codePrefix: "BED",
+    fields: {
+      showWardClass: true,
+      showMealsIncluded: true,
+      showMaxOccupancy: true,
+    },
+    helperText: "Per-day billing for room charges",
+  },
+  "Pharmacy": {
+    label: "Pharmacy",
+    departments: [
+      "Pharmacy",
+    ],
+    defaultUnit: "item",
+    codePrefix: "PHA",
+    fields: {
+      showHcpcs: true,
+      showBillingBasis: true,
+    },
+    helperText: "SKU-based items",
   },
   "Package": {
     label: "Package",
@@ -196,6 +217,8 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
       "Pre-Op",
       "Maternity",
       "Executive Health Check",
+      "Ophthalmology",
+      "Dietetics",
       "Others",
     ],
     defaultUnit: "package",
@@ -218,11 +241,79 @@ export const ALL_UNITS: { value: PricingUnit; label: string }[] = [
   { value: "study", label: "Study" },
   { value: "procedure", label: "Procedure" },
   { value: "event", label: "Event" },
+  { value: "session", label: "Session" },
   { value: "hour", label: "Hour" },
   { value: "day", label: "Day" },
   { value: "visit", label: "Visit" },
   { value: "item", label: "Item" },
   { value: "package", label: "Package" },
+  { value: "dose", label: "Dose" },
+  { value: "unit", label: "Unit" },
+  { value: "case", label: "Case" },
+  { value: "trip", label: "Trip" },
+  { value: "copy", label: "Copy" },
+  { value: "certificate", label: "Certificate" },
+];
+
+// All departments (comprehensive list)
+export const ALL_DEPARTMENTS = [
+  // Administration
+  "Administration",
+  // Clinical
+  "General Medicine",
+  "Cardiology",
+  "Neurology",
+  "Gastroenterology",
+  "Pulmonology",
+  "Nephrology",
+  "Endocrinology",
+  "Rheumatology",
+  "Oncology",
+  "Dermatology",
+  // Surgical
+  "Surgery",
+  "Orthopaedics",
+  "ENT",
+  "Obstetrics & Gynaecology",
+  "Urology",
+  "Ophthalmology",
+  // Support
+  "Anaesthesia",
+  "Emergency",
+  "ICU",
+  "Nursing",
+  "Physiotherapy",
+  "Speech Therapy",
+  "Audiology",
+  "Dietetics",
+  // Diagnostics
+  "Hematology",
+  "Biochemistry",
+  "Microbiology",
+  "Serology",
+  "Immunology",
+  "Pathology",
+  "Radiology",
+  "Nuclear Medicine",
+  // Services
+  "Pharmacy",
+  "Blood Bank",
+  "Vaccination",
+  "CSSD",
+  "Transport",
+  "Home Care",
+  "Mortuary",
+  "Medical Records",
+  "Hospital Services",
+  "Dental",
+  // Inpatient
+  "Inpatient",
+  // Packages
+  "Preventive Care",
+  "Pre-Op",
+  "Maternity",
+  "Executive Health Check",
+  "Others",
 ];
 
 // Package types
@@ -259,6 +350,9 @@ export const MODALITIES = [
   "Mammography",
   "PET Scan",
   "Nuclear Medicine",
+  "Doppler",
+  "Interventional",
+  "CBCT",
 ];
 
 // Anesthesia types
@@ -276,12 +370,16 @@ export const PROCEDURE_LOCATIONS = [
   "Day Care",
   "Procedure Room",
   "Bedside",
+  "Cath Lab",
+  "Endoscopy Suite",
 ];
 
 // Billing basis for nursing
 export const BILLING_BASIS = [
   { value: "event", label: "Per Event" },
   { value: "hour", label: "Per Hour" },
+  { value: "day", label: "Per Day" },
+  { value: "session", label: "Per Session" },
 ];
 
 // Provider types for consultation
@@ -299,6 +397,10 @@ export const WARD_CLASSES = [
   "Private",
   "Deluxe",
   "Suite",
+  "ICU",
+  "HDU",
+  "PICU",
+  "NICU",
 ];
 
 // Price modes for packages
@@ -315,77 +417,81 @@ export const LATERALITY_OPTIONS = [
   "N/A",
 ];
 
+// Code prefixes for internal code generation
+export const CODE_PREFIXES: Record<string, string> = {
+  // Administration
+  "Administration": "ADM",
+  // Clinical Consultations
+  "General Medicine": "OPD",
+  "Cardiology": "CAR",
+  "Neurology": "NEU",
+  "Gastroenterology": "GAS",
+  "Pulmonology": "PUL",
+  "Nephrology": "NEP",
+  "Endocrinology": "END",
+  "Rheumatology": "RHE",
+  "Oncology": "ONC",
+  "Dermatology": "DER",
+  // Surgical
+  "Surgery": "OT",
+  "Orthopaedics": "ORT",
+  "ENT": "ENT",
+  "Obstetrics & Gynaecology": "OBS",
+  "Urology": "URO",
+  "Ophthalmology": "OPH",
+  // Support
+  "Anaesthesia": "ANE",
+  "Emergency": "EMR",
+  "ICU": "ICU",
+  "Nursing": "NRS",
+  "Physiotherapy": "PHY",
+  "Speech Therapy": "SPH",
+  "Audiology": "AUD",
+  "Dietetics": "DIE",
+  // Diagnostics - Lab
+  "Hematology": "HEM",
+  "Biochemistry": "BIO",
+  "Microbiology": "MIC",
+  "Serology": "SER",
+  "Immunology": "IMM",
+  "Pathology": "PAT",
+  // Diagnostics - Imaging
+  "Radiology": "RAD",
+  "Nuclear Medicine": "NM",
+  "Dental": "DEN",
+  // Services
+  "Pharmacy": "PHA",
+  "Blood Bank": "BBK",
+  "Vaccination": "VAC",
+  "CSSD": "CSSD",
+  "Transport": "AMB",
+  "Home Care": "HME",
+  "Mortuary": "MOR",
+  "Medical Records": "DOC",
+  "Hospital Services": "MSC",
+  // Inpatient
+  "Inpatient": "BED",
+  // Packages
+  "Preventive Care": "PKG",
+  "Pre-Op": "PKG",
+  "Maternity": "PKG",
+  "Executive Health Check": "PKG",
+  "Others": "OTH",
+};
+
 /**
  * Get department prefix for internal code generation
  */
 export function getDepartmentPrefix(department: string): string {
-  const prefixMap: Record<string, string> = {
-    // Lab
-    "Hematology": "HEM",
-    "Biochemistry": "BIO",
-    "Microbiology": "MIC",
-    "Serology": "SER",
-    "Immunology": "IMM",
-    "Pathology": "PAT",
-    "Blood Bank": "BBK",
-    // Radiology
-    "X-ray": "XR",
-    "CT": "CT",
-    "MRI": "MRI",
-    "Ultrasound": "US",
-    "Mammography": "MAM",
-    "Nuclear Medicine": "NUC",
-    // Procedure
-    "General Surgery": "GS",
-    "Orthopedics": "ORT",
-    "ENT": "ENT",
-    "Gynecology": "GYN",
-    "Urology": "URO",
-    "Ophthalmology": "OPH",
-    "Dental": "DEN",
-    // Nursing
-    "Nursing": "NRS",
-    "Day Care": "DC",
-    // Room
-    "General Ward": "GW",
-    "Semi-Private": "SP",
-    "Private": "PVT",
-    "ICU": "ICU",
-    "NICU": "NICU",
-    "PICU": "PICU",
-    // Consultation
-    "OPD": "OPD",
-    "Cardiology": "CAR",
-    "Endocrinology": "END",
-    "Neurology": "NEU",
-    "Dermatology": "DER",
-    "Gastroenterology": "GAS",
-    "Pulmonology": "PUL",
-    "Nephrology": "NEP",
-    "Rheumatology": "RHE",
-    "Oncology": "ONC",
-    // Service
-    "Pharmacy/Stores": "PHR",
-    "Physiotherapy": "PHY",
-    "Equipment Use": "EQP",
-    // Package
-    "Preventive Care": "PVN",
-    "Pre-Op": "PRE",
-    "Maternity": "MAT",
-    "Executive Health Check": "EXE",
-    "Others": "OTH",
-  };
-  
-  return prefixMap[department] || department.slice(0, 3).toUpperCase();
+  return CODE_PREFIXES[department] || department.slice(0, 3).toUpperCase();
 }
 
 /**
  * Generate internal code based on category and department
  */
 export function generateCategoryCode(category: PricingCategory, department: string): string {
-  const config = CATEGORY_CONFIG[category];
   const deptPrefix = getDepartmentPrefix(department);
   const sequence = Math.floor(Math.random() * 999).toString().padStart(3, "0");
   
-  return `${config.codePrefix}-${deptPrefix}-${sequence}`;
+  return `${deptPrefix}${sequence}`;
 }
