@@ -224,6 +224,18 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
 
                   <Button
                     type="submit"
+                    variant="outline"
+                    onClick={() => setSaveAction("saveAndAdd")}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting && saveAction === "saveAndAdd" && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Save & Add Another
+                  </Button>
+
+                  <Button
+                    type="submit"
                     onClick={() => setSaveAction("publish")}
                     disabled={!canPublish || isSubmitting}
                   >
