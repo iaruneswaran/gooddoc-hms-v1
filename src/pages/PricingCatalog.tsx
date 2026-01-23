@@ -378,7 +378,7 @@ const PricingCatalog = () => {
                           {formatINR(item.pricing.netPrice)}
                         </td>
                         <td className="p-3 text-center">
-                          <Badge variant="outline" className={`min-w-[90px] ${getStatusColor(item.status)}`}>
+                          <Badge variant="outline" className={`min-w-[90px] inline-flex justify-center ${getStatusColor(item.status)}`}>
                             {item.status}
                           </Badge>
                         </td>
