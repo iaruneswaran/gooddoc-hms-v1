@@ -1,5 +1,26 @@
 import { PricingItem } from "@/types/pricing-catalog";
 import { LAB_MASTER_CATALOG, HEALTH_PACKAGES } from "./lab-master-catalog";
+import { ALL_HOSPITAL_SERVICES, HospitalService } from "./hospital-services-catalog";
+
+// Map hospital service categories to pricing categories
+const mapCategoryToPricingCategory = (category: string): "Lab Test" | "Doctor Fee" | "Procedure" | "Imaging" | "Room" | "Pharmacy" | "Package" => {
+  switch (category) {
+    case "Lab Test":
+      return "Lab Test";
+    case "Consultation":
+      return "Doctor Fee";
+    case "Room":
+      return "Room";
+    case "Pharmacy":
+      return "Pharmacy";
+    case "Package":
+      return "Package";
+    case "Imaging":
+      return "Imaging";
+    default:
+      return "Procedure";
+  }
+};
 
 // Convert lab catalog to pricing items
 const labPricingItems: PricingItem[] = LAB_MASTER_CATALOG.map((test) => ({
@@ -90,7 +111,51 @@ const packagePricingItems: PricingItem[] = HEALTH_PACKAGES.map((pkg) => ({
   audit: [],
 }));
 
+// Convert hospital services to pricing items
+const hospitalServicePricingItems: PricingItem[] = ALL_HOSPITAL_SERVICES.map((service: HospitalService) => ({
+  id: `price-${service.code}`,
+  name: service.name,
+  category: mapCategoryToPricingCategory(service.category),
+  department: service.department,
+  codes: {
+    internal: service.code,
+    cpt: "",
+    icd: "",
+  },
+  description: `${service.name} - ${service.unit}`,
+  unit: service.unit,
+  visibility: "staff" as const,
+  pricing: {
+    currency: "INR" as const,
+    cost: Math.round(service.mrp * 0.4 * 100),
+    basePrice: service.mrp * 100,
+    markupPct: 0,
+    discountPct: 0,
+    taxPct: 0,
+    netPrice: service.mrp * 100,
+    tiers: {
+      cash: service.mrp * 100,
+      insurance: Math.round(service.mrp * 0.9 * 100),
+      corporate: Math.round(service.mrp * 0.95 * 100),
+    },
+    effectiveFrom: "2025-01-01",
+    effectiveTo: null,
+  },
+  branchOverrides: [],
+  status: "Published" as const,
+  tags: [service.department.toLowerCase(), service.category.toLowerCase()],
+  requiresDoctorOrder: false,
+  availability: "In Stock" as const,
+  createdBy: "system",
+  createdAt: "2025-01-01T00:00:00Z",
+  updatedBy: "system",
+  updatedAt: "2025-01-01T00:00:00Z",
+  version: 1,
+  audit: [],
+}));
+
 export const MOCK_PRICING_ITEMS: PricingItem[] = [
   ...labPricingItems,
   ...packagePricingItems,
+  ...hospitalServicePricingItems,
 ];
