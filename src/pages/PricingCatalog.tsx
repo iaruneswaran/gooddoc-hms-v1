@@ -377,13 +377,6 @@ const PricingCatalog = () => {
                                 Edit
                               </DropdownMenuItem>
                               <DropdownMenuItem 
-                                className="gap-2 cursor-pointer"
-                                onClick={() => handleDuplicate(item)}
-                              >
-                                <Copy className="h-4 w-4" />
-                                Duplicate
-                              </DropdownMenuItem>
-                              <DropdownMenuItem 
                                 className="gap-2 text-destructive cursor-pointer"
                                 onClick={() => handleDelete(item)}
                               >
