@@ -184,6 +184,8 @@ export const CATEGORY_CONFIG: Record<PricingCategory, CategoryConfig> = {
     codePrefix: "SRV",
     fields: {
       showHcpcs: true,
+      showBillingBasis: true,
+      showEstimatedDuration: true,
     },
     helperText: "HCPCS if billable supply",
   },
