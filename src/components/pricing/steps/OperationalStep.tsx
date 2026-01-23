@@ -13,7 +13,6 @@ import {
 import { Card } from "@/components/ui/card";
 import { PricingItemFormData, PricingCategory } from "@/types/pricing-item";
 import { CATEGORY_CONFIG, PricingCategory as ConfigCategory } from "@/config/pricing-categories";
-import { PackageBuilder } from "../PackageBuilder";
 
 export function OperationalStep() {
   const {
@@ -31,11 +30,6 @@ export function OperationalStep() {
 
   return (
     <div className="space-y-6">
-      {/* Package Builder - shown only for Package category */}
-      {categoryConfig?.fields.showPackageBuilder && (
-        <PackageBuilder />
-      )}
-      
       <Card className="p-6">
         <h3 className="text-sm font-semibold mb-4">Operational Details</h3>
 
