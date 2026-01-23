@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { Calculator, Info } from "lucide-react";
-import { format } from "date-fns";
+import { CheckCircle, AlertCircle, Info } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -24,10 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PricingItemFormData } from "@/types/pricing-item";
-import { calcNetPrice, getPriceBreakdown } from "@/lib/priceUtils";
-import { TiersGrid } from "../TiersGrid";
-import { BranchOverrides } from "../BranchOverrides";
+import { PricingItemFormData, PricingCategory } from "@/types/pricing-item";
+import { CATEGORY_CONFIG, PricingCategory as ConfigCategory } from "@/config/pricing-categories";
 import { cn } from "@/lib/utils";
 
 export function PricingStep() {
@@ -39,47 +34,47 @@ export function PricingStep() {
   } = useFormContext<PricingItemFormData>();
 
   const currency = watch("pricing.currency");
-  const cost = watch("pricing.cost") || 0;
   const basePrice = watch("pricing.basePrice") || 0;
-  const markupPct = watch("pricing.markupPct") || 0;
   const discountPct = watch("pricing.discountPct") || 0;
-  const taxPct = watch("pricing.taxPct") || 0;
-  const autoCalcNet = watch("autoCalcNet");
-  const effectiveFrom = watch("pricing.effectiveFrom");
-  const effectiveTo = watch("pricing.effectiveTo");
+  const category = watch("category") as PricingCategory;
+  const requiresDoctorOrder = watch("requiresDoctorOrder");
+  const availability = watch("availability");
+  const packageComponents = watch("attributes.inclusions") || [];
 
-  // Auto-calculate net price when auto-calc is enabled
+  // Get config for selected category
+  const categoryConfig = category ? CATEGORY_CONFIG[category as ConfigCategory] : null;
+
+  // Calculate standard price (final price after discount)
+  const standardPrice = basePrice - (basePrice * discountPct / 100);
+
+  // Auto-update net price when standard price changes
   useEffect(() => {
-    if (autoCalcNet) {
-      const netPrice = calcNetPrice({
-        basePrice,
-        markupPct,
-        discountPct,
-        taxPct,
-      });
-      setValue("pricing.netPrice", netPrice);
-    }
-  }, [basePrice, markupPct, discountPct, taxPct, autoCalcNet, setValue]);
+    setValue("pricing.netPrice", standardPrice);
+  }, [standardPrice, setValue]);
 
-  const breakdown = getPriceBreakdown({
-    basePrice,
-    markupPct,
-    discountPct,
-    taxPct,
+  // Calculate package items total
+  const packageTotal = packageComponents.reduce((sum, item) => {
+    return sum + ((item.unitPrice || 0) * (item.quantity || 1));
+  }, 0);
+
+  // Form data for review section
+  const formData = watch();
+  const hasErrors = Object.keys(errors).length > 0;
+
+  const errorList = Object.entries(errors).flatMap(([key, value]) => {
+    if (typeof value === "object" && value !== null && "message" in value) {
+      return [`${key}: ${value.message}`];
+    }
+    return [];
   });
 
-  const handleEffectiveFromChange = (date: Date | undefined) => {
-    setValue("pricing.effectiveFrom", date ? format(date, "yyyy-MM-dd") : undefined);
-  };
-
-  const handleEffectiveToChange = (date: Date | undefined) => {
-    setValue("pricing.effectiveTo", date ? format(date, "yyyy-MM-dd") : null);
-  };
+  const currencySymbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "€";
 
   return (
     <div className="space-y-6">
+      {/* Pricing Section */}
       <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Base Pricing</h3>
+        <h3 className="text-sm font-semibold mb-4">Pricing</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Currency */}
@@ -105,81 +100,28 @@ export function PricingStep() {
             )}
           </div>
 
-          {/* Internal Cost */}
-          <div>
-            <Label htmlFor="cost" className="flex items-center gap-1">
-              Internal Cost (Optional)
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-3 w-3 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs">Your internal cost for this item</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Label>
-            <Input
-              id="cost"
-              type="number"
-              step="0.01"
-              min="0"
-              {...register("pricing.cost", { valueAsNumber: true })}
-              placeholder="0.00"
-              className="mt-1"
-            />
-          </div>
-
           {/* Base Price */}
           <div>
             <Label htmlFor="basePrice">
               Base Price <span className="text-destructive">*</span>
             </Label>
-            <Input
-              id="basePrice"
-              type="number"
-              step="0.01"
-              min="0.01"
-              {...register("pricing.basePrice", { valueAsNumber: true })}
-              placeholder="0.00"
-              className="mt-1"
-            />
+            <div className="relative mt-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                {currencySymbol}
+              </span>
+              <Input
+                id="basePrice"
+                type="number"
+                step="0.01"
+                min="0.01"
+                {...register("pricing.basePrice", { valueAsNumber: true })}
+                placeholder="0.00"
+                className="pl-7"
+              />
+            </div>
             {errors.pricing?.basePrice && (
               <p className="text-xs text-destructive mt-1">{errors.pricing.basePrice.message}</p>
             )}
-          </div>
-
-          {/* Markup % */}
-          <div>
-            <Label htmlFor="markupPct" className="flex items-center gap-1">
-              Markup %
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-3 w-3 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs">Percentage added to base price</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Label>
-            <div className="relative mt-1">
-              <Input
-                id="markupPct"
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                {...register("pricing.markupPct", { valueAsNumber: true })}
-                placeholder="0"
-                className="pr-8"
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                %
-              </span>
-            </div>
           </div>
 
           {/* Discount % */}
@@ -192,7 +134,7 @@ export function PricingStep() {
                     <Info className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-xs">Percentage discount applied</p>
+                    <p className="text-xs">Percentage discount applied to base price</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -214,182 +156,234 @@ export function PricingStep() {
             </div>
           </div>
 
-          {/* Tax % */}
+          {/* Standard Price (calculated) */}
           <div>
-            <Label htmlFor="taxPct" className="flex items-center gap-1">
-              Tax %
+            <Label className="flex items-center gap-1">
+              Standard Price
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-xs">Tax percentage (e.g., GST)</p>
+                    <p className="text-xs">Final price after discount (Base - Discount)</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </Label>
-            <div className="relative mt-1">
-              <Input
-                id="taxPct"
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                {...register("pricing.taxPct", { valueAsNumber: true })}
-                placeholder="0"
-                className="pr-8"
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                %
-              </span>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Calculator className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold">Net Price Calculation</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="autoCalcNet" className="text-sm font-normal">
-              Auto-calculate
-            </Label>
-            <Switch
-              id="autoCalcNet"
-              checked={autoCalcNet}
-              onCheckedChange={(checked) => setValue("autoCalcNet", checked)}
-            />
-          </div>
-        </div>
-
-        {/* Calculation Breakdown */}
-        <div className="bg-muted/50 rounded-lg p-4 mb-4">
-          <div className="space-y-1 text-sm">
-            {breakdown.map((line, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "flex justify-between",
-                  line.startsWith("= Net") && "font-semibold text-primary pt-2 border-t"
-                )}
-              >
-                <span>{line.split(":")[0]}</span>
-                <span>{line.split(": ")[1]}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Net Price Input/Display */}
-        <div>
-          <Label htmlFor="netPrice">
-            Net Price <span className="text-destructive">*</span>
-          </Label>
-          {autoCalcNet ? (
             <div className="mt-1">
-              <Badge variant="secondary" className="text-base px-4 py-2">
-                ₹{watch("pricing.netPrice")?.toFixed(2) || "0.00"}
+              <Badge variant="secondary" className="text-base px-4 py-2 font-semibold">
+                {currencySymbol}{standardPrice.toFixed(2)}
               </Badge>
             </div>
-          ) : (
-            <Input
-              id="netPrice"
-              type="number"
-              step="0.01"
-              min="0"
-              {...register("pricing.netPrice", { valueAsNumber: true })}
-              placeholder="0.00"
-              className="mt-1"
-            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Package Items Pricing - only show for Package category */}
+      {category === "Package" && packageComponents.length > 0 && (
+        <Card className="p-6">
+          <h3 className="text-sm font-semibold mb-4">Package Items Pricing</h3>
+          <div className="space-y-3">
+            {packageComponents.map((item, index) => (
+              <div key={item.itemId || index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                <div>
+                  <span className="font-medium">{item.itemName}</span>
+                  <span className="text-muted-foreground text-sm ml-2">
+                    × {item.quantity || 1}
+                  </span>
+                </div>
+                <span className="font-medium">
+                  {currencySymbol}{((item.unitPrice || 0) * (item.quantity || 1)).toFixed(2)}
+                </span>
+              </div>
+            ))}
+            <Separator />
+            <div className="flex items-center justify-between font-semibold">
+              <span>Package Total:</span>
+              <span className="text-primary">{currencySymbol}{packageTotal.toFixed(2)}</span>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Operational Details */}
+      <Card className="p-6">
+        <h3 className="text-sm font-semibold mb-4">Operational Details</h3>
+
+        <div className="space-y-6">
+          {/* Turnaround Time - show for relevant categories */}
+          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT") && (
+            <div>
+              <Label htmlFor="turnaroundTime">Turnaround Time</Label>
+              <Input
+                id="turnaroundTime"
+                {...register("turnaroundTime")}
+                placeholder="e.g., 24 hours, 2-3 days, Same day"
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Expected time to complete or deliver this service
+              </p>
+            </div>
           )}
-          {errors.pricing?.netPrice && (
-            <p className="text-xs text-destructive mt-1">{errors.pricing.netPrice.message}</p>
+
+          {/* Requires Doctor Order */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="requiresDoctorOrder">Requires Doctor Order?</Label>
+              <p className="text-xs text-muted-foreground">
+                Does this service require a doctor's prescription or order?
+              </p>
+            </div>
+            <Switch
+              id="requiresDoctorOrder"
+              checked={requiresDoctorOrder}
+              onCheckedChange={(checked) => setValue("requiresDoctorOrder", checked)}
+            />
+          </div>
+
+          {/* Availability */}
+          <div>
+            <Label htmlFor="availability">Availability Status</Label>
+            <Select
+              value={availability}
+              onValueChange={(value) => setValue("availability", value as any)}
+            >
+              <SelectTrigger id="availability" className="mt-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="In Stock">In Stock / Available</SelectItem>
+                <SelectItem value="Out of Stock">Out of Stock / Unavailable</SelectItem>
+                <SelectItem value="N/A">Not Applicable</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* SLA Notes */}
+          <div>
+            <Label htmlFor="slaNote">SLA / Service Level Notes</Label>
+            <Textarea
+              id="slaNote"
+              {...register("slaNote")}
+              placeholder="Any service level agreements or commitments"
+              className="mt-1"
+              rows={2}
+            />
+          </div>
+
+          {/* Prep Instructions - show for relevant categories */}
+          {(category === "Lab Test" || category === "Radiology/Imaging" || category === "Procedure/OT" || category === "Package") && (
+            <div>
+              <Label htmlFor="prepInstructions">Preparation Instructions</Label>
+              <Textarea
+                id="prepInstructions"
+                {...register("prepInstructions")}
+                placeholder="Patient preparation or pre-procedure instructions"
+                className="mt-1"
+                rows={3}
+              />
+            </div>
           )}
         </div>
       </Card>
 
-      {/* Price Tiers */}
+      {/* Review Summary */}
       <Card className="p-6">
-        <TiersGrid />
-      </Card>
+        <h3 className="text-sm font-semibold mb-4">Review Summary</h3>
+        
+        {/* Validation Status */}
+        {hasErrors ? (
+          <div className="p-4 border border-destructive bg-destructive/10 rounded-lg mb-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+              <div className="flex-1">
+                <h4 className="font-semibold text-destructive mb-2">
+                  Please fix the following errors:
+                </h4>
+                <ul className="list-disc list-inside space-y-1 text-sm text-destructive">
+                  {errorList.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 border border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg mb-4">
+            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+              <CheckCircle className="h-5 w-5" />
+              <span className="font-semibold">All required fields are complete!</span>
+            </div>
+          </div>
+        )}
 
-      {/* Effective Dates */}
-      <Card className="p-6">
-        <h3 className="text-sm font-semibold mb-4">Effective Dates</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label>Effective From</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal mt-1",
-                    !effectiveFrom && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {effectiveFrom ? format(new Date(effectiveFrom), "dd MMM yyyy") : "Pick a date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={effectiveFrom ? new Date(effectiveFrom) : undefined}
-                  onSelect={handleEffectiveFromChange}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
+        {/* Summary Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Basic Info */}
+          <div className="space-y-3 text-sm">
+            <h4 className="font-medium text-muted-foreground">Basic Information</h4>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Item Name:</span>
+              <span className="font-medium">{formData.name || "-"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Category:</span>
+              <Badge variant="secondary">{formData.category || "-"}</Badge>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Department:</span>
+              <span className="font-medium">{formData.department || "-"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Internal Code:</span>
+              <code className="font-mono text-xs bg-muted px-2 py-1 rounded">
+                {formData.codes?.internal || "-"}
+              </code>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Unit:</span>
+              <span className="font-medium capitalize">{formData.unit || "-"}</span>
+            </div>
           </div>
 
-          <div>
-            <Label>Effective To</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal mt-1",
-                    !effectiveTo && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {effectiveTo ? format(new Date(effectiveTo), "dd MMM yyyy") : "No end date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={effectiveTo ? new Date(effectiveTo) : undefined}
-                  onSelect={handleEffectiveToChange}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                  disabled={(date) => {
-                    if (effectiveFrom) {
-                      return date < new Date(effectiveFrom);
-                    }
-                    return false;
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            {errors.pricing?.effectiveTo && (
-              <p className="text-xs text-destructive mt-1">{errors.pricing.effectiveTo.message}</p>
+          {/* Pricing Info */}
+          <div className="space-y-3 text-sm">
+            <h4 className="font-medium text-muted-foreground">Pricing Details</h4>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Base Price:</span>
+              <span className="font-medium">{currencySymbol}{basePrice.toFixed(2)}</span>
+            </div>
+            {discountPct > 0 && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Discount:</span>
+                <span className="font-medium">{discountPct}%</span>
+              </div>
+            )}
+            <Separator />
+            <div className="flex justify-between text-base">
+              <span className="font-semibold">Standard Price:</span>
+              <span className="font-bold text-primary">{currencySymbol}{standardPrice.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Operational Summary */}
+        <div className="mt-6 pt-4 border-t">
+          <h4 className="font-medium text-muted-foreground text-sm mb-3">Operational</h4>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant={formData.requiresDoctorOrder ? "default" : "secondary"}>
+              {formData.requiresDoctorOrder ? "Requires Order" : "No Order Required"}
+            </Badge>
+            <Badge variant={formData.availability === "In Stock" ? "default" : "secondary"}>
+              {formData.availability}
+            </Badge>
+            {formData.turnaroundTime && (
+              <Badge variant="outline">TAT: {formData.turnaroundTime}</Badge>
             )}
           </div>
         </div>
-      </Card>
-
-      {/* Branch Overrides */}
-      <Card className="p-6">
-        <BranchOverrides />
       </Card>
     </div>
   );

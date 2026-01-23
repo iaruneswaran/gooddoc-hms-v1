@@ -7,18 +7,13 @@ import { Button } from "@/components/ui/button";
 import { StepHeader } from "./StepHeader";
 import { BasicsStep } from "./steps/BasicsStep";
 import { PricingStep } from "./steps/PricingStep";
-import { OperationalStep } from "./steps/OperationalStep";
-import { ReviewStep } from "./steps/ReviewStep";
 import { PricingItemSchema, PricingItemFormData } from "@/types/pricing-item";
 import { useCreatePricingItem } from "@/api/pricingApi";
 import { toast } from "@/hooks/use-toast";
-import { calcNetPrice } from "@/lib/priceUtils";
 
 const STEPS = [
   { id: 1, name: "Basics" },
   { id: 2, name: "Pricing" },
-  { id: 3, name: "Operational" },
-  { id: 4, name: "Review & Submit" },
 ];
 
 interface AddItemFormProps {
@@ -92,15 +87,10 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
 
   const onSubmit = async (data: PricingItemFormData) => {
     try {
-      // Ensure net price is calculated if auto-calc is on
-      if (data.autoCalcNet) {
-        data.pricing.netPrice = calcNetPrice({
-          basePrice: data.pricing.basePrice,
-          markupPct: data.pricing.markupPct,
-          discountPct: data.pricing.discountPct,
-          taxPct: data.pricing.taxPct,
-        });
-      }
+      // Calculate standard price (base - discount)
+      const basePrice = data.pricing.basePrice || 0;
+      const discountPct = data.pricing.discountPct || 0;
+      data.pricing.netPrice = basePrice - (basePrice * discountPct / 100);
 
       // Set status based on save action
       data.status = saveAction === "publish" ? "Published" : "Draft";
@@ -151,10 +141,6 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
         return <BasicsStep />;
       case 2:
         return <PricingStep />;
-      case 3:
-        return <OperationalStep />;
-      case 4:
-        return <ReviewStep />;
       default:
         return <BasicsStep />;
     }
