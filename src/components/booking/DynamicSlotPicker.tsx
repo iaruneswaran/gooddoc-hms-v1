@@ -42,6 +42,12 @@ export function DynamicSlotPicker({
   const [loading, setLoading] = useState(false);
   const [weekStart, setWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [hasAutoSelected, setHasAutoSelected] = useState(false);
+
+  // Reset auto-select flag when doctor changes
+  useEffect(() => {
+    setHasAutoSelected(false);
+    setSelectedDate(undefined);
+  }, [doctorId]);
   
   const { getAvailability } = useDoctorAvailability();
   const { 
