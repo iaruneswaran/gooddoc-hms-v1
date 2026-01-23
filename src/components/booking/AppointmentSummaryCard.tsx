@@ -310,11 +310,11 @@ export function AppointmentSummaryCard({
 
                       <div className="space-y-2 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
+                          <CalendarDays className="w-3.5 h-3.5" />
                           <span>{format(ipdAdmissionData.date, "dd MMM yyyy")} • {ipdAdmissionData.time}</span>
                         </div>
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          <User className="h-3 w-3" />
+                          <Stethoscope className="w-3.5 h-3.5" />
                           <span>{ipdAdmissionData.attendingDoctor}</span>
                         </div>
                         <div className="flex items-center gap-2 text-muted-foreground">
