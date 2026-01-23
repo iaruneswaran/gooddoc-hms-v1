@@ -187,7 +187,7 @@ const PricingCatalog = () => {
 
         <main className="p-6">
           {/* Header */}
-          <Card className="p-6 mb-8">
+          <Card className="p-6 mb-6">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
               <div className="flex gap-3">
@@ -262,21 +262,6 @@ const PricingCatalog = () => {
                 </SelectContent>
               </Select>
 
-              {/* Status Filter */}
-              <Select
-                value={statusFilter}
-                onValueChange={(value) => setStatusFilter(value as PricingStatus | "All")}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All Statuses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Statuses</SelectItem>
-                  <SelectItem value="Published">Published</SelectItem>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Archived">Archived</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             {/* Active Filters */}
@@ -344,9 +329,6 @@ const PricingCatalog = () => {
                       <th className="text-right text-xs font-medium text-muted-foreground p-3 uppercase">
                         NET PRICE
                       </th>
-                      <th className="text-center text-xs font-medium text-muted-foreground p-3 uppercase">
-                        STATUS
-                      </th>
                       <th className="text-left text-xs font-medium text-muted-foreground p-3 uppercase">
                         ACTIONS
                       </th>
@@ -377,11 +359,6 @@ const PricingCatalog = () => {
                         </td>
                         <td className="p-3 text-right text-sm font-semibold">
                           {formatINR(item.pricing.netPrice)}
-                        </td>
-                        <td className="p-3 text-center">
-                          <Badge variant="outline" className={getStatusColor(item.status)}>
-                            {item.status}
-                          </Badge>
                         </td>
                         <td className="p-4">
                           <DropdownMenu>
