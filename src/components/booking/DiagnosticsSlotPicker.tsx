@@ -158,7 +158,7 @@ export function DiagnosticsSlotPicker({
               <h4 className="text-sm font-medium text-muted-foreground mb-2">{period}</h4>
               <div className="flex flex-wrap gap-2">
                 {slots.map((slot) => {
-                  const isSelected = selectedTime === slot.time;
+                  const isSelected = selectedTime !== null && selectedTime === slot.time;
                   
                   return (
                     <Button
