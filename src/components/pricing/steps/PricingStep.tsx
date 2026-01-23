@@ -147,26 +147,23 @@ export function PricingStep() {
             </div>
           </div>
 
-          {/* Standard Price (calculated) */}
+          {/* Standard Price (calculated, read-only) */}
           <div>
-            <Label className="flex items-center gap-1">
-              Standard Price
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-3 w-3 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs">Final price after discount (Base - Discount)</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Label>
-            <div className="mt-1">
-              <Badge variant="secondary" className="text-base px-4 py-2 font-semibold">
-                {currencySymbol}{standardPrice.toFixed(2)}
-              </Badge>
+            <Label>Standard Price</Label>
+            <div className="relative mt-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                {currencySymbol}
+              </span>
+              <Input
+                type="text"
+                value={standardPrice.toFixed(2)}
+                readOnly
+                className="pl-7 bg-muted cursor-not-allowed"
+              />
             </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Base Price − Discount
+            </p>
           </div>
         </div>
       </Card>
