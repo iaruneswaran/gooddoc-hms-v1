@@ -322,14 +322,14 @@ const PricingCatalog = () => {
               <div className="overflow-x-auto">
                 <table className="w-full table-fixed">
                   <colgroup>
-                    <col style={{ width: '25%' }} />
-                    <col style={{ width: '10%' }} />
-                    <col style={{ width: '14%' }} />
-                    <col style={{ width: '10%' }} />
-                    <col style={{ width: '8%' }} />
-                    <col style={{ width: '12%' }} />
+                    <col style={{ width: '32%' }} />
+                    <col style={{ width: '9%' }} />
                     <col style={{ width: '12%' }} />
                     <col style={{ width: '9%' }} />
+                    <col style={{ width: '7%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '11%' }} />
                   </colgroup>
                   <thead className="bg-muted/50 sticky top-0">
                     <tr>
