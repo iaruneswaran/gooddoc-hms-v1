@@ -51,13 +51,13 @@ export function OverviewKpiCard({
       }}
       aria-label={`Open ${title} (${kpiValue})`}
       className="
-        group relative w-full rounded-[24px] bg-white border border-[#E6E8ED]
+        group relative w-full rounded-[24px] bg-card border border-border
         p-[18px] cursor-pointer
         transition-all duration-200 ease-out
         shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.04)]
-        hover:shadow-[0_1px_2px_rgba(16,24,40,0.05),0_6px_16px_rgba(16,24,40,0.06)]
-        hover:-translate-y-0.5
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(42,106,247,0.35)] focus-visible:ring-offset-2
+        hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5
+        active:scale-[0.98]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
       "
       style={{ fontFamily: 'Inter, "SF Pro", "Segoe UI", system-ui, sans-serif' }}
     >
