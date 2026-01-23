@@ -16,9 +16,7 @@ import { calcNetPrice } from "@/lib/priceUtils";
 
 const STEPS = [
   { id: 1, name: "Basics" },
-  { id: 2, name: "Pricing" },
-  { id: 3, name: "Operational" },
-  { id: 4, name: "Review & Submit" },
+  { id: 2, name: "Review & Submit" },
 ];
 
 interface AddItemFormProps {
@@ -150,10 +148,6 @@ export function AddItemForm({ mode, initialData }: AddItemFormProps) {
       case 1:
         return <BasicsStep />;
       case 2:
-        return <PricingStep />;
-      case 3:
-        return <OperationalStep />;
-      case 4:
         return <ReviewStep />;
       default:
         return <BasicsStep />;
