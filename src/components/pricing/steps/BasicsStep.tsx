@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { AlertCircle, Loader2, Info } from "lucide-react";
+import { PackageBuilder } from "../PackageBuilder";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,8 +54,6 @@ export function BasicsStep() {
   const { data: departments, isLoading: deptLoading } = useDepartments(category);
   const { data: categories, isLoading: catLoading } = useCategories();
 
-  const [tags, setTags] = useState<string[]>(watch("tags") || []);
-  const [tagInput, setTagInput] = useState("");
   const [checkingCode, setCheckingCode] = useState(false);
   const [codeError, setCodeError] = useState("");
 
@@ -114,21 +113,6 @@ export function BasicsStep() {
     }
   }, [debouncedCode]);
 
-  const handleAddTag = () => {
-    const trimmed = tagInput.trim();
-    if (trimmed && !tags.includes(trimmed)) {
-      const newTags = [...tags, trimmed];
-      setTags(newTags);
-      setValue("tags", newTags);
-      setTagInput("");
-    }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    const newTags = tags.filter((t) => t !== tag);
-    setTags(newTags);
-    setValue("tags", newTags);
-  };
 
   // Get available units based on category
   const getAvailableUnits = () => {
@@ -375,40 +359,6 @@ export function BasicsStep() {
             </p>
           </div>
 
-          {/* Tags */}
-          <div className="md:col-span-2">
-            <Label htmlFor="tags">Tags</Label>
-            <div className="flex gap-2 mt-1">
-              <Input
-                id="tags"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddTag();
-                  }
-                }}
-                placeholder="Add tags (press Enter)"
-              />
-            </div>
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="gap-1">
-                    {tag}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTag(tag)}
-                      className="ml-1 hover:text-destructive"
-                    >
-                      ×
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </Card>
 
@@ -841,6 +791,9 @@ export function BasicsStep() {
           )}
         </div>
       </Card>
+
+      {/* Package Builder - shown only for Package category */}
+      {category === "Package" && <PackageBuilder />}
     </div>
   );
 }
