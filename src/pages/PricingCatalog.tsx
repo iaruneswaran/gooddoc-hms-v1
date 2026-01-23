@@ -10,7 +10,6 @@ import {
   SlidersHorizontal,
   ChevronDown,
   Edit,
-  Copy,
   Trash2,
   Eye,
   MoreVertical,
@@ -49,6 +48,7 @@ import { PricingItem, PricingCategory, PricingStatus } from "@/types/pricing-cat
 import { formatINR } from "@/utils/currency";
 import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
+import { CodePrefixLegend } from "@/components/pricing/CodePrefixLegend";
 
 const PricingCatalog = () => {
   const navigate = useNavigate();
@@ -66,23 +66,6 @@ const PricingCatalog = () => {
 
   const handleEdit = (item: PricingItem) => {
     navigate(`/pricing-catalog/new`, { state: { editItem: item } });
-  };
-
-  const handleDuplicate = (item: PricingItem) => {
-    const duplicatedItem: PricingItem = {
-      ...item,
-      id: `${item.id}-copy-${Date.now()}`,
-      name: `${item.name} (Copy)`,
-      codes: {
-        ...item.codes,
-        internal: `${item.codes.internal}-COPY`,
-      },
-      status: "Draft" as PricingStatus,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setItems((prev) => [duplicatedItem, ...prev]);
-    toast.success(`"${item.name}" duplicated successfully`);
   };
 
   const handleDelete = (item: PricingItem) => {
@@ -177,7 +160,10 @@ const PricingCatalog = () => {
           {/* Header */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-lg font-semibold text-foreground">Pricing Catalog</h1>
+                <CodePrefixLegend />
+              </div>
               <div className="flex gap-3">
                 <Button variant="outline">
                   <Upload className="w-4 h-4 mr-2" />
