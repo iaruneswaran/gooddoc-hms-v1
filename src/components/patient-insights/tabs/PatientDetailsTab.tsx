@@ -81,7 +81,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
         </div>
         
         <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6">
-          <div className="space-y-3">
+          <div className="space-y-4">
             {!isEditing ? (
               // View Mode
               <>
