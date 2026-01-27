@@ -21,9 +21,11 @@ export function BillingSummaryCards({
   collectedAmount,
   balanceAmount,
 }: BillingSummaryCardsProps) {
-  // Calculate advance balance (advance - used portion)
+  // Calculate other payments (total paid minus advance)
+  const collectedNum = parseFloat(collectedAmount.replace(/[₹,]/g, '')) || 0;
   const advanceNum = parseFloat(advanceAmount.replace(/[₹,]/g, '')) || 0;
-  const advanceBalance = `₹${(advanceNum).toLocaleString('en-IN')}`;
+  const otherPayments = collectedNum - advanceNum;
+  const otherPaymentsFormatted = `₹${otherPayments.toLocaleString('en-IN')}`;
 
   return (
     <div className="flex gap-3">
@@ -39,7 +41,11 @@ export function BillingSummaryCards({
           </div>
           <div className="flex items-center justify-between gap-4">
             <span className="text-white/70 text-[11px]">Unbilled Amount</span>
-            <span className="text-white/90 text-xs tabular-nums">{unbilledAmount}</span>
+            <span className="text-white/90 text-sm tabular-nums">{unbilledAmount}</span>
+          </div>
+          <div className="flex items-center justify-between gap-4 pt-1 border-t border-white/15">
+            <span className="text-white text-[11px]">Total Due Amount</span>
+            <span className="text-white font-semibold text-sm tabular-nums">{totalDue}</span>
           </div>
         </div>
       </Card>
@@ -55,22 +61,29 @@ export function BillingSummaryCards({
             <span className="text-emerald-300 font-medium text-sm tabular-nums">{advanceAmount}</span>
           </div>
           <div className="flex items-center justify-between gap-4">
-            <span className="text-white/70 text-[11px]">Advance Balance</span>
-            <span className="text-white/90 text-xs tabular-nums">{advanceBalance}</span>
+            <span className="text-white/70 text-[11px]">Other Payments</span>
+            <span className="text-emerald-300 text-sm tabular-nums">{otherPaymentsFormatted}</span>
+          </div>
+          <div className="flex items-center justify-between gap-4 pt-1 border-t border-white/15">
+            <span className="text-white text-[11px]">Total Paid</span>
+            <span className="text-emerald-300 font-semibold text-sm tabular-nums">{collectedAmount}</span>
           </div>
         </div>
       </Card>
 
-      {/* Total Due Amount Card - Hero Card */}
+      {/* Final Payable Card - Hero Card */}
       <Card 
         className="bg-white/15 backdrop-blur-sm border-white/30 px-4 py-3 min-w-[220px] hover:bg-white/20 transition-colors ring-1 ring-white/10"
         data-testid="card-total-payable"
       >
-        <div className="flex items-baseline justify-between pb-2 border-b border-white/25 mb-2">
-          <p className="text-white text-xs">Total Due Amount</p>
-          <span className="text-white font-semibold text-sm tabular-nums">{totalDue}</span>
-        </div>
+        <p className="text-white text-xs pb-2 border-b border-white/25 mb-2">
+          Final Payable
+        </p>
         <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-white/70 text-[11px]">Total Due Amount</span>
+            <span className="text-white text-sm tabular-nums">{totalDue}</span>
+          </div>
           <div className="flex items-center justify-between gap-4">
             <span className="text-white/70 text-[11px]">Total Paid</span>
             <span className="text-emerald-300 text-sm tabular-nums">−{collectedAmount}</span>
