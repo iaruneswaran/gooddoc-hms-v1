@@ -507,7 +507,7 @@ export function InsuranceTab({ selectedVisit }: InsuranceTabProps) {
                 ))}
               </tbody>
               {/* Summary Footer */}
-              <tfoot className="bg-muted/40 border-t-2">
+              <tfoot className="bg-muted/40 border-t">
                 <tr>
                   <td colSpan={5} className="p-3 text-right">
                     <span className="text-sm font-semibold text-foreground">Totals:</span>
