@@ -399,7 +399,7 @@ const PatientServices = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="divide-y divide-border">
+                    <div className="space-y-3">
                       {/* Pending Services Section */}
                       {pendingServices.length > 0 && (
                         <>
@@ -412,8 +412,8 @@ const PatientServices = () => {
                                 key={ps.id}
                                 onClick={() => togglePendingSelection(ps.id)}
                                 className={cn(
-                                  "flex items-start gap-4 px-4 py-4 cursor-pointer transition-colors",
-                                  isSelected ? "bg-primary/5" : "hover:bg-muted/50",
+                                  "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
+                                  isSelected ? "bg-primary/5 border-primary/30" : "hover:bg-muted/50 border-border",
                                   inCart && "opacity-60"
                                 )}
                               >
@@ -421,13 +421,17 @@ const PatientServices = () => {
                                 <Checkbox
                                   checked={isSelected}
                                   onCheckedChange={() => togglePendingSelection(ps.id)}
-                                  className="mt-1"
+                                  className="mt-0.5"
                                 />
                                 
                                 {/* Service Info */}
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                  <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-xs font-mono text-muted-foreground">
+                                      {ps.service.code}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
                                     {ps.quantity > 1 && (
                                       <Badge variant="outline" className="text-xs">
                                         ×{ps.quantity}
@@ -439,13 +443,10 @@ const PatientServices = () => {
                                       </Badge>
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                                      {ps.service.code}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
-                                  </div>
-                                  <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                                  {ps.notes && (
+                                    <p className="text-xs text-muted-foreground mt-1">"{ps.notes}"</p>
+                                  )}
+                                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-3 h-3" />
                                       {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
@@ -453,12 +454,9 @@ const PatientServices = () => {
                                     <span>•</span>
                                     <span>{ps.performedBy}</span>
                                   </div>
-                                  {ps.notes && (
-                                    <p className="text-xs text-muted-foreground mt-1 italic">"{ps.notes}"</p>
-                                  )}
                                 </div>
                                 
-                              {/* Price & Add Button */}
+                                {/* Price & Add Button */}
                                 <div className="flex items-center gap-3 flex-shrink-0">
                                   <div className="text-right">
                                     <p className="text-sm font-bold text-foreground">
