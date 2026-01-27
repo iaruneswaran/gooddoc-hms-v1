@@ -399,7 +399,7 @@ const PatientServices = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="divide-y divide-border">
+                    <div className="space-y-3">
                       {/* Pending Services Section */}
                       {pendingServices.length > 0 && (
                         <>
@@ -412,24 +412,26 @@ const PatientServices = () => {
                                 key={ps.id}
                                 onClick={() => togglePendingSelection(ps.id)}
                                 className={cn(
-                                  "flex items-center gap-4 px-4 py-3 cursor-pointer transition-colors",
-                                  isSelected ? "bg-primary/5" : "hover:bg-muted/50",
+                                  "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
+                                  isSelected ? "bg-primary/5 border-primary/30" : "hover:bg-muted/50 border-border",
                                   inCart && "opacity-60"
                                 )}
                               >
-                                {/* Selection Icon */}
-                                <div className="flex-shrink-0">
-                                  {isSelected ? (
-                                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                                  ) : (
-                                    <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/40" />
-                                  )}
-                                </div>
+                                {/* Checkbox */}
+                                <Checkbox
+                                  checked={isSelected}
+                                  onCheckedChange={() => togglePendingSelection(ps.id)}
+                                  className="mt-0.5"
+                                />
                                 
-                                {/* Service Info - Left side */}
+                                {/* Service Info */}
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                  <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-xs font-mono text-muted-foreground">
+                                      {ps.service.code}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
                                     {ps.quantity > 1 && (
                                       <Badge variant="outline" className="text-xs">
                                         ×{ps.quantity}
@@ -441,21 +443,17 @@ const PatientServices = () => {
                                       </Badge>
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    <span className="text-xs font-mono text-muted-foreground">
-                                      {ps.service.code}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
-                                    <span className="text-xs text-muted-foreground">•</span>
-                                    <span className="text-xs text-muted-foreground">
+                                  {ps.notes && (
+                                    <p className="text-xs text-muted-foreground mt-1">"{ps.notes}"</p>
+                                  )}
+                                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
                                       {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
                                     </span>
-                                    <span className="text-xs text-muted-foreground">•</span>
-                                    <span className="text-xs text-muted-foreground">{ps.performedBy}</span>
+                                    <span>•</span>
+                                    <span>{ps.performedBy}</span>
                                   </div>
-                                  {ps.notes && (
-                                    <p className="text-xs text-muted-foreground mt-0.5">"{ps.notes}"</p>
-                                  )}
                                 </div>
                                 
                                 {/* Price & Add Button */}
