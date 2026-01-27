@@ -399,7 +399,7 @@ const PatientServices = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="divide-y divide-border">
+                    <div className="space-y-3">
                       {/* Pending Services Section */}
                       {pendingServices.length > 0 && (
                         <>
@@ -412,8 +412,8 @@ const PatientServices = () => {
                                 key={ps.id}
                                 onClick={() => togglePendingSelection(ps.id)}
                                 className={cn(
-                                  "flex items-start gap-4 px-4 py-3 cursor-pointer transition-colors",
-                                  isSelected ? "bg-primary/5" : "hover:bg-muted/50",
+                                  "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
+                                  isSelected ? "bg-primary/5 border-primary/30" : "hover:bg-muted/50 border-border",
                                   inCart && "opacity-60"
                                 )}
                               >
@@ -432,27 +432,28 @@ const PatientServices = () => {
                                       {ps.service.code}
                                     </span>
                                     <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
-                                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                      <Clock className="w-3 h-3" />
-                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">•</span>
-                                    <span className="text-xs text-muted-foreground">{ps.performedBy}</span>
                                     {ps.quantity > 1 && (
                                       <Badge variant="outline" className="text-xs">
                                         ×{ps.quantity}
                                       </Badge>
                                     )}
                                     {inCart && (
-                                      <span className="flex items-center gap-1 text-xs text-primary">
-                                        <CheckCircle2 className="w-3.5 h-3.5" />
-                                        Added
-                                      </span>
+                                      <Badge variant="secondary" className="text-xs">
+                                        In Cart
+                                      </Badge>
                                     )}
                                   </div>
                                   {ps.notes && (
                                     <p className="text-xs text-muted-foreground mt-1">"{ps.notes}"</p>
                                   )}
+                                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
+                                    </span>
+                                    <span>•</span>
+                                    <span>{ps.performedBy}</span>
+                                  </div>
                                 </div>
                                 
                                 {/* Price & Add Button */}
@@ -574,11 +575,32 @@ const PatientServices = () => {
                                 <p className="text-sm font-bold text-foreground">{formatPrice(service.price)}</p>
                               </div>
                               
-                              {inCart ? (
-                                <span className="flex items-center gap-1.5 text-sm text-primary font-medium">
-                                  <CheckCircle2 className="w-4 h-4" />
-                                  Added
-                                </span>
+                              {inCart && cartItem ? (
+                                <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-7 w-7"
+                                    onClick={() => {
+                                      if (cartItem.qty === 1) {
+                                        removeFromCart(cartItem.itemId);
+                                      } else {
+                                        updateQty(cartItem.itemId, cartItem.qty - 1);
+                                      }
+                                    }}
+                                  >
+                                    {cartItem.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-destructive" /> : <Minus className="w-3.5 h-3.5" />}
+                                  </Button>
+                                  <span className="text-sm font-semibold w-8 text-center">{cartItem.qty}</span>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-7 w-7"
+                                    onClick={() => updateQty(cartItem.itemId, cartItem.qty + 1)}
+                                  >
+                                    <Plus className="w-3.5 h-3.5" />
+                                  </Button>
+                                </div>
                               ) : (
                                 <Button
                                   size="sm"
