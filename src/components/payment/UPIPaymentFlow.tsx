@@ -215,6 +215,7 @@ export function UPIPaymentFlow({
               onEmail={() => console.log('Email receipt')}
               onSMS={() => console.log('SMS receipt')}
               onDone={hasNextPayment ? undefined : onCancel}
+              hideActionButtons={hasNextPayment}
             />
             {hasNextPayment && onNextPayment && (
               <Button onClick={onNextPayment} className="w-full gap-2">
