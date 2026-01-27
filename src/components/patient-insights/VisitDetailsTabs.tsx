@@ -99,7 +99,7 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
           </TabsContent>
 
           <TabsContent value="payments" className="mt-0">
-            <PaymentsTab selectedVisit={selectedVisit} />
+            <PaymentsTab selectedVisit={selectedVisit} patientName={patient.name} />
           </TabsContent>
 
           <TabsContent value="documents" className="mt-0">

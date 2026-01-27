@@ -406,7 +406,6 @@ const PatientInsightsContent = () => {
                 patientName={patient.name}
                 admissionId={selectedVisit?.visitId || "ADM-2026-001"}
                 variant="light"
-                onTabChange={setActiveTab}
               />
             </div>
 
