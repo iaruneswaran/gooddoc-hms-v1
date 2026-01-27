@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { 
-  ChevronLeft, Search, Plus, Minus, Trash2, Receipt, User, 
+  ChevronLeft, Search, Plus, 
   Stethoscope, FlaskConical, ScanLine, Pill, HeartPulse, BedDouble, 
-  UserRound, Package, Clock, FileText, AlertCircle, CheckCircle2,
-  ClipboardList, Square, CheckSquare, ShoppingCart, ArrowRightLeft, CalendarDays
+  UserRound, Package, Clock, AlertCircle, CheckCircle2,
+  Square, CheckSquare, ShoppingCart
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -13,22 +13,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useServicesCart } from "@/hooks/useServicesCart";
+import { useUndoableCart } from "@/hooks/useUndoableCart";
 import { searchServices, SERVICE_CATEGORIES, getSubCategories, getServicesByCategory } from "@/data/services.mock";
-import { getPendingServicesForPatient, PendingService } from "@/data/pending-services.mock";
+import { getPendingServicesForPatient } from "@/data/pending-services.mock";
 import { getPendingBedChargesForPatient } from "@/data/pending-bed-charges.mock";
 import { getTransferHistoryForPatient } from "@/data/transfer-history.mock";
-import { BedChargePending } from "@/types/bed-charge";
-import { ServiceCategory, ServiceItem } from "@/types/booking/ipAdmission";
+import { ServiceItem } from "@/types/booking/ipAdmission";
 import { useDebounce } from "@/hooks/useDebounce";
-import { RoomBedTab } from "@/components/services/RoomBedTab";
+import { RoomBedTab, ServiceCatalogRow, OrderSummaryPanel } from "@/components/services";
 import { cn } from "@/lib/utils";
-import { format, setHours, setMinutes } from "date-fns";
+import { format } from "date-fns";
 
 const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
@@ -72,7 +67,7 @@ const PatientServices = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all");
   const [selectedPendingIds, setSelectedPendingIds] = useState<Set<string>>(new Set());
   const [isGeneratingBill, setIsGeneratingBill] = useState(false);
-  const { cart, totals, globalDiscountAmt, addToCart, updateQty, updateDiscount, updateAddedAt, removeFromCart, updateGlobalDiscount } = useServicesCart();
+  const { cart, totals, globalDiscountAmt, addToCart, updateQty, updateDiscount, updateAddedAt, removeFromCart, updateGlobalDiscount } = useUndoableCart();
   
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -385,7 +380,7 @@ const PatientServices = () => {
                 <ScrollArea className="flex-1">
                   {totalPendingCount === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                      <CheckCircle2 className="w-12 h-12 text-green-500/50 mb-3" />
+                      <CheckCircle2 className="w-12 h-12 text-primary/50 mb-3" />
                       <p className="text-sm font-medium text-foreground">No pending services</p>
                       <p className="text-xs text-muted-foreground mt-1">All services have been billed</p>
                       <Button
@@ -530,86 +525,17 @@ const PatientServices = () => {
                     </div>
                   ) : (
                     <div className="divide-y divide-border">
-                      {results.map((service) => {
-                        const inCart = isInCart(service.id);
-                        const cartItem = getCartItem(service.id);
-                        
-                        return (
-                          <div 
-                            key={service.id} 
-                            className={cn(
-                              "flex items-center gap-4 px-4 py-3 transition-colors",
-                              inCart ? "bg-primary/5" : "hover:bg-muted/50"
-                            )}
-                          >
-                            
-                            {/* Service Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <p className="text-sm font-medium text-foreground truncate">{service.name}</p>
-                                {inCart && (
-                                  <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                                )}
-                              </div>
-                              <div className="flex items-center gap-2 mt-0.5">
-                                <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                                  {service.code}
-                                </span>
-                                {service.subCategory && (
-                                  <span className="text-xs text-muted-foreground">{service.subCategory}</span>
-                                )}
-                              </div>
-                              {service.description && (
-                                <p className="text-xs text-muted-foreground mt-1 truncate">{service.description}</p>
-                              )}
-                            </div>
-                            
-                            {/* Price & Actions */}
-                            <div className="flex items-center gap-4">
-                              <div className="text-right">
-                                <p className="text-sm font-bold text-foreground">{formatPrice(service.price)}</p>
-                              </div>
-                              
-                              {inCart && cartItem ? (
-                                <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-7 w-7"
-                                    onClick={() => {
-                                      if (cartItem.qty === 1) {
-                                        removeFromCart(cartItem.itemId);
-                                      } else {
-                                        updateQty(cartItem.itemId, cartItem.qty - 1);
-                                      }
-                                    }}
-                                  >
-                                    {cartItem.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-destructive" /> : <Minus className="w-3.5 h-3.5" />}
-                                  </Button>
-                                  <span className="text-sm font-semibold w-8 text-center">{cartItem.qty}</span>
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-7 w-7"
-                                    onClick={() => updateQty(cartItem.itemId, cartItem.qty + 1)}
-                                  >
-                                    <Plus className="w-3.5 h-3.5" />
-                                  </Button>
-                                </div>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  onClick={() => addToCart(service)}
-                                  className="h-8 gap-1"
-                                >
-                                  <Plus className="w-4 h-4" />
-                                  Add
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                      {results.map((service) => (
+                        <ServiceCatalogRow
+                          key={service.id}
+                          service={service}
+                          cartItem={getCartItem(service.id)}
+                          onAdd={addToCart}
+                          onUpdateQty={updateQty}
+                          onRemove={removeFromCart}
+                          formatPrice={formatPrice}
+                        />
+                      ))}
                     </div>
                   )}
                 </ScrollArea>
@@ -618,211 +544,20 @@ const PatientServices = () => {
           </div>
           
           {/* Right Side - Order Summary */}
-          <div className="w-[450px] border-l border-border flex flex-col bg-card">
-            {/* Header */}
-            <div className="p-4 border-b border-border bg-primary">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-semibold text-primary-foreground">Order Summary</h3>
-                  <p className="text-xs text-primary-foreground/80 mt-0.5">{cart.length} item(s) • {patient.gdid}</p>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <Receipt className="w-5 h-5 text-primary-foreground" />
-                </div>
-              </div>
-            </div>
-            
-            {/* Cart Items */}
-            <ScrollArea className="flex-1">
-              {cart.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-3">
-                    <FileText className="w-8 h-8 text-muted-foreground/50" />
-                  </div>
-                  <p className="text-sm font-medium text-foreground">No services added</p>
-                  <p className="text-xs text-muted-foreground mt-1">Select services from the catalog to add them to the bill</p>
-                </div>
-              ) : (
-                <div className="p-3 space-y-2">
-                  {cart.map((item) => {
-                    const addedDate = new Date(item.addedAt);
-                    const lineSubtotal = item.unitPrice * item.qty;
-                    const lineTotal = lineSubtotal - (item.discountAmt || 0);
-                    return (
-                      <Card key={item.itemId} className="shadow-sm border-border">
-                        <CardContent className="p-3">
-                          <div className="flex items-start gap-3">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0">
-                                  <p className="text-sm font-medium truncate">{item.name}</p>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    <p className="text-xs text-muted-foreground">{item.code}</p>
-                                    <span className="text-muted-foreground">•</span>
-                                    <Popover>
-                                      <PopoverTrigger asChild>
-                                        <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                                          <CalendarDays className="w-3 h-3" />
-                                          {format(addedDate, 'dd MMM, HH:mm')}
-                                        </button>
-                                      </PopoverTrigger>
-                                      <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                          mode="single"
-                                          selected={addedDate}
-                                          onSelect={(date) => {
-                                            if (date) {
-                                              // Preserve the original time
-                                              const newDate = setMinutes(setHours(date, addedDate.getHours()), addedDate.getMinutes());
-                                              updateAddedAt(item.itemId, newDate.toISOString());
-                                            }
-                                          }}
-                                          initialFocus
-                                          className="p-3 pointer-events-auto"
-                                        />
-                                      </PopoverContent>
-                                    </Popover>
-                                  </div>
-                                </div>
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  className="h-6 w-6 text-muted-foreground hover:text-destructive flex-shrink-0"
-                                  onClick={() => removeFromCart(item.itemId)}
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </Button>
-                              </div>
-                              
-                              {/* Qty controls and discount */}
-                              <div className="flex items-center justify-between mt-3 pt-2 border-t border-border/50">
-                                <div className="flex items-center gap-3">
-                                  {/* Quantity */}
-                                  <div className="flex items-center gap-1 bg-muted rounded p-0.5">
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      className="h-6 w-6"
-                                      onClick={() => updateQty(item.itemId, item.qty - 1)}
-                                      disabled={item.qty <= 1}
-                                    >
-                                      <Minus className="w-3 h-3" />
-                                    </Button>
-                                    <span className="text-xs font-medium w-6 text-center">{item.qty}</span>
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      className="h-6 w-6"
-                                      onClick={() => updateQty(item.itemId, item.qty + 1)}
-                                    >
-                                      <Plus className="w-3 h-3" />
-                                    </Button>
-                                  </div>
-                                  
-                                  {/* Discount */}
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-xs text-muted-foreground">Disc:</span>
-                                    <div className="relative flex items-center">
-                                      <span className="absolute left-2 text-xs text-muted-foreground pointer-events-none">₹</span>
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        max={lineSubtotal}
-                                        defaultValue={item.discountAmt || 0}
-                                        onBlur={(e) => {
-                                          const val = parseFloat(e.target.value);
-                                          if (!isNaN(val) && val >= 0 && val <= lineSubtotal) {
-                                            updateDiscount(item.itemId, val);
-                                          }
-                                        }}
-                                        className="h-6 w-16 pl-5 pr-1.5 text-xs text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                {/* Price */}
-                                <div className="text-right">
-                                  <span className="text-sm font-semibold">
-                                    {formatPrice(lineTotal)}
-                                  </span>
-                                  {(item.qty > 1 || (item.discountAmt && item.discountAmt > 0)) && (
-                                    <p className="text-xs text-muted-foreground">
-                                      {formatPrice(item.unitPrice)} × {item.qty}
-                                      {item.discountAmt && item.discountAmt > 0 && (
-                                        <span className="text-green-600 ml-1">-{formatPrice(item.discountAmt)}</span>
-                                      )}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
-            </ScrollArea>
-            
-            {/* Totals & Actions */}
-            <div className="p-4 border-t border-border bg-background">
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">{formatPrice(totals.subtotal)}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Discount</span>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-2.5 text-xs font-medium text-muted-foreground pointer-events-none">₹</span>
-                    <Input
-                      type="number"
-                      min="0"
-                      max={totals.subtotal}
-                      value={globalDiscountAmt || ''}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value);
-                        if (!isNaN(val) && val >= 0) {
-                          updateGlobalDiscount(Math.min(val, totals.subtotal));
-                        } else if (e.target.value === '') {
-                          updateGlobalDiscount(0);
-                        }
-                      }}
-                      className="h-8 w-24 pl-6 pr-2 text-sm text-right font-medium border-dashed focus:border-solid focus:border-primary transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      placeholder="0.00"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-between pt-3 border-t border-border">
-                  <span className="text-base font-semibold">Total Amount</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(totals.subtotal - totals.discountTotal)}</span>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Button 
-                  className="w-full h-11" 
-                  size="lg"
-                  disabled={cart.length === 0 || isGeneratingBill}
-                  onClick={handleGenerateBill}
-                >
-                  {isGeneratingBill ? (
-                    <>
-                      <div className="w-4 h-4 mr-2 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Generating Bill...
-                    </>
-                  ) : (
-                    <>
-                      <Receipt className="w-4 h-4 mr-2" />
-                      Generate Bill
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
+          <OrderSummaryPanel
+            cart={cart}
+            totals={totals}
+            globalDiscountAmt={globalDiscountAmt}
+            patientId={patient.gdid}
+            isGeneratingBill={isGeneratingBill}
+            onUpdateQty={updateQty}
+            onUpdateDiscount={updateDiscount}
+            onUpdateAddedAt={updateAddedAt}
+            onRemove={removeFromCart}
+            onUpdateGlobalDiscount={updateGlobalDiscount}
+            onGenerateBill={handleGenerateBill}
+            formatPrice={formatPrice}
+          />
         </div>
       </PageContent>
     </div>
