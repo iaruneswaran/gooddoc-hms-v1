@@ -437,11 +437,6 @@ const PatientServices = () => {
                                         ×{ps.quantity}
                                       </Badge>
                                     )}
-                                    {inCart && (
-                                      <Badge variant="secondary" className="text-xs">
-                                        In Cart
-                                      </Badge>
-                                    )}
                                   </div>
                                   <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
                                     <span>{format(new Date(ps.performedAt), 'dd MMM, HH:mm')}</span>
