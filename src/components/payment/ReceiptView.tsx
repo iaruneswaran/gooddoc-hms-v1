@@ -17,6 +17,7 @@ interface ReceiptViewProps {
   onEmail?: () => void;
   onSMS?: () => void;
   onDone?: () => void;
+  hideActionButtons?: boolean;
 }
 
 export function ReceiptView({
@@ -31,6 +32,7 @@ export function ReceiptView({
   onEmail,
   onSMS,
   onDone,
+  hideActionButtons = false,
 }: ReceiptViewProps) {
   const isCard = attempt.method === 'card';
   const cardMeta = attempt.metadata as CardMetadata | undefined;
@@ -167,10 +169,12 @@ export function ReceiptView({
         </Button>
       </div>
 
-      {/* Done button */}
-      <Button onClick={onDone} className="w-full mt-4">
-        Done
-      </Button>
+      {/* Done button - only show when not hiding action buttons */}
+      {!hideActionButtons && onDone && (
+        <Button onClick={onDone} className="w-full mt-4">
+          Done
+        </Button>
+      )}
     </div>
   );
 }
