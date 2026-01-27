@@ -443,15 +443,17 @@ const PatientServices = () => {
                                       </Badge>
                                     )}
                                   </div>
-                                  {ps.notes && (
-                                    <p className="text-xs text-muted-foreground mt-0.5">"{ps.notes}"</p>
-                                  )}
-                                </div>
-                                
-                                {/* Timestamp & Performer - Right Side */}
-                                <div className="flex flex-col items-end text-xs text-muted-foreground flex-shrink-0">
-                                  <span>{format(new Date(ps.performedAt), 'dd MMM, HH:mm')}</span>
-                                  <span>{ps.performedBy}</span>
+                                  <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
+                                    <span>{format(new Date(ps.performedAt), 'dd MMM, HH:mm')}</span>
+                                    <span>•</span>
+                                    <span>{ps.performedBy}</span>
+                                    {ps.notes && (
+                                      <>
+                                        <span>•</span>
+                                        <span>"{ps.notes}"</span>
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
                                 
                                 {/* Price & Add Button */}
