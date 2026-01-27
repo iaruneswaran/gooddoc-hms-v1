@@ -251,3 +251,33 @@ export function trackPaymentEvent(event: string, data: Record<string, unknown>) 
 export function resetPollCount() {
   pollCount = 0;
 }
+
+// Force UPI success immediately (for demo purposes)
+export async function forceUPISuccess(intentId: string): Promise<{
+  status: 'success';
+  attempt: PaymentAttempt;
+}> {
+  await simulateNetworkDelay(200);
+  
+  const intent = intentStore.get(intentId);
+  if (!intent) throw new Error('Intent not found');
+  
+  const attempt = intent.attempts[intent.attempts.length - 1];
+  if (!attempt) throw new Error('No attempt found');
+  
+  attempt.status = 'succeeded';
+  attempt.completedAt = new Date().toISOString();
+  attempt.providerTxnId = generateId('upi_txn');
+  attempt.metadata = {
+    payerVpa: 'user@okaxis',
+    utr: `UTR${Date.now()}`,
+    rrn: `RRN${Math.floor(Math.random() * 1000000000)}`,
+  } as UPIMetadata;
+  
+  intent.status = 'succeeded';
+  intent.updatedAt = new Date().toISOString();
+  
+  pollCount = 0; // Reset for next flow
+  
+  return { status: 'success', attempt };
+}
