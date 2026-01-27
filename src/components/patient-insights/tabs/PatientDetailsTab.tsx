@@ -80,7 +80,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
           )}
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6 mb-3">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
@@ -251,7 +251,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
           <h3 className="text-[14px] font-semibold text-foreground">Address Details</h3>
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4 mb-3">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
@@ -330,7 +330,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
           <h3 className="text-[14px] font-semibold text-foreground">Insurance Details</h3>
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4 mb-3">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
