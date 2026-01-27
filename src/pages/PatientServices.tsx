@@ -426,36 +426,40 @@ const PatientServices = () => {
                                 
                                 {/* Service Info */}
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
-                                    {ps.quantity > 1 && (
-                                      <Badge variant="outline" className="text-xs">
-                                        ×{ps.quantity}
-                                      </Badge>
-                                    )}
-                                    {inCart && (
-                                      <Badge variant="secondary" className="text-xs">
-                                        In Cart
-                                      </Badge>
-                                    )}
+                                  {/* Row 1: Service name + metadata on right */}
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-center gap-2">
+                                      <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                      {ps.quantity > 1 && (
+                                        <Badge variant="outline" className="text-xs">
+                                          ×{ps.quantity}
+                                        </Badge>
+                                      )}
+                                      {inCart && (
+                                        <Badge variant="secondary" className="text-xs">
+                                          In Cart
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    {/* Timestamp, performer, and notes on right */}
+                                    <div className="text-right flex-shrink-0">
+                                      <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
+                                        <span>{format(new Date(ps.performedAt), 'dd MMM, HH:mm')}</span>
+                                        <span>•</span>
+                                        <span>{ps.performedBy}</span>
+                                      </div>
+                                      {ps.notes && (
+                                        <p className="text-xs text-muted-foreground mt-0.5 italic">"{ps.notes}"</p>
+                                      )}
+                                    </div>
                                   </div>
-                                  <div className="flex items-center gap-2 mt-0.5">
+                                  {/* Row 2: Code and category */}
+                                  <div className="flex items-center gap-2 mt-1">
                                     <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
                                       {ps.service.code}
                                     </span>
                                     <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
                                   </div>
-                                  <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                      <Clock className="w-3 h-3" />
-                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
-                                    </span>
-                                    <span>•</span>
-                                    <span>{ps.performedBy}</span>
-                                  </div>
-                                  {ps.notes && (
-                                    <p className="text-xs text-muted-foreground mt-1 italic">"{ps.notes}"</p>
-                                  )}
                                 </div>
                                 
                               {/* Price & Add Button */}
