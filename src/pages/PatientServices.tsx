@@ -426,7 +426,6 @@ const PatientServices = () => {
                                 
                                 {/* Service Info */}
                                 <div className="flex-1 min-w-0">
-                                  {/* Row 1: Service name with badges */}
                                   <div className="flex items-center gap-2">
                                     <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
                                     {ps.quantity > 1 && (
@@ -440,19 +439,23 @@ const PatientServices = () => {
                                       </Badge>
                                     )}
                                   </div>
-                                  {/* Row 2: Code, category, then timestamp/nurse */}
-                                  <div className="flex items-center gap-2 mt-1">
+                                  <div className="flex items-center gap-2 mt-0.5">
                                     <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
                                       {ps.service.code}
                                     </span>
                                     <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
-                                    <span className="text-xs text-muted-foreground">•</span>
-                                    <span className="text-xs text-muted-foreground">
+                                  </div>
+                                  <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
                                       {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
                                     </span>
-                                    <span className="text-xs text-muted-foreground">•</span>
-                                    <span className="text-xs text-muted-foreground">{ps.performedBy}</span>
+                                    <span>•</span>
+                                    <span>{ps.performedBy}</span>
                                   </div>
+                                  {ps.notes && (
+                                    <p className="text-xs text-muted-foreground mt-1 italic">"{ps.notes}"</p>
+                                  )}
                                 </div>
                                 
                               {/* Price & Add Button */}
