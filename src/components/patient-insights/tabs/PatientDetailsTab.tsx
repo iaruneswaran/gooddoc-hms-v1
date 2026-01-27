@@ -80,12 +80,12 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
           )}
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
               <>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Title</Label>
                     <p className="text-sm text-foreground mt-1">{patient.title}</p>
@@ -94,20 +94,17 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <Label className="text-xs text-muted-foreground">First Name</Label>
                     <p className="text-sm text-foreground mt-1">{firstName}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Surname</Label>
                     <p className="text-sm text-foreground mt-1">{surname}</p>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Gender</Label>
                     <p className="text-sm text-foreground mt-1">{patient.gender}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Date of Birth</Label>
                     <p className="text-sm text-foreground mt-1">{patient.dob}</p>
@@ -118,7 +115,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Mobile Number</Label>
                     <p className="text-sm text-foreground mt-1">{patient.mobile}</p>
@@ -127,27 +124,20 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                     <Label className="text-xs text-muted-foreground">Email</Label>
                     <p className="text-sm text-foreground mt-1">{patient.email}</p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground">Blood Group</Label>
                     <p className="text-sm text-foreground mt-1">{patient.bloodGroup}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">ID</Label>
-                    <p className="text-sm text-foreground mt-1">GDID - {patient.gdid}</p>
                   </div>
                 </div>
               </>
             ) : (
               // Edit Mode
               <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm text-foreground">Title</Label>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Title</Label>
                     <Select defaultValue={patient.title.toLowerCase()}>
-                      <SelectTrigger className="mt-2">
+                      <SelectTrigger>
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
@@ -158,29 +148,27 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label className="text-sm text-foreground">First Name</Label>
+                  <div className="space-y-2">
+                    <Label>First Name</Label>
                     <Input 
                       defaultValue={firstName}
                       placeholder="First name"
-                      className="mt-2"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Surname</Label>
+                    <Input 
+                      defaultValue={surname}
+                      placeholder="Surname"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm text-foreground">Surname</Label>
-                    <Input 
-                      defaultValue={surname}
-                      placeholder="Surname"
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-sm text-foreground">Gender</Label>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Gender</Label>
                     <Select defaultValue={patient.gender.toLowerCase()}>
-                      <SelectTrigger className="mt-2">
+                      <SelectTrigger>
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
@@ -190,53 +178,52 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm text-foreground">Date of Birth</Label>
+                  <div className="space-y-2">
+                    <Label>Date of Birth</Label>
                     <Input 
                       defaultValue={patient.dob}
                       placeholder="dd/mm/yyyy"
-                      className="mt-2"
                     />
                   </div>
-                  <div>
-                    <Label className="text-sm text-foreground">Age</Label>
+                  <div className="space-y-2">
+                    <Label>Age</Label>
                     <Input 
                       value={patient.age}
                       placeholder="Calculated from DOB"
                       disabled
-                      className="mt-2"
+                      className="bg-muted"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm text-foreground">Mobile Number</Label>
-                    <Input 
-                      defaultValue={patient.mobile}
-                      placeholder="10 digits"
-                      className="mt-2"
-                    />
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Mobile Number</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value="+91"
+                        readOnly
+                        className="w-16 bg-muted text-center"
+                      />
+                      <Input 
+                        defaultValue={patient.mobile}
+                        placeholder="98765 43210"
+                        className="flex-1"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label className="text-sm text-foreground">Email</Label>
+                  <div className="space-y-2">
+                    <Label>Email</Label>
                     <Input 
                       defaultValue={patient.email}
                       placeholder="name@example.com"
                       type="email"
-                      className="mt-2"
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm text-foreground">Blood Group</Label>
+                  <div className="space-y-2">
+                    <Label>Blood Group</Label>
                     <Select defaultValue={patient.bloodGroup}>
-                      <SelectTrigger className="mt-2">
+                      <SelectTrigger>
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
@@ -250,15 +237,6 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
                         <SelectItem value="O−">O−</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
-                  <div>
-                    <Label className="text-sm text-muted-foreground">ID</Label>
-                    <Input 
-                      value={`GDID - ${patient.gdid}`}
-                      disabled
-                      className="mt-2 bg-muted"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">ID cannot be edited</p>
                   </div>
                 </div>
               </>
