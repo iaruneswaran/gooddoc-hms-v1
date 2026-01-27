@@ -61,7 +61,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
   return (
     <div className="py-4">
       {/* Patient Information Section */}
-      <div className="mb-6">
+      <div className="mb-3">
         <div className="px-6 pt-3 pb-4 flex items-center justify-between">
           <h3 className="text-[14px] font-semibold text-foreground">Patient Information</h3>
           {!isEditing ? (
@@ -80,7 +80,7 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
           )}
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6 mb-3">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-6">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
@@ -246,12 +246,12 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </div>
 
       {/* Address Details Section */}
-      <div className="mb-6">
+      <div className="mb-3">
         <div className="px-6 py-3">
           <h3 className="text-[14px] font-semibold text-foreground">Address Details</h3>
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4 mb-3">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
@@ -325,12 +325,12 @@ export function PatientDetailsTab({ patient }: PatientDetailsTabProps) {
       </div>
 
       {/* Insurance Details Section */}
-      <div className="mb-6">
+      <div className="mb-3">
         <div className="px-6 py-3">
           <h3 className="text-[14px] font-semibold text-foreground">Insurance Details</h3>
         </div>
         
-        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4 mb-3">
+        <div className="border rounded-lg overflow-hidden mx-6 bg-white dark:bg-card p-4">
           <div className="space-y-4">
             {!isEditing ? (
               // View Mode
