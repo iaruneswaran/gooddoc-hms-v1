@@ -30,7 +30,7 @@ export function BillingSummaryCards({
   return (
     <div className="flex gap-3">
       {/* Billing Summary Card */}
-      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-4 py-3 min-w-[200px] hover:bg-white/15 transition-colors">
+      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-4 py-3 min-w-[220px] hover:bg-white/15 transition-colors">
         <p className="text-white text-xs pb-2 border-b border-white/25 mb-2">
           Billing Summary
         </p>
@@ -51,7 +51,7 @@ export function BillingSummaryCards({
       </Card>
 
       {/* Collection Status Card */}
-      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-4 py-3 min-w-[200px] hover:bg-white/15 transition-colors">
+      <Card className="bg-white/10 backdrop-blur-sm border-white/20 px-4 py-3 min-w-[220px] hover:bg-white/15 transition-colors">
         <p className="text-white text-xs pb-2 border-b border-white/25 mb-2">
           Collection Status
         </p>
