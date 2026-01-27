@@ -318,7 +318,7 @@ export function SplitPaymentWizardModal({
                     hasNextPayment={!isLastStep && isCurrentStepSucceeded}
                     nextPaymentLabel={
                       !isLastStep && steps[currentStepIndex + 1]
-                        ? `Next: ${steps[currentStepIndex + 1].method.toUpperCase()} ${formatINR(steps[currentStepIndex + 1].amount)}`
+                        ? `Next Payment ${steps[currentStepIndex + 1].method.toUpperCase()}`
                         : undefined
                     }
                     onNextPayment={handleNext}
@@ -332,7 +332,7 @@ export function SplitPaymentWizardModal({
                     hasNextPayment={!isLastStep && isCurrentStepSucceeded}
                     nextPaymentLabel={
                       !isLastStep && steps[currentStepIndex + 1]
-                        ? `Next: ${steps[currentStepIndex + 1].method.toUpperCase()} ${formatINR(steps[currentStepIndex + 1].amount)}`
+                        ? `Next Payment ${steps[currentStepIndex + 1].method.toUpperCase()}`
                         : undefined
                     }
                     onNextPayment={handleNext}
@@ -400,7 +400,7 @@ export function SplitPaymentWizardModal({
                     </>
                   ) : (
                     <>
-                      Next: {steps[currentStepIndex + 1]?.method.toUpperCase()} Payment
+                      Next Payment {steps[currentStepIndex + 1]?.method.toUpperCase()}
                       <ChevronRight className="w-4 h-4" />
                     </>
                   )}
