@@ -121,6 +121,21 @@ export function UPIPaymentFlow({
     };
   }, [state.flowState, initializeUPI, stopPolling]);
 
+  // Demo auto-success after 10 seconds
+  useEffect(() => {
+    if (state.flowState === 'awaiting_input') {
+      const demoTimer = setTimeout(async () => {
+        const result = await pollUPIStatus(intent.id);
+        if (result.status === 'success' && result.attempt) {
+          stopPolling();
+          actions.paymentSuccess(result.attempt);
+        }
+      }, 10000); // 10 seconds
+
+      return () => clearTimeout(demoTimer);
+    }
+  }, [state.flowState, intent.id, actions, stopPolling]);
+
   const handleRetry = () => {
     processingRef.current = false;
     stopPolling();
