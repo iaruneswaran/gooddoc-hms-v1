@@ -12,42 +12,59 @@ export interface PendingService {
   status: 'pending' | 'billed';
 }
 
+// Helper to safely find a service - returns a fallback if not found
+const findService = (code: string): ServiceItem => {
+  const found = MOCK_SERVICES.find(s => s.code === code);
+  if (found) return found;
+  
+  // Return first available service as fallback
+  return MOCK_SERVICES[0] || {
+    id: 'fallback',
+    code: code,
+    name: 'Unknown Service',
+    category: 'Nursing',
+    price: 0,
+    taxPct: 0,
+  };
+};
+
 // Mock pending services performed by nurses for the patient
+// Using actual codes from the hospital services catalog
 export const MOCK_PENDING_SERVICES: PendingService[] = [
   {
     id: 'PS001',
-    serviceId: 'SRV003',
-    service: MOCK_SERVICES.find(s => s.id === 'SRV003')!,
+    serviceId: 'svc-NRS003',
+    service: findService('NRS003'), // IV cannulation
     performedAt: '2025-12-22T09:30:00',
     performedBy: 'Nurse Priya Sharma',
     quantity: 1,
-    notes: 'Morning nursing care completed',
+    notes: 'IV line inserted successfully',
     status: 'pending'
   },
   {
     id: 'PS002',
-    serviceId: 'SRV014',
-    service: MOCK_SERVICES.find(s => s.id === 'SRV014')!,
+    serviceId: 'svc-NRS002',
+    service: findService('NRS002'), // Injection IV push
     performedAt: '2025-12-22T08:15:00',
     performedBy: 'Nurse Priya Sharma',
     quantity: 1,
-    notes: 'IV line inserted in left hand',
+    notes: 'IV medication administered',
     status: 'pending'
   },
   {
     id: 'PS003',
-    serviceId: 'SRV055',
-    service: MOCK_SERVICES.find(s => s.id === 'SRV055')!,
+    serviceId: 'svc-NRS005',
+    service: findService('NRS005'), // Nebulisation
     performedAt: '2025-12-22T10:00:00',
     performedBy: 'Nurse Anil Kumar',
     quantity: 2,
-    notes: 'Morning medications administered',
+    notes: 'Morning nebulisation completed',
     status: 'pending'
   },
   {
     id: 'PS004',
-    serviceId: 'SRV007',
-    service: MOCK_SERVICES.find(s => s.id === 'SRV007')!,
+    serviceId: 'svc-NRS007',
+    service: findService('NRS007'), // Wound dressing – large/complex
     performedAt: '2025-12-22T11:30:00',
     performedBy: 'Nurse Priya Sharma',
     quantity: 1,
@@ -56,8 +73,8 @@ export const MOCK_PENDING_SERVICES: PendingService[] = [
   },
   {
     id: 'PS005',
-    serviceId: 'SRV051',
-    service: MOCK_SERVICES.find(s => s.id === 'SRV051')!,
+    serviceId: 'svc-GAS001',
+    service: findService('GAS001'), // Oxygen therapy
     performedAt: '2025-12-22T07:00:00',
     performedBy: 'Nurse Anil Kumar',
     quantity: 4,
