@@ -14,6 +14,7 @@ import {
   pollUPIStatus,
   trackPaymentEvent,
   resetPollCount,
+  forceUPISuccess,
 } from '@/services/paymentService';
 import { TIMEOUTS, ERROR_MESSAGES } from '@/types/payment-intent';
 import type { PaymentIntent, PaymentAttempt } from '@/types/payment-intent';
@@ -125,10 +126,12 @@ export function UPIPaymentFlow({
   useEffect(() => {
     if (state.flowState === 'awaiting_input') {
       const demoTimer = setTimeout(async () => {
-        const result = await pollUPIStatus(intent.id);
-        if (result.status === 'success' && result.attempt) {
+        try {
+          const result = await forceUPISuccess(intent.id);
           stopPolling();
           actions.paymentSuccess(result.attempt);
+        } catch (error) {
+          console.error('Demo auto-success failed:', error);
         }
       }, 10000); // 10 seconds
 
