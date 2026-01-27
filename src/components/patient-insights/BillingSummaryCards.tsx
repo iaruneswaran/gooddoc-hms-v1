@@ -68,12 +68,12 @@ export function BillingSummaryCards({
       >
         <div className="flex items-baseline justify-between pb-2 border-b border-white/25 mb-2">
           <p className="text-white text-xs">Total Due Amount</p>
-          <span className="text-white font-semibold text-base tabular-nums">{totalDue}</span>
+          <span className="text-white font-semibold text-sm tabular-nums">{totalDue}</span>
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center justify-between gap-4">
             <span className="text-white/70 text-[11px]">Total Paid</span>
-            <span className="text-emerald-300 text-xs tabular-nums">−{collectedAmount}</span>
+            <span className="text-emerald-300 text-sm tabular-nums">−{collectedAmount}</span>
           </div>
           <div className="flex items-center justify-between gap-4 pt-1 border-t border-white/15">
             <span className="text-white text-[11px]">Total Payable</span>
