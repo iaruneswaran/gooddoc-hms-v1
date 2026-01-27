@@ -22,10 +22,12 @@ import iconChevronMenu from "@/assets/icons/icon-chevron-menu.svg";
 
 const menuItems = [
   { icon: iconOverview, label: "Overview", href: "/" },
-  { icon: iconDoctors, label: "Doctors", href: "/doctors" },
+  // Temporarily hidden: { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
+  // Temporarily hidden: { icon: iconPharmacy, label: "Diagnostics", href: "/diagnostics" },
+  { icon: iconDiagnostics, label: "Doctors", href: "/doctors" },
   { icon: iconPatients, label: "Patients", href: "/patients" },
   { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog" },
-  { icon: iconPharmacy, label: "Pharmacy", href: "/pharmacy" },
+  { icon: iconDoctors, label: "Pharmacy", href: "/pharmacy" },
   { icon: iconReports, label: "Reports", href: "/reports" },
 ];
 
@@ -83,10 +85,8 @@ export function AppSidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-2">
         {menuItems.map((item) => {
-          // Root path needs exact match; other paths use prefix matching for nested routes
-          const isActive = item.href === "/" 
-            ? location.pathname === "/"
-            : location.pathname === item.href || location.pathname.startsWith(item.href + "/");
+          const isActive = location.pathname === item.href || 
+                          (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics"));
           
           const linkContent = (
             <Link
