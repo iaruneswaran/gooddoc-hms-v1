@@ -399,7 +399,7 @@ const PatientServices = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="divide-y divide-border">
                       {/* Pending Services Section */}
                       {pendingServices.length > 0 && (
                         <>
@@ -412,8 +412,8 @@ const PatientServices = () => {
                                 key={ps.id}
                                 onClick={() => togglePendingSelection(ps.id)}
                                 className={cn(
-                                  "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
-                                  isSelected ? "bg-primary/5 border-primary/30" : "hover:bg-muted/50 border-border",
+                                  "flex items-start gap-4 px-4 py-3 cursor-pointer transition-colors",
+                                  isSelected ? "bg-primary/5" : "hover:bg-muted/50",
                                   inCart && "opacity-60"
                                 )}
                               >
@@ -432,6 +432,12 @@ const PatientServices = () => {
                                       {ps.service.code}
                                     </span>
                                     <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
+                                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">•</span>
+                                    <span className="text-xs text-muted-foreground">{ps.performedBy}</span>
                                     {ps.quantity > 1 && (
                                       <Badge variant="outline" className="text-xs">
                                         ×{ps.quantity}
@@ -446,14 +452,6 @@ const PatientServices = () => {
                                   {ps.notes && (
                                     <p className="text-xs text-muted-foreground mt-1">"{ps.notes}"</p>
                                   )}
-                                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                      <Clock className="w-3 h-3" />
-                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
-                                    </span>
-                                    <span>•</span>
-                                    <span>{ps.performedBy}</span>
-                                  </div>
                                 </div>
                                 
                                 {/* Price & Add Button */}
