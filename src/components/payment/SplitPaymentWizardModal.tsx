@@ -385,6 +385,28 @@ export function SplitPaymentWizardModal({
               </>
             ) : null}
 
+            {/* Wizard footer buttons */}
+            {isCurrentStepSucceeded && (
+              <div className="mt-4 pt-4 border-t">
+                <Button
+                  onClick={handleNext}
+                  className="w-full gap-2"
+                  size="lg"
+                >
+                  {isLastStep ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Finish & Close
+                    </>
+                  ) : (
+                    <>
+                      Next: {steps[currentStepIndex + 1]?.method.toUpperCase()} Payment
+                      <ChevronRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
