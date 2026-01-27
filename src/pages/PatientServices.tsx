@@ -4,7 +4,7 @@ import {
   ChevronLeft, Search, Plus, 
   Stethoscope, FlaskConical, ScanLine, Pill, HeartPulse, BedDouble, 
   UserRound, Package, Clock, AlertCircle, CheckCircle2,
-  Square, CheckSquare, ShoppingCart
+  ShoppingCart
 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
@@ -353,11 +353,11 @@ const PatientServices = () => {
                       onClick={selectAllPending}
                       className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {allSelected ? (
-                        <CheckSquare className="w-4 h-4 text-primary" />
-                      ) : (
-                        <Square className="w-4 h-4" />
-                      )}
+                      <Checkbox
+                        checked={allSelected}
+                        onCheckedChange={selectAllPending}
+                        aria-label="Select all pending services"
+                      />
                       <span>{allSelected ? 'Deselect All' : 'Select All'}</span>
                     </button>
                     {selectedPendingIds.size > 0 && (
