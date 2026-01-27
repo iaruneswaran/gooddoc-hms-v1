@@ -95,11 +95,11 @@ export function VisitDetailsTabs({ selectedVisit, activeTab, onTabChange, patien
 
 
           <TabsContent value="collect-payment" className="mt-0 h-full">
-            <CollectPaymentTab selectedVisit={selectedVisit} />
+            <CollectPaymentTab selectedVisit={selectedVisit} patientName={patient.name} />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-0">
-            <PaymentsTab selectedVisit={selectedVisit} patientName={patient.name} />
+            <PaymentsTab selectedVisit={selectedVisit} />
           </TabsContent>
 
           <TabsContent value="documents" className="mt-0">

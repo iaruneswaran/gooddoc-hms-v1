@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Download, Printer, CreditCard, Banknote, Building2, Smartphone, FileText } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getTransactionsForVisit, getInvoicesForVisit, type Transaction, type PaymentMethod, type Invoice } from "@/data/billing.mock";
 
 interface PaymentsTabProps {
   selectedVisit: Visit | null;
-  patientName?: string;
 }
 
 const getStatusBadge = (status: Transaction["status"]) => {
@@ -75,22 +73,7 @@ const getServiceDetails = (invoiceNos: string[], invoices: Invoice[]): { service
   }).filter(detail => detail.service);
 };
 
-export function PaymentsTab({ selectedVisit, patientName = "Patient" }: PaymentsTabProps) {
-  const navigate = useNavigate();
-  const { patientId } = useParams();
-
-  const handleInterimBillClick = () => {
-    if (patientId && selectedVisit) {
-      const params = new URLSearchParams({
-        amount: "₹4,000",
-        name: patientName,
-        admissionId: selectedVisit.visitId,
-        from: 'ip-patients',
-      });
-      navigate(`/patient-insights/${patientId}/interim-bill?${params.toString()}`);
-    }
-  };
-
+export function PaymentsTab({ selectedVisit }: PaymentsTabProps) {
   if (!selectedVisit) {
     return (
       <div className="p-8 text-center">
@@ -123,18 +106,10 @@ export function PaymentsTab({ selectedVisit, patientName = "Patient" }: Payments
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-[14px] font-semibold text-foreground">Visit Transactions</h3>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Download className="h-4 w-4" />
-            Download Statement
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleInterimBillClick}>
-            Interim Bill
-          </Button>
-          <Button size="sm">
-            Proceed Payment
-          </Button>
-        </div>
+        <Button variant="outline" size="sm" className="gap-2">
+          <Download className="h-4 w-4" />
+          Download Statement
+        </Button>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">

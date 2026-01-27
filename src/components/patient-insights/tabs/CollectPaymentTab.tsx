@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Download, Printer } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Visit } from "../VisitListItem";
 import { formatINR } from "@/utils/currency";
 import { getPendingInvoicesForVisit, type Invoice } from "@/data/billing.mock";
@@ -10,6 +11,7 @@ import { PaymentSettlementModal } from "@/components/payment/PaymentSettlementMo
 
 interface CollectPaymentTabProps {
   selectedVisit: Visit | null;
+  patientName?: string;
 }
 
 const getStatusBadge = (status: Invoice["status"]) => {
@@ -23,12 +25,26 @@ const getStatusBadge = (status: Invoice["status"]) => {
   }
 };
 
-export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
+export function CollectPaymentTab({ selectedVisit, patientName = "Patient" }: CollectPaymentTabProps) {
   const [selectedBillIds, setSelectedBillIds] = useState<string[]>([]);
   const [showSettlementModal, setShowSettlementModal] = useState(false);
+  const navigate = useNavigate();
+  const { patientId } = useParams();
 
   const visitBills = selectedVisit ? getPendingInvoicesForVisit(selectedVisit.visitId) : [];
   const selectedBills = visitBills.filter((bill) => selectedBillIds.includes(bill.id));
+
+  const handleInterimBillClick = () => {
+    if (patientId && selectedVisit) {
+      const params = new URLSearchParams({
+        amount: "₹4,000",
+        name: patientName,
+        admissionId: selectedVisit.visitId,
+        from: 'ip-patients',
+      });
+      navigate(`/patient-insights/${patientId}/interim-bill?${params.toString()}`);
+    }
+  };
 
   if (!selectedVisit) {
     return (
@@ -65,13 +81,18 @@ export function CollectPaymentTab({ selectedVisit }: CollectPaymentTabProps) {
       {/* Header with Proceed Button */}
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">Payable Bills</h3>
-        <Button 
-          onClick={handleProceed}
-          disabled={selectedBills.length === 0}
-          size="sm"
-        >
-          Proceed Payment
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handleInterimBillClick}>
+            Interim Bill
+          </Button>
+          <Button 
+            onClick={handleProceed}
+            disabled={selectedBills.length === 0}
+            size="sm"
+          >
+            Proceed Payment
+          </Button>
+        </div>
       </div>
 
       {visitBills.length === 0 ? (
