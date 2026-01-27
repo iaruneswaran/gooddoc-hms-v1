@@ -245,13 +245,8 @@ export function CardPaymentFlow({
               onEmail={() => console.log('Email receipt')}
               onSMS={() => console.log('SMS receipt')}
               onDone={hasNextPayment ? undefined : onCancel}
+              hideActionButtons={hasNextPayment}
             />
-            {hasNextPayment && onNextPayment && (
-              <Button onClick={onNextPayment} className="w-full gap-2">
-                {nextPaymentLabel || 'Next Payment'}
-                <span className="text-xs opacity-70">→</span>
-              </Button>
-            )}
           </div>
         );
 
