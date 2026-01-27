@@ -426,39 +426,32 @@ const PatientServices = () => {
                                 
                                 {/* Service Info */}
                                 <div className="flex-1 min-w-0">
-                                  {/* Row 1: Service name + timestamp/nurse on right */}
-                                  <div className="flex items-start justify-between gap-4">
-                                    <div className="flex items-center gap-2">
-                                      <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
-                                      {ps.quantity > 1 && (
-                                        <Badge variant="outline" className="text-xs">
-                                          ×{ps.quantity}
-                                        </Badge>
-                                      )}
-                                      {inCart && (
-                                        <Badge variant="secondary" className="text-xs">
-                                          In Cart
-                                        </Badge>
-                                      )}
-                                    </div>
-                                    {/* Timestamp and performer on right */}
-                                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground flex-shrink-0">
-                                      <span>{format(new Date(ps.performedAt), 'dd MMM, HH:mm')}</span>
-                                      <span>•</span>
-                                      <span>{ps.performedBy}</span>
-                                    </div>
-                                  </div>
-                                  {/* Row 2: Code and category on left, notes on right */}
-                                  <div className="flex items-center justify-between gap-4 mt-1">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                                        {ps.service.code}
-                                      </span>
-                                      <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
-                                    </div>
-                                    {ps.notes && (
-                                      <p className="text-xs text-muted-foreground italic flex-shrink-0">"{ps.notes}"</p>
+                                  {/* Row 1: Service name with badges */}
+                                  <div className="flex items-center gap-2">
+                                    <p className="text-sm font-medium text-foreground">{ps.service.name}</p>
+                                    {ps.quantity > 1 && (
+                                      <Badge variant="outline" className="text-xs">
+                                        ×{ps.quantity}
+                                      </Badge>
                                     )}
+                                    {inCart && (
+                                      <Badge variant="secondary" className="text-xs">
+                                        In Cart
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  {/* Row 2: Code, category, then timestamp/nurse */}
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                                      {ps.service.code}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">{ps.service.subCategory}</span>
+                                    <span className="text-xs text-muted-foreground">•</span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {format(new Date(ps.performedAt), 'dd MMM, HH:mm')}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">•</span>
+                                    <span className="text-xs text-muted-foreground">{ps.performedBy}</span>
                                   </div>
                                 </div>
                                 
