@@ -7,10 +7,14 @@ import { Label } from "@/components/ui/label";
 import { 
   User, 
   Calendar, 
-  Loader2
+  Loader2,
+  Stethoscope,
+  Pill,
+  ClipboardCheck,
+  ShieldCheck
 } from "lucide-react";
 
-interface DischargeConfirmationModalProps {
+interface DentalFinalizeConfirmationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -19,29 +23,28 @@ interface DischargeConfirmationModalProps {
   encounterId: string;
 }
 
-export function DischargeConfirmationModal({
+export function DentalFinalizeConfirmationModal({
   open,
   onOpenChange,
   onConfirm,
   patientName,
   mrn,
   encounterId,
-}: DischargeConfirmationModalProps) {
+}: DentalFinalizeConfirmationModalProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
-  // Basic discharge data
-  const dischargeSummary = {
-    admissionDate: "15-Dec-2025",
-    dischargeDate: "20-Dec-2025",
-    lengthOfStay: "5 days",
-    ward: "General Ward - A",
-    bed: "Bed 12",
-    primaryDiagnosis: "Acute Viral Gastroenteritis with Dehydration",
-    attendingPhysician: "Dr. Meera Nair",
-    department: "Internal Medicine",
-    conditionAtDischarge: "Stable",
-    dischargeTo: "Home",
+  // Dental specific summary data
+  const visitSummary = {
+    visitDate: "12-May-2026",
+    startTime: "10:30 AM",
+    duration: "45 mins",
+    clinic: "Dental Unit - Operatory 1",
+    procedures: "Composite Restoration (#14), Scaling",
+    prescriptions: "Amoxicillin 500mg, Paracetamol 650mg",
+    attendingDentist: "Dr. Arun Eswaran",
+    nextFollowUp: "19-May-2026",
+    clinicalStatus: "Treatment Complete",
   };
 
   const handleConfirm = () => {
@@ -58,7 +61,7 @@ export function DischargeConfirmationModal({
       <DialogContent className="max-w-lg p-0 gap-0 border-0 flex flex-col [&>button]:text-white [&>button]:top-3 [&>button]:right-4 [&>button]:hover:bg-white/10">
         {/* Header */}
         <div className="bg-primary px-6 h-16 flex items-center rounded-t-lg shrink-0">
-          <h2 className="text-base font-semibold text-white">Confirm Discharge</h2>
+          <h2 className="text-base font-semibold text-white">Confirm Visit Finalization</h2>
         </div>
 
         {/* Content */}
@@ -70,45 +73,41 @@ export function DischargeConfirmationModal({
             </div>
             <div>
               <h3 className="font-semibold text-foreground">{patientName}</h3>
-              <p className="text-xs text-muted-foreground">MRN: {mrn} • Visit: {encounterId}</p>
+              <p className="text-xs text-muted-foreground">MRN: {mrn} • Visit ID: {encounterId}</p>
             </div>
           </div>
 
-          {/* Basic Details */}
+          {/* Clinical Details */}
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-xs text-muted-foreground block">Admission Date</span>
-              <span className="font-medium">{dischargeSummary.admissionDate}</span>
+              <span className="text-xs text-muted-foreground block">Visit Date</span>
+              <span className="font-medium">{visitSummary.visitDate}</span>
             </div>
             <div>
-              <span className="text-xs text-muted-foreground block">Discharge Date</span>
-              <span className="font-medium">{dischargeSummary.dischargeDate}</span>
+              <span className="text-xs text-muted-foreground block">Duration</span>
+              <span className="font-medium">{visitSummary.duration}</span>
+            </div>
+            <div className="col-span-2">
+              <span className="text-xs text-muted-foreground block">Procedures Performed</span>
+              <span className="font-medium">{visitSummary.procedures}</span>
+            </div>
+            <div className="col-span-2">
+              <span className="text-xs text-muted-foreground block">Prescriptions Issued</span>
+              <span className="font-medium">{visitSummary.prescriptions}</span>
             </div>
             <div>
-              <span className="text-xs text-muted-foreground block">Length of Stay</span>
-              <span className="font-medium">{dischargeSummary.lengthOfStay}</span>
+              <span className="text-xs text-muted-foreground block">Attending Dentist</span>
+              <span className="font-medium">{visitSummary.attendingDentist}</span>
             </div>
             <div>
-              <span className="text-xs text-muted-foreground block">Ward / Bed</span>
-              <span className="font-medium">{dischargeSummary.ward} - {dischargeSummary.bed}</span>
+              <span className="text-xs text-muted-foreground block">Next Follow-up</span>
+              <span className="font-medium">{visitSummary.nextFollowUp}</span>
             </div>
             <div>
-              <span className="text-xs text-muted-foreground block">Primary Diagnosis</span>
-              <span className="font-medium">{dischargeSummary.primaryDiagnosis}</span>
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground block">Attending Physician</span>
-              <span className="font-medium">{dischargeSummary.attendingPhysician}</span>
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground block">Condition at Discharge</span>
-              <Badge className="bg-green-500/10 text-green-600 border-green-500/30 text-xs mt-1">
-                {dischargeSummary.conditionAtDischarge}
+              <span className="text-xs text-muted-foreground block">Clinical Status</span>
+              <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/30 text-xs mt-1">
+                {visitSummary.clinicalStatus}
               </Badge>
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground block">Discharge To</span>
-              <span className="font-medium">{dischargeSummary.dischargeTo}</span>
             </div>
           </div>
 
@@ -116,12 +115,12 @@ export function DischargeConfirmationModal({
           <div className="bg-muted/30 rounded-lg p-4 border border-border">
             <div className="flex items-start gap-3">
               <Checkbox 
-                id="confirm-discharge" 
+                id="confirm-finalize" 
                 checked={confirmed}
                 onCheckedChange={(checked) => setConfirmed(!!checked)}
               />
-              <Label htmlFor="confirm-discharge" className="text-sm cursor-pointer leading-relaxed">
-                I confirm that all discharge formalities are complete and the patient is ready for discharge.
+              <Label htmlFor="confirm-finalize" className="text-sm cursor-pointer leading-relaxed">
+                I confirm that all clinical findings, procedures, and prescriptions are accurately recorded. I understand that locking this visit will prevent further edits.
               </Label>
             </div>
           </div>
@@ -135,14 +134,15 @@ export function DischargeConfirmationModal({
           <Button 
             onClick={handleConfirm} 
             disabled={!confirmed || isConfirming}
+            className="bg-primary"
           >
             {isConfirming ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
+                Finalizing...
               </>
             ) : (
-              "Confirm Discharge"
+              "Confirm & Lock Visit"
             )}
           </Button>
         </div>

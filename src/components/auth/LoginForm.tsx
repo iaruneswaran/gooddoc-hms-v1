@@ -51,7 +51,8 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
       toast.success('Welcome back!', {
         description: `Signed in as ${result.user.fullName || result.user.username}`,
       });
-      navigate('/', { replace: true });
+      const target = result.user.role === 'DENTAL' ? '/dental' : '/';
+      navigate(target, { replace: true });
     } else {
       setErrors({ general: result.error || 'Invalid credentials' });
     }

@@ -7,13 +7,10 @@ import { Button } from "@/components/ui/button";
 import { CalendarWidget } from "@/components/CalendarWidget";
 import { OverviewKpiCard } from "@/components/overview/OverviewKpiCard";
 import { 
-  BedDouble, 
   ChevronRight,
-  Plus,
 } from "lucide-react";
 
 import iconOpPatients from "@/assets/icon-op-patients.svg";
-import iconIpPatients from "@/assets/icons/icon-ip-patients.svg";
 import iconDiagnostics from "@/assets/icon-diagnostics.svg";
 import iconRevenue from "@/assets/icon-revenue.svg";
 
@@ -25,13 +22,6 @@ import iconBeds from "@/assets/icons/icon-beds.svg";
 import iconSurgeries from "@/assets/icons/icon-surgeries.svg";
 import iconEmergency from "@/assets/icons/icon-emergency.svg";
 import iconLowStock from "@/assets/icons/icon-low-stock.svg";
-
-interface SubMetric {
-  label: string;
-  value: number | string;
-  filterParam?: string;
-  route?: string;
-}
 
 interface MetricCardProps {
   title: string;
@@ -109,59 +99,59 @@ const StandardMetricCard = ({
   );
 };
 
-const Overview = () => {
+const DentalDashboard = () => {
   const navigate = useNavigate();
 
   // Top row cards (first 4)
   const topRowCards: MetricCardProps[] = [
     {
-      title: "Appointment request received",
-      count: 342,
-      displayCount: "342",
+      title: "Dental Appointments",
+      count: 156,
+      displayCount: "156",
       iconSrc: iconAppointmentRequest,
-      route: "/schedule/today?date=today",
-      badge: "12new",
+      route: "/dental/consultations",
+      badge: "08new",
     },
     {
-      title: "Doctors on Duty",
-      count: 89,
+      title: "Dentists on Duty",
+      count: 12,
       iconSrc: iconDoctorsDuty,
-      route: "/doctors/on-duty?shift=current",
+      route: "/doctors",
     },
     {
-      title: "Total medicine orders",
-      count: 89,
+      title: "Prescription Orders",
+      count: 45,
       iconSrc: iconMedicineOrders,
-      route: "/pharmacy/pending?status=pending",
+      route: "/dental/pharmacy/pending?status=pending",
     },
     {
-      title: "Beds Availability",
-      count: 67,
-      displayCount: "67",
+      title: "Chair Availability",
+      count: 8,
+      displayCount: "08",
       iconSrc: iconBeds,
-      route: "/patients/check-in?date=today",
+      route: "/dental/chairs",
     },
   ];
 
   // Bottom row cards
   const bottomRowCards: MetricCardProps[] = [
     {
-      title: "Surgeries",
-      count: 24,
+      title: "Oral Surgeries",
+      count: 6,
       iconSrc: iconSurgeries,
-      route: "/or/surgeries?date=today",
+      route: "/dental/surgeries?date=today",
     },
     {
-      title: "Emergency Cases",
-      count: 15,
+      title: "Dental Emergencies",
+      count: 3,
       iconSrc: iconEmergency,
-      route: "/er/cases?status=active",
+      route: "/dental/emergencies?status=active",
     },
     {
-      title: "Low Stock",
-      count: 34,
+      title: "Dental Supplies Stock",
+      count: 12,
       iconSrc: iconLowStock,
-      route: "/inventory/low-stock",
+      route: "/dental/inventory/low-stock",
     },
   ];
 
@@ -176,65 +166,57 @@ const Overview = () => {
           {/* Header Card */}
           <Card className="p-5 mb-6">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-foreground">Today's Summary</h1>
+              <h1 className="text-lg font-semibold text-foreground">Dental Center Summary</h1>
               <div className="flex items-center gap-4">
-                <CalendarWidget pageKey="overview" showSubtext={true} />
-                <Button onClick={() => navigate("/new-appointment")} className="h-9">
-                  <Plus className="w-4 h-4 mr-1" />
-                  New Appointment
-                </Button>
-                <Button onClick={() => navigate("/new-appointment", { state: { flowType: "ip-admission" } })} className="h-9 bg-[#16a34a] hover:bg-[#16a34a]/90 text-white border-none">
-                  <BedDouble className="w-4 h-4 mr-1" />
-                  IP Admission
-                </Button>
+                <CalendarWidget pageKey="dental-overview" showSubtext={true} />
               </div>
             </div>
           </Card>
 
-          {/* Priority KPI Cards Row - New Design */}
+          {/* Priority KPI Cards Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
             <OverviewKpiCard
-              title="OP Patients"
-              kpiValue="847"
+              title="Consultations"
+              kpiValue="124"
               iconSrc={iconOpPatients}
-              route="/patients/op?date=today"
-              bullets={[{ text: "Consultation" }]}
+              route="/dental/consultations"
+              bullets={[{ text: "Total Scheduled" }]}
               chips={[
-                { label: "Visit Completed", value: "282", route: "/patients/op?date=today&visitStatus=Completed" },
-                { label: "Check in Pending", value: "56", route: "/patients/op?date=today&visitStatus=In_Queue" },
+                { label: "Completed", value: "48", route: "/dental/consultations?status=Completed" },
+                { label: "In Waiting", value: "12", route: "/dental/consultations?status=Waiting" },
               ]}
             />
             <OverviewKpiCard
-              title="IP Patients"
-              kpiValue="234"
-              iconSrc={iconIpPatients}
-              route="/patients/ip?status=admitted"
-              bullets={[{ text: "Patients" }]}
+              title="Procedures"
+              kpiValue="42"
+              iconSrc={iconSurgeries}
+              route="/dental/procedures?status=active"
+              bullets={[{ text: "Active Procedures" }]}
               chips={[
-                { label: "New Admission", value: "19", route: "/patients/ip?status=admitted&admittedToday=true" },
-                { label: "Discharged", value: "45", route: "/patients/discharged?date=today" },
+                { label: "Root Canal", value: "08", route: "/dental/procedures?type=RCT" },
+                { label: "Cleaning", value: "15", route: "/dental/procedures?type=Cleaning" },
               ]}
             />
             <OverviewKpiCard
-              title="Diagnostics"
-              kpiValue="56"
+              title="Imaging"
+              kpiValue="28"
               iconSrc={iconDiagnostics}
-              route="/diagnostics/orders"
-              bullets={[{ text: "Orders" }]}
+              route="/dental/imaging"
+              bullets={[{ text: "Images Taken" }]}
               chips={[
-                { label: "Laboratory", value: "26", route: "/diagnostics/orders?type=Laboratory" },
-                { label: "Radiology", value: "30", route: "/diagnostics/orders?type=Radiology" },
+                { label: "Pending Report", value: "06", route: "/dental/imaging?status=Pending" },
+                { label: "Ready", value: "22", route: "/dental/imaging?status=Ready" },
               ]}
             />
             <OverviewKpiCard
               title="Revenue"
-              kpiValue="24.4L"
+              kpiValue="4.8L"
               iconSrc={iconRevenue}
-              route="/reports/revenue?type=paid"
+              route="/dental/revenue"
               bullets={[{ text: "From 24 Bills" }]}
               chips={[
-                { label: "Outstanding Bills", value: "₹8.4L/12", route: "/reports/revenue?type=outstanding" },
-                { label: "Advance Amount", value: "₹5.7/12", route: "/reports/advance-payments" },
+                { label: "Insurance Claims", value: "₹1.2L", route: "/dental/revenue?type=insurance" },
+                { label: "Self Pay", value: "₹3.6L", route: "/dental/revenue?type=self" },
               ]}
             />
           </div>
@@ -258,4 +240,4 @@ const Overview = () => {
   );
 };
 
-export default Overview;
+export default DentalDashboard;

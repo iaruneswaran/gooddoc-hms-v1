@@ -1,0 +1,37 @@
+:root {
+  --tooth-healthy: #22C55E;
+  --tooth-cavity: #EF4444;
+  --tooth-missing: #9CA3AF;
+  --tooth-rc: #0EA5E9;
+  --tooth-crown: #F59E0B;
+  --tooth-implant: #6D28D9;
+  --tooth-extraction: #F43F5E;
+  --tooth-sensitive: #EAB308;
+}
+
+.tooth-healthy { fill: var(--tooth-healthy); }
+.tooth-cavity { fill: var(--tooth-cavity); }
+.tooth-missing { fill: var(--tooth-missing); opacity: 0.3; }
+.tooth-rc { fill: var(--tooth-rc); }
+.tooth-crown { fill: var(--tooth-crown); }
+.tooth-implant { fill: var(--tooth-implant); }
+.tooth-extraction { fill: var(--tooth-extraction); stroke: var(--tooth-extraction); stroke-width: 2; stroke-dasharray: 4; }
+.tooth-sensitive { fill: var(--tooth-sensitive); }
+
+.tooth-surface {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tooth-surface:hover {
+  opacity: 0.8;
+}
+
+.tooth-surface.selected {
+  stroke: var(--primary);
+  stroke-width: 2px;
+}
+
+.dental-chart-container {
+  user-select: none;
+}

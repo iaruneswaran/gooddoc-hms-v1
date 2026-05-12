@@ -4,6 +4,7 @@ import { Bell, User, Search, LogOut } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ConnectionStatusIndicator } from "@/components/realtime/ConnectionStatusIndicator";
+import { getCurrentUser, logout } from "@/lib/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +52,7 @@ const notifications = [
 export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const user = getCurrentUser();
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
@@ -59,7 +61,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("gooddoc_session");
+    logout();
     navigate("/auth");
   };
 
@@ -106,7 +108,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-12 h-10 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 transition-all"
+            className="pl-12 h-10 bg-background border-2 border-primary/30 rounded-full shadow-sm text-base placeholder:text-muted-foreground/70 transition-all focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary/50"
           />
         </div>
       </div>
@@ -176,7 +178,7 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
             <button className="p-1 hover:bg-secondary rounded-lg transition-colors">
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
-                  GA
+                  {user?.fullName?.split(' ').map(n => n[0]).join('') || 'GD'}
                 </AvatarFallback>
               </Avatar>
             </button>
@@ -184,8 +186,13 @@ export function AppHeader({ breadcrumbs }: AppHeaderProps) {
           <DropdownMenuContent align="end" className="w-56 bg-popover">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium">GoodDoc Admin</p>
-                <p className="text-xs text-muted-foreground">admin@gooddoc.com</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium">{user?.fullName || user?.username}</p>
+                  <Badge variant="outline" className="text-[10px] h-4 px-1 font-normal border-primary/20 bg-primary/5 text-primary">
+                    {user?.role === 'DENTAL' ? 'Dental' : 'Front Desk'}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">{user?.email || 'admin@gooddoc.com'}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

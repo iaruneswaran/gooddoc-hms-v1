@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/contexts/SidebarContext";
 import { RealtimeProvider } from "@/contexts/RealtimeContext";
 import { ClockProvider } from "@/contexts/ClockContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { UserRole } from "@/lib/auth";
 
 import Auth from "./pages/Auth";
 import Overview from "./pages/Overview";
@@ -28,6 +29,13 @@ import DoctorSchedulePage from "./pages/DoctorSchedulePage";
 import DoctorCalendarPage from "./pages/DoctorCalendarPage";
 import NotFound from "./pages/NotFound";
 import DiagnosticsWorklist from "./pages/DiagnosticsWorklist";
+import DentalDashboard from "./pages/DentalDashboard";
+import DentalProcedures from "./pages/DentalProcedures";
+import DentalConsultationsList from "./pages/DentalConsultationsList";
+import ConsultationDashboard from "./pages/ConsultationDashboard";
+import FinalizeVisitPage from "./pages/FinalizeVisitPage";
+import DentalBillsList from "./pages/DentalBillsList";
+import DentalImagingList from "./pages/DentalImagingList";
 import LaboratoryResults from "./pages/LaboratoryResults";
 import RadiologyResults from "./pages/RadiologyResults";
 import OutpatientAppointments from "./pages/OutpatientAppointments";
@@ -69,8 +77,8 @@ import Settings from "./pages/Settings";
 const queryClient = new QueryClient();
 
 // Helper component to wrap protected routes
-const Protected = ({ children }: { children: React.ReactNode }) => (
-  <ProtectedRoute>{children}</ProtectedRoute>
+const Protected = ({ children, roles }: { children: React.ReactNode, roles?: UserRole[] }) => (
+  <ProtectedRoute allowedRoles={roles}>{children}</ProtectedRoute>
 );
 
 const App = () => (
@@ -86,8 +94,16 @@ const App = () => (
                 {/* Public route - Auth */}
                 <Route path="/auth" element={<Auth />} />
                 
-{/* Protected routes */}
-                <Route path="/" element={<Protected><Overview /></Protected>} />
+                {/* Protected routes */}
+                <Route path="/" element={<Protected roles={['FRONT_DESK']}><Overview /></Protected>} />
+                <Route path="/dental" element={<Protected roles={['DENTAL']}><DentalDashboard /></Protected>} />
+                <Route path="/dental/consultations" element={<Protected roles={['DENTAL']}><DentalConsultationsList /></Protected>} />
+                <Route path="/dental/procedures" element={<Protected roles={['DENTAL']}><DentalProcedures /></Protected>} />
+                <Route path="/dental/procedures/patients" element={<Protected roles={['DENTAL']}><DentalProcedures /></Protected>} />
+                <Route path="/dental/procedures/patients/:patientId/consultation" element={<Protected roles={['DENTAL']}><ConsultationDashboard /></Protected>} />
+                <Route path="/dental/procedures/patients/:patientId/finalize" element={<Protected roles={['DENTAL']}><FinalizeVisitPage /></Protected>} />
+                <Route path="/dental/revenue" element={<Protected roles={['DENTAL']}><DentalBillsList /></Protected>} />
+                <Route path="/dental/imaging" element={<Protected roles={['DENTAL']}><DentalImagingList /></Protected>} />
                 <Route path="/new-appointment" element={<Protected><NewAppointment /></Protected>} />
                 <Route path="/registration" element={<Protected><Registration /></Protected>} />
                 <Route path="/book-appointment" element={<Protected><BookAppointment /></Protected>} />

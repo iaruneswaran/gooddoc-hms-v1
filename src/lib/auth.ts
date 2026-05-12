@@ -9,14 +9,18 @@
 const SESSION_KEY = 'gooddoc_session';
 const USERS_KEY = 'gooddoc_users';
 
+export type UserRole = 'FRONT_DESK' | 'DENTAL';
+
 export interface User {
   username: string;
   email?: string;
   fullName?: string;
+  role: UserRole;
 }
 
-export interface StoredUser extends User {
+export interface StoredUser extends Omit<User, 'role'> {
   password: string;
+  role?: UserRole;
 }
 
 interface Session {
@@ -35,6 +39,15 @@ const DEMO_USER: StoredUser = {
   password: '123456',
   fullName: 'GoodDoc Admin',
   email: 'admin@gooddoc.com',
+  role: 'FRONT_DESK',
+};
+
+const DENTAL_USER: StoredUser = {
+  username: 'gooddoc',
+  password: '654321',
+  fullName: 'Dental Specialist',
+  email: 'dental@gooddoc.com',
+  role: 'DENTAL',
 };
 
 // Get stored users from localStorage
@@ -58,15 +71,30 @@ export const validateCredentials = (
   password: string
 ): { success: boolean; user?: User; error?: string } => {
   // Check demo credentials if demo mode is enabled
-  if (isDemoMode() && username === DEMO_USER.username && password === DEMO_USER.password) {
-    return {
-      success: true,
-      user: {
-        username: DEMO_USER.username,
-        fullName: DEMO_USER.fullName,
-        email: DEMO_USER.email,
-      },
-    };
+  if (isDemoMode()) {
+    if (username === DEMO_USER.username && password === DEMO_USER.password) {
+      return {
+        success: true,
+        user: {
+          username: DEMO_USER.username,
+          fullName: DEMO_USER.fullName,
+          email: DEMO_USER.email,
+          role: 'FRONT_DESK',
+        },
+      };
+    }
+    
+    if (username === DENTAL_USER.username && password === DENTAL_USER.password) {
+      return {
+        success: true,
+        user: {
+          username: DENTAL_USER.username,
+          fullName: DENTAL_USER.fullName,
+          email: DENTAL_USER.email,
+          role: 'DENTAL',
+        },
+      };
+    }
   }
 
   // Check stored users
@@ -82,6 +110,7 @@ export const validateCredentials = (
         username: foundUser.username,
         fullName: foundUser.fullName,
         email: foundUser.email,
+        role: foundUser.role || 'FRONT_DESK',
       },
     };
   }
@@ -124,6 +153,7 @@ export const registerUser = (
     email,
     fullName,
     password,
+    role: 'FRONT_DESK',
   };
 
   users.push(newUser);
@@ -135,6 +165,7 @@ export const registerUser = (
       username: newUser.username,
       fullName: newUser.fullName,
       email: newUser.email,
+      role: newUser.role,
     },
   };
 };

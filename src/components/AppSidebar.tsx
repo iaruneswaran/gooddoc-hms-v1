@@ -4,7 +4,7 @@ import logo from "@/assets/logo.svg";
 import logoIcon from "@/assets/logo-icon.svg";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { logout } from "@/lib/auth";
+import { logout, getCurrentUser, UserRole } from "@/lib/auth";
 import { toast } from "sonner";
 
 // Import custom icons
@@ -14,27 +14,34 @@ import iconDiagnostics from "@/assets/icons/icon-diagnostics.svg";
 import iconDoctors from "@/assets/icons/icon-doctors.svg";
 import iconPatients from "@/assets/icons/icon-patients.svg";
 import iconPricing from "@/assets/icons/icon-pricing.svg";
-import iconPharmacy from "@/assets/icons/icon-pharmacy.svg";
-import iconReports from "@/assets/icons/icon-reports.svg";
 import iconSettings from "@/assets/icons/icon-settings.svg";
 import iconSignout from "@/assets/icons/icon-signout.svg";
 import iconChevronMenu from "@/assets/icons/icon-chevron-menu.svg";
 
-const menuItems = [
-  { icon: iconOverview, label: "Overview", href: "/" },
-  // Temporarily hidden: { icon: iconOutpatient, label: "Outpatient", href: "/appointments/outpatient" },
-  // Temporarily hidden: { icon: iconPharmacy, label: "Diagnostics", href: "/diagnostics" },
-  { icon: iconDiagnostics, label: "Doctors", href: "/doctors" },
-  { icon: iconPatients, label: "Patients", href: "/patients" },
-  { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog" },
-  { icon: iconDoctors, label: "Pharmacy", href: "/pharmacy" },
-  { icon: iconReports, label: "Reports", href: "/reports" },
+interface MenuItem {
+  icon: string;
+  label: string;
+  href: string;
+  roles: UserRole[];
+}
+
+const menuItems: MenuItem[] = [
+  { icon: iconOverview, label: "Overview", href: "/", roles: ['FRONT_DESK'] },
+  { icon: iconOverview, label: "Overview", href: "/dental", roles: ['DENTAL'] },
+  { icon: iconDiagnostics, label: "Doctors", href: "/doctors", roles: ['FRONT_DESK'] },
+  { icon: iconPatients, label: "Patients", href: "/patients", roles: ['FRONT_DESK', 'DENTAL'] },
+  { icon: iconDiagnostics, label: "Dental Procedures", href: "/dental/procedures", roles: ['DENTAL'] },
+  { icon: iconPricing, label: "Pricing Catalog", href: "/pricing-catalog", roles: ['FRONT_DESK', 'DENTAL'] },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isCollapsed, toggleSidebar } = useSidebarContext();
+  const user = getCurrentUser();
+  const userRole = user?.role || 'FRONT_DESK';
+
+  const filteredMenuItems = menuItems.filter(item => item.roles.includes(userRole));
 
   const handleSignOut = () => {
     logout();
@@ -84,7 +91,7 @@ export function AppSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-2">
-        {menuItems.map((item) => {
+        {filteredMenuItems.map((item) => {
           const isActive = location.pathname === item.href || 
                           (item.href === "/diagnostics" && location.pathname.startsWith("/diagnostics"));
           

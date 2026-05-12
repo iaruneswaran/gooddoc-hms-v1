@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '@/lib/auth';
+import { isAuthenticated, getCurrentUser } from '@/lib/auth';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { toast } from 'sonner';
 
@@ -12,8 +12,10 @@ export default function Auth() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated()) {
-      navigate('/', { replace: true });
+    const user = getCurrentUser();
+    if (user) {
+      const target = user.role === 'DENTAL' ? '/dental' : '/';
+      navigate(target, { replace: true });
     }
   }, [navigate]);
 
